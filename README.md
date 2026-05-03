@@ -748,3 +748,7 @@ CINEMATICUM seals the current zero-intake snapshot after the intake rejection le
 ### Authority Object Admission Intake Reopening Gate
 
 CINEMATICUM preserves the current zero-intake finality seal without turning it into a permanent freeze. Future valid intake remains possible only under law and requires a new request record, validation, decision record, recomputed rejection ledger, and a new finality seal. Silent reopening is forbidden.
+
+### Authority Object Admission Intake Reopening Request Schema
+
+CINEMATICUM now separates future reopening-request shape from live reopening. The schema defines required future intake-reopening fields, while proving no live reopening request exists now and that schemas cannot reopen intake, satisfy authority, advance state, issue, or admit media.
