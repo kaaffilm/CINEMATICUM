@@ -25,4 +25,7 @@ python3 -m unittest tests/test_master_progression.py
 bash scripts/verify-object-registry.sh
 python3 -m unittest tests/test_object_registry.py
 
+bash scripts/verify-object-registry-fresh.sh
+python3 -m unittest tests/test_object_registry_freshness.py
+
 printf "CINEMATICUM VERIFY ALL: PASS\n"

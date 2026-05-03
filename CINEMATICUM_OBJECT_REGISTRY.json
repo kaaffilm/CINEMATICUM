@@ -9,7 +9,7 @@
   "registry_does_not_override_current_state": true,
   "current_active_state": "OUTSIDER_REPLAY_BUNDLE_LAW_DECLARED",
   "case_id": "CASE_001_THE_LAST_RENDER",
-  "entries_count": 43,
+  "entries_count": 44,
   "entries": [
     {
       "path": "ADMISSIBILITY_VERDICT_SCHEMA.json",
@@ -388,6 +388,18 @@
       "object_type": "UNDECLARED_OBJECT_TYPE",
       "schema_version": "cinematicum.motion_picture_issuance_act.v1",
       "surface_class": "CASE_RECORD",
+      "case_id": null,
+      "current_truth_owner": false,
+      "issued": false,
+      "release_candidate_ready": false,
+      "media_present": false,
+      "outsider_replay_passed": false
+    },
+    {
+      "path": "OBJECT_REGISTRY_REGENERATION_GUARD_LAW.json",
+      "object_type": "CINEMATICUM_OBJECT_REGISTRY_REGENERATION_GUARD_LAW",
+      "schema_version": "cinematicum.object_registry_regeneration_guard_law.v1",
+      "surface_class": "LAW_OBJECT",
       "case_id": null,
       "current_truth_owner": false,
       "issued": false,

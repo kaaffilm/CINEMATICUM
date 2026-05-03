@@ -12,7 +12,9 @@
     "scripts/verify-current-state-index.sh",
     "scripts/verify-master-progression.sh",
     "scripts/verify-all.sh",
-    "scripts/verify-object-registry.sh"
+    "scripts/verify-object-registry.sh",
+    "scripts/regenerate-object-registry.py",
+    "scripts/verify-object-registry-fresh.sh"
   ],
   "required_unittests": [
     "tests/test_cinematic_jurisdiction.py",
@@ -22,7 +24,8 @@
     "tests/test_outsider_replay_bundle_law.py",
     "tests/test_current_state_index.py",
     "tests/test_master_progression.py",
-    "tests/test_object_registry.py"
+    "tests/test_object_registry.py",
+    "tests/test_object_registry_freshness.py"
   ],
   "required_ci_workflows": [
     "cinematic-jurisdiction",
@@ -32,7 +35,8 @@
     "outsider-replay-bundle-law",
     "current-state-index",
     "master-progression",
-    "object-registry"
+    "object-registry",
+    "object-registry-freshness"
   ],
   "master_invariants": [
     "root_sentence_present",
@@ -49,6 +53,7 @@
     "all_json_parse",
     "all_layer_status_records_subordinate",
     "object_registry_complete",
-    "surface_classes_machine_readable"
+    "surface_classes_machine_readable",
+    "object_registry_freshness_guarded"
   ]
 }

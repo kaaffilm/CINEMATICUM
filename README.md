@@ -177,3 +177,18 @@ The registry does not issue a film, does not admit media, does not execute repla
 Current active state remains:
 
     CASE_001_THE_LAST_RENDER = OUTSIDER_REPLAY_BUNDLE_LAW_DECLARED
+
+## PR9 — Object registry regeneration guard
+
+PR9 adds a freshness guard for `CINEMATICUM_OBJECT_REGISTRY.json`.
+
+Regenerate:
+
+    python3 scripts/regenerate-object-registry.py --write
+
+Check:
+
+    bash scripts/verify-object-registry-fresh.sh
+    bash scripts/verify-all.sh
+
+The guard fails when JSON objects change without registry regeneration.
