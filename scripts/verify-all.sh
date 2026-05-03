@@ -52,4 +52,7 @@ python3 -m unittest tests/test_transition_attempt_rejection_ledger.py
 bash scripts/verify-public-perimeter-sentinel.sh
 python3 -m unittest tests/test_public_perimeter_sentinel.py
 
+bash scripts/verify-master-verification-manifest-closure.sh
+python3 -m unittest tests/test_master_verification_manifest_closure.py
+
 printf "CINEMATICUM VERIFY ALL: PASS\n"

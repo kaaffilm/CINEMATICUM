@@ -22,7 +22,8 @@
     "scripts/verify-state-transition-gate.sh",
     "scripts/verify-required-authority-objects.sh",
     "scripts/verify-transition-attempt-rejection-ledger.sh",
-    "scripts/verify-public-perimeter-sentinel.sh"
+    "scripts/verify-public-perimeter-sentinel.sh",
+    "scripts/verify-master-verification-manifest-closure.sh"
   ],
   "required_unittests": [
     "tests/test_cinematic_jurisdiction.py",
@@ -41,7 +42,8 @@
     "tests/test_state_transition_gate.py",
     "tests/test_required_authority_objects.py",
     "tests/test_transition_attempt_rejection_ledger.py",
-    "tests/test_public_perimeter_sentinel.py"
+    "tests/test_public_perimeter_sentinel.py",
+    "tests/test_master_verification_manifest_closure.py"
   ],
   "required_ci_workflows": [
     "cinematic-jurisdiction",
@@ -60,7 +62,8 @@
     "state-transition-gate",
     "required-authority-objects",
     "transition-attempt-rejection-ledger",
-    "public-perimeter-sentinel"
+    "public-perimeter-sentinel",
+    "master-verification-manifest-closure"
   ],
   "master_invariants": [
     "root_sentence_present",
@@ -112,6 +115,13 @@
     "public_perimeter_requires_no_private_access",
     "public_perimeter_contains_no_media_or_model_payload",
     "public_perimeter_contains_no_private_files",
-    "public_perimeter_contains_no_transition_attempt"
+    "public_perimeter_contains_no_transition_attempt",
+    "master_verification_manifest_closure_present",
+    "manifest_required_scripts_exist",
+    "manifest_required_scripts_are_executable",
+    "manifest_required_scripts_are_in_verify_all",
+    "manifest_required_unittests_exist",
+    "manifest_required_unittests_are_in_verify_all",
+    "manifest_required_ci_workflows_exist"
   ]
 }
