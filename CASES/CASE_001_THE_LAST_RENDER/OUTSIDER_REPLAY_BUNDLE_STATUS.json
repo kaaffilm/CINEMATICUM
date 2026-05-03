@@ -13,5 +13,12 @@
   "admissibility_verdict_present": false,
   "public_replay_index_present": false,
   "outsider_replay_passed": false,
-  "pr5_boundary": "Replay bundle and verdict schemas only; no replay pass is asserted."
+  "pr5_boundary": "Replay bundle and verdict schemas only; no replay pass is asserted.",
+  "surface_type": "LAYER_STATUS_RECORD",
+  "active_current_state_owner": "CASES/CASE_001_THE_LAST_RENDER/CURRENT_CASE_STATE.json",
+  "current_truth_owner": false,
+  "does_not_outrank_current_state_index": true,
+  "does_not_assert_issuance": true,
+  "does_not_admit_media": true,
+  "does_not_assert_replay_pass": true
 }

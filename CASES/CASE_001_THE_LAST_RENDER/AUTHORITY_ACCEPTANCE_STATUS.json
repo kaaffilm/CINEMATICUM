@@ -14,5 +14,12 @@
   "color_grade_lock_present": false,
   "terminal_closure_candidate_present": false,
   "outsider_replay_passed": false,
-  "pr4_boundary": "Authority acceptance schemas only; no acceptance object is asserted as present."
+  "pr4_boundary": "Authority acceptance schemas only; no acceptance object is asserted as present.",
+  "surface_type": "LAYER_STATUS_RECORD",
+  "active_current_state_owner": "CASES/CASE_001_THE_LAST_RENDER/CURRENT_CASE_STATE.json",
+  "current_truth_owner": false,
+  "does_not_outrank_current_state_index": true,
+  "does_not_assert_issuance": true,
+  "does_not_admit_media": true,
+  "does_not_assert_replay_pass": true
 }
