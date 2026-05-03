@@ -1,0 +1,39 @@
+{
+  "object_type": "CINEMATICUM_OUTSIDER_REPLAY_BUNDLE_SCHEMA",
+  "schema_version": "cinematicum.outsider_replay_bundle_schema.v1",
+  "boundary": "SCHEMA_ONLY_NO_REPLAY_BUNDLE",
+  "portable": true,
+  "private_access_required": false,
+  "required_fields": [
+    "bundle_id",
+    "case_id",
+    "bundle_version",
+    "created_at_utc",
+    "case_docket_digest",
+    "case_evidence_ledger_digest",
+    "authority_acceptance_digest",
+    "release_candidate_status_digest",
+    "release_manifest_digest",
+    "media_hash_manifest_digest",
+    "replay_execution_report_digest",
+    "admissibility_verdict_digest",
+    "terminal_closure_candidate_digest",
+    "bundle_manifest_sha256"
+  ],
+  "required_assertions": [
+    "bundle_contains_no_media_bytes",
+    "bundle_contains_no_private_keys",
+    "bundle_requires_no_private_access",
+    "bundle_does_not_issue_film",
+    "bundle_does_not_assert_replay_pass_by_schema_existence"
+  ],
+  "forbidden_fields": [
+    "embedded_media",
+    "raw_video",
+    "raw_audio",
+    "model_weights",
+    "private_key",
+    "cloud_token",
+    "secret_prompt_chain"
+  ]
+}

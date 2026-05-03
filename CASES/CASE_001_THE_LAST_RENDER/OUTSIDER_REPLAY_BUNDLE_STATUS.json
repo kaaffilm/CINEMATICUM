@@ -1,0 +1,17 @@
+{
+  "object_type": "CINEMATICUM_CASE_OUTSIDER_REPLAY_BUNDLE_STATUS",
+  "schema_version": "cinematicum.case_outsider_replay_bundle_status.v1",
+  "case_id": "CASE_001_THE_LAST_RENDER",
+  "docket_number": "CIN-0001",
+  "case_title": "THE LAST RENDER",
+  "current_state": "OUTSIDER_REPLAY_BUNDLE_LAW_DECLARED",
+  "release_candidate_ready": false,
+  "issued": false,
+  "media_present": false,
+  "outsider_replay_bundle_present": false,
+  "replay_execution_report_present": false,
+  "admissibility_verdict_present": false,
+  "public_replay_index_present": false,
+  "outsider_replay_passed": false,
+  "pr5_boundary": "Replay bundle and verdict schemas only; no replay pass is asserted."
+}

@@ -1,0 +1,29 @@
+{
+  "object_type": "CINEMATICUM_PUBLIC_REPLAY_INDEX_SCHEMA",
+  "schema_version": "cinematicum.public_replay_index_schema.v1",
+  "boundary": "SCHEMA_ONLY_NO_PUBLIC_INDEX",
+  "purpose": "Define how future public replay bundles may be indexed without private narration.",
+  "required_fields": [
+    "index_id",
+    "case_id",
+    "bundle_id",
+    "bundle_sha256",
+    "release_candidate_status_id",
+    "admissibility_verdict_id",
+    "replay_report_id",
+    "terminal_closure_candidate_id",
+    "published_at_utc"
+  ],
+  "required_assertions": [
+    "index_is_public",
+    "index_requires_no_private_access",
+    "index_does_not_embed_media",
+    "index_does_not_override_verdict"
+  ],
+  "forbidden_fields": [
+    "media_bytes",
+    "private_assets",
+    "secret_url",
+    "credential"
+  ]
+}
