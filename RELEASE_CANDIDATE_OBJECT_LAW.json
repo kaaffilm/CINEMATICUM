@@ -1,0 +1,40 @@
+{
+  "object_type": "CINEMATICUM_RELEASE_CANDIDATE_OBJECT_LAW",
+  "schema_version": "cinematicum.release_candidate_object_law.v1",
+  "institution": "CINEMATICUM",
+  "root_sentence": "CINEMATICUM issues admissible motion pictures.",
+  "law_boundary": "RELEASE_CANDIDATE_OBJECT_LAW_ONLY",
+  "issued_film": false,
+  "media_present": false,
+  "generation_present": false,
+  "engine_present": false,
+  "model_present": false,
+  "release_candidate_is": "a bounded pre-issuance state where final-cut, manifest, hash, authority, and outsider replay requirements are satisfied in object form before issuance",
+  "release_candidate_is_not": [
+    "issued film",
+    "released media",
+    "generated footage",
+    "render workflow",
+    "model output",
+    "distribution package",
+    "festival submission"
+  ],
+  "required_future_objects": [
+    "director_acceptance_object",
+    "locked_picture_object",
+    "final_cut_timeline_object",
+    "final_mix_lock_object",
+    "final_grade_lock_object",
+    "release_manifest_object",
+    "media_hash_manifest_object",
+    "outsider_replay_bundle",
+    "terminal_closure_candidate"
+  ],
+  "state_transitions": {
+    "ISSUANCE_DOCKET_OPEN": "release_candidate_law_may_be_declared",
+    "RELEASE_CANDIDATE_LAW_DECLARED": "schemas_exist_but_film_not_issued",
+    "RELEASE_CANDIDATE_READY": "future state; requires concrete release objects and replay pass",
+    "ISSUED_ADMISSIBLE_MOTION_PICTURE": "future state; requires motion picture issuance act"
+  },
+  "forbidden_pr3_transition": "ISSUED_ADMISSIBLE_MOTION_PICTURE"
+}

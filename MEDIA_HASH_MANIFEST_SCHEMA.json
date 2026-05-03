@@ -1,0 +1,29 @@
+{
+  "object_type": "CINEMATICUM_MEDIA_HASH_MANIFEST_SCHEMA",
+  "schema_version": "cinematicum.media_hash_manifest_schema.v1",
+  "boundary": "HASH_SCHEMA_ONLY_NO_MEDIA",
+  "hash_algorithm": "sha256",
+  "required_digest_targets": [
+    "picture_master",
+    "audio_master",
+    "subtitle_or_caption_tracks_if_any",
+    "poster_or_public_still_if_any",
+    "release_manifest"
+  ],
+  "required_fields_per_entry": [
+    "artifact_id",
+    "artifact_role",
+    "filename",
+    "byte_size",
+    "sha256",
+    "created_at_utc"
+  ],
+  "forbidden_material": [
+    "media bytes",
+    "render cache",
+    "model weights",
+    "private assets",
+    "cloud credentials"
+  ],
+  "rule": "PR3 defines how future media will be named and hashed; PR3 does not admit media into the repository."
+}

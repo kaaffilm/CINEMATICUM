@@ -64,3 +64,20 @@ The governing boundary remains:
     python3 -m unittest tests/test_cinematic_jurisdiction.py
     bash scripts/verify-cinematic-issuance-docket.sh
     python3 -m unittest tests/test_cinematic_issuance_docket.py
+
+## PR3 — Release-candidate object law
+
+PR3 adds release-candidate law and replay/manifest schemas.
+
+This does not create a release candidate.
+
+This does not issue a film.
+
+This does not add footage, audio, render workflows, model outputs, release artifacts, or media.
+
+PR3 defines how a future release candidate must bind director acceptance, locked picture, final-cut timeline, release manifest, hash manifest, and outsider replay.
+
+### PR3 verification
+
+    bash scripts/verify-release-candidate-law.sh
+    python3 -m unittest tests/test_release_candidate_law.py
