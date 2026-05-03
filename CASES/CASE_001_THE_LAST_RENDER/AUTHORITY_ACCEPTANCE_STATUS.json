@@ -1,0 +1,18 @@
+{
+  "object_type": "CINEMATICUM_CASE_AUTHORITY_ACCEPTANCE_STATUS",
+  "schema_version": "cinematicum.case_authority_acceptance_status.v1",
+  "case_id": "CASE_001_THE_LAST_RENDER",
+  "docket_number": "CIN-0001",
+  "case_title": "THE LAST RENDER",
+  "current_state": "AUTHORITY_ACCEPTANCE_LAW_DECLARED",
+  "release_candidate_ready": false,
+  "issued": false,
+  "media_present": false,
+  "director_acceptance_present": false,
+  "timeline_lock_present": false,
+  "sound_mix_lock_present": false,
+  "color_grade_lock_present": false,
+  "terminal_closure_candidate_present": false,
+  "outsider_replay_passed": false,
+  "pr4_boundary": "Authority acceptance schemas only; no acceptance object is asserted as present."
+}

@@ -1,0 +1,28 @@
+{
+  "object_type": "CINEMATICUM_DIRECTOR_ACCEPTANCE_OBJECT_SCHEMA",
+  "schema_version": "cinematicum.director_acceptance_object_schema.v1",
+  "boundary": "SCHEMA_ONLY_NO_ACCEPTANCE_OBJECT",
+  "required_fields": [
+    "case_id",
+    "director_authority_id",
+    "accepted_cut_id",
+    "final_cut_timeline_lock_id",
+    "acceptance_statement",
+    "accepted_at_utc",
+    "supersedes_acceptance_id",
+    "signature_or_digest"
+  ],
+  "required_assertions": [
+    "director_accepts_final_cut",
+    "acceptance_is_case_bound",
+    "acceptance_does_not_issue_film",
+    "acceptance_does_not_embed_media"
+  ],
+  "forbidden_fields": [
+    "embedded_media",
+    "raw_footage",
+    "private_key",
+    "cloud_token",
+    "model_weights"
+  ]
+}

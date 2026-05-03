@@ -81,3 +81,20 @@ PR3 defines how a future release candidate must bind director acceptance, locked
 
     bash scripts/verify-release-candidate-law.sh
     python3 -m unittest tests/test_release_candidate_law.py
+
+## PR4 — Authority acceptance object law
+
+PR4 adds director acceptance, final-cut timeline lock, sound mix lock, color grade lock, and terminal-closure candidate schemas.
+
+This does not make the case release-candidate-ready.
+
+This does not issue a film.
+
+This does not add footage, audio, stills, render workflows, model outputs, release artifacts, or media.
+
+PR4 defines which authority acceptance objects must exist before a future release candidate may be asserted.
+
+### PR4 verification
+
+    bash scripts/verify-authority-acceptance-law.sh
+    python3 -m unittest tests/test_authority_acceptance_law.py
