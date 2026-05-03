@@ -1,0 +1,18 @@
+{
+  "object_type": "CINEMATICUM_CASE_AUTHORITY_OBJECT_INSTANTIATION_GATE_STATUS",
+  "schema_version": "cinematicum.case_authority_object_instantiation_gate_status.v1",
+  "case_id": "CASE_001_THE_LAST_RENDER",
+  "case_title": "THE LAST RENDER",
+  "current_state": "OUTSIDER_REPLAY_BUNDLE_LAW_DECLARED",
+  "instantiation_gate_present": true,
+  "instantiated_authority_objects_present": false,
+  "authority_satisfied": false,
+  "required_authority_objects_missing": true,
+  "templates_do_not_satisfy_authority_objects": true,
+  "may_advance_now": false,
+  "release_candidate_ready": false,
+  "issued": false,
+  "media_present": false,
+  "outsider_replay_passed": false,
+  "terminal_closure_present": false
+}

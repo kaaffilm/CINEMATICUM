@@ -475,3 +475,29 @@ Still false:
     outsider_replay_passed=false
 
 The template kit creates a forward path, not authority.
+
+## PR21 — Authority object instantiation gate
+
+PR21 defines the boundary between inert templates and actual authority objects.
+
+Verify:
+
+    bash scripts/verify-authority-object-instantiation-gate.sh
+    bash scripts/verify-all.sh
+
+Current active state remains:
+
+    CASE_001_THE_LAST_RENDER = OUTSIDER_REPLAY_BUNDLE_LAW_DECLARED
+
+Still false:
+
+    instantiated_authority_objects_present=false
+    authority_satisfied=false
+    required_authority_objects_missing=true
+    may_advance_now=false
+    release_candidate_ready=false
+    issued=false
+    media_present=false
+    outsider_replay_passed=false
+
+The gate defines promotion requirements. It does not instantiate authority.
