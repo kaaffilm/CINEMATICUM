@@ -756,3 +756,7 @@ CINEMATICUM now separates future reopening-request shape from live reopening. Th
 ### Authority Object Admission Intake Reopening Request Validator
 
 CINEMATICUM now validates the future reopening-request schema while preserving zero live reopening requests. The validator proves that validation does not create a request, reopen intake, satisfy authority, advance state, issue, or admit media.
+
+### Authority Object Admission Intake Reopening Request Rejection Corpus
+
+CINEMATICUM now contains invalid reopening-request fixtures. The fixtures are explicitly not live requests and prove rejection behavior without reopening intake, satisfying authority, advancing state, issuing, or admitting media.

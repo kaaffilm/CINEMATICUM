@@ -1,0 +1,21 @@
+{
+  "fixture_type": "CINEMATICUM_REOPENING_REQUEST_REJECTION_FIXTURE",
+  "fixture_id": "REOPENING_REQUEST_REJECTION_FIXTURE_003",
+  "fixture_is_live_request": false,
+  "expected_valid": false,
+  "expected_rejection_reason": "missing_authority_object_manifest",
+  "request": {
+    "object_type": "CINEMATICUM_AUTHORITY_OBJECT_ADMISSION_INTAKE_REOPENING_REQUEST",
+    "case_id": "CASE_001_THE_LAST_RENDER",
+    "current_state": "OUTSIDER_REPLAY_BUNDLE_LAW_DECLARED",
+    "requested_action": "REOPEN_AUTHORITY_OBJECT_ADMISSION_INTAKE",
+    "requested_by_authority": "CINEMATICUM",
+    "requested_at_utc": "SCHEMA_FIXTURE_ONLY",
+    "reopening_scope": "FUTURE_VALID_INTAKE_ONLY",
+    "decision_required_before_reopening": true,
+    "finality_recompute_required": true,
+    "silent_reopening_forbidden": true,
+    "issued": false,
+    "media_present": false
+  }
+}

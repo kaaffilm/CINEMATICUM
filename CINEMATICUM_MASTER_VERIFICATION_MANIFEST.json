@@ -41,7 +41,8 @@
     "scripts/verify-authority-object-admission-intake-finality-seal.sh",
     "scripts/verify-authority-object-admission-intake-reopening-gate.sh",
     "scripts/verify-authority-object-admission-intake-reopening-request-schema.sh",
-    "scripts/verify-authority-object-admission-intake-reopening-request-validator.sh"
+    "scripts/verify-authority-object-admission-intake-reopening-request-validator.sh",
+    "scripts/verify-authority-object-admission-intake-reopening-request-rejection-corpus.sh"
   ],
   "required_unittests": [
     "tests/test_authority_acceptance_law.py",
@@ -79,7 +80,8 @@
     "tests/test_authority_object_admission_intake_finality_seal.py",
     "tests/test_authority_object_admission_intake_reopening_gate.py",
     "tests/test_authority_object_admission_intake_reopening_request_schema.py",
-    "tests/test_authority_object_admission_intake_reopening_request_validator.py"
+    "tests/test_authority_object_admission_intake_reopening_request_validator.py",
+    "tests/test_authority_object_admission_intake_reopening_request_rejection_corpus.py"
   ],
   "required_ci_workflows": [
     "authority-acceptance-law",
@@ -117,7 +119,8 @@
     "authority-object-admission-intake-finality-seal",
     "authority-object-admission-intake-reopening-gate",
     "authority-object-admission-intake-reopening-request-schema",
-    "authority-object-admission-intake-reopening-request-validator"
+    "authority-object-admission-intake-reopening-request-validator",
+    "authority-object-admission-intake-reopening-request-rejection-corpus"
   ],
   "master_invariants": [
     "accepted_admission_request_required_before_authority_object",
