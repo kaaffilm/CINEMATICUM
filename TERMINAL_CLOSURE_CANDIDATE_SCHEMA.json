@@ -1,0 +1,29 @@
+{
+  "object_type": "CINEMATICUM_TERMINAL_CLOSURE_CANDIDATE_SCHEMA",
+  "schema_version": "cinematicum.terminal_closure_candidate_schema.v1",
+  "boundary": "SCHEMA_ONLY_NO_TERMINAL_CLOSURE",
+  "required_fields": [
+    "case_id",
+    "closure_candidate_id",
+    "director_acceptance_id",
+    "final_cut_timeline_lock_id",
+    "sound_mix_lock_id",
+    "color_grade_lock_id",
+    "release_manifest_id",
+    "media_hash_manifest_id",
+    "outsider_replay_bundle_id",
+    "closure_statement",
+    "created_at_utc"
+  ],
+  "required_assertions": [
+    "closure_candidate_is_not_issuance",
+    "closure_candidate_is_not_release",
+    "closure_candidate_requires_replay_pass_before_issuance"
+  ],
+  "forbidden_fields": [
+    "issued_film",
+    "media_bytes",
+    "private_key",
+    "unverified_release_claim"
+  ]
+}

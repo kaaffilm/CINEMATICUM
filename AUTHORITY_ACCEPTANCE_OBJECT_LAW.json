@@ -1,0 +1,42 @@
+{
+  "object_type": "CINEMATICUM_AUTHORITY_ACCEPTANCE_OBJECT_LAW",
+  "schema_version": "cinematicum.authority_acceptance_object_law.v1",
+  "institution": "CINEMATICUM",
+  "root_sentence": "CINEMATICUM issues admissible motion pictures.",
+  "law_boundary": "AUTHORITY_ACCEPTANCE_OBJECT_LAW_ONLY",
+  "issued_film": false,
+  "release_candidate_ready": false,
+  "media_present": false,
+  "generation_present": false,
+  "engine_present": false,
+  "model_present": false,
+  "purpose": "Define the acceptance objects required before a case may become release-candidate-ready.",
+  "authority_objects_required_before_release_candidate_ready": [
+    "director_acceptance_object",
+    "final_cut_timeline_lock_object",
+    "sound_mix_lock_object",
+    "color_grade_lock_object",
+    "terminal_closure_candidate_object"
+  ],
+  "authority_law": {
+    "director_acceptance_object": "declares final-cut acceptance under director authority",
+    "final_cut_timeline_lock_object": "declares the exact timeline that may become release-candidate material",
+    "sound_mix_lock_object": "declares the locked mix boundary",
+    "color_grade_lock_object": "declares the locked grade boundary",
+    "terminal_closure_candidate_object": "declares that the case may approach issuance review but is not issued"
+  },
+  "forbidden_pr4_outputs": [
+    "issued film",
+    "release candidate ready state",
+    "media file",
+    "render workflow",
+    "model workflow",
+    "generation pipeline",
+    "distribution package"
+  ],
+  "pr4_state_transition": {
+    "from": "RELEASE_CANDIDATE_LAW_DECLARED",
+    "to": "AUTHORITY_ACCEPTANCE_LAW_DECLARED",
+    "not_to": "RELEASE_CANDIDATE_READY"
+  }
+}

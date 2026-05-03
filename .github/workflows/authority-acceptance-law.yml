@@ -1,0 +1,17 @@
+name: authority-acceptance-law
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+
+jobs:
+  authority-acceptance-law:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Verify authority acceptance law
+        run: bash scripts/verify-authority-acceptance-law.sh
+      - name: Run authority acceptance law tests
+        run: python3 -m unittest tests/test_authority_acceptance_law.py
