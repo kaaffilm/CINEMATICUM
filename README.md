@@ -269,3 +269,25 @@ Still false:
     outsider_replay_passed=false
     admissibility_verdict_present=false
     terminal_closure_present=false
+
+## PR13 — Authority precedence lattice
+
+PR13 adds the authority precedence lattice.
+
+Read:
+
+    AUTHORITY_PRECEDENCE.md
+    CINEMATICUM_AUTHORITY_PRECEDENCE_LATTICE.json
+
+Verify:
+
+    bash scripts/verify-authority-precedence-lattice.sh
+    bash scripts/verify-all.sh
+
+Binding rule:
+
+    active current-state objects outrank README prose, schemas, registry projections, status seals, public inspection surfaces, negative proofs, and layer-status records.
+
+Current active state remains:
+
+    CASE_001_THE_LAST_RENDER = OUTSIDER_REPLAY_BUNDLE_LAW_DECLARED
