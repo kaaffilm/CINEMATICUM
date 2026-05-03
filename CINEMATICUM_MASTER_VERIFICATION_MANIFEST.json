@@ -17,7 +17,8 @@
     "scripts/verify-object-registry-fresh.sh",
     "scripts/verify-repository-status-seal.sh",
     "scripts/verify-public-inspection-dossier.sh",
-    "scripts/verify-public-inspection-negative-proof.sh"
+    "scripts/verify-public-inspection-negative-proof.sh",
+    "scripts/verify-authority-precedence-lattice.sh"
   ],
   "required_unittests": [
     "tests/test_cinematic_jurisdiction.py",
@@ -31,7 +32,8 @@
     "tests/test_object_registry_freshness.py",
     "tests/test_repository_status_seal.py",
     "tests/test_public_inspection_dossier.py",
-    "tests/test_public_inspection_negative_proof.py"
+    "tests/test_public_inspection_negative_proof.py",
+    "tests/test_authority_precedence_lattice.py"
   ],
   "required_ci_workflows": [
     "cinematic-jurisdiction",
@@ -45,7 +47,8 @@
     "object-registry-freshness",
     "repository-status-seal",
     "public-inspection-dossier",
-    "public-inspection-negative-proof"
+    "public-inspection-negative-proof",
+    "authority-precedence-lattice"
   ],
   "master_invariants": [
     "root_sentence_present",
@@ -72,6 +75,11 @@
     "public_inspection_not_issuance",
     "public_inspection_not_media_admission",
     "public_inspection_not_replay_pass",
-    "public_inspection_not_verdict"
+    "public_inspection_not_verdict",
+    "authority_precedence_lattice_present",
+    "active_current_state_outranks_public_surfaces",
+    "active_current_state_outranks_registry",
+    "active_current_state_outranks_schema",
+    "active_current_state_outranks_readme"
   ]
 }
