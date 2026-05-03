@@ -1,0 +1,17 @@
+name: required-authority-objects
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+
+jobs:
+  required-authority-objects:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Verify required authority objects
+        run: bash scripts/verify-required-authority-objects.sh
+      - name: Run required authority object tests
+        run: python3 -m unittest tests/test_required_authority_objects.py

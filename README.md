@@ -316,3 +316,27 @@ Current gate status:
 Current active state remains:
 
     CASE_001_THE_LAST_RENDER = OUTSIDER_REPLAY_BUNDLE_LAW_DECLARED
+
+## PR15 — Required authority object checklist
+
+PR15 adds the required authority object checklist.
+
+Read:
+
+    REQUIRED_AUTHORITY_OBJECTS.md
+    CINEMATICUM_REQUIRED_AUTHORITY_OBJECT_CHECKLIST.json
+
+Verify:
+
+    bash scripts/verify-required-authority-objects.sh
+    bash scripts/verify-all.sh
+
+Current gate status:
+
+    may_advance_now=false
+    required_authority_objects_missing=true
+    schemas_do_not_satisfy_authority_objects=true
+
+Current active state remains:
+
+    CASE_001_THE_LAST_RENDER = OUTSIDER_REPLAY_BUNDLE_LAW_DECLARED
