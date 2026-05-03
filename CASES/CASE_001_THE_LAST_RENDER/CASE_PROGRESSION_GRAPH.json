@@ -1,0 +1,63 @@
+{
+  "object_type": "CINEMATICUM_CASE_PROGRESSION_GRAPH",
+  "schema_version": "cinematicum.case_progression_graph.v1",
+  "case_id": "CASE_001_THE_LAST_RENDER",
+  "case_title": "THE LAST RENDER",
+  "current_state": "OUTSIDER_REPLAY_BUNDLE_LAW_DECLARED",
+  "current_state_owner": "CASES/CASE_001_THE_LAST_RENDER/CURRENT_CASE_STATE.json",
+  "nodes": [
+    {
+      "state": "CINEMATIC_JURISDICTION_DECLARED",
+      "status": "reached"
+    },
+    {
+      "state": "ISSUANCE_DOCKET_OPEN",
+      "status": "reached"
+    },
+    {
+      "state": "RELEASE_CANDIDATE_LAW_DECLARED",
+      "status": "reached"
+    },
+    {
+      "state": "AUTHORITY_ACCEPTANCE_LAW_DECLARED",
+      "status": "reached"
+    },
+    {
+      "state": "OUTSIDER_REPLAY_BUNDLE_LAW_DECLARED",
+      "status": "active"
+    },
+    {
+      "state": "RELEASE_CANDIDATE_READY",
+      "status": "not_reached",
+      "missing": [
+        "director_acceptance_object",
+        "final_cut_timeline_lock_object",
+        "sound_mix_lock_object",
+        "color_grade_lock_object",
+        "release_manifest_object",
+        "media_hash_manifest_object",
+        "outsider_replay_bundle",
+        "replay_execution_report",
+        "admissibility_verdict",
+        "terminal_closure_candidate"
+      ]
+    },
+    {
+      "state": "ISSUED_ADMISSIBLE_MOTION_PICTURE",
+      "status": "not_reached",
+      "missing": [
+        "release_candidate_ready",
+        "outsider_replay_passed",
+        "admissibility_verdict_admissible",
+        "motion_picture_issuance_act",
+        "terminal_closure"
+      ]
+    }
+  ],
+  "false_now": {
+    "release_candidate_ready": false,
+    "issued": false,
+    "media_present": false,
+    "outsider_replay_passed": false
+  }
+}

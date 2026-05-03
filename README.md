@@ -141,3 +141,24 @@ Still false:
 
     bash scripts/verify-current-state-index.sh
     python3 -m unittest tests/test_current_state_index.py
+
+## PR7 — Master progression verifier
+
+PR7 adds the governed progression matrix and master verification battery.
+
+Use one command:
+
+    bash scripts/verify-all.sh
+
+Current active state:
+
+    CASE_001_THE_LAST_RENDER = OUTSIDER_REPLAY_BUNDLE_LAW_DECLARED
+
+Still false:
+
+    release_candidate_ready=false
+    issued=false
+    media_present=false
+    outsider_replay_passed=false
+
+PR7 prevents future layers from confusing schema with object, replay requirements with replay pass, verdict schema with verdict, or jurisdiction with issued film.
