@@ -8,6 +8,7 @@
     "scripts/verify-all.sh",
     "scripts/verify-authority-acceptance-law.sh",
     "scripts/verify-authority-object-admission-closure-seal.sh",
+    "scripts/verify-authority-object-admission-intake-order.sh",
     "scripts/verify-authority-object-admission-decision-ledger.sh",
     "scripts/verify-authority-object-admission-docket.sh",
     "scripts/verify-authority-object-admission-enforcement-gate.sh",
@@ -39,6 +40,7 @@
   "required_unittests": [
     "tests/test_authority_acceptance_law.py",
     "tests/test_authority_object_admission_closure_seal.py",
+    "tests/test_authority_object_admission_intake_order.py",
     "tests/test_authority_object_admission_decision_ledger.py",
     "tests/test_authority_object_admission_docket.py",
     "tests/test_authority_object_admission_enforcement_gate.py",
@@ -70,6 +72,7 @@
   "required_ci_workflows": [
     "authority-acceptance-law",
     "authority-object-admission-closure-seal",
+    "authority-object-admission-intake-order",
     "authority-object-admission-decision-ledger",
     "authority-object-admission-docket",
     "authority-object-admission-enforcement-gate",
@@ -107,6 +110,7 @@
     "all_json_parse",
     "all_layer_status_records_subordinate",
     "authority-object-admission-closure-seal",
+    "authority-object-admission-intake-order",
     "authority_object_admission_decision_ledger_acceptance_requires_valid_request",
     "authority_object_admission_decision_ledger_does_not_instantiate_authority",
     "authority_object_admission_decision_ledger_rejection_requires_canonical_reason",

@@ -1,0 +1,17 @@
+{
+  "object_type": "CINEMATICUM_CASE_AUTHORITY_OBJECT_ADMISSION_INTAKE_ORDER_STATUS",
+  "schema_version": "cinematicum.case_authority_object_admission_intake_order_status.v1",
+  "institution": "CINEMATICUM",
+  "case_id": "CASE_001_THE_LAST_RENDER",
+  "current_state": "OUTSIDER_REPLAY_BUNDLE_LAW_DECLARED",
+  "admission_stack_closed": true,
+  "required_authority_object_count": 8,
+  "live_admission_requests_present": false,
+  "admission_request_count": 0,
+  "accepted_decision_count": 0,
+  "instantiated_authority_objects_present": false,
+  "authority_satisfied": false,
+  "may_advance_now": false,
+  "issued": false,
+  "media_present": false
+}

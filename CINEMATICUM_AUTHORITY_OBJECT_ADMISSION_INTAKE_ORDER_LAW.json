@@ -1,0 +1,19 @@
+{
+  "object_type": "CINEMATICUM_AUTHORITY_OBJECT_ADMISSION_INTAKE_ORDER_LAW",
+  "schema_version": "cinematicum.authority_object_admission_intake_order_law.v1",
+  "institution": "CINEMATICUM",
+  "case_id": "CASE_001_THE_LAST_RENDER",
+  "current_state": "OUTSIDER_REPLAY_BUNDLE_LAW_DECLARED",
+  "law_declared": true,
+  "closure_seal_must_precede_intake_order": true,
+  "templates_do_not_satisfy_authority_objects": true,
+  "schemas_do_not_satisfy_authority_objects": true,
+  "each_required_authority_object_requires_live_admission_request": true,
+  "accepted_decision_required_before_instantiation": true,
+  "no_media_payload_may_be_admitted_by_intake_order": true,
+  "no_state_transition_may_be_unblocked_by_intake_order": true,
+  "authority_satisfied": false,
+  "may_advance_now": false,
+  "issued": false,
+  "media_present": false
+}
