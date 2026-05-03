@@ -744,3 +744,7 @@ CINEMATICUM records a closed zero-record intake rejection ledger after the intak
 ### Authority Object Admission Intake Finality Seal
 
 CINEMATICUM seals the current zero-intake snapshot after the intake rejection ledger. The seal is scoped only to the current state and does not bar future valid intake under law. It records that no open intake exceptions or unadjudicated intake records exist, while authority remains unsatisfied and the case cannot advance.
+
+### Authority Object Admission Intake Reopening Gate
+
+CINEMATICUM preserves the current zero-intake finality seal without turning it into a permanent freeze. Future valid intake remains possible only under law and requires a new request record, validation, decision record, recomputed rejection ledger, and a new finality seal. Silent reopening is forbidden.
