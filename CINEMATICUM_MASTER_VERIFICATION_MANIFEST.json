@@ -27,7 +27,8 @@
     "scripts/verify-outsider-clone-replay.sh",
     "scripts/verify-authority-object-template-kit.sh",
     "scripts/verify-authority-object-instantiation-gate.sh",
-    "scripts/verify-authority-object-admission-docket.sh"
+    "scripts/verify-authority-object-admission-docket.sh",
+    "scripts/verify-authority-object-admission-request-schema.sh"
   ],
   "required_unittests": [
     "tests/test_cinematic_jurisdiction.py",
@@ -51,7 +52,8 @@
     "tests/test_outsider_clone_replay.py",
     "tests/test_authority_object_template_kit.py",
     "tests/test_authority_object_instantiation_gate.py",
-    "tests/test_authority_object_admission_docket.py"
+    "tests/test_authority_object_admission_docket.py",
+    "tests/test_authority_object_admission_request_schema.py"
   ],
   "required_ci_workflows": [
     "cinematic-jurisdiction",
@@ -75,7 +77,8 @@
     "outsider-clone-replay",
     "authority-object-template-kit",
     "authority-object-instantiation-gate",
-    "authority-object-admission-docket"
+    "authority-object-admission-docket",
+    "authority-object-admission-request-schema"
   ],
   "master_invariants": [
     "root_sentence_present",
@@ -146,6 +149,8 @@
     "authority_object_instantiation_requires_accountable_actor_and_timestamp",
     "silent_authority_object_instantiation_forbidden",
     "authority_object_admission_docket_empty_until_public_request",
-    "accepted_admission_request_required_before_authority_object"
+    "accepted_admission_request_required_before_authority_object",
+    "authority_object_admission_requests_require_schema",
+    "authority_object_admission_request_does_not_satisfy_authority"
   ]
 }

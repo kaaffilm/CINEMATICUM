@@ -1,0 +1,31 @@
+{
+  "object_type": "CINEMATICUM_AUTHORITY_OBJECT_ADMISSION_REQUEST_SCHEMA_LAW",
+  "schema_version": "cinematicum.authority_object_admission_request_schema_law.v1",
+  "institution": "CINEMATICUM",
+  "root_sentence": "CINEMATICUM issues admissible motion pictures.",
+  "purpose": "Define the only admissible shape for future authority-object admission requests before any authority object may be instantiated.",
+  "schema_owner": "CINEMATICUM_AUTHORITY_OBJECT_ADMISSION_REQUEST_SCHEMA.json",
+  "docket_owner": "CINEMATICUM_AUTHORITY_OBJECT_ADMISSION_DOCKET.json",
+  "request_directory": "authority_object_admission_requests",
+  "current_state_owner": "CINEMATICUM_CURRENT_STATE_INDEX.json",
+  "case_current_state_owner": "CASES/CASE_001_THE_LAST_RENDER/CURRENT_CASE_STATE.json",
+  "law": {
+    "admission_requests_must_be_machine_readable": true,
+    "admission_requests_must_reference_template": true,
+    "admission_requests_must_reference_case": true,
+    "admission_requests_must_declare_no_media_payload": true,
+    "admission_requests_must_not_satisfy_authority_by_themselves": true,
+    "admission_requests_must_not_advance_state": true,
+    "admission_requests_must_not_issue_film": true
+  },
+  "does_not": [
+    "admit any authority object",
+    "instantiate any authority object",
+    "satisfy authority",
+    "make release candidate ready",
+    "admit media",
+    "execute replay",
+    "issue a film",
+    "create terminal closure"
+  ]
+}
