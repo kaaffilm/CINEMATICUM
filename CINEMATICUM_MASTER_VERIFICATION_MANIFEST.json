@@ -31,7 +31,8 @@
     "scripts/verify-authority-object-admission-request-schema.sh",
     "scripts/verify-authority-object-admission-request-validator.sh",
     "scripts/verify-authority-object-admission-request-rejection-corpus.sh",
-    "scripts/verify-authority-object-admission-rejection-taxonomy.sh"
+    "scripts/verify-authority-object-admission-rejection-taxonomy.sh",
+    "scripts/verify-authority-object-admission-decision-ledger.sh"
   ],
   "required_unittests": [
     "tests/test_cinematic_jurisdiction.py",
@@ -59,7 +60,8 @@
     "tests/test_authority_object_admission_request_schema.py",
     "tests/test_authority_object_admission_request_validator.py",
     "tests/test_authority_object_admission_request_rejection_corpus.py",
-    "tests/test_authority_object_admission_rejection_taxonomy.py"
+    "tests/test_authority_object_admission_rejection_taxonomy.py",
+    "tests/test_authority_object_admission_decision_ledger.py"
   ],
   "required_ci_workflows": [
     "cinematic-jurisdiction",
@@ -87,7 +89,8 @@
     "authority-object-admission-request-schema",
     "authority-object-admission-request-validator",
     "authority-object-admission-request-rejection-corpus",
-    "authority-object-admission-rejection-taxonomy"
+    "authority-object-admission-rejection-taxonomy",
+    "authority-object-admission-decision-ledger"
   ],
   "master_invariants": [
     "root_sentence_present",
@@ -169,6 +172,10 @@
     "authority_object_admission_rejection_taxonomy_has_canonical_reason_codes",
     "authority_object_admission_rejection_taxonomy_blocks_validator_drift",
     "authority_object_admission_rejection_taxonomy_does_not_create_live_requests",
-    "authority_object_admission_rejection_taxonomy_does_not_advance_state"
+    "authority_object_admission_rejection_taxonomy_does_not_advance_state",
+    "authority_object_admission_decision_ledger_requires_explicit_decisions",
+    "authority_object_admission_decision_ledger_acceptance_requires_valid_request",
+    "authority_object_admission_decision_ledger_rejection_requires_canonical_reason",
+    "authority_object_admission_decision_ledger_does_not_instantiate_authority"
   ]
 }
