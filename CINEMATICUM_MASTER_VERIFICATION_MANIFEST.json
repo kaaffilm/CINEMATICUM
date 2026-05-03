@@ -11,7 +11,8 @@
     "scripts/verify-outsider-replay-bundle-law.sh",
     "scripts/verify-current-state-index.sh",
     "scripts/verify-master-progression.sh",
-    "scripts/verify-all.sh"
+    "scripts/verify-all.sh",
+    "scripts/verify-object-registry.sh"
   ],
   "required_unittests": [
     "tests/test_cinematic_jurisdiction.py",
@@ -20,7 +21,8 @@
     "tests/test_authority_acceptance_law.py",
     "tests/test_outsider_replay_bundle_law.py",
     "tests/test_current_state_index.py",
-    "tests/test_master_progression.py"
+    "tests/test_master_progression.py",
+    "tests/test_object_registry.py"
   ],
   "required_ci_workflows": [
     "cinematic-jurisdiction",
@@ -29,7 +31,8 @@
     "authority-acceptance-law",
     "outsider-replay-bundle-law",
     "current-state-index",
-    "master-progression"
+    "master-progression",
+    "object-registry"
   ],
   "master_invariants": [
     "root_sentence_present",
@@ -44,6 +47,8 @@
     "outsider_replay_passed_false",
     "no_raw_media_or_model_files_in_git",
     "all_json_parse",
-    "all_layer_status_records_subordinate"
+    "all_layer_status_records_subordinate",
+    "object_registry_complete",
+    "surface_classes_machine_readable"
   ]
 }

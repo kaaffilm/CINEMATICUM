@@ -1,0 +1,17 @@
+name: object-registry
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+
+jobs:
+  object-registry:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Verify object registry
+        run: bash scripts/verify-object-registry.sh
+      - name: Run object registry tests
+        run: python3 -m unittest tests/test_object_registry.py

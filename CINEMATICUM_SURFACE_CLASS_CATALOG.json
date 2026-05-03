@@ -1,0 +1,55 @@
+{
+  "object_type": "CINEMATICUM_SURFACE_CLASS_CATALOG",
+  "schema_version": "cinematicum.surface_class_catalog.v1",
+  "institution": "CINEMATICUM",
+  "surface_classes": {
+    "LAW_OBJECT": {
+      "meaning": "Defines rule, boundary, or admissibility law.",
+      "may_define_current_truth": false,
+      "may_issue_film": false,
+      "may_admit_media": false
+    },
+    "SCHEMA_OBJECT": {
+      "meaning": "Defines future object shape only.",
+      "may_define_current_truth": false,
+      "may_issue_film": false,
+      "may_admit_media": false
+    },
+    "ACTIVE_CURRENT_STATE": {
+      "meaning": "Owns active current-state pointer.",
+      "may_define_current_truth": true,
+      "may_issue_film": false,
+      "may_admit_media": false
+    },
+    "LAYER_STATUS_RECORD": {
+      "meaning": "Records a staged layer status subordinate to current-state owner.",
+      "may_define_current_truth": false,
+      "may_issue_film": false,
+      "may_admit_media": false
+    },
+    "CASE_RECORD": {
+      "meaning": "Records case-local evidence or docket material.",
+      "may_define_current_truth": false,
+      "may_issue_film": false,
+      "may_admit_media": false
+    },
+    "VERIFICATION_MANIFEST": {
+      "meaning": "Defines verification battery, scripts, tests, and CI surfaces.",
+      "may_define_current_truth": false,
+      "may_issue_film": false,
+      "may_admit_media": false
+    },
+    "PROGRESSION_GRAPH": {
+      "meaning": "Describes lawful progression and reached/not-reached states.",
+      "may_define_current_truth": false,
+      "may_issue_film": false,
+      "may_admit_media": false
+    }
+  },
+  "hard_boundary": {
+    "issued": false,
+    "release_candidate_ready": false,
+    "media_present": false,
+    "outsider_replay_passed": false
+  }
+}

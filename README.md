@@ -162,3 +162,18 @@ Still false:
     outsider_replay_passed=false
 
 PR7 prevents future layers from confusing schema with object, replay requirements with replay pass, verdict schema with verdict, or jurisdiction with issued film.
+
+## PR8 — Object registry
+
+PR8 adds the machine-readable object registry and surface-class catalog.
+
+Use:
+
+    bash scripts/verify-object-registry.sh
+    bash scripts/verify-all.sh
+
+The registry does not issue a film, does not admit media, does not execute replay, and does not override current state.
+
+Current active state remains:
+
+    CASE_001_THE_LAST_RENDER = OUTSIDER_REPLAY_BUNDLE_LAW_DECLARED
