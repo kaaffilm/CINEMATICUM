@@ -1,0 +1,49 @@
+{
+  "object_type": "CINEMATICUM_MASTER_VERIFICATION_MANIFEST",
+  "schema_version": "cinematicum.master_verification_manifest.v1",
+  "institution": "CINEMATICUM",
+  "purpose": "List the full verification battery required for every current CINEMATICUM main-state assertion.",
+  "required_scripts": [
+    "scripts/verify-cinematic-jurisdiction.sh",
+    "scripts/verify-cinematic-issuance-docket.sh",
+    "scripts/verify-release-candidate-law.sh",
+    "scripts/verify-authority-acceptance-law.sh",
+    "scripts/verify-outsider-replay-bundle-law.sh",
+    "scripts/verify-current-state-index.sh",
+    "scripts/verify-master-progression.sh",
+    "scripts/verify-all.sh"
+  ],
+  "required_unittests": [
+    "tests/test_cinematic_jurisdiction.py",
+    "tests/test_cinematic_issuance_docket.py",
+    "tests/test_release_candidate_law.py",
+    "tests/test_authority_acceptance_law.py",
+    "tests/test_outsider_replay_bundle_law.py",
+    "tests/test_current_state_index.py",
+    "tests/test_master_progression.py"
+  ],
+  "required_ci_workflows": [
+    "cinematic-jurisdiction",
+    "cinematic-issuance-docket",
+    "release-candidate-law",
+    "authority-acceptance-law",
+    "outsider-replay-bundle-law",
+    "current-state-index",
+    "master-progression"
+  ],
+  "master_invariants": [
+    "root_sentence_present",
+    "case_001_present",
+    "one_active_case_state",
+    "release_candidate_ready_false",
+    "issued_false",
+    "media_present_false",
+    "generation_present_false",
+    "engine_present_false",
+    "model_present_false",
+    "outsider_replay_passed_false",
+    "no_raw_media_or_model_files_in_git",
+    "all_json_parse",
+    "all_layer_status_records_subordinate"
+  ]
+}
