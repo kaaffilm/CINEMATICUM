@@ -706,3 +706,22 @@ CINEMATICUM now contains an authority object admission enforcement gate.
 This gate makes the admission chain executable: live admission requests, accepted admission decisions, and instantiated authority objects are required before authority can be satisfied. Templates, schemas, fixtures, taxonomy, and empty ledgers do not advance the case.
 
 The current case remains blocked at `OUTSIDER_REPLAY_BUNDLE_LAW_DECLARED`: no media is present, no release candidate is ready, and no issuance has occurred.
+
+## Authority object admission closure seal
+
+CINEMATICUM now includes a closure seal for the authority-object admission perimeter.
+
+The seal proves that the docket, request schema, validator, rejection corpus, rejection taxonomy, decision ledger, and enforcement gate form a closed non-advancing admission stack.
+
+The seal does not admit authority objects, does not satisfy missing authority, does not advance the case state, does not create a release candidate, and does not issue a motion picture.
+
+Current invariant:
+
+```text
+CURRENT_STATE=OUTSIDER_REPLAY_BUNDLE_LAW_DECLARED
+ADMISSION_STACK_CLOSED=true
+AUTHORITY_SATISFIED=false
+MAY_ADVANCE_NOW=false
+ISSUED=false
+MEDIA_PRESENT=false
+```
