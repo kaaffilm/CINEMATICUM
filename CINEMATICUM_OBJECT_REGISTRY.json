@@ -9,7 +9,7 @@
   "registry_does_not_override_current_state": true,
   "current_active_state": "OUTSIDER_REPLAY_BUNDLE_LAW_DECLARED",
   "case_id": "CASE_001_THE_LAST_RENDER",
-  "entries_count": 119,
+  "entries_count": 122,
   "entries": [
     {
       "path": "ADMISSIBILITY_VERDICT_SCHEMA.json",
@@ -135,6 +135,18 @@
       "path": "CASES/CASE_001_THE_LAST_RENDER/AUTHORITY_OBJECT_ADMISSION_INTAKE_ORDER_STATUS.json",
       "object_type": "CINEMATICUM_CASE_AUTHORITY_OBJECT_ADMISSION_INTAKE_ORDER_STATUS",
       "schema_version": "cinematicum.case_authority_object_admission_intake_order_status.v1",
+      "surface_class": "LAYER_STATUS_RECORD",
+      "case_id": "CASE_001_THE_LAST_RENDER",
+      "current_truth_owner": false,
+      "issued": false,
+      "release_candidate_ready": false,
+      "media_present": false,
+      "outsider_replay_passed": false
+    },
+    {
+      "path": "CASES/CASE_001_THE_LAST_RENDER/AUTHORITY_OBJECT_ADMISSION_INTAKE_VALIDATION_GATE_STATUS.json",
+      "object_type": "CINEMATICUM_CASE_AUTHORITY_OBJECT_ADMISSION_INTAKE_VALIDATION_GATE_STATUS",
+      "schema_version": "cinematicum.case_authority_object_admission_intake_validation_gate_status.v1",
       "surface_class": "LAYER_STATUS_RECORD",
       "case_id": "CASE_001_THE_LAST_RENDER",
       "current_truth_owner": false,
@@ -545,6 +557,30 @@
       "schema_version": "cinematicum.authority_object_admission_intake_order_law.v1",
       "surface_class": "LAW_OBJECT",
       "case_id": "CASE_001_THE_LAST_RENDER",
+      "current_truth_owner": false,
+      "issued": false,
+      "release_candidate_ready": false,
+      "media_present": false,
+      "outsider_replay_passed": false
+    },
+    {
+      "path": "CINEMATICUM_AUTHORITY_OBJECT_ADMISSION_INTAKE_VALIDATION_GATE.json",
+      "object_type": "CINEMATICUM_AUTHORITY_OBJECT_ADMISSION_INTAKE_VALIDATION_GATE",
+      "schema_version": "cinematicum.authority_object_admission_intake_validation_gate.v1",
+      "surface_class": "CASE_RECORD",
+      "case_id": "CASE_001_THE_LAST_RENDER",
+      "current_truth_owner": false,
+      "issued": false,
+      "release_candidate_ready": false,
+      "media_present": false,
+      "outsider_replay_passed": false
+    },
+    {
+      "path": "CINEMATICUM_AUTHORITY_OBJECT_ADMISSION_INTAKE_VALIDATION_GATE_LAW.json",
+      "object_type": "CINEMATICUM_AUTHORITY_OBJECT_ADMISSION_INTAKE_VALIDATION_GATE_LAW",
+      "schema_version": "cinematicum.authority_object_admission_intake_validation_gate_law.v1",
+      "surface_class": "LAW_OBJECT",
+      "case_id": null,
       "current_truth_owner": false,
       "issued": false,
       "release_candidate_ready": false,

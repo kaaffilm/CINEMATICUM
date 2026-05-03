@@ -77,5 +77,6 @@
   "authority_satisfied": false,
   "may_advance_now": false,
   "issued": false,
-  "media_present": false
+  "media_present": false,
+  "admission_stack_closed": true
 }

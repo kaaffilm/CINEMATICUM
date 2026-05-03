@@ -85,6 +85,8 @@ bash scripts/verify-authority-object-admission-closure-seal.sh
 python3 -m unittest tests/test_authority_object_admission_closure_seal.py
 bash scripts/verify-authority-object-admission-intake-order.sh
 python3 -m unittest tests/test_authority_object_admission_intake_order.py
+bash scripts/verify-authority-object-admission-intake-validation-gate.sh
+python3 -m unittest tests/test_authority_object_admission_intake_validation_gate.py
 bash scripts/verify-master-verification-manifest-closure.sh
 python3 -m unittest tests/test_master_verification_manifest_closure.py
 
