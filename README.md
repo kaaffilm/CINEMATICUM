@@ -612,3 +612,32 @@ Current result:
     media_present=false
 
 The corpus tests refusal paths without creating live requests.
+
+## PR26 — Authority object admission rejection taxonomy
+
+PR26 freezes canonical rejection reason codes for authority-object admission requests.
+
+Verify:
+
+    bash scripts/verify-authority-object-admission-rejection-taxonomy.sh
+    bash scripts/verify-all.sh
+
+Current active state remains:
+
+    CASE_001_THE_LAST_RENDER = OUTSIDER_REPLAY_BUNDLE_LAW_DECLARED
+
+Current result:
+
+    canonical_rejection_reason_count=9
+    covered_rejection_reason_count=5
+    uncovered_rejection_reason_count=4
+    taxonomy_complete_for_current_validator=true
+    corpus_complete_for_required_reasons=true
+    admission_request_count=0
+    authority_satisfied=false
+    may_advance_now=false
+    release_candidate_ready=false
+    issued=false
+    media_present=false
+
+The taxonomy prevents validator drift without creating live requests.
