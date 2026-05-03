@@ -1,0 +1,30 @@
+{
+  "object_type": "CINEMATICUM_AUTHORITY_OBJECT_ADMISSION_REJECTION_TAXONOMY_LAW",
+  "schema_version": "cinematicum.authority_object_admission_rejection_taxonomy_law.v1",
+  "institution": "CINEMATICUM",
+  "root_sentence": "CINEMATICUM issues admissible motion pictures.",
+  "purpose": "Freeze canonical authority-object admission rejection reason codes so validator refusal cannot drift silently.",
+  "taxonomy_owner": "CINEMATICUM_AUTHORITY_OBJECT_ADMISSION_REJECTION_TAXONOMY.json",
+  "validator_owner": "CINEMATICUM_AUTHORITY_OBJECT_ADMISSION_REQUEST_VALIDATOR.json",
+  "corpus_owner": "CINEMATICUM_AUTHORITY_OBJECT_ADMISSION_REQUEST_REJECTION_CORPUS.json",
+  "schema_owner": "CINEMATICUM_AUTHORITY_OBJECT_ADMISSION_REQUEST_SCHEMA.json",
+  "law": {
+    "all_rejection_reasons_must_be_canonical": true,
+    "validator_may_not_emit_uncatalogued_rejection_reason": true,
+    "rejection_corpus_must_cover_required_reason_codes": true,
+    "taxonomy_does_not_create_live_requests": true,
+    "taxonomy_does_not_accept_requests": true,
+    "taxonomy_does_not_instantiate_authority_objects": true,
+    "taxonomy_does_not_satisfy_authority": true,
+    "taxonomy_does_not_advance_state": true
+  },
+  "does_not": [
+    "create a live admission request",
+    "accept an admission request",
+    "admit an authority object",
+    "instantiate an authority object",
+    "satisfy authority",
+    "make release candidate ready",
+    "issue a film"
+  ]
+}

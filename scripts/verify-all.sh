@@ -73,6 +73,9 @@ python3 -m unittest tests/test_authority_object_admission_request_validator.py
 bash scripts/verify-authority-object-admission-request-rejection-corpus.sh
 python3 -m unittest tests/test_authority_object_admission_request_rejection_corpus.py
 
+bash scripts/verify-authority-object-admission-rejection-taxonomy.sh
+python3 -m unittest tests/test_authority_object_admission_rejection_taxonomy.py
+
 bash scripts/verify-master-verification-manifest-closure.sh
 python3 -m unittest tests/test_master_verification_manifest_closure.py
 
