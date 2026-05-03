@@ -392,3 +392,30 @@ Current sentinel status:
 Current active state remains:
 
     CASE_001_THE_LAST_RENDER = OUTSIDER_REPLAY_BUNDLE_LAW_DECLARED
+
+## PR18 — Master verification manifest closure
+
+PR18 adds the master verification manifest closure guard.
+
+Read:
+
+    MASTER_VERIFICATION_MANIFEST_CLOSURE.md
+    CINEMATICUM_MASTER_VERIFICATION_MANIFEST_CLOSURE.json
+
+Verify:
+
+    bash scripts/verify-master-verification-manifest-closure.sh
+    bash scripts/verify-all.sh
+
+Closure status:
+
+    all_required_scripts_exist=true
+    all_required_scripts_executable=true
+    all_required_scripts_in_verify_all=true
+    all_required_unittests_exist=true
+    all_required_unittests_in_verify_all=true
+    all_required_ci_workflows_exist=true
+
+Current active state remains:
+
+    CASE_001_THE_LAST_RENDER = OUTSIDER_REPLAY_BUNDLE_LAW_DECLARED
