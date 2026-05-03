@@ -1,0 +1,25 @@
+{
+  "object_type": "CINEMATICUM_OBJECT_REGISTRY_REGENERATION_GUARD_LAW",
+  "schema_version": "cinematicum.object_registry_regeneration_guard_law.v1",
+  "institution": "CINEMATICUM",
+  "root_sentence": "CINEMATICUM issues admissible motion pictures.",
+  "purpose": "Ensure the object registry cannot silently become stale when JSON objects are added, removed, or reclassified.",
+  "guard_owner": "scripts/regenerate-object-registry.py",
+  "freshness_check_owner": "scripts/verify-object-registry-fresh.sh",
+  "registry_owner": "CINEMATICUM_OBJECT_REGISTRY.json",
+  "guard_rule": "The generated registry projection must match the committed registry byte-for-byte after canonical JSON formatting.",
+  "guard_does_not": [
+    "issue a film",
+    "make a release candidate ready",
+    "admit media",
+    "execute replay",
+    "produce a verdict",
+    "override current state"
+  ],
+  "currently_false_claims": {
+    "release_candidate_ready": false,
+    "issued": false,
+    "media_present": false,
+    "outsider_replay_passed": false
+  }
+}
