@@ -36,7 +36,8 @@
     "scripts/verify-required-authority-objects.sh",
     "scripts/verify-state-transition-gate.sh",
     "scripts/verify-transition-attempt-rejection-ledger.sh",
-    "scripts/verify-authority-object-admission-intake-validation-gate.sh"
+    "scripts/verify-authority-object-admission-intake-validation-gate.sh",
+    "scripts/verify-authority-object-admission-intake-rejection-ledger.sh"
   ],
   "required_unittests": [
     "tests/test_authority_acceptance_law.py",
@@ -69,7 +70,8 @@
     "tests/test_required_authority_objects.py",
     "tests/test_state_transition_gate.py",
     "tests/test_transition_attempt_rejection_ledger.py",
-    "tests/test_authority_object_admission_intake_validation_gate.py"
+    "tests/test_authority_object_admission_intake_validation_gate.py",
+    "tests/test_authority_object_admission_intake_rejection_ledger.py"
   ],
   "required_ci_workflows": [
     "authority-acceptance-law",
@@ -102,7 +104,8 @@
     "required-authority-objects",
     "state-transition-gate",
     "transition-attempt-rejection-ledger",
-    "authority-object-admission-intake-validation-gate"
+    "authority-object-admission-intake-validation-gate",
+    "authority-object-admission-intake-rejection-ledger"
   ],
   "master_invariants": [
     "accepted_admission_request_required_before_authority_object",
