@@ -1,0 +1,31 @@
+{
+  "schema_version": "cinematicum.case_evidence_ledger.v1",
+  "case_id": "CASE_001_THE_LAST_RENDER",
+  "evidence_status": "preproduction_not_started",
+  "required_future_locks": [
+    "script_lock",
+    "coverage_lock",
+    "shot_function_lock",
+    "performance_lock",
+    "selected_take_lock",
+    "timeline_lock",
+    "sound_mix_lock",
+    "grade_lock",
+    "release_lock",
+    "outsider_replay_lock",
+    "terminal_closure_lock"
+  ],
+  "current_admitted_evidence": [
+    "case_charter",
+    "film_thesis",
+    "audience_wound",
+    "directorial_intent",
+    "final_cut_law",
+    "admissibility_target",
+    "case_docket"
+  ],
+  "media_admitted": false,
+  "generation_admitted": false,
+  "engine_admitted": false,
+  "pass_condition": "CASE_001_EVIDENCE_LEDGER_PASS"
+}

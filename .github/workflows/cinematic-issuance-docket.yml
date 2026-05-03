@@ -1,0 +1,49 @@
+name: cinematic-issuance-docket
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  cinematic-issuance-docket:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Verify base jurisdiction
+        run: |
+          RECEIPT_PATH="$RUNNER_TEMP/CINEMATICUM_CINEMATIC_JURISDICTION_RECEIPT.json" \
+            bash scripts/verify-cinematic-jurisdiction.sh
+          python -m unittest tests/test_cinematic_jurisdiction.py
+
+      - name: Verify issuance docket
+        run: |
+          RECEIPT_PATH="$RUNNER_TEMP/CINEMATICUM_ISSUANCE_DOCKET_RECEIPT.json" \
+            bash scripts/verify-cinematic-issuance-docket.sh
+          python -m unittest tests/test_cinematic_issuance_docket.py
+
+      - name: Assert no engine/model/media body admitted
+        run: |
+          test ! -d engine
+          test ! -d workflows
+          test ! -d models.lock
+          test ! -d models
+          test ! -d renders
+          test ! -d frames
+          test ! -d exports
+          if git ls-files | grep -E '(^|/)__pycache__/|\.pyc$|\.pyo$'; then
+            echo "python cache artifact committed"
+            exit 1
+          fi
+          if git ls-files | grep -E '\.(mp4|mov|mkv|webm|wav|flac|safetensors|ckpt|pth|gguf)$'; then
+            echo "heavy media/model artifact committed"
+            exit 1
+          fi
