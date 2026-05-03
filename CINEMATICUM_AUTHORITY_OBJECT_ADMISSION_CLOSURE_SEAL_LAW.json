@@ -1,0 +1,17 @@
+{
+  "object_type": "CINEMATICUM_AUTHORITY_OBJECT_ADMISSION_CLOSURE_SEAL_LAW",
+  "schema_version": "cinematicum.authority_object_admission_closure_seal_law.v1",
+  "institution": "CINEMATICUM",
+  "surface_class": "LAW_OBJECT",
+  "law_declared": true,
+  "closure_seal_required_after_enforcement_gate": true,
+  "closure_seal_is_non_advancing": true,
+  "closure_seal_is_not_authority_satisfaction": true,
+  "closure_seal_is_not_release_readiness": true,
+  "closure_seal_is_not_issuance": true,
+  "closure_seal_is_public_inspection_boundary": true,
+  "authority_satisfied": false,
+  "may_advance_now": false,
+  "issued": false,
+  "media_present": false
+}
