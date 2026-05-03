@@ -192,3 +192,30 @@ Check:
     bash scripts/verify-all.sh
 
 The guard fails when JSON objects change without registry regeneration.
+
+## PR10 — Repository status seal
+
+PR10 adds the public repository status seal.
+
+Read:
+
+    PUBLIC_STATUS.md
+    CINEMATICUM_REPOSITORY_STATUS_SEAL.json
+
+Verify:
+
+    bash scripts/verify-repository-status-seal.sh
+    bash scripts/verify-all.sh
+
+Current active state remains:
+
+    CASE_001_THE_LAST_RENDER = OUTSIDER_REPLAY_BUNDLE_LAW_DECLARED
+
+Still false:
+
+    release_candidate_ready=false
+    issued=false
+    media_present=false
+    outsider_replay_passed=false
+
+The status seal summarizes current object state but does not outrank `CINEMATICUM_CURRENT_STATE_INDEX.json` or `CASES/CASE_001_THE_LAST_RENDER/CURRENT_CASE_STATE.json`.
