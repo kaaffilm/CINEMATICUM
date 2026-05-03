@@ -1,0 +1,81 @@
+{
+  "object_type": "CINEMATICUM_PUBLIC_PERIMETER_SENTINEL",
+  "schema_version": "cinematicum.public_perimeter_sentinel.v1",
+  "institution": "CINEMATICUM",
+  "root_sentence": "CINEMATICUM issues admissible motion pictures.",
+  "surface_type": "PUBLIC_PERIMETER_SENTINEL",
+  "case_id": "CASE_001_THE_LAST_RENDER",
+  "case_title": "THE LAST RENDER",
+  "current_state": "OUTSIDER_REPLAY_BUNDLE_LAW_DECLARED",
+  "current_truth_owner": false,
+  "active_current_state_owner": "CASES/CASE_001_THE_LAST_RENDER/CURRENT_CASE_STATE.json",
+  "root_current_state_owner": "CINEMATICUM_CURRENT_STATE_INDEX.json",
+  "public_inspection_chain": [
+    "PUBLIC_STATUS.md",
+    "PUBLIC_INSPECTION.md",
+    "PUBLIC_NEGATIVE_PROOF.md",
+    "AUTHORITY_PRECEDENCE.md",
+    "STATE_TRANSITION_GATE.md",
+    "REQUIRED_AUTHORITY_OBJECTS.md",
+    "TRANSITION_ATTEMPT_REJECTION_LEDGER.md"
+  ],
+  "machine_truth_chain": [
+    "CINEMATICUM_REPOSITORY_STATUS_SEAL.json",
+    "PUBLIC_INSPECTION_DOSSIER.json",
+    "PUBLIC_INSPECTION_NEGATIVE_PROOF.json",
+    "CINEMATICUM_AUTHORITY_PRECEDENCE_LATTICE.json",
+    "CINEMATICUM_STATE_TRANSITION_GATE.json",
+    "CINEMATICUM_REQUIRED_AUTHORITY_OBJECT_CHECKLIST.json",
+    "CINEMATICUM_TRANSITION_ATTEMPT_REJECTION_LEDGER.json",
+    "CINEMATICUM_OBJECT_REGISTRY.json"
+  ],
+  "required_verifiers": [
+    "scripts/verify-repository-status-seal.sh",
+    "scripts/verify-public-inspection-dossier.sh",
+    "scripts/verify-public-inspection-negative-proof.sh",
+    "scripts/verify-authority-precedence-lattice.sh",
+    "scripts/verify-state-transition-gate.sh",
+    "scripts/verify-required-authority-objects.sh",
+    "scripts/verify-transition-attempt-rejection-ledger.sh",
+    "scripts/verify-object-registry-fresh.sh",
+    "scripts/verify-all.sh"
+  ],
+  "perimeter_status": {
+    "private_access_required": false,
+    "media_or_model_payload_present": false,
+    "forbidden_private_file_present": false,
+    "valid_transition_attempt_present": false,
+    "invalid_transition_attempt_present": false,
+    "transition_attempts_recorded": 0,
+    "may_advance_now": false,
+    "required_authority_objects_missing": true,
+    "schemas_do_not_satisfy_authority_objects": true,
+    "object_registry_fresh_required": true,
+    "verify_all_required": true
+  },
+  "forbidden_transition_attempt_object_types": [
+    "CINEMATICUM_STATE_TRANSITION_ATTEMPT",
+    "CINEMATICUM_RELEASE_CANDIDATE_READY_TRANSITION_ATTEMPT",
+    "CINEMATICUM_ISSUANCE_TRANSITION_ATTEMPT",
+    "CINEMATICUM_CURRENT_STATE_ADVANCEMENT_ACT",
+    "CINEMATICUM_TRANSITION_APPROVAL_OBJECT"
+  ],
+  "forbidden_file_classes": [
+    "raw media",
+    "model weights",
+    "private credential material",
+    "environment secret files"
+  ],
+  "current_false_values": {
+    "release_candidate_ready": false,
+    "issued": false,
+    "media_present": false,
+    "generation_present": false,
+    "engine_present": false,
+    "model_present": false,
+    "outsider_replay_passed": false,
+    "admissibility_verdict_present": false,
+    "terminal_closure_present": false
+  },
+  "sentinel_statement": "The public repository perimeter is inspection-only, contains no media/model/private payload, and cannot advance current state while the transition gate remains blocked."
+}
