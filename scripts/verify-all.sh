@@ -79,6 +79,8 @@ python3 -m unittest tests/test_authority_object_admission_rejection_taxonomy.py
 bash scripts/verify-authority-object-admission-decision-ledger.sh
 python3 -m unittest tests/test_authority_object_admission_decision_ledger.py
 
+bash scripts/verify-authority-object-admission-enforcement-gate.sh
+python3 -m unittest tests/test_authority_object_admission_enforcement_gate.py
 bash scripts/verify-master-verification-manifest-closure.sh
 python3 -m unittest tests/test_master_verification_manifest_closure.py
 

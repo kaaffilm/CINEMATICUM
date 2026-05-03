@@ -671,3 +671,38 @@ Current result:
     media_present=false
 
 The ledger requires an explicit public decision before any authority object can be admitted.
+
+## Authority Object Admission Enforcement Gate
+
+CINEMATICUM now declares an enforcement gate after the admission decision ledger.
+
+An instantiated authority object does not satisfy authority unless it is backed by an accepted admission decision. Templates, schemas, validator success, docket existence, rejection corpus, taxonomy, and the decision ledger itself remain non-authority objects.
+
+Current state remains:
+
+```text
+CASE_001_THE_LAST_RENDER=OUTSIDER_REPLAY_BUNDLE_LAW_DECLARED
+accepted_decision_count=0
+instantiated_authority_object_count=0
+unbacked_authority_object_count=0
+authority_satisfied=false
+may_advance_now=false
+issued=false
+media_present=false
+````
+
+Verification:
+
+```bash
+bash scripts/verify-authority-object-admission-enforcement-gate.sh
+python3 -m unittest tests/test_authority_object_admission_enforcement_gate.py
+bash scripts/verify-all.sh
+```
+
+## Authority object admission enforcement gate
+
+CINEMATICUM now contains an authority object admission enforcement gate.
+
+This gate makes the admission chain executable: live admission requests, accepted admission decisions, and instantiated authority objects are required before authority can be satisfied. Templates, schemas, fixtures, taxonomy, and empty ledgers do not advance the case.
+
+The current case remains blocked at `OUTSIDER_REPLAY_BUNDLE_LAW_DECLARED`: no media is present, no release candidate is ready, and no issuance has occurred.

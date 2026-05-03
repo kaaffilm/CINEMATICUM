@@ -32,7 +32,8 @@
     "scripts/verify-authority-object-admission-request-validator.sh",
     "scripts/verify-authority-object-admission-request-rejection-corpus.sh",
     "scripts/verify-authority-object-admission-rejection-taxonomy.sh",
-    "scripts/verify-authority-object-admission-decision-ledger.sh"
+    "scripts/verify-authority-object-admission-decision-ledger.sh",
+    "scripts/verify-authority-object-admission-enforcement-gate.sh"
   ],
   "required_unittests": [
     "tests/test_cinematic_jurisdiction.py",
@@ -61,7 +62,8 @@
     "tests/test_authority_object_admission_request_validator.py",
     "tests/test_authority_object_admission_request_rejection_corpus.py",
     "tests/test_authority_object_admission_rejection_taxonomy.py",
-    "tests/test_authority_object_admission_decision_ledger.py"
+    "tests/test_authority_object_admission_decision_ledger.py",
+    "tests/test_authority_object_admission_enforcement_gate.py"
   ],
   "required_ci_workflows": [
     "cinematic-jurisdiction",
@@ -90,7 +92,8 @@
     "authority-object-admission-request-validator",
     "authority-object-admission-request-rejection-corpus",
     "authority-object-admission-rejection-taxonomy",
-    "authority-object-admission-decision-ledger"
+    "authority-object-admission-decision-ledger",
+    "authority-object-admission-enforcement-gate"
   ],
   "master_invariants": [
     "root_sentence_present",
@@ -177,5 +180,17 @@
     "authority_object_admission_decision_ledger_acceptance_requires_valid_request",
     "authority_object_admission_decision_ledger_rejection_requires_canonical_reason",
     "authority_object_admission_decision_ledger_does_not_instantiate_authority"
-  ]
+  ],
+  "authority_object_admission_enforcement_gate": {
+    "object": "AUTHORITY_OBJECT_ADMISSION_ENFORCEMENT_GATE",
+    "law": "CINEMATICUM_AUTHORITY_OBJECT_ADMISSION_ENFORCEMENT_GATE_LAW.json",
+    "status": "CASES/CASE_001_THE_LAST_RENDER/AUTHORITY_OBJECT_ADMISSION_ENFORCEMENT_GATE_STATUS.json",
+    "verifier": "scripts/verify-authority-object-admission-enforcement-gate.sh",
+    "unit_test": "tests/test_authority_object_admission_enforcement_gate.py",
+    "workflow": "authority-object-admission-enforcement-gate",
+    "authority_satisfied": false,
+    "may_advance_now": false,
+    "issued": false,
+    "media_present": false
+  }
 }

@@ -1,0 +1,20 @@
+{
+  "object_type": "CINEMATICUM_CASE_AUTHORITY_OBJECT_ADMISSION_ENFORCEMENT_GATE_STATUS",
+  "schema_version": "cinematicum.case_authority_object_admission_enforcement_gate_status.v1",
+  "institution": "CINEMATICUM",
+  "case_id": "CASE_001_THE_LAST_RENDER",
+  "surface_class": "LAYER_STATUS_RECORD",
+  "current_state": "OUTSIDER_REPLAY_BUNDLE_LAW_DECLARED",
+  "admission_request_count": 0,
+  "decision_record_count": 0,
+  "accepted_decision_count": 0,
+  "rejected_decision_count": 0,
+  "all_live_requests_have_decisions": true,
+  "accepted_decision_for_each_instantiated_authority_object": true,
+  "enforcement_gate_passed": false,
+  "authority_satisfied": false,
+  "may_advance_now": false,
+  "release_candidate_ready": false,
+  "issued": false,
+  "media_present": false
+}
