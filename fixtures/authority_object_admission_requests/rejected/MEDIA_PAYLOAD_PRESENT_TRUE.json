@@ -1,0 +1,12 @@
+{
+  "fixture_type": "REJECTED_AUTHORITY_OBJECT_ADMISSION_REQUEST_FIXTURE",
+  "expected_rejection_reason": "media_payload_present_true",
+  "case_id": "CASE_001_THE_LAST_RENDER",
+  "current_state": "OUTSIDER_REPLAY_BUNDLE_LAW_DECLARED",
+  "authority_object_type": "MEDIA_HASH_MANIFEST",
+  "authority_satisfied_by_request": false,
+  "may_advance_state_by_request": false,
+  "media_payload_present": true,
+  "model_weight_payload_present": false,
+  "private_access_required": false
+}
