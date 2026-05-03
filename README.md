@@ -340,3 +340,28 @@ Current gate status:
 Current active state remains:
 
     CASE_001_THE_LAST_RENDER = OUTSIDER_REPLAY_BUNDLE_LAW_DECLARED
+
+## PR16 — Transition attempt rejection ledger
+
+PR16 adds the transition attempt rejection ledger.
+
+Read:
+
+    TRANSITION_ATTEMPT_REJECTION_LEDGER.md
+    CINEMATICUM_TRANSITION_ATTEMPT_REJECTION_LEDGER.json
+
+Verify:
+
+    bash scripts/verify-transition-attempt-rejection-ledger.sh
+    bash scripts/verify-all.sh
+
+Current ledger status:
+
+    transition_attempts_recorded=0
+    valid_transition_attempt_present=false
+    may_advance_now=false
+    required_authority_objects_missing=true
+
+Current active state remains:
+
+    CASE_001_THE_LAST_RENDER = OUTSIDER_REPLAY_BUNDLE_LAW_DECLARED

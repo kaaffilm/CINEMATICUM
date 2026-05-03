@@ -20,7 +20,8 @@
     "scripts/verify-public-inspection-negative-proof.sh",
     "scripts/verify-authority-precedence-lattice.sh",
     "scripts/verify-state-transition-gate.sh",
-    "scripts/verify-required-authority-objects.sh"
+    "scripts/verify-required-authority-objects.sh",
+    "scripts/verify-transition-attempt-rejection-ledger.sh"
   ],
   "required_unittests": [
     "tests/test_cinematic_jurisdiction.py",
@@ -37,7 +38,8 @@
     "tests/test_public_inspection_negative_proof.py",
     "tests/test_authority_precedence_lattice.py",
     "tests/test_state_transition_gate.py",
-    "tests/test_required_authority_objects.py"
+    "tests/test_required_authority_objects.py",
+    "tests/test_transition_attempt_rejection_ledger.py"
   ],
   "required_ci_workflows": [
     "cinematic-jurisdiction",
@@ -54,7 +56,8 @@
     "public-inspection-negative-proof",
     "authority-precedence-lattice",
     "state-transition-gate",
-    "required-authority-objects"
+    "required-authority-objects",
+    "transition-attempt-rejection-ledger"
   ],
   "master_invariants": [
     "root_sentence_present",
@@ -96,6 +99,11 @@
     "required_authority_objects_missing",
     "schemas_do_not_satisfy_authority_objects",
     "release_candidate_authority_objects_missing",
-    "issuance_authority_objects_missing"
+    "issuance_authority_objects_missing",
+    "transition_attempt_rejection_ledger_present",
+    "no_valid_transition_attempt_present",
+    "transition_attempts_recorded_zero",
+    "blocked_targets_rejected_until_gate_unblocked",
+    "forbidden_transition_attempt_object_types_absent"
   ]
 }

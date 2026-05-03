@@ -1,0 +1,17 @@
+name: transition-attempt-rejection-ledger
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+
+jobs:
+  transition-attempt-rejection-ledger:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Verify transition attempt rejection ledger
+        run: bash scripts/verify-transition-attempt-rejection-ledger.sh
+      - name: Run transition attempt rejection ledger tests
+        run: python3 -m unittest tests/test_transition_attempt_rejection_ledger.py
