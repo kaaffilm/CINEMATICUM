@@ -22,4 +22,7 @@ python3 -m unittest tests/test_current_state_index.py
 bash scripts/verify-master-progression.sh
 python3 -m unittest tests/test_master_progression.py
 
+bash scripts/verify-object-registry.sh
+python3 -m unittest tests/test_object_registry.py
+
 printf "CINEMATICUM VERIFY ALL: PASS\n"
