@@ -1,0 +1,37 @@
+{
+  "object_type": "CINEMATICUM_AUTHORITY_OBJECT_ADMISSION_INTAKE_REOPENING_REQUEST_REJECTION_CORPUS",
+  "schema_version": "cinematicum.authority_object_admission_intake_reopening_request_rejection_corpus.v1",
+  "institution": "CINEMATICUM",
+  "root_sentence": "CINEMATICUM issues admissible motion pictures.",
+  "case_id": "CASE_001_THE_LAST_RENDER",
+  "current_state": "OUTSIDER_REPLAY_BUNDLE_LAW_DECLARED",
+  "surface_class": "REJECTION_CORPUS_OBJECT",
+  "depends_on": [
+    "CINEMATICUM_AUTHORITY_OBJECT_ADMISSION_INTAKE_REOPENING_REQUEST_SCHEMA",
+    "CINEMATICUM_AUTHORITY_OBJECT_ADMISSION_INTAKE_REOPENING_REQUEST_VALIDATOR"
+  ],
+  "fixture_directory": "FIXTURES/AUTHORITY_OBJECT_ADMISSION_INTAKE_REOPENING_REQUEST_REJECTION_CORPUS",
+  "canonical_rejection_fixture_count": 5,
+  "fixture_rejection_reasons": [
+    "missing_current_state",
+    "wrong_current_state",
+    "missing_authority_object_manifest",
+    "silent_reopening_allowed",
+    "media_present"
+  ],
+  "fixtures_are_live_requests": false,
+  "all_fixtures_rejected": true,
+  "live_reopening_request_count": 0,
+  "valid_reopening_request_count": 0,
+  "accepted_reopening_request_count": 0,
+  "rejection_corpus_declared": true,
+  "rejection_corpus_does_not_create_live_request": true,
+  "rejection_corpus_does_not_reopen_intake": true,
+  "rejection_corpus_does_not_satisfy_authority": true,
+  "rejection_corpus_does_not_advance_case_state": true,
+  "silent_reopening_forbidden": true,
+  "authority_satisfied": false,
+  "may_advance_now": false,
+  "issued": false,
+  "media_present": false
+}

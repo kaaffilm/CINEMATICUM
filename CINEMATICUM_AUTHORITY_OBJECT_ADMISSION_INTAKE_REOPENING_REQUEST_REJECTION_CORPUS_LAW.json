@@ -1,0 +1,18 @@
+{
+  "object_type": "CINEMATICUM_AUTHORITY_OBJECT_ADMISSION_INTAKE_REOPENING_REQUEST_REJECTION_CORPUS_LAW",
+  "schema_version": "cinematicum.authority_object_admission_intake_reopening_request_rejection_corpus_law.v1",
+  "institution": "CINEMATICUM",
+  "root_sentence": "CINEMATICUM issues admissible motion pictures.",
+  "current_state": "OUTSIDER_REPLAY_BUNDLE_LAW_DECLARED",
+  "surface_class": "LAW_OBJECT",
+  "rejection_corpus_declared": true,
+  "fixtures_are_live_requests": false,
+  "all_fixtures_must_be_rejected": true,
+  "fixtures_must_not_reopen_intake": true,
+  "fixtures_must_not_satisfy_authority": true,
+  "fixtures_must_not_advance_case_state": true,
+  "fixtures_must_not_issue": true,
+  "fixtures_must_not_admit_media": true,
+  "live_reopening_request_count_must_remain_zero": true,
+  "silent_reopening_forbidden": true
+}
