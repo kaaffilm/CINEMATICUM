@@ -641,3 +641,33 @@ Current result:
     media_present=false
 
 The taxonomy prevents validator drift without creating live requests.
+
+## PR27 — Authority object admission decision ledger
+
+PR27 adds a public decision ledger for authority-object admission outcomes.
+
+Verify:
+
+    bash scripts/verify-authority-object-admission-decision-ledger.sh
+    bash scripts/verify-all.sh
+
+Current active state remains:
+
+    CASE_001_THE_LAST_RENDER = OUTSIDER_REPLAY_BUNDLE_LAW_DECLARED
+
+Current result:
+
+    decision_record_count=0
+    accepted_decision_count=0
+    rejected_decision_count=0
+    live_admission_request_count=0
+    all_live_requests_have_decisions=true
+    all_accepted_decisions_have_valid_requests=true
+    all_rejected_decisions_have_canonical_reasons=true
+    authority_satisfied=false
+    may_advance_now=false
+    release_candidate_ready=false
+    issued=false
+    media_present=false
+
+The ledger requires an explicit public decision before any authority object can be admitted.
