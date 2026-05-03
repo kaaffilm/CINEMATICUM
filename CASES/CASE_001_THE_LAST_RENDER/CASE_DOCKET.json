@@ -1,0 +1,21 @@
+{
+  "schema_version": "cinematicum.case_docket.v1",
+  "case_id": "CASE_001_THE_LAST_RENDER",
+  "docket_number": "CIN-0001",
+  "title": "THE LAST RENDER",
+  "jurisdiction": "CINEMATICUM",
+  "case_status": "registered_under_jurisdiction",
+  "target_status": "issued_admissible_motion_picture",
+  "not_demo": true,
+  "not_model_showcase": true,
+  "not_prompt_pipeline": true,
+  "audience_wound": "proof of existence can become a prison",
+  "central_question": "Is proof of existence worth becoming an image forever?",
+  "core_thesis": "A film is not alive because it is generated. A film is alive because someone chose what must remain.",
+  "minimum_case_bodies": [
+    "audience_body",
+    "evidentiary_body",
+    "jurisdictional_body"
+  ],
+  "pass_condition": "CASE_001_DOCKET_PASS"
+}

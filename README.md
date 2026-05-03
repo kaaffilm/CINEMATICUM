@@ -42,3 +42,25 @@ Expected:
 CINEMATICUM CINEMATIC JURISDICTION: PASS
 ```
 
+
+## PR2 — Issuance docket control plane
+
+PR2 promotes CINEMATICUM from jurisdiction birth into issuance-docket control.
+
+This does not issue a film.
+
+This does not add engines, models, generation, media, render workflows, release artifacts, or finished footage.
+
+PR2 adds the admissible film object anatomy, department authority ledger, case docket, case evidence ledger, directorial order, forbidden image doctrine, CI workflow, verifier, and tests.
+
+The governing boundary remains:
+
+    CINEMATICUM issues admissible motion pictures.
+    No engines. No models. No generation. No media.
+
+### PR2 verification
+
+    bash scripts/verify-cinematic-jurisdiction.sh
+    python3 -m unittest tests/test_cinematic_jurisdiction.py
+    bash scripts/verify-cinematic-issuance-docket.sh
+    python3 -m unittest tests/test_cinematic_issuance_docket.py
