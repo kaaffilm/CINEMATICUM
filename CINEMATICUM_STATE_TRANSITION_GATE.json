@@ -1,0 +1,63 @@
+{
+  "object_type": "CINEMATICUM_STATE_TRANSITION_GATE",
+  "schema_version": "cinematicum.state_transition_gate.v1",
+  "institution": "CINEMATICUM",
+  "root_sentence": "CINEMATICUM issues admissible motion pictures.",
+  "surface_type": "STATE_TRANSITION_GATE",
+  "case_id": "CASE_001_THE_LAST_RENDER",
+  "case_title": "THE LAST RENDER",
+  "current_state": "OUTSIDER_REPLAY_BUNDLE_LAW_DECLARED",
+  "current_state_is_authoritative": false,
+  "current_truth_owners": [
+    "CINEMATICUM_CURRENT_STATE_INDEX.json",
+    "CASES/CASE_001_THE_LAST_RENDER/CURRENT_CASE_STATE.json"
+  ],
+  "gate_status": "BLOCKED_FOR_ADVANCEMENT",
+  "may_advance_now": false,
+  "next_candidate_state": "RELEASE_CANDIDATE_READY",
+  "next_candidate_state_unblocked": false,
+  "final_issuance_state_unblocked": false,
+  "transition_candidates": [
+    {
+      "from": "OUTSIDER_REPLAY_BUNDLE_LAW_DECLARED",
+      "to": "RELEASE_CANDIDATE_READY",
+      "status": "blocked",
+      "missing_required_authority_objects": [
+        "DIRECTOR_ACCEPTANCE_OBJECT",
+        "FINAL_CUT_TIMELINE_LOCK_OBJECT",
+        "SOUND_MIX_LOCK_OBJECT",
+        "COLOR_GRADE_LOCK_OBJECT",
+        "MEDIA_HASH_MANIFEST_OBJECT",
+        "RELEASE_MANIFEST_OBJECT",
+        "OUTSIDER_REPLAY_BUNDLE_OBJECT",
+        "REPLAY_EXECUTION_REPORT_OBJECT",
+        "ADMISSIBILITY_VERDICT_OBJECT",
+        "TERMINAL_CLOSURE_CANDIDATE_OBJECT"
+      ]
+    },
+    {
+      "from": "RELEASE_CANDIDATE_READY",
+      "to": "ISSUED_ADMISSIBLE_MOTION_PICTURE",
+      "status": "blocked",
+      "missing_required_authority_objects": [
+        "MOTION_PICTURE_ISSUANCE_ACT_OBJECT",
+        "OUTSIDER_REPLAY_PASS_OBJECT",
+        "ADMISSIBILITY_VERDICT_OBJECT",
+        "TERMINAL_CLOSURE_OBJECT",
+        "MEDIA_ADMISSION_OBJECT"
+      ]
+    }
+  ],
+  "current_false_values": {
+    "release_candidate_ready": false,
+    "issued": false,
+    "media_present": false,
+    "generation_present": false,
+    "engine_present": false,
+    "model_present": false,
+    "outsider_replay_passed": false,
+    "admissibility_verdict_present": false,
+    "terminal_closure_present": false
+  },
+  "gate_statement": "CINEMATICUM may describe future transitions, but current state cannot advance until the required authority objects exist and the active current-state owners change in the same governed transition."
+}

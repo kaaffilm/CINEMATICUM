@@ -291,3 +291,28 @@ Binding rule:
 Current active state remains:
 
     CASE_001_THE_LAST_RENDER = OUTSIDER_REPLAY_BUNDLE_LAW_DECLARED
+
+## PR14 — State transition gate
+
+PR14 adds the state transition gate.
+
+Read:
+
+    STATE_TRANSITION_GATE.md
+    CINEMATICUM_STATE_TRANSITION_GATE.json
+
+Verify:
+
+    bash scripts/verify-state-transition-gate.sh
+    bash scripts/verify-all.sh
+
+Current gate status:
+
+    may_advance_now=false
+    next_candidate_state=RELEASE_CANDIDATE_READY
+    next_candidate_state_unblocked=false
+    final_issuance_state_unblocked=false
+
+Current active state remains:
+
+    CASE_001_THE_LAST_RENDER = OUTSIDER_REPLAY_BUNDLE_LAW_DECLARED
