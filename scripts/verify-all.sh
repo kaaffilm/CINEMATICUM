@@ -43,4 +43,7 @@ python3 -m unittest tests/test_authority_precedence_lattice.py
 bash scripts/verify-state-transition-gate.sh
 python3 -m unittest tests/test_state_transition_gate.py
 
+bash scripts/verify-required-authority-objects.sh
+python3 -m unittest tests/test_required_authority_objects.py
+
 printf "CINEMATICUM VERIFY ALL: PASS\n"

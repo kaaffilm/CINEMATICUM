@@ -19,7 +19,8 @@
     "scripts/verify-public-inspection-dossier.sh",
     "scripts/verify-public-inspection-negative-proof.sh",
     "scripts/verify-authority-precedence-lattice.sh",
-    "scripts/verify-state-transition-gate.sh"
+    "scripts/verify-state-transition-gate.sh",
+    "scripts/verify-required-authority-objects.sh"
   ],
   "required_unittests": [
     "tests/test_cinematic_jurisdiction.py",
@@ -35,7 +36,8 @@
     "tests/test_public_inspection_dossier.py",
     "tests/test_public_inspection_negative_proof.py",
     "tests/test_authority_precedence_lattice.py",
-    "tests/test_state_transition_gate.py"
+    "tests/test_state_transition_gate.py",
+    "tests/test_required_authority_objects.py"
   ],
   "required_ci_workflows": [
     "cinematic-jurisdiction",
@@ -51,7 +53,8 @@
     "public-inspection-dossier",
     "public-inspection-negative-proof",
     "authority-precedence-lattice",
-    "state-transition-gate"
+    "state-transition-gate",
+    "required-authority-objects"
   ],
   "master_invariants": [
     "root_sentence_present",
@@ -88,6 +91,11 @@
     "release_candidate_transition_blocked",
     "issuance_transition_blocked",
     "state_advancement_requires_authority_objects",
-    "state_advancement_requires_current_state_owner_update"
+    "state_advancement_requires_current_state_owner_update",
+    "required_authority_object_checklist_present",
+    "required_authority_objects_missing",
+    "schemas_do_not_satisfy_authority_objects",
+    "release_candidate_authority_objects_missing",
+    "issuance_authority_objects_missing"
   ]
 }
