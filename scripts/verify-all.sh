@@ -34,4 +34,7 @@ python3 -m unittest tests/test_repository_status_seal.py
 bash scripts/verify-public-inspection-dossier.sh
 python3 -m unittest tests/test_public_inspection_dossier.py
 
+bash scripts/verify-public-inspection-negative-proof.sh
+python3 -m unittest tests/test_public_inspection_negative_proof.py
+
 printf "CINEMATICUM VERIFY ALL: PASS\n"

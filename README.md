@@ -246,3 +246,26 @@ Still false:
     outsider_replay_passed=false
 
 The dossier requires no private access and does not outrank the current-state owners.
+
+## PR12 — Public inspection negative proof
+
+PR12 proves that public inspection surfaces are not issuance, media admission, replay pass, admissibility verdict, or terminal closure.
+
+Read:
+
+    PUBLIC_NEGATIVE_PROOF.md
+    PUBLIC_INSPECTION_NEGATIVE_PROOF.json
+
+Verify:
+
+    bash scripts/verify-public-inspection-negative-proof.sh
+    bash scripts/verify-all.sh
+
+Still false:
+
+    release_candidate_ready=false
+    issued=false
+    media_present=false
+    outsider_replay_passed=false
+    admissibility_verdict_present=false
+    terminal_closure_present=false
