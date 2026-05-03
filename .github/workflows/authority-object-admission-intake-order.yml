@@ -1,0 +1,17 @@
+name: authority-object-admission-intake-order
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+
+jobs:
+  authority-object-admission-intake-order:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Verify authority object admission intake order
+        run: bash scripts/verify-authority-object-admission-intake-order.sh
+      - name: Run authority object admission intake order tests
+        run: python3 -m unittest tests/test_authority_object_admission_intake_order.py

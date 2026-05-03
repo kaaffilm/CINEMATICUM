@@ -725,3 +725,11 @@ MAY_ADVANCE_NOW=false
 ISSUED=false
 MEDIA_PRESENT=false
 ```
+
+## Authority Object Admission Intake Order
+
+The authority-object admission stack is now closed, but closure does not satisfy authority.
+
+CINEMATICUM_AUTHORITY_OBJECT_ADMISSION_INTAKE_ORDER.json fixes the required intake order for the eight authority objects needed before any authority satisfaction or state advancement can be asserted.
+
+The intake order admits no media, creates no live request, accepts no decision, instantiates no authority object, and leaves the case blocked at OUTSIDER_REPLAY_BUNDLE_LAW_DECLARED.
