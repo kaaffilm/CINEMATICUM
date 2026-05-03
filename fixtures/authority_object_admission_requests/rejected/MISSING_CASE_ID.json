@@ -1,0 +1,11 @@
+{
+  "fixture_type": "REJECTED_AUTHORITY_OBJECT_ADMISSION_REQUEST_FIXTURE",
+  "expected_rejection_reason": "missing_case_id",
+  "current_state": "OUTSIDER_REPLAY_BUNDLE_LAW_DECLARED",
+  "authority_object_type": "DIRECTOR_ACCEPTANCE_OBJECT",
+  "authority_satisfied_by_request": false,
+  "may_advance_state_by_request": false,
+  "media_payload_present": false,
+  "model_weight_payload_present": false,
+  "private_access_required": false
+}

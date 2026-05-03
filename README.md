@@ -585,3 +585,30 @@ Current result:
     media_present=false
 
 The validator scans; it does not admit, reject, instantiate, or advance.
+
+## PR25 — Authority object admission request rejection corpus
+
+PR25 adds a non-live rejected fixture corpus for authority-object admission requests.
+
+Verify:
+
+    bash scripts/verify-authority-object-admission-request-rejection-corpus.sh
+    bash scripts/verify-all.sh
+
+Current active state remains:
+
+    CASE_001_THE_LAST_RENDER = OUTSIDER_REPLAY_BUNDLE_LAW_DECLARED
+
+Current result:
+
+    rejection_fixture_count=5
+    fixtures_are_live_requests=false
+    admission_request_count=0
+    all_fixtures_rejected=true
+    authority_satisfied=false
+    may_advance_now=false
+    release_candidate_ready=false
+    issued=false
+    media_present=false
+
+The corpus tests refusal paths without creating live requests.

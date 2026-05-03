@@ -1,0 +1,30 @@
+{
+  "object_type": "CINEMATICUM_AUTHORITY_OBJECT_ADMISSION_REQUEST_REJECTION_CORPUS_LAW",
+  "schema_version": "cinematicum.authority_object_admission_request_rejection_corpus_law.v1",
+  "institution": "CINEMATICUM",
+  "root_sentence": "CINEMATICUM issues admissible motion pictures.",
+  "purpose": "Provide non-live rejected authority-object admission request fixtures that test validator refusal without creating admission requests.",
+  "corpus_owner": "CINEMATICUM_AUTHORITY_OBJECT_ADMISSION_REQUEST_REJECTION_CORPUS.json",
+  "validator_owner": "CINEMATICUM_AUTHORITY_OBJECT_ADMISSION_REQUEST_VALIDATOR.json",
+  "schema_owner": "CINEMATICUM_AUTHORITY_OBJECT_ADMISSION_REQUEST_SCHEMA.json",
+  "fixture_directory": "fixtures/authority_object_admission_requests/rejected",
+  "live_request_directory": "authority_object_admission_requests",
+  "law": {
+    "fixtures_are_not_live_requests": true,
+    "fixtures_must_remain_outside_live_request_directory": true,
+    "each_fixture_must_be_rejected": true,
+    "rejected_fixtures_do_not_count_as_admission_requests": true,
+    "rejected_fixtures_do_not_instantiate_authority_objects": true,
+    "rejected_fixtures_do_not_satisfy_authority": true,
+    "rejected_fixtures_do_not_advance_state": true
+  },
+  "does_not": [
+    "create a live admission request",
+    "accept an admission request",
+    "admit an authority object",
+    "instantiate an authority object",
+    "satisfy authority",
+    "make release candidate ready",
+    "issue a film"
+  ]
+}
