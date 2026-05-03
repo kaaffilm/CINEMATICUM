@@ -1,0 +1,17 @@
+{
+  "object_type": "CINEMATICUM_AUTHORITY_OBJECT_ADMISSION_INTAKE_REJECTION_LEDGER_LAW",
+  "schema_version": "cinematicum.authority_object_admission_intake_rejection_ledger_law.v1",
+  "institution": "CINEMATICUM",
+  "root_sentence": "CINEMATICUM issues admissible motion pictures.",
+  "current_state": "OUTSIDER_REPLAY_BUNDLE_LAW_DECLARED",
+  "surface_class": "LAW_OBJECT",
+  "records_negative_intake_adjudication": true,
+  "zero_valid_intake_requires_zero_rejection_records": true,
+  "does_not_create_admission_requests": true,
+  "does_not_accept_authority_objects": true,
+  "does_not_instantiate_authority_objects": true,
+  "does_not_satisfy_authority": true,
+  "does_not_advance_case_state": true,
+  "does_not_issue": true,
+  "does_not_admit_media": true
+}

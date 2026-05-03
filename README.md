@@ -736,3 +736,7 @@ The intake order admits no media, creates no live request, accepts no decision, 
 ## Authority Object Admission Intake Validation Gate
 
 CINEMATICUM now declares an authority object admission intake validation gate. The gate verifies that the closed admission stack and intake order remain non-advancing: zero live admission requests, zero valid admission requests, zero accepted decisions, no instantiated authority objects, no authority satisfaction, no media, no issuance, and no current-state advancement.
+
+### Authority Object Admission Intake Rejection Ledger
+
+CINEMATICUM records a closed zero-record intake rejection ledger after the intake validation gate. Because there are zero live admission requests and zero valid intake records, no live rejection record is required, no authority object is accepted, no authority is satisfied, no case state advances, no issuance occurs, and no media is admitted.
