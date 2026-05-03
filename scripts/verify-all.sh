@@ -100,7 +100,9 @@ python3 -m unittest tests/test_authority_object_admission_intake_reopening_reque
 bash scripts/verify-authority-object-admission-intake-reopening-request-rejection-corpus.sh
 python3 -m unittest tests/test_authority_object_admission_intake_reopening_request_rejection_corpus.py
 bash scripts/verify-authority-object-admission-intake-reopening-request-rejection-taxonomy.sh
+bash scripts/verify-authority-object-admission-intake-reopening-request-decision-ledger.sh
 python3 -m unittest tests/test_authority_object_admission_intake_reopening_request_rejection_taxonomy.py
+python3 -m unittest tests/test_authority_object_admission_intake_reopening_request_decision_ledger.py
 bash scripts/verify-master-verification-manifest-closure.sh
 python3 -m unittest tests/test_master_verification_manifest_closure.py
 

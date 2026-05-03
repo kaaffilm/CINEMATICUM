@@ -778,3 +778,7 @@ may_advance_now=false
 issued=false
 media_present=false
 ```
+
+### Authority object admission intake reopening request decision ledger
+
+CINEMATICUM records decisions for future valid reopening requests only. The decision ledger does not reopen intake, does not satisfy authority, does not advance state, does not admit media, and does not issue a motion picture.

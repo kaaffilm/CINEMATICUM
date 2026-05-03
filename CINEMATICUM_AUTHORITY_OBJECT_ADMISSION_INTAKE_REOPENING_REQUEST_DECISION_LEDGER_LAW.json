@@ -1,0 +1,21 @@
+{
+  "object_type": "CINEMATICUM_AUTHORITY_OBJECT_ADMISSION_INTAKE_REOPENING_REQUEST_DECISION_LEDGER_LAW",
+  "schema_version": "cinematicum.authority_object_admission_intake_reopening_request_decision_ledger_law.v1",
+  "institution": "CINEMATICUM",
+  "case_id": "CASE_001_THE_LAST_RENDER",
+  "current_state": "OUTSIDER_REPLAY_BUNDLE_LAW_DECLARED",
+  "surface_class": "LAW_OBJECT",
+  "law": "A reopening request decision ledger may record decisions for future valid reopening requests only. It does not reopen intake, satisfy authority, advance state, admit media, or issue a motion picture.",
+  "requires_reopening_request_schema": true,
+  "requires_reopening_request_validator": true,
+  "requires_reopening_request_rejection_corpus": true,
+  "requires_reopening_request_rejection_taxonomy": true,
+  "zero_live_requests_require_zero_decisions": true,
+  "accepted_reopening_request_required_to_open_reopening_gate": true,
+  "silent_reopening_forbidden": true,
+  "decision_ledger_does_not_reopen_intake": true,
+  "authority_satisfied": false,
+  "may_advance_now": false,
+  "issued": false,
+  "media_present": false
+}

@@ -1,0 +1,32 @@
+{
+  "object_type": "CINEMATICUM_AUTHORITY_OBJECT_ADMISSION_INTAKE_REOPENING_REQUEST_DECISION_LEDGER",
+  "schema_version": "cinematicum.authority_object_admission_intake_reopening_request_decision_ledger.v1",
+  "institution": "CINEMATICUM",
+  "root_sentence": "CINEMATICUM issues admissible motion pictures.",
+  "case_id": "CASE_001_THE_LAST_RENDER",
+  "current_state": "OUTSIDER_REPLAY_BUNDLE_LAW_DECLARED",
+  "surface_class": "CASE_RECORD",
+  "decision_scope": "FUTURE_VALID_REOPENING_REQUESTS_ONLY",
+  "depends_on": [
+    "CINEMATICUM_AUTHORITY_OBJECT_ADMISSION_INTAKE_REOPENING_REQUEST_SCHEMA",
+    "CINEMATICUM_AUTHORITY_OBJECT_ADMISSION_INTAKE_REOPENING_REQUEST_VALIDATOR",
+    "CINEMATICUM_AUTHORITY_OBJECT_ADMISSION_INTAKE_REOPENING_REQUEST_REJECTION_CORPUS",
+    "CINEMATICUM_AUTHORITY_OBJECT_ADMISSION_INTAKE_REOPENING_REQUEST_REJECTION_TAXONOMY"
+  ],
+  "live_reopening_request_count": 0,
+  "valid_reopening_request_count": 0,
+  "invalid_reopening_request_count": 0,
+  "decision_record_count": 0,
+  "accepted_reopening_request_count": 0,
+  "rejected_reopening_request_count": 0,
+  "decision_records": [],
+  "all_live_reopening_requests_have_decisions": true,
+  "accepted_reopening_request_present": false,
+  "decision_ledger_does_not_reopen_intake": true,
+  "silent_reopening_forbidden": true,
+  "reopening_gate_open_now": false,
+  "authority_satisfied": false,
+  "may_advance_now": false,
+  "issued": false,
+  "media_present": false
+}
