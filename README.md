@@ -119,3 +119,25 @@ PR5 defines the evidence package an outsider must later be able to replay withou
 
     bash scripts/verify-outsider-replay-bundle-law.sh
     python3 -m unittest tests/test_outsider_replay_bundle_law.py
+
+## PR6 — Current-state index
+
+PR6 adds the current-state index and case-level active current-state pointer.
+
+This prevents staged layer-status records from being mistaken for competing current truth.
+
+Current active state for `CASE_001_THE_LAST_RENDER`:
+
+    OUTSIDER_REPLAY_BUNDLE_LAW_DECLARED
+
+Still false:
+
+    release_candidate_ready=false
+    issued=false
+    media_present=false
+    outsider_replay_passed=false
+
+### PR6 verification
+
+    bash scripts/verify-current-state-index.sh
+    python3 -m unittest tests/test_current_state_index.py

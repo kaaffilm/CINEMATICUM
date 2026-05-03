@@ -1,0 +1,22 @@
+{
+  "object_type": "CINEMATICUM_CURRENT_STATE_INDEX",
+  "schema_version": "cinematicum.current_state_index.v1",
+  "institution": "CINEMATICUM",
+  "surface_type": "ACTIVE_CURRENT_STATE",
+  "root_sentence": "CINEMATICUM issues admissible motion pictures.",
+  "active_cases": [
+    "CASE_001_THE_LAST_RENDER"
+  ],
+  "active_case_states": {
+    "CASE_001_THE_LAST_RENDER": "OUTSIDER_REPLAY_BUNDLE_LAW_DECLARED"
+  },
+  "case_state_files": {
+    "CASE_001_THE_LAST_RENDER": "CASES/CASE_001_THE_LAST_RENDER/CURRENT_CASE_STATE.json"
+  },
+  "issued_films": [],
+  "release_candidate_ready_cases": [],
+  "media_admitted_cases": [],
+  "outsider_replay_passed_cases": [],
+  "current_truth_rule": "This index is the root current-state pointer. Layer status records may describe staged law surfaces but must not outrank this index.",
+  "pr6_boundary": "Current-state indexing only; no release readiness, replay pass, media, or issuance."
+}
