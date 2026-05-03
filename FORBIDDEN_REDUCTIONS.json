@@ -1,0 +1,18 @@
+{
+  "schema_version": "cinematicum.forbidden_reductions.v1",
+  "forbidden_reductions": [
+    "ai_video_generator",
+    "prompt_pipeline",
+    "model_showcase",
+    "demo_clip",
+    "tech_preview",
+    "automation_wrapper",
+    "asset_factory",
+    "render_farm",
+    "workflow_collection"
+  ],
+  "correct_identity": "sovereign_cinematic_jurisdiction",
+  "correct_issued_object": "admissible_motion_picture",
+  "correct_first_case": "THE LAST RENDER",
+  "pass_condition": "FORBIDDEN_REDUCTIONS_PASS"
+}

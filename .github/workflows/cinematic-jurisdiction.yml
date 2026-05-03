@@ -1,0 +1,43 @@
+name: cinematic-jurisdiction
+
+on:
+pull_request:
+push:
+branches: [main]
+
+permissions:
+contents: read
+
+jobs:
+cinematic-jurisdiction:
+runs-on: ubuntu-latest
+steps:
+- uses: actions/checkout@v4
+
+```
+  - uses: actions/setup-python@v5
+    with:
+      python-version: "3.12"
+
+  - name: Verify CINEMATICUM jurisdiction
+    run: |
+      RECEIPT_PATH="$RUNNER_TEMP/CINEMATICUM_CINEMATIC_JURISDICTION_RECEIPT.json" \
+        bash scripts/verify-cinematic-jurisdiction.sh
+
+  - name: Run jurisdiction tests
+    run: python -m unittest tests/test_cinematic_jurisdiction.py
+
+  - name: Assert PR1 contains no engine/model/media body
+    run: |
+      test ! -d engine
+      test ! -d workflows
+      test ! -d models.lock
+      test ! -d models
+      test ! -d renders
+      test ! -d frames
+      test ! -d exports
+      ! find . -type f \( \
+        -name '*.mp4' -o -name '*.mov' -o -name '*.wav' -o -name '*.safetensors' -o -name '*.ckpt' \
+      \) | grep .
+```
+

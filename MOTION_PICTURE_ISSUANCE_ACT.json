@@ -1,0 +1,26 @@
+{
+  "schema_version": "cinematicum.motion_picture_issuance_act.v1",
+  "root_sentence": "CINEMATICUM issues admissible motion pictures.",
+  "issuance_is_not_export": true,
+  "issuance_requires": [
+    "director_accepts_final_cut",
+    "editor_locks_timeline",
+    "sound_department_locks_final_mix",
+    "color_authority_locks_grade",
+    "release_authority_locks_delivery_artifacts",
+    "archivist_locks_proof_chain",
+    "outsider_replay_passes",
+    "terminal_closure_sealed"
+  ],
+  "pre_issuance_states": [
+    "development_material",
+    "production_material",
+    "cut",
+    "proof_cut",
+    "rough_cut",
+    "locked_picture",
+    "release_candidate"
+  ],
+  "issued_state": "admissible_motion_picture",
+  "pass_condition": "MOTION_PICTURE_ISSUANCE_ACT_PASS"
+}

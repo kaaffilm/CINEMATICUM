@@ -1,0 +1,38 @@
+{
+  "schema_version": "cinematicum.admissible_motion_picture_standard.v1",
+  "object_type": "admissible_motion_picture",
+  "definition": "finished audience-facing film whose artistic body and evidentiary body are both intact",
+  "audience_body_required": [
+    "image",
+    "sound",
+    "silence",
+    "performance",
+    "rhythm",
+    "cut",
+    "tension",
+    "emotional_residue",
+    "final_audience_experience"
+  ],
+  "evidentiary_body_required": [
+    "director_authority",
+    "script_lock",
+    "shot_function_lock",
+    "take_provenance",
+    "selected_take_record",
+    "final_cut_timeline",
+    "release_manifest",
+    "media_hashes",
+    "public_release_object",
+    "outsider_replay_proof",
+    "terminal_closure"
+  ],
+  "inadmissible_if": [
+    "only_generated_media_exists",
+    "director_authority_missing",
+    "timeline_missing",
+    "release_manifest_missing",
+    "outsider_replay_missing",
+    "terminal_closure_missing"
+  ],
+  "pass_condition": "ADMISSIBLE_MOTION_PICTURE_STANDARD_PASS"
+}

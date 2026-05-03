@@ -1,0 +1,52 @@
+{
+  "schema_version": "cinematicum.cinematic_jurisdiction.v1",
+  "institution": "CINEMATICUM",
+  "repo": "kaaffilm/CINEMATICUM",
+  "root_sentence": "CINEMATICUM issues admissible motion pictures.",
+  "primary_form": "sovereign_cinematic_jurisdiction",
+  "issued_object": "admissible_motion_picture",
+  "first_case": "CASE_001_THE_LAST_RENDER",
+  "first_case_title": "THE LAST RENDER",
+  "forbidden_reductions": [
+    "ai_video_generator",
+    "prompt_pipeline",
+    "model_showcase",
+    "demo_clip",
+    "tech_preview",
+    "automation_wrapper",
+    "asset_factory",
+    "render_farm",
+    "workflow_collection"
+  ],
+  "creative_authority": [
+    "audience_wound",
+    "film_thesis",
+    "director_intent",
+    "script_lock",
+    "shot_function",
+    "performance_truth",
+    "editorial_timeline",
+    "final_cut"
+  ],
+  "technical_authority": [
+    "local_model_lock",
+    "take_hash",
+    "timeline_hash",
+    "release_hash",
+    "outsider_replay",
+    "terminal_closure"
+  ],
+  "local_only": true,
+  "paid_api_allowed": false,
+  "cloud_render_allowed": false,
+  "raw_media_in_git": false,
+  "model_weights_in_git": false,
+  "release_media_in_github_releases": true,
+  "timeline_native": true,
+  "final_cut_required": true,
+  "audience_artifact_required": true,
+  "proof_artifact_required": true,
+  "outsider_replay_required": true,
+  "terminal_closure_required": true,
+  "pass_condition": "CINEMATICUM_CINEMATIC_JURISDICTION_PASS"
+}

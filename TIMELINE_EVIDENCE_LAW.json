@@ -1,0 +1,27 @@
+{
+  "schema_version": "cinematicum.timeline_evidence_law.v1",
+  "timeline_native": true,
+  "timeline_is_not_decoration": true,
+  "timeline_binds": [
+    "shot_id",
+    "take_id",
+    "duration",
+    "cut_order",
+    "media_reference",
+    "audio_reference",
+    "subtitle_reference",
+    "hash_reference"
+  ],
+  "future_required_formats": [
+    "otio",
+    "json",
+    "edl_if_applicable"
+  ],
+  "inadmissible_if": [
+    "final_mp4_exists_without_timeline",
+    "timeline_references_untracked_media",
+    "selected_take_missing_hash",
+    "cut_order_not_reconstructable"
+  ],
+  "pass_condition": "TIMELINE_EVIDENCE_LAW_PASS"
+}

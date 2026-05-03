@@ -1,0 +1,23 @@
+{
+  "schema_version": "cinematicum.release_admissibility_law.v1",
+  "release_is_issuance_candidate": true,
+  "github_release_media_allowed": true,
+  "normal_git_media_forbidden": true,
+  "release_requires": [
+    "final_film",
+    "timeline",
+    "release_manifest",
+    "sha256sums",
+    "subtitles",
+    "poster",
+    "outsider_replay_proof"
+  ],
+  "release_rejects": [
+    "media_without_hash",
+    "timeline_without_final_cut_lock",
+    "proof_without_public_replay",
+    "asset_larger_than_declared_release_boundary",
+    "raw_renders_in_git"
+  ],
+  "pass_condition": "RELEASE_ADMISSIBILITY_LAW_PASS"
+}

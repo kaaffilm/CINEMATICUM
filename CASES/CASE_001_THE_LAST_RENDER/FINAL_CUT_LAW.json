@@ -1,0 +1,22 @@
+{
+  "schema_version": "cinematicum.case_final_cut_law.v1",
+  "case_id": "CASE_001_THE_LAST_RENDER",
+  "final_cut_required": true,
+  "runtime_target_seconds": 450,
+  "format_target": {
+    "aspect_ratio": "2.39:1",
+    "fps": 24,
+    "master_resolution": "1920x804",
+    "release_resolution": "1920x1080_letterboxed"
+  },
+  "shot_count_target": {
+    "min": 48,
+    "max": 64
+  },
+  "dialogue_policy": {
+    "sparse": true,
+    "maximum_spoken_words_target": 220,
+    "silence_carries_film": true
+  },
+  "pass_condition": "CASE_001_FINAL_CUT_LAW_PASS"
+}

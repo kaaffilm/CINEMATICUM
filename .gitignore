@@ -1,0 +1,50 @@
+# CINEMATICUM heavy/local boundary
+
+# local model and execution workspaces
+
+/models/
+/model-cache/
+/ComfyUI/
+/work/
+/cache/
+/tmp/
+/venv/
+/.venv/
+/node_modules/
+
+# generated image/video/audio media
+
+/frames/
+/renders/
+/exports/
+/audio/work/
+/audio/stems/
+/films/*/shots/*/renders/
+/films/*/shots/*/frames/
+*.mp4
+*.mov
+*.mkv
+*.avi
+*.webm
+*.wav
+*.flac
+*.aiff
+*.png
+*.jpg
+*.jpeg
+*.tiff
+*.exr
+
+# model weights / checkpoints
+
+*.safetensors
+*.ckpt
+*.pth
+*.pt
+*.onnx
+*.gguf
+*.bin
+
+# local receipts
+
+CINEMATICUM_*_RECEIPT.json

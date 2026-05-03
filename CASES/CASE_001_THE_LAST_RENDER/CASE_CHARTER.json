@@ -1,0 +1,13 @@
+{
+  "schema_version": "cinematicum.case_charter.v1",
+  "case_id": "CASE_001_THE_LAST_RENDER",
+  "title": "THE LAST RENDER",
+  "status_target": "FIRST_ISSUED_ADMISSIBLE_MOTION_PICTURE",
+  "not_demo": true,
+  "not_experiment": true,
+  "not_ai_film_label": true,
+  "case_under_jurisdiction": "CINEMATICUM",
+  "core_thesis": "A film is not alive because it is generated. A film is alive because someone chose what must remain.",
+  "dramatic_premise": "A solitary projectionist wakes inside a dead render facility after the final human film fails to export. To leave, he must reconstruct one missing timeline from corrupted shots and become the last admissible witness.",
+  "pass_condition": "CASE_001_THE_LAST_RENDER_CHARTER_PASS"
+}
