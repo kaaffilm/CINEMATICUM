@@ -752,3 +752,7 @@ CINEMATICUM preserves the current zero-intake finality seal without turning it i
 ### Authority Object Admission Intake Reopening Request Schema
 
 CINEMATICUM now separates future reopening-request shape from live reopening. The schema defines required future intake-reopening fields, while proving no live reopening request exists now and that schemas cannot reopen intake, satisfy authority, advance state, issue, or admit media.
+
+### Authority Object Admission Intake Reopening Request Validator
+
+CINEMATICUM now validates the future reopening-request schema while preserving zero live reopening requests. The validator proves that validation does not create a request, reopen intake, satisfy authority, advance state, issue, or admit media.
