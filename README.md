@@ -365,3 +365,30 @@ Current ledger status:
 Current active state remains:
 
     CASE_001_THE_LAST_RENDER = OUTSIDER_REPLAY_BUNDLE_LAW_DECLARED
+
+## PR17 — Public perimeter sentinel
+
+PR17 adds the public perimeter sentinel.
+
+Read:
+
+    PUBLIC_PERIMETER_SENTINEL.md
+    CINEMATICUM_PUBLIC_PERIMETER_SENTINEL.json
+
+Verify:
+
+    bash scripts/verify-public-perimeter-sentinel.sh
+    bash scripts/verify-all.sh
+
+Current sentinel status:
+
+    private_access_required=false
+    media_or_model_payload_present=false
+    forbidden_private_file_present=false
+    valid_transition_attempt_present=false
+    may_advance_now=false
+    required_authority_objects_missing=true
+
+Current active state remains:
+
+    CASE_001_THE_LAST_RENDER = OUTSIDER_REPLAY_BUNDLE_LAW_DECLARED

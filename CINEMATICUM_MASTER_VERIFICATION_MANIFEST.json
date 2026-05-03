@@ -21,7 +21,8 @@
     "scripts/verify-authority-precedence-lattice.sh",
     "scripts/verify-state-transition-gate.sh",
     "scripts/verify-required-authority-objects.sh",
-    "scripts/verify-transition-attempt-rejection-ledger.sh"
+    "scripts/verify-transition-attempt-rejection-ledger.sh",
+    "scripts/verify-public-perimeter-sentinel.sh"
   ],
   "required_unittests": [
     "tests/test_cinematic_jurisdiction.py",
@@ -39,7 +40,8 @@
     "tests/test_authority_precedence_lattice.py",
     "tests/test_state_transition_gate.py",
     "tests/test_required_authority_objects.py",
-    "tests/test_transition_attempt_rejection_ledger.py"
+    "tests/test_transition_attempt_rejection_ledger.py",
+    "tests/test_public_perimeter_sentinel.py"
   ],
   "required_ci_workflows": [
     "cinematic-jurisdiction",
@@ -57,7 +59,8 @@
     "authority-precedence-lattice",
     "state-transition-gate",
     "required-authority-objects",
-    "transition-attempt-rejection-ledger"
+    "transition-attempt-rejection-ledger",
+    "public-perimeter-sentinel"
   ],
   "master_invariants": [
     "root_sentence_present",
@@ -104,6 +107,11 @@
     "no_valid_transition_attempt_present",
     "transition_attempts_recorded_zero",
     "blocked_targets_rejected_until_gate_unblocked",
-    "forbidden_transition_attempt_object_types_absent"
+    "forbidden_transition_attempt_object_types_absent",
+    "public_perimeter_sentinel_present",
+    "public_perimeter_requires_no_private_access",
+    "public_perimeter_contains_no_media_or_model_payload",
+    "public_perimeter_contains_no_private_files",
+    "public_perimeter_contains_no_transition_attempt"
   ]
 }
