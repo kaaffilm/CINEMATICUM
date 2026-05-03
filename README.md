@@ -98,3 +98,24 @@ PR4 defines which authority acceptance objects must exist before a future releas
 
     bash scripts/verify-authority-acceptance-law.sh
     python3 -m unittest tests/test_authority_acceptance_law.py
+
+## PR5 — Outsider replay bundle law
+
+PR5 adds outsider replay bundle, replay execution report, admissibility verdict, and public replay index schemas.
+
+This does not create a replay bundle.
+
+This does not execute replay.
+
+This does not produce an admissibility verdict.
+
+This does not make the case release-candidate-ready.
+
+This does not issue a film.
+
+PR5 defines the evidence package an outsider must later be able to replay without private narration.
+
+### PR5 verification
+
+    bash scripts/verify-outsider-replay-bundle-law.sh
+    python3 -m unittest tests/test_outsider_replay_bundle_law.py

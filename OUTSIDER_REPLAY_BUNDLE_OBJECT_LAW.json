@@ -1,0 +1,66 @@
+{
+  "object_type": "CINEMATICUM_OUTSIDER_REPLAY_BUNDLE_OBJECT_LAW",
+  "schema_version": "cinematicum.outsider_replay_bundle_object_law.v1",
+  "institution": "CINEMATICUM",
+  "root_sentence": "CINEMATICUM issues admissible motion pictures.",
+  "law_boundary": "OUTSIDER_REPLAY_BUNDLE_OBJECT_LAW_ONLY",
+  "issued_film": false,
+  "release_candidate_ready": false,
+  "outsider_replay_passed": false,
+  "media_present": false,
+  "generation_present": false,
+  "engine_present": false,
+  "model_present": false,
+  "purpose": "Define the replay bundle and admissibility verdict object classes required before a future motion picture may approach issuance.",
+  "replay_bundle_is": "a portable public evidence package allowing an outsider to reconstruct the case, authority objects, manifest objects, hash commitments, verdicts, and closure posture without private narration",
+  "replay_bundle_is_not": [
+    "issued film",
+    "release artifact",
+    "media container",
+    "generated footage",
+    "model workflow",
+    "private production archive",
+    "festival package"
+  ],
+  "required_future_bundle_members": [
+    "case_docket",
+    "case_evidence_ledger",
+    "director_acceptance_object",
+    "final_cut_timeline_lock_object",
+    "sound_mix_lock_object",
+    "color_grade_lock_object",
+    "release_manifest_object",
+    "media_hash_manifest_object",
+    "replay_execution_report",
+    "admissibility_verdict_object",
+    "terminal_closure_candidate_object"
+  ],
+  "minimum_replay_outcomes": [
+    "case_identity_reconstructed",
+    "authority_chain_reconstructed",
+    "timeline_lock_reconstructed",
+    "release_manifest_validated",
+    "hash_manifest_validated",
+    "declared_artifact_digests_matched",
+    "admissibility_verdict_reconstructed",
+    "terminal_closure_posture_reconstructed"
+  ],
+  "forbidden_pr5_outputs": [
+    "actual replay pass",
+    "release candidate ready assertion",
+    "issued film",
+    "media file",
+    "render workflow",
+    "model workflow",
+    "generation pipeline",
+    "distribution package"
+  ],
+  "pr5_state_transition": {
+    "from": "AUTHORITY_ACCEPTANCE_LAW_DECLARED",
+    "to": "OUTSIDER_REPLAY_BUNDLE_LAW_DECLARED",
+    "not_to": [
+      "RELEASE_CANDIDATE_READY",
+      "ISSUED_ADMISSIBLE_MOTION_PICTURE"
+    ]
+  }
+}

@@ -1,0 +1,34 @@
+{
+  "object_type": "CINEMATICUM_REPLAY_EXECUTION_REPORT_SCHEMA",
+  "schema_version": "cinematicum.replay_execution_report_schema.v1",
+  "boundary": "SCHEMA_ONLY_NO_REPLAY_EXECUTION",
+  "required_fields": [
+    "replay_report_id",
+    "case_id",
+    "bundle_id",
+    "executed_at_utc",
+    "executor_identity",
+    "tool_version",
+    "input_bundle_sha256",
+    "checks",
+    "pass",
+    "failure_reasons"
+  ],
+  "required_checks": [
+    "case_identity_check",
+    "authority_chain_check",
+    "timeline_lock_check",
+    "release_manifest_check",
+    "media_hash_manifest_check",
+    "digest_match_check",
+    "admissibility_verdict_check",
+    "terminal_closure_posture_check"
+  ],
+  "report_rule": "A replay execution report records a future replay attempt; this schema alone does not execute replay and does not pass replay.",
+  "forbidden_fields": [
+    "media_bytes",
+    "private_key",
+    "secret_inputs",
+    "cloud_credentials"
+  ]
+}
