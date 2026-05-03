@@ -1,0 +1,17 @@
+name: repository-status-seal
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+
+jobs:
+  repository-status-seal:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Verify repository status seal
+        run: bash scripts/verify-repository-status-seal.sh
+      - name: Run repository status seal tests
+        run: python3 -m unittest tests/test_repository_status_seal.py

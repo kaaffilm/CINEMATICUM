@@ -14,7 +14,8 @@
     "scripts/verify-all.sh",
     "scripts/verify-object-registry.sh",
     "scripts/regenerate-object-registry.py",
-    "scripts/verify-object-registry-fresh.sh"
+    "scripts/verify-object-registry-fresh.sh",
+    "scripts/verify-repository-status-seal.sh"
   ],
   "required_unittests": [
     "tests/test_cinematic_jurisdiction.py",
@@ -25,7 +26,8 @@
     "tests/test_current_state_index.py",
     "tests/test_master_progression.py",
     "tests/test_object_registry.py",
-    "tests/test_object_registry_freshness.py"
+    "tests/test_object_registry_freshness.py",
+    "tests/test_repository_status_seal.py"
   ],
   "required_ci_workflows": [
     "cinematic-jurisdiction",
@@ -36,7 +38,8 @@
     "current-state-index",
     "master-progression",
     "object-registry",
-    "object-registry-freshness"
+    "object-registry-freshness",
+    "repository-status-seal"
   ],
   "master_invariants": [
     "root_sentence_present",
@@ -54,6 +57,8 @@
     "all_layer_status_records_subordinate",
     "object_registry_complete",
     "surface_classes_machine_readable",
-    "object_registry_freshness_guarded"
+    "object_registry_freshness_guarded",
+    "repository_status_seal_bounded",
+    "public_status_does_not_outrank_current_state"
   ]
 }
