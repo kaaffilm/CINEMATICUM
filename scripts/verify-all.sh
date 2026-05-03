@@ -67,6 +67,9 @@ python3 -m unittest tests/test_authority_object_admission_docket.py
 bash scripts/verify-authority-object-admission-request-schema.sh
 python3 -m unittest tests/test_authority_object_admission_request_schema.py
 
+bash scripts/verify-authority-object-admission-request-validator.sh
+python3 -m unittest tests/test_authority_object_admission_request_validator.py
+
 bash scripts/verify-master-verification-manifest-closure.sh
 python3 -m unittest tests/test_master_verification_manifest_closure.py
 

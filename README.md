@@ -557,3 +557,31 @@ Still false:
     media_present=false
 
 The schema does not admit an authority object and does not advance state.
+
+## PR24 — Authority object admission request validator
+
+PR24 adds the validator for future authority-object admission request files.
+
+Verify:
+
+    bash scripts/verify-authority-object-admission-request-validator.sh
+    bash scripts/verify-all.sh
+
+Current active state remains:
+
+    CASE_001_THE_LAST_RENDER = OUTSIDER_REPLAY_BUNDLE_LAW_DECLARED
+
+Current result:
+
+    zero_requests_valid=true
+    admission_requests_present=false
+    admission_request_count=0
+    valid_admission_request_count=0
+    invalid_admission_request_count=0
+    authority_satisfied=false
+    may_advance_now=false
+    release_candidate_ready=false
+    issued=false
+    media_present=false
+
+The validator scans; it does not admit, reject, instantiate, or advance.
