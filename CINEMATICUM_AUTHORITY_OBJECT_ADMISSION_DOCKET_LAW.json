@@ -1,0 +1,40 @@
+{
+  "object_type": "CINEMATICUM_AUTHORITY_OBJECT_ADMISSION_DOCKET_LAW",
+  "schema_version": "cinematicum.authority_object_admission_docket_law.v1",
+  "institution": "CINEMATICUM",
+  "root_sentence": "CINEMATICUM issues admissible motion pictures.",
+  "purpose": "Require every future authority-object instantiation attempt to enter a public admission docket before any authority object can exist.",
+  "docket_owner": "CINEMATICUM_AUTHORITY_OBJECT_ADMISSION_DOCKET.json",
+  "request_directory": "authority_object_admission_requests",
+  "instantiation_gate_owner": "CINEMATICUM_AUTHORITY_OBJECT_INSTANTIATION_GATE.json",
+  "instantiated_authority_directory": "authority_objects",
+  "template_directory": "templates/authority_objects",
+  "law": {
+    "silent_authority_object_instantiation_forbidden": true,
+    "request_required_before_authority_object": true,
+    "request_must_be_public": true,
+    "request_must_be_case_bound": true,
+    "request_must_reference_template": true,
+    "request_must_reference_target_authority_object": true,
+    "request_must_include_actor": true,
+    "request_must_include_utc_timestamp": true,
+    "request_must_include_evidence_references": true,
+    "request_must_include_requested_state_effect": true,
+    "request_must_pass_docket_verification": true,
+    "docket_does_not_itself_admit_request": true,
+    "docket_does_not_itself_instantiate_authority": true,
+    "docket_does_not_itself_advance_state": true,
+    "docket_does_not_issue_film": true
+  },
+  "current_non_authorizing_status": {
+    "admission_requests_present": false,
+    "accepted_admission_requests_present": false,
+    "rejected_admission_requests_present": false,
+    "instantiated_authority_objects_present": false,
+    "authority_satisfied": false,
+    "may_advance_now": false,
+    "release_candidate_ready": false,
+    "issued": false,
+    "media_present": false
+  }
+}

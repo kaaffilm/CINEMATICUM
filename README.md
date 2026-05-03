@@ -501,3 +501,30 @@ Still false:
     outsider_replay_passed=false
 
 The gate defines promotion requirements. It does not instantiate authority.
+
+## PR22 — Authority object admission docket
+
+PR22 prevents silent authority-object appearance.
+
+Verify:
+
+    bash scripts/verify-authority-object-admission-docket.sh
+    bash scripts/verify-all.sh
+
+Current active state remains:
+
+    CASE_001_THE_LAST_RENDER = OUTSIDER_REPLAY_BUNDLE_LAW_DECLARED
+
+Still false:
+
+    admission_requests_present=false
+    admission_request_count=0
+    accepted_admission_requests_present=false
+    instantiated_authority_objects_present=false
+    authority_satisfied=false
+    may_advance_now=false
+    release_candidate_ready=false
+    issued=false
+    media_present=false
+
+The docket requires a public request before any future authority object can be instantiated.
