@@ -46,4 +46,7 @@ python3 -m unittest tests/test_state_transition_gate.py
 bash scripts/verify-required-authority-objects.sh
 python3 -m unittest tests/test_required_authority_objects.py
 
+bash scripts/verify-transition-attempt-rejection-ledger.sh
+python3 -m unittest tests/test_transition_attempt_rejection_ledger.py
+
 printf "CINEMATICUM VERIFY ALL: PASS\n"
