@@ -1,0 +1,37 @@
+{
+  "object_type": "CINEMATICUM_AUTHORITY_OBJECT_INSTANTIATION_GATE_LAW",
+  "schema_version": "cinematicum.authority_object_instantiation_gate_law.v1",
+  "institution": "CINEMATICUM",
+  "root_sentence": "CINEMATICUM issues admissible motion pictures.",
+  "purpose": "Define the gate between inert authority-object templates and instantiated authority objects.",
+  "gate_owner": "CINEMATICUM_AUTHORITY_OBJECT_INSTANTIATION_GATE.json",
+  "template_kit_owner": "CINEMATICUM_AUTHORITY_OBJECT_TEMPLATE_KIT.json",
+  "required_authority_checklist_owner": "CINEMATICUM_REQUIRED_AUTHORITY_OBJECT_CHECKLIST.json",
+  "transition_gate_owner": "CINEMATICUM_STATE_TRANSITION_GATE.json",
+  "instantiated_authority_directory": "authority_objects",
+  "template_directory": "templates/authority_objects",
+  "law": {
+    "templates_are_not_authority_objects": true,
+    "authority_object_requires_copy_outside_template_directory": true,
+    "authority_object_requires_template_only_false": true,
+    "authority_object_requires_accountable_actor": true,
+    "authority_object_requires_utc_timestamp": true,
+    "authority_object_requires_authority_basis": true,
+    "authority_object_requires_explicit_acceptance_or_rejection": true,
+    "authority_object_requires_hash_or_reference_material": true,
+    "authority_object_requires_verification_before_state_advance": true,
+    "instantiation_gate_may_not_itself_advance_state": true,
+    "instantiation_gate_may_not_issue_film": true,
+    "instantiation_gate_may_not_admit_media": true
+  },
+  "current_non_authorizing_status": {
+    "instantiated_authority_objects_present": false,
+    "authority_satisfied": false,
+    "may_advance_now": false,
+    "release_candidate_ready": false,
+    "issued": false,
+    "media_present": false,
+    "outsider_replay_passed": false,
+    "terminal_closure_present": false
+  }
+}

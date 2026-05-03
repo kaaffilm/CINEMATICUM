@@ -58,6 +58,9 @@ python3 -m unittest tests/test_outsider_clone_replay.py
 bash scripts/verify-authority-object-template-kit.sh
 python3 -m unittest tests/test_authority_object_template_kit.py
 
+bash scripts/verify-authority-object-instantiation-gate.sh
+python3 -m unittest tests/test_authority_object_instantiation_gate.py
+
 bash scripts/verify-master-verification-manifest-closure.sh
 python3 -m unittest tests/test_master_verification_manifest_closure.py
 

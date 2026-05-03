@@ -25,7 +25,8 @@
     "scripts/verify-public-perimeter-sentinel.sh",
     "scripts/verify-master-verification-manifest-closure.sh",
     "scripts/verify-outsider-clone-replay.sh",
-    "scripts/verify-authority-object-template-kit.sh"
+    "scripts/verify-authority-object-template-kit.sh",
+    "scripts/verify-authority-object-instantiation-gate.sh"
   ],
   "required_unittests": [
     "tests/test_cinematic_jurisdiction.py",
@@ -47,7 +48,8 @@
     "tests/test_public_perimeter_sentinel.py",
     "tests/test_master_verification_manifest_closure.py",
     "tests/test_outsider_clone_replay.py",
-    "tests/test_authority_object_template_kit.py"
+    "tests/test_authority_object_template_kit.py",
+    "tests/test_authority_object_instantiation_gate.py"
   ],
   "required_ci_workflows": [
     "cinematic-jurisdiction",
@@ -69,7 +71,8 @@
     "public-perimeter-sentinel",
     "master-verification-manifest-closure",
     "outsider-clone-replay",
-    "authority-object-template-kit"
+    "authority-object-template-kit",
+    "authority-object-instantiation-gate"
   ],
   "master_invariants": [
     "root_sentence_present",
@@ -134,6 +137,9 @@
     "outsider_clone_replay_preserves_current_state",
     "authority_object_templates_are_not_authority_objects",
     "authority_object_templates_do_not_satisfy_required_authority",
-    "authority_object_templates_do_not_advance_state"
+    "authority_object_templates_do_not_advance_state",
+    "authority_object_instantiation_gate_is_not_authority",
+    "no_instantiated_authority_objects_present",
+    "authority_object_instantiation_requires_accountable_actor_and_timestamp"
   ]
 }
