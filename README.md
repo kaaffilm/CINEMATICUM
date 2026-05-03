@@ -449,3 +449,29 @@ Still false:
     terminal_closure_present=false
 
 The clone replay harness proves public reproducibility of the repository perimeter. It does not issue a film, admit media, execute film replay, or create terminal closure.
+
+## PR20 — Authority object template kit
+
+PR20 adds inert templates for future required authority objects.
+
+Verify:
+
+    bash scripts/verify-authority-object-template-kit.sh
+    bash scripts/verify-all.sh
+
+Current active state remains:
+
+    CASE_001_THE_LAST_RENDER = OUTSIDER_REPLAY_BUNDLE_LAW_DECLARED
+
+Still false:
+
+    template_only=true
+    authority_satisfied=false
+    templates_do_not_satisfy_authority_objects=true
+    may_advance_now=false
+    release_candidate_ready=false
+    issued=false
+    media_present=false
+    outsider_replay_passed=false
+
+The template kit creates a forward path, not authority.

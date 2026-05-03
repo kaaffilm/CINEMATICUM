@@ -1,0 +1,17 @@
+name: authority-object-template-kit
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+
+jobs:
+  authority-object-template-kit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Verify authority object template kit
+        run: bash scripts/verify-authority-object-template-kit.sh
+      - name: Run authority object template kit tests
+        run: python3 -m unittest tests/test_authority_object_template_kit.py

@@ -55,6 +55,9 @@ python3 -m unittest tests/test_public_perimeter_sentinel.py
 bash scripts/verify-outsider-clone-replay.sh
 python3 -m unittest tests/test_outsider_clone_replay.py
 
+bash scripts/verify-authority-object-template-kit.sh
+python3 -m unittest tests/test_authority_object_template_kit.py
+
 bash scripts/verify-master-verification-manifest-closure.sh
 python3 -m unittest tests/test_master_verification_manifest_closure.py
 
