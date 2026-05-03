@@ -1,0 +1,32 @@
+{
+  "object_type": "CINEMATICUM_AUTHORITY_OBJECT_ADMISSION_REQUEST_VALIDATOR_LAW",
+  "schema_version": "cinematicum.authority_object_admission_request_validator_law.v1",
+  "institution": "CINEMATICUM",
+  "root_sentence": "CINEMATICUM issues admissible motion pictures.",
+  "purpose": "Validate the authority-object admission-request directory against the declared request schema without admitting or instantiating authority objects.",
+  "validator_owner": "CINEMATICUM_AUTHORITY_OBJECT_ADMISSION_REQUEST_VALIDATOR.json",
+  "schema_owner": "CINEMATICUM_AUTHORITY_OBJECT_ADMISSION_REQUEST_SCHEMA.json",
+  "docket_owner": "CINEMATICUM_AUTHORITY_OBJECT_ADMISSION_DOCKET.json",
+  "request_directory": "authority_object_admission_requests",
+  "request_file_pattern": "AUTHORITY_OBJECT_ADMISSION_REQUEST_*.json",
+  "law": {
+    "validator_must_read_schema": true,
+    "validator_must_scan_request_directory": true,
+    "validator_must_accept_zero_requests": true,
+    "validator_must_reject_malformed_requests": true,
+    "validator_must_not_admit_requests": true,
+    "validator_must_not_instantiate_authority_objects": true,
+    "validator_must_not_satisfy_authority": true,
+    "validator_must_not_advance_state": true
+  },
+  "does_not": [
+    "create an admission request",
+    "accept an admission request",
+    "reject an admission request",
+    "admit any authority object",
+    "instantiate any authority object",
+    "satisfy authority",
+    "make release candidate ready",
+    "issue a film"
+  ]
+}

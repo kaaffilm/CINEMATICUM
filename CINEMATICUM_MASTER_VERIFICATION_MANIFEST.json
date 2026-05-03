@@ -28,7 +28,8 @@
     "scripts/verify-authority-object-template-kit.sh",
     "scripts/verify-authority-object-instantiation-gate.sh",
     "scripts/verify-authority-object-admission-docket.sh",
-    "scripts/verify-authority-object-admission-request-schema.sh"
+    "scripts/verify-authority-object-admission-request-schema.sh",
+    "scripts/verify-authority-object-admission-request-validator.sh"
   ],
   "required_unittests": [
     "tests/test_cinematic_jurisdiction.py",
@@ -53,7 +54,8 @@
     "tests/test_authority_object_template_kit.py",
     "tests/test_authority_object_instantiation_gate.py",
     "tests/test_authority_object_admission_docket.py",
-    "tests/test_authority_object_admission_request_schema.py"
+    "tests/test_authority_object_admission_request_schema.py",
+    "tests/test_authority_object_admission_request_validator.py"
   ],
   "required_ci_workflows": [
     "cinematic-jurisdiction",
@@ -78,7 +80,8 @@
     "authority-object-template-kit",
     "authority-object-instantiation-gate",
     "authority-object-admission-docket",
-    "authority-object-admission-request-schema"
+    "authority-object-admission-request-schema",
+    "authority-object-admission-request-validator"
   ],
   "master_invariants": [
     "root_sentence_present",
@@ -151,6 +154,8 @@
     "authority_object_admission_docket_empty_until_public_request",
     "accepted_admission_request_required_before_authority_object",
     "authority_object_admission_requests_require_schema",
-    "authority_object_admission_request_does_not_satisfy_authority"
+    "authority_object_admission_request_does_not_satisfy_authority",
+    "authority_object_admission_request_validator_accepts_zero_requests",
+    "authority_object_admission_request_validator_does_not_admit_authority"
   ]
 }
