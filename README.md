@@ -219,3 +219,30 @@ Still false:
     outsider_replay_passed=false
 
 The status seal summarizes current object state but does not outrank `CINEMATICUM_CURRENT_STATE_INDEX.json` or `CASES/CASE_001_THE_LAST_RENDER/CURRENT_CASE_STATE.json`.
+
+## PR11 — Public inspection dossier
+
+PR11 adds the outsider inspection entrypoint.
+
+Read:
+
+    PUBLIC_INSPECTION.md
+    PUBLIC_INSPECTION_DOSSIER.json
+
+Verify:
+
+    bash scripts/verify-public-inspection-dossier.sh
+    bash scripts/verify-all.sh
+
+Current active state remains:
+
+    CASE_001_THE_LAST_RENDER = OUTSIDER_REPLAY_BUNDLE_LAW_DECLARED
+
+Still false:
+
+    release_candidate_ready=false
+    issued=false
+    media_present=false
+    outsider_replay_passed=false
+
+The dossier requires no private access and does not outrank the current-state owners.

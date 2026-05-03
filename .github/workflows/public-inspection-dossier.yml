@@ -1,0 +1,17 @@
+name: public-inspection-dossier
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+
+jobs:
+  public-inspection-dossier:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Verify public inspection dossier
+        run: bash scripts/verify-public-inspection-dossier.sh
+      - name: Run public inspection dossier tests
+        run: python3 -m unittest tests/test_public_inspection_dossier.py

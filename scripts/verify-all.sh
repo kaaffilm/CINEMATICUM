@@ -31,4 +31,7 @@ python3 -m unittest tests/test_object_registry_freshness.py
 bash scripts/verify-repository-status-seal.sh
 python3 -m unittest tests/test_repository_status_seal.py
 
+bash scripts/verify-public-inspection-dossier.sh
+python3 -m unittest tests/test_public_inspection_dossier.py
+
 printf "CINEMATICUM VERIFY ALL: PASS\n"
