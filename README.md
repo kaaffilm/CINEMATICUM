@@ -740,3 +740,7 @@ CINEMATICUM now declares an authority object admission intake validation gate. T
 ### Authority Object Admission Intake Rejection Ledger
 
 CINEMATICUM records a closed zero-record intake rejection ledger after the intake validation gate. Because there are zero live admission requests and zero valid intake records, no live rejection record is required, no authority object is accepted, no authority is satisfied, no case state advances, no issuance occurs, and no media is admitted.
+
+### Authority Object Admission Intake Finality Seal
+
+CINEMATICUM seals the current zero-intake snapshot after the intake rejection ledger. The seal is scoped only to the current state and does not bar future valid intake under law. It records that no open intake exceptions or unadjudicated intake records exist, while authority remains unsatisfied and the case cannot advance.
