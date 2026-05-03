@@ -1,0 +1,33 @@
+{
+  "object_type": "CINEMATICUM_OUTSIDER_CLONE_REPLAY_LAW",
+  "schema_version": "cinematicum.outsider_clone_replay_law.v1",
+  "institution": "CINEMATICUM",
+  "root_sentence": "CINEMATICUM issues admissible motion pictures.",
+  "purpose": "Define clone-time outsider replay as the public reproducibility harness for verifying repository state from a fresh checkout without private context.",
+  "replay_owner": "OUTSIDER_CLONE_REPLAY.json",
+  "public_document_owner": "OUTSIDER_CLONE_REPLAY.md",
+  "status_owner": "CASES/CASE_001_THE_LAST_RENDER/OUTSIDER_CLONE_REPLAY_STATUS.json",
+  "required_primary_command": "bash scripts/verify-all.sh",
+  "required_local_command": "bash scripts/verify-outsider-clone-replay.sh",
+  "private_access_required": false,
+  "network_required_after_clone": false,
+  "media_required": false,
+  "model_required": false,
+  "paid_api_required": false,
+  "cloud_render_required": false,
+  "clone_replay_must_assert": {
+    "fresh_checkout_can_verify": true,
+    "private_access_required": false,
+    "network_required_after_clone": false,
+    "media_or_model_payload_present": false,
+    "current_state_preserved": true,
+    "transition_state_unchanged": true,
+    "does_not_issue_film": true,
+    "does_not_create_release_candidate": true,
+    "does_not_admit_media": true,
+    "does_not_execute_film_replay": true,
+    "does_not_create_admissibility_verdict": true,
+    "does_not_create_terminal_closure": true
+  },
+  "current_state_locked_to": "OUTSIDER_REPLAY_BUNDLE_LAW_DECLARED"
+}

@@ -9,7 +9,7 @@
   "registry_does_not_override_current_state": true,
   "current_active_state": "OUTSIDER_REPLAY_BUNDLE_LAW_DECLARED",
   "case_id": "CASE_001_THE_LAST_RENDER",
-  "entries_count": 70,
+  "entries_count": 73,
   "entries": [
     {
       "path": "ADMISSIBILITY_VERDICT_SCHEMA.json",
@@ -171,6 +171,18 @@
       "path": "CASES/CASE_001_THE_LAST_RENDER/MASTER_VERIFICATION_MANIFEST_CLOSURE_STATUS.json",
       "object_type": "CINEMATICUM_CASE_MASTER_VERIFICATION_MANIFEST_CLOSURE_STATUS",
       "schema_version": "cinematicum.case_master_verification_manifest_closure_status.v1",
+      "surface_class": "LAYER_STATUS_RECORD",
+      "case_id": "CASE_001_THE_LAST_RENDER",
+      "current_truth_owner": false,
+      "issued": false,
+      "release_candidate_ready": false,
+      "media_present": false,
+      "outsider_replay_passed": false
+    },
+    {
+      "path": "CASES/CASE_001_THE_LAST_RENDER/OUTSIDER_CLONE_REPLAY_STATUS.json",
+      "object_type": "CINEMATICUM_CASE_OUTSIDER_CLONE_REPLAY_STATUS",
+      "schema_version": "cinematicum.case_outsider_clone_replay_status.v1",
       "surface_class": "LAYER_STATUS_RECORD",
       "case_id": "CASE_001_THE_LAST_RENDER",
       "current_truth_owner": false,
@@ -663,6 +675,30 @@
       "path": "OBJECT_REGISTRY_REGENERATION_GUARD_LAW.json",
       "object_type": "CINEMATICUM_OBJECT_REGISTRY_REGENERATION_GUARD_LAW",
       "schema_version": "cinematicum.object_registry_regeneration_guard_law.v1",
+      "surface_class": "LAW_OBJECT",
+      "case_id": null,
+      "current_truth_owner": false,
+      "issued": false,
+      "release_candidate_ready": false,
+      "media_present": false,
+      "outsider_replay_passed": false
+    },
+    {
+      "path": "OUTSIDER_CLONE_REPLAY.json",
+      "object_type": "CINEMATICUM_OUTSIDER_CLONE_REPLAY",
+      "schema_version": "cinematicum.outsider_clone_replay.v1",
+      "surface_class": "CASE_RECORD",
+      "case_id": "CASE_001_THE_LAST_RENDER",
+      "current_truth_owner": false,
+      "issued": false,
+      "release_candidate_ready": false,
+      "media_present": false,
+      "outsider_replay_passed": false
+    },
+    {
+      "path": "OUTSIDER_CLONE_REPLAY_LAW.json",
+      "object_type": "CINEMATICUM_OUTSIDER_CLONE_REPLAY_LAW",
+      "schema_version": "cinematicum.outsider_clone_replay_law.v1",
       "surface_class": "LAW_OBJECT",
       "case_id": null,
       "current_truth_owner": false,

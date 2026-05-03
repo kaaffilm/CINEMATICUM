@@ -1,0 +1,46 @@
+{
+  "object_type": "CINEMATICUM_OUTSIDER_CLONE_REPLAY",
+  "schema_version": "cinematicum.outsider_clone_replay.v1",
+  "institution": "CINEMATICUM",
+  "case_id": "CASE_001_THE_LAST_RENDER",
+  "case_title": "THE LAST RENDER",
+  "surface_type": "OUTSIDER_CLONE_REPLAY_HARNESS",
+  "current_state": "OUTSIDER_REPLAY_BUNDLE_LAW_DECLARED",
+  "private_access_required": false,
+  "network_required_after_clone": false,
+  "media_required": false,
+  "model_required": false,
+  "paid_api_required": false,
+  "cloud_render_required": false,
+  "fresh_clone_command": "git clone https://github.com/kaaffilm/CINEMATICUM.git",
+  "verification_command": "bash scripts/verify-all.sh",
+  "local_harness_command": "bash scripts/verify-outsider-clone-replay.sh",
+  "public_start_documents": [
+    "PUBLIC_INSPECTION.md",
+    "PUBLIC_STATUS.md",
+    "PUBLIC_NEGATIVE_PROOF.md",
+    "PUBLIC_PERIMETER_SENTINEL.md",
+    "OUTSIDER_CLONE_REPLAY.md"
+  ],
+  "truth_owners": [
+    "CINEMATICUM_CURRENT_STATE_INDEX.json",
+    "CASES/CASE_001_THE_LAST_RENDER/CURRENT_CASE_STATE.json",
+    "CINEMATICUM_REPOSITORY_STATUS_SEAL.json",
+    "CINEMATICUM_OBJECT_REGISTRY.json",
+    "CINEMATICUM_MASTER_VERIFICATION_MANIFEST.json"
+  ],
+  "expected_false_claims": {
+    "release_candidate_ready": false,
+    "issued": false,
+    "media_present": false,
+    "generation_present": false,
+    "engine_present": false,
+    "model_present": false,
+    "outsider_replay_passed": false,
+    "valid_transition_attempt_present": false,
+    "may_advance_now": false,
+    "admissibility_verdict_present": false,
+    "terminal_closure_present": false
+  },
+  "bounded_result": "A fresh public checkout can verify the repository perimeter, but does not issue or release the film."
+}

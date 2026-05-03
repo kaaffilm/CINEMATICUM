@@ -1,0 +1,17 @@
+name: outsider-clone-replay
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+
+jobs:
+  outsider-clone-replay:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Verify outsider clone replay
+        run: bash scripts/verify-outsider-clone-replay.sh
+      - name: Run outsider clone replay tests
+        run: python3 -m unittest tests/test_outsider_clone_replay.py
