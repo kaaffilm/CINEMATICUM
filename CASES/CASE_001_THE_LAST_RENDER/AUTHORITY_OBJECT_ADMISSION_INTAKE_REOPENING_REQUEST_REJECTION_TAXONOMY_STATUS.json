@@ -1,0 +1,22 @@
+{
+  "object_type": "CINEMATICUM_CASE_AUTHORITY_OBJECT_ADMISSION_INTAKE_REOPENING_REQUEST_REJECTION_TAXONOMY_STATUS",
+  "schema_version": "cinematicum.case_authority_object_admission_intake_reopening_request_rejection_taxonomy_status.v1",
+  "institution": "CINEMATICUM",
+  "root_sentence": "CINEMATICUM issues admissible motion pictures.",
+  "case_id": "CASE_001_THE_LAST_RENDER",
+  "current_state": "OUTSIDER_REPLAY_BUNDLE_LAW_DECLARED",
+  "canonical_rejection_reason_count": 9,
+  "covered_rejection_reason_count": 5,
+  "uncovered_rejection_reason_count": 4,
+  "required_corpus_reason_count": 5,
+  "taxonomy_complete_for_current_validator": true,
+  "corpus_complete_for_required_reasons": true,
+  "fixtures_are_live_requests": false,
+  "live_reopening_request_count": 0,
+  "valid_reopening_request_count": 0,
+  "accepted_reopening_request_count": 0,
+  "authority_satisfied": false,
+  "may_advance_now": false,
+  "issued": false,
+  "media_present": false
+}

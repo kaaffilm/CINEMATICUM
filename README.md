@@ -760,3 +760,21 @@ CINEMATICUM now validates the future reopening-request schema while preserving z
 ### Authority Object Admission Intake Reopening Request Rejection Corpus
 
 CINEMATICUM now contains invalid reopening-request fixtures. The fixtures are explicitly not live requests and prove rejection behavior without reopening intake, satisfying authority, advancing state, issuing, or admitting media.
+
+## Authority object admission intake reopening request rejection taxonomy
+
+CINEMATICUM now declares the authority object admission intake reopening request rejection taxonomy.
+
+The taxonomy canonicalizes future reopening request rejection reasons while preserving the current zero-intake final snapshot:
+
+```text
+canonical_rejection_reason_count=9
+covered_rejection_reason_count=5
+uncovered_rejection_reason_count=4
+taxonomy_complete_for_current_validator=true
+corpus_complete_for_required_reasons=true
+authority_satisfied=false
+may_advance_now=false
+issued=false
+media_present=false
+```
