@@ -1,0 +1,17 @@
+name: authority-object-admission-intake-reopening-request-schema
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+
+jobs:
+  authority-object-admission-intake-reopening-request-schema:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Verify authority object admission intake reopening request schema
+        run: bash scripts/verify-authority-object-admission-intake-reopening-request-schema.sh
+      - name: Run authority object admission intake reopening request schema tests
+        run: python3 -m unittest tests/test_authority_object_admission_intake_reopening_request_schema.py
