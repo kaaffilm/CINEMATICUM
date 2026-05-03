@@ -1,0 +1,30 @@
+{
+  "object_type": "TERMINAL_CLOSURE_CANDIDATE_TEMPLATE",
+  "schema_version": "cinematicum.terminal_closure_candidate.template.v1",
+  "institution": "CINEMATICUM",
+  "case_id": "CASE_001_THE_LAST_RENDER",
+  "case_title": "THE LAST RENDER",
+  "template_only": true,
+  "authority_satisfied": false,
+  "may_advance_state": false,
+  "release_candidate_ready": false,
+  "issued": false,
+  "media_present": false,
+  "outsider_replay_passed": false,
+  "future_authority_object": "TERMINAL_CLOSURE_CANDIDATE.json",
+  "must_be_copied_outside_template_directory_before_use": true,
+  "template_boundary": [
+    "this template is not an authority object",
+    "this template does not satisfy required authority",
+    "this template does not admit media",
+    "this template does not advance current state"
+  ],
+  "required_future_fields": [
+    "authority_actor",
+    "authority_timestamp_utc",
+    "authority_basis",
+    "object_hashes_or_references",
+    "explicit_acceptance_or_rejection",
+    "signature_or_public_accountable_record"
+  ]
+}
