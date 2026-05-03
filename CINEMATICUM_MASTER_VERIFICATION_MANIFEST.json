@@ -23,7 +23,8 @@
     "scripts/verify-required-authority-objects.sh",
     "scripts/verify-transition-attempt-rejection-ledger.sh",
     "scripts/verify-public-perimeter-sentinel.sh",
-    "scripts/verify-master-verification-manifest-closure.sh"
+    "scripts/verify-master-verification-manifest-closure.sh",
+    "scripts/verify-outsider-clone-replay.sh"
   ],
   "required_unittests": [
     "tests/test_cinematic_jurisdiction.py",
@@ -43,7 +44,8 @@
     "tests/test_required_authority_objects.py",
     "tests/test_transition_attempt_rejection_ledger.py",
     "tests/test_public_perimeter_sentinel.py",
-    "tests/test_master_verification_manifest_closure.py"
+    "tests/test_master_verification_manifest_closure.py",
+    "tests/test_outsider_clone_replay.py"
   ],
   "required_ci_workflows": [
     "cinematic-jurisdiction",
@@ -63,7 +65,8 @@
     "required-authority-objects",
     "transition-attempt-rejection-ledger",
     "public-perimeter-sentinel",
-    "master-verification-manifest-closure"
+    "master-verification-manifest-closure",
+    "outsider-clone-replay"
   ],
   "master_invariants": [
     "root_sentence_present",
@@ -122,6 +125,9 @@
     "manifest_required_scripts_are_in_verify_all",
     "manifest_required_unittests_exist",
     "manifest_required_unittests_are_in_verify_all",
-    "manifest_required_ci_workflows_exist"
+    "manifest_required_ci_workflows_exist",
+    "outsider_clone_replay_requires_no_private_access",
+    "outsider_clone_replay_does_not_issue",
+    "outsider_clone_replay_preserves_current_state"
   ]
 }

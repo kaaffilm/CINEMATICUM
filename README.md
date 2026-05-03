@@ -419,3 +419,33 @@ Closure status:
 Current active state remains:
 
     CASE_001_THE_LAST_RENDER = OUTSIDER_REPLAY_BUNDLE_LAW_DECLARED
+
+## PR19 — Outsider clone replay
+
+PR19 adds the clone-time outsider replay harness.
+
+Fresh public checkout:
+
+    git clone https://github.com/kaaffilm/CINEMATICUM.git
+    cd CINEMATICUM
+    bash scripts/verify-all.sh
+
+Local harness:
+
+    bash scripts/verify-outsider-clone-replay.sh
+
+Current active state remains:
+
+    CASE_001_THE_LAST_RENDER = OUTSIDER_REPLAY_BUNDLE_LAW_DECLARED
+
+Still false:
+
+    release_candidate_ready=false
+    issued=false
+    media_present=false
+    outsider_replay_passed=false
+    valid_transition_attempt_present=false
+    may_advance_now=false
+    terminal_closure_present=false
+
+The clone replay harness proves public reproducibility of the repository perimeter. It does not issue a film, admit media, execute film replay, or create terminal closure.
