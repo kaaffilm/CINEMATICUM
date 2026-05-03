@@ -99,6 +99,8 @@ bash scripts/verify-authority-object-admission-intake-reopening-request-validato
 python3 -m unittest tests/test_authority_object_admission_intake_reopening_request_validator.py
 bash scripts/verify-authority-object-admission-intake-reopening-request-rejection-corpus.sh
 python3 -m unittest tests/test_authority_object_admission_intake_reopening_request_rejection_corpus.py
+bash scripts/verify-authority-object-admission-intake-reopening-request-rejection-taxonomy.sh
+python3 -m unittest tests/test_authority_object_admission_intake_reopening_request_rejection_taxonomy.py
 bash scripts/verify-master-verification-manifest-closure.sh
 python3 -m unittest tests/test_master_verification_manifest_closure.py
 

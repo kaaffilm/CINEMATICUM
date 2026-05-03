@@ -9,7 +9,7 @@
   "registry_does_not_override_current_state": true,
   "current_active_state": "OUTSIDER_REPLAY_BUNDLE_LAW_DECLARED",
   "case_id": "CASE_001_THE_LAST_RENDER",
-  "entries_count": 145,
+  "entries_count": 148,
   "entries": [
     {
       "path": "ADMISSIBILITY_VERDICT_SCHEMA.json",
@@ -183,6 +183,18 @@
       "path": "CASES/CASE_001_THE_LAST_RENDER/AUTHORITY_OBJECT_ADMISSION_INTAKE_REOPENING_REQUEST_REJECTION_CORPUS_STATUS.json",
       "object_type": "CINEMATICUM_CASE_AUTHORITY_OBJECT_ADMISSION_INTAKE_REOPENING_REQUEST_REJECTION_CORPUS_STATUS",
       "schema_version": "cinematicum.case_authority_object_admission_intake_reopening_request_rejection_corpus_status.v1",
+      "surface_class": "LAYER_STATUS_RECORD",
+      "case_id": "CASE_001_THE_LAST_RENDER",
+      "current_truth_owner": false,
+      "issued": false,
+      "release_candidate_ready": false,
+      "media_present": false,
+      "outsider_replay_passed": false
+    },
+    {
+      "path": "CASES/CASE_001_THE_LAST_RENDER/AUTHORITY_OBJECT_ADMISSION_INTAKE_REOPENING_REQUEST_REJECTION_TAXONOMY_STATUS.json",
+      "object_type": "CINEMATICUM_CASE_AUTHORITY_OBJECT_ADMISSION_INTAKE_REOPENING_REQUEST_REJECTION_TAXONOMY_STATUS",
+      "schema_version": "cinematicum.case_authority_object_admission_intake_reopening_request_rejection_taxonomy_status.v1",
       "surface_class": "LAYER_STATUS_RECORD",
       "case_id": "CASE_001_THE_LAST_RENDER",
       "current_truth_owner": false,
@@ -725,6 +737,30 @@
       "schema_version": "cinematicum.authority_object_admission_intake_reopening_request_rejection_corpus_law.v1",
       "surface_class": "LAW_OBJECT",
       "case_id": null,
+      "current_truth_owner": false,
+      "issued": false,
+      "release_candidate_ready": false,
+      "media_present": false,
+      "outsider_replay_passed": false
+    },
+    {
+      "path": "CINEMATICUM_AUTHORITY_OBJECT_ADMISSION_INTAKE_REOPENING_REQUEST_REJECTION_TAXONOMY.json",
+      "object_type": "CINEMATICUM_AUTHORITY_OBJECT_ADMISSION_INTAKE_REOPENING_REQUEST_REJECTION_TAXONOMY",
+      "schema_version": "cinematicum.authority_object_admission_intake_reopening_request_rejection_taxonomy.v1",
+      "surface_class": "CASE_RECORD",
+      "case_id": "CASE_001_THE_LAST_RENDER",
+      "current_truth_owner": false,
+      "issued": false,
+      "release_candidate_ready": false,
+      "media_present": false,
+      "outsider_replay_passed": false
+    },
+    {
+      "path": "CINEMATICUM_AUTHORITY_OBJECT_ADMISSION_INTAKE_REOPENING_REQUEST_REJECTION_TAXONOMY_LAW.json",
+      "object_type": "CINEMATICUM_AUTHORITY_OBJECT_ADMISSION_INTAKE_REOPENING_REQUEST_REJECTION_TAXONOMY_LAW",
+      "schema_version": "cinematicum.authority_object_admission_intake_reopening_request_rejection_taxonomy_law.v1",
+      "surface_class": "LAW_OBJECT",
+      "case_id": "CASE_001_THE_LAST_RENDER",
       "current_truth_owner": false,
       "issued": false,
       "release_candidate_ready": false,
