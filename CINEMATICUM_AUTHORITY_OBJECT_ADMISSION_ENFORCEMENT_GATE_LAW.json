@@ -1,0 +1,23 @@
+{
+  "object_type": "CINEMATICUM_AUTHORITY_OBJECT_ADMISSION_ENFORCEMENT_GATE_LAW",
+  "schema_version": "cinematicum.authority_object_admission_enforcement_gate_law.v1",
+  "institution": "CINEMATICUM",
+  "root_sentence": "CINEMATICUM issues admissible motion pictures.",
+  "surface_class": "LAW_OBJECT",
+  "law_declared": true,
+  "case_id": "CASE_001_THE_LAST_RENDER",
+  "current_state": "OUTSIDER_REPLAY_BUNDLE_LAW_DECLARED",
+  "live_authority_object_requires_admission_decision": true,
+  "accepted_admission_decision_required_before_instantiation": true,
+  "rejected_decision_blocks_instantiation": true,
+  "missing_decision_blocks_instantiation": true,
+  "accepted_decision_does_not_issue_film": true,
+  "enforcement_gate_does_not_admit_media": true,
+  "enforcement_gate_does_not_create_release_candidate": true,
+  "enforcement_gate_does_not_issue_motion_picture": true,
+  "authority_satisfied": false,
+  "may_advance_now": false,
+  "release_candidate_ready": false,
+  "issued": false,
+  "media_present": false
+}
