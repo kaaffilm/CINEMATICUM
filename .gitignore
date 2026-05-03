@@ -48,3 +48,11 @@
 # local receipts
 
 CINEMATICUM_*_RECEIPT.json
+# source purity
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+.coverage
+htmlcov/
+.DS_Store
