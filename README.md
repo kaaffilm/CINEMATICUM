@@ -815,3 +815,4 @@ CINEMATICUM records decisions for future valid reopening requests only. The deci
 - CURRENT_ZERO_LEDGER_NO_FURTHER_ADVANCEMENT_PROOF: proves the current-zero ledger has no remaining advancement route and routes next work to OPEN_REAL_CASE_AUTHORITY_INTAKE.
 - REAL_CASE_AUTHORITY_INTAKE_DOCKET declares the eight Case 001 real authority slots after OPEN_REAL_CASE_AUTHORITY_INTAKE without satisfying authority, advancing state, issuing, or admitting media.
 - REAL_CASE_AUTHORITY_OBJECT_SLOT_INDEX.md — eight-slot real authority-object queue for current open intake.
+- `REAL_CASE_AUTHORITY_OBJECT_ADMISSION_REQUEST_SCHEMA` — schema-only aperture for future real-case authority-object admission requests; creates no live request and satisfies no authority.

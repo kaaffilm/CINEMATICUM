@@ -9,7 +9,7 @@
   "registry_does_not_override_current_state": true,
   "current_active_state": "OUTSIDER_REPLAY_BUNDLE_LAW_DECLARED",
   "case_id": "CASE_001_THE_LAST_RENDER",
-  "entries_count": 247,
+  "entries_count": 250,
   "entries": [
     {
       "path": "ADMISSIBILITY_VERDICT_SCHEMA.json",
@@ -845,6 +845,18 @@
       "schema_version": "cinematicum.case_001.real_case_authority_intake_docket_status.v1",
       "surface_class": "CASE_RECORD",
       "case_id": null,
+      "current_truth_owner": false,
+      "issued": false,
+      "release_candidate_ready": false,
+      "media_present": false,
+      "outsider_replay_passed": false
+    },
+    {
+      "path": "CASES/CASE_001_THE_LAST_RENDER/REAL_CASE_AUTHORITY_OBJECT_ADMISSION_REQUEST_SCHEMA_STATUS.json",
+      "object_type": "CINEMATICUM_CASE_REAL_CASE_AUTHORITY_OBJECT_ADMISSION_REQUEST_SCHEMA_STATUS",
+      "schema_version": "cinematicum.case.real_case_authority_object_admission_request_schema_status.v1",
+      "surface_class": "SCHEMA_OBJECT",
+      "case_id": "CASE_001_THE_LAST_RENDER",
       "current_truth_owner": false,
       "issued": false,
       "release_candidate_ready": false,
@@ -2261,6 +2273,30 @@
       "schema_version": "cinematicum.real_case_authority_intake_docket_law.v1",
       "surface_class": "CASE_RECORD",
       "case_id": null,
+      "current_truth_owner": false,
+      "issued": false,
+      "release_candidate_ready": false,
+      "media_present": false,
+      "outsider_replay_passed": false
+    },
+    {
+      "path": "CINEMATICUM_REAL_CASE_AUTHORITY_OBJECT_ADMISSION_REQUEST_SCHEMA.json",
+      "object_type": "CINEMATICUM_REAL_CASE_AUTHORITY_OBJECT_ADMISSION_REQUEST_SCHEMA",
+      "schema_version": "cinematicum.real_case_authority_object_admission_request_schema.v1",
+      "surface_class": "SCHEMA_OBJECT",
+      "case_id": "CASE_001_THE_LAST_RENDER",
+      "current_truth_owner": false,
+      "issued": false,
+      "release_candidate_ready": false,
+      "media_present": false,
+      "outsider_replay_passed": false
+    },
+    {
+      "path": "CINEMATICUM_REAL_CASE_AUTHORITY_OBJECT_ADMISSION_REQUEST_SCHEMA_LAW.json",
+      "object_type": "CINEMATICUM_REAL_CASE_AUTHORITY_OBJECT_ADMISSION_REQUEST_SCHEMA_LAW",
+      "schema_version": "cinematicum.real_case_authority_object_admission_request_schema_law.v1",
+      "surface_class": "SCHEMA_OBJECT",
+      "case_id": "CASE_001_THE_LAST_RENDER",
       "current_truth_owner": false,
       "issued": false,
       "release_candidate_ready": false,
