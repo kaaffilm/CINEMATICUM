@@ -806,3 +806,4 @@ CINEMATICUM records decisions for future valid reopening requests only. The deci
 
 - AUTHORITY_OBJECT_ADMISSION_INTAKE_REOPENING_REQUEST_FUTURE_SNAPSHOT_FORK_LEDGER_NON_AUDIENCE_ARTIFACT_SEAL
 - [AUTHORITY_OBJECT_ADMISSION_INTAKE_REOPENING_REQUEST_FUTURE_SNAPSHOT_FORK_LEDGER_NON_PROOF_ARTIFACT_SEAL](AUTHORITY_OBJECT_ADMISSION_INTAKE_REOPENING_REQUEST_FUTURE_SNAPSHOT_FORK_LEDGER_NON_PROOF_ARTIFACT_SEAL.md)
+- Authority object admission intake reopening request future snapshot fork ledger non-outsider-replay-passage seal: current-zero fork ledger proof absence does not pass outsider replay.
