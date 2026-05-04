@@ -614,7 +614,12 @@
     "real_case_authority_object_admission_rejection_taxonomy_does_not_issue_motion_picture",
     "real_case_authority_object_admission_rejection_taxonomy_does_not_admit_media",
     "scripts/verify-real-case-authority-object-admission-decision-ledger.sh",
-    ".github/workflows/real-case-authority-object-admission-decision-ledger.yml"
+    ".github/workflows/real-case-authority-object-admission-decision-ledger.yml",
+    "real_case_authority_object_admission_enforcement_gate_requires_explicit_decision",
+    "real_case_authority_object_admission_enforcement_gate_blocks_silent_instantiation",
+    "real_case_authority_object_admission_enforcement_gate_does_not_satisfy_authority",
+    "real_case_authority_object_admission_enforcement_gate_does_not_advance_state",
+    "real_case_authority_object_admission_enforcement_gate_does_not_issue_motion_picture"
   ],
   "non_star_seal_redundancy_stop_rule": {
     "authority_satisfied": false,
@@ -646,6 +651,19 @@
     "status": "CASES/CASE_001_THE_LAST_RENDER/REAL_CASE_AUTHORITY_INTAKE_DOCKET_STATUS.json",
     "test": "tests/test_real_case_authority_intake_docket.py",
     "workflow": ".github/workflows/real-case-authority-intake-docket.yml"
+  },
+  "real_case_authority_object_admission_enforcement_gate": {
+    "authority_satisfied": false,
+    "issued": false,
+    "law": "CINEMATICUM_REAL_CASE_AUTHORITY_OBJECT_ADMISSION_ENFORCEMENT_GATE_LAW.json",
+    "may_advance_now": false,
+    "media_present": false,
+    "object": "REAL_CASE_AUTHORITY_OBJECT_ADMISSION_ENFORCEMENT_GATE",
+    "release_candidate_ready": false,
+    "status": "CASES/CASE_001_THE_LAST_RENDER/REAL_CASE_AUTHORITY_OBJECT_ADMISSION_ENFORCEMENT_GATE_STATUS.json",
+    "unit_test": "tests/test_real_case_authority_object_admission_enforcement_gate.py",
+    "verifier": "scripts/verify-real-case-authority-object-admission-enforcement-gate.sh",
+    "workflow": "real-case-authority-object-admission-enforcement-gate"
   },
   "real_case_authority_object_admission_rejection_taxonomy": {
     "authority_satisfied": false,
