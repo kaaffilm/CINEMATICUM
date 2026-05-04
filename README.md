@@ -799,3 +799,4 @@ CINEMATICUM records decisions for future valid reopening requests only. The deci
 - Authority object admission intake reopening request future snapshot fork ledger terminal closure seal: `bash scripts/verify-authority-object-admission-intake-reopening-request-future-snapshot-fork-ledger-terminal-closure-seal.sh`
 - Authority object admission intake reopening request future snapshot fork ledger non-issuance seal: `bash scripts/verify-authority-object-admission-intake-reopening-request-future-snapshot-fork-ledger-non-issuance-seal.sh`
 - Authority object admission intake reopening request future snapshot fork ledger non-authority-satisfaction seal: current zero ledger does not satisfy authority or advance state.
+- `AUTHORITY_OBJECT_ADMISSION_INTAKE_REOPENING_REQUEST_FUTURE_SNAPSHOT_FORK_LEDGER_NON_ADVANCEMENT_SEAL` — current zero future snapshot fork ledger non-advancement seal.
