@@ -163,3 +163,5 @@ bash scripts/verify-authority-object-admission-intake-reopening-request-future-s
 python3 -m unittest tests/test_authority_object_admission_intake_reopening_request_future_snapshot_fork_ledger_zero_perimeter_completion_index.py
 bash scripts/verify-non-star-seal-redundancy-stop-rule.sh
 python3 -m unittest tests/test_non_star_seal_redundancy_stop_rule.py
+bash scripts/verify-current-zero-ledger-no-further-advancement-proof.sh
+python3 -m unittest tests/test_current_zero_ledger_no_further_advancement_proof.py

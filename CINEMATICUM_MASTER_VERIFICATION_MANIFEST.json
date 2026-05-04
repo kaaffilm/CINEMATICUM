@@ -299,6 +299,19 @@
     "verifier": "scripts/verify-authority-object-admission-intake-reopening-request-terminal-seal.sh",
     "workflow": "authority-object-admission-intake-reopening-request-terminal-seal"
   },
+  "current_zero_ledger_no_further_advancement_proof": {
+    "authority_satisfied": false,
+    "issued": false,
+    "law": "CINEMATICUM_CURRENT_ZERO_LEDGER_NO_FURTHER_ADVANCEMENT_PROOF_LAW.json",
+    "may_advance_now": false,
+    "media_present": false,
+    "object": "CURRENT_ZERO_LEDGER_NO_FURTHER_ADVANCEMENT_PROOF",
+    "release_candidate_ready": false,
+    "status": "CASES/CASE_001_THE_LAST_RENDER/CURRENT_ZERO_LEDGER_NO_FURTHER_ADVANCEMENT_PROOF_STATUS.json",
+    "unit_test": "tests/test_current_zero_ledger_no_further_advancement_proof.py",
+    "verifier": "scripts/verify-current-zero-ledger-no-further-advancement-proof.sh",
+    "workflow": "current-zero-ledger-no-further-advancement-proof"
+  },
   "institution": "CINEMATICUM",
   "master_invariants": [
     "accepted_admission_request_required_before_authority_object",
@@ -555,7 +568,14 @@
     "non_star_seal_redundancy_stop_rule_forbids_redundant_negative_seals",
     "non_star_seal_redundancy_stop_rule_routes_to_real_case_authority_intake",
     "non_star_seal_redundancy_stop_rule_does_not_advance_state",
-    "non_star_seal_redundancy_stop_rule_does_not_issue_motion_picture"
+    "non_star_seal_redundancy_stop_rule_does_not_issue_motion_picture",
+    "current_zero_ledger_no_further_advancement_proof_present",
+    "current_zero_ledger_has_no_remaining_advancement_route",
+    "current_zero_ledger_no_further_advancement_proof_is_not_non_star_seal",
+    "current_zero_ledger_no_further_advancement_proof_routes_to_open_real_case_authority_intake",
+    "current_zero_ledger_no_further_advancement_proof_does_not_advance_state",
+    "current_zero_ledger_no_further_advancement_proof_does_not_issue",
+    "current_zero_ledger_no_further_advancement_proof_does_not_admit_media"
   ],
   "non_star_seal_redundancy_stop_rule": {
     "authority_satisfied": false,

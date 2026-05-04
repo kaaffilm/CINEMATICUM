@@ -812,3 +812,4 @@ CINEMATICUM records decisions for future valid reopening requests only. The deci
 - AUTHORITY_OBJECT_ADMISSION_INTAKE_REOPENING_REQUEST_FUTURE_SNAPSHOT_FORK_LEDGER_NON_PUBLIC_INSPECTION_VERDICT_SEAL: current-zero future snapshot fork ledger non-public-inspection-verdict seal.
 - CINEMATICUM authority object admission intake reopening request future snapshot fork ledger zero perimeter completion index
 - PR67: `NON_*_SEAL_REDUNDANCY_STOP_RULE` seals that redundant non-capability seals are forbidden after zero perimeter completion unless required to unblock real Case 001 authority intake.
+- CURRENT_ZERO_LEDGER_NO_FURTHER_ADVANCEMENT_PROOF: proves the current-zero ledger has no remaining advancement route and routes next work to OPEN_REAL_CASE_AUTHORITY_INTAKE.
