@@ -1,0 +1,19 @@
+name: authority-object-admission-intake-reopening-request-closure-seal
+
+on:
+  pull_request:
+  push:
+    branches: [ main ]
+
+permissions:
+  contents: read
+
+jobs:
+  authority-object-admission-intake-reopening-request-closure-seal:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Verify reopening request closure seal
+        run: |
+          bash scripts/verify-authority-object-admission-intake-reopening-request-closure-seal.sh
+          python3 -m unittest tests/test_authority_object_admission_intake_reopening_request_closure_seal.py

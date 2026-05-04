@@ -783,3 +783,4 @@ media_present=false
 
 CINEMATICUM records decisions for future valid reopening requests only. The decision ledger does not reopen intake, does not satisfy authority, does not advance state, does not admit media, and does not issue a motion picture.
 - Authority object admission intake reopening request enforcement gate is present and proves future accepted reopening requests only; it does not reopen intake now.
+- Authority object admission intake reopening request closure seal: current zero-reopening-request snapshot closed without reopening intake, satisfying authority, advancing state, issuing media, or admitting a motion picture.
