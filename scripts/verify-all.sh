@@ -165,3 +165,5 @@ bash scripts/verify-non-star-seal-redundancy-stop-rule.sh
 python3 -m unittest tests/test_non_star_seal_redundancy_stop_rule.py
 bash scripts/verify-current-zero-ledger-no-further-advancement-proof.sh
 python3 -m unittest tests/test_current_zero_ledger_no_further_advancement_proof.py
+bash scripts/verify-open-real-case-authority-intake.sh
+python3 -m unittest tests/test_open_real_case_authority_intake.py
