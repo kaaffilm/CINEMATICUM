@@ -1,0 +1,47 @@
+{
+  "current_zero_ledger_claims": {
+    "authority_satisfied": false,
+    "issued": false,
+    "may_advance_now": false,
+    "media_present": false,
+    "outsider_replay_passed": false,
+    "release_candidate_ready": false,
+    "public_inspection_verdict_blocked": true,
+    "public_inspection_verdict_present": false,
+    "public_inspection_verdict_sealed": false
+  },
+  "depends_on": [
+    "FUTURE_SNAPSHOT_FORK_LEDGER_NON_OUTSIDER_REPLAY_PASSAGE_SEAL",
+    "FUTURE_SNAPSHOT_FORK_LEDGER_NON_PROOF_ARTIFACT_SEAL",
+    "FUTURE_SNAPSHOT_FORK_LEDGER_TERMINAL_CLOSURE_SEAL"
+  ],
+  "distinction": {
+    "ledger_terminal_closure": "already sealed for current-zero future snapshot fork ledger",
+    "motion_picture_public_inspection_verdict": "not present, not sealed, and not created by this negative seal"
+  },
+  "forbidden_effects": [
+    "open_future_fork_gate",
+    "create_new_snapshot_now",
+    "mutate_current_snapshot",
+    "mutate_permanent_ledger",
+    "satisfy_authority",
+    "advance_state",
+    "issue_motion_picture",
+    "create_release_candidate",
+    "admit_media",
+    "create_audience_artifact",
+    "create_proof_artifact",
+    "pass_outsider_replay",
+    "seal_public_inspection_verdict"
+  ],
+  "future_fork_requirements": [
+    "must establish public inspection verdict independently",
+    "must target a new snapshot",
+    "must not mutate the current zero ledger",
+    "must not rely on the current zero ledger negative seal as an artifact"
+  ],
+  "object_type": "CINEMATICUM_AUTHORITY_OBJECT_ADMISSION_INTAKE_REOPENING_REQUEST_FUTURE_SNAPSHOT_FORK_LEDGER_NON_PUBLIC_INSPECTION_VERDICT_SEAL_LAW",
+  "schema_version": "cinematicum.authority_object_admission_intake_reopening_request.future_snapshot_fork_ledger.non_public_inspection_verdict_law.v1",
+  "scope": "CURRENT_ZERO_FUTURE_SNAPSHOT_FORK_LEDGER_ONLY",
+  "title": "CINEMATICUM AUTHORITY OBJECT ADMISSION INTAKE REOPENING REQUEST FUTURE SNAPSHOT FORK LEDGER NON-PUBLIC-INSPECTION-VERDICT SEAL"
+}
