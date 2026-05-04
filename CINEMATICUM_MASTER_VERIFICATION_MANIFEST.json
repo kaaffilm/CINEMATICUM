@@ -914,7 +914,8 @@
     "scripts/verify-real-case-authority-object-admission-decision-ledger.sh",
     "scripts/verify-real-case-authority-object-admission-closure-seal.sh",
     "scripts/verify-real-case-authority-object-admission-finality-seal.sh",
-    "scripts/verify-real-case-authority-object-admission-terminal-seal.sh"
+    "scripts/verify-real-case-authority-object-admission-terminal-seal.sh",
+    "scripts/verify-real-case-authority-object-admission-permanence-seal.sh"
   ],
   "required_unit_tests": [
     "tests/test_real_case_authority_object_admission_rejection_taxonomy.py"
@@ -986,7 +987,8 @@
     "tests/test_real_case_authority_object_admission_decision_ledger.py",
     "tests/test_real_case_authority_object_admission_closure_seal.py",
     "tests/test_real_case_authority_object_admission_finality_seal.py",
-    "tests/test_real_case_authority_object_admission_terminal_seal.py"
+    "tests/test_real_case_authority_object_admission_terminal_seal.py",
+    "tests/test_real_case_authority_object_admission_permanence_seal.py"
   ],
   "schema_version": "cinematicum.master_verification_manifest.v1"
 }
