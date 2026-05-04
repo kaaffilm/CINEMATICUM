@@ -47,7 +47,8 @@
     "scripts/verify-authority-object-admission-intake-reopening-request-decision-ledger.sh",
     "scripts/verify-authority-object-admission-intake-reopening-request-enforcement-gate.sh",
     "scripts/verify-authority-object-admission-intake-reopening-request-closure-seal.sh",
-    "scripts/verify-authority-object-admission-intake-reopening-request-finality-seal.sh"
+    "scripts/verify-authority-object-admission-intake-reopening-request-finality-seal.sh",
+    "scripts/verify-authority-object-admission-intake-reopening-request-terminal-seal.sh"
   ],
   "required_unittests": [
     "tests/test_authority_acceptance_law.py",
@@ -91,7 +92,8 @@
     "tests/test_authority_object_admission_intake_reopening_request_decision_ledger.py",
     "tests/test_authority_object_admission_intake_reopening_request_enforcement_gate.py",
     "tests/test_authority_object_admission_intake_reopening_request_closure_seal.py",
-    "tests/test_authority_object_admission_intake_reopening_request_finality_seal.py"
+    "tests/test_authority_object_admission_intake_reopening_request_finality_seal.py",
+    "tests/test_authority_object_admission_intake_reopening_request_terminal_seal.py"
   ],
   "required_ci_workflows": [
     "authority-acceptance-law",
@@ -135,7 +137,8 @@
     "authority-object-admission-intake-reopening-request-decision-ledger",
     "authority-object-admission-intake-reopening-request-enforcement-gate",
     "authority-object-admission-intake-reopening-request-closure-seal",
-    "authority-object-admission-intake-reopening-request-finality-seal"
+    "authority-object-admission-intake-reopening-request-finality-seal",
+    "authority-object-admission-intake-reopening-request-terminal-seal"
   ],
   "master_invariants": [
     "accepted_admission_request_required_before_authority_object",
@@ -228,7 +231,10 @@
     "authority_object_admission_intake_reopening_request_enforcement_gate_blocks_silent_reopening",
     "authority_object_admission_intake_reopening_request_finality_seal_requires_closure_seal",
     "authority_object_admission_intake_reopening_request_finality_seal_blocks_silent_reopening",
-    "authority_object_admission_intake_reopening_request_finality_seal_does_not_advance_state"
+    "authority_object_admission_intake_reopening_request_finality_seal_does_not_advance_state",
+    "authority_object_admission_intake_reopening_request_terminal_seal_requires_finality_seal",
+    "authority_object_admission_intake_reopening_request_terminal_seal_blocks_silent_reopening",
+    "authority_object_admission_intake_reopening_request_terminal_seal_does_not_advance_state"
   ],
   "authority_object_admission_enforcement_gate": {
     "object": "AUTHORITY_OBJECT_ADMISSION_ENFORCEMENT_GATE",
@@ -273,6 +279,18 @@
     "verifier": "scripts/verify-authority-object-admission-intake-reopening-request-finality-seal.sh",
     "unit_test": "tests/test_authority_object_admission_intake_reopening_request_finality_seal.py",
     "workflow": "authority-object-admission-intake-reopening-request-finality-seal",
+    "authority_satisfied": false,
+    "may_advance_now": false,
+    "issued": false,
+    "media_present": false
+  },
+  "authority_object_admission_intake_reopening_request_terminal_seal": {
+    "object": "AUTHORITY_OBJECT_ADMISSION_INTAKE_REOPENING_REQUEST_TERMINAL_SEAL",
+    "law": "CINEMATICUM_AUTHORITY_OBJECT_ADMISSION_INTAKE_REOPENING_REQUEST_TERMINAL_SEAL_LAW.json",
+    "status": "CASES/CASE_001_THE_LAST_RENDER/AUTHORITY_OBJECT_ADMISSION_INTAKE_REOPENING_REQUEST_TERMINAL_SEAL_STATUS.json",
+    "verifier": "scripts/verify-authority-object-admission-intake-reopening-request-terminal-seal.sh",
+    "unit_test": "tests/test_authority_object_admission_intake_reopening_request_terminal_seal.py",
+    "workflow": "authority-object-admission-intake-reopening-request-terminal-seal",
     "authority_satisfied": false,
     "may_advance_now": false,
     "issued": false,
