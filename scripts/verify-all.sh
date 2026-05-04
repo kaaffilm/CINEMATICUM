@@ -141,3 +141,5 @@ bash scripts/verify-authority-object-admission-intake-reopening-request-enforcem
 python3 -m unittest tests/test_authority_object_admission_intake_reopening_request_enforcement_gate.py
 bash scripts/verify-authority-object-admission-intake-reopening-request-future-snapshot-fork-ledger-non-authority-satisfaction-seal.sh
 python3 -m unittest tests/test_authority_object_admission_intake_reopening_request_future_snapshot_fork_ledger_non_authority_satisfaction_seal.py
+bash scripts/verify-authority-object-admission-intake-reopening-request-future-snapshot-fork-ledger-non-advancement-seal.sh
+python3 -m unittest tests/test_authority_object_admission_intake_reopening_request_future_snapshot_fork_ledger_non_advancement_seal.py
