@@ -810,3 +810,4 @@ CINEMATICUM records decisions for future valid reopening requests only. The deci
 - CINEMATICUM AUTHORITY OBJECT ADMISSION INTAKE REOPENING REQUEST FUTURE SNAPSHOT FORK LEDGER NON-TERMINAL-CLOSURE-INDEX SEAL
 - AUTHORITY_OBJECT_ADMISSION_INTAKE_REOPENING_REQUEST_FUTURE_SNAPSHOT_FORK_LEDGER_NON_PUBLIC_REPLAY_INDEX_SEAL: current-zero future snapshot fork ledger non-public-replay-index seal.
 - AUTHORITY_OBJECT_ADMISSION_INTAKE_REOPENING_REQUEST_FUTURE_SNAPSHOT_FORK_LEDGER_NON_PUBLIC_INSPECTION_VERDICT_SEAL: current-zero future snapshot fork ledger non-public-inspection-verdict seal.
+- CINEMATICUM authority object admission intake reopening request future snapshot fork ledger zero perimeter completion index
