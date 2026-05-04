@@ -187,6 +187,8 @@ bash scripts/verify-real-case-authority-object-admission-enforcement-gate.sh
 bash scripts/verify-real-case-authority-object-admission-closure-seal.sh
 bash scripts/verify-real-case-authority-object-admission-finality-seal.sh
 bash scripts/verify-real-case-authority-object-admission-terminal-seal.sh
+bash scripts/verify-real-case-authority-object-admission-permanence-seal.sh
+python3 -m unittest tests/test_real_case_authority_object_admission_permanence_seal.py
 python3 -m unittest tests/test_real_case_authority_object_admission_enforcement_gate.py
 
 python3 -m unittest tests/test_real_case_authority_object_admission_closure_seal.py
