@@ -813,3 +813,4 @@ CINEMATICUM records decisions for future valid reopening requests only. The deci
 - CINEMATICUM authority object admission intake reopening request future snapshot fork ledger zero perimeter completion index
 - PR67: `NON_*_SEAL_REDUNDANCY_STOP_RULE` seals that redundant non-capability seals are forbidden after zero perimeter completion unless required to unblock real Case 001 authority intake.
 - CURRENT_ZERO_LEDGER_NO_FURTHER_ADVANCEMENT_PROOF: proves the current-zero ledger has no remaining advancement route and routes next work to OPEN_REAL_CASE_AUTHORITY_INTAKE.
+- REAL_CASE_AUTHORITY_INTAKE_DOCKET declares the eight Case 001 real authority slots after OPEN_REAL_CASE_AUTHORITY_INTAKE without satisfying authority, advancing state, issuing, or admitting media.
