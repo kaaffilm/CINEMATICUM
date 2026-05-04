@@ -111,6 +111,8 @@ bash scripts/verify-authority-object-admission-intake-reopening-request-terminal
 python3 -m unittest tests/test_authority_object_admission_intake_reopening_request_terminal_seal.py
 bash scripts/verify-authority-object-admission-intake-reopening-request-permanence-seal.sh
 python3 -m unittest tests/test_authority_object_admission_intake_reopening_request_permanence_seal.py
+bash scripts/verify-authority-object-admission-intake-reopening-request-future-continuity-seal.sh
+python3 -m unittest tests/test_authority_object_admission_intake_reopening_request_future_continuity_seal.py
 bash scripts/verify-master-verification-manifest-closure.sh
 python3 -m unittest tests/test_master_verification_manifest_closure.py
 

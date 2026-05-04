@@ -787,3 +787,4 @@ CINEMATICUM records decisions for future valid reopening requests only. The deci
 - `AUTHORITY_OBJECT_ADMISSION_INTAKE_REOPENING_REQUEST_FINALITY_SEAL.md` — seals the current zero-reopening-request snapshot without reopening intake or advancing state.
 - `AUTHORITY_OBJECT_ADMISSION_INTAKE_REOPENING_REQUEST_TERMINAL_SEAL.md` — terminally seals the current zero-reopening-request snapshot without reopening intake or advancing state.
 - `AUTHORITY_OBJECT_ADMISSION_INTAKE_REOPENING_REQUEST_PERMANENCE_SEAL.md` — makes the current zero-reopening-request snapshot non-mutable without blocking future valid reopening requests under law.
+- `AUTHORITY_OBJECT_ADMISSION_INTAKE_REOPENING_REQUEST_FUTURE_CONTINUITY_SEAL.md` — preserves explicit future reopening continuity without mutating the current sealed snapshot.
