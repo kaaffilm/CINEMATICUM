@@ -575,7 +575,15 @@
     "current_zero_ledger_no_further_advancement_proof_routes_to_open_real_case_authority_intake",
     "current_zero_ledger_no_further_advancement_proof_does_not_advance_state",
     "current_zero_ledger_no_further_advancement_proof_does_not_issue",
-    "current_zero_ledger_no_further_advancement_proof_does_not_admit_media"
+    "current_zero_ledger_no_further_advancement_proof_does_not_admit_media",
+    "real_case_authority_object_slot_index_present",
+    "real_case_authority_object_slot_index_has_eight_slots",
+    "real_case_authority_object_slot_index_slots_unfilled",
+    "real_case_authority_object_slot_index_does_not_satisfy_authority",
+    "real_case_authority_object_slot_index_does_not_advance_state",
+    "real_case_authority_object_slot_index_does_not_issue_motion_picture",
+    "real_case_authority_object_slot_index_does_not_admit_media",
+    "real_case_authority_object_slot_index_does_not_create_release_candidate"
   ],
   "non_star_seal_redundancy_stop_rule": {
     "authority_satisfied": false,
@@ -607,6 +615,19 @@
     "status": "CASES/CASE_001_THE_LAST_RENDER/REAL_CASE_AUTHORITY_INTAKE_DOCKET_STATUS.json",
     "test": "tests/test_real_case_authority_intake_docket.py",
     "workflow": ".github/workflows/real-case-authority-intake-docket.yml"
+  },
+  "real_case_authority_object_slot_index": {
+    "authority_satisfied": false,
+    "issued": false,
+    "law": "CINEMATICUM_REAL_CASE_AUTHORITY_OBJECT_SLOT_INDEX_LAW.json",
+    "may_advance_now": false,
+    "media_present": false,
+    "object": "REAL_CASE_AUTHORITY_OBJECT_SLOT_INDEX",
+    "release_candidate_ready": false,
+    "status": "CASES/CASE_001_THE_LAST_RENDER/REAL_CASE_AUTHORITY_OBJECT_SLOT_INDEX_STATUS.json",
+    "unit_test": "tests/test_real_case_authority_object_slot_index.py",
+    "verifier": "scripts/verify-real-case-authority-object-slot-index.sh",
+    "workflow": "real-case-authority-object-slot-index"
   },
   "required_ci_workflows": [
     "authority-acceptance-law",

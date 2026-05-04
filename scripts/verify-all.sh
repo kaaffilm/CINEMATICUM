@@ -169,3 +169,5 @@ bash scripts/verify-open-real-case-authority-intake.sh
 python3 -m unittest tests/test_open_real_case_authority_intake.py
 bash scripts/verify-real-case-authority-intake-docket.sh
 python3 -m unittest tests/test_real_case_authority_intake_docket.py
+bash scripts/verify-real-case-authority-object-slot-index.sh
+python3 -m unittest tests/test_real_case_authority_object_slot_index.py
