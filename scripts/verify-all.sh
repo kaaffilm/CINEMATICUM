@@ -179,3 +179,5 @@ bash scripts/verify-real-case-authority-object-admission-request-validator.sh
 bash scripts/verify-real-case-authority-object-admission-request-rejection-corpus.sh
 python3 -m unittest tests/test_real_case_authority_object_admission_request_validator.py
 python3 -m unittest tests/test_real_case_authority_object_admission_request_rejection_corpus.py
+bash scripts/verify-real-case-authority-object-admission-rejection-taxonomy.sh
+python3 -m unittest tests/test_real_case_authority_object_admission_rejection_taxonomy.py

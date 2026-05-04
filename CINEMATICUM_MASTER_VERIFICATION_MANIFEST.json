@@ -604,7 +604,15 @@
     "real_case_authority_object_admission_request_validator_does_not_admit_media",
     "scripts/verify-real-case-authority-object-admission-request-rejection-corpus.sh",
     "tests/test_real_case_authority_object_admission_request_rejection_corpus.py",
-    ".github/workflows/real-case-authority-object-admission-request-rejection-corpus.yml"
+    ".github/workflows/real-case-authority-object-admission-request-rejection-corpus.yml",
+    "real_case_authority_object_admission_rejection_taxonomy_blocks_validator_drift",
+    "real_case_authority_object_admission_rejection_taxonomy_has_canonical_reason_codes",
+    "real_case_authority_object_admission_rejection_taxonomy_does_not_create_live_requests",
+    "real_case_authority_object_admission_rejection_taxonomy_does_not_reject_live_requests",
+    "real_case_authority_object_admission_rejection_taxonomy_does_not_satisfy_authority",
+    "real_case_authority_object_admission_rejection_taxonomy_does_not_advance_state",
+    "real_case_authority_object_admission_rejection_taxonomy_does_not_issue_motion_picture",
+    "real_case_authority_object_admission_rejection_taxonomy_does_not_admit_media"
   ],
   "non_star_seal_redundancy_stop_rule": {
     "authority_satisfied": false,
@@ -637,6 +645,19 @@
     "test": "tests/test_real_case_authority_intake_docket.py",
     "workflow": ".github/workflows/real-case-authority-intake-docket.yml"
   },
+  "real_case_authority_object_admission_rejection_taxonomy": {
+    "authority_satisfied": false,
+    "issued": false,
+    "law": "CINEMATICUM_REAL_CASE_AUTHORITY_OBJECT_ADMISSION_REJECTION_TAXONOMY_LAW.json",
+    "may_advance_now": false,
+    "media_present": false,
+    "object": "CINEMATICUM_REAL_CASE_AUTHORITY_OBJECT_ADMISSION_REJECTION_TAXONOMY.json",
+    "release_candidate_ready": false,
+    "status": "CASES/CASE_001_THE_LAST_RENDER/REAL_CASE_AUTHORITY_OBJECT_ADMISSION_REJECTION_TAXONOMY_STATUS.json",
+    "unit_test": "tests/test_real_case_authority_object_admission_rejection_taxonomy.py",
+    "verifier": "scripts/verify-real-case-authority-object-admission-rejection-taxonomy.sh",
+    "workflow": "real-case-authority-object-admission-rejection-taxonomy"
+  },
   "real_case_authority_object_admission_request_schema": {
     "authority_satisfied": false,
     "issued": false,
@@ -650,6 +671,19 @@
     "unit_test": "tests/test_real_case_authority_object_admission_request_schema.py",
     "verifier": "scripts/verify-real-case-authority-object-admission-request-schema.sh",
     "workflow": "real-case-authority-object-admission-request-schema"
+  },
+  "real_case_authority_object_admission_request_validator": {
+    "authority_satisfied": false,
+    "issued": false,
+    "law": "CINEMATICUM_REAL_CASE_AUTHORITY_OBJECT_ADMISSION_REQUEST_VALIDATOR_LAW.json",
+    "may_advance_now": false,
+    "media_present": false,
+    "object": "REAL_CASE_AUTHORITY_OBJECT_ADMISSION_REQUEST_VALIDATOR",
+    "release_candidate_ready": false,
+    "status": "CASES/CASE_001_THE_LAST_RENDER/REAL_CASE_AUTHORITY_OBJECT_ADMISSION_REQUEST_VALIDATOR_STATUS.json",
+    "unit_test": "tests/test_real_case_authority_object_admission_request_validator.py",
+    "verifier": "scripts/verify-real-case-authority-object-admission-request-validator.sh",
+    "workflow": "real-case-authority-object-admission-request-validator"
   },
   "real_case_authority_object_slot_index": {
     "authority_satisfied": false,
@@ -725,7 +759,8 @@
     "authority-object-admission-intake-reopening-request-future-snapshot-fork-ledger-non-audience-artifact-seal",
     "authority-object-admission-intake-reopening-request-future-snapshot-fork-ledger-non-proof-artifact-seal",
     "authority-object-admission-intake-reopening-request-future-snapshot-fork-ledger-zero-perimeter-completion-index",
-    "real-case-authority-object-admission-request-rejection-corpus"
+    "real-case-authority-object-admission-request-rejection-corpus",
+    "real-case-authority-object-admission-rejection-taxonomy"
   ],
   "required_scripts": [
     "scripts/verify-all.sh",
@@ -791,7 +826,11 @@
     "scripts/verify-authority-object-admission-intake-reopening-request-future-snapshot-fork-ledger-zero-perimeter-completion-index.sh",
     "scripts/verify-open-real-case-authority-intake.sh",
     "scripts/verify-real-case-authority-intake-docket.sh",
-    "scripts/verify-real-case-authority-object-admission-request-rejection-corpus.sh"
+    "scripts/verify-real-case-authority-object-admission-request-rejection-corpus.sh",
+    "scripts/verify-real-case-authority-object-admission-rejection-taxonomy.sh"
+  ],
+  "required_unit_tests": [
+    "tests/test_real_case_authority_object_admission_rejection_taxonomy.py"
   ],
   "required_unittests": [
     "tests/test_authority_acceptance_law.py",
@@ -858,18 +897,5 @@
     "tests/test_real_case_authority_intake_docket.py",
     "tests/test_real_case_authority_object_admission_request_rejection_corpus.py"
   ],
-  "schema_version": "cinematicum.master_verification_manifest.v1",
-  "real_case_authority_object_admission_request_validator": {
-    "object": "REAL_CASE_AUTHORITY_OBJECT_ADMISSION_REQUEST_VALIDATOR",
-    "law": "CINEMATICUM_REAL_CASE_AUTHORITY_OBJECT_ADMISSION_REQUEST_VALIDATOR_LAW.json",
-    "status": "CASES/CASE_001_THE_LAST_RENDER/REAL_CASE_AUTHORITY_OBJECT_ADMISSION_REQUEST_VALIDATOR_STATUS.json",
-    "verifier": "scripts/verify-real-case-authority-object-admission-request-validator.sh",
-    "unit_test": "tests/test_real_case_authority_object_admission_request_validator.py",
-    "workflow": "real-case-authority-object-admission-request-validator",
-    "authority_satisfied": false,
-    "may_advance_now": false,
-    "release_candidate_ready": false,
-    "issued": false,
-    "media_present": false
-  }
+  "schema_version": "cinematicum.master_verification_manifest.v1"
 }

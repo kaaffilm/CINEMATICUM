@@ -1,0 +1,128 @@
+{
+  "object_type": "CINEMATICUM_REAL_CASE_AUTHORITY_OBJECT_ADMISSION_REJECTION_TAXONOMY",
+  "schema_version": "cinematicum.real_case_authority_object_admission_rejection_taxonomy.v1",
+  "institution": "CINEMATICUM",
+  "root_sentence": "CINEMATICUM issues admissible motion pictures.",
+  "case_id": "CASE_001_THE_LAST_RENDER",
+  "case_title": "THE LAST RENDER",
+  "current_state": "OUTSIDER_REPLAY_BUNDLE_LAW_DECLARED",
+  "surface_type": "CASE_RECORD",
+  "taxonomy_scope": "REAL_CASE_AUTHORITY_OBJECTS_ONLY",
+  "depends_on": [
+    "CINEMATICUM_REAL_CASE_AUTHORITY_OBJECT_ADMISSION_REQUEST_SCHEMA",
+    "CINEMATICUM_REAL_CASE_AUTHORITY_OBJECT_ADMISSION_REQUEST_VALIDATOR",
+    "CINEMATICUM_REAL_CASE_AUTHORITY_OBJECT_ADMISSION_REQUEST_REJECTION_CORPUS"
+  ],
+  "schema_owner": "CINEMATICUM_REAL_CASE_AUTHORITY_OBJECT_ADMISSION_REQUEST_SCHEMA.json",
+  "validator_owner": "CINEMATICUM_REAL_CASE_AUTHORITY_OBJECT_ADMISSION_REQUEST_VALIDATOR.json",
+  "corpus_owner": "CINEMATICUM_REAL_CASE_AUTHORITY_OBJECT_ADMISSION_REQUEST_REJECTION_CORPUS.json",
+  "canonical_rejection_reason_count": 9,
+  "required_corpus_reason_count": 5,
+  "canonical_rejection_reasons": [
+    {
+      "code": "missing_required_field",
+      "class": "schema_identity",
+      "severity": "fatal",
+      "meaning": "Request omits one or more required real-case authority admission fields.",
+      "covered_by_rejection_corpus": true
+    },
+    {
+      "code": "wrong_case_id",
+      "class": "case_identity",
+      "severity": "fatal",
+      "meaning": "Request targets a case other than CASE_001_THE_LAST_RENDER.",
+      "covered_by_rejection_corpus": false
+    },
+    {
+      "code": "unknown_authority_object_slot",
+      "class": "slot_identity",
+      "severity": "fatal",
+      "meaning": "Request targets a slot outside the real-case authority object slot index.",
+      "covered_by_rejection_corpus": true
+    },
+    {
+      "code": "forbidden_payload_field_present",
+      "class": "payload_boundary",
+      "severity": "fatal",
+      "meaning": "Request contains a forbidden payload/control field.",
+      "covered_by_rejection_corpus": false
+    },
+    {
+      "code": "media_payload_forbidden",
+      "class": "media_boundary",
+      "severity": "fatal",
+      "meaning": "Request attempts to carry raw media through the authority admission path.",
+      "covered_by_rejection_corpus": true
+    },
+    {
+      "code": "model_weight_payload_forbidden",
+      "class": "model_boundary",
+      "severity": "fatal",
+      "meaning": "Request attempts to carry model weights through the authority admission path.",
+      "covered_by_rejection_corpus": false
+    },
+    {
+      "code": "private_secret_payload_forbidden",
+      "class": "public_replay_boundary",
+      "severity": "fatal",
+      "meaning": "Request requires private or secret payload material and therefore cannot be replay-stable public authority.",
+      "covered_by_rejection_corpus": false
+    },
+    {
+      "code": "state_advancement_forbidden",
+      "class": "state_boundary",
+      "severity": "fatal",
+      "meaning": "Request attempts to advance current state by request assertion.",
+      "covered_by_rejection_corpus": true
+    },
+    {
+      "code": "current_snapshot_mutation_forbidden",
+      "class": "snapshot_boundary",
+      "severity": "fatal",
+      "meaning": "Request attempts to reopen or mutate the current snapshot.",
+      "covered_by_rejection_corpus": true
+    }
+  ],
+  "covered_rejection_reasons": [
+    "missing_required_field",
+    "unknown_authority_object_slot",
+    "media_payload_forbidden",
+    "state_advancement_forbidden",
+    "current_snapshot_mutation_forbidden"
+  ],
+  "uncovered_rejection_reasons": [
+    "wrong_case_id",
+    "forbidden_payload_field_present",
+    "model_weight_payload_forbidden",
+    "private_secret_payload_forbidden"
+  ],
+  "taxonomy_complete_for_current_validator": true,
+  "corpus_complete_for_required_reasons": true,
+  "fixtures_are_live_requests": false,
+  "creates_live_admission_requests": false,
+  "accepts_admission_requests": false,
+  "rejects_live_admission_requests": false,
+  "instantiates_authority_objects": false,
+  "satisfies_authority": false,
+  "advances_state": false,
+  "issues_motion_picture": false,
+  "admits_media": false,
+  "creates_release_candidate": false,
+  "reopens_current_snapshot": false,
+  "creates_new_snapshot": false,
+  "live_admission_request_count": 0,
+  "valid_admission_request_count": 0,
+  "invalid_admission_request_count": 0,
+  "accepted_admission_request_count": 0,
+  "rejected_admission_request_count": 0,
+  "pending_admission_request_count": 0,
+  "accepted_authority_object_count": 0,
+  "instantiated_authority_object_count": 0,
+  "authority_satisfied": false,
+  "may_advance_now": false,
+  "release_candidate_ready": false,
+  "issued": false,
+  "media_present": false,
+  "outsider_replay_passed": false,
+  "pass_condition": "CINEMATICUM_REAL_CASE_AUTHORITY_OBJECT_ADMISSION_REJECTION_TAXONOMY_PASS"
+}

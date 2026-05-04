@@ -1,0 +1,27 @@
+name: real-case-authority-object-admission-rejection-taxonomy
+
+on:
+pull_request:
+paths:
+- "CINEMATICUM_REAL_CASE_AUTHORITY_OBJECT_ADMISSION_REJECTION_TAXONOMY.json"
+- "CINEMATICUM_REAL_CASE_AUTHORITY_OBJECT_ADMISSION_REJECTION_TAXONOMY_LAW.json"
+- "REAL_CASE_AUTHORITY_OBJECT_ADMISSION_REJECTION_TAXONOMY.md"
+- "CASES/CASE_001_THE_LAST_RENDER/REAL_CASE_AUTHORITY_OBJECT_ADMISSION_REJECTION_TAXONOMY_STATUS.json"
+- "scripts/verify-real-case-authority-object-admission-rejection-taxonomy.sh"
+- "tests/test_real_case_authority_object_admission_rejection_taxonomy.py"
+- "CINEMATICUM_MASTER_VERIFICATION_MANIFEST.json"
+- "CINEMATICUM_OBJECT_REGISTRY.json"
+- "scripts/verify-all.sh"
+push:
+branches: [ main ]
+
+jobs:
+verify:
+runs-on: ubuntu-latest
+steps:
+- uses: actions/checkout@v4
+- name: Verify real case authority object admission rejection taxonomy
+run: |
+bash scripts/verify-real-case-authority-object-admission-rejection-taxonomy.sh
+python3 -m unittest tests/test_real_case_authority_object_admission_rejection_taxonomy.py
+bash scripts/verify-object-registry-fresh.sh

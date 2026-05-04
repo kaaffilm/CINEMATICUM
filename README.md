@@ -819,3 +819,4 @@ CINEMATICUM records decisions for future valid reopening requests only. The deci
 - REAL_CASE_AUTHORITY_OBJECT_ADMISSION_REQUEST_VALIDATOR — validates real-case authority object admission request shape without acceptance, instantiation, state advancement, issuance, or media admission.
 - REAL_CASE_AUTHORITY_OBJECT_ADMISSION_REQUEST_REJECTION_CORPUS
 - `REAL_CASE_AUTHORITY_OBJECT_ADMISSION_REQUEST_REJECTION_CORPUS.md` — real-case authority-object admission request rejection corpus.
+- `REAL_CASE_AUTHORITY_OBJECT_ADMISSION_REJECTION_TAXONOMY` — canonical real-case request rejection reason catalogue; fixture-only; non-advancing.
