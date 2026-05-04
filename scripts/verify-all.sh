@@ -186,8 +186,11 @@ python3 -m unittest tests/test_real_case_authority_object_admission_decision_led
 bash scripts/verify-real-case-authority-object-admission-enforcement-gate.sh
 bash scripts/verify-real-case-authority-object-admission-closure-seal.sh
 bash scripts/verify-real-case-authority-object-admission-finality-seal.sh
+bash scripts/verify-real-case-authority-object-admission-terminal-seal.sh
 python3 -m unittest tests/test_real_case_authority_object_admission_enforcement_gate.py
 
 python3 -m unittest tests/test_real_case_authority_object_admission_closure_seal.py
 
 python3 -m unittest tests/test_real_case_authority_object_admission_finality_seal.py
+
+python3 -m unittest tests/test_real_case_authority_object_admission_terminal_seal.py
