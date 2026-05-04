@@ -155,3 +155,5 @@ bash scripts/verify-authority-object-admission-intake-reopening-request-future-s
 python3 -m unittest tests/test_authority_object_admission_intake_reopening_request_future_snapshot_fork_ledger_non_outsider_replay_passage_seal.py
 bash scripts/verify-authority-object-admission-intake-reopening-request-future-snapshot-fork-ledger-non-terminal-closure-index-seal.sh
 python3 tests/test_authority_object_admission_intake_reopening_request_future_snapshot_fork_ledger_non_terminal_closure_index_seal.py
+bash scripts/verify-authority-object-admission-intake-reopening-request-future-snapshot-fork-ledger-non-public-replay-index-seal.sh
+python3 -m unittest tests/test_authority_object_admission_intake_reopening_request_future_snapshot_fork_ledger_non_public_replay_index_seal.py
