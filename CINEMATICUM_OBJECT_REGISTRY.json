@@ -9,7 +9,7 @@
   "registry_does_not_override_current_state": true,
   "current_active_state": "OUTSIDER_REPLAY_BUNDLE_LAW_DECLARED",
   "case_id": "CASE_001_THE_LAST_RENDER",
-  "entries_count": 232,
+  "entries_count": 235,
   "entries": [
     {
       "path": "ADMISSIBILITY_VERDICT_SCHEMA.json",
@@ -737,6 +737,18 @@
       "schema_version": "cinematicum.case_master_verification_manifest_closure_status.v1",
       "surface_class": "LAYER_STATUS_RECORD",
       "case_id": "CASE_001_THE_LAST_RENDER",
+      "current_truth_owner": false,
+      "issued": false,
+      "release_candidate_ready": false,
+      "media_present": false,
+      "outsider_replay_passed": false
+    },
+    {
+      "path": "CASES/CASE_001_THE_LAST_RENDER/NON_STAR_SEAL_REDUNDANCY_STOP_RULE_STATUS.json",
+      "object_type": "UNDECLARED_OBJECT_TYPE",
+      "schema_version": "cinematicum.non_star_seal_redundancy_stop_rule_status.v1",
+      "surface_class": "CASE_RECORD",
+      "case_id": null,
       "current_truth_owner": false,
       "issued": false,
       "release_candidate_ready": false,
@@ -2067,6 +2079,30 @@
       "path": "CINEMATICUM_MASTER_VERIFICATION_MANIFEST_CLOSURE_LAW.json",
       "object_type": "CINEMATICUM_MASTER_VERIFICATION_MANIFEST_CLOSURE_LAW",
       "schema_version": "cinematicum.master_verification_manifest_closure_law.v1",
+      "surface_class": "LAW_OBJECT",
+      "case_id": null,
+      "current_truth_owner": false,
+      "issued": false,
+      "release_candidate_ready": false,
+      "media_present": false,
+      "outsider_replay_passed": false
+    },
+    {
+      "path": "CINEMATICUM_NON_STAR_SEAL_REDUNDANCY_STOP_RULE.json",
+      "object_type": "NON_STAR_SEAL_REDUNDANCY_STOP_RULE",
+      "schema_version": "cinematicum.object.v1",
+      "surface_class": "CASE_RECORD",
+      "case_id": null,
+      "current_truth_owner": false,
+      "issued": false,
+      "release_candidate_ready": false,
+      "media_present": false,
+      "outsider_replay_passed": false
+    },
+    {
+      "path": "CINEMATICUM_NON_STAR_SEAL_REDUNDANCY_STOP_RULE_LAW.json",
+      "object_type": "CINEMATICUM_NON_STAR_SEAL_REDUNDANCY_STOP_RULE_LAW",
+      "schema_version": "cinematicum.non_star_seal_redundancy_stop_rule_law.v1",
       "surface_class": "LAW_OBJECT",
       "case_id": null,
       "current_truth_owner": false,
