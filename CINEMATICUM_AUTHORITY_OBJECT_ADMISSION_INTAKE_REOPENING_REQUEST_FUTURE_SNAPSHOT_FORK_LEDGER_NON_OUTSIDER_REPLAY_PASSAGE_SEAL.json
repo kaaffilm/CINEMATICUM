@@ -1,0 +1,39 @@
+{
+  "audience_artifact_present": false,
+  "authority_satisfied": false,
+  "case": "CASE_001_THE_LAST_RENDER",
+  "current_state": "OUTSIDER_REPLAY_BUNDLE_LAW_DECLARED",
+  "declares": [
+    "FUTURE_SNAPSHOT_FORK_LEDGER_NON_OUTSIDER_REPLAY_PASSAGE_SEALED",
+    "CURRENT_ZERO_LEDGER_OUTSIDER_REPLAY_PASSAGE_BLOCKED",
+    "NON_PROOF_ARTIFACT_DOES_NOT_CREATE_OUTSIDER_REPLAY_PASSAGE"
+  ],
+  "does_not": [
+    "open_future_fork_gate",
+    "create_new_snapshot",
+    "mutate_current_snapshot",
+    "mutate_permanent_ledger",
+    "satisfy_authority",
+    "advance_state",
+    "issue_motion_picture",
+    "create_release_candidate",
+    "admit_media",
+    "create_audience_artifact",
+    "create_proof_artifact",
+    "pass_outsider_replay"
+  ],
+  "future_valid_fork_requirement": "outsider_replay_passage_must_be_established_independently_against_new_snapshot",
+  "issued": false,
+  "may_advance_now": false,
+  "media_present": false,
+  "object": "AUTHORITY_OBJECT_ADMISSION_INTAKE_REOPENING_REQUEST_FUTURE_SNAPSHOT_FORK_LEDGER_NON_OUTSIDER_REPLAY_PASSAGE_SEAL",
+  "outsider_replay_passed": false,
+  "proof_artifact_present": false,
+  "release_candidate_ready": false,
+  "requires": [
+    "FUTURE_SNAPSHOT_FORK_LEDGER_NON_PROOF_ARTIFACT_SEALED"
+  ],
+  "schema_version": "cinematicum.authority_object_admission_intake_reopening_request.future_snapshot_fork_ledger.non_outsider_replay_passage_seal.v1",
+  "scope": "CURRENT_ZERO_FUTURE_SNAPSHOT_FORK_LEDGER_ONLY",
+  "title": "CINEMATICUM AUTHORITY OBJECT ADMISSION INTAKE REOPENING REQUEST FUTURE SNAPSHOT FORK LEDGER NON-OUTSIDER-REPLAY-PASSAGE SEAL"
+}

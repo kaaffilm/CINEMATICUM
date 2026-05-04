@@ -1,0 +1,28 @@
+{
+  "case": "CASE_001_THE_LAST_RENDER",
+  "current_state": "OUTSIDER_REPLAY_BUNDLE_LAW_DECLARED",
+  "forbids": [
+    "treating proof-artifact absence as outsider replay passage",
+    "opening the future fork gate",
+    "creating a new snapshot",
+    "mutating the current snapshot",
+    "mutating the permanent ledger",
+    "satisfying authority",
+    "advancing state",
+    "issuing a motion picture",
+    "creating a release candidate",
+    "admitting media"
+  ],
+  "future_valid_fork_rule": "Any future valid fork must establish outsider replay passage independently and target the new snapshot.",
+  "law": "AUTHORITY_OBJECT_ADMISSION_INTAKE_REOPENING_REQUEST_FUTURE_SNAPSHOT_FORK_LEDGER_NON_OUTSIDER_REPLAY_PASSAGE_SEAL_LAW",
+  "pass_condition": "CINEMATICUM_AUTHORITY_OBJECT_ADMISSION_INTAKE_REOPENING_REQUEST_FUTURE_SNAPSHOT_FORK_LEDGER_NON_OUTSIDER_REPLAY_PASSAGE_SEAL_PASS",
+  "premise": "A current-zero future snapshot fork ledger proof-artifact absence seal is not outsider replay passage.",
+  "requires": [
+    "FUTURE_SNAPSHOT_FORK_LEDGER_NON_PROOF_ARTIFACT_SEALED",
+    "CURRENT_ZERO_LEDGER_PROOF_ARTIFACT_PRESENT=false",
+    "OUTSIDER_REPLAY_PASSED=false"
+  ],
+  "schema_version": "cinematicum.authority_object_admission_intake_reopening_request.future_snapshot_fork_ledger.non_outsider_replay_passage_law.v1",
+  "scope": "CURRENT_ZERO_FUTURE_SNAPSHOT_FORK_LEDGER_ONLY",
+  "title": "CINEMATICUM AUTHORITY OBJECT ADMISSION INTAKE REOPENING REQUEST FUTURE SNAPSHOT FORK LEDGER NON-OUTSIDER-REPLAY-PASSAGE SEAL LAW"
+}
