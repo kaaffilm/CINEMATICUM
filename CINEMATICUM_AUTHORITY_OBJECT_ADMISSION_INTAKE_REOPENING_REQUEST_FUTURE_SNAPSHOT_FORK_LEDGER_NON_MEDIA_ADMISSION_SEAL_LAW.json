@@ -1,0 +1,13 @@
+{
+  "case": "CASE_001_THE_LAST_RENDER",
+  "future_rule": "Any future valid fork must establish media admission independently, against a new snapshot, after explicit request, validation, decision, enforcement gate, and required future-fork artifacts.",
+  "jurisdiction": "CINEMATICUM",
+  "law": "AUTHORITY_OBJECT_ADMISSION_INTAKE_REOPENING_REQUEST_FUTURE_SNAPSHOT_FORK_LEDGER_NON_MEDIA_ADMISSION_SEAL_LAW",
+  "media_or_model_payload_present": false,
+  "network_required_after_clone": false,
+  "private_access_required": false,
+  "rule": "The current-zero future snapshot fork ledger remains non-media-admitting. The seal does not admit media, does not create release candidate readiness, does not issue a motion picture, does not satisfy authority, does not advance state, does not create a new snapshot, and does not open the future snapshot fork gate.",
+  "schema_version": "cinematicum.authority_object_admission_intake_reopening_request.future_snapshot_fork_ledger.non_media_admission_law.v1",
+  "scope": "CURRENT_ZERO_FUTURE_SNAPSHOT_FORK_LEDGER_ONLY",
+  "title": "CINEMATICUM AUTHORITY OBJECT ADMISSION INTAKE REOPENING REQUEST FUTURE SNAPSHOT FORK LEDGER NON-MEDIA-ADMISSION SEAL LAW"
+}
