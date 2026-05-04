@@ -57,7 +57,8 @@
     "scripts/verify-authority-object-admission-intake-reopening-request-future-snapshot-fork-ledger-finality-seal.sh",
     "scripts/verify-authority-object-admission-intake-reopening-request-future-snapshot-fork-ledger-terminal-seal.sh",
     "scripts/verify-authority-object-admission-intake-reopening-request-future-snapshot-fork-ledger-permanence-seal.sh",
-    "scripts/verify-authority-object-admission-intake-reopening-request-future-snapshot-fork-ledger-future-continuity-seal.sh"
+    "scripts/verify-authority-object-admission-intake-reopening-request-future-snapshot-fork-ledger-future-continuity-seal.sh",
+    "scripts/verify-authority-object-admission-intake-reopening-request-future-snapshot-fork-ledger-outsider-replay-seal.sh"
   ],
   "required_unittests": [
     "tests/test_authority_acceptance_law.py",
@@ -111,7 +112,8 @@
     "tests/test_authority_object_admission_intake_reopening_request_future_snapshot_fork_ledger_finality_seal.py",
     "tests/test_authority_object_admission_intake_reopening_request_future_snapshot_fork_ledger_terminal_seal.py",
     "tests/test_authority_object_admission_intake_reopening_request_future_snapshot_fork_ledger_permanence_seal.py",
-    "tests/test_authority_object_admission_intake_reopening_request_future_snapshot_fork_ledger_future_continuity_seal.py"
+    "tests/test_authority_object_admission_intake_reopening_request_future_snapshot_fork_ledger_future_continuity_seal.py",
+    "tests/test_authority_object_admission_intake_reopening_request_future_snapshot_fork_ledger_outsider_replay_seal.py"
   ],
   "required_ci_workflows": [
     "authority-acceptance-law",
@@ -165,7 +167,8 @@
     "authority-object-admission-intake-reopening-request-future-snapshot-fork-ledger-finality-seal",
     "authority-object-admission-intake-reopening-request-future-snapshot-fork-ledger-terminal-seal",
     "authority-object-admission-intake-reopening-request-future-snapshot-fork-ledger-permanence-seal",
-    "authority-object-admission-intake-reopening-request-future-snapshot-fork-ledger-future-continuity-seal"
+    "authority-object-admission-intake-reopening-request-future-snapshot-fork-ledger-future-continuity-seal",
+    "authority-object-admission-intake-reopening-request-future-snapshot-fork-ledger-outsider-replay-seal"
   ],
   "master_invariants": [
     "accepted_admission_request_required_before_authority_object",
@@ -312,7 +315,16 @@
     "authority_object_admission_intake_reopening_request_future_snapshot_fork_ledger_future_continuity_seal_does_not_create_new_snapshot_now",
     "authority_object_admission_intake_reopening_request_future_snapshot_fork_ledger_future_continuity_seal_does_not_mutate_current_snapshot",
     "authority_object_admission_intake_reopening_request_future_snapshot_fork_ledger_future_continuity_seal_does_not_mutate_permanent_ledger",
-    "authority_object_admission_intake_reopening_request_future_snapshot_fork_ledger_future_continuity_seal_does_not_satisfy_authority"
+    "authority_object_admission_intake_reopening_request_future_snapshot_fork_ledger_future_continuity_seal_does_not_satisfy_authority",
+    "authority_object_admission_intake_reopening_request_future_snapshot_fork_ledger_outsider_replay_seal_requires_future_continuity_seal",
+    "authority_object_admission_intake_reopening_request_future_snapshot_fork_ledger_outsider_replay_seal_replays_current_zero_ledger_without_future_fork_records",
+    "authority_object_admission_intake_reopening_request_future_snapshot_fork_ledger_outsider_replay_seal_requires_no_private_access",
+    "authority_object_admission_intake_reopening_request_future_snapshot_fork_ledger_outsider_replay_seal_requires_no_network",
+    "authority_object_admission_intake_reopening_request_future_snapshot_fork_ledger_outsider_replay_seal_requires_no_media_payload",
+    "authority_object_admission_intake_reopening_request_future_snapshot_fork_ledger_outsider_replay_seal_does_not_open_future_fork_gate",
+    "authority_object_admission_intake_reopening_request_future_snapshot_fork_ledger_outsider_replay_seal_does_not_create_new_snapshot",
+    "authority_object_admission_intake_reopening_request_future_snapshot_fork_ledger_outsider_replay_seal_does_not_mutate_permanent_ledger",
+    "authority_object_admission_intake_reopening_request_future_snapshot_fork_ledger_outsider_replay_seal_does_not_satisfy_authority"
   ],
   "authority_object_admission_enforcement_gate": {
     "object": "AUTHORITY_OBJECT_ADMISSION_ENFORCEMENT_GATE",
@@ -477,6 +489,18 @@
     "verifier": "scripts/verify-authority-object-admission-intake-reopening-request-future-snapshot-fork-ledger-future-continuity-seal.sh",
     "unit_test": "tests/test_authority_object_admission_intake_reopening_request_future_snapshot_fork_ledger_future_continuity_seal.py",
     "workflow": "authority-object-admission-intake-reopening-request-future-snapshot-fork-ledger-future-continuity-seal",
+    "authority_satisfied": false,
+    "may_advance_now": false,
+    "issued": false,
+    "media_present": false
+  },
+  "authority_object_admission_intake_reopening_request_future_snapshot_fork_ledger_outsider_replay_seal": {
+    "object": "AUTHORITY_OBJECT_ADMISSION_INTAKE_REOPENING_REQUEST_FUTURE_SNAPSHOT_FORK_LEDGER_OUTSIDER_REPLAY_SEAL",
+    "law": "CINEMATICUM_AUTHORITY_OBJECT_ADMISSION_INTAKE_REOPENING_REQUEST_FUTURE_SNAPSHOT_FORK_LEDGER_OUTSIDER_REPLAY_SEAL_LAW.json",
+    "status": "CASES/CASE_001_THE_LAST_RENDER/AUTHORITY_OBJECT_ADMISSION_INTAKE_REOPENING_REQUEST_FUTURE_SNAPSHOT_FORK_LEDGER_OUTSIDER_REPLAY_SEAL_STATUS.json",
+    "verifier": "scripts/verify-authority-object-admission-intake-reopening-request-future-snapshot-fork-ledger-outsider-replay-seal.sh",
+    "unit_test": "tests/test_authority_object_admission_intake_reopening_request_future_snapshot_fork_ledger_outsider_replay_seal.py",
+    "workflow": "authority-object-admission-intake-reopening-request-future-snapshot-fork-ledger-outsider-replay-seal",
     "authority_satisfied": false,
     "may_advance_now": false,
     "issued": false,
