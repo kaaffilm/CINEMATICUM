@@ -624,7 +624,14 @@
     "real_case_authority_object_admission_closure_seal_does_not_satisfy_authority",
     "real_case_authority_object_admission_closure_seal_does_not_advance_state",
     "real_case_authority_object_admission_closure_seal_does_not_issue_motion_picture",
-    "real_case_authority_object_admission_closure_seal_does_not_admit_media"
+    "real_case_authority_object_admission_closure_seal_does_not_admit_media",
+    "real_case_authority_object_admission_finality_seal_requires_closure_seal",
+    "real_case_authority_object_admission_finality_seal_makes_current_zero_snapshot_immutable",
+    "real_case_authority_object_admission_finality_seal_preserves_future_lawful_intake",
+    "real_case_authority_object_admission_finality_seal_does_not_satisfy_authority",
+    "real_case_authority_object_admission_finality_seal_does_not_advance_state",
+    "real_case_authority_object_admission_finality_seal_does_not_issue_motion_picture",
+    "real_case_authority_object_admission_finality_seal_does_not_admit_media"
   ],
   "non_star_seal_redundancy_stop_rule": {
     "authority_satisfied": false,
@@ -682,6 +689,19 @@
     "unit_test": "tests/test_real_case_authority_object_admission_enforcement_gate.py",
     "verifier": "scripts/verify-real-case-authority-object-admission-enforcement-gate.sh",
     "workflow": "real-case-authority-object-admission-enforcement-gate"
+  },
+  "real_case_authority_object_admission_finality_seal": {
+    "authority_satisfied": false,
+    "issued": false,
+    "law": "CINEMATICUM_REAL_CASE_AUTHORITY_OBJECT_ADMISSION_FINALITY_SEAL_LAW.json",
+    "may_advance_now": false,
+    "media_present": false,
+    "object": "AUTHORITY_OBJECT_ADMISSION_FINALITY_SEAL",
+    "release_candidate_ready": false,
+    "status": "CASES/CASE_001_THE_LAST_RENDER/REAL_CASE_AUTHORITY_OBJECT_ADMISSION_FINALITY_SEAL_STATUS.json",
+    "unit_test": "tests/test_real_case_authority_object_admission_finality_seal.py",
+    "verifier": "scripts/verify-real-case-authority-object-admission-finality-seal.sh",
+    "workflow": "real-case-authority-object-admission-finality-seal"
   },
   "real_case_authority_object_admission_rejection_taxonomy": {
     "authority_satisfied": false,
@@ -800,7 +820,8 @@
     "real-case-authority-object-admission-request-rejection-corpus",
     "real-case-authority-object-admission-rejection-taxonomy",
     "real-case-authority-object-admission-decision-ledger",
-    "real-case-authority-object-admission-closure-seal"
+    "real-case-authority-object-admission-closure-seal",
+    "real-case-authority-object-admission-finality-seal"
   ],
   "required_scripts": [
     "scripts/verify-all.sh",
@@ -869,7 +890,8 @@
     "scripts/verify-real-case-authority-object-admission-request-rejection-corpus.sh",
     "scripts/verify-real-case-authority-object-admission-rejection-taxonomy.sh",
     "scripts/verify-real-case-authority-object-admission-decision-ledger.sh",
-    "scripts/verify-real-case-authority-object-admission-closure-seal.sh"
+    "scripts/verify-real-case-authority-object-admission-closure-seal.sh",
+    "scripts/verify-real-case-authority-object-admission-finality-seal.sh"
   ],
   "required_unit_tests": [
     "tests/test_real_case_authority_object_admission_rejection_taxonomy.py"
@@ -939,7 +961,8 @@
     "tests/test_real_case_authority_intake_docket.py",
     "tests/test_real_case_authority_object_admission_request_rejection_corpus.py",
     "tests/test_real_case_authority_object_admission_decision_ledger.py",
-    "tests/test_real_case_authority_object_admission_closure_seal.py"
+    "tests/test_real_case_authority_object_admission_closure_seal.py",
+    "tests/test_real_case_authority_object_admission_finality_seal.py"
   ],
   "schema_version": "cinematicum.master_verification_manifest.v1"
 }

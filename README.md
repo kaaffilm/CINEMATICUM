@@ -824,3 +824,5 @@ CINEMATICUM records decisions for future valid reopening requests only. The deci
 - REAL_CASE_AUTHORITY_OBJECT_ADMISSION_ENFORCEMENT_GATE: enforces explicit accepted decision before real-case authority object instantiation.
 
 - `REAL_CASE_AUTHORITY_OBJECT_ADMISSION_CLOSURE_SEAL` closes the real-case authority object admission stack without satisfying authority, advancing state, issuing a motion picture, or admitting media.
+
+- `REAL_CASE_AUTHORITY_OBJECT_ADMISSION_FINALITY_SEAL` finalizes the current zero real-case authority object admission snapshot without satisfying authority, advancing state, issuing a motion picture, admitting media, or blocking future lawful intake.
