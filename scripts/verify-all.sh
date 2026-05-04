@@ -173,3 +173,5 @@ bash scripts/verify-real-case-authority-object-slot-index.sh
 python3 -m unittest tests/test_real_case_authority_object_slot_index.py
 bash scripts/verify-real-case-authority-object-admission-request-schema.sh
 python3 -m unittest tests/test_real_case_authority_object_admission_request_schema.py
+bash scripts/verify-real-case-authority-object-admission-request-validator.sh
+python3 -m unittest tests/test_real_case_authority_object_admission_request_validator.py

@@ -589,7 +589,19 @@
     "real_case_authority_object_admission_request_schema_does_not_create_live_requests",
     "real_case_authority_object_admission_request_schema_does_not_satisfy_authority",
     "real_case_authority_object_admission_request_schema_does_not_advance_state",
-    "real_case_authority_object_admission_request_schema_does_not_issue_motion_picture"
+    "real_case_authority_object_admission_request_schema_does_not_issue_motion_picture",
+    "real_case_authority_object_admission_request_validator_accepts_zero_requests",
+    "real_case_authority_object_admission_request_validator_requires_schema",
+    "real_case_authority_object_admission_request_validator_rejects_forbidden_fields",
+    "real_case_authority_object_admission_request_validator_requires_permitted_slot_id",
+    "real_case_authority_object_admission_request_validator_does_not_create_live_requests",
+    "real_case_authority_object_admission_request_validator_does_not_accept_requests",
+    "real_case_authority_object_admission_request_validator_does_not_reject_requests",
+    "real_case_authority_object_admission_request_validator_does_not_instantiate_authority_objects",
+    "real_case_authority_object_admission_request_validator_does_not_satisfy_authority",
+    "real_case_authority_object_admission_request_validator_does_not_advance_state",
+    "real_case_authority_object_admission_request_validator_does_not_issue_motion_picture",
+    "real_case_authority_object_admission_request_validator_does_not_admit_media"
   ],
   "non_star_seal_redundancy_stop_rule": {
     "authority_satisfied": false,
@@ -841,5 +853,18 @@
     "tests/test_open_real_case_authority_intake.py",
     "tests/test_real_case_authority_intake_docket.py"
   ],
-  "schema_version": "cinematicum.master_verification_manifest.v1"
+  "schema_version": "cinematicum.master_verification_manifest.v1",
+  "real_case_authority_object_admission_request_validator": {
+    "object": "REAL_CASE_AUTHORITY_OBJECT_ADMISSION_REQUEST_VALIDATOR",
+    "law": "CINEMATICUM_REAL_CASE_AUTHORITY_OBJECT_ADMISSION_REQUEST_VALIDATOR_LAW.json",
+    "status": "CASES/CASE_001_THE_LAST_RENDER/REAL_CASE_AUTHORITY_OBJECT_ADMISSION_REQUEST_VALIDATOR_STATUS.json",
+    "verifier": "scripts/verify-real-case-authority-object-admission-request-validator.sh",
+    "unit_test": "tests/test_real_case_authority_object_admission_request_validator.py",
+    "workflow": "real-case-authority-object-admission-request-validator",
+    "authority_satisfied": false,
+    "may_advance_now": false,
+    "release_candidate_ready": false,
+    "issued": false,
+    "media_present": false
+  }
 }
