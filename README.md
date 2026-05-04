@@ -821,3 +821,4 @@ CINEMATICUM records decisions for future valid reopening requests only. The deci
 - `REAL_CASE_AUTHORITY_OBJECT_ADMISSION_REQUEST_REJECTION_CORPUS.md` — real-case authority-object admission request rejection corpus.
 - `REAL_CASE_AUTHORITY_OBJECT_ADMISSION_REJECTION_TAXONOMY` — canonical real-case request rejection reason catalogue; fixture-only; non-advancing.
 - `REAL_CASE_AUTHORITY_OBJECT_ADMISSION_DECISION_LEDGER` — records the current zero-decision real-case authority object admission ledger without accepting, rejecting, instantiating, advancing, issuing, admitting media, or creating a release candidate.
+- REAL_CASE_AUTHORITY_OBJECT_ADMISSION_ENFORCEMENT_GATE: enforces explicit accepted decision before real-case authority object instantiation.

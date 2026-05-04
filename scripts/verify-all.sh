@@ -183,3 +183,5 @@ bash scripts/verify-real-case-authority-object-admission-rejection-taxonomy.sh
 python3 -m unittest tests/test_real_case_authority_object_admission_rejection_taxonomy.py
 bash scripts/verify-real-case-authority-object-admission-decision-ledger.sh
 python3 -m unittest tests/test_real_case_authority_object_admission_decision_ledger.py
+bash scripts/verify-real-case-authority-object-admission-enforcement-gate.sh
+python3 -m unittest tests/test_real_case_authority_object_admission_enforcement_gate.py
