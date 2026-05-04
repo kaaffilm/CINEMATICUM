@@ -1,0 +1,17 @@
+name: non-star-seal-redundancy-stop-rule
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Verify non star seal redundancy stop rule
+        run: |
+          bash scripts/verify-non-star-seal-redundancy-stop-rule.sh
+          python3 -m unittest tests/test_non_star_seal_redundancy_stop_rule.py

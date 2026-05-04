@@ -550,8 +550,26 @@
     "authority_object_admission_intake_reopening_request_future_snapshot_fork_ledger_zero_perimeter_completion_index_present",
     "authority_object_admission_intake_reopening_request_future_snapshot_fork_ledger_zero_perimeter_completion_index_closes_negative_perimeter",
     "authority_object_admission_intake_reopening_request_future_snapshot_fork_ledger_zero_perimeter_completion_index_routes_next_work_to_real_intake",
-    "authority_object_admission_intake_reopening_request_future_snapshot_fork_ledger_zero_perimeter_completion_index_does_not_advance_state"
+    "authority_object_admission_intake_reopening_request_future_snapshot_fork_ledger_zero_perimeter_completion_index_does_not_advance_state",
+    "non_star_seal_redundancy_stop_rule_present",
+    "non_star_seal_redundancy_stop_rule_forbids_redundant_negative_seals",
+    "non_star_seal_redundancy_stop_rule_routes_to_real_case_authority_intake",
+    "non_star_seal_redundancy_stop_rule_does_not_advance_state",
+    "non_star_seal_redundancy_stop_rule_does_not_issue_motion_picture"
   ],
+  "non_star_seal_redundancy_stop_rule": {
+    "authority_satisfied": false,
+    "issued": false,
+    "law": "CINEMATICUM_NON_STAR_SEAL_REDUNDANCY_STOP_RULE_LAW.json",
+    "may_advance_now": false,
+    "media_present": false,
+    "object": "NON_STAR_SEAL_REDUNDANCY_STOP_RULE",
+    "release_candidate_ready": false,
+    "status": "CASES/CASE_001_THE_LAST_RENDER/NON_STAR_SEAL_REDUNDANCY_STOP_RULE_STATUS.json",
+    "unit_test": "tests/test_non_star_seal_redundancy_stop_rule.py",
+    "verifier": "scripts/verify-non-star-seal-redundancy-stop-rule.sh",
+    "workflow": "non-star-seal-redundancy-stop-rule"
+  },
   "object_type": "CINEMATICUM_MASTER_VERIFICATION_MANIFEST",
   "purpose": "List the full verification battery required for every current CINEMATICUM main-state assertion.",
   "required_ci_workflows": [
