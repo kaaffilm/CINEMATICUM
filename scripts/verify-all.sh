@@ -115,6 +115,8 @@ bash scripts/verify-authority-object-admission-intake-reopening-request-future-c
 python3 -m unittest tests/test_authority_object_admission_intake_reopening_request_future_continuity_seal.py
 bash scripts/verify-authority-object-admission-intake-reopening-request-future-snapshot-fork-gate.sh
 python3 -m unittest tests/test_authority_object_admission_intake_reopening_request_future_snapshot_fork_gate.py
+bash scripts/verify-authority-object-admission-intake-reopening-request-future-snapshot-fork-ledger.sh
+python3 -m unittest tests/test_authority_object_admission_intake_reopening_request_future_snapshot_fork_ledger.py
 bash scripts/verify-master-verification-manifest-closure.sh
 python3 -m unittest tests/test_master_verification_manifest_closure.py
 
