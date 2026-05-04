@@ -1,0 +1,21 @@
+{
+  "object_type": "CINEMATICUM_AUTHORITY_OBJECT_ADMISSION_INTAKE_REOPENING_REQUEST_ENFORCEMENT_GATE_LAW",
+  "schema_version": "cinematicum.authority_object_admission_intake_reopening_request_enforcement_gate_law.v1",
+  "institution": "CINEMATICUM",
+  "case_id": "CASE_001_THE_LAST_RENDER",
+  "current_state": "OUTSIDER_REPLAY_BUNDLE_LAW_DECLARED",
+  "surface_class": "LAW_OBJECT",
+  "accepted_reopening_request_required_before_reopening_gate_open": true,
+  "valid_reopening_request_required_before_acceptance": true,
+  "recorded_reopening_decision_required_before_enforcement": true,
+  "reopening_request_decision_ledger_required": true,
+  "silent_reopening_forbidden": true,
+  "enforcement_gate_does_not_reopen_intake": true,
+  "enforcement_gate_does_not_satisfy_authority": true,
+  "enforcement_gate_does_not_issue_motion_picture": true,
+  "authority_satisfied": false,
+  "may_advance_now": false,
+  "release_candidate_ready": false,
+  "issued": false,
+  "media_present": false
+}

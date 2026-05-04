@@ -1,0 +1,17 @@
+name: authority-object-admission-intake-reopening-request-enforcement-gate
+
+on:
+  pull_request:
+  push:
+    branches: [ main ]
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
+      - run: bash scripts/verify-authority-object-admission-intake-reopening-request-enforcement-gate.sh
+      - run: python3 -m unittest tests/test_authority_object_admission_intake_reopening_request_enforcement_gate.py
