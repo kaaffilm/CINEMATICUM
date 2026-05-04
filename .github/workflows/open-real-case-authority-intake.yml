@@ -1,0 +1,14 @@
+name: open-real-case-authority-intake
+
+on:
+  pull_request:
+  push:
+    branches: [ main ]
+
+jobs:
+  verify-open-real-case-authority-intake:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Verify open real case authority intake
+        run: bash scripts/verify-open-real-case-authority-intake.sh
