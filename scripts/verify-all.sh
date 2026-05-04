@@ -146,6 +146,8 @@ python3 -m unittest tests/test_authority_object_admission_intake_reopening_reque
 bash scripts/verify-authority-object-admission-intake-reopening-request-future-snapshot-fork-ledger-non-release-candidate-seal.sh
 bash scripts/verify-authority-object-admission-intake-reopening-request-future-snapshot-fork-ledger-non-media-admission-seal.sh
 bash scripts/verify-authority-object-admission-intake-reopening-request-future-snapshot-fork-ledger-non-audience-artifact-seal.sh
+bash scripts/verify-authority-object-admission-intake-reopening-request-future-snapshot-fork-ledger-non-proof-artifact-seal.sh
 python3 -m unittest tests/test_authority_object_admission_intake_reopening_request_future_snapshot_fork_ledger_non_release_candidate_seal.py
 python3 -m unittest tests/test_authority_object_admission_intake_reopening_request_future_snapshot_fork_ledger_non_media_admission_seal.py
 python3 -m unittest tests/test_authority_object_admission_intake_reopening_request_future_snapshot_fork_ledger_non_audience_artifact_seal.py
+python3 -m unittest tests/test_authority_object_admission_intake_reopening_request_future_snapshot_fork_ledger_non_proof_artifact_seal.py
