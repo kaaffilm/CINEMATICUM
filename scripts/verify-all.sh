@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
+# scripts/verify-all.sh is the master battery entrypoint.
+
 bash scripts/verify-cinematic-jurisdiction.sh
 python3 -m unittest tests/test_cinematic_jurisdiction.py
 
@@ -174,4 +176,6 @@ python3 -m unittest tests/test_real_case_authority_object_slot_index.py
 bash scripts/verify-real-case-authority-object-admission-request-schema.sh
 python3 -m unittest tests/test_real_case_authority_object_admission_request_schema.py
 bash scripts/verify-real-case-authority-object-admission-request-validator.sh
+bash scripts/verify-real-case-authority-object-admission-request-rejection-corpus.sh
 python3 -m unittest tests/test_real_case_authority_object_admission_request_validator.py
+python3 -m unittest tests/test_real_case_authority_object_admission_request_rejection_corpus.py

@@ -817,3 +817,5 @@ CINEMATICUM records decisions for future valid reopening requests only. The deci
 - REAL_CASE_AUTHORITY_OBJECT_SLOT_INDEX.md — eight-slot real authority-object queue for current open intake.
 - `REAL_CASE_AUTHORITY_OBJECT_ADMISSION_REQUEST_SCHEMA` — schema-only aperture for future real-case authority-object admission requests; creates no live request and satisfies no authority.
 - REAL_CASE_AUTHORITY_OBJECT_ADMISSION_REQUEST_VALIDATOR — validates real-case authority object admission request shape without acceptance, instantiation, state advancement, issuance, or media admission.
+- REAL_CASE_AUTHORITY_OBJECT_ADMISSION_REQUEST_REJECTION_CORPUS
+- `REAL_CASE_AUTHORITY_OBJECT_ADMISSION_REQUEST_REJECTION_CORPUS.md` — real-case authority-object admission request rejection corpus.

@@ -1,0 +1,33 @@
+{
+  "schema_version": "cinematicum.real_case_authority_object_admission_request_rejection_corpus_law.v1",
+  "law": "REAL_CASE_AUTHORITY_OBJECT_ADMISSION_REQUEST_REJECTION_CORPUS_LAW",
+  "jurisdiction": "CINEMATICUM",
+  "case": "CASE_001_THE_LAST_RENDER",
+  "current_state": "OUTSIDER_REPLAY_BUNDLE_LAW_DECLARED",
+  "scope": "REAL_CASE_AUTHORITY_OBJECTS_ONLY",
+  "rule": "The rejection corpus proves malformed real-case authority-object admission requests are rejected as fixtures only; it does not create, accept, reject, or instantiate live admission requests.",
+  "required_fixture_count": 5,
+  "fixtures_must_not_be_live_requests": true,
+  "all_fixtures_must_be_rejected": true,
+  "recognized_rejection_reasons": [
+    "missing_required_field",
+    "unknown_authority_object_slot",
+    "media_payload_forbidden",
+    "state_advancement_forbidden",
+    "current_snapshot_mutation_forbidden"
+  ],
+  "negative_authority": {
+    "does_not_create_live_requests": true,
+    "does_not_accept_requests": true,
+    "does_not_reject_live_requests": true,
+    "does_not_instantiate_authority_objects": true,
+    "does_not_satisfy_authority": true,
+    "does_not_advance_state": true,
+    "does_not_issue_motion_picture": true,
+    "does_not_admit_media": true,
+    "does_not_create_release_candidate": true,
+    "does_not_reopen_current_snapshot": true,
+    "does_not_create_new_snapshot": true
+  },
+  "pass_condition": "CINEMATICUM_REAL_CASE_AUTHORITY_OBJECT_ADMISSION_REQUEST_REJECTION_CORPUS_LAW_PASS"
+}
