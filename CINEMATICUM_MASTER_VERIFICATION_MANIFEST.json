@@ -515,5 +515,15 @@
     "status": "CASES/CASE_001_THE_LAST_RENDER/AUTHORITY_OBJECT_ADMISSION_INTAKE_REOPENING_REQUEST_FUTURE_SNAPSHOT_FORK_LEDGER_TERMINAL_CLOSURE_SEAL_STATUS.json",
     "issued": false,
     "media_present": false
+  },
+  "authority_object_admission_intake_reopening_request_future_snapshot_fork_ledger_non_issuance_seal": {
+    "script": "scripts/verify-authority-object-admission-intake-reopening-request-future-snapshot-fork-ledger-non-issuance-seal.sh",
+    "unit_test": "tests/test_authority_object_admission_intake_reopening_request_future_snapshot_fork_ledger_non_issuance_seal.py",
+    "workflow": "authority-object-admission-intake-reopening-request-future-snapshot-fork-ledger-non-issuance-seal",
+    "object": "CINEMATICUM_AUTHORITY_OBJECT_ADMISSION_INTAKE_REOPENING_REQUEST_FUTURE_SNAPSHOT_FORK_LEDGER_NON_ISSUANCE_SEAL.json",
+    "law": "CINEMATICUM_AUTHORITY_OBJECT_ADMISSION_INTAKE_REOPENING_REQUEST_FUTURE_SNAPSHOT_FORK_LEDGER_NON_ISSUANCE_SEAL_LAW.json",
+    "status": "CASES/CASE_001_THE_LAST_RENDER/AUTHORITY_OBJECT_ADMISSION_INTAKE_REOPENING_REQUEST_FUTURE_SNAPSHOT_FORK_LEDGER_NON_ISSUANCE_SEAL_STATUS.json",
+    "issued": false,
+    "media_present": false
   }
 }
