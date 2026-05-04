@@ -1,0 +1,21 @@
+{
+  "authority_satisfied": false,
+  "case": "CASE_001_THE_LAST_RENDER",
+  "current_state": "OUTSIDER_REPLAY_BUNDLE_LAW_DECLARED",
+  "issued": false,
+  "law": "CINEMATICUM_AUTHORITY_OBJECT_ADMISSION_INTAKE_REOPENING_REQUEST_FUTURE_SNAPSHOT_FORK_LEDGER_NON_PUBLIC_REPLAY_INDEX_SEAL_LAW.json",
+  "may_advance_now": false,
+  "media_present": false,
+  "object_type": "AUTHORITY_OBJECT_ADMISSION_INTAKE_REOPENING_REQUEST_FUTURE_SNAPSHOT_FORK_LEDGER_NON_PUBLIC_REPLAY_INDEX_SEAL",
+  "outsider_replay_passed": false,
+  "release_candidate_ready": false,
+  "schema_version": "cinematicum.object.v1",
+  "scope": "CURRENT_ZERO_FUTURE_SNAPSHOT_FORK_LEDGER_ONLY",
+  "status": "CASES/CASE_001_THE_LAST_RENDER/AUTHORITY_OBJECT_ADMISSION_INTAKE_REOPENING_REQUEST_FUTURE_SNAPSHOT_FORK_LEDGER_NON_PUBLIC_REPLAY_INDEX_SEAL_STATUS.json",
+  "public_replay_index_present": false,
+  "public_replay_index_sealed": false,
+  "title": "CINEMATICUM AUTHORITY OBJECT ADMISSION INTAKE REOPENING REQUEST FUTURE SNAPSHOT FORK LEDGER NON-PUBLIC-REPLAY-INDEX SEAL",
+  "unit_test": "tests/test_authority_object_admission_intake_reopening_request_future_snapshot_fork_ledger_non_public_replay_index_seal.py",
+  "verifier": "scripts/verify-authority-object-admission-intake-reopening-request-future-snapshot-fork-ledger-non-public-replay-index-seal.sh",
+  "workflow": "authority-object-admission-intake-reopening-request-future-snapshot-fork-ledger-non-public-replay-index-seal"
+}

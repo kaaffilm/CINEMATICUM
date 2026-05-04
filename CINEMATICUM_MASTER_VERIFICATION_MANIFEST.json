@@ -172,6 +172,22 @@
     "verifier": "scripts/verify-authority-object-admission-intake-reopening-request-future-snapshot-fork-ledger-non-terminal-closure-index-seal.sh",
     "workflow": "authority-object-admission-intake-reopening-request-future-snapshot-fork-ledger-non-terminal-closure-index-seal"
   },
+  "authority_object_admission_intake_reopening_request_future_snapshot_fork_ledger_non_public_replay_index_seal": {
+    "authority_satisfied": false,
+    "issued": false,
+    "law": "CINEMATICUM_AUTHORITY_OBJECT_ADMISSION_INTAKE_REOPENING_REQUEST_FUTURE_SNAPSHOT_FORK_LEDGER_NON_PUBLIC_REPLAY_INDEX_SEAL_LAW.json",
+    "may_advance_now": false,
+    "media_present": false,
+    "object": "AUTHORITY_OBJECT_ADMISSION_INTAKE_REOPENING_REQUEST_FUTURE_SNAPSHOT_FORK_LEDGER_NON_PUBLIC_REPLAY_INDEX_SEAL",
+    "outsider_replay_passed": false,
+    "public_replay_index_present": false,
+    "public_replay_index_sealed": false,
+    "release_candidate_ready": false,
+    "status": "CASES/CASE_001_THE_LAST_RENDER/AUTHORITY_OBJECT_ADMISSION_INTAKE_REOPENING_REQUEST_FUTURE_SNAPSHOT_FORK_LEDGER_NON_PUBLIC_REPLAY_INDEX_SEAL_STATUS.json",
+    "unit_test": "tests/test_authority_object_admission_intake_reopening_request_future_snapshot_fork_ledger_non_public_replay_index_seal.py",
+    "verifier": "scripts/verify-authority-object-admission-intake-reopening-request-future-snapshot-fork-ledger-non-public-replay-index-seal.sh",
+    "workflow": "authority-object-admission-intake-reopening-request-future-snapshot-fork-ledger-non-public-replay-index-seal"
+  },
   "authority_object_admission_intake_reopening_request_future_snapshot_fork_ledger_outsider_replay_seal": {
     "authority_satisfied": false,
     "issued": false,
@@ -487,7 +503,14 @@
     "authority_object_admission_intake_reopening_request_future_snapshot_fork_ledger_non_terminal_closure_index_seal_does_not_mutate_permanent_ledger",
     "authority_object_admission_intake_reopening_request_future_snapshot_fork_ledger_non_terminal_closure_index_seal_does_not_satisfy_authority",
     "authority_object_admission_intake_reopening_request_future_snapshot_fork_ledger_non_terminal_closure_index_seal_does_not_advance_state",
-    "authority_object_admission_intake_reopening_request_future_snapshot_fork_ledger_non_terminal_closure_index_seal_does_not_issue_motion_picture"
+    "authority_object_admission_intake_reopening_request_future_snapshot_fork_ledger_non_terminal_closure_index_seal_does_not_issue_motion_picture",
+    "authority_object_admission_intake_reopening_request_future_snapshot_fork_ledger_non_public_replay_index_seal_requires_non_terminal_closure_index_seal",
+    "authority_object_admission_intake_reopening_request_future_snapshot_fork_ledger_non_public_replay_index_seal_blocks_current_zero_public_replay_index",
+    "authority_object_admission_intake_reopening_request_future_snapshot_fork_ledger_non_public_replay_index_seal_does_not_open_future_fork_gate",
+    "authority_object_admission_intake_reopening_request_future_snapshot_fork_ledger_non_public_replay_index_seal_does_not_create_new_snapshot",
+    "authority_object_admission_intake_reopening_request_future_snapshot_fork_ledger_non_public_replay_index_seal_does_not_mutate_current_snapshot",
+    "authority_object_admission_intake_reopening_request_future_snapshot_fork_ledger_non_public_replay_index_seal_does_not_satisfy_authority",
+    "authority_object_admission_intake_reopening_request_future_snapshot_fork_ledger_non_public_replay_index_seal_does_not_advance_state"
   ],
   "object_type": "CINEMATICUM_MASTER_VERIFICATION_MANIFEST",
   "purpose": "List the full verification battery required for every current CINEMATICUM main-state assertion.",
