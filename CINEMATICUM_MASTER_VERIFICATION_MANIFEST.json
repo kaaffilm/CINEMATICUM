@@ -612,7 +612,9 @@
     "real_case_authority_object_admission_rejection_taxonomy_does_not_satisfy_authority",
     "real_case_authority_object_admission_rejection_taxonomy_does_not_advance_state",
     "real_case_authority_object_admission_rejection_taxonomy_does_not_issue_motion_picture",
-    "real_case_authority_object_admission_rejection_taxonomy_does_not_admit_media"
+    "real_case_authority_object_admission_rejection_taxonomy_does_not_admit_media",
+    "scripts/verify-real-case-authority-object-admission-decision-ledger.sh",
+    ".github/workflows/real-case-authority-object-admission-decision-ledger.yml"
   ],
   "non_star_seal_redundancy_stop_rule": {
     "authority_satisfied": false,
@@ -760,7 +762,8 @@
     "authority-object-admission-intake-reopening-request-future-snapshot-fork-ledger-non-proof-artifact-seal",
     "authority-object-admission-intake-reopening-request-future-snapshot-fork-ledger-zero-perimeter-completion-index",
     "real-case-authority-object-admission-request-rejection-corpus",
-    "real-case-authority-object-admission-rejection-taxonomy"
+    "real-case-authority-object-admission-rejection-taxonomy",
+    "real-case-authority-object-admission-decision-ledger"
   ],
   "required_scripts": [
     "scripts/verify-all.sh",
@@ -827,7 +830,8 @@
     "scripts/verify-open-real-case-authority-intake.sh",
     "scripts/verify-real-case-authority-intake-docket.sh",
     "scripts/verify-real-case-authority-object-admission-request-rejection-corpus.sh",
-    "scripts/verify-real-case-authority-object-admission-rejection-taxonomy.sh"
+    "scripts/verify-real-case-authority-object-admission-rejection-taxonomy.sh",
+    "scripts/verify-real-case-authority-object-admission-decision-ledger.sh"
   ],
   "required_unit_tests": [
     "tests/test_real_case_authority_object_admission_rejection_taxonomy.py"
@@ -895,7 +899,8 @@
     "tests/test_authority_object_admission_intake_reopening_request_future_snapshot_fork_ledger_zero_perimeter_completion_index.py",
     "tests/test_open_real_case_authority_intake.py",
     "tests/test_real_case_authority_intake_docket.py",
-    "tests/test_real_case_authority_object_admission_request_rejection_corpus.py"
+    "tests/test_real_case_authority_object_admission_request_rejection_corpus.py",
+    "tests/test_real_case_authority_object_admission_decision_ledger.py"
   ],
   "schema_version": "cinematicum.master_verification_manifest.v1"
 }
