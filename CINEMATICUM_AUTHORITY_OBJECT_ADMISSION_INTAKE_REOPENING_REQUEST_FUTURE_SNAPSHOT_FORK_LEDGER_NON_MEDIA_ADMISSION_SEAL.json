@@ -1,0 +1,28 @@
+{
+  "case": "CASE_001_THE_LAST_RENDER",
+  "current_zero_ledger_media_admission_blocked": true,
+  "depends_on": [
+    "AUTHORITY_OBJECT_ADMISSION_INTAKE_REOPENING_REQUEST_FUTURE_SNAPSHOT_FORK_LEDGER_TERMINAL_CLOSURE_SEAL",
+    "AUTHORITY_OBJECT_ADMISSION_INTAKE_REOPENING_REQUEST_FUTURE_SNAPSHOT_FORK_LEDGER_NON_ISSUANCE_SEAL",
+    "AUTHORITY_OBJECT_ADMISSION_INTAKE_REOPENING_REQUEST_FUTURE_SNAPSHOT_FORK_LEDGER_NON_AUTHORITY_SATISFACTION_SEAL",
+    "AUTHORITY_OBJECT_ADMISSION_INTAKE_REOPENING_REQUEST_FUTURE_SNAPSHOT_FORK_LEDGER_NON_ADVANCEMENT_SEAL",
+    "AUTHORITY_OBJECT_ADMISSION_INTAKE_REOPENING_REQUEST_FUTURE_SNAPSHOT_FORK_LEDGER_NON_RELEASE_CANDIDATE_SEAL"
+  ],
+  "does_not_admit_media": true,
+  "does_not_advance_state": true,
+  "does_not_create_new_snapshot": true,
+  "does_not_create_release_candidate": true,
+  "does_not_issue_motion_picture": true,
+  "does_not_mutate_current_snapshot": true,
+  "does_not_mutate_permanent_ledger": true,
+  "does_not_open_future_fork_gate": true,
+  "does_not_satisfy_authority": true,
+  "future_valid_fork_media_admission_must_target_new_snapshot": true,
+  "future_valid_fork_must_establish_media_admission_independently": true,
+  "jurisdiction": "CINEMATICUM",
+  "object": "AUTHORITY_OBJECT_ADMISSION_INTAKE_REOPENING_REQUEST_FUTURE_SNAPSHOT_FORK_LEDGER_NON_MEDIA_ADMISSION_SEAL",
+  "schema_version": "cinematicum.authority_object_admission_intake_reopening_request.future_snapshot_fork_ledger.non_media_admission_seal.v1",
+  "scope": "CURRENT_ZERO_FUTURE_SNAPSHOT_FORK_LEDGER_ONLY",
+  "seal": "NON_MEDIA_ADMISSION",
+  "title": "CINEMATICUM AUTHORITY OBJECT ADMISSION INTAKE REOPENING REQUEST FUTURE SNAPSHOT FORK LEDGER NON-MEDIA-ADMISSION SEAL"
+}
