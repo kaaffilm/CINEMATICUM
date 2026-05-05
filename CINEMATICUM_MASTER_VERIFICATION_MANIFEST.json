@@ -843,7 +843,8 @@
     "real-case-authority-object-admission-decision-ledger",
     "real-case-authority-object-admission-closure-seal",
     "real-case-authority-object-admission-finality-seal",
-    "real-case-authority-object-admission-terminal-seal"
+    "real-case-authority-object-admission-terminal-seal",
+    "real-case-authority-object-admission-future-continuity-seal"
   ],
   "required_scripts": [
     "scripts/verify-all.sh",
@@ -915,10 +916,12 @@
     "scripts/verify-real-case-authority-object-admission-closure-seal.sh",
     "scripts/verify-real-case-authority-object-admission-finality-seal.sh",
     "scripts/verify-real-case-authority-object-admission-terminal-seal.sh",
-    "scripts/verify-real-case-authority-object-admission-permanence-seal.sh"
+    "scripts/verify-real-case-authority-object-admission-permanence-seal.sh",
+    "scripts/verify-real-case-authority-object-admission-future-continuity-seal.sh"
   ],
   "required_unit_tests": [
-    "tests/test_real_case_authority_object_admission_rejection_taxonomy.py"
+    "tests/test_real_case_authority_object_admission_rejection_taxonomy.py",
+    "tests/test_real_case_authority_object_admission_future_continuity_seal.py"
   ],
   "required_unittests": [
     "tests/test_authority_acceptance_law.py",
