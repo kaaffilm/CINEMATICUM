@@ -230,3 +230,8 @@ echo "[CINEMATICUM FOURTH FUTURE COLOR GRADE LOCK AUTHORITY OBJECT INSTANTIATION
 bash scripts/verify-fourth-future-color-grade-lock-authority-object-instantiation-record.sh
 python3 -m unittest tests/test_fourth_future_color_grade_lock_authority_object_instantiation_record.py
 
+echo
+echo "[CINEMATICUM FIFTH FUTURE RELEASE DELIVERY-ARTIFACTS LOCK AUTHORITY OBJECT INSTANTIATION RECORD]"
+bash scripts/verify-fifth-future-release-delivery-artifacts-lock-authority-object-instantiation-record.sh
+python3 -m unittest tests/test_fifth_future_release_delivery_artifacts_lock_authority_object_instantiation_record.py
+
