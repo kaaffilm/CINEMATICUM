@@ -846,3 +846,4 @@ CINEMATICUM records decisions for future valid reopening requests only. The deci
 ## CINEMATICUM third future sound final-mix lock authority object instantiation record
 
 `SOUND_FINAL_MIX_LOCK_AUTHORITY_OBJECT` is instantiated as the third future-scoped real-case authority object. It follows `EDITORIAL_TIMELINE_AUTHORITY_OBJECT`, keeps aggregate authority unsatisfied, keeps advancement blocked, creates no release candidate, issues no motion picture, and admits no media.
+- Fourth future authority object instantiated: `COLOR_GRADE_LOCK_AUTHORITY_OBJECT` remains non-issuing and non-advancing.

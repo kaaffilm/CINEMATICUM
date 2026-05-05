@@ -225,3 +225,8 @@ echo "[CINEMATICUM THIRD FUTURE SOUND FINAL-MIX LOCK AUTHORITY OBJECT INSTANTIAT
 bash scripts/verify-third-future-sound-final-mix-lock-authority-object-instantiation-record.sh
 python3 -m unittest tests/test_third_future_sound_final_mix_lock_authority_object_instantiation_record.py
 
+echo
+echo "[CINEMATICUM FOURTH FUTURE COLOR GRADE LOCK AUTHORITY OBJECT INSTANTIATION RECORD]"
+bash scripts/verify-fourth-future-color-grade-lock-authority-object-instantiation-record.sh
+python3 -m unittest tests/test_fourth_future_color_grade_lock_authority_object_instantiation_record.py
+
