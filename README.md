@@ -851,3 +851,4 @@ CINEMATICUM records decisions for future valid reopening requests only. The deci
 - Sixth future authority object instantiated: `ARCHIVIST_PROOF_CHAIN_LOCK_AUTHORITY_OBJECT`.
 - `SEVENTH_FUTURE_OUTSIDER_REPLAY_PASSAGE_AUTHORITY_OBJECT_INSTANTIATION_RECORD.md` — seventh future authority object instantiation record; outsider replay passage locked for the future authority snapshot only; does not advance state, issue, admit media, or open terminal closure.
 - Eighth future terminal closure authority object instantiation record: TERMINAL_CLOSURE_AUTHORITY_OBJECT completes the eight-slot future authority-object stack without issuing, admitting media, creating a release candidate, or advancing current state.
+- Future authority satisfaction gate: verifies the completed eight-object future authority stack while preserving authority_satisfied=false, may_advance_now=false, release_candidate_ready=false, issued=false, media_present=false, and current-state non-advancement.

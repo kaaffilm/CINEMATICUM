@@ -251,3 +251,8 @@ echo "[CINEMATICUM EIGHTH FUTURE TERMINAL CLOSURE AUTHORITY OBJECT INSTANTIATION
 bash scripts/verify-eighth-future-terminal-closure-authority-object-instantiation-record.sh
 python3 -m unittest tests/test_eighth_future_terminal_closure_authority_object_instantiation_record.py
 
+echo
+echo "[CINEMATICUM FUTURE AUTHORITY SATISFACTION GATE]"
+bash scripts/verify-future-authority-satisfaction-gate.sh
+python3 -m unittest tests/test_future_authority_satisfaction_gate.py
+

@@ -1124,5 +1124,20 @@
     "release_candidate_ready": false,
     "issued": false,
     "media_present": false
+  },
+  "future_authority_satisfaction_gate": {
+    "object": "FUTURE_AUTHORITY_SATISFACTION_GATE",
+    "law": "CINEMATICUM_FUTURE_AUTHORITY_SATISFACTION_GATE_LAW.json",
+    "status": "CASES/CASE_001_THE_LAST_RENDER/FUTURE_AUTHORITY_SATISFACTION_GATE_STATUS.json",
+    "case_record": "CASES/CASE_001_THE_LAST_RENDER/FUTURE_AUTHORITY_SATISFACTION_GATE/FUTURE_AUTHORITY_SATISFACTION_GATE.json",
+    "verifier": "scripts/verify-future-authority-satisfaction-gate.sh",
+    "unit_test": "tests/test_future_authority_satisfaction_gate.py",
+    "workflow": "future-authority-satisfaction-gate",
+    "future_authority_satisfaction_gate_passed": true,
+    "authority_satisfied": false,
+    "may_advance_now": false,
+    "release_candidate_ready": false,
+    "issued": false,
+    "media_present": false
   }
 }
