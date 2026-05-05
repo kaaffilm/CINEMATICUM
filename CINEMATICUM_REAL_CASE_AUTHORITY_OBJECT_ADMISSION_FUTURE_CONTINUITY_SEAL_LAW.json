@@ -1,0 +1,24 @@
+{
+  "object_type": "CINEMATICUM_REAL_CASE_AUTHORITY_OBJECT_ADMISSION_FUTURE_CONTINUITY_SEAL_LAW",
+  "schema_version": "cinematicum.real_case_authority_object_admission_future_continuity_seal_law.v1",
+  "institution": "CINEMATICUM",
+  "case_id": "CASE_001_THE_LAST_RENDER",
+  "surface_class": "LAW_OBJECT",
+  "root_sentence": "CINEMATICUM issues admissible motion pictures.",
+  "law": {
+    "purpose": "Preserve the permanent current-zero real-case authority-object admission snapshot while routing future valid admission requests to future snapshots.",
+    "forbids_current_zero_mutation": true,
+    "forbids_terminal_snapshot_mutation": true,
+    "forbids_silent_slot_filling": true,
+    "forbids_authority_satisfaction_by_continuity_seal": true,
+    "requires_future_snapshot_for_valid_admission": true
+  },
+  "non_effects": {
+    "does_not_satisfy_authority": true,
+    "does_not_advance_state": true,
+    "does_not_issue_motion_picture": true,
+    "does_not_admit_media": true,
+    "does_not_create_release_candidate": true,
+    "does_not_create_new_snapshot_now": true
+  }
+}
