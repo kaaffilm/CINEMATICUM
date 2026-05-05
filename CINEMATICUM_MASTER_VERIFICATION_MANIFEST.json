@@ -325,6 +325,19 @@
     "verifier": "scripts/verify-first-future-director-final-cut-authority-object-admission-request.sh",
     "workflow": "first-future-director-final-cut-authority-object-admission-request"
   },
+  "first_future_director_final_cut_authority_object_instantiation_record": {
+    "authority_satisfied": false,
+    "issued": false,
+    "law": "CINEMATICUM_FIRST_FUTURE_DIRECTOR_FINAL_CUT_AUTHORITY_OBJECT_INSTANTIATION_RECORD_LAW.json",
+    "may_advance_now": false,
+    "media_present": false,
+    "object": "FIRST_FUTURE_DIRECTOR_FINAL_CUT_AUTHORITY_OBJECT_INSTANTIATION_RECORD",
+    "release_candidate_ready": false,
+    "status": "CASES/CASE_001_THE_LAST_RENDER/FIRST_FUTURE_DIRECTOR_FINAL_CUT_AUTHORITY_OBJECT_INSTANTIATION_RECORD_STATUS.json",
+    "unit_test": "tests/test_first_future_director_final_cut_authority_object_instantiation_record.py",
+    "verifier": "scripts/verify-first-future-director-final-cut-authority-object-instantiation-record.sh",
+    "workflow": "first-future-director-final-cut-authority-object-instantiation-record"
+  },
   "institution": "CINEMATICUM",
   "master_invariants": [
     "accepted_admission_request_required_before_authority_object",
@@ -1029,17 +1042,9 @@
     "tests/test_first_future_director_final_cut_authority_object_admission_decision_record.py"
   ],
   "schema_version": "cinematicum.master_verification_manifest.v1",
-  "first_future_director_final_cut_authority_object_instantiation_record": {
-    "object": "FIRST_FUTURE_DIRECTOR_FINAL_CUT_AUTHORITY_OBJECT_INSTANTIATION_RECORD",
-    "law": "CINEMATICUM_FIRST_FUTURE_DIRECTOR_FINAL_CUT_AUTHORITY_OBJECT_INSTANTIATION_RECORD_LAW.json",
-    "status": "CASES/CASE_001_THE_LAST_RENDER/FIRST_FUTURE_DIRECTOR_FINAL_CUT_AUTHORITY_OBJECT_INSTANTIATION_RECORD_STATUS.json",
-    "verifier": "scripts/verify-first-future-director-final-cut-authority-object-instantiation-record.sh",
-    "unit_test": "tests/test_first_future_director_final_cut_authority_object_instantiation_record.py",
-    "workflow": "first-future-director-final-cut-authority-object-instantiation-record",
-    "authority_satisfied": false,
-    "may_advance_now": false,
-    "release_candidate_ready": false,
-    "issued": false,
-    "media_present": false
+  "second_future_editorial_timeline_authority_object_instantiation_record": {
+    "script": "scripts/verify-second-future-editorial-timeline-authority-object-instantiation-record.sh",
+    "unit_test": "tests/test_second_future_editorial_timeline_authority_object_instantiation_record.py",
+    "workflow": ".github/workflows/second-future-editorial-timeline-authority-object-instantiation-record.yml"
   }
 }

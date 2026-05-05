@@ -214,3 +214,9 @@ python3 -m unittest tests/test_first_future_director_final_cut_authority_object_
 printf '\n[CINEMATICUM FIRST FUTURE DIRECTOR FINAL CUT AUTHORITY OBJECT INSTANTIATION RECORD]\n'
 bash scripts/verify-first-future-director-final-cut-authority-object-instantiation-record.sh
 python3 -m unittest tests/test_first_future_director_final_cut_authority_object_instantiation_record.py
+
+echo
+echo "[CINEMATICUM SECOND FUTURE EDITORIAL TIMELINE AUTHORITY OBJECT INSTANTIATION RECORD]"
+bash scripts/verify-second-future-editorial-timeline-authority-object-instantiation-record.sh
+python3 -m unittest tests/test_second_future_editorial_timeline_authority_object_instantiation_record.py
+
