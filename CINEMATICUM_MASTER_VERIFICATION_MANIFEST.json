@@ -1073,6 +1073,19 @@
     "unit_test": "tests/test_second_future_editorial_timeline_authority_object_instantiation_record.py",
     "workflow": ".github/workflows/second-future-editorial-timeline-authority-object-instantiation-record.yml"
   },
+  "seventh_future_outsider_replay_passage_authority_object_instantiation_record": {
+    "authority_satisfied": false,
+    "issued": false,
+    "law": "CINEMATICUM_SEVENTH_FUTURE_OUTSIDER_REPLAY_PASSAGE_AUTHORITY_OBJECT_INSTANTIATION_RECORD_LAW.json",
+    "may_advance_now": false,
+    "media_present": false,
+    "object": "SEVENTH_FUTURE_OUTSIDER_REPLAY_PASSAGE_AUTHORITY_OBJECT_INSTANTIATION_RECORD",
+    "release_candidate_ready": false,
+    "status": "CASES/CASE_001_THE_LAST_RENDER/SEVENTH_FUTURE_OUTSIDER_REPLAY_PASSAGE_AUTHORITY_OBJECT_INSTANTIATION_RECORD_STATUS.json",
+    "unit_test": "tests/test_seventh_future_outsider_replay_passage_authority_object_instantiation_record.py",
+    "verifier": "scripts/verify-seventh-future-outsider-replay-passage-authority-object-instantiation-record.sh",
+    "workflow": "seventh-future-outsider-replay-passage-authority-object-instantiation-record"
+  },
   "sixth_future_archivist_proof_chain_lock_authority_object_instantiation_record": {
     "authority_satisfied": false,
     "issued": false,

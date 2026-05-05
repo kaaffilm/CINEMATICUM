@@ -1,0 +1,15 @@
+name: seventh-future-outsider-replay-passage-authority-object-instantiation-record
+
+on:
+  pull_request:
+  push:
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Verify seventh future outsider replay passage authority object instantiation record
+        run: |
+          bash scripts/verify-seventh-future-outsider-replay-passage-authority-object-instantiation-record.sh
+          python3 -m unittest tests/test_seventh_future_outsider_replay_passage_authority_object_instantiation_record.py

@@ -240,3 +240,8 @@ echo "[CINEMATICUM SIXTH FUTURE ARCHIVIST PROOF-CHAIN LOCK AUTHORITY OBJECT INST
 bash scripts/verify-sixth-future-archivist-proof-chain-lock-authority-object-instantiation-record.sh
 python3 -m unittest tests/test_sixth_future_archivist_proof_chain_lock_authority_object_instantiation_record.py
 
+echo
+echo "[CINEMATICUM SEVENTH FUTURE OUTSIDER REPLAY PASSAGE AUTHORITY OBJECT INSTANTIATION RECORD]"
+bash scripts/verify-seventh-future-outsider-replay-passage-authority-object-instantiation-record.sh
+python3 -m unittest tests/test_seventh_future_outsider_replay_passage_authority_object_instantiation_record.py
+
