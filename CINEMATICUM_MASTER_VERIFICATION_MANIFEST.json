@@ -312,6 +312,19 @@
     "verifier": "scripts/verify-current-zero-ledger-no-further-advancement-proof.sh",
     "workflow": "current-zero-ledger-no-further-advancement-proof"
   },
+  "fifth_future_release_delivery_artifacts_lock_authority_object_instantiation_record": {
+    "authority_satisfied": false,
+    "issued": false,
+    "law": "CINEMATICUM_FIFTH_FUTURE_RELEASE_DELIVERY_ARTIFACTS_LOCK_AUTHORITY_OBJECT_INSTANTIATION_RECORD_LAW.json",
+    "may_advance_now": false,
+    "media_present": false,
+    "object": "FIFTH_FUTURE_RELEASE_DELIVERY_ARTIFACTS_LOCK_AUTHORITY_OBJECT_INSTANTIATION_RECORD",
+    "release_candidate_ready": false,
+    "status": "CASES/CASE_001_THE_LAST_RENDER/FIFTH_FUTURE_RELEASE_DELIVERY_ARTIFACTS_LOCK_AUTHORITY_OBJECT_INSTANTIATION_RECORD_STATUS.json",
+    "unit_test": "tests/test_fifth_future_release_delivery_artifacts_lock_authority_object_instantiation_record.py",
+    "verifier": "scripts/verify-fifth-future-release-delivery-artifacts-lock-authority-object-instantiation-record.sh",
+    "workflow": "fifth-future-release-delivery-artifacts-lock-authority-object-instantiation-record"
+  },
   "first_future_director_final_cut_authority_object_admission_request": {
     "authority_satisfied": false,
     "issued": false,
