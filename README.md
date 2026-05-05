@@ -834,3 +834,4 @@ CINEMATICUM records decisions for future valid reopening requests only. The deci
 - Real-case authority object admission future snapshot fork gate: current zero snapshot remains immutable; future valid authority requests fork to a future snapshot.
 
 - `FIRST_FUTURE_DIRECTOR_FINAL_CUT_AUTHORITY_OBJECT_ADMISSION_REQUEST` — creates the first future real-case authority-object admission request candidate for `director_final_cut_authority` / `DIRECTOR_FINAL_CUT_AUTHORITY_OBJECT`; it is not a current-zero live request, accepted decision, instantiated authority object, release candidate, media admission, or issuance.
+- [FIRST_FUTURE_DIRECTOR_FINAL_CUT_AUTHORITY_OBJECT_ADMISSION_REQUEST_VALIDATION_RECORD](FIRST_FUTURE_DIRECTOR_FINAL_CUT_AUTHORITY_OBJECT_ADMISSION_REQUEST_VALIDATION_RECORD.md) — validates the first future director-final-cut authority admission request without acceptance, instantiation, advancement, issuance, or media admission.
