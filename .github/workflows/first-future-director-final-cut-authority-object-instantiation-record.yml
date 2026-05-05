@@ -1,0 +1,15 @@
+name: First Future Director Final Cut Authority Object Instantiation Record
+
+on:
+push:
+pull_request:
+
+jobs:
+verify:
+runs-on: ubuntu-latest
+steps:
+- uses: actions/checkout@v4
+- name: Verify first future director final cut authority object instantiation record
+run: bash scripts/verify-first-future-director-final-cut-authority-object-instantiation-record.sh
+- name: Unit test first future director final cut authority object instantiation record
+run: python3 -m unittest tests/test_first_future_director_final_cut_authority_object_instantiation_record.py
