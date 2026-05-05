@@ -1163,6 +1163,24 @@
     "verifier": "scripts/verify-sixth-future-archivist-proof-chain-lock-authority-object-instantiation-record.sh",
     "workflow": "sixth-future-archivist-proof-chain-lock-authority-object-instantiation-record"
   },
+  "state_advancement_execution_record": {
+    "authority_satisfied": false,
+    "authority_satisfied_for_transition": true,
+    "case_record": "CASES/CASE_001_THE_LAST_RENDER/STATE_ADVANCEMENT_EXECUTION_RECORD/STATE_ADVANCEMENT_EXECUTION_RECORD.json",
+    "current_state_index_change_deferred_to_next_object": true,
+    "current_state_index_mutation_authorized": true,
+    "issued": false,
+    "law": "CINEMATICUM_STATE_ADVANCEMENT_EXECUTION_RECORD_LAW.json",
+    "may_advance_now": false,
+    "media_present": false,
+    "object": "STATE_ADVANCEMENT_EXECUTION_RECORD",
+    "release_candidate_ready": false,
+    "state_mutation_execution_authorized": true,
+    "status": "CASES/CASE_001_THE_LAST_RENDER/STATE_ADVANCEMENT_EXECUTION_RECORD_STATUS.json",
+    "unit_test": "tests/test_state_advancement_execution_record.py",
+    "verifier": "scripts/verify-state-advancement-execution-record.sh",
+    "workflow": "state-advancement-execution-record"
+  },
   "third_future_sound_final_mix_lock_authority_object_instantiation_record": {
     "authority_satisfied": false,
     "issued": false,
