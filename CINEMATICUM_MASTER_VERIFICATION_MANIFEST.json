@@ -325,6 +325,26 @@
     "verifier": "scripts/verify-eighth-future-terminal-closure-authority-object-instantiation-record.sh",
     "workflow": "eighth-future-terminal-closure-authority-object-instantiation-record"
   },
+  "explicit_state_advancement_decision_record": {
+    "authority_satisfied": false,
+    "authority_satisfied_for_transition": true,
+    "case_record": "CASES/CASE_001_THE_LAST_RENDER/EXPLICIT_STATE_ADVANCEMENT_DECISION_RECORD/EXPLICIT_STATE_ADVANCEMENT_DECISION_RECORD.json",
+    "decision_accepts_request": true,
+    "decision_authorizes_state_mutation": true,
+    "decision_record_present": true,
+    "explicit_state_advancement_request_present": true,
+    "issued": false,
+    "law": "CINEMATICUM_EXPLICIT_STATE_ADVANCEMENT_DECISION_RECORD_LAW.json",
+    "may_advance_now": false,
+    "media_present": false,
+    "object": "EXPLICIT_STATE_ADVANCEMENT_DECISION_RECORD",
+    "release_candidate_ready": false,
+    "state_mutation_record_required_before_current_state_index_change": true,
+    "status": "CASES/CASE_001_THE_LAST_RENDER/EXPLICIT_STATE_ADVANCEMENT_DECISION_RECORD_STATUS.json",
+    "unit_test": "tests/test_explicit_state_advancement_decision_record.py",
+    "verifier": "scripts/verify-explicit-state-advancement-decision-record.sh",
+    "workflow": "explicit-state-advancement-decision-record"
+  },
   "explicit_state_advancement_request": {
     "authority_satisfied": false,
     "case_record": "CASES/CASE_001_THE_LAST_RENDER/EXPLICIT_STATE_ADVANCEMENT_REQUEST/EXPLICIT_STATE_ADVANCEMENT_REQUEST.json",

@@ -261,3 +261,8 @@ echo "[CINEMATICUM EXPLICIT STATE ADVANCEMENT REQUEST]"
 bash scripts/verify-explicit-state-advancement-request.sh
 python3 -m unittest tests/test_explicit_state_advancement_request.py
 
+echo
+echo "[CINEMATICUM EXPLICIT STATE ADVANCEMENT DECISION RECORD]"
+bash scripts/verify-explicit-state-advancement-decision-record.sh
+python3 -m unittest tests/test_explicit_state_advancement_decision_record.py
+
