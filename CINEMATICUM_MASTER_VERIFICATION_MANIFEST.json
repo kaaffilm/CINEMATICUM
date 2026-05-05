@@ -1111,5 +1111,18 @@
     "unit_test": "tests/test_third_future_sound_final_mix_lock_authority_object_instantiation_record.py",
     "verifier": "scripts/verify-third-future-sound-final-mix-lock-authority-object-instantiation-record.sh",
     "workflow": "third-future-sound-final-mix-lock-authority-object-instantiation-record"
+  },
+  "eighth_future_terminal_closure_authority_object_instantiation_record": {
+    "object": "EIGHTH_FUTURE_TERMINAL_CLOSURE_AUTHORITY_OBJECT_INSTANTIATION_RECORD",
+    "law": "CINEMATICUM_EIGHTH_FUTURE_TERMINAL_CLOSURE_AUTHORITY_OBJECT_INSTANTIATION_RECORD_LAW.json",
+    "status": "CASES/CASE_001_THE_LAST_RENDER/EIGHTH_FUTURE_TERMINAL_CLOSURE_AUTHORITY_OBJECT_INSTANTIATION_RECORD_STATUS.json",
+    "verifier": "scripts/verify-eighth-future-terminal-closure-authority-object-instantiation-record.sh",
+    "unit_test": "tests/test_eighth_future_terminal_closure_authority_object_instantiation_record.py",
+    "workflow": "eighth-future-terminal-closure-authority-object-instantiation-record",
+    "authority_satisfied": false,
+    "may_advance_now": false,
+    "release_candidate_ready": false,
+    "issued": false,
+    "media_present": false
   }
 }
