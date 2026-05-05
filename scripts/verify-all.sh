@@ -206,3 +206,7 @@ python3 -m unittest tests/test_first_future_director_final_cut_authority_object_
 printf "\n[CINEMATICUM FIRST FUTURE DIRECTOR FINAL CUT AUTHORITY OBJECT ADMISSION REQUEST VALIDATION RECORD]\n"
 bash scripts/verify-first-future-director-final-cut-authority-object-admission-request-validation-record.sh
 python3 -m unittest tests/test_first_future_director_final_cut_authority_object_admission_request_validation_record.py
+
+printf '\n[CINEMATICUM FIRST FUTURE DIRECTOR FINAL CUT AUTHORITY OBJECT ADMISSION DECISION RECORD]\n'
+bash scripts/verify-first-future-director-final-cut-authority-object-admission-decision-record.sh
+python3 -m unittest tests/test_first_future_director_final_cut_authority_object_admission_decision_record.py
