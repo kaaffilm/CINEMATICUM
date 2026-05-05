@@ -338,6 +338,19 @@
     "verifier": "scripts/verify-first-future-director-final-cut-authority-object-instantiation-record.sh",
     "workflow": "first-future-director-final-cut-authority-object-instantiation-record"
   },
+  "fourth_future_color_grade_lock_authority_object_instantiation_record": {
+    "authority_satisfied": false,
+    "issued": false,
+    "law": "CINEMATICUM_FOURTH_FUTURE_COLOR_GRADE_LOCK_AUTHORITY_OBJECT_INSTANTIATION_RECORD_LAW.json",
+    "may_advance_now": false,
+    "media_present": false,
+    "object": "FOURTH_FUTURE_COLOR_GRADE_LOCK_AUTHORITY_OBJECT_INSTANTIATION_RECORD",
+    "release_candidate_ready": false,
+    "status": "CASES/CASE_001_THE_LAST_RENDER/FOURTH_FUTURE_COLOR_GRADE_LOCK_AUTHORITY_OBJECT_INSTANTIATION_RECORD_STATUS.json",
+    "unit_test": "tests/test_fourth_future_color_grade_lock_authority_object_instantiation_record.py",
+    "verifier": "scripts/verify-fourth-future-color-grade-lock-authority-object-instantiation-record.sh",
+    "workflow": "fourth-future-color-grade-lock-authority-object-instantiation-record"
+  },
   "institution": "CINEMATICUM",
   "master_invariants": [
     "accepted_admission_request_required_before_authority_object",
@@ -1048,16 +1061,16 @@
     "workflow": ".github/workflows/second-future-editorial-timeline-authority-object-instantiation-record.yml"
   },
   "third_future_sound_final_mix_lock_authority_object_instantiation_record": {
-    "object": "THIRD_FUTURE_SOUND_FINAL_MIX_LOCK_AUTHORITY_OBJECT_INSTANTIATION_RECORD",
-    "law": "CINEMATICUM_THIRD_FUTURE_SOUND_FINAL_MIX_LOCK_AUTHORITY_OBJECT_INSTANTIATION_RECORD_LAW.json",
-    "status": "CASES/CASE_001_THE_LAST_RENDER/THIRD_FUTURE_SOUND_FINAL_MIX_LOCK_AUTHORITY_OBJECT_INSTANTIATION_RECORD_STATUS.json",
-    "verifier": "scripts/verify-third-future-sound-final-mix-lock-authority-object-instantiation-record.sh",
-    "unit_test": "tests/test_third_future_sound_final_mix_lock_authority_object_instantiation_record.py",
-    "workflow": "third-future-sound-final-mix-lock-authority-object-instantiation-record",
     "authority_satisfied": false,
-    "may_advance_now": false,
-    "release_candidate_ready": false,
     "issued": false,
-    "media_present": false
+    "law": "CINEMATICUM_THIRD_FUTURE_SOUND_FINAL_MIX_LOCK_AUTHORITY_OBJECT_INSTANTIATION_RECORD_LAW.json",
+    "may_advance_now": false,
+    "media_present": false,
+    "object": "THIRD_FUTURE_SOUND_FINAL_MIX_LOCK_AUTHORITY_OBJECT_INSTANTIATION_RECORD",
+    "release_candidate_ready": false,
+    "status": "CASES/CASE_001_THE_LAST_RENDER/THIRD_FUTURE_SOUND_FINAL_MIX_LOCK_AUTHORITY_OBJECT_INSTANTIATION_RECORD_STATUS.json",
+    "unit_test": "tests/test_third_future_sound_final_mix_lock_authority_object_instantiation_record.py",
+    "verifier": "scripts/verify-third-future-sound-final-mix-lock-authority-object-instantiation-record.sh",
+    "workflow": "third-future-sound-final-mix-lock-authority-object-instantiation-record"
   }
 }

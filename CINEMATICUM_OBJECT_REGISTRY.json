@@ -9,7 +9,7 @@
   "registry_does_not_override_current_state": true,
   "current_active_state": "OUTSIDER_REPLAY_BUNDLE_LAW_DECLARED",
   "case_id": "CASE_001_THE_LAST_RENDER",
-  "entries_count": 310,
+  "entries_count": 317,
   "entries": [
     {
       "path": "ADMISSIBILITY_VERDICT_SCHEMA.json",
@@ -792,6 +792,30 @@
       "outsider_replay_passed": false
     },
     {
+      "path": "CASES/CASE_001_THE_LAST_RENDER/FOURTH_FUTURE_COLOR_GRADE_LOCK_AUTHORITY_OBJECT_INSTANTIATION_RECORD_STATUS.json",
+      "object_type": "CINEMATICUM_CASE_FOURTH_FUTURE_COLOR_GRADE_LOCK_AUTHORITY_OBJECT_INSTANTIATION_RECORD_STATUS",
+      "schema_version": "cinematicum.case_fourth_future_color_grade_lock_authority_object_instantiation_record_status.v1",
+      "surface_class": "LAYER_STATUS_RECORD",
+      "case_id": "CASE_001_THE_LAST_RENDER",
+      "current_truth_owner": false,
+      "issued": false,
+      "release_candidate_ready": false,
+      "media_present": false,
+      "outsider_replay_passed": false
+    },
+    {
+      "path": "CASES/CASE_001_THE_LAST_RENDER/FUTURE_REAL_CASE_AUTHORITY_OBJECTS/COLOR_GRADE_LOCK_AUTHORITY_OBJECT.json",
+      "object_type": "COLOR_GRADE_LOCK_AUTHORITY_OBJECT",
+      "schema_version": "cinematicum.future_real_case_authority_object.v1",
+      "surface_class": "CASE_RECORD",
+      "case_id": "CASE_001_THE_LAST_RENDER",
+      "current_truth_owner": false,
+      "issued": false,
+      "release_candidate_ready": false,
+      "media_present": false,
+      "outsider_replay_passed": false
+    },
+    {
       "path": "CASES/CASE_001_THE_LAST_RENDER/FUTURE_REAL_CASE_AUTHORITY_OBJECTS/DIRECTOR_FINAL_CUT_AUTHORITY_OBJECT.json",
       "object_type": "CINEMATICUM_FUTURE_REAL_CASE_AUTHORITY_OBJECT",
       "schema_version": "cinematicum.future_real_case_authority_object.v1",
@@ -864,6 +888,18 @@
       "outsider_replay_passed": false
     },
     {
+      "path": "CASES/CASE_001_THE_LAST_RENDER/FUTURE_REAL_CASE_AUTHORITY_OBJECT_ADMISSION_DECISION_RECORDS/DEC_004_COLOR_GRADE_LOCK_AUTHORITY_OBJECT.json",
+      "object_type": "FOURTH_FUTURE_COLOR_GRADE_LOCK_AUTHORITY_OBJECT_ADMISSION_DECISION_RECORD",
+      "schema_version": "cinematicum.future_real_case_authority_object_admission_decision_record.v1",
+      "surface_class": "CASE_RECORD",
+      "case_id": "CASE_001_THE_LAST_RENDER",
+      "current_truth_owner": false,
+      "issued": false,
+      "release_candidate_ready": false,
+      "media_present": false,
+      "outsider_replay_passed": false
+    },
+    {
       "path": "CASES/CASE_001_THE_LAST_RENDER/FUTURE_REAL_CASE_AUTHORITY_OBJECT_ADMISSION_REQUESTS/REQ_001_DIRECTOR_FINAL_CUT_AUTHORITY_OBJECT.json",
       "object_type": "CINEMATICUM_FIRST_FUTURE_DIRECTOR_FINAL_CUT_AUTHORITY_OBJECT_ADMISSION_REQUEST",
       "schema_version": "cinematicum.first_future_director_final_cut_authority_object_admission_request.v1",
@@ -890,6 +926,18 @@
     {
       "path": "CASES/CASE_001_THE_LAST_RENDER/FUTURE_REAL_CASE_AUTHORITY_OBJECT_ADMISSION_REQUESTS/REQ_003_SOUND_FINAL_MIX_LOCK_AUTHORITY_OBJECT.json",
       "object_type": "THIRD_FUTURE_SOUND_FINAL_MIX_LOCK_AUTHORITY_OBJECT_ADMISSION_REQUEST",
+      "schema_version": "cinematicum.future_real_case_authority_object_admission_request.v1",
+      "surface_class": "CASE_RECORD",
+      "case_id": "CASE_001_THE_LAST_RENDER",
+      "current_truth_owner": false,
+      "issued": false,
+      "release_candidate_ready": false,
+      "media_present": false,
+      "outsider_replay_passed": false
+    },
+    {
+      "path": "CASES/CASE_001_THE_LAST_RENDER/FUTURE_REAL_CASE_AUTHORITY_OBJECT_ADMISSION_REQUESTS/REQ_004_COLOR_GRADE_LOCK_AUTHORITY_OBJECT.json",
+      "object_type": "FOURTH_FUTURE_COLOR_GRADE_LOCK_AUTHORITY_OBJECT_ADMISSION_REQUEST",
       "schema_version": "cinematicum.future_real_case_authority_object_admission_request.v1",
       "surface_class": "CASE_RECORD",
       "case_id": "CASE_001_THE_LAST_RENDER",
@@ -936,6 +984,18 @@
       "outsider_replay_passed": false
     },
     {
+      "path": "CASES/CASE_001_THE_LAST_RENDER/FUTURE_REAL_CASE_AUTHORITY_OBJECT_ADMISSION_VALIDATION_RECORDS/VAL_004_COLOR_GRADE_LOCK_AUTHORITY_OBJECT.json",
+      "object_type": "FOURTH_FUTURE_COLOR_GRADE_LOCK_AUTHORITY_OBJECT_ADMISSION_REQUEST_VALIDATION_RECORD",
+      "schema_version": "cinematicum.future_real_case_authority_object_admission_validation_record.v1",
+      "surface_class": "CASE_RECORD",
+      "case_id": "CASE_001_THE_LAST_RENDER",
+      "current_truth_owner": false,
+      "issued": false,
+      "release_candidate_ready": false,
+      "media_present": false,
+      "outsider_replay_passed": false
+    },
+    {
       "path": "CASES/CASE_001_THE_LAST_RENDER/FUTURE_REAL_CASE_AUTHORITY_OBJECT_INSTANTIATION_RECORDS/INST_001_DIRECTOR_FINAL_CUT_AUTHORITY_OBJECT.json",
       "object_type": "CINEMATICUM_REAL_CASE_AUTHORITY_OBJECT_INSTANTIATION_RECORD",
       "schema_version": "cinematicum.real_case_authority_object_instantiation_record.v1",
@@ -962,6 +1022,18 @@
     {
       "path": "CASES/CASE_001_THE_LAST_RENDER/FUTURE_REAL_CASE_AUTHORITY_OBJECT_INSTANTIATION_RECORDS/INST_003_SOUND_FINAL_MIX_LOCK_AUTHORITY_OBJECT.json",
       "object_type": "THIRD_FUTURE_SOUND_FINAL_MIX_LOCK_AUTHORITY_OBJECT_INSTANTIATION_RECORD",
+      "schema_version": "cinematicum.future_real_case_authority_object_instantiation_record.v1",
+      "surface_class": "CASE_RECORD",
+      "case_id": "CASE_001_THE_LAST_RENDER",
+      "current_truth_owner": false,
+      "issued": false,
+      "release_candidate_ready": false,
+      "media_present": false,
+      "outsider_replay_passed": false
+    },
+    {
+      "path": "CASES/CASE_001_THE_LAST_RENDER/FUTURE_REAL_CASE_AUTHORITY_OBJECT_INSTANTIATION_RECORDS/INST_004_COLOR_GRADE_LOCK_AUTHORITY_OBJECT.json",
+      "object_type": "FOURTH_FUTURE_COLOR_GRADE_LOCK_AUTHORITY_OBJECT_INSTANTIATION_RECORD",
       "schema_version": "cinematicum.future_real_case_authority_object_instantiation_record.v1",
       "surface_class": "CASE_RECORD",
       "case_id": "CASE_001_THE_LAST_RENDER",
@@ -2547,6 +2619,18 @@
       "path": "CINEMATICUM_FIRST_FUTURE_DIRECTOR_FINAL_CUT_AUTHORITY_OBJECT_INSTANTIATION_RECORD_LAW.json",
       "object_type": "CINEMATICUM_FIRST_FUTURE_DIRECTOR_FINAL_CUT_AUTHORITY_OBJECT_INSTANTIATION_RECORD_LAW",
       "schema_version": "cinematicum.first_future_director_final_cut_authority_object_instantiation_record.law.v1",
+      "surface_class": "LAW_OBJECT",
+      "case_id": "CASE_001_THE_LAST_RENDER",
+      "current_truth_owner": false,
+      "issued": false,
+      "release_candidate_ready": false,
+      "media_present": false,
+      "outsider_replay_passed": false
+    },
+    {
+      "path": "CINEMATICUM_FOURTH_FUTURE_COLOR_GRADE_LOCK_AUTHORITY_OBJECT_INSTANTIATION_RECORD_LAW.json",
+      "object_type": "CINEMATICUM_FOURTH_FUTURE_COLOR_GRADE_LOCK_AUTHORITY_OBJECT_INSTANTIATION_RECORD_LAW",
+      "schema_version": "cinematicum.fourth_future_color_grade_lock_authority_object_instantiation_record_law.v1",
       "surface_class": "LAW_OBJECT",
       "case_id": "CASE_001_THE_LAST_RENDER",
       "current_truth_owner": false,
