@@ -245,3 +245,9 @@ echo "[CINEMATICUM SEVENTH FUTURE OUTSIDER REPLAY PASSAGE AUTHORITY OBJECT INSTA
 bash scripts/verify-seventh-future-outsider-replay-passage-authority-object-instantiation-record.sh
 python3 -m unittest tests/test_seventh_future_outsider_replay_passage_authority_object_instantiation_record.py
 
+
+echo
+echo "[CINEMATICUM EIGHTH FUTURE TERMINAL CLOSURE AUTHORITY OBJECT INSTANTIATION RECORD]"
+bash scripts/verify-eighth-future-terminal-closure-authority-object-instantiation-record.sh
+python3 -m unittest tests/test_eighth_future_terminal_closure_authority_object_instantiation_record.py
+

@@ -9,7 +9,7 @@
   "registry_does_not_override_current_state": true,
   "current_active_state": "OUTSIDER_REPLAY_BUNDLE_LAW_DECLARED",
   "case_id": "CASE_001_THE_LAST_RENDER",
-  "entries_count": 338,
+  "entries_count": 345,
   "entries": [
     {
       "path": "ADMISSIBILITY_VERDICT_SCHEMA.json",
@@ -732,6 +732,18 @@
       "outsider_replay_passed": false
     },
     {
+      "path": "CASES/CASE_001_THE_LAST_RENDER/EIGHTH_FUTURE_TERMINAL_CLOSURE_AUTHORITY_OBJECT_INSTANTIATION_RECORD_STATUS.json",
+      "object_type": "CINEMATICUM_CASE_EIGHTH_FUTURE_TERMINAL_CLOSURE_AUTHORITY_OBJECT_INSTANTIATION_RECORD_STATUS",
+      "schema_version": "cinematicum.case_eighth_future_terminal_closure_authority_object_instantiation_record_status.v1",
+      "surface_class": "LAYER_STATUS_RECORD",
+      "case_id": "CASE_001_THE_LAST_RENDER",
+      "current_truth_owner": false,
+      "issued": false,
+      "release_candidate_ready": false,
+      "media_present": false,
+      "outsider_replay_passed": false
+    },
+    {
       "path": "CASES/CASE_001_THE_LAST_RENDER/FIFTH_FUTURE_RELEASE_DELIVERY_ARTIFACTS_LOCK_AUTHORITY_OBJECT_INSTANTIATION_RECORD_STATUS.json",
       "object_type": "CINEMATICUM_CASE_FIFTH_FUTURE_RELEASE_DELIVERY_ARTIFACTS_LOCK_AUTHORITY_OBJECT_INSTANTIATION_RECORD_STATUS",
       "schema_version": "cinematicum.case_fifth_future_release_delivery_artifacts_lock_authority_object_instantiation_record_status.v1",
@@ -900,6 +912,18 @@
       "outsider_replay_passed": false
     },
     {
+      "path": "CASES/CASE_001_THE_LAST_RENDER/FUTURE_REAL_CASE_AUTHORITY_OBJECTS/TERMINAL_CLOSURE_AUTHORITY_OBJECT.json",
+      "object_type": "TERMINAL_CLOSURE_AUTHORITY_OBJECT",
+      "schema_version": "cinematicum.future_real_case_authority_object.v1",
+      "surface_class": "CASE_RECORD",
+      "case_id": "CASE_001_THE_LAST_RENDER",
+      "current_truth_owner": false,
+      "issued": false,
+      "release_candidate_ready": false,
+      "media_present": false,
+      "outsider_replay_passed": false
+    },
+    {
       "path": "CASES/CASE_001_THE_LAST_RENDER/FUTURE_REAL_CASE_AUTHORITY_OBJECT_ADMISSION_DECISION_RECORDS/DEC_001_DIRECTOR_FINAL_CUT_AUTHORITY_OBJECT.json",
       "object_type": "UNDECLARED_OBJECT_TYPE",
       "schema_version": "cinematicum.real_case_authority_object_admission_decision_record.v1",
@@ -984,6 +1008,18 @@
       "outsider_replay_passed": false
     },
     {
+      "path": "CASES/CASE_001_THE_LAST_RENDER/FUTURE_REAL_CASE_AUTHORITY_OBJECT_ADMISSION_DECISION_RECORDS/DEC_008_TERMINAL_CLOSURE_AUTHORITY_OBJECT.json",
+      "object_type": "CINEMATICUM_FUTURE_REAL_CASE_AUTHORITY_OBJECT_ADMISSION_DECISION_RECORD",
+      "schema_version": "cinematicum.future_real_case_authority_object_admission_decision_record.v1",
+      "surface_class": "CASE_RECORD",
+      "case_id": "CASE_001_THE_LAST_RENDER",
+      "current_truth_owner": false,
+      "issued": false,
+      "release_candidate_ready": false,
+      "media_present": false,
+      "outsider_replay_passed": false
+    },
+    {
       "path": "CASES/CASE_001_THE_LAST_RENDER/FUTURE_REAL_CASE_AUTHORITY_OBJECT_ADMISSION_REQUESTS/REQ_001_DIRECTOR_FINAL_CUT_AUTHORITY_OBJECT.json",
       "object_type": "CINEMATICUM_FIRST_FUTURE_DIRECTOR_FINAL_CUT_AUTHORITY_OBJECT_ADMISSION_REQUEST",
       "schema_version": "cinematicum.first_future_director_final_cut_authority_object_admission_request.v1",
@@ -1057,6 +1093,18 @@
     },
     {
       "path": "CASES/CASE_001_THE_LAST_RENDER/FUTURE_REAL_CASE_AUTHORITY_OBJECT_ADMISSION_REQUESTS/REQ_007_OUTSIDER_REPLAY_PASSAGE_AUTHORITY_OBJECT.json",
+      "object_type": "CINEMATICUM_FUTURE_REAL_CASE_AUTHORITY_OBJECT_ADMISSION_REQUEST",
+      "schema_version": "cinematicum.future_real_case_authority_object_admission_request.v1",
+      "surface_class": "CASE_RECORD",
+      "case_id": "CASE_001_THE_LAST_RENDER",
+      "current_truth_owner": false,
+      "issued": false,
+      "release_candidate_ready": false,
+      "media_present": false,
+      "outsider_replay_passed": false
+    },
+    {
+      "path": "CASES/CASE_001_THE_LAST_RENDER/FUTURE_REAL_CASE_AUTHORITY_OBJECT_ADMISSION_REQUESTS/REQ_008_TERMINAL_CLOSURE_AUTHORITY_OBJECT.json",
       "object_type": "CINEMATICUM_FUTURE_REAL_CASE_AUTHORITY_OBJECT_ADMISSION_REQUEST",
       "schema_version": "cinematicum.future_real_case_authority_object_admission_request.v1",
       "surface_class": "CASE_RECORD",
@@ -1152,6 +1200,18 @@
       "outsider_replay_passed": false
     },
     {
+      "path": "CASES/CASE_001_THE_LAST_RENDER/FUTURE_REAL_CASE_AUTHORITY_OBJECT_ADMISSION_VALIDATION_RECORDS/VAL_008_TERMINAL_CLOSURE_AUTHORITY_OBJECT.json",
+      "object_type": "CINEMATICUM_FUTURE_REAL_CASE_AUTHORITY_OBJECT_ADMISSION_VALIDATION_RECORD",
+      "schema_version": "cinematicum.future_real_case_authority_object_admission_validation_record.v1",
+      "surface_class": "CASE_RECORD",
+      "case_id": "CASE_001_THE_LAST_RENDER",
+      "current_truth_owner": false,
+      "issued": false,
+      "release_candidate_ready": false,
+      "media_present": false,
+      "outsider_replay_passed": false
+    },
+    {
       "path": "CASES/CASE_001_THE_LAST_RENDER/FUTURE_REAL_CASE_AUTHORITY_OBJECT_INSTANTIATION_RECORDS/INST_001_DIRECTOR_FINAL_CUT_AUTHORITY_OBJECT.json",
       "object_type": "CINEMATICUM_REAL_CASE_AUTHORITY_OBJECT_INSTANTIATION_RECORD",
       "schema_version": "cinematicum.real_case_authority_object_instantiation_record.v1",
@@ -1226,6 +1286,18 @@
     {
       "path": "CASES/CASE_001_THE_LAST_RENDER/FUTURE_REAL_CASE_AUTHORITY_OBJECT_INSTANTIATION_RECORDS/INST_007_OUTSIDER_REPLAY_PASSAGE_AUTHORITY_OBJECT.json",
       "object_type": "SEVENTH_FUTURE_OUTSIDER_REPLAY_PASSAGE_AUTHORITY_OBJECT_INSTANTIATION_RECORD",
+      "schema_version": "cinematicum.future_real_case_authority_object_instantiation_record.v1",
+      "surface_class": "CASE_RECORD",
+      "case_id": "CASE_001_THE_LAST_RENDER",
+      "current_truth_owner": false,
+      "issued": false,
+      "release_candidate_ready": false,
+      "media_present": false,
+      "outsider_replay_passed": false
+    },
+    {
+      "path": "CASES/CASE_001_THE_LAST_RENDER/FUTURE_REAL_CASE_AUTHORITY_OBJECT_INSTANTIATION_RECORDS/INST_008_TERMINAL_CLOSURE_AUTHORITY_OBJECT.json",
+      "object_type": "EIGHTH_FUTURE_TERMINAL_CLOSURE_AUTHORITY_OBJECT_INSTANTIATION_RECORD",
       "schema_version": "cinematicum.future_real_case_authority_object_instantiation_record.v1",
       "surface_class": "CASE_RECORD",
       "case_id": "CASE_001_THE_LAST_RENDER",
@@ -2787,6 +2859,18 @@
       "path": "CINEMATICUM_CURRENT_ZERO_LEDGER_NO_FURTHER_ADVANCEMENT_PROOF_LAW.json",
       "object_type": "CINEMATICUM_CURRENT_ZERO_LEDGER_NO_FURTHER_ADVANCEMENT_PROOF_LAW",
       "schema_version": "cinematicum.current_zero_ledger_no_further_advancement_proof_law.v1",
+      "surface_class": "LAW_OBJECT",
+      "case_id": "CASE_001_THE_LAST_RENDER",
+      "current_truth_owner": false,
+      "issued": false,
+      "release_candidate_ready": false,
+      "media_present": false,
+      "outsider_replay_passed": false
+    },
+    {
+      "path": "CINEMATICUM_EIGHTH_FUTURE_TERMINAL_CLOSURE_AUTHORITY_OBJECT_INSTANTIATION_RECORD_LAW.json",
+      "object_type": "CINEMATICUM_EIGHTH_FUTURE_TERMINAL_CLOSURE_AUTHORITY_OBJECT_INSTANTIATION_RECORD_LAW",
+      "schema_version": "cinematicum.eighth_future_terminal_closure_authority_object_instantiation_record_law.v1",
       "surface_class": "LAW_OBJECT",
       "case_id": "CASE_001_THE_LAST_RENDER",
       "current_truth_owner": false,
