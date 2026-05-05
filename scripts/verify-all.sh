@@ -256,3 +256,8 @@ echo "[CINEMATICUM FUTURE AUTHORITY SATISFACTION GATE]"
 bash scripts/verify-future-authority-satisfaction-gate.sh
 python3 -m unittest tests/test_future_authority_satisfaction_gate.py
 
+echo
+echo "[CINEMATICUM EXPLICIT STATE ADVANCEMENT REQUEST]"
+bash scripts/verify-explicit-state-advancement-request.sh
+python3 -m unittest tests/test_explicit_state_advancement_request.py
+
