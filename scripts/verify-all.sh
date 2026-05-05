@@ -202,3 +202,7 @@ bash scripts/verify-real-case-authority-object-admission-future-snapshot-fork-ga
 python3 -m unittest tests/test_real_case_authority_object_admission_future_snapshot_fork_gate.py
 bash scripts/verify-first-future-director-final-cut-authority-object-admission-request.sh
 python3 -m unittest tests/test_first_future_director_final_cut_authority_object_admission_request.py
+
+printf "\n[CINEMATICUM FIRST FUTURE DIRECTOR FINAL CUT AUTHORITY OBJECT ADMISSION REQUEST VALIDATION RECORD]\n"
+bash scripts/verify-first-future-director-final-cut-authority-object-admission-request-validation-record.sh
+python3 -m unittest tests/test_first_future_director_final_cut_authority_object_admission_request_validation_record.py
