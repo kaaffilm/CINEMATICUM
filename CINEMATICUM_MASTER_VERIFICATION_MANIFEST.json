@@ -1046,5 +1046,18 @@
     "script": "scripts/verify-second-future-editorial-timeline-authority-object-instantiation-record.sh",
     "unit_test": "tests/test_second_future_editorial_timeline_authority_object_instantiation_record.py",
     "workflow": ".github/workflows/second-future-editorial-timeline-authority-object-instantiation-record.yml"
+  },
+  "third_future_sound_final_mix_lock_authority_object_instantiation_record": {
+    "object": "THIRD_FUTURE_SOUND_FINAL_MIX_LOCK_AUTHORITY_OBJECT_INSTANTIATION_RECORD",
+    "law": "CINEMATICUM_THIRD_FUTURE_SOUND_FINAL_MIX_LOCK_AUTHORITY_OBJECT_INSTANTIATION_RECORD_LAW.json",
+    "status": "CASES/CASE_001_THE_LAST_RENDER/THIRD_FUTURE_SOUND_FINAL_MIX_LOCK_AUTHORITY_OBJECT_INSTANTIATION_RECORD_STATUS.json",
+    "verifier": "scripts/verify-third-future-sound-final-mix-lock-authority-object-instantiation-record.sh",
+    "unit_test": "tests/test_third_future_sound_final_mix_lock_authority_object_instantiation_record.py",
+    "workflow": "third-future-sound-final-mix-lock-authority-object-instantiation-record",
+    "authority_satisfied": false,
+    "may_advance_now": false,
+    "release_candidate_ready": false,
+    "issued": false,
+    "media_present": false
   }
 }

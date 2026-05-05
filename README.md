@@ -842,3 +842,7 @@ CINEMATICUM records decisions for future valid reopening requests only. The deci
 ## CINEMATICUM second future editorial timeline authority object instantiation record
 
 `EDITORIAL_TIMELINE_AUTHORITY_OBJECT` is instantiated as the second future-scoped real-case authority object. It follows `DIRECTOR_FINAL_CUT_AUTHORITY_OBJECT`, keeps aggregate authority unsatisfied, keeps advancement blocked, and admits no media.
+
+## CINEMATICUM third future sound final-mix lock authority object instantiation record
+
+`SOUND_FINAL_MIX_LOCK_AUTHORITY_OBJECT` is instantiated as the third future-scoped real-case authority object. It follows `EDITORIAL_TIMELINE_AUTHORITY_OBJECT`, keeps aggregate authority unsatisfied, keeps advancement blocked, creates no release candidate, issues no motion picture, and admits no media.

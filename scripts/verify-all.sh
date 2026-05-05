@@ -220,3 +220,8 @@ echo "[CINEMATICUM SECOND FUTURE EDITORIAL TIMELINE AUTHORITY OBJECT INSTANTIATI
 bash scripts/verify-second-future-editorial-timeline-authority-object-instantiation-record.sh
 python3 -m unittest tests/test_second_future_editorial_timeline_authority_object_instantiation_record.py
 
+echo
+echo "[CINEMATICUM THIRD FUTURE SOUND FINAL-MIX LOCK AUTHORITY OBJECT INSTANTIATION RECORD]"
+bash scripts/verify-third-future-sound-final-mix-lock-authority-object-instantiation-record.sh
+python3 -m unittest tests/test_third_future_sound_final_mix_lock_authority_object_instantiation_record.py
+
