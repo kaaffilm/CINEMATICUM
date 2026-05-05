@@ -836,3 +836,5 @@ CINEMATICUM records decisions for future valid reopening requests only. The deci
 - `FIRST_FUTURE_DIRECTOR_FINAL_CUT_AUTHORITY_OBJECT_ADMISSION_REQUEST` — creates the first future real-case authority-object admission request candidate for `director_final_cut_authority` / `DIRECTOR_FINAL_CUT_AUTHORITY_OBJECT`; it is not a current-zero live request, accepted decision, instantiated authority object, release candidate, media admission, or issuance.
 - [FIRST_FUTURE_DIRECTOR_FINAL_CUT_AUTHORITY_OBJECT_ADMISSION_REQUEST_VALIDATION_RECORD](FIRST_FUTURE_DIRECTOR_FINAL_CUT_AUTHORITY_OBJECT_ADMISSION_REQUEST_VALIDATION_RECORD.md) — validates the first future director-final-cut authority admission request without acceptance, instantiation, advancement, issuance, or media admission.
 - First future director final cut authority object admission decision record: `bash scripts/verify-first-future-director-final-cut-authority-object-admission-decision-record.sh`
+
+- FIRST_FUTURE_DIRECTOR_FINAL_CUT_AUTHORITY_OBJECT_INSTANTIATION_RECORD: first accepted future director-final-cut authority object instantiated; aggregate authority remains unsatisfied.

@@ -652,7 +652,13 @@
     "real_case_authority_object_admission_terminal_seal_does_not_satisfy_authority",
     "real_case_authority_object_admission_terminal_seal_does_not_advance_state",
     "real_case_authority_object_admission_terminal_seal_does_not_issue_motion_picture",
-    "real_case_authority_object_admission_terminal_seal_does_not_admit_media"
+    "real_case_authority_object_admission_terminal_seal_does_not_admit_media",
+    "first_future_director_final_cut_authority_object_instantiation_record_requires_accepted_decision",
+    "first_future_director_final_cut_authority_object_instantiation_record_instantiates_one_future_authority_object",
+    "first_future_director_final_cut_authority_object_instantiation_record_does_not_satisfy_aggregate_authority",
+    "first_future_director_final_cut_authority_object_instantiation_record_does_not_advance_state",
+    "first_future_director_final_cut_authority_object_instantiation_record_does_not_issue_motion_picture",
+    "first_future_director_final_cut_authority_object_instantiation_record_does_not_admit_media"
   ],
   "non_star_seal_redundancy_stop_rule": {
     "authority_satisfied": false,
@@ -1022,5 +1028,18 @@
     "tests/test_first_future_director_final_cut_authority_object_admission_request_validation_record.py",
     "tests/test_first_future_director_final_cut_authority_object_admission_decision_record.py"
   ],
-  "schema_version": "cinematicum.master_verification_manifest.v1"
+  "schema_version": "cinematicum.master_verification_manifest.v1",
+  "first_future_director_final_cut_authority_object_instantiation_record": {
+    "object": "FIRST_FUTURE_DIRECTOR_FINAL_CUT_AUTHORITY_OBJECT_INSTANTIATION_RECORD",
+    "law": "CINEMATICUM_FIRST_FUTURE_DIRECTOR_FINAL_CUT_AUTHORITY_OBJECT_INSTANTIATION_RECORD_LAW.json",
+    "status": "CASES/CASE_001_THE_LAST_RENDER/FIRST_FUTURE_DIRECTOR_FINAL_CUT_AUTHORITY_OBJECT_INSTANTIATION_RECORD_STATUS.json",
+    "verifier": "scripts/verify-first-future-director-final-cut-authority-object-instantiation-record.sh",
+    "unit_test": "tests/test_first_future_director_final_cut_authority_object_instantiation_record.py",
+    "workflow": "first-future-director-final-cut-authority-object-instantiation-record",
+    "authority_satisfied": false,
+    "may_advance_now": false,
+    "release_candidate_ready": false,
+    "issued": false,
+    "media_present": false
+  }
 }
