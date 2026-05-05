@@ -198,3 +198,5 @@ python3 -m unittest tests/test_real_case_authority_object_admission_closure_seal
 python3 -m unittest tests/test_real_case_authority_object_admission_finality_seal.py
 
 python3 -m unittest tests/test_real_case_authority_object_admission_terminal_seal.py
+bash scripts/verify-real-case-authority-object-admission-future-snapshot-fork-gate.sh
+python3 -m unittest tests/test_real_case_authority_object_admission_future_snapshot_fork_gate.py
