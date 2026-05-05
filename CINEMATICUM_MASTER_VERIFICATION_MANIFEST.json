@@ -996,5 +996,18 @@
     "tests/test_real_case_authority_object_admission_permanence_seal.py",
     "tests/test_real_case_authority_object_admission_future_snapshot_fork_gate.py"
   ],
-  "schema_version": "cinematicum.master_verification_manifest.v1"
+  "schema_version": "cinematicum.master_verification_manifest.v1",
+  "first_future_director_final_cut_authority_object_admission_request": {
+    "object": "FIRST_FUTURE_DIRECTOR_FINAL_CUT_AUTHORITY_OBJECT_ADMISSION_REQUEST",
+    "law": "CINEMATICUM_FIRST_FUTURE_DIRECTOR_FINAL_CUT_AUTHORITY_OBJECT_ADMISSION_REQUEST_LAW.json",
+    "status": "CASES/CASE_001_THE_LAST_RENDER/FIRST_FUTURE_DIRECTOR_FINAL_CUT_AUTHORITY_OBJECT_ADMISSION_REQUEST_STATUS.json",
+    "verifier": "scripts/verify-first-future-director-final-cut-authority-object-admission-request.sh",
+    "unit_test": "tests/test_first_future_director_final_cut_authority_object_admission_request.py",
+    "workflow": "first-future-director-final-cut-authority-object-admission-request",
+    "authority_satisfied": false,
+    "may_advance_now": false,
+    "release_candidate_ready": false,
+    "issued": false,
+    "media_present": false
+  }
 }
