@@ -235,3 +235,8 @@ echo "[CINEMATICUM FIFTH FUTURE RELEASE DELIVERY-ARTIFACTS LOCK AUTHORITY OBJECT
 bash scripts/verify-fifth-future-release-delivery-artifacts-lock-authority-object-instantiation-record.sh
 python3 -m unittest tests/test_fifth_future_release_delivery_artifacts_lock_authority_object_instantiation_record.py
 
+echo
+echo "[CINEMATICUM SIXTH FUTURE ARCHIVIST PROOF-CHAIN LOCK AUTHORITY OBJECT INSTANTIATION RECORD]"
+bash scripts/verify-sixth-future-archivist-proof-chain-lock-authority-object-instantiation-record.sh
+python3 -m unittest tests/test_sixth_future_archivist_proof_chain_lock_authority_object_instantiation_record.py
+

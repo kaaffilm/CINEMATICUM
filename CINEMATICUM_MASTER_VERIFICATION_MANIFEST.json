@@ -1073,6 +1073,19 @@
     "unit_test": "tests/test_second_future_editorial_timeline_authority_object_instantiation_record.py",
     "workflow": ".github/workflows/second-future-editorial-timeline-authority-object-instantiation-record.yml"
   },
+  "sixth_future_archivist_proof_chain_lock_authority_object_instantiation_record": {
+    "authority_satisfied": false,
+    "issued": false,
+    "law": "CINEMATICUM_SIXTH_FUTURE_ARCHIVIST_PROOF_CHAIN_LOCK_AUTHORITY_OBJECT_INSTANTIATION_RECORD_LAW.json",
+    "may_advance_now": false,
+    "media_present": false,
+    "object": "SIXTH_FUTURE_ARCHIVIST_PROOF_CHAIN_LOCK_AUTHORITY_OBJECT_INSTANTIATION_RECORD",
+    "release_candidate_ready": false,
+    "status": "CASES/CASE_001_THE_LAST_RENDER/SIXTH_FUTURE_ARCHIVIST_PROOF_CHAIN_LOCK_AUTHORITY_OBJECT_INSTANTIATION_RECORD_STATUS.json",
+    "unit_test": "tests/test_sixth_future_archivist_proof_chain_lock_authority_object_instantiation_record.py",
+    "verifier": "scripts/verify-sixth-future-archivist-proof-chain-lock-authority-object-instantiation-record.sh",
+    "workflow": "sixth-future-archivist-proof-chain-lock-authority-object-instantiation-record"
+  },
   "third_future_sound_final_mix_lock_authority_object_instantiation_record": {
     "authority_satisfied": false,
     "issued": false,
