@@ -1,0 +1,16 @@
+name: third-future-sound-final-mix-lock-authority-object-instantiation-record
+
+on:
+  pull_request:
+  push:
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Verify third future sound final-mix lock authority object instantiation record
+        run: |
+          bash scripts/verify-third-future-sound-final-mix-lock-authority-object-instantiation-record.sh
+          python3 -m unittest tests/test_third_future_sound_final_mix_lock_authority_object_instantiation_record.py
+          bash scripts/verify-all.sh
