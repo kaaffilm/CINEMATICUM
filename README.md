@@ -832,3 +832,5 @@ CINEMATICUM records decisions for future valid reopening requests only. The deci
 
 - `CINEMATICUM_REAL_CASE_AUTHORITY_OBJECT_ADMISSION_FUTURE_CONTINUITY_SEAL.json` — preserves the permanent zero admission snapshot while routing future valid real-case authority-object admission requests to future snapshots.
 - Real-case authority object admission future snapshot fork gate: current zero snapshot remains immutable; future valid authority requests fork to a future snapshot.
+
+- `FIRST_FUTURE_DIRECTOR_FINAL_CUT_AUTHORITY_OBJECT_ADMISSION_REQUEST` — creates the first future real-case authority-object admission request candidate for `director_final_cut_authority` / `DIRECTOR_FINAL_CUT_AUTHORITY_OBJECT`; it is not a current-zero live request, accepted decision, instantiated authority object, release candidate, media admission, or issuance.

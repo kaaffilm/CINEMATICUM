@@ -200,3 +200,5 @@ python3 -m unittest tests/test_real_case_authority_object_admission_finality_sea
 python3 -m unittest tests/test_real_case_authority_object_admission_terminal_seal.py
 bash scripts/verify-real-case-authority-object-admission-future-snapshot-fork-gate.sh
 python3 -m unittest tests/test_real_case_authority_object_admission_future_snapshot_fork_gate.py
+bash scripts/verify-first-future-director-final-cut-authority-object-admission-request.sh
+python3 -m unittest tests/test_first_future_director_final_cut_authority_object_admission_request.py
