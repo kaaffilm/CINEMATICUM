@@ -925,6 +925,23 @@
     "verifier": "scripts/verify-release-candidate-gap-ledger.sh",
     "workflow": "release-candidate-gap-ledger"
   },
+  "release_candidate_manifest": {
+    "admissibility_verdict_present": false,
+    "authority_satisfied": false,
+    "case_record": "CASES/CASE_001_THE_LAST_RENDER/RELEASE_CANDIDATE_MANIFEST/RELEASE_CANDIDATE_MANIFEST.json",
+    "issued": false,
+    "law": "CINEMATICUM_RELEASE_CANDIDATE_MANIFEST_LAW.json",
+    "may_advance_now": false,
+    "media_present": false,
+    "object": "RELEASE_CANDIDATE_MANIFEST",
+    "outsider_replay_passed": false,
+    "release_candidate_ready": false,
+    "status": "CASES/CASE_001_THE_LAST_RENDER/RELEASE_CANDIDATE_MANIFEST_STATUS.json",
+    "terminal_closure_present": false,
+    "unit_test": "tests/test_release_candidate_manifest.py",
+    "verifier": "scripts/verify-release-candidate-manifest.sh",
+    "workflow": "release-candidate-manifest"
+  },
   "required_ci_workflows": [
     "authority-acceptance-law",
     "authority-object-admission-closure-seal",
@@ -995,7 +1012,8 @@
     "real-case-authority-object-admission-future-continuity-seal",
     "real-case-authority-object-admission-future-snapshot-fork-gate",
     "first-future-director-final-cut-authority-object-admission-request-validation-record",
-    "first-future-director-final-cut-authority-object-admission-decision-record"
+    "first-future-director-final-cut-authority-object-admission-decision-record",
+    "release-candidate-manifest"
   ],
   "required_documents": [
     "FIRST_FUTURE_DIRECTOR_FINAL_CUT_AUTHORITY_OBJECT_ADMISSION_REQUEST_VALIDATION_RECORD.md"
@@ -1077,7 +1095,8 @@
     "scripts/verify-real-case-authority-object-admission-future-continuity-seal.sh",
     "scripts/verify-real-case-authority-object-admission-future-snapshot-fork-gate.sh",
     "scripts/verify-first-future-director-final-cut-authority-object-admission-request-validation-record.sh",
-    "scripts/verify-first-future-director-final-cut-authority-object-admission-decision-record.sh"
+    "scripts/verify-first-future-director-final-cut-authority-object-admission-decision-record.sh",
+    "scripts/verify-release-candidate-manifest.sh"
   ],
   "required_unit_tests": [
     "tests/test_real_case_authority_object_admission_rejection_taxonomy.py",
@@ -1155,7 +1174,8 @@
     "tests/test_real_case_authority_object_admission_permanence_seal.py",
     "tests/test_real_case_authority_object_admission_future_snapshot_fork_gate.py",
     "tests/test_first_future_director_final_cut_authority_object_admission_request_validation_record.py",
-    "tests/test_first_future_director_final_cut_authority_object_admission_decision_record.py"
+    "tests/test_first_future_director_final_cut_authority_object_admission_decision_record.py",
+    "tests/test_release_candidate_manifest.py"
   ],
   "schema_version": "cinematicum.master_verification_manifest.v1",
   "second_future_editorial_timeline_authority_object_instantiation_record": {

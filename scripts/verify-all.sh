@@ -16,6 +16,7 @@ python3 -m unittest tests/test_repository_status_seal.py
 python3 -m unittest tests/test_release_candidate_law.py
 python3 -m unittest tests/test_release_candidate_gap_ledger.py
 python3 -m unittest tests/test_release_candidate_artifacts_docket.py
+python3 -m unittest tests/test_release_candidate_manifest.py
 python3 -m unittest tests/test_real_case_authority_object_slot_index.py
 python3 -m unittest tests/test_real_case_authority_object_admission_terminal_seal.py
 python3 -m unittest tests/test_real_case_authority_object_admission_request_validator.py
@@ -115,6 +116,7 @@ bash scripts/verify-repository-status-seal.sh
 bash scripts/verify-release-candidate-law.sh
 bash scripts/verify-release-candidate-gap-ledger.sh
 bash scripts/verify-release-candidate-artifacts-docket.sh
+bash scripts/verify-release-candidate-manifest.sh
 bash scripts/verify-real-case-authority-object-slot-index.sh
 bash scripts/verify-real-case-authority-object-admission-terminal-seal.sh
 bash scripts/verify-real-case-authority-object-admission-request-validator.sh
