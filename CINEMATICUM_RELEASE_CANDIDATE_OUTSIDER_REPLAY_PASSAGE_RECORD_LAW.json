@@ -1,0 +1,16 @@
+{
+  "admissibility_verdict_present": false,
+  "case_id": "CASE_001_THE_LAST_RENDER",
+  "current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+  "issued": false,
+  "law_declared": true,
+  "media_present": false,
+  "next_required_object": "RELEASE_CANDIDATE_ADMISSIBILITY_VERDICT_RECORD",
+  "object_type": "CINEMATICUM_RELEASE_CANDIDATE_OUTSIDER_REPLAY_PASSAGE_RECORD_LAW",
+  "outsider_replay_passage_record_may_assert_outsider_replay_passed": true,
+  "outsider_replay_passed": true,
+  "release_candidate_ready": false,
+  "schema_only": true,
+  "schema_version": "cinematicum.release_candidate_outsider_replay_passage_record_law.v1",
+  "terminal_closure_present": false
+}
