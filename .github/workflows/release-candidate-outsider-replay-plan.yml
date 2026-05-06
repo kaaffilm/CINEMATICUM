@@ -1,0 +1,29 @@
+name: release-candidate-outsider-replay-plan
+
+on:
+  push:
+    paths:
+      - 'CINEMATICUM_RELEASE_CANDIDATE_OUTSIDER_REPLAY_PLAN.json'
+      - 'CINEMATICUM_RELEASE_CANDIDATE_OUTSIDER_REPLAY_PLAN_LAW.json'
+      - 'CASES/CASE_001_THE_LAST_RENDER/RELEASE_CANDIDATE_OUTSIDER_REPLAY_PLAN/**'
+      - 'CASES/CASE_001_THE_LAST_RENDER/RELEASE_CANDIDATE_OUTSIDER_REPLAY_PLAN_STATUS.json'
+      - 'scripts/verify-release-candidate-outsider-replay-plan.sh'
+      - 'tests/test_release_candidate_outsider_replay_plan.py'
+      - '.github/workflows/release-candidate-outsider-replay-plan.yml'
+  pull_request:
+    paths:
+      - 'CINEMATICUM_RELEASE_CANDIDATE_OUTSIDER_REPLAY_PLAN.json'
+      - 'CINEMATICUM_RELEASE_CANDIDATE_OUTSIDER_REPLAY_PLAN_LAW.json'
+      - 'CASES/CASE_001_THE_LAST_RENDER/RELEASE_CANDIDATE_OUTSIDER_REPLAY_PLAN/**'
+      - 'CASES/CASE_001_THE_LAST_RENDER/RELEASE_CANDIDATE_OUTSIDER_REPLAY_PLAN_STATUS.json'
+      - 'scripts/verify-release-candidate-outsider-replay-plan.sh'
+      - 'tests/test_release_candidate_outsider_replay_plan.py'
+      - '.github/workflows/release-candidate-outsider-replay-plan.yml'
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: python3 -m unittest tests/test_release_candidate_outsider_replay_plan.py
+      - run: bash scripts/verify-release-candidate-outsider-replay-plan.sh
