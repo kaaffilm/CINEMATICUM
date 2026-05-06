@@ -21,6 +21,7 @@ python3 -m unittest tests/test_release_candidate_evidence_bundle.py
 python3 -m unittest tests/test_release_candidate_public_inspection_dossier.py
 python3 -m unittest tests/test_release_candidate_outsider_replay_plan.py
 python3 -m unittest tests/test_release_candidate_terminal_closure_plan.py
+python3 -m unittest tests/test_release_candidate_outsider_replay_execution_record.py
 python3 -m unittest tests/test_real_case_authority_object_slot_index.py
 python3 -m unittest tests/test_real_case_authority_object_admission_terminal_seal.py
 python3 -m unittest tests/test_real_case_authority_object_admission_request_validator.py
@@ -125,6 +126,7 @@ bash scripts/verify-release-candidate-evidence-bundle.sh
 bash scripts/verify-release-candidate-public-inspection-dossier.sh
 bash scripts/verify-release-candidate-outsider-replay-plan.sh
 bash scripts/verify-release-candidate-terminal-closure-plan.sh
+bash scripts/verify-release-candidate-outsider-replay-execution-record.sh
 bash scripts/verify-real-case-authority-object-slot-index.sh
 bash scripts/verify-real-case-authority-object-admission-terminal-seal.sh
 bash scripts/verify-real-case-authority-object-admission-request-validator.sh

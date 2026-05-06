@@ -955,6 +955,22 @@
     "verifier": "scripts/verify-release-candidate-manifest.sh",
     "workflow": "release-candidate-manifest"
   },
+  "release_candidate_outsider_replay_execution_record": {
+    "admissibility_verdict_present": false,
+    "authority_satisfied": false,
+    "issued": false,
+    "law": "CINEMATICUM_RELEASE_CANDIDATE_OUTSIDER_REPLAY_EXECUTION_RECORD_LAW.json",
+    "may_advance_now": false,
+    "media_present": false,
+    "object": "RELEASE_CANDIDATE_OUTSIDER_REPLAY_EXECUTION_RECORD",
+    "outsider_replay_passed": false,
+    "release_candidate_ready": false,
+    "status": "CASES/CASE_001_THE_LAST_RENDER/RELEASE_CANDIDATE_OUTSIDER_REPLAY_EXECUTION_RECORD_STATUS.json",
+    "terminal_closure_present": false,
+    "unit_test": "tests/test_release_candidate_outsider_replay_execution_record.py",
+    "verifier": "scripts/verify-release-candidate-outsider-replay-execution-record.sh",
+    "workflow": "release-candidate-outsider-replay-execution-record"
+  },
   "release_candidate_outsider_replay_plan": {
     "authority_satisfied": false,
     "issued": false,
