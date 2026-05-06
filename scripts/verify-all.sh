@@ -18,6 +18,7 @@ python3 -m unittest tests/test_release_candidate_gap_ledger.py
 python3 -m unittest tests/test_release_candidate_artifacts_docket.py
 python3 -m unittest tests/test_release_candidate_manifest.py
 python3 -m unittest tests/test_release_candidate_evidence_bundle.py
+python3 -m unittest tests/test_release_candidate_public_inspection_dossier.py
 python3 -m unittest tests/test_real_case_authority_object_slot_index.py
 python3 -m unittest tests/test_real_case_authority_object_admission_terminal_seal.py
 python3 -m unittest tests/test_real_case_authority_object_admission_request_validator.py
@@ -119,6 +120,7 @@ bash scripts/verify-release-candidate-gap-ledger.sh
 bash scripts/verify-release-candidate-artifacts-docket.sh
 bash scripts/verify-release-candidate-manifest.sh
 bash scripts/verify-release-candidate-evidence-bundle.sh
+bash scripts/verify-release-candidate-public-inspection-dossier.sh
 bash scripts/verify-real-case-authority-object-slot-index.sh
 bash scripts/verify-real-case-authority-object-admission-terminal-seal.sh
 bash scripts/verify-real-case-authority-object-admission-request-validator.sh
