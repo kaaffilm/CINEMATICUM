@@ -1,0 +1,29 @@
+name: release-candidate-outsider-replay-execution-record
+
+on:
+  push:
+    paths:
+      - 'CINEMATICUM_RELEASE_CANDIDATE_OUTSIDER_REPLAY_EXECUTION_RECORD.json'
+      - 'CINEMATICUM_RELEASE_CANDIDATE_OUTSIDER_REPLAY_EXECUTION_RECORD_LAW.json'
+      - 'CASES/CASE_001_THE_LAST_RENDER/RELEASE_CANDIDATE_OUTSIDER_REPLAY_EXECUTION_RECORD/**'
+      - 'CASES/CASE_001_THE_LAST_RENDER/RELEASE_CANDIDATE_OUTSIDER_REPLAY_EXECUTION_RECORD_STATUS.json'
+      - 'scripts/verify-release-candidate-outsider-replay-execution-record.sh'
+      - 'tests/test_release_candidate_outsider_replay_execution_record.py'
+      - '.github/workflows/release-candidate-outsider-replay-execution-record.yml'
+  pull_request:
+    paths:
+      - 'CINEMATICUM_RELEASE_CANDIDATE_OUTSIDER_REPLAY_EXECUTION_RECORD.json'
+      - 'CINEMATICUM_RELEASE_CANDIDATE_OUTSIDER_REPLAY_EXECUTION_RECORD_LAW.json'
+      - 'CASES/CASE_001_THE_LAST_RENDER/RELEASE_CANDIDATE_OUTSIDER_REPLAY_EXECUTION_RECORD/**'
+      - 'CASES/CASE_001_THE_LAST_RENDER/RELEASE_CANDIDATE_OUTSIDER_REPLAY_EXECUTION_RECORD_STATUS.json'
+      - 'scripts/verify-release-candidate-outsider-replay-execution-record.sh'
+      - 'tests/test_release_candidate_outsider_replay_execution_record.py'
+      - '.github/workflows/release-candidate-outsider-replay-execution-record.yml'
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: python3 -m unittest tests/test_release_candidate_outsider_replay_execution_record.py
+      - run: bash scripts/verify-release-candidate-outsider-replay-execution-record.sh
