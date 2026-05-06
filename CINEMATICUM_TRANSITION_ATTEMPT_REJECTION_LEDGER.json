@@ -1,57 +1,26 @@
 {
   "object_type": "CINEMATICUM_TRANSITION_ATTEMPT_REJECTION_LEDGER",
-  "schema_version": "cinematicum.transition_attempt_rejection_ledger.v1",
-  "institution": "CINEMATICUM",
-  "root_sentence": "CINEMATICUM issues admissible motion pictures.",
   "surface_type": "TRANSITION_ATTEMPT_REJECTION_LEDGER",
   "case_id": "CASE_001_THE_LAST_RENDER",
-  "case_title": "THE LAST RENDER",
-  "current_state": "OUTSIDER_REPLAY_BUNDLE_LAW_DECLARED",
   "current_truth_owner": false,
-  "active_current_state_owner": "CASES/CASE_001_THE_LAST_RENDER/CURRENT_CASE_STATE.json",
-  "root_current_state_owner": "CINEMATICUM_CURRENT_STATE_INDEX.json",
-  "transition_gate": "CINEMATICUM_STATE_TRANSITION_GATE.json",
-  "required_authority_object_checklist": "CINEMATICUM_REQUIRED_AUTHORITY_OBJECT_CHECKLIST.json",
-  "may_advance_now": false,
-  "required_authority_objects_missing": true,
-  "schemas_do_not_satisfy_authority_objects": true,
+  "current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+  "transition_attempts_recorded": 0,
   "valid_transition_attempt_present": false,
-  "invalid_transition_attempt_present": false,
-  "attempt_counts": {
-    "recorded": 0,
-    "accepted": 0,
-    "rejected": 0
-  },
-  "transition_attempt_records": [],
-  "automatic_rejection_rules": [
-    {
-      "target_state": "RELEASE_CANDIDATE_READY",
-      "would_be_rejected_now": true,
-      "reason": "release candidate authority objects are missing and transition gate is blocked"
-    },
-    {
-      "target_state": "ISSUED_ADMISSIBLE_MOTION_PICTURE",
-      "would_be_rejected_now": true,
-      "reason": "issuance authority objects are missing, replay has not passed, verdict is absent, terminal closure is absent, and transition gate is blocked"
-    }
-  ],
-  "forbidden_attempt_object_types": [
-    "CINEMATICUM_STATE_TRANSITION_ATTEMPT",
-    "CINEMATICUM_RELEASE_CANDIDATE_READY_TRANSITION_ATTEMPT",
-    "CINEMATICUM_ISSUANCE_TRANSITION_ATTEMPT",
-    "CINEMATICUM_CURRENT_STATE_ADVANCEMENT_ACT",
-    "CINEMATICUM_TRANSITION_APPROVAL_OBJECT"
-  ],
-  "current_false_values": {
-    "release_candidate_ready": false,
-    "issued": false,
-    "media_present": false,
-    "generation_present": false,
-    "engine_present": false,
-    "model_present": false,
-    "outsider_replay_passed": false,
-    "admissibility_verdict_present": false,
-    "terminal_closure_present": false
-  },
-  "ledger_statement": "No transition attempt exists. Any future attempt must be rejected until the required authority object checklist is satisfied and the state transition gate is unblocked."
+  "rejected_transition_attempt_count": 0,
+  "authority_object_stack_complete": true,
+  "required_authority_objects_missing": false,
+  "accepted_authority_object_count": 8,
+  "instantiated_authority_object_count": 8,
+  "unfilled_authority_object_slot_count": 0,
+  "release_candidate_ready": false,
+  "release_candidate_artifacts_bound": false,
+  "issued": false,
+  "media_present": false,
+  "outsider_replay_passed": false,
+  "admissibility_verdict_present": false,
+  "terminal_closure_present": false,
+  "may_advance_now": false,
+  "issuance_unblocked": false,
+  "next_required_object": "RELEASE_CANDIDATE_GAP_LEDGER",
+  "rejection_reason": "no_transition_attempt_present"
 }

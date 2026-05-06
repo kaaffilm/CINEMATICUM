@@ -17,7 +17,7 @@ class RealCaseAuthorityObjectAdmissionRequestRejectionCorpusTest(unittest.TestCa
             "CINEMATICUM REAL CASE AUTHORITY OBJECT ADMISSION REQUEST REJECTION CORPUS: PASS",
             out,
         )
-        self.assertIn("CURRENT_STATE=OUTSIDER_REPLAY_BUNDLE_LAW_DECLARED", out)
+        self.assertIn("CURRENT_STATE=REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS", out)
         self.assertIn("CORPUS_SCOPE=REAL_CASE_AUTHORITY_OBJECTS_ONLY", out)
         self.assertIn("FIXTURES_ARE_LIVE_REQUESTS=false", out)
         self.assertIn("ALL_FIXTURES_REJECTED=true", out)

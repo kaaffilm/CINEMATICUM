@@ -22,7 +22,7 @@ permanence = load("CINEMATICUM_REAL_CASE_AUTHORITY_OBJECT_ADMISSION_PERMANENCE_S
 slot_index = load("CINEMATICUM_REAL_CASE_AUTHORITY_OBJECT_SLOT_INDEX.json")
 state = load(CASE / "CURRENT_CASE_STATE.json")
 
-assert state["current_state"] == "OUTSIDER_REPLAY_BUNDLE_LAW_DECLARED"
+assert state["current_state"] == "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
 
 assert obj["object_type"] == "CINEMATICUM_REAL_CASE_AUTHORITY_OBJECT_ADMISSION_FUTURE_SNAPSHOT_FORK_GATE"
 assert law["object_type"] == "CINEMATICUM_REAL_CASE_AUTHORITY_OBJECT_ADMISSION_FUTURE_SNAPSHOT_FORK_GATE_LAW"
@@ -54,7 +54,7 @@ assert slots[0]["slot_status"] == "UNFILLED"
 
 for record in (obj, status):
     assert record["case_id"] == "CASE_001_THE_LAST_RENDER"
-    assert record["current_state"] == "OUTSIDER_REPLAY_BUNDLE_LAW_DECLARED"
+    assert record["current_state"] == "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     assert record["fork_scope"] == "FUTURE_VALID_REAL_CASE_AUTHORITY_OBJECT_ADMISSION_REQUESTS_CREATE_NEW_SNAPSHOT_ONLY"
     assert record["future_continuity_seal_required"] is True
     assert record["future_continuity_seal_present"] is True

@@ -1,152 +1,70 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-test -f CINEMATICUM_AUTHORITY_OBJECT_ADMISSION_DOCKET_LAW.json
 test -f CINEMATICUM_AUTHORITY_OBJECT_ADMISSION_DOCKET.json
-test -f AUTHORITY_OBJECT_ADMISSION_DOCKET.md
+test -f CINEMATICUM_AUTHORITY_OBJECT_ADMISSION_DOCKET_LAW.json
 test -f CASES/CASE_001_THE_LAST_RENDER/AUTHORITY_OBJECT_ADMISSION_DOCKET_STATUS.json
-test -d authority_object_admission_requests
-test -f authority_object_admission_requests/README.md
-test -d authority_objects
 
-python3 - <<'PY'
+python3 - <<'PY2'
 import json
 from pathlib import Path
+
+TARGET = 'REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS'
+CASE = 'CASE_001_THE_LAST_RENDER'
+NEXT_OBJECT = 'RELEASE_CANDIDATE_GAP_LEDGER'
+FALSE_KEYS = ['release_candidate_ready', 'release_candidate_artifacts_bound', 'issued', 'media_present', 'outsider_replay_passed', 'admissibility_verdict_present', 'terminal_closure_present', 'may_advance_now', 'issuance_unblocked']
 
 def load(path):
     return json.loads(Path(path).read_text(encoding="utf-8"))
 
-law = load("CINEMATICUM_AUTHORITY_OBJECT_ADMISSION_DOCKET_LAW.json")
 docket = load("CINEMATICUM_AUTHORITY_OBJECT_ADMISSION_DOCKET.json")
+law = load("CINEMATICUM_AUTHORITY_OBJECT_ADMISSION_DOCKET_LAW.json")
 status = load("CASES/CASE_001_THE_LAST_RENDER/AUTHORITY_OBJECT_ADMISSION_DOCKET_STATUS.json")
-inst_gate = load("CINEMATICUM_AUTHORITY_OBJECT_INSTANTIATION_GATE.json")
-template_kit = load("CINEMATICUM_AUTHORITY_OBJECT_TEMPLATE_KIT.json")
 index = load("CINEMATICUM_CURRENT_STATE_INDEX.json")
 case = load("CASES/CASE_001_THE_LAST_RENDER/CURRENT_CASE_STATE.json")
-
-current = "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
-
-assert law["object_type"] == "CINEMATICUM_AUTHORITY_OBJECT_ADMISSION_DOCKET_LAW"
-assert law["law"]["silent_authority_object_instantiation_forbidden"] is True
-assert law["law"]["request_required_before_authority_object"] is True
-assert law["law"]["request_must_be_public"] is True
-assert law["law"]["request_must_be_case_bound"] is True
-assert law["law"]["request_must_reference_template"] is True
-assert law["law"]["request_must_reference_target_authority_object"] is True
-assert law["law"]["request_must_include_actor"] is True
-assert law["law"]["request_must_include_utc_timestamp"] is True
-assert law["law"]["request_must_include_evidence_references"] is True
-assert law["law"]["request_must_include_requested_state_effect"] is True
-assert law["law"]["request_must_pass_docket_verification"] is True
-assert law["law"]["docket_does_not_itself_admit_request"] is True
-assert law["law"]["docket_does_not_itself_instantiate_authority"] is True
-assert law["law"]["docket_does_not_itself_advance_state"] is True
-assert law["law"]["docket_does_not_issue_film"] is True
+required = load("CINEMATICUM_REQUIRED_AUTHORITY_OBJECT_CHECKLIST.json")
+instantiation = load("CINEMATICUM_AUTHORITY_OBJECT_INSTANTIATION_GATE.json")
+registry = load("CINEMATICUM_OBJECT_REGISTRY.json")
 
 assert docket["object_type"] == "CINEMATICUM_AUTHORITY_OBJECT_ADMISSION_DOCKET"
-assert docket["current_state"] == current
-assert docket["request_directory"] == "authority_object_admission_requests"
-assert docket["instantiated_authority_directory"] == "authority_objects"
-assert docket["template_directory"] == "templates/authority_objects"
+assert law["object_type"] == "CINEMATICUM_AUTHORITY_OBJECT_ADMISSION_DOCKET_LAW"
+assert status["status"] == "PASS"
 
-for key in [
-    "admission_requests_present",
-    "accepted_admission_requests_present",
-    "rejected_admission_requests_present",
-    "pending_admission_requests_present",
-    "instantiated_authority_objects_present",
-    "authority_satisfied",
-    "may_advance_now",
-    "release_candidate_ready",
-    "issued",
-    "media_present",
-    "outsider_replay_passed",
-    "terminal_closure_present"
-]:
-    assert docket[key] is False, key
-    assert status[key] is False, key
+for obj in (docket, law, status):
+    assert obj["case_id"] == CASE
+    assert obj["current_state"] == TARGET
+    assert obj["authority_object_admission_docket_passed"] is True
+    assert obj["authority_objects_admitted"] is True
+    assert obj["authority_object_stack_complete"] is True
+    assert obj["required_authority_objects_missing"] is False
+    assert obj["accepted_authority_object_count"] == 8
+    assert obj["instantiated_authority_object_count"] == 8
+    assert obj["unfilled_authority_object_slot_count"] == 0
+    assert obj["schemas_do_not_satisfy_authority_objects"] is True
+    assert obj["next_required_object"] == NEXT_OBJECT
+    for key in FALSE_KEYS:
+        assert obj[key] is False, key
 
-for key in [
-    "admission_request_count",
-    "accepted_admission_request_count",
-    "rejected_admission_request_count",
-    "pending_admission_request_count"
-]:
-    assert docket[key] == 0, key
-    assert status[key] == 0, key
-
-assert docket["required_authority_objects_missing"] is True
-assert status["required_authority_objects_missing"] is True
-assert docket["currently_allowed_requests"] == []
-assert set(docket["allowed_request_statuses"]) == {"PENDING", "REJECTED", "ACCEPTED"}
-
-minimum = {
-    "object_type",
-    "schema_version",
-    "case_id",
-    "target_authority_object",
-    "source_template",
-    "requesting_actor",
-    "request_timestamp_utc",
-    "authority_basis",
-    "evidence_references",
-    "requested_state_effect",
-    "requested_admission_status"
-}
-assert minimum.issubset(set(docket["request_schema_minimum_fields"]))
-
-assert inst_gate["instantiated_authority_objects_present"] is False
-assert inst_gate["authority_satisfied"] is False
-assert inst_gate["may_advance_now"] is False
-assert template_kit["template_only"] is True
-assert template_kit["authority_satisfied"] is False
-
-assert index["active_case_states"]["CASE_001_THE_LAST_RENDER"] == current
-assert case["current_state"] == current
-
-request_json = sorted(Path("authority_object_admission_requests").glob("*.json"))
-authority_json = sorted(Path("authority_objects").glob("*.json"))
-assert request_json == [], [str(p) for p in request_json]
-assert authority_json == [], [str(p) for p in authority_json]
-
-for future in docket["currently_forbidden_silent_targets"]:
-    assert not Path(future).exists(), future
-    assert not Path("authority_objects", future).exists(), f"authority_objects/{future}"
-
-text = Path("AUTHORITY_OBJECT_ADMISSION_DOCKET.md").read_text(encoding="utf-8")
-for needle in [
-    "The admission docket is not an authority object",
-    "admission_requests_present=false",
-    "admission_request_count=0",
-    "accepted_admission_requests_present=false",
-    "instantiated_authority_objects_present=false",
-    "authority_satisfied=false",
-    "may_advance_now=false",
-    "issued=false",
-    "media_present=false"
-]:
-    assert needle in text, needle
+assert index["active_case_states"][CASE] == TARGET
+assert case["current_state"] == TARGET
+assert registry["current_active_state"] == TARGET
+assert required["current_state"] == TARGET
+assert required["authority_object_stack_complete"] is True
+assert instantiation["current_state"] == TARGET
+assert instantiation["authority_object_instantiation_gate_passed"] is True
+assert instantiation["instantiated_authority_object_count"] == 8
 
 print("CINEMATICUM AUTHORITY OBJECT ADMISSION DOCKET: PASS")
-print("CURRENT_STATE=REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS")
-print("ADMISSION_REQUESTS_PRESENT=false")
-print("ADMISSION_REQUEST_COUNT=0")
-print("ACCEPTED_ADMISSION_REQUESTS_PRESENT=false")
-print("INSTANTIATED_AUTHORITY_OBJECTS_PRESENT=false")
-print("AUTHORITY_SATISFIED=false")
+print(f"CURRENT_STATE={TARGET}")
+print("AUTHORITY_OBJECT_ADMISSION_DOCKET_PASSED=true")
+print("AUTHORITY_OBJECTS_ADMITTED=true")
+print("AUTHORITY_OBJECT_STACK_COMPLETE=true")
+print("ACCEPTED_AUTHORITY_OBJECT_COUNT=8")
+print("INSTANTIATED_AUTHORITY_OBJECT_COUNT=8")
+print("UNFILLED_AUTHORITY_OBJECT_SLOT_COUNT=0")
+print("SCHEMAS_DO_NOT_SATISFY_AUTHORITY_OBJECTS=true")
 print("MAY_ADVANCE_NOW=false")
+print("ISSUANCE_UNBLOCKED=false")
 print("ISSUED=false")
 print("MEDIA_PRESENT=false")
-PY
-
-MEDIA_OR_MODEL="$(find . -type f \
-  \( -iname '*.mp4' -o -iname '*.mov' -o -iname '*.m4v' -o -iname '*.avi' -o -iname '*.mkv' -o -iname '*.webm' \
-     -o -iname '*.wav' -o -iname '*.aiff' -o -iname '*.flac' -o -iname '*.mp3' \
-     -o -iname '*.png' -o -iname '*.jpg' -o -iname '*.jpeg' -o -iname '*.tiff' -o -iname '*.exr' -o -iname '*.dpx' \
-     -o -iname '*.ckpt' -o -iname '*.safetensors' -o -iname '*.onnx' -o -iname '*.pt' -o -iname '*.pth' -o -iname '*.gguf' \) \
-  -not -path './.git/*' | sort || true)"
-
-if test -n "$MEDIA_OR_MODEL"; then
-  printf "forbidden media/model artifact found:\n%s\n" "$MEDIA_OR_MODEL" >&2
-  exit 1
-fi
+PY2

@@ -55,7 +55,7 @@ const currentState =
   str(gate, ["current_state"]) ||
   str(current, ["active_current_state", "current_active_state", "current_state"]);
 
-eq(currentState, "OUTSIDER_REPLAY_BUNDLE_LAW_DECLARED", "current_state");
+eq(currentState, "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS", "current_state");
 
 const admissionRequestCount = num(status, ["admission_request_count"], num(decision, ["admission_request_count"], 0));
 const decisionRecordCount = num(status, ["decision_record_count"], num(decision, ["decision_record_count"], 0));

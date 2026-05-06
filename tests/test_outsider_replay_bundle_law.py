@@ -52,7 +52,7 @@ class TestOutsiderReplayBundleLaw(unittest.TestCase):
 
     def test_case_replay_bundle_status_is_not_ready(self):
         case = load("CASES/CASE_001_THE_LAST_RENDER/OUTSIDER_REPLAY_BUNDLE_STATUS.json")
-        self.assertEqual(case["current_state"], "OUTSIDER_REPLAY_BUNDLE_LAW_DECLARED")
+        self.assertEqual(case["current_state"], "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS")
         self.assertFalse(case["release_candidate_ready"])
         self.assertFalse(case["issued"])
         self.assertFalse(case["media_present"])

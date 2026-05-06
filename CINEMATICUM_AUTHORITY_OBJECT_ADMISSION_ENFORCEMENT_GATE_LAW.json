@@ -6,7 +6,7 @@
   "surface_class": "LAW_OBJECT",
   "law_declared": true,
   "case_id": "CASE_001_THE_LAST_RENDER",
-  "current_state": "OUTSIDER_REPLAY_BUNDLE_LAW_DECLARED",
+  "current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
   "live_authority_object_requires_admission_decision": true,
   "accepted_admission_decision_required_before_instantiation": true,
   "rejected_decision_blocks_instantiation": true,

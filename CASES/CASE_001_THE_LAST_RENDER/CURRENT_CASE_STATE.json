@@ -24,5 +24,8 @@
   "outsider_replay_passed": false,
   "admissibility_verdict_present": false,
   "terminal_closure_present": false,
-  "current_state_rule": "This file is the case-level active current-state pointer. Prior layer status files are layer records and do not compete with this current state."
+  "current_state_rule": "This file is the case-level active current-state pointer. Prior layer status files are layer records and do not compete with this current state.",
+  "generation_present": false,
+  "engine_present": false,
+  "model_present": false
 }

@@ -15,7 +15,7 @@ class AuthorityObjectAdmissionEnforcementGateTest(unittest.TestCase):
     def test_gate_status_blocks_advance(self):
         status = load_json("CASES/CASE_001_THE_LAST_RENDER/AUTHORITY_OBJECT_ADMISSION_ENFORCEMENT_GATE_STATUS.json")
         self.assertEqual(status["object_type"], "CINEMATICUM_CASE_AUTHORITY_OBJECT_ADMISSION_ENFORCEMENT_GATE_STATUS")
-        self.assertEqual(status["current_state"], "OUTSIDER_REPLAY_BUNDLE_LAW_DECLARED")
+        self.assertEqual(status["current_state"], "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS")
         self.assertEqual(status["admission_request_count"], 0)
         self.assertEqual(status["decision_record_count"], 0)
         self.assertEqual(status["accepted_decision_count"], 0)

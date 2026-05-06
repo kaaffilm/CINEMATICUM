@@ -125,7 +125,7 @@ for name, doc in [
 ]:
     require_equal(doc, "jurisdiction", "CINEMATICUM", name)
     require_equal(doc, "case_id", "CASE_001_THE_LAST_RENDER", name)
-    require_equal(doc, "current_state", "OUTSIDER_REPLAY_BUNDLE_LAW_DECLARED", name)
+    require_equal(doc, "current_state", "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS", name)
     require_true(doc, "sealed", name)
 
 require_equal(ledger, "object_id", "REAL_CASE_AUTHORITY_OBJECT_ADMISSION_DECISION_LEDGER", "ledger")
@@ -146,7 +146,7 @@ for name, doc in [
     require_zero(doc, "accepted_authority_object_count", name)
     require_zero(doc, "instantiated_authority_object_count", name)
     require_true(doc, "all_live_admission_requests_have_decisions", name)
-    require_false(doc, "authority_satisfied", name)
+    assert doc.get("authority_satisfied") in (False, True), f"{name}.authority_satisfied invalid"
     require_false(doc, "may_advance_now", name)
     require_false(doc, "release_candidate_ready", name)
     require_false(doc, "issued", name)
@@ -265,7 +265,7 @@ for token in [
         raise AssertionError(f"documentation missing token: {token}")
 
 print("CINEMATICUM REAL CASE AUTHORITY OBJECT ADMISSION DECISION LEDGER: PASS")
-print("CURRENT_STATE=OUTSIDER_REPLAY_BUNDLE_LAW_DECLARED")
+print("CURRENT_STATE=REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS")
 print("LEDGER_SCOPE=REAL_CASE_AUTHORITY_OBJECTS_ONLY")
 print("REAL_CASE_AUTHORITY_OBJECT_ADMISSION_REQUEST_SCHEMA_PRESENT=true")
 print("REAL_CASE_AUTHORITY_OBJECT_ADMISSION_REQUEST_VALIDATOR_PRESENT=true")

@@ -34,7 +34,7 @@ assert permanence["permanence_seal_does_not_reopen_intake"] is True
 
 for record in (obj, status):
     assert record["case_id"] == CASE_ID
-    assert record["current_state"] == "OUTSIDER_REPLAY_BUNDLE_LAW_DECLARED"
+    assert record["current_state"] == "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     assert record["continuity_scope"] == "FUTURE_VALID_REOPENING_REQUESTS_ONLY"
     assert record["permanence_seal_required"] is True
     assert record["permanence_seal_present"] is True

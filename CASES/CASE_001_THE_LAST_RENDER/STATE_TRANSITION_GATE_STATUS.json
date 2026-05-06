@@ -1,24 +1,43 @@
 {
   "object_type": "CINEMATICUM_CASE_STATE_TRANSITION_GATE_STATUS",
-  "schema_version": "cinematicum.case_state_transition_gate_status.v1",
-  "case_id": "CASE_001_THE_LAST_RENDER",
-  "case_title": "THE LAST RENDER",
   "surface_type": "LAYER_STATUS_RECORD",
+  "case_id": "CASE_001_THE_LAST_RENDER",
   "current_truth_owner": false,
-  "active_current_state_owner": "CASES/CASE_001_THE_LAST_RENDER/CURRENT_CASE_STATE.json",
-  "root_current_state_owner": "CINEMATICUM_CURRENT_STATE_INDEX.json",
-  "current_state": "OUTSIDER_REPLAY_BUNDLE_LAW_DECLARED",
-  "transition_gate": "CINEMATICUM_STATE_TRANSITION_GATE.json",
-  "may_advance_now": false,
-  "release_candidate_ready_unblocked": false,
-  "issuance_unblocked": false,
+  "current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+  "from_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+  "next_required_state": "RELEASE_CANDIDATE_ARTIFACTS_BOUND",
+  "next_required_object": "RELEASE_CANDIDATE_GAP_LEDGER",
+  "authority_object_stack_complete": true,
+  "accepted_authority_object_count": 8,
+  "instantiated_authority_object_count": 8,
+  "unfilled_authority_object_slot_count": 0,
   "release_candidate_ready": false,
+  "release_candidate_artifacts_bound": false,
   "issued": false,
   "media_present": false,
-  "generation_present": false,
-  "engine_present": false,
-  "model_present": false,
   "outsider_replay_passed": false,
   "admissibility_verdict_present": false,
-  "terminal_closure_present": false
+  "terminal_closure_present": false,
+  "may_advance_now": false,
+  "issuance_unblocked": false,
+  "blocked_by": [
+    "RELEASE_CANDIDATE_GAP_LEDGER",
+    "RELEASE_MANIFEST_OBJECT",
+    "MEDIA_HASH_MANIFEST_OBJECT",
+    "PUBLIC_RELEASE_OBJECT",
+    "OUTSIDER_REPLAY_BUNDLE_OBJECT",
+    "REPLAY_EXECUTION_REPORT_OBJECT",
+    "ADMISSIBILITY_VERDICT_OBJECT",
+    "TERMINAL_CLOSURE_OBJECT"
+  ],
+  "transition_candidates": [
+    {
+      "from_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "to_state": "RELEASE_CANDIDATE_ARTIFACTS_BOUND",
+      "may_advance_now": false,
+      "blocked": true,
+      "reason": "release candidate artifacts are not yet bound"
+    }
+  ],
+  "status": "PASS"
 }

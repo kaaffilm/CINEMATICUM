@@ -50,7 +50,7 @@ assert status["object_type"] == "CINEMATICUM_CASE_REAL_CASE_AUTHORITY_OBJECT_ADM
 for obj in (law, schema, status):
     assert obj["institution"] == "CINEMATICUM"
     assert obj["case_id"] == "CASE_001_THE_LAST_RENDER"
-    assert obj["current_state"] == "OUTSIDER_REPLAY_BUNDLE_LAW_DECLARED"
+    assert obj["current_state"] == "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     assert obj["schema_only"] is True
     assert obj["real_case_authority_intake_open"] is True
     assert obj["authority_object_slot_count"] == 8
@@ -116,7 +116,7 @@ assert schema["object_is_non_star_seal"] is False
 assert schema["object_is_negative_capability_seal"] is False
 
 print("CINEMATICUM REAL CASE AUTHORITY OBJECT ADMISSION REQUEST SCHEMA: PASS")
-print("CURRENT_STATE=OUTSIDER_REPLAY_BUNDLE_LAW_DECLARED")
+print("CURRENT_STATE=REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS")
 print("SCHEMA_SCOPE=REAL_CASE_AUTHORITY_OBJECTS_ONLY")
 print("REAL_CASE_AUTHORITY_OBJECT_ADMISSION_REQUEST_SCHEMA_PRESENT=true")
 print("REAL_CASE_AUTHORITY_OBJECT_ADMISSION_REQUEST_SCHEMA_SEALED=true")

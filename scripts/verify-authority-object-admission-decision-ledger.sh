@@ -51,7 +51,7 @@ current_state = (
     or g(status, "current_state", "active_current_state")
     or g(state_index, "active_current_state", "current_state")
 )
-assert current_state == "OUTSIDER_REPLAY_BUNDLE_LAW_DECLARED", current_state
+assert current_state == "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS", current_state
 
 admission_count = count(ledger, "admission_request_count", "live_admission_request_count")
 live_admission_count = count(ledger, "live_admission_request_count", "admission_request_count")

@@ -38,3 +38,8 @@ The public inspection layer does not create terminal closure.
 
     bash scripts/verify-public-inspection-negative-proof.sh
     bash scripts/verify-all.sh
+
+
+## PR98 negative proof reconciliation
+
+REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS

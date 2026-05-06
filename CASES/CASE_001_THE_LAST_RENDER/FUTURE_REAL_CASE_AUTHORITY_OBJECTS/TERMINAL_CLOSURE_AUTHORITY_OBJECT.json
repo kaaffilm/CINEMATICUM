@@ -11,7 +11,7 @@
   "authority_satisfied": false,
   "authority_slot_id": "terminal_closure_authority",
   "case_id": "CASE_001_THE_LAST_RENDER",
-  "current_state": "OUTSIDER_REPLAY_BUNDLE_LAW_DECLARED",
+  "current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
   "decision_record_id": "DEC_008_TERMINAL_CLOSURE_AUTHORITY_OBJECT",
   "does_not_admit_media": true,
   "does_not_advance_state": true,
@@ -39,5 +39,12 @@
   "terminal_closure_dependency_satisfied": true,
   "terminal_closure_locked_for_future_authority_snapshot": true,
   "unfilled_authority_object_slot_count": 0,
-  "validation_record_id": "VAL_008_TERMINAL_CLOSURE_AUTHORITY_OBJECT"
+  "validation_record_id": "VAL_008_TERMINAL_CLOSURE_AUTHORITY_OBJECT",
+  "instantiated": true,
+  "accepted": true,
+  "release_candidate_artifacts_bound": false,
+  "outsider_replay_passed": false,
+  "admissibility_verdict_present": false,
+  "terminal_closure_present": false,
+  "issuance_unblocked": false
 }

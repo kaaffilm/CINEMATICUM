@@ -80,7 +80,7 @@ for token in required_tokens:
 current_state = find_first(
     combined,
     ["current_state", "active_current_state"],
-    "OUTSIDER_REPLAY_BUNDLE_LAW_DECLARED",
+    "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
 )
 
 request_id = find_first(
@@ -159,7 +159,7 @@ release_candidate_ready = as_bool(find_first(combined, ["release_candidate_ready
 issued = as_bool(find_first(combined, ["issued"], False))
 media_present = as_bool(find_first(combined, ["media_present"], False))
 
-assert current_state == "OUTSIDER_REPLAY_BUNDLE_LAW_DECLARED"
+assert current_state == "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
 assert authority_slot_id == "director_final_cut_authority"
 assert authority_object == "DIRECTOR_FINAL_CUT_AUTHORITY_OBJECT"
 assert "REQ_001" in str(request_id) or "DIRECTOR_FINAL_CUT" in str(request_id)

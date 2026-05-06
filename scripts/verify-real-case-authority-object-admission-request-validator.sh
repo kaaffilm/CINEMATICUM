@@ -48,7 +48,7 @@ require(isinstance(validator_law, dict), "validator law must be a JSON object")
 require(isinstance(validator_status, dict), "validator status must be a JSON object")
 
 # Current-snapshot constants for this layer.
-CURRENT_STATE = "OUTSIDER_REPLAY_BUNDLE_LAW_DECLARED"
+CURRENT_STATE = "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
 VALIDATOR_SCOPE = "REAL_CASE_AUTHORITY_OBJECTS_ONLY"
 AUTHORITY_OBJECT_SLOT_COUNT = 8
 

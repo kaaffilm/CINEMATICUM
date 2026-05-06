@@ -7,7 +7,7 @@
   "current_truth_owner": false,
   "active_current_state_owner": "CASES/CASE_001_THE_LAST_RENDER/CURRENT_CASE_STATE.json",
   "root_current_state_owner": "CINEMATICUM_CURRENT_STATE_INDEX.json",
-  "current_state": "OUTSIDER_REPLAY_BUNDLE_LAW_DECLARED",
+  "current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
   "authority_precedence_lattice": "CINEMATICUM_AUTHORITY_PRECEDENCE_LATTICE.json",
   "readme_prose_may_override_current_state": false,
   "schema_may_override_current_state": false,
@@ -20,5 +20,17 @@
   "media_present": false,
   "outsider_replay_passed": false,
   "admissibility_verdict_present": false,
-  "terminal_closure_present": false
+  "terminal_closure_present": false,
+  "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+  "active_current_state_owns": true,
+  "current_state_index_owns": true,
+  "case_current_state_owns": true,
+  "readme_may_override": false,
+  "schema_may_override": false,
+  "registry_may_override": false,
+  "public_surfaces_may_override": false,
+  "release_candidate_artifacts_bound": false,
+  "issuance_unblocked": false,
+  "terminal_closure": false,
+  "media_admitted": false
 }

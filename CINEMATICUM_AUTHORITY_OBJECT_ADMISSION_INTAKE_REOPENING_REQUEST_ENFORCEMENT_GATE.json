@@ -3,7 +3,7 @@
   "schema_version": "cinematicum.authority_object_admission_intake_reopening_request_enforcement_gate.v1",
   "institution": "CINEMATICUM",
   "case_id": "CASE_001_THE_LAST_RENDER",
-  "current_state": "OUTSIDER_REPLAY_BUNDLE_LAW_DECLARED",
+  "current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
   "surface_class": "CASE_RECORD",
   "gate_scope": "FUTURE_ACCEPTED_REOPENING_REQUESTS_ONLY",
   "requires_reopening_request_schema": true,

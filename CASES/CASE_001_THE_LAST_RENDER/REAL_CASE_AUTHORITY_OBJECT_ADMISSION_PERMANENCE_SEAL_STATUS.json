@@ -2,7 +2,7 @@
   "schema_version": "cinematicum.real_case_authority_object_admission_permanence_seal_status.v1",
   "case_id": "CASE_001_THE_LAST_RENDER",
   "status_id": "REAL_CASE_AUTHORITY_OBJECT_ADMISSION_PERMANENCE_SEAL_STATUS",
-  "current_state": "OUTSIDER_REPLAY_BUNDLE_LAW_DECLARED",
+  "current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
   "permanence_scope": "CURRENT_ZERO_REAL_CASE_AUTHORITY_OBJECT_ADMISSION_SNAPSHOT_ONLY",
   "admission_stack_layer_count": 9,
   "admission_stack_closed": true,

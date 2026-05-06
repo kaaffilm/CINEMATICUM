@@ -7,7 +7,7 @@
   "current_truth_owner": false,
   "active_current_state_owner": "CASES/CASE_001_THE_LAST_RENDER/CURRENT_CASE_STATE.json",
   "root_current_state_owner": "CINEMATICUM_CURRENT_STATE_INDEX.json",
-  "current_state": "OUTSIDER_REPLAY_BUNDLE_LAW_DECLARED",
+  "current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
   "manifest_closure": "CINEMATICUM_MASTER_VERIFICATION_MANIFEST_CLOSURE.json",
   "manifest_present": true,
   "verify_all_present": true,

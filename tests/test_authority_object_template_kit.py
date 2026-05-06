@@ -1,54 +1,48 @@
 import json
-import pathlib
+import subprocess
 import unittest
+from pathlib import Path
 
-ROOT = pathlib.Path(__file__).resolve().parents[1]
-
-def load(path: str):
-    return json.loads((ROOT / path).read_text(encoding="utf-8"))
+TARGET = 'REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS'
+NEXT_OBJECT = 'RELEASE_CANDIDATE_GAP_LEDGER'
 
 class TestAuthorityObjectTemplateKit(unittest.TestCase):
-    def test_kit_is_template_only(self):
-        kit = load("CINEMATICUM_AUTHORITY_OBJECT_TEMPLATE_KIT.json")
-        self.assertTrue(kit["template_only"])
-        self.assertFalse(kit["authority_satisfied"])
-        self.assertTrue(kit["templates_do_not_satisfy_authority_objects"])
-        self.assertFalse(kit["may_advance_now"])
+    def test_template_kit_contract(self):
+        data = json.loads(Path("CINEMATICUM_AUTHORITY_OBJECT_TEMPLATE_KIT.json").read_text())
+        self.assertEqual(data["current_state"], TARGET)
+        self.assertEqual(data["required_authority_object_template_count"], 8)
+        self.assertTrue(data["template_only"])
+        self.assertTrue(data["templates_do_not_satisfy_authority_objects"])
+        self.assertEqual(len(data["template_paths"]), 8)
+        for path in data["template_paths"]:
+            self.assertTrue(Path(path).exists(), path)
 
-    def test_templates_exist_and_are_inert(self):
-        kit = load("CINEMATICUM_AUTHORITY_OBJECT_TEMPLATE_KIT.json")
-        self.assertGreaterEqual(len(kit["templates"]), 8)
-        for item in kit["templates"]:
-            path = ROOT / item["path"]
-            self.assertTrue(path.exists(), item["path"])
-            payload = json.loads(path.read_text(encoding="utf-8"))
-            self.assertTrue(payload["object_type"].endswith("_TEMPLATE"))
-            self.assertTrue(payload["template_only"])
-            self.assertFalse(payload["authority_satisfied"])
-            self.assertFalse(payload["may_advance_state"])
-            self.assertFalse(payload["issued"])
-            self.assertFalse(payload["media_present"])
+    def test_non_issuance_flags_remain_false(self):
+        data = json.loads(Path("CINEMATICUM_AUTHORITY_OBJECT_TEMPLATE_KIT.json").read_text())
+        for key in [
+            "release_candidate_ready",
+            "release_candidate_artifacts_bound",
+            "issued",
+            "media_present",
+            "outsider_replay_passed",
+            "admissibility_verdict_present",
+            "terminal_closure_present",
+            "may_advance_now",
+            "issuance_unblocked",
+        ]:
+            self.assertFalse(data[key], key)
+        self.assertEqual(data["next_required_object"], NEXT_OBJECT)
 
-    def test_actual_authority_objects_absent(self):
-        kit = load("CINEMATICUM_AUTHORITY_OBJECT_TEMPLATE_KIT.json")
-        for item in kit["templates"]:
-            self.assertFalse((ROOT / item["future_authority_object"]).exists(), item["future_authority_object"])
-
-    def test_current_state_unchanged(self):
-        kit = load("CINEMATICUM_AUTHORITY_OBJECT_TEMPLATE_KIT.json")
-        index = load("CINEMATICUM_CURRENT_STATE_INDEX.json")
-        case = load("CASES/CASE_001_THE_LAST_RENDER/CURRENT_CASE_STATE.json")
-        current = "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
-        self.assertEqual(kit["current_state"], current)
-        self.assertEqual(index["active_case_states"]["CASE_001_THE_LAST_RENDER"], current)
-        self.assertEqual(case["current_state"], current)
-
-    def test_markdown_boundary(self):
-        text = (ROOT / "AUTHORITY_OBJECT_TEMPLATES.md").read_text(encoding="utf-8")
-        self.assertIn("Templates are not authority objects", text)
-        self.assertIn("may_advance_now=false", text)
-        self.assertIn("issued=false", text)
-        self.assertIn("media_present=false", text)
+    def test_verifier_passes(self):
+        out = subprocess.run(
+            ["bash", "scripts/verify-authority-object-template-kit.sh"],
+            check=True,
+            text=True,
+            capture_output=True,
+        ).stdout
+        self.assertIn("CINEMATICUM AUTHORITY OBJECT TEMPLATE KIT: PASS", out)
+        self.assertIn("TEMPLATE_ONLY=true", out)
+        self.assertIn("TEMPLATES_DO_NOT_SATISFY_AUTHORITY_OBJECTS=true", out)
 
 if __name__ == "__main__":
     unittest.main()

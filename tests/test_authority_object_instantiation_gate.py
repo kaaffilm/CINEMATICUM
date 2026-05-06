@@ -1,63 +1,45 @@
 import json
-import pathlib
+import subprocess
 import unittest
+from pathlib import Path
 
-ROOT = pathlib.Path(__file__).resolve().parents[1]
-
-def load(path: str):
-    return json.loads((ROOT / path).read_text(encoding="utf-8"))
+TARGET = 'REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS'
+AUTHORITY_OBJECTS = ['CASES/CASE_001_THE_LAST_RENDER/FUTURE_REAL_CASE_AUTHORITY_OBJECTS/DIRECTOR_FINAL_CUT_AUTHORITY_OBJECT.json', 'CASES/CASE_001_THE_LAST_RENDER/FUTURE_REAL_CASE_AUTHORITY_OBJECTS/EDITORIAL_TIMELINE_AUTHORITY_OBJECT.json', 'CASES/CASE_001_THE_LAST_RENDER/FUTURE_REAL_CASE_AUTHORITY_OBJECTS/SOUND_FINAL_MIX_LOCK_AUTHORITY_OBJECT.json', 'CASES/CASE_001_THE_LAST_RENDER/FUTURE_REAL_CASE_AUTHORITY_OBJECTS/COLOR_GRADE_LOCK_AUTHORITY_OBJECT.json', 'CASES/CASE_001_THE_LAST_RENDER/FUTURE_REAL_CASE_AUTHORITY_OBJECTS/RELEASE_DELIVERY_ARTIFACTS_LOCK_AUTHORITY_OBJECT.json', 'CASES/CASE_001_THE_LAST_RENDER/FUTURE_REAL_CASE_AUTHORITY_OBJECTS/ARCHIVIST_PROOF_CHAIN_LOCK_AUTHORITY_OBJECT.json', 'CASES/CASE_001_THE_LAST_RENDER/FUTURE_REAL_CASE_AUTHORITY_OBJECTS/OUTSIDER_REPLAY_PASSAGE_AUTHORITY_OBJECT.json', 'CASES/CASE_001_THE_LAST_RENDER/FUTURE_REAL_CASE_AUTHORITY_OBJECTS/TERMINAL_CLOSURE_AUTHORITY_OBJECT.json']
+FALSE_KEYS = ['release_candidate_ready', 'release_candidate_artifacts_bound', 'issued', 'media_present', 'outsider_replay_passed', 'admissibility_verdict_present', 'terminal_closure_present', 'may_advance_now', 'issuance_unblocked']
 
 class TestAuthorityObjectInstantiationGate(unittest.TestCase):
-    def test_gate_is_non_authorizing(self):
-        gate = load("CINEMATICUM_AUTHORITY_OBJECT_INSTANTIATION_GATE.json")
-        self.assertFalse(gate["instantiated_authority_objects_present"])
-        self.assertFalse(gate["authority_satisfied"])
-        self.assertTrue(gate["required_authority_objects_missing"])
-        self.assertFalse(gate["may_advance_now"])
-        self.assertFalse(gate["issued"])
-        self.assertFalse(gate["media_present"])
+    def test_instantiation_gate_contract(self):
+        data = json.loads(Path("CINEMATICUM_AUTHORITY_OBJECT_INSTANTIATION_GATE.json").read_text())
+        self.assertEqual(data["current_state"], TARGET)
+        self.assertTrue(data["authority_object_instantiation_gate_passed"])
+        self.assertTrue(data["authority_object_stack_complete"])
+        self.assertFalse(data["required_authority_objects_missing"])
+        self.assertEqual(data["accepted_authority_object_count"], 8)
+        self.assertEqual(data["instantiated_authority_object_count"], 8)
+        self.assertEqual(data["unfilled_authority_object_slot_count"], 0)
+        self.assertEqual(data["instantiated_authority_object_paths"], AUTHORITY_OBJECTS)
 
-    def test_no_authority_object_json_exists(self):
-        authority_json = sorted((ROOT / "authority_objects").glob("*.json"))
-        self.assertEqual(authority_json, [])
+    def test_instantiated_objects_exist_and_do_not_issue(self):
+        for rel in AUTHORITY_OBJECTS:
+            p = Path(rel)
+            self.assertTrue(p.exists(), rel)
+            data = json.loads(p.read_text())
+            self.assertEqual(data["current_state"], TARGET)
+            self.assertTrue(data.get("instantiated"), rel)
+            self.assertTrue(data.get("accepted"), rel)
+            for key in FALSE_KEYS:
+                self.assertFalse(data.get(key), f"{rel}:{key}")
 
-    def test_forbidden_instantiations_absent(self):
-        gate = load("CINEMATICUM_AUTHORITY_OBJECT_INSTANTIATION_GATE.json")
-        for future in gate["currently_forbidden_instantiations"]:
-            self.assertFalse((ROOT / future).exists(), future)
-            self.assertFalse((ROOT / "authority_objects" / future).exists(), future)
-
-    def test_promotion_requirements_are_explicit(self):
-        gate = load("CINEMATICUM_AUTHORITY_OBJECT_INSTANTIATION_GATE.json")
-        required = {
-            "copy template outside templates/authority_objects",
-            "change template_only to false",
-            "provide authority_actor",
-            "provide authority_timestamp_utc",
-            "provide authority_basis",
-            "provide explicit_acceptance_or_rejection",
-            "provide object_hashes_or_references",
-            "provide signature_or_public_accountable_record",
-            "pass dedicated authority-object verifier",
-            "pass scripts/verify-all.sh",
-        }
-        self.assertTrue(required.issubset(set(gate["promotion_requirements"])))
-
-    def test_current_state_unchanged(self):
-        gate = load("CINEMATICUM_AUTHORITY_OBJECT_INSTANTIATION_GATE.json")
-        index = load("CINEMATICUM_CURRENT_STATE_INDEX.json")
-        case = load("CASES/CASE_001_THE_LAST_RENDER/CURRENT_CASE_STATE.json")
-        current = "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
-        self.assertEqual(gate["current_state"], current)
-        self.assertEqual(index["active_case_states"]["CASE_001_THE_LAST_RENDER"], current)
-        self.assertEqual(case["current_state"], current)
-
-    def test_markdown_boundary(self):
-        text = (ROOT / "AUTHORITY_OBJECT_INSTANTIATION_GATE.md").read_text(encoding="utf-8")
-        self.assertIn("The instantiation gate is not an authority object", text)
-        self.assertIn("instantiated_authority_objects_present=false", text)
-        self.assertIn("authority_satisfied=false", text)
-        self.assertIn("may_advance_now=false", text)
+    def test_verifier_passes(self):
+        out = subprocess.run(
+            ["bash", "scripts/verify-authority-object-instantiation-gate.sh"],
+            check=True,
+            text=True,
+            capture_output=True,
+        ).stdout
+        self.assertIn("CINEMATICUM AUTHORITY OBJECT INSTANTIATION GATE: PASS", out)
+        self.assertIn("AUTHORITY_OBJECT_STACK_COMPLETE=true", out)
+        self.assertIn("INSTANTIATED_AUTHORITY_OBJECT_COUNT=8", out)
 
 if __name__ == "__main__":
     unittest.main()

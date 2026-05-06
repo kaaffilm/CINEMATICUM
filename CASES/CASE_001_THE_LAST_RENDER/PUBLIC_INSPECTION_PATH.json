@@ -4,7 +4,7 @@
   "case_id": "CASE_001_THE_LAST_RENDER",
   "case_title": "THE LAST RENDER",
   "private_access_required": false,
-  "current_state": "OUTSIDER_REPLAY_BUNDLE_LAW_DECLARED",
+  "current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
   "current_state_owner": "CASES/CASE_001_THE_LAST_RENDER/CURRENT_CASE_STATE.json",
   "public_inspection_dossier": "PUBLIC_INSPECTION_DOSSIER.json",
   "public_status": "PUBLIC_STATUS.md",
