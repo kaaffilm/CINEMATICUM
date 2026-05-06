@@ -24,7 +24,7 @@ assert law["seal_owner"] == "CINEMATICUM_REPOSITORY_STATUS_SEAL.json"
 assert law["public_document_owner"] == "PUBLIC_STATUS.md"
 assert law["current_state_owner"] == "CINEMATICUM_CURRENT_STATE_INDEX.json"
 assert law["case_current_state_owner"] == "CASES/CASE_001_THE_LAST_RENDER/CURRENT_CASE_STATE.json"
-assert law["seal_must_assert"]["current_state"] == "OUTSIDER_REPLAY_BUNDLE_LAW_DECLARED"
+assert law["seal_must_assert"]["current_state"] == "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
 assert law["seal_must_assert"]["release_candidate_ready"] is False
 assert law["seal_must_assert"]["issued"] is False
 assert law["seal_must_assert"]["media_present"] is False
@@ -38,7 +38,7 @@ assert seal["seal_is_current_truth_owner"] is False
 assert seal["current_truth_owner"] == "CINEMATICUM_CURRENT_STATE_INDEX.json"
 assert seal["case_current_truth_owner"] == "CASES/CASE_001_THE_LAST_RENDER/CURRENT_CASE_STATE.json"
 assert seal["case_id"] == "CASE_001_THE_LAST_RENDER"
-assert seal["current_state"] == "OUTSIDER_REPLAY_BUNDLE_LAW_DECLARED"
+assert seal["current_state"] == "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
 
 for key in [
     "release_candidate_ready",
@@ -63,7 +63,7 @@ assert registry["current_active_state"] == seal["current_state"]
 
 text = Path("PUBLIC_STATUS.md").read_text(encoding="utf-8")
 for needle in [
-    "OUTSIDER_REPLAY_BUNDLE_LAW_DECLARED",
+    "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
     "release_candidate_ready=false",
     "issued=false",
     "media_present=false",
@@ -75,8 +75,8 @@ for needle in [
     assert needle in text, needle
 
 print("CINEMATICUM REPOSITORY STATUS SEAL: PASS")
-print("ACTIVE_CURRENT_STATE=OUTSIDER_REPLAY_BUNDLE_LAW_DECLARED")
-print("RELEASE_CANDIDATE_READY=false")
+print("ACTIVE_CURRENT_STATE=REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS")
+print("REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS=false")
 print("ISSUED=false")
 print("MEDIA_PRESENT=false")
 print("REPLAY_PASSED=false")

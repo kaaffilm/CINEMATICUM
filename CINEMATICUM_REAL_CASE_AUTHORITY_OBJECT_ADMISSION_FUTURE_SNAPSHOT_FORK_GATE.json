@@ -3,7 +3,7 @@
   "schema_version": "cinematicum.real_case_authority_object_admission_future_snapshot_fork_gate.v1",
   "institution": "CINEMATICUM",
   "case_id": "CASE_001_THE_LAST_RENDER",
-  "current_state": "OUTSIDER_REPLAY_BUNDLE_LAW_DECLARED",
+  "current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
   "surface_class": "FORK_GATE_RECORD",
   "root_sentence": "CINEMATICUM issues admissible motion pictures.",
   "fork_scope": "FUTURE_VALID_REAL_CASE_AUTHORITY_OBJECT_ADMISSION_REQUESTS_CREATE_NEW_SNAPSHOT_ONLY",

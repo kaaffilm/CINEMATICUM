@@ -1,68 +1,38 @@
 import json
-import pathlib
+import subprocess
 import unittest
+from pathlib import Path
 
-ROOT = pathlib.Path(__file__).resolve().parents[1]
-
-def load(path: str):
-    return json.loads((ROOT / path).read_text(encoding="utf-8"))
+TARGET = 'REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS'
+FALSE_KEYS = ['release_candidate_ready', 'release_candidate_artifacts_bound', 'issued', 'media_present', 'outsider_replay_passed', 'admissibility_verdict_present', 'terminal_closure_present', 'may_advance_now', 'issuance_unblocked']
 
 class TestAuthorityObjectAdmissionDocket(unittest.TestCase):
-    def test_docket_is_empty_and_non_authorizing(self):
-        docket = load("CINEMATICUM_AUTHORITY_OBJECT_ADMISSION_DOCKET.json")
-        self.assertFalse(docket["admission_requests_present"])
-        self.assertEqual(docket["admission_request_count"], 0)
-        self.assertFalse(docket["accepted_admission_requests_present"])
-        self.assertFalse(docket["rejected_admission_requests_present"])
-        self.assertEqual(docket["rejected_admission_request_count"], 0)
-        self.assertFalse(docket["instantiated_authority_objects_present"])
-        self.assertFalse(docket["authority_satisfied"])
-        self.assertFalse(docket["may_advance_now"])
-        self.assertFalse(docket["issued"])
-        self.assertFalse(docket["media_present"])
+    def test_docket_contract(self):
+        data = json.loads(Path("CINEMATICUM_AUTHORITY_OBJECT_ADMISSION_DOCKET.json").read_text())
+        self.assertEqual(data["current_state"], TARGET)
+        self.assertTrue(data["authority_object_admission_docket_passed"])
+        self.assertTrue(data["authority_objects_admitted"])
+        self.assertTrue(data["authority_object_stack_complete"])
+        self.assertFalse(data["required_authority_objects_missing"])
+        self.assertEqual(data["accepted_authority_object_count"], 8)
+        self.assertEqual(data["instantiated_authority_object_count"], 8)
+        self.assertEqual(data["unfilled_authority_object_slot_count"], 0)
 
-    def test_no_request_or_authority_json_exists(self):
-        self.assertEqual(sorted((ROOT / "authority_object_admission_requests").glob("*.json")), [])
-        self.assertEqual(sorted((ROOT / "authority_objects").glob("*.json")), [])
+    def test_docket_does_not_advance_to_release_or_issuance(self):
+        data = json.loads(Path("CINEMATICUM_AUTHORITY_OBJECT_ADMISSION_DOCKET.json").read_text())
+        for key in FALSE_KEYS:
+            self.assertFalse(data[key], key)
 
-    def test_request_schema_minimum_fields(self):
-        docket = load("CINEMATICUM_AUTHORITY_OBJECT_ADMISSION_DOCKET.json")
-        required = {
-            "object_type",
-            "schema_version",
-            "case_id",
-            "target_authority_object",
-            "source_template",
-            "requesting_actor",
-            "request_timestamp_utc",
-            "authority_basis",
-            "evidence_references",
-            "requested_state_effect",
-            "requested_admission_status",
-        }
-        self.assertTrue(required.issubset(set(docket["request_schema_minimum_fields"])))
-
-    def test_current_state_unchanged(self):
-        docket = load("CINEMATICUM_AUTHORITY_OBJECT_ADMISSION_DOCKET.json")
-        index = load("CINEMATICUM_CURRENT_STATE_INDEX.json")
-        case = load("CASES/CASE_001_THE_LAST_RENDER/CURRENT_CASE_STATE.json")
-        current = "OUTSIDER_REPLAY_BUNDLE_LAW_DECLARED"
-        self.assertEqual(docket["current_state"], current)
-        self.assertEqual(index["active_case_states"]["CASE_001_THE_LAST_RENDER"], current)
-        self.assertEqual(case["current_state"], current)
-
-    def test_forbidden_silent_targets_absent(self):
-        docket = load("CINEMATICUM_AUTHORITY_OBJECT_ADMISSION_DOCKET.json")
-        for future in docket["currently_forbidden_silent_targets"]:
-            self.assertFalse((ROOT / future).exists(), future)
-            self.assertFalse((ROOT / "authority_objects" / future).exists(), future)
-
-    def test_markdown_boundary(self):
-        text = (ROOT / "AUTHORITY_OBJECT_ADMISSION_DOCKET.md").read_text(encoding="utf-8")
-        self.assertIn("The admission docket is not an authority object", text)
-        self.assertIn("admission_requests_present=false", text)
-        self.assertIn("admission_request_count=0", text)
-        self.assertIn("may_advance_now=false", text)
+    def test_verifier_passes(self):
+        out = subprocess.run(
+            ["bash", "scripts/verify-authority-object-admission-docket.sh"],
+            check=True,
+            text=True,
+            capture_output=True,
+        ).stdout
+        self.assertIn("CINEMATICUM AUTHORITY OBJECT ADMISSION DOCKET: PASS", out)
+        self.assertIn("AUTHORITY_OBJECTS_ADMITTED=true", out)
+        self.assertIn("INSTANTIATED_AUTHORITY_OBJECT_COUNT=8", out)
 
 if __name__ == "__main__":
     unittest.main()

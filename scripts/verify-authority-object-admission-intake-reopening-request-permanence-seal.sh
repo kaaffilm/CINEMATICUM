@@ -33,8 +33,8 @@ assert terminal["terminal_seal_does_not_advance_state"] is True
 
 assert obj["case_id"] == CASE_ID
 assert status["case_id"] == CASE_ID
-assert obj["current_state"] == "OUTSIDER_REPLAY_BUNDLE_LAW_DECLARED"
-assert status["current_state"] == "OUTSIDER_REPLAY_BUNDLE_LAW_DECLARED"
+assert obj["current_state"] == "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
+assert status["current_state"] == "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
 
 assert obj["permanence_scope"] == "CURRENT_ZERO_REOPENING_REQUEST_SNAPSHOT_ONLY"
 assert status["permanence_scope"] == "CURRENT_ZERO_REOPENING_REQUEST_SNAPSHOT_ONLY"

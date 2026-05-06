@@ -3,7 +3,7 @@
   "schema_version": "cinematicum.first_future_director_final_cut_authority_object_admission_request_law.v1",
   "institution": "CINEMATICUM",
   "case_id": "CASE_001_THE_LAST_RENDER",
-  "current_state": "OUTSIDER_REPLAY_BUNDLE_LAW_DECLARED",
+  "current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
   "surface_type": "LAW_OBJECT",
   "law_scope": "FIRST_FUTURE_DIRECTOR_FINAL_CUT_AUTHORITY_OBJECT_ADMISSION_REQUEST_ONLY",
   "root_sentence": "CINEMATICUM issues admissible motion pictures.",

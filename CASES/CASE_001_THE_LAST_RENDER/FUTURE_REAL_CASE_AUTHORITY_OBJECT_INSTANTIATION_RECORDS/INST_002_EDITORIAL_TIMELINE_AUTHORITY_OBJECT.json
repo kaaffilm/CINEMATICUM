@@ -1,10 +1,12 @@
 {
   "accepted_authority_object_count_after": 2,
+  "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
   "authority_object": "EDITORIAL_TIMELINE_AUTHORITY_OBJECT",
   "authority_satisfied": false,
   "authority_slot_id": "editorial_timeline_authority",
+  "case_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
   "case_id": "CASE_001_THE_LAST_RENDER",
-  "current_state": "OUTSIDER_REPLAY_BUNDLE_LAW_DECLARED",
+  "current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
   "decision_record_id": "DEC_002_EDITORIAL_TIMELINE_AUTHORITY_OBJECT",
   "does_not_mutate_current_zero_snapshot": true,
   "does_not_mutate_terminal_snapshot": true,

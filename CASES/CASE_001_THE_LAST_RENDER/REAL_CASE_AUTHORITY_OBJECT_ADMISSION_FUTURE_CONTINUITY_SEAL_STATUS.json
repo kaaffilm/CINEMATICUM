@@ -3,7 +3,7 @@
   "schema_version": "cinematicum.case_real_case_authority_object_admission_future_continuity_seal_status.v1",
   "case_id": "CASE_001_THE_LAST_RENDER",
   "surface_class": "LAYER_STATUS_RECORD",
-  "current_state": "OUTSIDER_REPLAY_BUNDLE_LAW_DECLARED",
+  "current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
   "future_continuity_sealed": true,
   "current_zero_real_case_authority_object_admission_snapshot_permanent": true,
   "future_valid_admission_requests_must_target_future_snapshot": true,

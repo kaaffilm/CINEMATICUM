@@ -14,7 +14,7 @@ class TestMasterVerificationManifestClosure(unittest.TestCase):
         closure = load("CINEMATICUM_MASTER_VERIFICATION_MANIFEST_CLOSURE.json")
         index = load("CINEMATICUM_CURRENT_STATE_INDEX.json")
         case = load("CASES/CASE_001_THE_LAST_RENDER/CURRENT_CASE_STATE.json")
-        self.assertEqual(closure["current_state"], "OUTSIDER_REPLAY_BUNDLE_LAW_DECLARED")
+        self.assertEqual(closure["current_state"], "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS")
         self.assertEqual(index["active_case_states"]["CASE_001_THE_LAST_RENDER"], closure["current_state"])
         self.assertEqual(case["current_state"], closure["current_state"])
 

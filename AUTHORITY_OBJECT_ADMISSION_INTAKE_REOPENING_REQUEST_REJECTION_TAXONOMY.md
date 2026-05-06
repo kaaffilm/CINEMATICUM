@@ -5,7 +5,7 @@ CINEMATICUM authority object admission intake reopening request rejection taxono
 It canonicalizes reopening request rejection reasons without creating a live request, accepting a request, reopening intake, satisfying authority, advancing case state, issuing a film, or admitting media.
 
 ```text
-current_state=OUTSIDER_REPLAY_BUNDLE_LAW_DECLARED
+current_state=REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS
 canonical_rejection_reason_count=9
 covered_rejection_reason_count=5
 uncovered_rejection_reason_count=4

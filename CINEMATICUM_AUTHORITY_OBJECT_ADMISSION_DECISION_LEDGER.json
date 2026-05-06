@@ -4,7 +4,7 @@
   "institution": "CINEMATICUM",
   "case_id": "CASE_001_THE_LAST_RENDER",
   "case_title": "THE LAST RENDER",
-  "current_state": "OUTSIDER_REPLAY_BUNDLE_LAW_DECLARED",
+  "current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
   "admission_docket_owner": "CINEMATICUM_AUTHORITY_OBJECT_ADMISSION_DOCKET.json",
   "request_schema_owner": "CINEMATICUM_AUTHORITY_OBJECT_ADMISSION_REQUEST_SCHEMA.json",
   "request_validator_owner": "CINEMATICUM_AUTHORITY_OBJECT_ADMISSION_REQUEST_VALIDATOR.json",
@@ -53,5 +53,5 @@
   "decision_records_present": false,
   "accepted_decisions_present": false,
   "rejected_decisions_present": false,
-  "active_current_state": "OUTSIDER_REPLAY_BUNDLE_LAW_DECLARED"
+  "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
 }

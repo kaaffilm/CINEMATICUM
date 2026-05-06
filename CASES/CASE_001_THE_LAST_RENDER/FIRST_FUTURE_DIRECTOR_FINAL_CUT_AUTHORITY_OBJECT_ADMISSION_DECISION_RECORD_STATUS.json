@@ -2,7 +2,7 @@
   "schema_version": "cinematicum.first_future_director_final_cut_authority_object_admission_decision_record_status.v1",
   "jurisdiction": "CINEMATICUM",
   "case_id": "CASE_001_THE_LAST_RENDER",
-  "current_state": "OUTSIDER_REPLAY_BUNDLE_LAW_DECLARED",
+  "current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
   "decision_scope": "FUTURE_VALID_REAL_CASE_AUTHORITY_OBJECT_ADMISSION_REQUESTS_ONLY",
   "request_id": "REQ_001_DIRECTOR_FINAL_CUT_AUTHORITY_OBJECT",
   "validation_record_id": "VAL_001_DIRECTOR_FINAL_CUT_AUTHORITY_OBJECT",

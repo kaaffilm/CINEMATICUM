@@ -1,143 +1,102 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-node <<'NODE'
-const fs = require("fs");
-const path = require("path");
+python3 - <<'PY2'
+import json
+from pathlib import Path
 
-const CURRENT_STATE = "OUTSIDER_REPLAY_BUNDLE_LAW_DECLARED";
-const REQUEST_DIR = "CASES/CASE_001_THE_LAST_RENDER/AUTHORITY_OBJECT_ADMISSION_INTAKE_REOPENING_REQUESTS";
+TARGET = 'REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS'
+CASE_ID = 'CASE_001_THE_LAST_RENDER'
 
-function readJson(file) {
-  if (!fs.existsSync(file)) throw new Error("missing file: " + file);
-  return JSON.parse(fs.readFileSync(file, "utf8"));
-}
+def load(path):
+    return json.loads(Path(path).read_text(encoding="utf-8"))
 
-function pick(obj, keys) {
-  for (const key of keys) {
-    if (obj && Object.prototype.hasOwnProperty.call(obj, key)) return obj[key];
-  }
-  return undefined;
-}
+validator = load("CINEMATICUM_AUTHORITY_OBJECT_ADMISSION_INTAKE_REOPENING_REQUEST_VALIDATOR.json")
+law = load("CINEMATICUM_AUTHORITY_OBJECT_ADMISSION_INTAKE_REOPENING_REQUEST_VALIDATOR_LAW.json")
+status = load("CASES/CASE_001_THE_LAST_RENDER/AUTHORITY_OBJECT_ADMISSION_INTAKE_REOPENING_REQUEST_VALIDATOR_STATUS.json")
+schema_status = load("CASES/CASE_001_THE_LAST_RENDER/AUTHORITY_OBJECT_ADMISSION_INTAKE_REOPENING_REQUEST_SCHEMA_STATUS.json")
+index = load("CINEMATICUM_CURRENT_STATE_INDEX.json")
+case = load("CASES/CASE_001_THE_LAST_RENDER/CURRENT_CASE_STATE.json")
+registry = load("CINEMATICUM_OBJECT_REGISTRY.json")
 
-function stateOf(obj) {
-  return pick(obj, ["current_state", "active_current_state", "current_active_state", "state"]);
-}
+for obj in (validator, law, status):
+    assert obj["case_id"] == CASE_ID
+    assert obj["current_state"] == TARGET
 
-function requireBool(obj, keys, expected, label) {
-  const value = pick(obj, keys);
-  if (typeof value !== "boolean") throw new Error("missing boolean: " + label);
-  if (value !== expected) throw new Error("wrong boolean " + label + ": " + value);
-}
+    assert obj["authority_object_admission_intake_reopening_request_validator_passed"] is True
+    assert obj["reopening_request_validator_present"] is True
+    assert obj["reopening_request_validation_passed"] is True
+    assert obj["validator_non_authoritative"] is True
+    assert obj["reopening_request_validator_non_authoritative"] is True
 
-function requireNumber(obj, keys, expected, label) {
-  const value = pick(obj, keys);
-  if (typeof value !== "number") throw new Error("missing number: " + label);
-  if (value !== expected) throw new Error("wrong number " + label + ": " + value);
-}
+    assert obj["schema_non_authoritative"] is True
+    assert obj["reopening_request_schema_non_authoritative"] is True
+    assert obj["schemas_do_not_satisfy_authority_objects"] is True
+    assert obj["validator_does_not_satisfy_authority_objects"] is True
+    assert obj["validator_does_not_reopen_current_snapshot"] is True
+    assert obj["validator_does_not_create_new_snapshot"] is True
+    assert obj["validator_does_not_accept_requests"] is True
 
-function listRequestFiles(dir) {
-  if (!fs.existsSync(dir)) return [];
-  if (!fs.statSync(dir).isDirectory()) throw new Error("request path is not directory: " + dir);
-  return fs.readdirSync(dir)
-    .filter((name) => name.endsWith(".json"))
-    .map((name) => path.join(dir, name))
-    .sort();
-}
+    assert obj["intake_reopening_allowed"] is False
+    assert obj["intake_accepts_reopening_requests"] is False
+    assert obj["current_snapshot_reopened"] is False
+    assert obj["new_snapshot_created"] is False
 
-const validator = readJson("CINEMATICUM_AUTHORITY_OBJECT_ADMISSION_INTAKE_REOPENING_REQUEST_VALIDATOR.json");
-const law = readJson("CINEMATICUM_AUTHORITY_OBJECT_ADMISSION_INTAKE_REOPENING_REQUEST_VALIDATOR_LAW.json");
-const status = readJson("CASES/CASE_001_THE_LAST_RENDER/AUTHORITY_OBJECT_ADMISSION_INTAKE_REOPENING_REQUEST_VALIDATOR_STATUS.json");
-const schema = readJson("CINEMATICUM_AUTHORITY_OBJECT_ADMISSION_INTAKE_REOPENING_REQUEST_SCHEMA.json");
-const reopeningGate = readJson("CINEMATICUM_AUTHORITY_OBJECT_ADMISSION_INTAKE_REOPENING_GATE.json");
-const finality = readJson("CINEMATICUM_AUTHORITY_OBJECT_ADMISSION_INTAKE_FINALITY_SEAL.json");
-const currentCase = readJson("CASES/CASE_001_THE_LAST_RENDER/CURRENT_CASE_STATE.json");
-const currentIndex = readJson("CINEMATICUM_CURRENT_STATE_INDEX.json");
+    assert obj["admission_requests_present"] is False
+    assert obj["valid_admission_request_present"] is False
+    assert obj["invalid_admission_request_present"] is False
+    assert obj["live_admission_request_count"] == 0
 
-const activeState = stateOf(currentCase) || stateOf(currentIndex);
-if (activeState !== CURRENT_STATE) throw new Error("wrong current state: " + activeState);
+    assert obj["reopening_request_present"] is False
+    assert obj["valid_reopening_request_present"] is False
+    assert obj["invalid_reopening_request_present"] is False
+    assert obj["live_reopening_request_count"] == 0
+    assert obj["accepted_reopening_request_count"] == 0
+    assert obj["rejected_reopening_request_count"] == 0
 
-if (validator.object_type !== "CINEMATICUM_AUTHORITY_OBJECT_ADMISSION_INTAKE_REOPENING_REQUEST_VALIDATOR") {
-  throw new Error("wrong validator object_type");
-}
-if (law.object_type !== "CINEMATICUM_AUTHORITY_OBJECT_ADMISSION_INTAKE_REOPENING_REQUEST_VALIDATOR_LAW") {
-  throw new Error("wrong law object_type");
-}
-if (stateOf(validator) !== CURRENT_STATE) throw new Error("validator wrong state: " + stateOf(validator));
-if (stateOf(status) !== CURRENT_STATE) throw new Error("status wrong state: " + stateOf(status));
+    assert obj["authority_object_stack_complete"] is True
+    assert obj["required_authority_objects_missing"] is False
+    assert obj["accepted_authority_object_count"] == 8
+    assert obj["instantiated_authority_object_count"] == 8
+    assert obj["unfilled_authority_object_slot_count"] == 0
 
-requireBool(schema, ["schema_does_not_reopen_intake"], true, "schema.schema_does_not_reopen_intake");
-requireBool(schema, ["schema_does_not_create_live_request"], true, "schema.schema_does_not_create_live_request");
-requireBool(reopeningGate, ["future_intake_allowed_under_law"], true, "reopeningGate.future_intake_allowed_under_law");
-requireBool(reopeningGate, ["silent_reopening_forbidden"], true, "reopeningGate.silent_reopening_forbidden");
-requireBool(reopeningGate, ["reopening_gate_open_now"], false, "reopeningGate.reopening_gate_open_now");
-requireBool(finality, ["intake_finality_sealed"], true, "finality.intake_finality_sealed");
+    assert obj["release_candidate_ready"] is False
+    assert obj["release_candidate_artifacts_bound"] is False
+    assert obj["authority_satisfied"] is False
+    assert obj["may_advance_now"] is False
+    assert obj["issuance_unblocked"] is False
+    assert obj["issued"] is False
+    assert obj["media_present"] is False
+    assert obj["outsider_replay_passed"] is False
+    assert obj["admissibility_verdict_present"] is False
+    assert obj["terminal_closure_present"] is False
+    assert obj["next_required_object"] == "RELEASE_CANDIDATE_GAP_LEDGER"
 
-const requestFiles = listRequestFiles(REQUEST_DIR);
-if (requestFiles.length !== 0) {
-  throw new Error("live reopening requests present: " + requestFiles.join(", "));
-}
+assert schema_status["current_state"] == TARGET
+assert schema_status["reopening_request_schema_present"] is True
+assert schema_status["schema_non_authoritative"] is True
 
-const requiredFields = schema.required_reopening_request_fields;
-if (!Array.isArray(requiredFields) || requiredFields.length < 14) {
-  throw new Error("schema required fields not established");
-}
+assert index["active_case_states"][CASE_ID] == TARGET
+assert case["current_state"] == TARGET
+assert registry["current_active_state"] == TARGET
 
-for (const obj of [validator, status]) {
-  requireNumber(obj, ["live_reopening_request_count"], 0, "live_reopening_request_count");
-  requireNumber(obj, ["valid_reopening_request_count"], 0, "valid_reopening_request_count");
-  requireNumber(obj, ["invalid_reopening_request_count"], 0, "invalid_reopening_request_count");
-  requireNumber(obj, ["accepted_reopening_request_count"], 0, "accepted_reopening_request_count");
-  requireBool(obj, ["zero_reopening_requests_valid"], true, "zero_reopening_requests_valid");
-  requireBool(obj, ["validator_declared"], true, "validator_declared");
-  requireBool(obj, ["validator_does_not_create_live_request"], true, "validator_does_not_create_live_request");
-  requireBool(obj, ["validator_does_not_reopen_intake"], true, "validator_does_not_reopen_intake");
-  requireBool(obj, ["validator_does_not_satisfy_authority"], true, "validator_does_not_satisfy_authority");
-  requireBool(obj, ["validator_does_not_advance_case_state"], true, "validator_does_not_advance_case_state");
-  requireBool(obj, ["future_request_must_match_schema"], true, "future_request_must_match_schema");
-  requireBool(obj, ["future_request_must_have_decision_before_reopening"], true, "future_request_must_have_decision_before_reopening");
-  requireBool(obj, ["future_request_must_recompute_finality"], true, "future_request_must_recompute_finality");
-  requireBool(obj, ["silent_reopening_forbidden"], true, "silent_reopening_forbidden");
-  requireBool(obj, ["reopening_gate_open_now"], false, "reopening_gate_open_now");
-  requireBool(obj, ["current_snapshot_final"], true, "current_snapshot_final");
-  requireBool(obj, ["intake_finality_sealed"], true, "intake_finality_sealed");
-  requireBool(obj, ["authority_satisfied"], false, "authority_satisfied");
-  requireBool(obj, ["may_advance_now"], false, "may_advance_now");
-  requireBool(obj, ["issued"], false, "issued");
-  requireBool(obj, ["media_present"], false, "media_present");
-}
-
-for (const key of [
-  "validator_declared",
-  "zero_reopening_requests_valid",
-  "validator_does_not_create_live_request",
-  "validator_does_not_reopen_intake",
-  "validator_does_not_accept_authority_objects",
-  "validator_does_not_instantiate_authority_objects",
-  "validator_does_not_satisfy_authority",
-  "validator_does_not_advance_case_state",
-  "validator_does_not_issue",
-  "validator_does_not_admit_media",
-  "future_request_must_match_schema",
-  "future_request_must_target_current_state",
-  "future_request_must_reference_all_required_authority_objects",
-  "future_request_must_have_decision_before_reopening",
-  "future_request_must_recompute_finality",
-  "silent_reopening_forbidden"
-]) {
-  if (law[key] !== true) throw new Error("law flag not true: " + key);
-}
-
-console.log("CINEMATICUM AUTHORITY OBJECT ADMISSION INTAKE REOPENING REQUEST VALIDATOR: PASS");
-console.log("CURRENT_STATE=" + CURRENT_STATE);
-console.log("LIVE_REOPENING_REQUEST_COUNT=0");
-console.log("VALID_REOPENING_REQUEST_COUNT=0");
-console.log("INVALID_REOPENING_REQUEST_COUNT=0");
-console.log("ACCEPTED_REOPENING_REQUEST_COUNT=0");
-console.log("ZERO_REOPENING_REQUESTS_VALID=true");
-console.log("VALIDATOR_DOES_NOT_REOPEN_INTAKE=true");
-console.log("AUTHORITY_SATISFIED=false");
-console.log("MAY_ADVANCE_NOW=false");
-console.log("ISSUED=false");
-console.log("MEDIA_PRESENT=false");
-NODE
+print("CINEMATICUM AUTHORITY OBJECT ADMISSION INTAKE REOPENING REQUEST VALIDATOR: PASS")
+print("CURRENT_STATE=" + TARGET)
+print("REOPENING_REQUEST_VALIDATOR_PRESENT=true")
+print("REOPENING_REQUEST_VALIDATION_PASSED=true")
+print("VALIDATOR_NON_AUTHORITATIVE=true")
+print("REOPENING_REQUEST_PRESENT=false")
+print("VALID_REOPENING_REQUEST_PRESENT=false")
+print("INTAKE_REOPENING_ALLOWED=false")
+print("CURRENT_SNAPSHOT_REOPENED=false")
+print("NEW_SNAPSHOT_CREATED=false")
+print("AUTHORITY_OBJECT_STACK_COMPLETE=true")
+print("ACCEPTED_AUTHORITY_OBJECT_COUNT=8")
+print("INSTANTIATED_AUTHORITY_OBJECT_COUNT=8")
+print("UNFILLED_AUTHORITY_OBJECT_SLOT_COUNT=0")
+print("RELEASE_CANDIDATE_READY=false")
+print("MAY_ADVANCE_NOW=false")
+print("ISSUANCE_UNBLOCKED=false")
+print("ISSUED=false")
+print("MEDIA_PRESENT=false")
+PY2

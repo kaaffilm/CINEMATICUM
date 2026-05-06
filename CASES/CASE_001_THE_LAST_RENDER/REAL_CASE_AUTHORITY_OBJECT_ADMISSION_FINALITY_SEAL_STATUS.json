@@ -5,7 +5,7 @@
   "jurisdiction": "CINEMATICUM",
   "case_id": "CASE_001_THE_LAST_RENDER",
   "case_title": "THE_LAST_RENDER",
-  "current_state": "OUTSIDER_REPLAY_BUNDLE_LAW_DECLARED",
+  "current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
   "scope": "CURRENT_ZERO_REAL_CASE_AUTHORITY_OBJECT_ADMISSION_SNAPSHOT_ONLY",
   "real_case_authority_intake_open": true,
   "admission_stack_layer_count": 7,

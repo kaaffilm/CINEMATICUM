@@ -36,7 +36,7 @@ for key, expected in law["currently_false_claims"].items():
 assert lattice["object_type"] == "CINEMATICUM_AUTHORITY_PRECEDENCE_LATTICE"
 assert lattice["surface_type"] == "AUTHORITY_PRECEDENCE_LATTICE"
 assert lattice["case_id"] == "CASE_001_THE_LAST_RENDER"
-assert lattice["current_state"] == "OUTSIDER_REPLAY_BUNDLE_LAW_DECLARED"
+assert lattice["current_state"] == "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
 
 owners = {owner["path"] for owner in lattice["current_truth_owners"]}
 assert owners == {

@@ -59,7 +59,7 @@ assert status["object_type"] == "CINEMATICUM_CASE_AUTHORITY_OBJECT_ADMISSION_INT
 
 for record in (obj, status):
     assert record["case_id"] == CASE_ID
-    assert record["current_state"] == "OUTSIDER_REPLAY_BUNDLE_LAW_DECLARED"
+    assert record["current_state"] == "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     assert record["continuity_scope"] == "FUTURE_VALID_REOPENING_REQUEST_SNAPSHOT_FORKS_ONLY"
     assert record["permanence_scope_preserved"] == "CURRENT_ZERO_FUTURE_SNAPSHOT_FORK_LEDGER_ONLY"
     assert record["future_snapshot_fork_ledger_present"] is True

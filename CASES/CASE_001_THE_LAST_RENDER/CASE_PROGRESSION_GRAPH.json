@@ -3,32 +3,22 @@
   "schema_version": "cinematicum.case_progression_graph.v1",
   "case_id": "CASE_001_THE_LAST_RENDER",
   "case_title": "THE LAST RENDER",
-  "current_state": "OUTSIDER_REPLAY_BUNDLE_LAW_DECLARED",
+  "current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
   "current_state_owner": "CASES/CASE_001_THE_LAST_RENDER/CURRENT_CASE_STATE.json",
   "nodes": [
     {
       "state": "CINEMATIC_JURISDICTION_DECLARED",
-      "status": "reached"
+      "status": "reached",
+      "active": false
     },
     {
       "state": "ISSUANCE_DOCKET_OPEN",
-      "status": "reached"
+      "status": "reached",
+      "active": false
     },
     {
-      "state": "RELEASE_CANDIDATE_LAW_DECLARED",
-      "status": "reached"
-    },
-    {
-      "state": "AUTHORITY_ACCEPTANCE_LAW_DECLARED",
-      "status": "reached"
-    },
-    {
-      "state": "OUTSIDER_REPLAY_BUNDLE_LAW_DECLARED",
-      "status": "active"
-    },
-    {
-      "state": "RELEASE_CANDIDATE_READY",
-      "status": "not_reached",
+      "state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "status": "active",
       "missing": [
         "director_acceptance_object",
         "final_cut_timeline_lock_object",
@@ -40,7 +30,14 @@
         "replay_execution_report",
         "admissibility_verdict",
         "terminal_closure_candidate"
-      ]
+      ],
+      "reached": true,
+      "active": true
+    },
+    {
+      "state": "AUTHORITY_ACCEPTANCE_LAW_DECLARED",
+      "status": "reached",
+      "active": false
     },
     {
       "state": "ISSUED_ADMISSIBLE_MOTION_PICTURE",
@@ -51,7 +48,9 @@
         "admissibility_verdict_admissible",
         "motion_picture_issuance_act",
         "terminal_closure"
-      ]
+      ],
+      "reached": false,
+      "active": false
     }
   ],
   "false_now": {
@@ -59,5 +58,12 @@
     "issued": false,
     "media_present": false,
     "outsider_replay_passed": false
-  }
+  },
+  "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+  "status": "active",
+  "release_candidate_ready": false,
+  "issued": false,
+  "media_present": false,
+  "outsider_replay_passed": false,
+  "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
 }

@@ -38,7 +38,7 @@ validation_status = load(validation_status_path)
 request_status = load(request_status_path, optional=True)
 
 expected = {
-    "current_state": "OUTSIDER_REPLAY_BUNDLE_LAW_DECLARED",
+    "current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
     "decision_scope": "FUTURE_VALID_REAL_CASE_AUTHORITY_OBJECT_ADMISSION_REQUESTS_ONLY",
     "request_id": "REQ_001_DIRECTOR_FINAL_CUT_AUTHORITY_OBJECT",
     "validation_record_id": "VAL_001_DIRECTOR_FINAL_CUT_AUTHORITY_OBJECT",

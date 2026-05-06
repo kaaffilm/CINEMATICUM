@@ -28,8 +28,8 @@ assert status["object_type"] == "CINEMATICUM_CASE_AUTHORITY_OBJECT_ADMISSION_INT
 
 assert obj["case_id"] == CASE_ID
 assert status["case_id"] == CASE_ID
-assert obj["current_state"] == "OUTSIDER_REPLAY_BUNDLE_LAW_DECLARED"
-assert status["current_state"] == "OUTSIDER_REPLAY_BUNDLE_LAW_DECLARED"
+assert obj["current_state"] == "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
+assert status["current_state"] == "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
 
 assert obj["finality_scope"] == "CURRENT_ZERO_REOPENING_REQUEST_SNAPSHOT_ONLY"
 assert status["finality_scope"] == "CURRENT_ZERO_REOPENING_REQUEST_SNAPSHOT_ONLY"

@@ -83,7 +83,7 @@ for name, doc in [("terminal", terminal)]:
     require_false(doc, "media_present", name)
 
 for name, doc in [("permanence", permanence), ("status", status)]:
-    require(doc, "current_state", "OUTSIDER_REPLAY_BUNDLE_LAW_DECLARED", name)
+    require(doc, "current_state", "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS", name)
     require(doc, "permanence_scope", "CURRENT_ZERO_REAL_CASE_AUTHORITY_OBJECT_ADMISSION_SNAPSHOT_ONLY", name)
     require(doc, "admission_stack_layer_count", 9, name)
     require_true(doc, "admission_stack_closed", name)

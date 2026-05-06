@@ -36,7 +36,7 @@ request_id = "REQ_001_DIRECTOR_FINAL_CUT_AUTHORITY_OBJECT"
 record_id = "VAL_001_DIRECTOR_FINAL_CUT_AUTHORITY_OBJECT"
 slot_id = "director_final_cut_authority"
 authority_object = "DIRECTOR_FINAL_CUT_AUTHORITY_OBJECT"
-current_state = "OUTSIDER_REPLAY_BUNDLE_LAW_DECLARED"
+current_state = "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
 
 require(pick(validation, "record_id") == record_id, "validation record_id mismatch")
 require(pick(validation, "request_id") == request_id, "validation request_id mismatch")

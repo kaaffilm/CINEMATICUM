@@ -6,7 +6,7 @@
   "case_id": "CASE_001_THE_LAST_RENDER",
   "corpus_complete_for_required_reasons": true,
   "covered_rejection_reason_count": 5,
-  "current_state": "OUTSIDER_REPLAY_BUNDLE_LAW_DECLARED",
+  "current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
   "fixtures_are_live_requests": false,
   "instantiated_authority_object_count": 0,
   "institution": "CINEMATICUM",

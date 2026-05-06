@@ -49,7 +49,7 @@ class AuthorityObjectAdmissionDecisionLedgerTest(unittest.TestCase):
         )
 
     def test_current_state_is_not_advanced(self):
-        self.assertEqual(self.active_state(), "OUTSIDER_REPLAY_BUNDLE_LAW_DECLARED")
+        self.assertEqual(self.active_state(), "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS")
         self.assertFalse(flag(self.ledger, "authority_satisfied"))
         self.assertFalse(flag(self.ledger, "may_advance_now"))
         self.assertFalse(flag(self.ledger, "release_candidate_ready"))

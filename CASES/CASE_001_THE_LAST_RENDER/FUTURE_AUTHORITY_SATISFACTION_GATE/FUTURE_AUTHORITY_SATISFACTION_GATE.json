@@ -9,7 +9,7 @@
   "completed_stack_is_sufficient_for_future_satisfaction_gate": true,
   "consumes_terminal_authority_object_path": "CASES/CASE_001_THE_LAST_RENDER/FUTURE_REAL_CASE_AUTHORITY_OBJECTS/TERMINAL_CLOSURE_AUTHORITY_OBJECT.json",
   "consumes_terminal_instantiation_record_path": "CASES/CASE_001_THE_LAST_RENDER/FUTURE_REAL_CASE_AUTHORITY_OBJECT_INSTANTIATION_RECORDS/INST_008_TERMINAL_CLOSURE_AUTHORITY_OBJECT.json",
-  "current_state": "OUTSIDER_REPLAY_BUNDLE_LAW_DECLARED",
+  "current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
   "does_not_admit_media": true,
   "does_not_advance_state": true,
   "does_not_create_release_candidate": true,

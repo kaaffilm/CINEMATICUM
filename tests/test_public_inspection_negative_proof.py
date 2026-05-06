@@ -12,7 +12,7 @@ class TestPublicInspectionNegativeProof(unittest.TestCase):
         proof = load("PUBLIC_INSPECTION_NEGATIVE_PROOF.json")
         index = load("CINEMATICUM_CURRENT_STATE_INDEX.json")
         case = load("CASES/CASE_001_THE_LAST_RENDER/CURRENT_CASE_STATE.json")
-        self.assertEqual(proof["current_state"], "OUTSIDER_REPLAY_BUNDLE_LAW_DECLARED")
+        self.assertEqual(proof["current_state"], "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS")
         self.assertEqual(index["active_case_states"]["CASE_001_THE_LAST_RENDER"], proof["current_state"])
         self.assertEqual(case["current_state"], proof["current_state"])
 
@@ -26,7 +26,7 @@ class TestPublicInspectionNegativeProof(unittest.TestCase):
         proof = load("PUBLIC_INSPECTION_NEGATIVE_PROOF.json")
         for name in [
             "MOTION_PICTURE_ISSUANCE_ACT_OBJECT",
-            "RELEASE_CANDIDATE_READY_OBJECT",
+            "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS_OBJECT",
             "OUTSIDER_REPLAY_PASS_OBJECT",
             "ADMISSIBILITY_VERDICT_OBJECT",
             "TERMINAL_CLOSURE_OBJECT",

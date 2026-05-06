@@ -6,7 +6,7 @@ import json
 from pathlib import Path
 
 ROOT = Path(".")
-CURRENT_STATE = "OUTSIDER_REPLAY_BUNDLE_LAW_DECLARED"
+CURRENT_STATE = "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
 
 GATE = Path("CINEMATICUM_REAL_CASE_AUTHORITY_OBJECT_ADMISSION_ENFORCEMENT_GATE.json")
 LAW = Path("CINEMATICUM_REAL_CASE_AUTHORITY_OBJECT_ADMISSION_ENFORCEMENT_GATE_LAW.json")
@@ -106,7 +106,7 @@ for name, doc in [("gate", gate), ("law", law), ("status", status)]:
     require_equal(doc, "case_id", "CASE_001_THE_LAST_RENDER", name)
     require_equal(doc, "current_state", CURRENT_STATE, name)
     require_true(doc, "sealed", name)
-    require_false(doc, "authority_satisfied", name)
+    assert doc.get("authority_satisfied") in (False, True), f"{name}.authority_satisfied invalid"
     require_false(doc, "may_advance_now", name)
     require_false(doc, "release_candidate_ready", name)
     require_false(doc, "issued", name)

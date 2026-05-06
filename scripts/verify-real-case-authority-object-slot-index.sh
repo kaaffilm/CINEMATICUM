@@ -47,7 +47,7 @@ assert status["object_type"] == "CINEMATICUM_CASE_REAL_CASE_AUTHORITY_OBJECT_SLO
 for obj in (law, index, status):
     assert obj["institution"] == "CINEMATICUM"
     assert obj["case_id"] == "CASE_001_THE_LAST_RENDER"
-    assert obj["current_state"] == "OUTSIDER_REPLAY_BUNDLE_LAW_DECLARED"
+    assert obj["current_state"] == "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     assert obj["authority_satisfied"] is False
     assert obj["may_advance_now"] is False
     assert obj["release_candidate_ready"] is False
@@ -108,7 +108,7 @@ assert index["object_is_non_star_seal"] is False
 assert index["object_is_negative_capability_seal"] is False
 
 print("CINEMATICUM REAL CASE AUTHORITY OBJECT SLOT INDEX: PASS")
-print("CURRENT_STATE=OUTSIDER_REPLAY_BUNDLE_LAW_DECLARED")
+print("CURRENT_STATE=REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS")
 print("SLOT_INDEX_SCOPE=REAL_CASE_AUTHORITY_OBJECTS_ONLY")
 print("REAL_CASE_AUTHORITY_OBJECT_SLOT_INDEX_PRESENT=true")
 print("REAL_CASE_AUTHORITY_OBJECT_SLOT_INDEX_SEALED=true")

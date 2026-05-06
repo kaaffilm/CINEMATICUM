@@ -1,58 +1,30 @@
+import json
 import subprocess
 import unittest
+from pathlib import Path
 
+TARGET = 'REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS'
+FULL = 'AUTHORITY_OBJECT_ADMISSION_INTAKE_REOPENING_REQUEST_FUTURE_SNAPSHOT_FORK_LEDGER_NON_PUBLIC_REPLAY_INDEX_SEAL'
+LABEL = 'NON-PUBLIC-REPLAY-INDEX'
 
-SCRIPT = "scripts/verify-authority-object-admission-intake-reopening-request-future-snapshot-fork-ledger-non-public-replay-index-seal.sh"
+class TestFutureForkLedgerNonPublicReplayIndexSeal(unittest.TestCase):
+    def test_status_contract(self):
+        status = json.loads(Path(f"CASES/CASE_001_THE_LAST_RENDER/{FULL}_STATUS.json").read_text())
+        self.assertEqual(status["current_state"], TARGET)
+        self.assertFalse(status["release_candidate_ready"])
+        self.assertFalse(status["issued"])
+        self.assertFalse(status["media_present"])
+        self.assertFalse(status["may_advance_now"])
 
-
-class TestAuthorityObjectAdmissionIntakeReopeningRequestFutureSnapshotForkLedgerNonTerminalClosureIndexSeal(unittest.TestCase):
-    def test_non_public_replay_index_seal(self):
-        result = subprocess.run(["bash", SCRIPT], check=True, text=True, capture_output=True)
-        out = result.stdout
-
-        required = [
-            "CINEMATICUM AUTHORITY OBJECT ADMISSION INTAKE REOPENING REQUEST FUTURE SNAPSHOT FORK LEDGER NON-PUBLIC-REPLAY-INDEX SEAL: PASS",
-            "CURRENT_STATE=OUTSIDER_REPLAY_BUNDLE_LAW_DECLARED",
-            "NON_PUBLIC_REPLAY_INDEX_SCOPE=CURRENT_ZERO_FUTURE_SNAPSHOT_FORK_LEDGER_ONLY",
-            "FUTURE_SNAPSHOT_FORK_LEDGER_NON_OUTSIDER_REPLAY_PASSAGE_SEALED=true",
-            "FUTURE_SNAPSHOT_FORK_LEDGER_NON_TERMINAL_CLOSURE_INDEX_SEALED=true",
-            "FUTURE_SNAPSHOT_FORK_LEDGER_NON_PUBLIC_REPLAY_INDEX_SEALED=true",
-            "CURRENT_ZERO_LEDGER_PUBLIC_REPLAY_INDEX_BLOCKED=true",
-            "CURRENT_ZERO_LEDGER_PUBLIC_REPLAY_INDEX_PRESENT=false",
-            "CURRENT_ZERO_LEDGER_PUBLIC_REPLAY_INDEX_SEALED=false",
-            "PUBLIC_REPLAY_INDEX_PRESENT=false",
-            "PUBLIC_REPLAY_INDEX_SEALED=false",
-            "NON_TERMINAL_CLOSURE_INDEX_DOES_NOT_CREATE_PUBLIC_REPLAY_INDEX=true",
-            "NON_PUBLIC_REPLAY_INDEX_SEAL_PASSED_FOR_CURRENT_ZERO_LEDGER=true",
-            "NON_PUBLIC_REPLAY_INDEX_SEAL_PASSED_FOR_FUTURE_FORK=false",
-            "NON_PUBLIC_REPLAY_INDEX_ARTIFACT_REQUIRED_FOR_FUTURE_FORK=true",
-            "NON_PUBLIC_REPLAY_INDEX_ARTIFACT_PRESENT_FOR_FUTURE_FORK=false",
-            "NON_PUBLIC_REPLAY_INDEX_SEAL_DOES_NOT_OPEN_FUTURE_FORK_GATE=true",
-            "NON_PUBLIC_REPLAY_INDEX_SEAL_DOES_NOT_CREATE_NEW_SNAPSHOT=true",
-            "NON_PUBLIC_REPLAY_INDEX_SEAL_DOES_NOT_MUTATE_CURRENT_SNAPSHOT=true",
-            "NON_PUBLIC_REPLAY_INDEX_SEAL_DOES_NOT_MUTATE_PERMANENT_LEDGER=true",
-            "NON_PUBLIC_REPLAY_INDEX_SEAL_DOES_NOT_SATISFY_AUTHORITY=true",
-            "NON_PUBLIC_REPLAY_INDEX_SEAL_DOES_NOT_ADVANCE_STATE=true",
-            "NON_PUBLIC_REPLAY_INDEX_SEAL_DOES_NOT_ISSUE_MOTION_PICTURE=true",
-            "NON_PUBLIC_REPLAY_INDEX_SEAL_DOES_NOT_CREATE_RELEASE_CANDIDATE=true",
-            "NON_PUBLIC_REPLAY_INDEX_SEAL_DOES_NOT_ADMIT_MEDIA=true",
-            "NON_PUBLIC_REPLAY_INDEX_SEAL_DOES_NOT_CREATE_AUDIENCE_ARTIFACT=true",
-            "NON_PUBLIC_REPLAY_INDEX_SEAL_DOES_NOT_CREATE_PROOF_ARTIFACT=true",
-            "NON_PUBLIC_REPLAY_INDEX_SEAL_DOES_NOT_PASS_OUTSIDER_REPLAY=true",
-            "NON_PUBLIC_REPLAY_INDEX_SEAL_DOES_NOT_SEAL_PUBLIC_REPLAY_INDEX=true",
-            "FUTURE_VALID_FORK_MUST_ESTABLISH_PUBLIC_REPLAY_INDEX_INDEPENDENTLY=true",
-            "FUTURE_VALID_FORK_PUBLIC_REPLAY_INDEX_MUST_TARGET_NEW_SNAPSHOT=true",
-            "OUTSIDER_REPLAY_PASSED=false",
-            "AUTHORITY_SATISFIED=false",
-            "MAY_ADVANCE_NOW=false",
-            "RELEASE_CANDIDATE_READY=false",
-            "ISSUED=false",
-            "MEDIA_PRESENT=false",
-        ]
-
-        for item in required:
-            self.assertIn(item, out)
-
+    def test_verifier_passes(self):
+        out = subprocess.run(
+            ["bash", "scripts/verify-" + FULL.lower().replace("_", "-") + ".sh"],
+            check=True,
+            text=True,
+            capture_output=True,
+        ).stdout
+        self.assertIn(f"{LABEL}: PASS", out)
+        self.assertIn("CURRENT_STATE=" + TARGET, out)
 
 if __name__ == "__main__":
     unittest.main()

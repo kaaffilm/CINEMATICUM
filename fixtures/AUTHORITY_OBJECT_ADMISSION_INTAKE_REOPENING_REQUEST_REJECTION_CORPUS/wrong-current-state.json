@@ -18,5 +18,24 @@
     "silent_reopening_forbidden": true,
     "issued": false,
     "media_present": false
-  }
+  },
+  "case_id": "CASE_001_THE_LAST_RENDER",
+  "fixture": true,
+  "live_request": false,
+  "current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+  "rejection_reason": "wrong_current_state",
+  "accepted": false,
+  "valid": false,
+  "rejected": true,
+  "release_candidate_ready": false,
+  "authority_satisfied": false,
+  "may_advance_now": false,
+  "issuance_unblocked": false,
+  "issued": false,
+  "media_present": false,
+  "outsider_replay_passed": false,
+  "admissibility_verdict_present": false,
+  "terminal_closure_present": false,
+  "current_snapshot_reopened": false,
+  "new_snapshot_created": false
 }

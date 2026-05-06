@@ -58,7 +58,7 @@ assert "index_requires_no_private_access" in index["required_assertions"]
 assert "media_bytes" in index["forbidden_fields"]
 
 assert case["case_id"] == "CASE_001_THE_LAST_RENDER"
-assert case["current_state"] == "OUTSIDER_REPLAY_BUNDLE_LAW_DECLARED"
+assert case["current_state"] == "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
 assert case["release_candidate_ready"] is False
 assert case["issued"] is False
 assert case["media_present"] is False

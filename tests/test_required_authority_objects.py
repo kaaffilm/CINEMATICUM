@@ -1,78 +1,49 @@
 import json
-import pathlib
+import subprocess
 import unittest
+from pathlib import Path
 
-ROOT = pathlib.Path(__file__).resolve().parents[1]
-
-def load(path: str):
-    return json.loads((ROOT / path).read_text(encoding="utf-8"))
+TARGET = 'REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS'
+NEXT_OBJECT = 'RELEASE_CANDIDATE_GAP_LEDGER'
 
 class TestRequiredAuthorityObjects(unittest.TestCase):
-    def test_checklist_matches_current_state(self):
-        checklist = load("CINEMATICUM_REQUIRED_AUTHORITY_OBJECT_CHECKLIST.json")
-        index = load("CINEMATICUM_CURRENT_STATE_INDEX.json")
-        case = load("CASES/CASE_001_THE_LAST_RENDER/CURRENT_CASE_STATE.json")
-        self.assertEqual(checklist["current_state"], "OUTSIDER_REPLAY_BUNDLE_LAW_DECLARED")
-        self.assertEqual(index["active_case_states"]["CASE_001_THE_LAST_RENDER"], checklist["current_state"])
-        self.assertEqual(case["current_state"], checklist["current_state"])
+    def test_stack_complete_but_release_candidate_not_ready(self):
+        data = json.loads(Path("CINEMATICUM_REQUIRED_AUTHORITY_OBJECT_CHECKLIST.json").read_text())
+        self.assertEqual(data["current_state"], TARGET)
+        self.assertTrue(data["authority_object_stack_complete"])
+        self.assertFalse(data["required_authority_objects_missing"])
+        self.assertEqual(data["accepted_authority_object_count"], 8)
+        self.assertEqual(data["instantiated_authority_object_count"], 8)
+        self.assertEqual(data["unfilled_authority_object_slot_count"], 0)
+        self.assertFalse(data["release_candidate_ready"])
+        self.assertFalse(data["release_candidate_artifacts_bound"])
+        self.assertFalse(data["issued"])
+        self.assertFalse(data["media_present"])
+        self.assertFalse(data["outsider_replay_passed"])
+        self.assertFalse(data["admissibility_verdict_present"])
+        self.assertFalse(data["terminal_closure_present"])
+        self.assertFalse(data["may_advance_now"])
+        self.assertFalse(data["issuance_unblocked"])
+        self.assertEqual(data["next_required_object"], NEXT_OBJECT)
 
-    def test_all_required_objects_are_missing(self):
-        checklist = load("CINEMATICUM_REQUIRED_AUTHORITY_OBJECT_CHECKLIST.json")
-        all_items = checklist["required_for_release_candidate_ready"] + checklist["required_for_issued_admissible_motion_picture"]
-        self.assertGreater(len(all_items), 0)
-        for item in all_items:
-            self.assertEqual(item["status"], "missing", item["required_object_type"])
+    def test_transition_candidate_is_blocked(self):
+        data = json.loads(Path("CINEMATICUM_REQUIRED_AUTHORITY_OBJECT_CHECKLIST.json").read_text())
+        candidate = data["transition_candidates"][0]
+        self.assertEqual(candidate["from_state"], TARGET)
+        self.assertEqual(candidate["required_object"], NEXT_OBJECT)
+        self.assertFalse(candidate["may_advance_now"])
+        self.assertTrue(candidate["blocked"])
 
-    def test_checklist_blocks_advancement(self):
-        checklist = load("CINEMATICUM_REQUIRED_AUTHORITY_OBJECT_CHECKLIST.json")
-        self.assertFalse(checklist["may_advance_now"])
-        self.assertFalse(checklist["release_candidate_ready_unblocked"])
-        self.assertFalse(checklist["issuance_unblocked"])
-        self.assertTrue(checklist["required_authority_objects_missing"])
-        self.assertTrue(checklist["schemas_do_not_satisfy_authority_objects"])
-
-    def test_required_sets_match_transition_gate(self):
-        checklist = load("CINEMATICUM_REQUIRED_AUTHORITY_OBJECT_CHECKLIST.json")
-        gate = load("CINEMATICUM_STATE_TRANSITION_GATE.json")
-        release_set = {item["required_object_type"] for item in checklist["required_for_release_candidate_ready"]}
-        issuance_set = {item["required_object_type"] for item in checklist["required_for_issued_admissible_motion_picture"]}
-
-        gate_release = set()
-        gate_issuance = set()
-        for transition in gate["transition_candidates"]:
-            if transition["to"] == "RELEASE_CANDIDATE_READY":
-                gate_release.update(transition["missing_required_authority_objects"])
-            if transition["to"] == "ISSUED_ADMISSIBLE_MOTION_PICTURE":
-                gate_issuance.update(transition["missing_required_authority_objects"])
-
-        self.assertEqual(release_set, gate_release)
-        self.assertEqual(issuance_set, gate_issuance)
-
-    def test_exact_required_authority_objects_do_not_exist(self):
-        checklist = load("CINEMATICUM_REQUIRED_AUTHORITY_OBJECT_CHECKLIST.json")
-        required = {
-            item["required_object_type"]
-            for item in checklist["required_for_release_candidate_ready"] + checklist["required_for_issued_admissible_motion_picture"]
-        }
-
-        present = set()
-        for path in ROOT.rglob("*.json"):
-            if ".git" in path.parts:
-                continue
-            data = json.loads(path.read_text(encoding="utf-8"))
-            object_type = data.get("object_type")
-            if object_type:
-                present.add(object_type)
-
-        self.assertTrue(required.isdisjoint(present), required & present)
-
-    def test_required_authority_doc_is_bounded(self):
-        text = (ROOT / "REQUIRED_AUTHORITY_OBJECTS.md").read_text(encoding="utf-8")
-        self.assertIn("A schema does not satisfy an authority object", text)
-        self.assertIn("MOTION_PICTURE_ISSUANCE_ACT_OBJECT", text)
-        self.assertIn("OUTSIDER_REPLAY_PASS_OBJECT", text)
-        self.assertIn("does not issue a film", text)
-        self.assertIn("does not admit media", text)
+    def test_verifier_passes(self):
+        out = subprocess.run(
+            ["bash", "scripts/verify-required-authority-objects.sh"],
+            check=True,
+            text=True,
+            capture_output=True,
+        ).stdout
+        self.assertIn("CINEMATICUM REQUIRED AUTHORITY OBJECT CHECKLIST: PASS", out)
+        self.assertIn("AUTHORITY_OBJECT_STACK_COMPLETE=true", out)
+        self.assertIn("MAY_ADVANCE_NOW=false", out)
 
 if __name__ == "__main__":
     unittest.main()

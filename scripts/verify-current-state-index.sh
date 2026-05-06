@@ -19,14 +19,14 @@ case = load("CASES/CASE_001_THE_LAST_RENDER/CURRENT_CASE_STATE.json")
 
 assert law["one_active_truth_per_case"] is True
 assert index["surface_type"] == "ACTIVE_CURRENT_STATE"
-assert index["active_case_states"]["CASE_001_THE_LAST_RENDER"] == "OUTSIDER_REPLAY_BUNDLE_LAW_DECLARED"
+assert index["active_case_states"]["CASE_001_THE_LAST_RENDER"] == "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
 assert index["issued_films"] == []
 assert index["release_candidate_ready_cases"] == []
 assert index["media_admitted_cases"] == []
 assert index["outsider_replay_passed_cases"] == []
 
 assert case["surface_type"] == "ACTIVE_CURRENT_STATE"
-assert case["current_state"] == "OUTSIDER_REPLAY_BUNDLE_LAW_DECLARED"
+assert case["current_state"] == "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
 assert case["release_candidate_ready"] is False
 assert case["issued"] is False
 assert case["media_present"] is False
@@ -51,8 +51,8 @@ assert active == ["CASES/CASE_001_THE_LAST_RENDER/CURRENT_CASE_STATE.json"], act
 
 print("CINEMATICUM CURRENT STATE INDEX: PASS")
 print("CASE_001=THE_LAST_RENDER")
-print("ACTIVE_CURRENT_STATE=OUTSIDER_REPLAY_BUNDLE_LAW_DECLARED")
-print("RELEASE_CANDIDATE_READY=false")
+print("ACTIVE_CURRENT_STATE=REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS")
+print("REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS=false")
 print("ISSUED=false")
 print("MEDIA_PRESENT=false")
 print("REPLAY_PASSED=false")

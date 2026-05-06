@@ -1,121 +1,87 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-node <<'NODE'
-const fs = require("fs");
+python3 - <<'PY2'
+import json
+from pathlib import Path
 
-const CURRENT_STATE = "OUTSIDER_REPLAY_BUNDLE_LAW_DECLARED";
+TARGET = 'REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS'
+CASE_ID = 'CASE_001_THE_LAST_RENDER'
 
-function readJson(path) {
-  if (!fs.existsSync(path)) throw new Error("missing file: " + path);
-  return JSON.parse(fs.readFileSync(path, "utf8"));
-}
+def load(path):
+    return json.loads(Path(path).read_text(encoding="utf-8"))
 
-function pick(obj, keys, fallback = undefined) {
-  for (const key of keys) {
-    if (obj && Object.prototype.hasOwnProperty.call(obj, key)) return obj[key];
-  }
-  return fallback;
-}
+ledger = load("CINEMATICUM_AUTHORITY_OBJECT_ADMISSION_INTAKE_REJECTION_LEDGER.json")
+law = load("CINEMATICUM_AUTHORITY_OBJECT_ADMISSION_INTAKE_REJECTION_LEDGER_LAW.json")
+status = load("CASES/CASE_001_THE_LAST_RENDER/AUTHORITY_OBJECT_ADMISSION_INTAKE_REJECTION_LEDGER_STATUS.json")
+index = load("CINEMATICUM_CURRENT_STATE_INDEX.json")
+case = load("CASES/CASE_001_THE_LAST_RENDER/CURRENT_CASE_STATE.json")
+registry = load("CINEMATICUM_OBJECT_REGISTRY.json")
 
-function stateOf(obj) {
-  return pick(obj, ["current_state", "active_current_state", "current_active_state", "state"]);
-}
+for obj in (ledger, law, status):
+    assert obj["case_id"] == CASE_ID
+    assert obj["current_state"] == TARGET
+    assert obj["authority_object_admission_intake_rejection_ledger_passed"] is True
+    assert obj["intake_rejection_ledger_passed"] is True
+    assert obj["intake_order_closed"] is True
+    assert obj["intake_accepts_new_requests"] is False
 
-function requireBool(obj, keys, expected, label) {
-  const value = pick(obj, keys);
-  if (typeof value !== "boolean") throw new Error("missing boolean: " + label);
-  if (value !== expected) throw new Error("wrong boolean " + label + ": " + value);
-  return value;
-}
+    assert obj["admission_requests_present"] is False
+    assert obj["valid_admission_request_present"] is False
+    assert obj["invalid_admission_request_present"] is False
+    assert obj["rejected_admission_request_count"] == 0
+    assert obj["accepted_admission_request_count"] == 0
+    assert obj["live_admission_request_count"] == 0
 
-function requireNumber(obj, keys, expected, label) {
-  const value = pick(obj, keys);
-  if (typeof value !== "number") throw new Error("missing number: " + label);
-  if (value !== expected) throw new Error("wrong number " + label + ": " + value);
-  return value;
-}
+    assert obj["schema_non_authoritative"] is True
+    assert obj["validator_non_authoritative"] is True
+    assert obj["validation_gate_non_authoritative"] is True
+    assert obj["rejection_ledger_non_authoritative"] is True
 
-const ledger = readJson("CINEMATICUM_AUTHORITY_OBJECT_ADMISSION_INTAKE_REJECTION_LEDGER.json");
-const law = readJson("CINEMATICUM_AUTHORITY_OBJECT_ADMISSION_INTAKE_REJECTION_LEDGER_LAW.json");
-const status = readJson("CASES/CASE_001_THE_LAST_RENDER/AUTHORITY_OBJECT_ADMISSION_INTAKE_REJECTION_LEDGER_STATUS.json");
-const currentCase = readJson("CASES/CASE_001_THE_LAST_RENDER/CURRENT_CASE_STATE.json");
-const currentIndex = readJson("CINEMATICUM_CURRENT_STATE_INDEX.json");
-const validation = readJson("CINEMATICUM_AUTHORITY_OBJECT_ADMISSION_INTAKE_VALIDATION_GATE.json");
-const intake = readJson("CINEMATICUM_AUTHORITY_OBJECT_ADMISSION_INTAKE_ORDER.json");
-const closure = readJson("CINEMATICUM_AUTHORITY_OBJECT_ADMISSION_CLOSURE_SEAL.json");
+    assert obj["authority_object_stack_complete"] is True
+    assert obj["required_authority_objects_missing"] is False
+    assert obj["accepted_authority_object_count"] == 8
+    assert obj["instantiated_authority_object_count"] == 8
+    assert obj["unfilled_authority_object_slot_count"] == 0
 
-const activeState = stateOf(currentCase) || stateOf(currentIndex);
-if (activeState !== CURRENT_STATE) throw new Error("wrong current state: " + activeState);
+    assert obj["schemas_do_not_satisfy_authority_objects"] is True
+    assert obj["rejection_ledger_does_not_satisfy_authority_objects"] is True
 
-if (ledger.object_type !== "CINEMATICUM_AUTHORITY_OBJECT_ADMISSION_INTAKE_REJECTION_LEDGER") {
-  throw new Error("wrong ledger object_type");
-}
-if (law.object_type !== "CINEMATICUM_AUTHORITY_OBJECT_ADMISSION_INTAKE_REJECTION_LEDGER_LAW") {
-  throw new Error("wrong law object_type");
-}
-if (stateOf(ledger) !== CURRENT_STATE) throw new Error("ledger wrong state: " + stateOf(ledger));
-if (stateOf(status) !== CURRENT_STATE) throw new Error("status wrong state: " + stateOf(status));
+    assert obj["release_candidate_ready"] is False
+    assert obj["release_candidate_artifacts_bound"] is False
+    assert obj["authority_satisfied"] is False
+    assert obj["may_advance_now"] is False
+    assert obj["issuance_unblocked"] is False
+    assert obj["issued"] is False
+    assert obj["media_present"] is False
+    assert obj["outsider_replay_passed"] is False
+    assert obj["admissibility_verdict_present"] is False
+    assert obj["terminal_closure_present"] is False
+    assert obj["next_required_object"] == "RELEASE_CANDIDATE_GAP_LEDGER"
 
-const closureClosed = pick(closure, [
-  "admission_stack_closed",
-  "authority_object_admission_stack_closed",
-  "closed"
-], true);
-if (closureClosed !== true) throw new Error("closure seal not closed");
+assert index["active_case_states"][CASE_ID] == TARGET
+assert case["current_state"] == TARGET
+assert registry["current_active_state"] == TARGET
 
-const intakeClosed = pick(intake, [
-  "admission_stack_closed",
-  "authority_object_admission_stack_closed",
-  "closure_seal_admission_stack_closed"
-], true);
-if (intakeClosed !== true) throw new Error("intake order not closed");
-
-requireBool(validation, ["intake_validation_gate_passed"], false, "validation.intake_validation_gate_passed");
-requireNumber(validation, ["valid_admission_request_count"], 0, "validation.valid_admission_request_count");
-
-for (const obj of [ledger, status]) {
-  requireBool(obj, ["admission_stack_closed"], true, "admission_stack_closed");
-  requireNumber(obj, ["required_authority_object_count"], 8, "required_authority_object_count");
-  requireNumber(obj, ["admission_request_count"], 0, "admission_request_count");
-  requireNumber(obj, ["valid_admission_request_count"], 0, "valid_admission_request_count");
-  requireNumber(obj, ["accepted_decision_count"], 0, "accepted_decision_count");
-  requireBool(obj, ["intake_validation_gate_passed"], false, "intake_validation_gate_passed");
-  requireNumber(obj, ["intake_rejection_record_count"], 0, "intake_rejection_record_count");
-  requireBool(obj, ["live_intake_rejections_required"], false, "live_intake_rejections_required");
-  requireBool(obj, ["all_invalid_intake_rejected"], true, "all_invalid_intake_rejected");
-  requireBool(obj, ["rejection_ledger_closed"], true, "rejection_ledger_closed");
-  requireBool(obj, ["authority_satisfied"], false, "authority_satisfied");
-  requireBool(obj, ["may_advance_now"], false, "may_advance_now");
-  requireBool(obj, ["issued"], false, "issued");
-  requireBool(obj, ["media_present"], false, "media_present");
-}
-
-for (const key of [
-  "records_negative_intake_adjudication",
-  "zero_valid_intake_requires_zero_rejection_records",
-  "does_not_create_admission_requests",
-  "does_not_accept_authority_objects",
-  "does_not_instantiate_authority_objects",
-  "does_not_satisfy_authority",
-  "does_not_advance_case_state",
-  "does_not_issue",
-  "does_not_admit_media"
-]) {
-  if (law[key] !== true) throw new Error("law flag not true: " + key);
-}
-
-console.log("CINEMATICUM AUTHORITY OBJECT ADMISSION INTAKE REJECTION LEDGER: PASS");
-console.log("CURRENT_STATE=" + CURRENT_STATE);
-console.log("ADMISSION_STACK_CLOSED=true");
-console.log("REQUIRED_AUTHORITY_OBJECT_COUNT=8");
-console.log("ADMISSION_REQUEST_COUNT=0");
-console.log("VALID_ADMISSION_REQUEST_COUNT=0");
-console.log("INTAKE_REJECTION_RECORD_COUNT=0");
-console.log("ALL_INVALID_INTAKE_REJECTED=true");
-console.log("REJECTION_LEDGER_CLOSED=true");
-console.log("AUTHORITY_SATISFIED=false");
-console.log("MAY_ADVANCE_NOW=false");
-console.log("ISSUED=false");
-console.log("MEDIA_PRESENT=false");
-NODE
+print("CINEMATICUM AUTHORITY OBJECT ADMISSION INTAKE REJECTION LEDGER: PASS")
+print("CURRENT_STATE=" + TARGET)
+print("INTAKE_REJECTION_LEDGER_PASSED=true")
+print("ADMISSION_REQUESTS_PRESENT=false")
+print("VALID_ADMISSION_REQUEST_PRESENT=false")
+print("INVALID_ADMISSION_REQUEST_PRESENT=false")
+print("REJECTED_ADMISSION_REQUEST_COUNT=0")
+print("ACCEPTED_ADMISSION_REQUEST_COUNT=0")
+print("LIVE_ADMISSION_REQUEST_COUNT=0")
+print("SCHEMA_NON_AUTHORITATIVE=true")
+print("VALIDATOR_NON_AUTHORITATIVE=true")
+print("REJECTION_LEDGER_NON_AUTHORITATIVE=true")
+print("AUTHORITY_OBJECT_STACK_COMPLETE=true")
+print("ACCEPTED_AUTHORITY_OBJECT_COUNT=8")
+print("INSTANTIATED_AUTHORITY_OBJECT_COUNT=8")
+print("UNFILLED_AUTHORITY_OBJECT_SLOT_COUNT=0")
+print("RELEASE_CANDIDATE_READY=false")
+print("MAY_ADVANCE_NOW=false")
+print("ISSUANCE_UNBLOCKED=false")
+print("ISSUED=false")
+print("MEDIA_PRESENT=false")
+PY2

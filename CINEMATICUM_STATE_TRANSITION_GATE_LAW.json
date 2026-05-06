@@ -1,49 +1,21 @@
 {
   "object_type": "CINEMATICUM_STATE_TRANSITION_GATE_LAW",
   "schema_version": "cinematicum.state_transition_gate_law.v1",
-  "institution": "CINEMATICUM",
-  "root_sentence": "CINEMATICUM issues admissible motion pictures.",
-  "purpose": "Define the lawful gate for advancing CINEMATICUM from the current active state to any later state.",
-  "transition_gate_owner": "CINEMATICUM_STATE_TRANSITION_GATE.json",
-  "public_document_owner": "STATE_TRANSITION_GATE.md",
-  "current_state_owner": "CINEMATICUM_CURRENT_STATE_INDEX.json",
-  "case_current_state_owner": "CASES/CASE_001_THE_LAST_RENDER/CURRENT_CASE_STATE.json",
-  "progression_owner": "CINEMATICUM_GOVERNED_PROGRESSION_MATRIX.json",
-  "authority_precedence_owner": "CINEMATICUM_AUTHORITY_PRECEDENCE_LATTICE.json",
-  "transition_rule": "No current-state advancement is valid unless the transition gate declares the target state unblocked and the active current-state owners are updated in the same governed change.",
-  "current_state": "OUTSIDER_REPLAY_BUNDLE_LAW_DECLARED",
-  "blocked_targets": [
-    "RELEASE_CANDIDATE_READY",
-    "ISSUED_ADMISSIBLE_MOTION_PICTURE"
-  ],
-  "allowed_future_targets": [
-    "RELEASE_CANDIDATE_READY",
-    "ISSUED_ADMISSIBLE_MOTION_PICTURE"
-  ],
-  "currently_false_claims": {
-    "release_candidate_ready": false,
-    "issued": false,
-    "media_present": false,
-    "generation_present": false,
-    "engine_present": false,
-    "model_present": false,
-    "outsider_replay_passed": false,
-    "admissibility_verdict_present": false,
-    "terminal_closure_present": false
-  },
-  "forbidden_transition_conditions": [
-    "current state advanced by README prose",
-    "current state advanced by schema object",
-    "current state advanced by object registry projection",
-    "current state advanced by repository status seal",
-    "current state advanced by public inspection surface",
-    "current state advanced by negative proof",
-    "current state advanced by layer-status record",
-    "release candidate ready without director acceptance object",
-    "release candidate ready without final cut timeline lock object",
-    "release candidate ready without media hash manifest object",
-    "issued film without outsider replay pass object",
-    "issued film without admissibility verdict object",
-    "issued film without terminal closure object"
-  ]
+  "case_id": "CASE_001_THE_LAST_RENDER",
+  "gate_owner": "CINEMATICUM_STATE_TRANSITION_GATE.json",
+  "status_owner": "CASES/CASE_001_THE_LAST_RENDER/STATE_TRANSITION_GATE_STATUS.json",
+  "current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+  "from_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+  "next_required_state": "RELEASE_CANDIDATE_ARTIFACTS_BOUND",
+  "next_required_object": "RELEASE_CANDIDATE_GAP_LEDGER",
+  "release_candidate_ready": false,
+  "release_candidate_artifacts_bound": false,
+  "issued": false,
+  "media_present": false,
+  "outsider_replay_passed": false,
+  "admissibility_verdict_present": false,
+  "terminal_closure_present": false,
+  "may_advance_now": false,
+  "issuance_unblocked": false,
+  "law_declared": true
 }

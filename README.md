@@ -128,7 +128,7 @@ This prevents staged layer-status records from being mistaken for competing curr
 
 Current active state for `CASE_001_THE_LAST_RENDER`:
 
-    OUTSIDER_REPLAY_BUNDLE_LAW_DECLARED
+    REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS
 
 Still false:
 
@@ -152,7 +152,7 @@ Use one command:
 
 Current active state:
 
-    CASE_001_THE_LAST_RENDER = OUTSIDER_REPLAY_BUNDLE_LAW_DECLARED
+    CASE_001_THE_LAST_RENDER = REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS
 
 Still false:
 
@@ -176,7 +176,7 @@ The registry does not issue a film, does not admit media, does not execute repla
 
 Current active state remains:
 
-    CASE_001_THE_LAST_RENDER = OUTSIDER_REPLAY_BUNDLE_LAW_DECLARED
+    CASE_001_THE_LAST_RENDER = REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS
 
 ## PR9 — Object registry regeneration guard
 
@@ -209,7 +209,7 @@ Verify:
 
 Current active state remains:
 
-    CASE_001_THE_LAST_RENDER = OUTSIDER_REPLAY_BUNDLE_LAW_DECLARED
+    CASE_001_THE_LAST_RENDER = REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS
 
 Still false:
 
@@ -236,7 +236,7 @@ Verify:
 
 Current active state remains:
 
-    CASE_001_THE_LAST_RENDER = OUTSIDER_REPLAY_BUNDLE_LAW_DECLARED
+    CASE_001_THE_LAST_RENDER = REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS
 
 Still false:
 
@@ -290,7 +290,7 @@ Binding rule:
 
 Current active state remains:
 
-    CASE_001_THE_LAST_RENDER = OUTSIDER_REPLAY_BUNDLE_LAW_DECLARED
+    CASE_001_THE_LAST_RENDER = REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS
 
 ## PR14 — State transition gate
 
@@ -309,13 +309,13 @@ Verify:
 Current gate status:
 
     may_advance_now=false
-    next_candidate_state=RELEASE_CANDIDATE_READY
+    next_candidate_state=REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS
     next_candidate_state_unblocked=false
     final_issuance_state_unblocked=false
 
 Current active state remains:
 
-    CASE_001_THE_LAST_RENDER = OUTSIDER_REPLAY_BUNDLE_LAW_DECLARED
+    CASE_001_THE_LAST_RENDER = REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS
 
 ## PR15 — Required authority object checklist
 
@@ -339,7 +339,7 @@ Current gate status:
 
 Current active state remains:
 
-    CASE_001_THE_LAST_RENDER = OUTSIDER_REPLAY_BUNDLE_LAW_DECLARED
+    CASE_001_THE_LAST_RENDER = REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS
 
 ## PR16 — Transition attempt rejection ledger
 
@@ -364,7 +364,7 @@ Current ledger status:
 
 Current active state remains:
 
-    CASE_001_THE_LAST_RENDER = OUTSIDER_REPLAY_BUNDLE_LAW_DECLARED
+    CASE_001_THE_LAST_RENDER = REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS
 
 ## PR17 — Public perimeter sentinel
 
@@ -391,7 +391,7 @@ Current sentinel status:
 
 Current active state remains:
 
-    CASE_001_THE_LAST_RENDER = OUTSIDER_REPLAY_BUNDLE_LAW_DECLARED
+    CASE_001_THE_LAST_RENDER = REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS
 
 ## PR18 — Master verification manifest closure
 
@@ -418,7 +418,7 @@ Closure status:
 
 Current active state remains:
 
-    CASE_001_THE_LAST_RENDER = OUTSIDER_REPLAY_BUNDLE_LAW_DECLARED
+    CASE_001_THE_LAST_RENDER = REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS
 
 ## PR19 — Outsider clone replay
 
@@ -436,7 +436,7 @@ Local harness:
 
 Current active state remains:
 
-    CASE_001_THE_LAST_RENDER = OUTSIDER_REPLAY_BUNDLE_LAW_DECLARED
+    CASE_001_THE_LAST_RENDER = REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS
 
 Still false:
 
@@ -461,7 +461,7 @@ Verify:
 
 Current active state remains:
 
-    CASE_001_THE_LAST_RENDER = OUTSIDER_REPLAY_BUNDLE_LAW_DECLARED
+    CASE_001_THE_LAST_RENDER = REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS
 
 Still false:
 
@@ -487,7 +487,7 @@ Verify:
 
 Current active state remains:
 
-    CASE_001_THE_LAST_RENDER = OUTSIDER_REPLAY_BUNDLE_LAW_DECLARED
+    CASE_001_THE_LAST_RENDER = REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS
 
 Still false:
 
@@ -513,7 +513,7 @@ Verify:
 
 Current active state remains:
 
-    CASE_001_THE_LAST_RENDER = OUTSIDER_REPLAY_BUNDLE_LAW_DECLARED
+    CASE_001_THE_LAST_RENDER = REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS
 
 Still false:
 
@@ -540,7 +540,7 @@ Verify:
 
 Current active state remains:
 
-    CASE_001_THE_LAST_RENDER = OUTSIDER_REPLAY_BUNDLE_LAW_DECLARED
+    CASE_001_THE_LAST_RENDER = REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS
 
 Still false:
 
@@ -569,7 +569,7 @@ Verify:
 
 Current active state remains:
 
-    CASE_001_THE_LAST_RENDER = OUTSIDER_REPLAY_BUNDLE_LAW_DECLARED
+    CASE_001_THE_LAST_RENDER = REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS
 
 Current result:
 
@@ -597,7 +597,7 @@ Verify:
 
 Current active state remains:
 
-    CASE_001_THE_LAST_RENDER = OUTSIDER_REPLAY_BUNDLE_LAW_DECLARED
+    CASE_001_THE_LAST_RENDER = REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS
 
 Current result:
 
@@ -624,7 +624,7 @@ Verify:
 
 Current active state remains:
 
-    CASE_001_THE_LAST_RENDER = OUTSIDER_REPLAY_BUNDLE_LAW_DECLARED
+    CASE_001_THE_LAST_RENDER = REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS
 
 Current result:
 
@@ -653,7 +653,7 @@ Verify:
 
 Current active state remains:
 
-    CASE_001_THE_LAST_RENDER = OUTSIDER_REPLAY_BUNDLE_LAW_DECLARED
+    CASE_001_THE_LAST_RENDER = REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS
 
 Current result:
 
@@ -681,7 +681,7 @@ An instantiated authority object does not satisfy authority unless it is backed 
 Current state remains:
 
 ```text
-CASE_001_THE_LAST_RENDER=OUTSIDER_REPLAY_BUNDLE_LAW_DECLARED
+CASE_001_THE_LAST_RENDER=REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS
 accepted_decision_count=0
 instantiated_authority_object_count=0
 unbacked_authority_object_count=0
@@ -705,7 +705,7 @@ CINEMATICUM now contains an authority object admission enforcement gate.
 
 This gate makes the admission chain executable: live admission requests, accepted admission decisions, and instantiated authority objects are required before authority can be satisfied. Templates, schemas, fixtures, taxonomy, and empty ledgers do not advance the case.
 
-The current case remains blocked at `OUTSIDER_REPLAY_BUNDLE_LAW_DECLARED`: no media is present, no release candidate is ready, and no issuance has occurred.
+The current case remains blocked at `REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS`: no media is present, no release candidate is ready, and no issuance has occurred.
 
 ## Authority object admission closure seal
 
@@ -718,7 +718,7 @@ The seal does not admit authority objects, does not satisfy missing authority, d
 Current invariant:
 
 ```text
-CURRENT_STATE=OUTSIDER_REPLAY_BUNDLE_LAW_DECLARED
+CURRENT_STATE=REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS
 ADMISSION_STACK_CLOSED=true
 AUTHORITY_SATISFIED=false
 MAY_ADVANCE_NOW=false
@@ -732,7 +732,7 @@ The authority-object admission stack is now closed, but closure does not satisfy
 
 CINEMATICUM_AUTHORITY_OBJECT_ADMISSION_INTAKE_ORDER.json fixes the required intake order for the eight authority objects needed before any authority satisfaction or state advancement can be asserted.
 
-The intake order admits no media, creates no live request, accepts no decision, instantiates no authority object, and leaves the case blocked at OUTSIDER_REPLAY_BUNDLE_LAW_DECLARED.
+The intake order admits no media, creates no live request, accepts no decision, instantiates no authority object, and leaves the case blocked at REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS.
 ## Authority Object Admission Intake Validation Gate
 
 CINEMATICUM now declares an authority object admission intake validation gate. The gate verifies that the closed admission stack and intake order remain non-advancing: zero live admission requests, zero valid admission requests, zero accepted decisions, no instantiated authority objects, no authority satisfaction, no media, no issuance, and no current-state advancement.
@@ -852,6 +852,6 @@ CINEMATICUM records decisions for future valid reopening requests only. The deci
 - `SEVENTH_FUTURE_OUTSIDER_REPLAY_PASSAGE_AUTHORITY_OBJECT_INSTANTIATION_RECORD.md` — seventh future authority object instantiation record; outsider replay passage locked for the future authority snapshot only; does not advance state, issue, admit media, or open terminal closure.
 - Eighth future terminal closure authority object instantiation record: TERMINAL_CLOSURE_AUTHORITY_OBJECT completes the eight-slot future authority-object stack without issuing, admitting media, creating a release candidate, or advancing current state.
 - Future authority satisfaction gate: verifies the completed eight-object future authority stack while preserving authority_satisfied=false, may_advance_now=false, release_candidate_ready=false, issued=false, media_present=false, and current-state non-advancement.
-- Explicit state advancement request: records the requested transition from OUTSIDER_REPLAY_BUNDLE_LAW_DECLARED to RELEASE_CANDIDATE_READY after the future authority satisfaction gate, while preserving authority_satisfied=false, may_advance_now=false, release_candidate_ready=false, issued=false, and media_present=false until a separate decision record exists.
+- Explicit state advancement request: records the requested transition from REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS to REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS after the future authority satisfaction gate, while preserving authority_satisfied=false, may_advance_now=false, release_candidate_ready=false, issued=false, and media_present=false until a separate decision record exists.
 - Explicit state advancement decision record: accepts REQ_001_EXPLICIT_STATE_ADVANCEMENT_REQUEST after FUTURE_AUTHORITY_SATISFACTION_GATE, authorizes later state mutation, and preserves current_state unchanged, release_candidate_ready=false, issued=false, and media_present=false until a state advancement execution record exists.
 - `STATE_ADVANCEMENT_EXECUTION_RECORD`: records authorized execution after explicit advancement decision; current-state index mutation is deferred to `CURRENT_STATE_INDEX_ADVANCEMENT_RECORD`.

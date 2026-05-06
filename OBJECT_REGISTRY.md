@@ -14,7 +14,7 @@ The registry does not produce an admissibility verdict.
 
 ## Current active state
 
-    CASE_001_THE_LAST_RENDER = OUTSIDER_REPLAY_BUNDLE_LAW_DECLARED
+    CASE_001_THE_LAST_RENDER = REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS
 
 ## Registry owners
 
