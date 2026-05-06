@@ -899,6 +899,19 @@
     "verifier": "scripts/verify-real-case-authority-object-slot-index.sh",
     "workflow": "real-case-authority-object-slot-index"
   },
+  "release_candidate_artifacts_docket": {
+    "authority_satisfied": false,
+    "issued": false,
+    "law": "CINEMATICUM_RELEASE_CANDIDATE_ARTIFACTS_DOCKET_LAW.json",
+    "may_advance_now": false,
+    "media_present": false,
+    "object": "RELEASE_CANDIDATE_ARTIFACTS_DOCKET",
+    "release_candidate_ready": false,
+    "status": "CASES/CASE_001_THE_LAST_RENDER/RELEASE_CANDIDATE_ARTIFACTS_DOCKET_STATUS.json",
+    "unit_test": "tests/test_release_candidate_artifacts_docket.py",
+    "verifier": "scripts/verify-release-candidate-artifacts-docket.sh",
+    "workflow": "release-candidate-artifacts-docket"
+  },
   "release_candidate_gap_ledger": {
     "authority_satisfied": false,
     "issued": false,
