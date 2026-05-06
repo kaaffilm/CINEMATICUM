@@ -1,0 +1,29 @@
+name: release-candidate-public-inspection-dossier
+
+on:
+  push:
+    paths:
+      - 'CINEMATICUM_RELEASE_CANDIDATE_PUBLIC_INSPECTION_DOSSIER.json'
+      - 'CINEMATICUM_RELEASE_CANDIDATE_PUBLIC_INSPECTION_DOSSIER_LAW.json'
+      - 'CASES/CASE_001_THE_LAST_RENDER/RELEASE_CANDIDATE_PUBLIC_INSPECTION_DOSSIER/**'
+      - 'CASES/CASE_001_THE_LAST_RENDER/RELEASE_CANDIDATE_PUBLIC_INSPECTION_DOSSIER_STATUS.json'
+      - 'scripts/verify-release-candidate-public-inspection-dossier.sh'
+      - 'tests/test_release_candidate_public_inspection_dossier.py'
+      - '.github/workflows/release-candidate-public-inspection-dossier.yml'
+  pull_request:
+    paths:
+      - 'CINEMATICUM_RELEASE_CANDIDATE_PUBLIC_INSPECTION_DOSSIER.json'
+      - 'CINEMATICUM_RELEASE_CANDIDATE_PUBLIC_INSPECTION_DOSSIER_LAW.json'
+      - 'CASES/CASE_001_THE_LAST_RENDER/RELEASE_CANDIDATE_PUBLIC_INSPECTION_DOSSIER/**'
+      - 'CASES/CASE_001_THE_LAST_RENDER/RELEASE_CANDIDATE_PUBLIC_INSPECTION_DOSSIER_STATUS.json'
+      - 'scripts/verify-release-candidate-public-inspection-dossier.sh'
+      - 'tests/test_release_candidate_public_inspection_dossier.py'
+      - '.github/workflows/release-candidate-public-inspection-dossier.yml'
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: python3 -m unittest tests/test_release_candidate_public_inspection_dossier.py
+      - run: bash scripts/verify-release-candidate-public-inspection-dossier.sh
