@@ -32,7 +32,7 @@ assert dossier["object_type"] == "CINEMATICUM_PUBLIC_INSPECTION_DOSSIER"
 assert dossier["surface_type"] == "PUBLIC_INSPECTION_DOSSIER"
 assert dossier["private_access_required"] is False
 assert dossier["case_id"] == "CASE_001_THE_LAST_RENDER"
-assert dossier["current_state"] == "OUTSIDER_REPLAY_BUNDLE_LAW_DECLARED"
+assert dossier["current_state"] == "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
 assert "bash scripts/verify-all.sh" in dossier["inspection_commands"]
 assert "bash scripts/verify-public-inspection-dossier.sh" in dossier["inspection_commands"]
 
@@ -63,7 +63,7 @@ assert registry["current_active_state"] == dossier["current_state"]
 
 text = Path("PUBLIC_INSPECTION.md").read_text(encoding="utf-8")
 for needle in [
-    "OUTSIDER_REPLAY_BUNDLE_LAW_DECLARED",
+    "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
     "release_candidate_ready=false",
     "issued=false",
     "media_present=false",
@@ -76,8 +76,8 @@ for needle in [
 
 print("CINEMATICUM PUBLIC INSPECTION DOSSIER: PASS")
 print("PRIVATE_ACCESS_REQUIRED=false")
-print("ACTIVE_CURRENT_STATE=OUTSIDER_REPLAY_BUNDLE_LAW_DECLARED")
-print("RELEASE_CANDIDATE_READY=false")
+print("ACTIVE_CURRENT_STATE=REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS")
+print("REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS=false")
 print("ISSUED=false")
 print("MEDIA_PRESENT=false")
 print("REPLAY_PASSED=false")

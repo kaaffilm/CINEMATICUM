@@ -12,7 +12,7 @@ class TestPublicInspectionDossier(unittest.TestCase):
         dossier = load("PUBLIC_INSPECTION_DOSSIER.json")
         index = load("CINEMATICUM_CURRENT_STATE_INDEX.json")
         case = load("CASES/CASE_001_THE_LAST_RENDER/CURRENT_CASE_STATE.json")
-        self.assertEqual(dossier["current_state"], "OUTSIDER_REPLAY_BUNDLE_LAW_DECLARED")
+        self.assertEqual(dossier["current_state"], "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS")
         self.assertEqual(index["active_case_states"]["CASE_001_THE_LAST_RENDER"], dossier["current_state"])
         self.assertEqual(case["current_state"], dossier["current_state"])
 
@@ -34,7 +34,7 @@ class TestPublicInspectionDossier(unittest.TestCase):
 
     def test_public_inspection_doc_is_bounded(self):
         text = (ROOT / "PUBLIC_INSPECTION.md").read_text(encoding="utf-8")
-        self.assertIn("OUTSIDER_REPLAY_BUNDLE_LAW_DECLARED", text)
+        self.assertIn("REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS", text)
         self.assertIn("release_candidate_ready=false", text)
         self.assertIn("issued=false", text)
         self.assertIn("does not issue a film", text)

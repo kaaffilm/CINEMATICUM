@@ -29,8 +29,8 @@ assert law["current_state_owner"] == "CINEMATICUM_CURRENT_STATE_INDEX.json"
 assert law["case_current_state_owner"] == "CASES/CASE_001_THE_LAST_RENDER/CURRENT_CASE_STATE.json"
 assert law["progression_owner"] == "CINEMATICUM_GOVERNED_PROGRESSION_MATRIX.json"
 assert law["authority_precedence_owner"] == "CINEMATICUM_AUTHORITY_PRECEDENCE_LATTICE.json"
-assert law["current_state"] == "OUTSIDER_REPLAY_BUNDLE_LAW_DECLARED"
-assert "RELEASE_CANDIDATE_READY" in law["blocked_targets"]
+assert law["current_state"] == "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
+assert "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS" in law["blocked_targets"]
 assert "ISSUED_ADMISSIBLE_MOTION_PICTURE" in law["blocked_targets"]
 
 for key, expected in law["currently_false_claims"].items():
@@ -50,17 +50,17 @@ for forbidden in [
 assert gate["object_type"] == "CINEMATICUM_STATE_TRANSITION_GATE"
 assert gate["surface_type"] == "STATE_TRANSITION_GATE"
 assert gate["case_id"] == "CASE_001_THE_LAST_RENDER"
-assert gate["current_state"] == "OUTSIDER_REPLAY_BUNDLE_LAW_DECLARED"
+assert gate["current_state"] == "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
 assert gate["current_state_is_authoritative"] is False
 assert gate["gate_status"] == "BLOCKED_FOR_ADVANCEMENT"
 assert gate["may_advance_now"] is False
-assert gate["next_candidate_state"] == "RELEASE_CANDIDATE_READY"
+assert gate["next_candidate_state"] == "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
 assert gate["next_candidate_state_unblocked"] is False
 assert gate["final_issuance_state_unblocked"] is False
 
 transitions = {(t["from"], t["to"]): t for t in gate["transition_candidates"]}
-assert ("OUTSIDER_REPLAY_BUNDLE_LAW_DECLARED", "RELEASE_CANDIDATE_READY") in transitions
-assert ("RELEASE_CANDIDATE_READY", "ISSUED_ADMISSIBLE_MOTION_PICTURE") in transitions
+assert ("REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS", "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS") in transitions
+assert ("REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS", "ISSUED_ADMISSIBLE_MOTION_PICTURE") in transitions
 for transition in transitions.values():
     assert transition["status"] == "blocked"
     assert transition["missing_required_authority_objects"], transition
@@ -72,7 +72,7 @@ for required in [
     "ADMISSIBILITY_VERDICT_OBJECT",
     "TERMINAL_CLOSURE_CANDIDATE_OBJECT"
 ]:
-    assert required in transitions[("OUTSIDER_REPLAY_BUNDLE_LAW_DECLARED", "RELEASE_CANDIDATE_READY")]["missing_required_authority_objects"], required
+    assert required in transitions[("REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS", "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS")]["missing_required_authority_objects"], required
 
 for required in [
     "MOTION_PICTURE_ISSUANCE_ACT_OBJECT",
@@ -81,7 +81,7 @@ for required in [
     "TERMINAL_CLOSURE_OBJECT",
     "MEDIA_ADMISSION_OBJECT"
 ]:
-    assert required in transitions[("RELEASE_CANDIDATE_READY", "ISSUED_ADMISSIBLE_MOTION_PICTURE")]["missing_required_authority_objects"], required
+    assert required in transitions[("REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS", "ISSUED_ADMISSIBLE_MOTION_PICTURE")]["missing_required_authority_objects"], required
 
 for key in [
     "release_candidate_ready",
@@ -111,16 +111,16 @@ assert precedence["current_state"] == gate["current_state"]
 assert seal["current_state"] == gate["current_state"]
 assert negative["current_state"] == gate["current_state"]
 
-assert "RELEASE_CANDIDATE_READY" in matrix["states_not_reached"]
+assert "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS" in matrix["states_not_reached"]
 assert "ISSUED_ADMISSIBLE_MOTION_PICTURE" in matrix["states_not_reached"]
 
 text = Path("STATE_TRANSITION_GATE.md").read_text(encoding="utf-8")
 for needle in [
     "may_advance_now=false",
-    "next_candidate_state=RELEASE_CANDIDATE_READY",
+    "next_candidate_state=REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
     "next_candidate_state_unblocked=false",
     "final_issuance_state_unblocked=false",
-    "RELEASE_CANDIDATE_READY",
+    "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
     "ISSUED_ADMISSIBLE_MOTION_PICTURE",
     "release_candidate_ready=false",
     "issued=false",
@@ -132,9 +132,9 @@ for needle in [
     assert needle in text, needle
 
 print("CINEMATICUM STATE TRANSITION GATE: PASS")
-print("CURRENT_STATE=OUTSIDER_REPLAY_BUNDLE_LAW_DECLARED")
+print("CURRENT_STATE=REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS")
 print("MAY_ADVANCE_NOW=false")
-print("RELEASE_CANDIDATE_READY_UNBLOCKED=false")
+print("REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS_UNBLOCKED=false")
 print("ISSUANCE_UNBLOCKED=false")
 print("ISSUED=false")
 print("MEDIA_PRESENT=false")

@@ -12,7 +12,7 @@ class TestStateTransitionGate(unittest.TestCase):
         gate = load("CINEMATICUM_STATE_TRANSITION_GATE.json")
         index = load("CINEMATICUM_CURRENT_STATE_INDEX.json")
         case = load("CASES/CASE_001_THE_LAST_RENDER/CURRENT_CASE_STATE.json")
-        self.assertEqual(gate["current_state"], "OUTSIDER_REPLAY_BUNDLE_LAW_DECLARED")
+        self.assertEqual(gate["current_state"], "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS")
         self.assertEqual(index["active_case_states"]["CASE_001_THE_LAST_RENDER"], gate["current_state"])
         self.assertEqual(case["current_state"], gate["current_state"])
 
@@ -55,7 +55,7 @@ class TestStateTransitionGate(unittest.TestCase):
     def test_transition_gate_doc_is_bounded(self):
         text = (ROOT / "STATE_TRANSITION_GATE.md").read_text(encoding="utf-8")
         self.assertIn("may_advance_now=false", text)
-        self.assertIn("RELEASE_CANDIDATE_READY", text)
+        self.assertIn("REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS", text)
         self.assertIn("ISSUED_ADMISSIBLE_MOTION_PICTURE", text)
         self.assertIn("does not issue a film", text)
         self.assertIn("does not admit media", text)

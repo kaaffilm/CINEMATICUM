@@ -12,7 +12,7 @@ class TestRequiredAuthorityObjects(unittest.TestCase):
         checklist = load("CINEMATICUM_REQUIRED_AUTHORITY_OBJECT_CHECKLIST.json")
         index = load("CINEMATICUM_CURRENT_STATE_INDEX.json")
         case = load("CASES/CASE_001_THE_LAST_RENDER/CURRENT_CASE_STATE.json")
-        self.assertEqual(checklist["current_state"], "OUTSIDER_REPLAY_BUNDLE_LAW_DECLARED")
+        self.assertEqual(checklist["current_state"], "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS")
         self.assertEqual(index["active_case_states"]["CASE_001_THE_LAST_RENDER"], checklist["current_state"])
         self.assertEqual(case["current_state"], checklist["current_state"])
 
@@ -40,7 +40,7 @@ class TestRequiredAuthorityObjects(unittest.TestCase):
         gate_release = set()
         gate_issuance = set()
         for transition in gate["transition_candidates"]:
-            if transition["to"] == "RELEASE_CANDIDATE_READY":
+            if transition["to"] == "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS":
                 gate_release.update(transition["missing_required_authority_objects"])
             if transition["to"] == "ISSUED_ADMISSIBLE_MOTION_PICTURE":
                 gate_issuance.update(transition["missing_required_authority_objects"])

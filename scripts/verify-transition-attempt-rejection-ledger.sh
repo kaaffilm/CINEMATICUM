@@ -27,14 +27,14 @@ assert law["object_type"] == "CINEMATICUM_TRANSITION_ATTEMPT_REJECTION_LAW"
 assert law["ledger_owner"] == "CINEMATICUM_TRANSITION_ATTEMPT_REJECTION_LEDGER.json"
 assert law["transition_gate_owner"] == "CINEMATICUM_STATE_TRANSITION_GATE.json"
 assert law["required_authority_object_checklist_owner"] == "CINEMATICUM_REQUIRED_AUTHORITY_OBJECT_CHECKLIST.json"
-assert law["current_state"] == "OUTSIDER_REPLAY_BUNDLE_LAW_DECLARED"
+assert law["current_state"] == "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
 assert law["attempts_recorded"] == 0
 assert law["attempts_accepted"] == 0
 assert law["attempts_rejected"] == 0
 assert law["valid_transition_attempt_present"] is False
 assert law["invalid_transition_attempt_present"] is False
 
-for target in ["RELEASE_CANDIDATE_READY", "ISSUED_ADMISSIBLE_MOTION_PICTURE"]:
+for target in ["REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS", "ISSUED_ADMISSIBLE_MOTION_PICTURE"]:
     assert target in law["blocked_targets"], target
 
 for key, expected in law["currently_false_claims"].items():
@@ -43,7 +43,7 @@ for key, expected in law["currently_false_claims"].items():
 assert ledger["object_type"] == "CINEMATICUM_TRANSITION_ATTEMPT_REJECTION_LEDGER"
 assert ledger["surface_type"] == "TRANSITION_ATTEMPT_REJECTION_LEDGER"
 assert ledger["case_id"] == "CASE_001_THE_LAST_RENDER"
-assert ledger["current_state"] == "OUTSIDER_REPLAY_BUNDLE_LAW_DECLARED"
+assert ledger["current_state"] == "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
 assert ledger["current_truth_owner"] is False
 assert ledger["may_advance_now"] is False
 assert ledger["required_authority_objects_missing"] is True
@@ -54,7 +54,7 @@ assert ledger["attempt_counts"] == {"recorded": 0, "accepted": 0, "rejected": 0}
 assert ledger["transition_attempt_records"] == []
 
 rules = {rule["target_state"]: rule for rule in ledger["automatic_rejection_rules"]}
-assert set(rules) == {"RELEASE_CANDIDATE_READY", "ISSUED_ADMISSIBLE_MOTION_PICTURE"}
+assert set(rules) == {"REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS", "ISSUED_ADMISSIBLE_MOTION_PICTURE"}
 for rule in rules.values():
     assert rule["would_be_rejected_now"] is True
     assert "blocked" in rule["reason"] or "missing" in rule["reason"]
@@ -120,7 +120,7 @@ for needle in [
     "invalid_transition_attempt_present=false",
     "may_advance_now=false",
     "required_authority_objects_missing=true",
-    "RELEASE_CANDIDATE_READY",
+    "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
     "ISSUED_ADMISSIBLE_MOTION_PICTURE",
     "CINEMATICUM_STATE_TRANSITION_ATTEMPT",
     "release_candidate_ready=false",
@@ -132,7 +132,7 @@ for needle in [
     assert needle in text, needle
 
 print("CINEMATICUM TRANSITION ATTEMPT REJECTION LEDGER: PASS")
-print("CURRENT_STATE=OUTSIDER_REPLAY_BUNDLE_LAW_DECLARED")
+print("CURRENT_STATE=REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS")
 print("TRANSITION_ATTEMPTS_RECORDED=0")
 print("VALID_TRANSITION_ATTEMPT_PRESENT=false")
 print("MAY_ADVANCE_NOW=false")

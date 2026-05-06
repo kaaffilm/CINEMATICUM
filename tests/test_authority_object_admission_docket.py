@@ -46,7 +46,7 @@ class TestAuthorityObjectAdmissionDocket(unittest.TestCase):
         docket = load("CINEMATICUM_AUTHORITY_OBJECT_ADMISSION_DOCKET.json")
         index = load("CINEMATICUM_CURRENT_STATE_INDEX.json")
         case = load("CASES/CASE_001_THE_LAST_RENDER/CURRENT_CASE_STATE.json")
-        current = "OUTSIDER_REPLAY_BUNDLE_LAW_DECLARED"
+        current = "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
         self.assertEqual(docket["current_state"], current)
         self.assertEqual(index["active_case_states"]["CASE_001_THE_LAST_RENDER"], current)
         self.assertEqual(case["current_state"], current)

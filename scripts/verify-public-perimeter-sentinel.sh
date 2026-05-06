@@ -50,7 +50,7 @@ rejection = load("CINEMATICUM_TRANSITION_ATTEMPT_REJECTION_LEDGER.json")
 
 assert law["object_type"] == "CINEMATICUM_PUBLIC_PERIMETER_SENTINEL_LAW"
 assert law["sentinel_owner"] == "CINEMATICUM_PUBLIC_PERIMETER_SENTINEL.json"
-assert law["current_state"] == "OUTSIDER_REPLAY_BUNDLE_LAW_DECLARED"
+assert law["current_state"] == "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
 
 expected_status = {
     "private_access_required": False,
@@ -71,7 +71,7 @@ for key, expected in law["currently_false_claims"].items():
 assert sentinel["object_type"] == "CINEMATICUM_PUBLIC_PERIMETER_SENTINEL"
 assert sentinel["surface_type"] == "PUBLIC_PERIMETER_SENTINEL"
 assert sentinel["case_id"] == "CASE_001_THE_LAST_RENDER"
-assert sentinel["current_state"] == "OUTSIDER_REPLAY_BUNDLE_LAW_DECLARED"
+assert sentinel["current_state"] == "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
 assert sentinel["current_truth_owner"] is False
 
 for path in sentinel["public_inspection_chain"] + sentinel["machine_truth_chain"] + sentinel["required_verifiers"]:
@@ -178,7 +178,7 @@ for needle in [
     assert needle in text, needle
 
 print("CINEMATICUM PUBLIC PERIMETER SENTINEL: PASS")
-print("CURRENT_STATE=OUTSIDER_REPLAY_BUNDLE_LAW_DECLARED")
+print("CURRENT_STATE=REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS")
 print("PRIVATE_ACCESS_REQUIRED=false")
 print("MEDIA_OR_MODEL_PAYLOAD_PRESENT=false")
 print("FORBIDDEN_PRIVATE_FILE_PRESENT=false")

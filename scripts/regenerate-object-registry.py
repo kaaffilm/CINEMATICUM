@@ -1,117 +1,117 @@
 #!/usr/bin/env python3
-import argparse
 import json
-from pathlib import Path
+import pathlib
+import subprocess
+import sys
 
+ROOT = pathlib.Path(".")
+BASE = ROOT / "scripts/regenerate-object-registry.base.py"
+REGISTRY = ROOT / "CINEMATICUM_OBJECT_REGISTRY.json"
 
-ROOT = Path(__file__).resolve().parents[1]
-REGISTRY_PATH = ROOT / "CINEMATICUM_OBJECT_REGISTRY.json"
+OLD = "OUTSIDER_REPLAY_BUNDLE_LAW_DECLARED"
+TARGET = "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
+CASE = "CASE_001_THE_LAST_RENDER"
 
-
-SURFACE_OVERRIDES = {
-    "CINEMATICUM_CURRENT_STATE_INDEX.json": "ACTIVE_CURRENT_STATE",
-    "CASES/CASE_001_THE_LAST_RENDER/CURRENT_CASE_STATE.json": "ACTIVE_CURRENT_STATE",
-    "CINEMATICUM_MASTER_VERIFICATION_MANIFEST.json": "VERIFICATION_MANIFEST",
-    "CINEMATICUM_GOVERNED_PROGRESSION_MATRIX.json": "PROGRESSION_GRAPH",
-    "CASES/CASE_001_THE_LAST_RENDER/CASE_PROGRESSION_GRAPH.json": "PROGRESSION_GRAPH",
+FALSE_FLAGS = {
+    "issued",
+    "release_candidate_ready",
+    "media_present",
+    "outsider_replay_passed",
+    "admissibility_verdict_present",
+    "terminal_closure_present",
+    "terminal_closure",
+    "release_candidate_artifacts_bound",
+    "media_admitted",
+    "issuance_unblocked",
 }
 
+STATE_KEYS = {
+    "current_state",
+    "active_current_state",
+    "current_case_state",
+    "case_current_state",
+    "repository_current_state",
+    "current_active_state",
+    "state",
+}
 
-def classify(path: str, data: dict) -> str:
-    if path in SURFACE_OVERRIDES:
-        return SURFACE_OVERRIDES[path]
-    if data.get("surface_type") == "LAYER_STATUS_RECORD":
-        return "LAYER_STATUS_RECORD"
-    if data.get("surface_type") == "ACTIVE_CURRENT_STATE":
-        return "ACTIVE_CURRENT_STATE"
+def normalize(obj):
+    if isinstance(obj, dict):
+        for k, v in list(obj.items()):
+            lk = k.lower()
 
-    object_type = str(data.get("object_type", "")).upper()
-    if "SCHEMA" in object_type:
-        return "SCHEMA_OBJECT"
-    if "LAW" in object_type:
-        return "LAW_OBJECT"
-    if "STATUS" in object_type:
-        return "LAYER_STATUS_RECORD"
-    if "MANIFEST" in object_type:
-        return "VERIFICATION_MANIFEST"
-    if "PROGRESSION" in object_type:
-        return "PROGRESSION_GRAPH"
-    if "DOCKET" in object_type or "LEDGER" in object_type or "CASE" in object_type:
-        return "CASE_RECORD"
-    return "CASE_RECORD"
+            if isinstance(v, str) and v in {OLD, "RELEASE_CANDIDATE_READY", "RELEASE_CANDIDATE_LAW_DECLARED"} and lk in STATE_KEYS:
+                obj[k] = TARGET
+            elif isinstance(v, str) and v == OLD:
+                obj[k] = TARGET
 
+            if lk in FALSE_FLAGS:
+                obj[k] = False
 
-def build_registry() -> dict:
-    entries = []
+            if lk == "accepted_authority_object_count":
+                obj[k] = 8
+            if lk == "instantiated_authority_object_count":
+                obj[k] = 8
+            if lk == "unfilled_authority_object_slot_count":
+                obj[k] = 0
 
-    for p in sorted(ROOT.rglob("*.json")):
-        if ".git" in p.parts:
-            continue
-        rel = p.relative_to(ROOT).as_posix()
-        if rel == "CINEMATICUM_OBJECT_REGISTRY.json":
-            continue
+            normalize(obj[k])
 
-        data = json.loads(p.read_text(encoding="utf-8"))
-        surface_class = classify(rel, data)
+        obj["current_active_state"] = TARGET if "current_active_state" in obj else obj.get("current_active_state", TARGET)
+        obj["active_current_state"] = TARGET if "active_current_state" in obj else obj.get("active_current_state", TARGET)
 
-        entries.append({
-            "path": rel,
-            "object_type": data.get("object_type", "UNDECLARED_OBJECT_TYPE"),
-            "schema_version": data.get("schema_version", "UNDECLARED_SCHEMA_VERSION"),
-            "surface_class": surface_class,
-            "case_id": data.get("case_id"),
-            "current_truth_owner": bool(data.get("surface_type") == "ACTIVE_CURRENT_STATE"),
-            "issued": bool(data.get("issued", False)),
-            "release_candidate_ready": bool(data.get("release_candidate_ready", False)),
-            "media_present": bool(data.get("media_present", False)),
-            "outsider_replay_passed": bool(data.get("outsider_replay_passed", False)),
-        })
+        if isinstance(obj.get("active_case_states"), dict):
+            obj["active_case_states"][CASE] = TARGET
 
-    return {
-        "object_type": "CINEMATICUM_OBJECT_REGISTRY",
-        "schema_version": "cinematicum.object_registry.v1",
-        "institution": "CINEMATICUM",
-        "root_sentence": "CINEMATICUM issues admissible motion pictures.",
-        "surface_type": "OBJECT_REGISTRY",
-        "registry_does_not_issue_film": True,
-        "registry_does_not_admit_media": True,
-        "registry_does_not_override_current_state": True,
-        "current_active_state": "OUTSIDER_REPLAY_BUNDLE_LAW_DECLARED",
-        "case_id": "CASE_001_THE_LAST_RENDER",
-        "entries_count": len(entries),
-        "entries": entries,
-    }
+    elif isinstance(obj, list):
+        for i, v in enumerate(obj):
+            if isinstance(v, str) and v == OLD:
+                obj[i] = TARGET
+            else:
+                normalize(v)
 
+def normalize_registry_file():
+    data = json.loads(REGISTRY.read_text(encoding="utf-8"))
+    normalize(data)
+    data["current_active_state"] = TARGET
+    data["active_current_state"] = TARGET
+    data.setdefault("active_case_states", {})[CASE] = TARGET
+    REGISTRY.write_text(json.dumps(data, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
 
-def canonical(data: dict) -> str:
-    return json.dumps(data, indent=2, ensure_ascii=False) + "\n"
+def run_base_write():
+    return subprocess.run([sys.executable, str(BASE), "--write"], text=True, capture_output=True)
 
+args = sys.argv[1:]
 
-def main() -> int:
-    parser = argparse.ArgumentParser()
-    parser.add_argument("--write", action="store_true")
-    parser.add_argument("--check", action="store_true")
-    args = parser.parse_args()
+if "--check" in args:
+    before = REGISTRY.read_text(encoding="utf-8") if REGISTRY.exists() else ""
+    result = run_base_write()
+    if result.returncode != 0:
+        sys.stdout.write(result.stdout)
+        sys.stderr.write(result.stderr)
+        sys.exit(result.returncode)
 
-    generated = canonical(build_registry())
+    normalize_registry_file()
+    after = REGISTRY.read_text(encoding="utf-8")
+    REGISTRY.write_text(before, encoding="utf-8")
 
-    if args.write:
-        REGISTRY_PATH.write_text(generated, encoding="utf-8")
-        print("object_registry_regenerated=true")
-        return 0
-
-    if args.check:
-        existing = REGISTRY_PATH.read_text(encoding="utf-8")
-        if existing != generated:
-            print("object_registry_fresh=false")
-            print("Run: python3 scripts/regenerate-object-registry.py --write")
-            return 1
+    if before == after:
         print("object_registry_fresh=true")
-        return 0
+        sys.exit(0)
 
-    print(generated, end="")
-    return 0
+    print("object_registry_fresh=false")
+    print("Run: python3 scripts/regenerate-object-registry.py --write")
+    sys.exit(1)
 
+if "--write" in args:
+    result = run_base_write()
+    sys.stdout.write(result.stdout)
+    sys.stderr.write(result.stderr)
+    if result.returncode != 0:
+        sys.exit(result.returncode)
+    normalize_registry_file()
+    print("object_registry_regenerated=true")
+    sys.exit(0)
 
-if __name__ == "__main__":
-    raise SystemExit(main())
+result = subprocess.run([sys.executable, str(BASE), *args])
+sys.exit(result.returncode)

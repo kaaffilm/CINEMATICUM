@@ -12,7 +12,7 @@ class TestPublicPerimeterSentinel(unittest.TestCase):
         sentinel = load("CINEMATICUM_PUBLIC_PERIMETER_SENTINEL.json")
         index = load("CINEMATICUM_CURRENT_STATE_INDEX.json")
         case = load("CASES/CASE_001_THE_LAST_RENDER/CURRENT_CASE_STATE.json")
-        self.assertEqual(sentinel["current_state"], "OUTSIDER_REPLAY_BUNDLE_LAW_DECLARED")
+        self.assertEqual(sentinel["current_state"], "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS")
         self.assertEqual(index["active_case_states"]["CASE_001_THE_LAST_RENDER"], sentinel["current_state"])
         self.assertEqual(case["current_state"], sentinel["current_state"])
 

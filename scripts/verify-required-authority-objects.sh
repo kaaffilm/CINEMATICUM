@@ -25,7 +25,7 @@ registry = load("CINEMATICUM_OBJECT_REGISTRY.json")
 assert law["object_type"] == "CINEMATICUM_REQUIRED_AUTHORITY_OBJECT_CHECKLIST_LAW"
 assert law["checklist_owner"] == "CINEMATICUM_REQUIRED_AUTHORITY_OBJECT_CHECKLIST.json"
 assert law["transition_gate_owner"] == "CINEMATICUM_STATE_TRANSITION_GATE.json"
-assert law["current_state"] == "OUTSIDER_REPLAY_BUNDLE_LAW_DECLARED"
+assert law["current_state"] == "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
 
 for key, expected in law["checklist_must_assert"].items():
     assert expected is (True if key in ["required_authority_objects_missing", "schemas_do_not_satisfy_authority_objects"] else False), key
@@ -47,7 +47,7 @@ for forbidden in [
 assert checklist["object_type"] == "CINEMATICUM_REQUIRED_AUTHORITY_OBJECT_CHECKLIST"
 assert checklist["surface_type"] == "REQUIRED_AUTHORITY_OBJECT_CHECKLIST"
 assert checklist["case_id"] == "CASE_001_THE_LAST_RENDER"
-assert checklist["current_state"] == "OUTSIDER_REPLAY_BUNDLE_LAW_DECLARED"
+assert checklist["current_state"] == "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
 assert checklist["current_truth_owner"] is False
 assert checklist["schemas_do_not_satisfy_authority_objects"] is True
 assert checklist["may_advance_now"] is False
@@ -67,7 +67,7 @@ issuance_required = {
 gate_release_missing = set()
 gate_issuance_missing = set()
 for transition in gate["transition_candidates"]:
-    if transition["to"] == "RELEASE_CANDIDATE_READY":
+    if transition["to"] == "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS":
         gate_release_missing.update(transition["missing_required_authority_objects"])
     if transition["to"] == "ISSUED_ADMISSIBLE_MOTION_PICTURE":
         gate_issuance_missing.update(transition["missing_required_authority_objects"])
@@ -148,11 +148,11 @@ for needle in [
     assert needle in text, needle
 
 print("CINEMATICUM REQUIRED AUTHORITY OBJECT CHECKLIST: PASS")
-print("CURRENT_STATE=OUTSIDER_REPLAY_BUNDLE_LAW_DECLARED")
+print("CURRENT_STATE=REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS")
 print("MAY_ADVANCE_NOW=false")
 print("REQUIRED_AUTHORITY_OBJECTS_MISSING=true")
 print("SCHEMAS_DO_NOT_SATISFY_AUTHORITY_OBJECTS=true")
-print("RELEASE_CANDIDATE_READY=false")
+print("REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS=false")
 print("ISSUED=false")
 print("MEDIA_PRESENT=false")
 PY

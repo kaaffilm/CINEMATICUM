@@ -7,9 +7,9 @@
   "registry_does_not_issue_film": true,
   "registry_does_not_admit_media": true,
   "registry_does_not_override_current_state": true,
-  "current_active_state": "OUTSIDER_REPLAY_BUNDLE_LAW_DECLARED",
+  "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
   "case_id": "CASE_001_THE_LAST_RENDER",
-  "entries_count": 357,
+  "entries_count": 360,
   "entries": [
     {
       "path": "ADMISSIBILITY_VERDICT_SCHEMA.json",
@@ -21,7 +21,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "ADMISSIBLE_FILM_OBJECT_ANATOMY.json",
@@ -33,7 +35,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "ADMISSIBLE_MOTION_PICTURE_STANDARD.json",
@@ -45,7 +49,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "AUTHORITY_ACCEPTANCE_OBJECT_LAW.json",
@@ -57,7 +63,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "CASES/CASE_001_THE_LAST_RENDER/ADMISSIBILITY_TARGET.json",
@@ -69,7 +77,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "CASES/CASE_001_THE_LAST_RENDER/AUTHORITY_ACCEPTANCE_STATUS.json",
@@ -81,7 +91,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "CASES/CASE_001_THE_LAST_RENDER/AUTHORITY_OBJECT_ADMISSION_CLOSURE_SEAL_STATUS.json",
@@ -93,7 +105,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "CASES/CASE_001_THE_LAST_RENDER/AUTHORITY_OBJECT_ADMISSION_DECISION_LEDGER_STATUS.json",
@@ -105,7 +119,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "CASES/CASE_001_THE_LAST_RENDER/AUTHORITY_OBJECT_ADMISSION_DOCKET_STATUS.json",
@@ -117,7 +133,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "CASES/CASE_001_THE_LAST_RENDER/AUTHORITY_OBJECT_ADMISSION_ENFORCEMENT_GATE_STATUS.json",
@@ -129,7 +147,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "CASES/CASE_001_THE_LAST_RENDER/AUTHORITY_OBJECT_ADMISSION_INTAKE_FINALITY_SEAL_STATUS.json",
@@ -141,7 +161,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "CASES/CASE_001_THE_LAST_RENDER/AUTHORITY_OBJECT_ADMISSION_INTAKE_ORDER_STATUS.json",
@@ -153,7 +175,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "CASES/CASE_001_THE_LAST_RENDER/AUTHORITY_OBJECT_ADMISSION_INTAKE_REJECTION_LEDGER_STATUS.json",
@@ -165,7 +189,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "CASES/CASE_001_THE_LAST_RENDER/AUTHORITY_OBJECT_ADMISSION_INTAKE_REOPENING_GATE_STATUS.json",
@@ -177,7 +203,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "CASES/CASE_001_THE_LAST_RENDER/AUTHORITY_OBJECT_ADMISSION_INTAKE_REOPENING_REQUEST_CLOSURE_SEAL_STATUS.json",
@@ -189,7 +217,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "CASES/CASE_001_THE_LAST_RENDER/AUTHORITY_OBJECT_ADMISSION_INTAKE_REOPENING_REQUEST_DECISION_LEDGER_STATUS.json",
@@ -201,7 +231,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "CASES/CASE_001_THE_LAST_RENDER/AUTHORITY_OBJECT_ADMISSION_INTAKE_REOPENING_REQUEST_ENFORCEMENT_GATE_STATUS.json",
@@ -213,7 +245,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "CASES/CASE_001_THE_LAST_RENDER/AUTHORITY_OBJECT_ADMISSION_INTAKE_REOPENING_REQUEST_FINALITY_SEAL_STATUS.json",
@@ -225,7 +259,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "CASES/CASE_001_THE_LAST_RENDER/AUTHORITY_OBJECT_ADMISSION_INTAKE_REOPENING_REQUEST_FUTURE_CONTINUITY_SEAL_STATUS.json",
@@ -237,7 +273,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "CASES/CASE_001_THE_LAST_RENDER/AUTHORITY_OBJECT_ADMISSION_INTAKE_REOPENING_REQUEST_FUTURE_SNAPSHOT_FORK_GATE_STATUS.json",
@@ -249,7 +287,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "CASES/CASE_001_THE_LAST_RENDER/AUTHORITY_OBJECT_ADMISSION_INTAKE_REOPENING_REQUEST_FUTURE_SNAPSHOT_FORK_LEDGER_CLOSURE_SEAL_STATUS.json",
@@ -261,7 +301,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "CASES/CASE_001_THE_LAST_RENDER/AUTHORITY_OBJECT_ADMISSION_INTAKE_REOPENING_REQUEST_FUTURE_SNAPSHOT_FORK_LEDGER_FINALITY_SEAL_STATUS.json",
@@ -273,7 +315,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "CASES/CASE_001_THE_LAST_RENDER/AUTHORITY_OBJECT_ADMISSION_INTAKE_REOPENING_REQUEST_FUTURE_SNAPSHOT_FORK_LEDGER_FUTURE_CONTINUITY_SEAL_STATUS.json",
@@ -285,7 +329,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "CASES/CASE_001_THE_LAST_RENDER/AUTHORITY_OBJECT_ADMISSION_INTAKE_REOPENING_REQUEST_FUTURE_SNAPSHOT_FORK_LEDGER_NON_ADVANCEMENT_SEAL_STATUS.json",
@@ -297,7 +343,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "CASES/CASE_001_THE_LAST_RENDER/AUTHORITY_OBJECT_ADMISSION_INTAKE_REOPENING_REQUEST_FUTURE_SNAPSHOT_FORK_LEDGER_NON_AUDIENCE_ARTIFACT_SEAL_STATUS.json",
@@ -309,7 +357,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "CASES/CASE_001_THE_LAST_RENDER/AUTHORITY_OBJECT_ADMISSION_INTAKE_REOPENING_REQUEST_FUTURE_SNAPSHOT_FORK_LEDGER_NON_AUTHORITY_SATISFACTION_SEAL_STATUS.json",
@@ -321,7 +371,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "CASES/CASE_001_THE_LAST_RENDER/AUTHORITY_OBJECT_ADMISSION_INTAKE_REOPENING_REQUEST_FUTURE_SNAPSHOT_FORK_LEDGER_NON_ISSUANCE_SEAL_STATUS.json",
@@ -333,7 +385,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "CASES/CASE_001_THE_LAST_RENDER/AUTHORITY_OBJECT_ADMISSION_INTAKE_REOPENING_REQUEST_FUTURE_SNAPSHOT_FORK_LEDGER_NON_MEDIA_ADMISSION_SEAL_STATUS.json",
@@ -345,7 +399,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "CASES/CASE_001_THE_LAST_RENDER/AUTHORITY_OBJECT_ADMISSION_INTAKE_REOPENING_REQUEST_FUTURE_SNAPSHOT_FORK_LEDGER_NON_OUTSIDER_REPLAY_PASSAGE_SEAL_STATUS.json",
@@ -357,7 +413,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "CASES/CASE_001_THE_LAST_RENDER/AUTHORITY_OBJECT_ADMISSION_INTAKE_REOPENING_REQUEST_FUTURE_SNAPSHOT_FORK_LEDGER_NON_PROOF_ARTIFACT_SEAL_STATUS.json",
@@ -369,7 +427,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "CASES/CASE_001_THE_LAST_RENDER/AUTHORITY_OBJECT_ADMISSION_INTAKE_REOPENING_REQUEST_FUTURE_SNAPSHOT_FORK_LEDGER_NON_PUBLIC_INSPECTION_VERDICT_SEAL_STATUS.json",
@@ -381,7 +441,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "CASES/CASE_001_THE_LAST_RENDER/AUTHORITY_OBJECT_ADMISSION_INTAKE_REOPENING_REQUEST_FUTURE_SNAPSHOT_FORK_LEDGER_NON_PUBLIC_REPLAY_INDEX_SEAL_STATUS.json",
@@ -393,7 +455,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "CASES/CASE_001_THE_LAST_RENDER/AUTHORITY_OBJECT_ADMISSION_INTAKE_REOPENING_REQUEST_FUTURE_SNAPSHOT_FORK_LEDGER_NON_RELEASE_CANDIDATE_SEAL_STATUS.json",
@@ -405,7 +469,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "CASES/CASE_001_THE_LAST_RENDER/AUTHORITY_OBJECT_ADMISSION_INTAKE_REOPENING_REQUEST_FUTURE_SNAPSHOT_FORK_LEDGER_NON_TERMINAL_CLOSURE_INDEX_SEAL_STATUS.json",
@@ -417,7 +483,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "CASES/CASE_001_THE_LAST_RENDER/AUTHORITY_OBJECT_ADMISSION_INTAKE_REOPENING_REQUEST_FUTURE_SNAPSHOT_FORK_LEDGER_OUTSIDER_REPLAY_SEAL_STATUS.json",
@@ -429,7 +497,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "CASES/CASE_001_THE_LAST_RENDER/AUTHORITY_OBJECT_ADMISSION_INTAKE_REOPENING_REQUEST_FUTURE_SNAPSHOT_FORK_LEDGER_PERMANENCE_SEAL_STATUS.json",
@@ -441,7 +511,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "CASES/CASE_001_THE_LAST_RENDER/AUTHORITY_OBJECT_ADMISSION_INTAKE_REOPENING_REQUEST_FUTURE_SNAPSHOT_FORK_LEDGER_STATUS.json",
@@ -453,7 +525,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "CASES/CASE_001_THE_LAST_RENDER/AUTHORITY_OBJECT_ADMISSION_INTAKE_REOPENING_REQUEST_FUTURE_SNAPSHOT_FORK_LEDGER_TERMINAL_CLOSURE_SEAL_STATUS.json",
@@ -465,7 +539,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "CASES/CASE_001_THE_LAST_RENDER/AUTHORITY_OBJECT_ADMISSION_INTAKE_REOPENING_REQUEST_FUTURE_SNAPSHOT_FORK_LEDGER_TERMINAL_SEAL_STATUS.json",
@@ -477,7 +553,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "CASES/CASE_001_THE_LAST_RENDER/AUTHORITY_OBJECT_ADMISSION_INTAKE_REOPENING_REQUEST_FUTURE_SNAPSHOT_FORK_LEDGER_ZERO_PERIMETER_COMPLETION_INDEX_STATUS.json",
@@ -489,7 +567,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "CASES/CASE_001_THE_LAST_RENDER/AUTHORITY_OBJECT_ADMISSION_INTAKE_REOPENING_REQUEST_PERMANENCE_SEAL_STATUS.json",
@@ -501,7 +581,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "CASES/CASE_001_THE_LAST_RENDER/AUTHORITY_OBJECT_ADMISSION_INTAKE_REOPENING_REQUEST_REJECTION_CORPUS_STATUS.json",
@@ -513,7 +595,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "CASES/CASE_001_THE_LAST_RENDER/AUTHORITY_OBJECT_ADMISSION_INTAKE_REOPENING_REQUEST_REJECTION_TAXONOMY_STATUS.json",
@@ -525,7 +609,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "CASES/CASE_001_THE_LAST_RENDER/AUTHORITY_OBJECT_ADMISSION_INTAKE_REOPENING_REQUEST_SCHEMA_STATUS.json",
@@ -537,7 +623,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "CASES/CASE_001_THE_LAST_RENDER/AUTHORITY_OBJECT_ADMISSION_INTAKE_REOPENING_REQUEST_TERMINAL_SEAL_STATUS.json",
@@ -549,7 +637,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "CASES/CASE_001_THE_LAST_RENDER/AUTHORITY_OBJECT_ADMISSION_INTAKE_REOPENING_REQUEST_VALIDATOR_STATUS.json",
@@ -561,7 +651,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "CASES/CASE_001_THE_LAST_RENDER/AUTHORITY_OBJECT_ADMISSION_INTAKE_VALIDATION_GATE_STATUS.json",
@@ -573,7 +665,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "CASES/CASE_001_THE_LAST_RENDER/AUTHORITY_OBJECT_ADMISSION_REJECTION_TAXONOMY_STATUS.json",
@@ -585,7 +679,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "CASES/CASE_001_THE_LAST_RENDER/AUTHORITY_OBJECT_ADMISSION_REQUEST_REJECTION_CORPUS_STATUS.json",
@@ -597,7 +693,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "CASES/CASE_001_THE_LAST_RENDER/AUTHORITY_OBJECT_ADMISSION_REQUEST_SCHEMA_STATUS.json",
@@ -609,7 +707,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "CASES/CASE_001_THE_LAST_RENDER/AUTHORITY_OBJECT_ADMISSION_REQUEST_VALIDATOR_STATUS.json",
@@ -621,7 +721,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "CASES/CASE_001_THE_LAST_RENDER/AUTHORITY_OBJECT_INSTANTIATION_GATE_STATUS.json",
@@ -633,7 +735,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "CASES/CASE_001_THE_LAST_RENDER/AUTHORITY_OBJECT_TEMPLATE_KIT_STATUS.json",
@@ -645,7 +749,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "CASES/CASE_001_THE_LAST_RENDER/AUTHORITY_PRECEDENCE_STATUS.json",
@@ -657,7 +763,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "CASES/CASE_001_THE_LAST_RENDER/CASE_CHARTER.json",
@@ -669,7 +777,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "CASES/CASE_001_THE_LAST_RENDER/CASE_DOCKET.json",
@@ -681,7 +791,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "CASES/CASE_001_THE_LAST_RENDER/CASE_EVIDENCE_LEDGER.json",
@@ -693,7 +805,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "CASES/CASE_001_THE_LAST_RENDER/CASE_PROGRESSION_GRAPH.json",
@@ -705,7 +819,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "CASES/CASE_001_THE_LAST_RENDER/CURRENT_CASE_STATE.json",
@@ -717,7 +833,37 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
+    },
+    {
+      "path": "CASES/CASE_001_THE_LAST_RENDER/CURRENT_STATE_INDEX_ADVANCEMENT_RECORD/CURRENT_STATE_INDEX_ADVANCEMENT_RECORD.json",
+      "object_type": "CINEMATICUM_CURRENT_STATE_INDEX_ADVANCEMENT_RECORD",
+      "schema_version": "UNDECLARED_SCHEMA_VERSION",
+      "surface_class": "CASE_RECORD",
+      "case_id": "CASE_001_THE_LAST_RENDER",
+      "current_truth_owner": false,
+      "issued": false,
+      "release_candidate_ready": false,
+      "media_present": false,
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
+    },
+    {
+      "path": "CASES/CASE_001_THE_LAST_RENDER/CURRENT_STATE_INDEX_ADVANCEMENT_RECORD_STATUS.json",
+      "object_type": "CINEMATICUM_CURRENT_STATE_INDEX_ADVANCEMENT_RECORD",
+      "schema_version": "UNDECLARED_SCHEMA_VERSION",
+      "surface_class": "CASE_RECORD",
+      "case_id": "CASE_001_THE_LAST_RENDER",
+      "current_truth_owner": false,
+      "issued": false,
+      "release_candidate_ready": false,
+      "media_present": false,
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "CASES/CASE_001_THE_LAST_RENDER/CURRENT_ZERO_LEDGER_NO_FURTHER_ADVANCEMENT_PROOF_STATUS.json",
@@ -729,7 +875,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "CASES/CASE_001_THE_LAST_RENDER/EIGHTH_FUTURE_TERMINAL_CLOSURE_AUTHORITY_OBJECT_INSTANTIATION_RECORD_STATUS.json",
@@ -741,7 +889,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "CASES/CASE_001_THE_LAST_RENDER/EXPLICIT_STATE_ADVANCEMENT_DECISION_RECORD/EXPLICIT_STATE_ADVANCEMENT_DECISION_RECORD.json",
@@ -753,7 +903,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "CASES/CASE_001_THE_LAST_RENDER/EXPLICIT_STATE_ADVANCEMENT_DECISION_RECORD_STATUS.json",
@@ -765,7 +917,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "CASES/CASE_001_THE_LAST_RENDER/EXPLICIT_STATE_ADVANCEMENT_REQUEST/EXPLICIT_STATE_ADVANCEMENT_REQUEST.json",
@@ -777,7 +931,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "CASES/CASE_001_THE_LAST_RENDER/EXPLICIT_STATE_ADVANCEMENT_REQUEST_STATUS.json",
@@ -789,7 +945,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "CASES/CASE_001_THE_LAST_RENDER/FIFTH_FUTURE_RELEASE_DELIVERY_ARTIFACTS_LOCK_AUTHORITY_OBJECT_INSTANTIATION_RECORD_STATUS.json",
@@ -801,7 +959,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "CASES/CASE_001_THE_LAST_RENDER/FINAL_CUT_LAW.json",
@@ -813,7 +973,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "CASES/CASE_001_THE_LAST_RENDER/FIRST_FUTURE_DIRECTOR_FINAL_CUT_AUTHORITY_OBJECT_ADMISSION_DECISION_RECORD_STATUS.json",
@@ -825,7 +987,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "CASES/CASE_001_THE_LAST_RENDER/FIRST_FUTURE_DIRECTOR_FINAL_CUT_AUTHORITY_OBJECT_ADMISSION_REQUEST_STATUS.json",
@@ -837,7 +1001,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "CASES/CASE_001_THE_LAST_RENDER/FIRST_FUTURE_DIRECTOR_FINAL_CUT_AUTHORITY_OBJECT_ADMISSION_REQUEST_VALIDATION_RECORD_STATUS.json",
@@ -849,7 +1015,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "CASES/CASE_001_THE_LAST_RENDER/FIRST_FUTURE_DIRECTOR_FINAL_CUT_AUTHORITY_OBJECT_INSTANTIATION_RECORD_STATUS.json",
@@ -861,7 +1029,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "CASES/CASE_001_THE_LAST_RENDER/FOURTH_FUTURE_COLOR_GRADE_LOCK_AUTHORITY_OBJECT_INSTANTIATION_RECORD_STATUS.json",
@@ -873,7 +1043,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "CASES/CASE_001_THE_LAST_RENDER/FUTURE_AUTHORITY_SATISFACTION_GATE/FUTURE_AUTHORITY_SATISFACTION_GATE.json",
@@ -885,7 +1057,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "CASES/CASE_001_THE_LAST_RENDER/FUTURE_AUTHORITY_SATISFACTION_GATE_STATUS.json",
@@ -897,7 +1071,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "CASES/CASE_001_THE_LAST_RENDER/FUTURE_REAL_CASE_AUTHORITY_OBJECTS/ARCHIVIST_PROOF_CHAIN_LOCK_AUTHORITY_OBJECT.json",
@@ -909,7 +1085,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "CASES/CASE_001_THE_LAST_RENDER/FUTURE_REAL_CASE_AUTHORITY_OBJECTS/COLOR_GRADE_LOCK_AUTHORITY_OBJECT.json",
@@ -921,7 +1099,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "CASES/CASE_001_THE_LAST_RENDER/FUTURE_REAL_CASE_AUTHORITY_OBJECTS/DIRECTOR_FINAL_CUT_AUTHORITY_OBJECT.json",
@@ -933,7 +1113,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "CASES/CASE_001_THE_LAST_RENDER/FUTURE_REAL_CASE_AUTHORITY_OBJECTS/EDITORIAL_TIMELINE_AUTHORITY_OBJECT.json",
@@ -945,7 +1127,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "CASES/CASE_001_THE_LAST_RENDER/FUTURE_REAL_CASE_AUTHORITY_OBJECTS/OUTSIDER_REPLAY_PASSAGE_AUTHORITY_OBJECT.json",
@@ -957,7 +1141,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "CASES/CASE_001_THE_LAST_RENDER/FUTURE_REAL_CASE_AUTHORITY_OBJECTS/RELEASE_DELIVERY_ARTIFACTS_LOCK_AUTHORITY_OBJECT.json",
@@ -969,7 +1155,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "CASES/CASE_001_THE_LAST_RENDER/FUTURE_REAL_CASE_AUTHORITY_OBJECTS/SOUND_FINAL_MIX_LOCK_AUTHORITY_OBJECT.json",
@@ -981,7 +1169,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "CASES/CASE_001_THE_LAST_RENDER/FUTURE_REAL_CASE_AUTHORITY_OBJECTS/TERMINAL_CLOSURE_AUTHORITY_OBJECT.json",
@@ -993,7 +1183,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "CASES/CASE_001_THE_LAST_RENDER/FUTURE_REAL_CASE_AUTHORITY_OBJECT_ADMISSION_DECISION_RECORDS/DEC_001_DIRECTOR_FINAL_CUT_AUTHORITY_OBJECT.json",
@@ -1005,7 +1197,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "CASES/CASE_001_THE_LAST_RENDER/FUTURE_REAL_CASE_AUTHORITY_OBJECT_ADMISSION_DECISION_RECORDS/DEC_002_EDITORIAL_TIMELINE_AUTHORITY_OBJECT.json",
@@ -1017,7 +1211,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "CASES/CASE_001_THE_LAST_RENDER/FUTURE_REAL_CASE_AUTHORITY_OBJECT_ADMISSION_DECISION_RECORDS/DEC_003_SOUND_FINAL_MIX_LOCK_AUTHORITY_OBJECT.json",
@@ -1029,7 +1225,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "CASES/CASE_001_THE_LAST_RENDER/FUTURE_REAL_CASE_AUTHORITY_OBJECT_ADMISSION_DECISION_RECORDS/DEC_004_COLOR_GRADE_LOCK_AUTHORITY_OBJECT.json",
@@ -1041,7 +1239,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "CASES/CASE_001_THE_LAST_RENDER/FUTURE_REAL_CASE_AUTHORITY_OBJECT_ADMISSION_DECISION_RECORDS/DEC_005_RELEASE_DELIVERY_ARTIFACTS_LOCK_AUTHORITY_OBJECT.json",
@@ -1053,7 +1253,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "CASES/CASE_001_THE_LAST_RENDER/FUTURE_REAL_CASE_AUTHORITY_OBJECT_ADMISSION_DECISION_RECORDS/DEC_006_ARCHIVIST_PROOF_CHAIN_LOCK_AUTHORITY_OBJECT.json",
@@ -1065,7 +1267,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "CASES/CASE_001_THE_LAST_RENDER/FUTURE_REAL_CASE_AUTHORITY_OBJECT_ADMISSION_DECISION_RECORDS/DEC_007_OUTSIDER_REPLAY_PASSAGE_AUTHORITY_OBJECT.json",
@@ -1077,7 +1281,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "CASES/CASE_001_THE_LAST_RENDER/FUTURE_REAL_CASE_AUTHORITY_OBJECT_ADMISSION_DECISION_RECORDS/DEC_008_TERMINAL_CLOSURE_AUTHORITY_OBJECT.json",
@@ -1089,7 +1295,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "CASES/CASE_001_THE_LAST_RENDER/FUTURE_REAL_CASE_AUTHORITY_OBJECT_ADMISSION_REQUESTS/REQ_001_DIRECTOR_FINAL_CUT_AUTHORITY_OBJECT.json",
@@ -1101,7 +1309,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "CASES/CASE_001_THE_LAST_RENDER/FUTURE_REAL_CASE_AUTHORITY_OBJECT_ADMISSION_REQUESTS/REQ_002_EDITORIAL_TIMELINE_AUTHORITY_OBJECT.json",
@@ -1113,7 +1323,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "CASES/CASE_001_THE_LAST_RENDER/FUTURE_REAL_CASE_AUTHORITY_OBJECT_ADMISSION_REQUESTS/REQ_003_SOUND_FINAL_MIX_LOCK_AUTHORITY_OBJECT.json",
@@ -1125,7 +1337,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "CASES/CASE_001_THE_LAST_RENDER/FUTURE_REAL_CASE_AUTHORITY_OBJECT_ADMISSION_REQUESTS/REQ_004_COLOR_GRADE_LOCK_AUTHORITY_OBJECT.json",
@@ -1137,7 +1351,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "CASES/CASE_001_THE_LAST_RENDER/FUTURE_REAL_CASE_AUTHORITY_OBJECT_ADMISSION_REQUESTS/REQ_005_RELEASE_DELIVERY_ARTIFACTS_LOCK_AUTHORITY_OBJECT.json",
@@ -1149,7 +1365,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "CASES/CASE_001_THE_LAST_RENDER/FUTURE_REAL_CASE_AUTHORITY_OBJECT_ADMISSION_REQUESTS/REQ_006_ARCHIVIST_PROOF_CHAIN_LOCK_AUTHORITY_OBJECT.json",
@@ -1161,7 +1379,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "CASES/CASE_001_THE_LAST_RENDER/FUTURE_REAL_CASE_AUTHORITY_OBJECT_ADMISSION_REQUESTS/REQ_007_OUTSIDER_REPLAY_PASSAGE_AUTHORITY_OBJECT.json",
@@ -1173,7 +1393,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "CASES/CASE_001_THE_LAST_RENDER/FUTURE_REAL_CASE_AUTHORITY_OBJECT_ADMISSION_REQUESTS/REQ_008_TERMINAL_CLOSURE_AUTHORITY_OBJECT.json",
@@ -1185,7 +1407,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "CASES/CASE_001_THE_LAST_RENDER/FUTURE_REAL_CASE_AUTHORITY_OBJECT_ADMISSION_VALIDATION_RECORDS/VAL_001_DIRECTOR_FINAL_CUT_AUTHORITY_OBJECT.json",
@@ -1197,7 +1421,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "CASES/CASE_001_THE_LAST_RENDER/FUTURE_REAL_CASE_AUTHORITY_OBJECT_ADMISSION_VALIDATION_RECORDS/VAL_002_EDITORIAL_TIMELINE_AUTHORITY_OBJECT.json",
@@ -1209,7 +1435,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "CASES/CASE_001_THE_LAST_RENDER/FUTURE_REAL_CASE_AUTHORITY_OBJECT_ADMISSION_VALIDATION_RECORDS/VAL_003_SOUND_FINAL_MIX_LOCK_AUTHORITY_OBJECT.json",
@@ -1221,7 +1449,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "CASES/CASE_001_THE_LAST_RENDER/FUTURE_REAL_CASE_AUTHORITY_OBJECT_ADMISSION_VALIDATION_RECORDS/VAL_004_COLOR_GRADE_LOCK_AUTHORITY_OBJECT.json",
@@ -1233,7 +1463,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "CASES/CASE_001_THE_LAST_RENDER/FUTURE_REAL_CASE_AUTHORITY_OBJECT_ADMISSION_VALIDATION_RECORDS/VAL_005_RELEASE_DELIVERY_ARTIFACTS_LOCK_AUTHORITY_OBJECT.json",
@@ -1245,7 +1477,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "CASES/CASE_001_THE_LAST_RENDER/FUTURE_REAL_CASE_AUTHORITY_OBJECT_ADMISSION_VALIDATION_RECORDS/VAL_006_ARCHIVIST_PROOF_CHAIN_LOCK_AUTHORITY_OBJECT.json",
@@ -1257,7 +1491,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "CASES/CASE_001_THE_LAST_RENDER/FUTURE_REAL_CASE_AUTHORITY_OBJECT_ADMISSION_VALIDATION_RECORDS/VAL_007_OUTSIDER_REPLAY_PASSAGE_AUTHORITY_OBJECT.json",
@@ -1269,7 +1505,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "CASES/CASE_001_THE_LAST_RENDER/FUTURE_REAL_CASE_AUTHORITY_OBJECT_ADMISSION_VALIDATION_RECORDS/VAL_008_TERMINAL_CLOSURE_AUTHORITY_OBJECT.json",
@@ -1281,7 +1519,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "CASES/CASE_001_THE_LAST_RENDER/FUTURE_REAL_CASE_AUTHORITY_OBJECT_INSTANTIATION_RECORDS/INST_001_DIRECTOR_FINAL_CUT_AUTHORITY_OBJECT.json",
@@ -1293,7 +1533,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "CASES/CASE_001_THE_LAST_RENDER/FUTURE_REAL_CASE_AUTHORITY_OBJECT_INSTANTIATION_RECORDS/INST_002_EDITORIAL_TIMELINE_AUTHORITY_OBJECT.json",
@@ -1305,7 +1547,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "CASES/CASE_001_THE_LAST_RENDER/FUTURE_REAL_CASE_AUTHORITY_OBJECT_INSTANTIATION_RECORDS/INST_003_SOUND_FINAL_MIX_LOCK_AUTHORITY_OBJECT.json",
@@ -1317,7 +1561,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "CASES/CASE_001_THE_LAST_RENDER/FUTURE_REAL_CASE_AUTHORITY_OBJECT_INSTANTIATION_RECORDS/INST_004_COLOR_GRADE_LOCK_AUTHORITY_OBJECT.json",
@@ -1329,7 +1575,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "CASES/CASE_001_THE_LAST_RENDER/FUTURE_REAL_CASE_AUTHORITY_OBJECT_INSTANTIATION_RECORDS/INST_005_RELEASE_DELIVERY_ARTIFACTS_LOCK_AUTHORITY_OBJECT.json",
@@ -1341,7 +1589,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "CASES/CASE_001_THE_LAST_RENDER/FUTURE_REAL_CASE_AUTHORITY_OBJECT_INSTANTIATION_RECORDS/INST_006_ARCHIVIST_PROOF_CHAIN_LOCK_AUTHORITY_OBJECT.json",
@@ -1353,7 +1603,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "CASES/CASE_001_THE_LAST_RENDER/FUTURE_REAL_CASE_AUTHORITY_OBJECT_INSTANTIATION_RECORDS/INST_007_OUTSIDER_REPLAY_PASSAGE_AUTHORITY_OBJECT.json",
@@ -1365,7 +1617,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "CASES/CASE_001_THE_LAST_RENDER/FUTURE_REAL_CASE_AUTHORITY_OBJECT_INSTANTIATION_RECORDS/INST_008_TERMINAL_CLOSURE_AUTHORITY_OBJECT.json",
@@ -1377,7 +1631,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "CASES/CASE_001_THE_LAST_RENDER/MASTER_VERIFICATION_MANIFEST_CLOSURE_STATUS.json",
@@ -1389,7 +1645,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "CASES/CASE_001_THE_LAST_RENDER/NON_STAR_SEAL_REDUNDANCY_STOP_RULE_STATUS.json",
@@ -1401,7 +1659,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "CASES/CASE_001_THE_LAST_RENDER/OPEN_REAL_CASE_AUTHORITY_INTAKE_STATUS.json",
@@ -1413,7 +1673,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "CASES/CASE_001_THE_LAST_RENDER/OUTSIDER_CLONE_REPLAY_STATUS.json",
@@ -1425,7 +1687,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "CASES/CASE_001_THE_LAST_RENDER/OUTSIDER_REPLAY_BUNDLE_STATUS.json",
@@ -1437,7 +1701,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "CASES/CASE_001_THE_LAST_RENDER/PUBLIC_INSPECTION_PATH.json",
@@ -1449,7 +1715,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "CASES/CASE_001_THE_LAST_RENDER/PUBLIC_NEGATIVE_PROOF_STATUS.json",
@@ -1461,7 +1729,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "CASES/CASE_001_THE_LAST_RENDER/PUBLIC_PERIMETER_SENTINEL_STATUS.json",
@@ -1473,7 +1743,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "CASES/CASE_001_THE_LAST_RENDER/REAL_CASE_AUTHORITY_INTAKE_DOCKET_STATUS.json",
@@ -1485,7 +1757,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "CASES/CASE_001_THE_LAST_RENDER/REAL_CASE_AUTHORITY_OBJECT_ADMISSION_CLOSURE_SEAL_STATUS.json",
@@ -1497,7 +1771,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "CASES/CASE_001_THE_LAST_RENDER/REAL_CASE_AUTHORITY_OBJECT_ADMISSION_DECISION_LEDGER_STATUS.json",
@@ -1509,7 +1785,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "CASES/CASE_001_THE_LAST_RENDER/REAL_CASE_AUTHORITY_OBJECT_ADMISSION_ENFORCEMENT_GATE_STATUS.json",
@@ -1521,7 +1799,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "CASES/CASE_001_THE_LAST_RENDER/REAL_CASE_AUTHORITY_OBJECT_ADMISSION_FINALITY_SEAL_STATUS.json",
@@ -1533,7 +1813,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "CASES/CASE_001_THE_LAST_RENDER/REAL_CASE_AUTHORITY_OBJECT_ADMISSION_FUTURE_CONTINUITY_SEAL_STATUS.json",
@@ -1545,7 +1827,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "CASES/CASE_001_THE_LAST_RENDER/REAL_CASE_AUTHORITY_OBJECT_ADMISSION_FUTURE_SNAPSHOT_FORK_GATE_STATUS.json",
@@ -1557,7 +1841,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "CASES/CASE_001_THE_LAST_RENDER/REAL_CASE_AUTHORITY_OBJECT_ADMISSION_PERMANENCE_SEAL_STATUS.json",
@@ -1569,7 +1855,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "CASES/CASE_001_THE_LAST_RENDER/REAL_CASE_AUTHORITY_OBJECT_ADMISSION_REJECTION_TAXONOMY_STATUS.json",
@@ -1581,7 +1869,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "CASES/CASE_001_THE_LAST_RENDER/REAL_CASE_AUTHORITY_OBJECT_ADMISSION_REQUEST_REJECTION_CORPUS_STATUS.json",
@@ -1593,7 +1883,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "CASES/CASE_001_THE_LAST_RENDER/REAL_CASE_AUTHORITY_OBJECT_ADMISSION_REQUEST_SCHEMA_STATUS.json",
@@ -1605,7 +1897,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "CASES/CASE_001_THE_LAST_RENDER/REAL_CASE_AUTHORITY_OBJECT_ADMISSION_REQUEST_VALIDATOR_STATUS.json",
@@ -1617,7 +1911,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "CASES/CASE_001_THE_LAST_RENDER/REAL_CASE_AUTHORITY_OBJECT_ADMISSION_TERMINAL_SEAL_STATUS.json",
@@ -1629,7 +1925,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "CASES/CASE_001_THE_LAST_RENDER/REAL_CASE_AUTHORITY_OBJECT_SLOT_INDEX_STATUS.json",
@@ -1641,7 +1939,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "CASES/CASE_001_THE_LAST_RENDER/RELEASE_CANDIDATE_STATUS.json",
@@ -1653,7 +1953,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "CASES/CASE_001_THE_LAST_RENDER/REQUIRED_AUTHORITY_OBJECTS_STATUS.json",
@@ -1665,7 +1967,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "CASES/CASE_001_THE_LAST_RENDER/SECOND_FUTURE_EDITORIAL_TIMELINE_AUTHORITY_OBJECT_INSTANTIATION_RECORD_STATUS.json",
@@ -1677,7 +1981,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "CASES/CASE_001_THE_LAST_RENDER/SEVENTH_FUTURE_OUTSIDER_REPLAY_PASSAGE_AUTHORITY_OBJECT_INSTANTIATION_RECORD_STATUS.json",
@@ -1689,7 +1995,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "CASES/CASE_001_THE_LAST_RENDER/SIXTH_FUTURE_ARCHIVIST_PROOF_CHAIN_LOCK_AUTHORITY_OBJECT_INSTANTIATION_RECORD_STATUS.json",
@@ -1701,7 +2009,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "CASES/CASE_001_THE_LAST_RENDER/STATE_ADVANCEMENT_EXECUTION_RECORD/STATE_ADVANCEMENT_EXECUTION_RECORD.json",
@@ -1713,7 +2023,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "CASES/CASE_001_THE_LAST_RENDER/STATE_ADVANCEMENT_EXECUTION_RECORD_STATUS.json",
@@ -1725,7 +2037,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "CASES/CASE_001_THE_LAST_RENDER/STATE_TRANSITION_GATE_STATUS.json",
@@ -1737,7 +2051,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "CASES/CASE_001_THE_LAST_RENDER/THIRD_FUTURE_SOUND_FINAL_MIX_LOCK_AUTHORITY_OBJECT_INSTANTIATION_RECORD_STATUS.json",
@@ -1749,7 +2065,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "CASES/CASE_001_THE_LAST_RENDER/TRANSITION_ATTEMPT_REJECTION_STATUS.json",
@@ -1761,7 +2079,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "CHARTER_OF_CINEMATIC_JURISDICTION.json",
@@ -1773,7 +2093,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "CINEMATICUM_AUTHORITY_OBJECT_ADMISSION_CLOSURE_SEAL.json",
@@ -1785,7 +2107,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "CINEMATICUM_AUTHORITY_OBJECT_ADMISSION_CLOSURE_SEAL_LAW.json",
@@ -1797,7 +2121,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "CINEMATICUM_AUTHORITY_OBJECT_ADMISSION_DECISION_LEDGER.json",
@@ -1809,7 +2135,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "CINEMATICUM_AUTHORITY_OBJECT_ADMISSION_DECISION_LEDGER_LAW.json",
@@ -1821,7 +2149,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "CINEMATICUM_AUTHORITY_OBJECT_ADMISSION_DOCKET.json",
@@ -1833,7 +2163,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "CINEMATICUM_AUTHORITY_OBJECT_ADMISSION_DOCKET_LAW.json",
@@ -1845,7 +2177,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "CINEMATICUM_AUTHORITY_OBJECT_ADMISSION_ENFORCEMENT_GATE.json",
@@ -1857,7 +2191,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "CINEMATICUM_AUTHORITY_OBJECT_ADMISSION_ENFORCEMENT_GATE_LAW.json",
@@ -1869,7 +2205,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "CINEMATICUM_AUTHORITY_OBJECT_ADMISSION_INTAKE_FINALITY_SEAL.json",
@@ -1881,7 +2219,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "CINEMATICUM_AUTHORITY_OBJECT_ADMISSION_INTAKE_FINALITY_SEAL_LAW.json",
@@ -1893,7 +2233,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "CINEMATICUM_AUTHORITY_OBJECT_ADMISSION_INTAKE_ORDER.json",
@@ -1905,7 +2247,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "CINEMATICUM_AUTHORITY_OBJECT_ADMISSION_INTAKE_ORDER_LAW.json",
@@ -1917,7 +2261,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "CINEMATICUM_AUTHORITY_OBJECT_ADMISSION_INTAKE_REJECTION_LEDGER.json",
@@ -1929,7 +2275,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "CINEMATICUM_AUTHORITY_OBJECT_ADMISSION_INTAKE_REJECTION_LEDGER_LAW.json",
@@ -1941,7 +2289,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "CINEMATICUM_AUTHORITY_OBJECT_ADMISSION_INTAKE_REOPENING_GATE.json",
@@ -1953,7 +2303,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "CINEMATICUM_AUTHORITY_OBJECT_ADMISSION_INTAKE_REOPENING_GATE_LAW.json",
@@ -1965,7 +2317,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "CINEMATICUM_AUTHORITY_OBJECT_ADMISSION_INTAKE_REOPENING_REQUEST_CLOSURE_SEAL.json",
@@ -1977,7 +2331,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "CINEMATICUM_AUTHORITY_OBJECT_ADMISSION_INTAKE_REOPENING_REQUEST_CLOSURE_SEAL_LAW.json",
@@ -1989,7 +2345,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "CINEMATICUM_AUTHORITY_OBJECT_ADMISSION_INTAKE_REOPENING_REQUEST_DECISION_LEDGER.json",
@@ -2001,7 +2359,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "CINEMATICUM_AUTHORITY_OBJECT_ADMISSION_INTAKE_REOPENING_REQUEST_DECISION_LEDGER_LAW.json",
@@ -2013,7 +2373,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "CINEMATICUM_AUTHORITY_OBJECT_ADMISSION_INTAKE_REOPENING_REQUEST_ENFORCEMENT_GATE.json",
@@ -2025,7 +2387,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "CINEMATICUM_AUTHORITY_OBJECT_ADMISSION_INTAKE_REOPENING_REQUEST_ENFORCEMENT_GATE_LAW.json",
@@ -2037,7 +2401,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "CINEMATICUM_AUTHORITY_OBJECT_ADMISSION_INTAKE_REOPENING_REQUEST_FINALITY_SEAL.json",
@@ -2049,7 +2415,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "CINEMATICUM_AUTHORITY_OBJECT_ADMISSION_INTAKE_REOPENING_REQUEST_FINALITY_SEAL_LAW.json",
@@ -2061,7 +2429,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "CINEMATICUM_AUTHORITY_OBJECT_ADMISSION_INTAKE_REOPENING_REQUEST_FUTURE_CONTINUITY_SEAL.json",
@@ -2073,7 +2443,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "CINEMATICUM_AUTHORITY_OBJECT_ADMISSION_INTAKE_REOPENING_REQUEST_FUTURE_CONTINUITY_SEAL_LAW.json",
@@ -2085,7 +2457,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "CINEMATICUM_AUTHORITY_OBJECT_ADMISSION_INTAKE_REOPENING_REQUEST_FUTURE_SNAPSHOT_FORK_GATE.json",
@@ -2097,7 +2471,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "CINEMATICUM_AUTHORITY_OBJECT_ADMISSION_INTAKE_REOPENING_REQUEST_FUTURE_SNAPSHOT_FORK_GATE_LAW.json",
@@ -2109,7 +2485,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "CINEMATICUM_AUTHORITY_OBJECT_ADMISSION_INTAKE_REOPENING_REQUEST_FUTURE_SNAPSHOT_FORK_LEDGER.json",
@@ -2121,7 +2499,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "CINEMATICUM_AUTHORITY_OBJECT_ADMISSION_INTAKE_REOPENING_REQUEST_FUTURE_SNAPSHOT_FORK_LEDGER_CLOSURE_SEAL.json",
@@ -2133,7 +2513,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "CINEMATICUM_AUTHORITY_OBJECT_ADMISSION_INTAKE_REOPENING_REQUEST_FUTURE_SNAPSHOT_FORK_LEDGER_CLOSURE_SEAL_LAW.json",
@@ -2145,7 +2527,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "CINEMATICUM_AUTHORITY_OBJECT_ADMISSION_INTAKE_REOPENING_REQUEST_FUTURE_SNAPSHOT_FORK_LEDGER_FINALITY_SEAL.json",
@@ -2157,7 +2541,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "CINEMATICUM_AUTHORITY_OBJECT_ADMISSION_INTAKE_REOPENING_REQUEST_FUTURE_SNAPSHOT_FORK_LEDGER_FINALITY_SEAL_LAW.json",
@@ -2169,7 +2555,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "CINEMATICUM_AUTHORITY_OBJECT_ADMISSION_INTAKE_REOPENING_REQUEST_FUTURE_SNAPSHOT_FORK_LEDGER_FUTURE_CONTINUITY_SEAL.json",
@@ -2181,7 +2569,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "CINEMATICUM_AUTHORITY_OBJECT_ADMISSION_INTAKE_REOPENING_REQUEST_FUTURE_SNAPSHOT_FORK_LEDGER_FUTURE_CONTINUITY_SEAL_LAW.json",
@@ -2193,7 +2583,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "CINEMATICUM_AUTHORITY_OBJECT_ADMISSION_INTAKE_REOPENING_REQUEST_FUTURE_SNAPSHOT_FORK_LEDGER_LAW.json",
@@ -2205,7 +2597,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "CINEMATICUM_AUTHORITY_OBJECT_ADMISSION_INTAKE_REOPENING_REQUEST_FUTURE_SNAPSHOT_FORK_LEDGER_NON_ADVANCEMENT_SEAL.json",
@@ -2217,7 +2611,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "CINEMATICUM_AUTHORITY_OBJECT_ADMISSION_INTAKE_REOPENING_REQUEST_FUTURE_SNAPSHOT_FORK_LEDGER_NON_ADVANCEMENT_SEAL_LAW.json",
@@ -2229,7 +2625,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "CINEMATICUM_AUTHORITY_OBJECT_ADMISSION_INTAKE_REOPENING_REQUEST_FUTURE_SNAPSHOT_FORK_LEDGER_NON_AUDIENCE_ARTIFACT_SEAL.json",
@@ -2241,7 +2639,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "CINEMATICUM_AUTHORITY_OBJECT_ADMISSION_INTAKE_REOPENING_REQUEST_FUTURE_SNAPSHOT_FORK_LEDGER_NON_AUDIENCE_ARTIFACT_SEAL_LAW.json",
@@ -2253,7 +2653,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "CINEMATICUM_AUTHORITY_OBJECT_ADMISSION_INTAKE_REOPENING_REQUEST_FUTURE_SNAPSHOT_FORK_LEDGER_NON_AUTHORITY_SATISFACTION_SEAL.json",
@@ -2265,7 +2667,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "CINEMATICUM_AUTHORITY_OBJECT_ADMISSION_INTAKE_REOPENING_REQUEST_FUTURE_SNAPSHOT_FORK_LEDGER_NON_AUTHORITY_SATISFACTION_SEAL_LAW.json",
@@ -2277,7 +2681,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "CINEMATICUM_AUTHORITY_OBJECT_ADMISSION_INTAKE_REOPENING_REQUEST_FUTURE_SNAPSHOT_FORK_LEDGER_NON_ISSUANCE_SEAL.json",
@@ -2289,7 +2695,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "CINEMATICUM_AUTHORITY_OBJECT_ADMISSION_INTAKE_REOPENING_REQUEST_FUTURE_SNAPSHOT_FORK_LEDGER_NON_ISSUANCE_SEAL_LAW.json",
@@ -2301,7 +2709,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "CINEMATICUM_AUTHORITY_OBJECT_ADMISSION_INTAKE_REOPENING_REQUEST_FUTURE_SNAPSHOT_FORK_LEDGER_NON_MEDIA_ADMISSION_SEAL.json",
@@ -2313,7 +2723,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "CINEMATICUM_AUTHORITY_OBJECT_ADMISSION_INTAKE_REOPENING_REQUEST_FUTURE_SNAPSHOT_FORK_LEDGER_NON_MEDIA_ADMISSION_SEAL_LAW.json",
@@ -2325,7 +2737,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "CINEMATICUM_AUTHORITY_OBJECT_ADMISSION_INTAKE_REOPENING_REQUEST_FUTURE_SNAPSHOT_FORK_LEDGER_NON_OUTSIDER_REPLAY_PASSAGE_SEAL.json",
@@ -2337,7 +2751,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "CINEMATICUM_AUTHORITY_OBJECT_ADMISSION_INTAKE_REOPENING_REQUEST_FUTURE_SNAPSHOT_FORK_LEDGER_NON_OUTSIDER_REPLAY_PASSAGE_SEAL_LAW.json",
@@ -2349,7 +2765,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "CINEMATICUM_AUTHORITY_OBJECT_ADMISSION_INTAKE_REOPENING_REQUEST_FUTURE_SNAPSHOT_FORK_LEDGER_NON_PROOF_ARTIFACT_SEAL.json",
@@ -2361,7 +2779,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "CINEMATICUM_AUTHORITY_OBJECT_ADMISSION_INTAKE_REOPENING_REQUEST_FUTURE_SNAPSHOT_FORK_LEDGER_NON_PROOF_ARTIFACT_SEAL_LAW.json",
@@ -2373,7 +2793,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "CINEMATICUM_AUTHORITY_OBJECT_ADMISSION_INTAKE_REOPENING_REQUEST_FUTURE_SNAPSHOT_FORK_LEDGER_NON_PUBLIC_INSPECTION_VERDICT_SEAL.json",
@@ -2385,7 +2807,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "CINEMATICUM_AUTHORITY_OBJECT_ADMISSION_INTAKE_REOPENING_REQUEST_FUTURE_SNAPSHOT_FORK_LEDGER_NON_PUBLIC_INSPECTION_VERDICT_SEAL_LAW.json",
@@ -2397,7 +2821,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "CINEMATICUM_AUTHORITY_OBJECT_ADMISSION_INTAKE_REOPENING_REQUEST_FUTURE_SNAPSHOT_FORK_LEDGER_NON_PUBLIC_REPLAY_INDEX_SEAL.json",
@@ -2409,7 +2835,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "CINEMATICUM_AUTHORITY_OBJECT_ADMISSION_INTAKE_REOPENING_REQUEST_FUTURE_SNAPSHOT_FORK_LEDGER_NON_PUBLIC_REPLAY_INDEX_SEAL_LAW.json",
@@ -2421,7 +2849,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "CINEMATICUM_AUTHORITY_OBJECT_ADMISSION_INTAKE_REOPENING_REQUEST_FUTURE_SNAPSHOT_FORK_LEDGER_NON_RELEASE_CANDIDATE_SEAL.json",
@@ -2433,7 +2863,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "CINEMATICUM_AUTHORITY_OBJECT_ADMISSION_INTAKE_REOPENING_REQUEST_FUTURE_SNAPSHOT_FORK_LEDGER_NON_RELEASE_CANDIDATE_SEAL_LAW.json",
@@ -2445,7 +2877,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "CINEMATICUM_AUTHORITY_OBJECT_ADMISSION_INTAKE_REOPENING_REQUEST_FUTURE_SNAPSHOT_FORK_LEDGER_NON_TERMINAL_CLOSURE_INDEX_SEAL.json",
@@ -2457,7 +2891,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "CINEMATICUM_AUTHORITY_OBJECT_ADMISSION_INTAKE_REOPENING_REQUEST_FUTURE_SNAPSHOT_FORK_LEDGER_NON_TERMINAL_CLOSURE_INDEX_SEAL_LAW.json",
@@ -2469,7 +2905,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "CINEMATICUM_AUTHORITY_OBJECT_ADMISSION_INTAKE_REOPENING_REQUEST_FUTURE_SNAPSHOT_FORK_LEDGER_OUTSIDER_REPLAY_SEAL.json",
@@ -2481,7 +2919,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "CINEMATICUM_AUTHORITY_OBJECT_ADMISSION_INTAKE_REOPENING_REQUEST_FUTURE_SNAPSHOT_FORK_LEDGER_OUTSIDER_REPLAY_SEAL_LAW.json",
@@ -2493,7 +2933,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "CINEMATICUM_AUTHORITY_OBJECT_ADMISSION_INTAKE_REOPENING_REQUEST_FUTURE_SNAPSHOT_FORK_LEDGER_PERMANENCE_SEAL.json",
@@ -2505,7 +2947,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "CINEMATICUM_AUTHORITY_OBJECT_ADMISSION_INTAKE_REOPENING_REQUEST_FUTURE_SNAPSHOT_FORK_LEDGER_PERMANENCE_SEAL_LAW.json",
@@ -2517,7 +2961,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "CINEMATICUM_AUTHORITY_OBJECT_ADMISSION_INTAKE_REOPENING_REQUEST_FUTURE_SNAPSHOT_FORK_LEDGER_TERMINAL_CLOSURE_SEAL.json",
@@ -2529,7 +2975,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "CINEMATICUM_AUTHORITY_OBJECT_ADMISSION_INTAKE_REOPENING_REQUEST_FUTURE_SNAPSHOT_FORK_LEDGER_TERMINAL_CLOSURE_SEAL_LAW.json",
@@ -2541,7 +2989,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "CINEMATICUM_AUTHORITY_OBJECT_ADMISSION_INTAKE_REOPENING_REQUEST_FUTURE_SNAPSHOT_FORK_LEDGER_TERMINAL_SEAL.json",
@@ -2553,7 +3003,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "CINEMATICUM_AUTHORITY_OBJECT_ADMISSION_INTAKE_REOPENING_REQUEST_FUTURE_SNAPSHOT_FORK_LEDGER_TERMINAL_SEAL_LAW.json",
@@ -2565,7 +3017,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "CINEMATICUM_AUTHORITY_OBJECT_ADMISSION_INTAKE_REOPENING_REQUEST_FUTURE_SNAPSHOT_FORK_LEDGER_ZERO_PERIMETER_COMPLETION_INDEX.json",
@@ -2577,7 +3031,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "CINEMATICUM_AUTHORITY_OBJECT_ADMISSION_INTAKE_REOPENING_REQUEST_FUTURE_SNAPSHOT_FORK_LEDGER_ZERO_PERIMETER_COMPLETION_INDEX_LAW.json",
@@ -2589,7 +3045,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "CINEMATICUM_AUTHORITY_OBJECT_ADMISSION_INTAKE_REOPENING_REQUEST_PERMANENCE_SEAL.json",
@@ -2601,7 +3059,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "CINEMATICUM_AUTHORITY_OBJECT_ADMISSION_INTAKE_REOPENING_REQUEST_PERMANENCE_SEAL_LAW.json",
@@ -2613,7 +3073,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "CINEMATICUM_AUTHORITY_OBJECT_ADMISSION_INTAKE_REOPENING_REQUEST_REJECTION_CORPUS.json",
@@ -2625,7 +3087,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "CINEMATICUM_AUTHORITY_OBJECT_ADMISSION_INTAKE_REOPENING_REQUEST_REJECTION_CORPUS_LAW.json",
@@ -2637,7 +3101,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "CINEMATICUM_AUTHORITY_OBJECT_ADMISSION_INTAKE_REOPENING_REQUEST_REJECTION_TAXONOMY.json",
@@ -2649,7 +3115,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "CINEMATICUM_AUTHORITY_OBJECT_ADMISSION_INTAKE_REOPENING_REQUEST_REJECTION_TAXONOMY_LAW.json",
@@ -2661,7 +3129,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "CINEMATICUM_AUTHORITY_OBJECT_ADMISSION_INTAKE_REOPENING_REQUEST_SCHEMA.json",
@@ -2673,7 +3143,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "CINEMATICUM_AUTHORITY_OBJECT_ADMISSION_INTAKE_REOPENING_REQUEST_SCHEMA_LAW.json",
@@ -2685,7 +3157,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "CINEMATICUM_AUTHORITY_OBJECT_ADMISSION_INTAKE_REOPENING_REQUEST_TERMINAL_SEAL.json",
@@ -2697,7 +3171,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "CINEMATICUM_AUTHORITY_OBJECT_ADMISSION_INTAKE_REOPENING_REQUEST_TERMINAL_SEAL_LAW.json",
@@ -2709,7 +3185,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "CINEMATICUM_AUTHORITY_OBJECT_ADMISSION_INTAKE_REOPENING_REQUEST_VALIDATOR.json",
@@ -2721,7 +3199,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "CINEMATICUM_AUTHORITY_OBJECT_ADMISSION_INTAKE_REOPENING_REQUEST_VALIDATOR_LAW.json",
@@ -2733,7 +3213,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "CINEMATICUM_AUTHORITY_OBJECT_ADMISSION_INTAKE_VALIDATION_GATE.json",
@@ -2745,7 +3227,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "CINEMATICUM_AUTHORITY_OBJECT_ADMISSION_INTAKE_VALIDATION_GATE_LAW.json",
@@ -2757,7 +3241,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "CINEMATICUM_AUTHORITY_OBJECT_ADMISSION_REJECTION_TAXONOMY.json",
@@ -2769,7 +3255,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "CINEMATICUM_AUTHORITY_OBJECT_ADMISSION_REJECTION_TAXONOMY_LAW.json",
@@ -2781,7 +3269,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "CINEMATICUM_AUTHORITY_OBJECT_ADMISSION_REQUEST_REJECTION_CORPUS.json",
@@ -2793,7 +3283,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "CINEMATICUM_AUTHORITY_OBJECT_ADMISSION_REQUEST_REJECTION_CORPUS_LAW.json",
@@ -2805,7 +3297,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "CINEMATICUM_AUTHORITY_OBJECT_ADMISSION_REQUEST_SCHEMA.json",
@@ -2817,7 +3311,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "CINEMATICUM_AUTHORITY_OBJECT_ADMISSION_REQUEST_SCHEMA_LAW.json",
@@ -2829,7 +3325,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "CINEMATICUM_AUTHORITY_OBJECT_ADMISSION_REQUEST_VALIDATOR.json",
@@ -2841,7 +3339,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "CINEMATICUM_AUTHORITY_OBJECT_ADMISSION_REQUEST_VALIDATOR_LAW.json",
@@ -2853,7 +3353,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "CINEMATICUM_AUTHORITY_OBJECT_INSTANTIATION_GATE.json",
@@ -2865,7 +3367,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "CINEMATICUM_AUTHORITY_OBJECT_INSTANTIATION_GATE_LAW.json",
@@ -2877,7 +3381,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "CINEMATICUM_AUTHORITY_OBJECT_TEMPLATE_KIT.json",
@@ -2889,7 +3395,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "CINEMATICUM_AUTHORITY_OBJECT_TEMPLATE_KIT_LAW.json",
@@ -2901,7 +3409,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "CINEMATICUM_AUTHORITY_PRECEDENCE_LATTICE.json",
@@ -2913,7 +3423,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "CINEMATICUM_AUTHORITY_PRECEDENCE_LAW.json",
@@ -2925,7 +3437,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "CINEMATICUM_CURRENT_STATE_INDEX.json",
@@ -2937,7 +3451,23 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
+    },
+    {
+      "path": "CINEMATICUM_CURRENT_STATE_INDEX_ADVANCEMENT_RECORD_LAW.json",
+      "object_type": "CINEMATICUM_CURRENT_STATE_INDEX_ADVANCEMENT_RECORD_LAW",
+      "schema_version": "cinematicum.current_state_index_advancement_record_law.v1",
+      "surface_class": "LAW_OBJECT",
+      "case_id": "CASE_001_THE_LAST_RENDER",
+      "current_truth_owner": false,
+      "issued": false,
+      "release_candidate_ready": false,
+      "media_present": false,
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "CINEMATICUM_CURRENT_ZERO_LEDGER_NO_FURTHER_ADVANCEMENT_PROOF.json",
@@ -2949,7 +3479,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "CINEMATICUM_CURRENT_ZERO_LEDGER_NO_FURTHER_ADVANCEMENT_PROOF_LAW.json",
@@ -2961,7 +3493,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "CINEMATICUM_EIGHTH_FUTURE_TERMINAL_CLOSURE_AUTHORITY_OBJECT_INSTANTIATION_RECORD_LAW.json",
@@ -2973,7 +3507,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "CINEMATICUM_EXPLICIT_STATE_ADVANCEMENT_DECISION_RECORD_LAW.json",
@@ -2985,7 +3521,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "CINEMATICUM_EXPLICIT_STATE_ADVANCEMENT_REQUEST_LAW.json",
@@ -2997,7 +3535,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "CINEMATICUM_FIFTH_FUTURE_RELEASE_DELIVERY_ARTIFACTS_LOCK_AUTHORITY_OBJECT_INSTANTIATION_RECORD_LAW.json",
@@ -3009,7 +3549,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "CINEMATICUM_FIRST_FUTURE_DIRECTOR_FINAL_CUT_AUTHORITY_OBJECT_ADMISSION_DECISION_RECORD_LAW.json",
@@ -3021,7 +3563,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "CINEMATICUM_FIRST_FUTURE_DIRECTOR_FINAL_CUT_AUTHORITY_OBJECT_ADMISSION_REQUEST_LAW.json",
@@ -3033,7 +3577,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "CINEMATICUM_FIRST_FUTURE_DIRECTOR_FINAL_CUT_AUTHORITY_OBJECT_ADMISSION_REQUEST_VALIDATION_RECORD_LAW.json",
@@ -3045,7 +3591,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "CINEMATICUM_FIRST_FUTURE_DIRECTOR_FINAL_CUT_AUTHORITY_OBJECT_INSTANTIATION_RECORD_LAW.json",
@@ -3057,7 +3605,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "CINEMATICUM_FOURTH_FUTURE_COLOR_GRADE_LOCK_AUTHORITY_OBJECT_INSTANTIATION_RECORD_LAW.json",
@@ -3069,7 +3619,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "CINEMATICUM_FUTURE_AUTHORITY_SATISFACTION_GATE_LAW.json",
@@ -3081,7 +3633,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "CINEMATICUM_GOVERNED_PROGRESSION_MATRIX.json",
@@ -3093,7 +3647,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "CINEMATICUM_MASTER_VERIFICATION_MANIFEST.json",
@@ -3105,7 +3661,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "CINEMATICUM_MASTER_VERIFICATION_MANIFEST_CLOSURE.json",
@@ -3117,7 +3675,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "CINEMATICUM_MASTER_VERIFICATION_MANIFEST_CLOSURE_LAW.json",
@@ -3129,7 +3689,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "CINEMATICUM_NON_STAR_SEAL_REDUNDANCY_STOP_RULE.json",
@@ -3141,7 +3703,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "CINEMATICUM_NON_STAR_SEAL_REDUNDANCY_STOP_RULE_LAW.json",
@@ -3153,7 +3717,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "CINEMATICUM_OBJECT_REGISTRY_LAW.json",
@@ -3165,7 +3731,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "CINEMATICUM_OPEN_REAL_CASE_AUTHORITY_INTAKE.json",
@@ -3177,7 +3745,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "CINEMATICUM_OPEN_REAL_CASE_AUTHORITY_INTAKE_LAW.json",
@@ -3189,7 +3759,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "CINEMATICUM_PUBLIC_PERIMETER_SENTINEL.json",
@@ -3201,7 +3773,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "CINEMATICUM_PUBLIC_PERIMETER_SENTINEL_LAW.json",
@@ -3213,7 +3787,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "CINEMATICUM_REAL_CASE_AUTHORITY_INTAKE_DOCKET.json",
@@ -3225,7 +3801,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "CINEMATICUM_REAL_CASE_AUTHORITY_INTAKE_DOCKET_LAW.json",
@@ -3237,7 +3815,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "CINEMATICUM_REAL_CASE_AUTHORITY_OBJECT_ADMISSION_CLOSURE_SEAL.json",
@@ -3249,7 +3829,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "CINEMATICUM_REAL_CASE_AUTHORITY_OBJECT_ADMISSION_CLOSURE_SEAL_LAW.json",
@@ -3261,7 +3843,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "CINEMATICUM_REAL_CASE_AUTHORITY_OBJECT_ADMISSION_DECISION_LEDGER.json",
@@ -3273,7 +3857,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "CINEMATICUM_REAL_CASE_AUTHORITY_OBJECT_ADMISSION_DECISION_LEDGER_LAW.json",
@@ -3285,7 +3871,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "CINEMATICUM_REAL_CASE_AUTHORITY_OBJECT_ADMISSION_ENFORCEMENT_GATE.json",
@@ -3297,7 +3885,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "CINEMATICUM_REAL_CASE_AUTHORITY_OBJECT_ADMISSION_ENFORCEMENT_GATE_LAW.json",
@@ -3309,7 +3899,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "CINEMATICUM_REAL_CASE_AUTHORITY_OBJECT_ADMISSION_FINALITY_SEAL.json",
@@ -3321,7 +3913,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "CINEMATICUM_REAL_CASE_AUTHORITY_OBJECT_ADMISSION_FINALITY_SEAL_LAW.json",
@@ -3333,7 +3927,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "CINEMATICUM_REAL_CASE_AUTHORITY_OBJECT_ADMISSION_FUTURE_CONTINUITY_SEAL.json",
@@ -3345,7 +3941,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "CINEMATICUM_REAL_CASE_AUTHORITY_OBJECT_ADMISSION_FUTURE_CONTINUITY_SEAL_LAW.json",
@@ -3357,7 +3955,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "CINEMATICUM_REAL_CASE_AUTHORITY_OBJECT_ADMISSION_FUTURE_SNAPSHOT_FORK_GATE.json",
@@ -3369,7 +3969,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "CINEMATICUM_REAL_CASE_AUTHORITY_OBJECT_ADMISSION_FUTURE_SNAPSHOT_FORK_GATE_LAW.json",
@@ -3381,7 +3983,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "CINEMATICUM_REAL_CASE_AUTHORITY_OBJECT_ADMISSION_PERMANENCE_SEAL.json",
@@ -3393,7 +3997,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "CINEMATICUM_REAL_CASE_AUTHORITY_OBJECT_ADMISSION_PERMANENCE_SEAL_LAW.json",
@@ -3405,7 +4011,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "CINEMATICUM_REAL_CASE_AUTHORITY_OBJECT_ADMISSION_REJECTION_TAXONOMY.json",
@@ -3417,7 +4025,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "CINEMATICUM_REAL_CASE_AUTHORITY_OBJECT_ADMISSION_REJECTION_TAXONOMY_LAW.json",
@@ -3429,7 +4039,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "CINEMATICUM_REAL_CASE_AUTHORITY_OBJECT_ADMISSION_REQUEST_REJECTION_CORPUS.json",
@@ -3441,7 +4053,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "CINEMATICUM_REAL_CASE_AUTHORITY_OBJECT_ADMISSION_REQUEST_REJECTION_CORPUS_LAW.json",
@@ -3453,7 +4067,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "CINEMATICUM_REAL_CASE_AUTHORITY_OBJECT_ADMISSION_REQUEST_SCHEMA.json",
@@ -3465,7 +4081,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "CINEMATICUM_REAL_CASE_AUTHORITY_OBJECT_ADMISSION_REQUEST_SCHEMA_LAW.json",
@@ -3477,7 +4095,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "CINEMATICUM_REAL_CASE_AUTHORITY_OBJECT_ADMISSION_REQUEST_VALIDATOR.json",
@@ -3489,7 +4109,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "CINEMATICUM_REAL_CASE_AUTHORITY_OBJECT_ADMISSION_REQUEST_VALIDATOR_LAW.json",
@@ -3501,7 +4123,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "CINEMATICUM_REAL_CASE_AUTHORITY_OBJECT_ADMISSION_TERMINAL_SEAL.json",
@@ -3513,7 +4137,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "CINEMATICUM_REAL_CASE_AUTHORITY_OBJECT_ADMISSION_TERMINAL_SEAL_LAW.json",
@@ -3525,7 +4151,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "CINEMATICUM_REAL_CASE_AUTHORITY_OBJECT_SLOT_INDEX.json",
@@ -3537,7 +4165,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "CINEMATICUM_REAL_CASE_AUTHORITY_OBJECT_SLOT_INDEX_LAW.json",
@@ -3549,7 +4179,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "CINEMATICUM_REPOSITORY_STATUS_SEAL.json",
@@ -3561,7 +4193,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "CINEMATICUM_REPOSITORY_STATUS_SEAL_LAW.json",
@@ -3573,7 +4207,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "CINEMATICUM_REQUIRED_AUTHORITY_OBJECT_CHECKLIST.json",
@@ -3585,7 +4221,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "CINEMATICUM_REQUIRED_AUTHORITY_OBJECT_CHECKLIST_LAW.json",
@@ -3597,7 +4235,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "CINEMATICUM_SECOND_FUTURE_EDITORIAL_TIMELINE_AUTHORITY_OBJECT_INSTANTIATION_RECORD_LAW.json",
@@ -3609,7 +4249,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "CINEMATICUM_SEVENTH_FUTURE_OUTSIDER_REPLAY_PASSAGE_AUTHORITY_OBJECT_INSTANTIATION_RECORD_LAW.json",
@@ -3621,7 +4263,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "CINEMATICUM_SIXTH_FUTURE_ARCHIVIST_PROOF_CHAIN_LOCK_AUTHORITY_OBJECT_INSTANTIATION_RECORD_LAW.json",
@@ -3633,7 +4277,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "CINEMATICUM_STATE_ADVANCEMENT_EXECUTION_RECORD_LAW.json",
@@ -3645,7 +4291,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "CINEMATICUM_STATE_TRANSITION_GATE.json",
@@ -3657,7 +4305,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "CINEMATICUM_STATE_TRANSITION_GATE_LAW.json",
@@ -3669,7 +4319,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "CINEMATICUM_SURFACE_CLASS_CATALOG.json",
@@ -3681,7 +4333,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "CINEMATICUM_THIRD_FUTURE_SOUND_FINAL_MIX_LOCK_AUTHORITY_OBJECT_INSTANTIATION_RECORD_LAW.json",
@@ -3693,7 +4347,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "CINEMATICUM_TRANSITION_ATTEMPT_REJECTION_LAW.json",
@@ -3705,7 +4361,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "CINEMATICUM_TRANSITION_ATTEMPT_REJECTION_LEDGER.json",
@@ -3717,7 +4375,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "COLOR_GRADE_LOCK_SCHEMA.json",
@@ -3729,7 +4389,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "CURRENT_STATE_INDEX_LAW.json",
@@ -3741,7 +4403,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "DEPARTMENT_AUTHORITY_LEDGER.json",
@@ -3753,7 +4417,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "DIRECTORIAL_AUTHORITY_LAW.json",
@@ -3765,7 +4431,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "DIRECTOR_ACCEPTANCE_OBJECT_SCHEMA.json",
@@ -3777,7 +4445,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "FINAL_CUT_JURISDICTION.json",
@@ -3789,7 +4459,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "FINAL_CUT_TIMELINE_LOCK_SCHEMA.json",
@@ -3801,7 +4473,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "FORBIDDEN_REDUCTIONS.json",
@@ -3813,7 +4487,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "ISSUANCE_DOCKET.json",
@@ -3825,7 +4501,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "LOCAL_SOVEREIGN_PRODUCTION_LAW.json",
@@ -3837,7 +4515,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "MEDIA_HASH_MANIFEST_SCHEMA.json",
@@ -3849,7 +4529,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "MOTION_PICTURE_ISSUANCE_ACT.json",
@@ -3861,7 +4543,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "OBJECT_REGISTRY_REGENERATION_GUARD_LAW.json",
@@ -3873,7 +4557,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "OUTSIDER_CLONE_REPLAY.json",
@@ -3885,7 +4571,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "OUTSIDER_CLONE_REPLAY_LAW.json",
@@ -3897,7 +4585,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "OUTSIDER_REPLAY_BUNDLE_OBJECT_LAW.json",
@@ -3909,7 +4599,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "OUTSIDER_REPLAY_BUNDLE_SCHEMA.json",
@@ -3921,7 +4613,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "OUTSIDER_REPLAY_REQUIREMENTS.json",
@@ -3933,7 +4627,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "PUBLIC_INSPECTION_DOSSIER.json",
@@ -3945,7 +4641,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "PUBLIC_INSPECTION_DOSSIER_LAW.json",
@@ -3957,7 +4655,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "PUBLIC_INSPECTION_NEGATIVE_PROOF.json",
@@ -3969,7 +4669,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "PUBLIC_INSPECTION_NEGATIVE_PROOF_LAW.json",
@@ -3981,7 +4683,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "PUBLIC_REPLAY_INDEX_SCHEMA.json",
@@ -3993,7 +4697,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "RELEASE_ADMISSIBILITY_LAW.json",
@@ -4005,7 +4711,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "RELEASE_CANDIDATE_OBJECT_LAW.json",
@@ -4017,7 +4725,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "RELEASE_MANIFEST_SCHEMA.json",
@@ -4029,7 +4739,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "REPLAY_EXECUTION_REPORT_SCHEMA.json",
@@ -4041,7 +4753,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "SOUND_MIX_LOCK_SCHEMA.json",
@@ -4053,7 +4767,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "TERMINAL_CLOSURE_CANDIDATE_SCHEMA.json",
@@ -4065,7 +4781,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "TIMELINE_EVIDENCE_LAW.json",
@@ -4077,7 +4795,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "fixtures/AUTHORITY_OBJECT_ADMISSION_INTAKE_REOPENING_REQUEST_REJECTION_CORPUS/media-present.json",
@@ -4089,7 +4809,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "fixtures/AUTHORITY_OBJECT_ADMISSION_INTAKE_REOPENING_REQUEST_REJECTION_CORPUS/missing-authority-object-manifest.json",
@@ -4101,7 +4823,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "fixtures/AUTHORITY_OBJECT_ADMISSION_INTAKE_REOPENING_REQUEST_REJECTION_CORPUS/missing-current-state.json",
@@ -4113,7 +4837,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "fixtures/AUTHORITY_OBJECT_ADMISSION_INTAKE_REOPENING_REQUEST_REJECTION_CORPUS/silent-reopening-allowed.json",
@@ -4125,7 +4851,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "fixtures/AUTHORITY_OBJECT_ADMISSION_INTAKE_REOPENING_REQUEST_REJECTION_CORPUS/wrong-current-state.json",
@@ -4137,7 +4865,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "fixtures/authority_object_admission_requests/rejected/AUTHORITY_SATISFIED_TRUE.json",
@@ -4149,7 +4879,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "fixtures/authority_object_admission_requests/rejected/MEDIA_PAYLOAD_PRESENT_TRUE.json",
@@ -4161,7 +4893,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "fixtures/authority_object_admission_requests/rejected/MISSING_CASE_ID.json",
@@ -4173,7 +4907,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "fixtures/authority_object_admission_requests/rejected/PRIVATE_ACCESS_REQUIRED_TRUE.json",
@@ -4185,7 +4921,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "fixtures/authority_object_admission_requests/rejected/WRONG_CURRENT_STATE.json",
@@ -4197,7 +4935,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "templates/authority_objects/ADMISSIBILITY_VERDICT_TEMPLATE.json",
@@ -4209,7 +4949,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "templates/authority_objects/COLOR_GRADE_LOCK_TEMPLATE.json",
@@ -4221,7 +4963,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "templates/authority_objects/DIRECTOR_ACCEPTANCE_OBJECT_TEMPLATE.json",
@@ -4233,7 +4977,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "templates/authority_objects/FINAL_CUT_TIMELINE_LOCK_TEMPLATE.json",
@@ -4245,7 +4991,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "templates/authority_objects/MEDIA_HASH_MANIFEST_TEMPLATE.json",
@@ -4257,7 +5005,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "templates/authority_objects/REPLAY_EXECUTION_REPORT_TEMPLATE.json",
@@ -4269,7 +5019,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "templates/authority_objects/SOUND_MIX_LOCK_TEMPLATE.json",
@@ -4281,7 +5033,9 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     },
     {
       "path": "templates/authority_objects/TERMINAL_CLOSURE_CANDIDATE_TEMPLATE.json",
@@ -4293,7 +5047,13 @@
       "issued": false,
       "release_candidate_ready": false,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": false,
+      "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
     }
-  ]
+  ],
+  "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+  "active_case_states": {
+    "CASE_001_THE_LAST_RENDER": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
+  }
 }

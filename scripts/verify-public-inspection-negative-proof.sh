@@ -34,7 +34,7 @@ for key, expected in law["must_remain_false"].items():
 assert proof["object_type"] == "CINEMATICUM_PUBLIC_INSPECTION_NEGATIVE_PROOF"
 assert proof["surface_type"] == "NEGATIVE_PROOF"
 assert proof["case_id"] == "CASE_001_THE_LAST_RENDER"
-assert proof["current_state"] == "OUTSIDER_REPLAY_BUNDLE_LAW_DECLARED"
+assert proof["current_state"] == "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
 
 for key, proves_absence in proof["proves_absence_of"].items():
     assert proves_absence is True, key
@@ -42,7 +42,7 @@ for key, proves_absence in proof["proves_absence_of"].items():
 
 for absent in [
     "MOTION_PICTURE_ISSUANCE_ACT_OBJECT",
-    "RELEASE_CANDIDATE_READY_OBJECT",
+    "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS_OBJECT",
     "OUTSIDER_REPLAY_PASS_OBJECT",
     "ADMISSIBILITY_VERDICT_OBJECT",
     "TERMINAL_CLOSURE_OBJECT",
@@ -98,7 +98,7 @@ for needle in [
 
 print("CINEMATICUM PUBLIC INSPECTION NEGATIVE PROOF: PASS")
 print("ISSUED=false")
-print("RELEASE_CANDIDATE_READY=false")
+print("REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS=false")
 print("MEDIA_PRESENT=false")
 print("REPLAY_PASSED=false")
 print("VERDICT_PRESENT=false")

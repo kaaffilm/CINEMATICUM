@@ -28,7 +28,7 @@ sentinel = load("CINEMATICUM_PUBLIC_PERIMETER_SENTINEL.json")
 manifest = load("CINEMATICUM_MASTER_VERIFICATION_MANIFEST.json")
 registry = load("CINEMATICUM_OBJECT_REGISTRY.json")
 
-expected_state = "OUTSIDER_REPLAY_BUNDLE_LAW_DECLARED"
+expected_state = "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
 
 assert law["object_type"] == "CINEMATICUM_OUTSIDER_CLONE_REPLAY_LAW"
 assert law["replay_owner"] == "OUTSIDER_CLONE_REPLAY.json"
@@ -131,7 +131,7 @@ text = Path("OUTSIDER_CLONE_REPLAY.md").read_text(encoding="utf-8")
 for needle in [
     "git clone https://github.com/kaaffilm/CINEMATICUM.git",
     "bash scripts/verify-all.sh",
-    "OUTSIDER_REPLAY_BUNDLE_LAW_DECLARED",
+    "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
     "release_candidate_ready=false",
     "issued=false",
     "media_present=false",
@@ -146,7 +146,7 @@ assert "bash scripts/verify-outsider-clone-replay.sh" in verify_all
 assert "python3 -m unittest tests/test_outsider_clone_replay.py" in verify_all
 
 print("CINEMATICUM OUTSIDER CLONE REPLAY: PASS")
-print("CURRENT_STATE=OUTSIDER_REPLAY_BUNDLE_LAW_DECLARED")
+print("CURRENT_STATE=REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS")
 print("FRESH_CHECKOUT_CAN_VERIFY=true")
 print("PRIVATE_ACCESS_REQUIRED=false")
 print("NETWORK_REQUIRED_AFTER_CLONE=false")

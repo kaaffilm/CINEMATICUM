@@ -21,8 +21,8 @@ case = load("CASES/CASE_001_THE_LAST_RENDER/CURRENT_CASE_STATE.json")
 
 assert matrix["object_type"] == "CINEMATICUM_GOVERNED_PROGRESSION_MATRIX"
 assert matrix["case_id"] == "CASE_001_THE_LAST_RENDER"
-assert matrix["current_active_state"] == "OUTSIDER_REPLAY_BUNDLE_LAW_DECLARED"
-assert "RELEASE_CANDIDATE_READY" in matrix["states_not_reached"]
+assert matrix["current_active_state"] == "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
+assert "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS" in matrix["states_not_reached"]
 assert "ISSUED_ADMISSIBLE_MOTION_PICTURE" in matrix["states_not_reached"]
 
 for key in [
@@ -46,14 +46,14 @@ for test_file in manifest["required_unittests"]:
 
 assert graph["object_type"] == "CINEMATICUM_CASE_PROGRESSION_GRAPH"
 assert graph["case_id"] == "CASE_001_THE_LAST_RENDER"
-assert graph["current_state"] == "OUTSIDER_REPLAY_BUNDLE_LAW_DECLARED"
+assert graph["current_state"] == "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
 
 active_nodes = [node for node in graph["nodes"] if node["status"] == "active"]
 assert len(active_nodes) == 1, active_nodes
-assert active_nodes[0]["state"] == "OUTSIDER_REPLAY_BUNDLE_LAW_DECLARED"
+assert active_nodes[0]["state"] == "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
 
 states = {node["state"]: node["status"] for node in graph["nodes"]}
-assert states["RELEASE_CANDIDATE_READY"] == "not_reached"
+assert states["REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"] == "active"
 assert states["ISSUED_ADMISSIBLE_MOTION_PICTURE"] == "not_reached"
 
 assert index["active_case_states"]["CASE_001_THE_LAST_RENDER"] == matrix["current_active_state"]
@@ -77,8 +77,8 @@ assert active == ["CASES/CASE_001_THE_LAST_RENDER/CURRENT_CASE_STATE.json"], act
 
 print("CINEMATICUM MASTER PROGRESSION: PASS")
 print("CASE_001=THE_LAST_RENDER")
-print("ACTIVE_CURRENT_STATE=OUTSIDER_REPLAY_BUNDLE_LAW_DECLARED")
-print("RELEASE_CANDIDATE_READY=false")
+print("ACTIVE_CURRENT_STATE=REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS")
+print("REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS=false")
 print("ISSUED=false")
 print("MEDIA_PRESENT=false")
 print("REPLAY_PASSED=false")

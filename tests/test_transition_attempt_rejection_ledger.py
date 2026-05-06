@@ -12,7 +12,7 @@ class TestTransitionAttemptRejectionLedger(unittest.TestCase):
         ledger = load("CINEMATICUM_TRANSITION_ATTEMPT_REJECTION_LEDGER.json")
         index = load("CINEMATICUM_CURRENT_STATE_INDEX.json")
         case = load("CASES/CASE_001_THE_LAST_RENDER/CURRENT_CASE_STATE.json")
-        self.assertEqual(ledger["current_state"], "OUTSIDER_REPLAY_BUNDLE_LAW_DECLARED")
+        self.assertEqual(ledger["current_state"], "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS")
         self.assertEqual(index["active_case_states"]["CASE_001_THE_LAST_RENDER"], ledger["current_state"])
         self.assertEqual(case["current_state"], ledger["current_state"])
 
@@ -28,7 +28,7 @@ class TestTransitionAttemptRejectionLedger(unittest.TestCase):
     def test_automatic_rejection_rules_cover_blocked_targets(self):
         ledger = load("CINEMATICUM_TRANSITION_ATTEMPT_REJECTION_LEDGER.json")
         targets = {rule["target_state"] for rule in ledger["automatic_rejection_rules"]}
-        self.assertEqual(targets, {"RELEASE_CANDIDATE_READY", "ISSUED_ADMISSIBLE_MOTION_PICTURE"})
+        self.assertEqual(targets, {"REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS", "ISSUED_ADMISSIBLE_MOTION_PICTURE"})
         for rule in ledger["automatic_rejection_rules"]:
             self.assertTrue(rule["would_be_rejected_now"])
 
