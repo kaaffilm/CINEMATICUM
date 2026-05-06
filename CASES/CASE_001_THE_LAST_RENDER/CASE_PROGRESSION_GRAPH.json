@@ -19,23 +19,6 @@
     {
       "state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
       "status": "active",
-      "active": true,
-      "reached": true
-    },
-    {
-      "state": "AUTHORITY_ACCEPTANCE_LAW_DECLARED",
-      "status": "reached",
-      "active": false
-    },
-    {
-      "state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
-      "status": "active",
-      "reached": true,
-      "active": true
-    },
-    {
-      "state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
-      "status": "active",
       "missing": [
         "director_acceptance_object",
         "final_cut_timeline_lock_object",
@@ -50,6 +33,11 @@
       ],
       "reached": true,
       "active": true
+    },
+    {
+      "state": "AUTHORITY_ACCEPTANCE_LAW_DECLARED",
+      "status": "reached",
+      "active": false
     },
     {
       "state": "ISSUED_ADMISSIBLE_MOTION_PICTURE",
