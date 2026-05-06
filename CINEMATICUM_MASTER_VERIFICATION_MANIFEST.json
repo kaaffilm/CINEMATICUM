@@ -912,6 +912,19 @@
     "verifier": "scripts/verify-release-candidate-artifacts-docket.sh",
     "workflow": "release-candidate-artifacts-docket"
   },
+  "release_candidate_evidence_bundle": {
+    "authority_satisfied": false,
+    "issued": false,
+    "law": "CINEMATICUM_RELEASE_CANDIDATE_EVIDENCE_BUNDLE_LAW.json",
+    "may_advance_now": false,
+    "media_present": false,
+    "object": "RELEASE_CANDIDATE_EVIDENCE_BUNDLE",
+    "release_candidate_ready": false,
+    "status": "CASES/CASE_001_THE_LAST_RENDER/RELEASE_CANDIDATE_EVIDENCE_BUNDLE_STATUS.json",
+    "unit_test": "tests/test_release_candidate_evidence_bundle.py",
+    "verifier": "scripts/verify-release-candidate-evidence-bundle.sh",
+    "workflow": "release-candidate-evidence-bundle"
+  },
   "release_candidate_gap_ledger": {
     "authority_satisfied": false,
     "issued": false,
