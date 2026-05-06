@@ -982,6 +982,21 @@
     "verifier": "scripts/verify-release-candidate-public-inspection-dossier.sh",
     "workflow": "release-candidate-public-inspection-dossier"
   },
+  "release_candidate_terminal_closure_plan": {
+    "authority_satisfied": false,
+    "issued": false,
+    "law": "CINEMATICUM_RELEASE_CANDIDATE_TERMINAL_CLOSURE_PLAN_LAW.json",
+    "may_advance_now": false,
+    "media_present": false,
+    "object": "RELEASE_CANDIDATE_TERMINAL_CLOSURE_PLAN",
+    "outsider_replay_passed": false,
+    "release_candidate_ready": false,
+    "status": "CASES/CASE_001_THE_LAST_RENDER/RELEASE_CANDIDATE_TERMINAL_CLOSURE_PLAN_STATUS.json",
+    "terminal_closure_present": false,
+    "unit_test": "tests/test_release_candidate_terminal_closure_plan.py",
+    "verifier": "scripts/verify-release-candidate-terminal-closure-plan.sh",
+    "workflow": "release-candidate-terminal-closure-plan"
+  },
   "required_ci_workflows": [
     "authority-acceptance-law",
     "authority-object-admission-closure-seal",
