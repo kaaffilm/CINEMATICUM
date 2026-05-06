@@ -1,0 +1,21 @@
+# RELEASE_CANDIDATE_ADMISSIBILITY_VERDICT_RECORD
+
+This object records the release-candidate admissibility verdict after outsider replay passage.
+
+It asserts:
+
+- `OUTSIDER_REPLAY_PASSED=true`
+- `ADMISSIBILITY_VERDICT_RECORD_PRESENT=true`
+- `ADMISSIBILITY_VERDICT_PRESENT=true`
+- `ADMISSIBILITY_VERDICT_RESULT=ADMISSIBLE`
+
+It preserves:
+
+- `RELEASE_CANDIDATE_READY=false`
+- `ISSUED=false`
+- `MEDIA_PRESENT=false`
+- `TERMINAL_CLOSURE_PRESENT=false`
+
+Next required object:
+
+`RELEASE_CANDIDATE_TERMINAL_CLOSURE_RECORD`

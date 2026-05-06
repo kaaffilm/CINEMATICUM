@@ -1,0 +1,18 @@
+{
+  "admissibility_verdict_declared": true,
+  "admissibility_verdict_present": true,
+  "admissibility_verdict_record_present": true,
+  "case_id": "CASE_001_THE_LAST_RENDER",
+  "current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+  "issued": false,
+  "media_present": false,
+  "next_required_object": "RELEASE_CANDIDATE_TERMINAL_CLOSURE_RECORD",
+  "object_type": "CINEMATICUM_CASE_RELEASE_CANDIDATE_ADMISSIBILITY_VERDICT_RECORD_STATUS",
+  "outsider_replay_passage_record_present": true,
+  "outsider_replay_passed": true,
+  "release_candidate_ready": false,
+  "schema_version": "cinematicum.case.release_candidate_admissibility_verdict_record_status.v1",
+  "surface_class": "LAYER_STATUS_RECORD",
+  "terminal_closure_present": false,
+  "terminal_closure_record_present": false
+}

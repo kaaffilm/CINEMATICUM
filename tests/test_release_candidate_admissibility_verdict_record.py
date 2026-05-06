@@ -1,0 +1,71 @@
+import json
+import pathlib
+import unittest
+
+ROOT = pathlib.Path(__file__).resolve().parents[1]
+CASE_ID = "CASE_001_THE_LAST_RENDER"
+CURRENT_STATE = "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
+NEXT = "RELEASE_CANDIDATE_TERMINAL_CLOSURE_RECORD"
+
+def load(path: str):
+    return json.loads((ROOT / path).read_text(encoding="utf-8"))
+
+class TestReleaseCandidateAdmissibilityVerdictRecord(unittest.TestCase):
+    def test_verdict_record_present_after_outsider_replay_passage(self):
+        obj = load("CINEMATICUM_RELEASE_CANDIDATE_ADMISSIBILITY_VERDICT_RECORD.json")
+        self.assertEqual(obj["case_id"], CASE_ID)
+        self.assertEqual(obj["current_state"], CURRENT_STATE)
+        self.assertTrue(obj["release_candidate_planning_perimeter_complete"])
+        self.assertTrue(obj["all_required_release_candidate_gap_objects_present"])
+        self.assertTrue(obj["release_candidate_outsider_replay_execution_record_present"])
+        self.assertTrue(obj["release_candidate_outsider_replay_passage_record_present"])
+        self.assertTrue(obj["outsider_replay_execution_record_present"])
+        self.assertTrue(obj["outsider_replay_execution_completed"])
+        self.assertEqual(obj["outsider_replay_execution_result"], "PASS")
+        self.assertTrue(obj["outsider_replay_passage_record_present"])
+        self.assertTrue(obj["outsider_replay_passage_declared"])
+        self.assertTrue(obj["outsider_replay_passed"])
+        self.assertTrue(obj["release_candidate_admissibility_verdict_record_present"])
+        self.assertTrue(obj["release_candidate_admissibility_verdict_record_sealed"])
+        self.assertTrue(obj["admissibility_verdict_record_present"])
+        self.assertTrue(obj["admissibility_verdict_record_sealed"])
+        self.assertTrue(obj["admissibility_verdict_declared"])
+        self.assertTrue(obj["admissibility_verdict_present"])
+        self.assertEqual(obj["admissibility_verdict_result"], "ADMISSIBLE")
+        self.assertEqual(obj["next_required_object"], NEXT)
+
+    def test_verdict_record_does_not_terminally_close_or_issue(self):
+        obj = load("CINEMATICUM_RELEASE_CANDIDATE_ADMISSIBILITY_VERDICT_RECORD.json")
+        for key in [
+            "terminal_closure_record_present",
+            "release_candidate_ready",
+            "issued",
+            "media_present",
+            "terminal_closure_present",
+            "authority_satisfied",
+            "may_advance_now",
+        ]:
+            self.assertFalse(obj[key], key)
+
+        self.assertTrue(obj["verdict_record_is_not_terminal_closure_record"])
+        self.assertTrue(obj["verdict_record_does_not_create_terminal_closure"])
+        self.assertTrue(obj["verdict_record_does_not_create_release_candidate"])
+        self.assertTrue(obj["verdict_record_does_not_issue_motion_picture"])
+        self.assertTrue(obj["verdict_record_does_not_admit_media"])
+        self.assertTrue(obj["verdict_record_does_not_mutate_current_state"])
+
+    def test_public_clone_replay_perimeter_preserved(self):
+        obj = load("CINEMATICUM_RELEASE_CANDIDATE_ADMISSIBILITY_VERDICT_RECORD.json")
+        self.assertTrue(obj["fresh_checkout_can_verify"])
+        self.assertFalse(obj["private_access_required"])
+        self.assertFalse(obj["network_required_after_clone"])
+        self.assertFalse(obj["media_or_model_payload_present"])
+        self.assertFalse(obj["forbidden_private_file_present"])
+
+    def test_case_record_identity(self):
+        obj = load(f"CASES/{CASE_ID}/RELEASE_CANDIDATE_ADMISSIBILITY_VERDICT_RECORD/RELEASE_CANDIDATE_ADMISSIBILITY_VERDICT_RECORD.json")
+        self.assertEqual(obj["record_id"], "ADMISSIBILITY_VERDICT_RECORD_001_RELEASE_CANDIDATE")
+        self.assertEqual(obj["object_type"], "CINEMATICUM_RELEASE_CANDIDATE_ADMISSIBILITY_VERDICT_RECORD")
+
+if __name__ == "__main__":
+    unittest.main()

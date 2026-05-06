@@ -899,6 +899,23 @@
     "verifier": "scripts/verify-real-case-authority-object-slot-index.sh",
     "workflow": "real-case-authority-object-slot-index"
   },
+  "release_candidate_admissibility_verdict_record": {
+    "admissibility_verdict_present": true,
+    "authority_satisfied": false,
+    "case_record": "CASES/CASE_001_THE_LAST_RENDER/RELEASE_CANDIDATE_ADMISSIBILITY_VERDICT_RECORD/RELEASE_CANDIDATE_ADMISSIBILITY_VERDICT_RECORD.json",
+    "issued": false,
+    "law": "CINEMATICUM_RELEASE_CANDIDATE_ADMISSIBILITY_VERDICT_RECORD_LAW.json",
+    "may_advance_now": false,
+    "media_present": false,
+    "object": "RELEASE_CANDIDATE_ADMISSIBILITY_VERDICT_RECORD",
+    "outsider_replay_passed": true,
+    "release_candidate_ready": false,
+    "status": "CASES/CASE_001_THE_LAST_RENDER/RELEASE_CANDIDATE_ADMISSIBILITY_VERDICT_RECORD_STATUS.json",
+    "terminal_closure_present": false,
+    "unit_test": "tests/test_release_candidate_admissibility_verdict_record.py",
+    "verifier": "scripts/verify-release-candidate-admissibility-verdict-record.sh",
+    "workflow": "release-candidate-admissibility-verdict-record"
+  },
   "release_candidate_artifacts_docket": {
     "authority_satisfied": false,
     "issued": false,
