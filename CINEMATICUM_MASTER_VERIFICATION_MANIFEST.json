@@ -1047,6 +1047,23 @@
     "verifier": "scripts/verify-release-candidate-terminal-closure-plan.sh",
     "workflow": "release-candidate-terminal-closure-plan"
   },
+  "release_candidate_terminal_closure_record": {
+    "admissibility_verdict_present": true,
+    "authority_satisfied": false,
+    "case_record": "CASES/CASE_001_THE_LAST_RENDER/RELEASE_CANDIDATE_TERMINAL_CLOSURE_RECORD/RELEASE_CANDIDATE_TERMINAL_CLOSURE_RECORD.json",
+    "issued": false,
+    "law": "CINEMATICUM_RELEASE_CANDIDATE_TERMINAL_CLOSURE_RECORD_LAW.json",
+    "may_advance_now": false,
+    "media_present": false,
+    "object": "CINEMATICUM_RELEASE_CANDIDATE_TERMINAL_CLOSURE_RECORD.json",
+    "release_candidate_ready": false,
+    "status": "CASES/CASE_001_THE_LAST_RENDER/RELEASE_CANDIDATE_TERMINAL_CLOSURE_RECORD_STATUS.json",
+    "terminal_closure_present": true,
+    "terminal_closure_record_present": true,
+    "unit_test": "tests/test_release_candidate_terminal_closure_record.py",
+    "verifier": "scripts/verify-release-candidate-terminal-closure-record.sh",
+    "workflow": "release-candidate-terminal-closure-record"
+  },
   "required_ci_workflows": [
     "authority-acceptance-law",
     "authority-object-admission-closure-seal",
