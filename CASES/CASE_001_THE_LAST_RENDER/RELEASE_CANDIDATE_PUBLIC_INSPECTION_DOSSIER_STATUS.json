@@ -4,7 +4,7 @@
   "authority_object_stack_complete": true,
   "authority_satisfied": false,
   "case_id": "CASE_001_THE_LAST_RENDER",
-  "current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+  "current_state": "RELEASE_CANDIDATE_READY",
   "future_authority_satisfaction_gate_passed": true,
   "instantiated_authority_object_count": 8,
   "institution": "CINEMATICUM",
@@ -47,5 +47,8 @@
   "schema_version": "cinematicum.release_candidate_public_inspection_dossier.v1",
   "surface_class": "CASE_RECORD",
   "terminal_closure_present": false,
-  "unfilled_authority_object_slot_count": 0
+  "unfilled_authority_object_slot_count": 0,
+  "active_current_state": "RELEASE_CANDIDATE_READY",
+  "record_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+  "active_release_candidate_ready": true
 }

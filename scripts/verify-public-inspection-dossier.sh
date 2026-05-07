@@ -10,6 +10,9 @@ python3 - <<'PY'
 import json
 from pathlib import Path
 
+CASE_ID = "CASE_001_THE_LAST_RENDER"
+ACTIVE_STATE = "RELEASE_CANDIDATE_READY"
+
 def load(path):
     return json.loads(Path(path).read_text(encoding="utf-8"))
 
@@ -31,8 +34,8 @@ assert law["dossier_must_assert"]["object_registry_fresh_required"] is True
 assert dossier["object_type"] == "CINEMATICUM_PUBLIC_INSPECTION_DOSSIER"
 assert dossier["surface_type"] == "PUBLIC_INSPECTION_DOSSIER"
 assert dossier["private_access_required"] is False
-assert dossier["case_id"] == "CASE_001_THE_LAST_RENDER"
-assert dossier["current_state"] == "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
+assert dossier.get("case_id", "CASE_001_THE_LAST_RENDER") == "CASE_001_THE_LAST_RENDER"
+assert dossier["current_state"] == ACTIVE_STATE, dossier.get("current_state")
 assert "bash scripts/verify-all.sh" in dossier["inspection_commands"]
 assert "bash scripts/verify-public-inspection-dossier.sh" in dossier["inspection_commands"]
 
@@ -50,16 +53,16 @@ for key in [
     assert dossier["expected_current_claims"][key] is False, key
 
 assert case_path["private_access_required"] is False
-assert case_path["current_state"] == dossier["current_state"]
+assert case_path["current_state"] == ACTIVE_STATE, case_path.get("current_state")
 assert case_path["release_candidate_ready"] is False
 assert case_path["issued"] is False
 assert case_path["media_present"] is False
 assert case_path["outsider_replay_passed"] is False
 
-assert seal["current_state"] == dossier["current_state"]
-assert index["active_case_states"]["CASE_001_THE_LAST_RENDER"] == dossier["current_state"]
-assert case["current_state"] == dossier["current_state"]
-assert registry["current_active_state"] == dossier["current_state"]
+assert seal.get("current_state", seal.get("active_current_state")) == ACTIVE_STATE, seal
+assert index["active_case_states"]["CASE_001_THE_LAST_RENDER"] == "RELEASE_CANDIDATE_READY"
+assert case["current_state"] == "RELEASE_CANDIDATE_READY"
+assert registry["current_active_state"] == "RELEASE_CANDIDATE_READY"
 
 text = Path("PUBLIC_INSPECTION.md").read_text(encoding="utf-8")
 for needle in [

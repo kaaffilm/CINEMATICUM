@@ -6,7 +6,7 @@
   "surface_type": "NEGATIVE_PROOF",
   "case_id": "CASE_001_THE_LAST_RENDER",
   "case_title": "THE LAST RENDER",
-  "current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+  "current_state": "RELEASE_CANDIDATE_READY",
   "negative_proof_scope": [
     "PUBLIC_INSPECTION.md",
     "PUBLIC_INSPECTION_DOSSIER.json",
@@ -45,5 +45,13 @@
     "TERMINAL_CLOSURE_OBJECT",
     "MEDIA_ADMISSION_OBJECT"
   ],
-  "negative_statement": "The public inspection surfaces are readable, replayable status surfaces only. They are not issuance, readiness, media admission, replay pass, verdict, or closure."
+  "negative_statement": "The public inspection surfaces are readable, replayable status surfaces only. They are not issuance, readiness, media admission, replay pass, verdict, or closure.",
+  "active_current_state": "RELEASE_CANDIDATE_READY",
+  "record_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+  "issued": false,
+  "media_present": false,
+  "authority_satisfied": false,
+  "may_advance_now": false,
+  "release_candidate_ready": false,
+  "active_release_candidate_ready": true
 }

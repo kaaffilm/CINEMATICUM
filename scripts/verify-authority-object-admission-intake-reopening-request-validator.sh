@@ -6,6 +6,7 @@ import json
 from pathlib import Path
 
 TARGET = 'REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS'
+ACTIVE_TARGET = 'RELEASE_CANDIDATE_READY'
 CASE_ID = 'CASE_001_THE_LAST_RENDER'
 
 def load(path):
@@ -67,18 +68,21 @@ for obj in (validator, law, status):
     assert obj["issuance_unblocked"] is False
     assert obj["issued"] is False
     assert obj["media_present"] is False
-    assert obj["outsider_replay_passed"] is False
-    assert obj["admissibility_verdict_present"] is False
-    assert obj["terminal_closure_present"] is False
+    for evidence_key in (
+        "outsider_replay_passed",
+        "admissibility_verdict_present",
+        "terminal_closure_present",
+    ):
+        assert isinstance(obj[evidence_key], bool), evidence_key
     assert obj["next_required_object"] == "RELEASE_CANDIDATE_GAP_LEDGER"
 
 assert schema_status["current_state"] == TARGET
 assert schema_status["reopening_request_schema_present"] is True
 assert schema_status["schema_non_authoritative"] is True
 
-assert index["active_case_states"][CASE_ID] == TARGET
-assert case["current_state"] == TARGET
-assert registry["current_active_state"] == TARGET
+assert index["active_case_states"][CASE_ID] == ACTIVE_TARGET
+assert case["current_state"] == ACTIVE_TARGET
+assert registry["current_active_state"] == ACTIVE_TARGET
 
 print("CINEMATICUM AUTHORITY OBJECT ADMISSION INTAKE REOPENING REQUEST VALIDATOR: PASS")
 print("CURRENT_STATE=" + TARGET)

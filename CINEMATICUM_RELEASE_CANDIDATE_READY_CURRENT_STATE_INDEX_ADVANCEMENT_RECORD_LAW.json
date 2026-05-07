@@ -1,0 +1,14 @@
+{
+  "authorizes_current_state_index_mutation_to_release_candidate_ready": true,
+  "case_id": "CASE_001_THE_LAST_RENDER",
+  "does_not_admit_media": true,
+  "does_not_issue_motion_picture": true,
+  "from_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+  "governs_object": "RELEASE_CANDIDATE_READY_CURRENT_STATE_INDEX_ADVANCEMENT_RECORD",
+  "jurisdiction": "CINEMATICUM",
+  "law": "CINEMATICUM_RELEASE_CANDIDATE_READY_CURRENT_STATE_INDEX_ADVANCEMENT_RECORD_LAW",
+  "requires_current_state_index_from_state_match": true,
+  "requires_prior_execution_record": "RELEASE_CANDIDATE_READY_STATE_ADVANCEMENT_EXECUTION_RECORD",
+  "sealed": true,
+  "to_state": "RELEASE_CANDIDATE_READY"
+}

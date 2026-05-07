@@ -7,7 +7,7 @@
   "private_access_required": false,
   "case_id": "CASE_001_THE_LAST_RENDER",
   "case_title": "THE LAST RENDER",
-  "current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+  "current_state": "RELEASE_CANDIDATE_READY",
   "current_truth_owners": [
     "CINEMATICUM_CURRENT_STATE_INDEX.json",
     "CASES/CASE_001_THE_LAST_RENDER/CURRENT_CASE_STATE.json"

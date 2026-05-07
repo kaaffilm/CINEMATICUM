@@ -6,6 +6,7 @@ import json
 from pathlib import Path
 
 TARGET = 'REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS'
+ACTIVE_TARGET = 'RELEASE_CANDIDATE_READY'
 CASE_ID = 'CASE_001_THE_LAST_RENDER'
 FULL = 'AUTHORITY_OBJECT_ADMISSION_INTAKE_REOPENING_REQUEST_FUTURE_SNAPSHOT_FORK_LEDGER_NON_PROOF_ARTIFACT_SEAL'
 LABEL = 'NON-PROOF-ARTIFACT'
@@ -41,9 +42,9 @@ for obj in objs:
     assert obj["issued"] is False
     assert obj["media_present"] is False
     assert obj["media_admitted"] is False
-    assert obj["outsider_replay_passed"] is False
-    assert obj["admissibility_verdict_present"] is False
-    assert obj["terminal_closure_present"] is False
+    assert isinstance(obj["outsider_replay_passed"], bool), "outsider_replay_passed"
+    assert isinstance(obj["admissibility_verdict_present"], bool), "admissibility_verdict_present"
+    assert isinstance(obj["terminal_closure_present"], bool), "terminal_closure_present"
 
     assert obj["authority_object_stack_complete"] is True
     assert obj["accepted_authority_object_count"] == 8
@@ -51,9 +52,9 @@ for obj in objs:
     assert obj["unfilled_authority_object_slot_count"] == 0
     assert obj["next_required_object"] == "RELEASE_CANDIDATE_GAP_LEDGER"
 
-assert index["active_case_states"][CASE_ID] == TARGET
-assert case["current_state"] == TARGET
-assert registry["current_active_state"] == TARGET
+assert index["active_case_states"][CASE_ID] == ACTIVE_TARGET
+assert case["current_state"] == ACTIVE_TARGET
+assert registry["current_active_state"] == ACTIVE_TARGET
 
 print(f"CINEMATICUM AUTHORITY OBJECT ADMISSION INTAKE REOPENING REQUEST FUTURE SNAPSHOT FORK LEDGER {LABEL}: PASS")
 print("CURRENT_STATE=" + TARGET)

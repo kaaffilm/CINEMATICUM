@@ -10,6 +10,11 @@ python3 - <<'PY'
 import json
 from pathlib import Path
 
+RECORD_STATE = "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
+ACTIVE_STATE = "RELEASE_CANDIDATE_READY"
+CASE_ID = "CASE_001_THE_LAST_RENDER"
+ACTIVE_TRUE_NOT_NEGATIVE_PROOF_KEYS = {"release_candidate_ready"}
+
 def load(path):
     return json.loads(Path(path).read_text(encoding="utf-8"))
 
@@ -29,14 +34,18 @@ assert law["inspection_dossier_owner"] == "PUBLIC_INSPECTION_DOSSIER.json"
 assert law["status_seal_owner"] == "CINEMATICUM_REPOSITORY_STATUS_SEAL.json"
 
 for key, expected in law["must_remain_false"].items():
+    if key in ACTIVE_TRUE_NOT_NEGATIVE_PROOF_KEYS:
+        continue
     assert expected is False, key
 
 assert proof["object_type"] == "CINEMATICUM_PUBLIC_INSPECTION_NEGATIVE_PROOF"
 assert proof["surface_type"] == "NEGATIVE_PROOF"
 assert proof["case_id"] == "CASE_001_THE_LAST_RENDER"
-assert proof["current_state"] == "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
+assert proof["current_state"] == ACTIVE_STATE, proof.get("current_state")
 
 for key, proves_absence in proof["proves_absence_of"].items():
+    if key in ACTIVE_TRUE_NOT_NEGATIVE_PROOF_KEYS:
+        continue
     assert proves_absence is True, key
     assert proof["current_false_values"][key] is False, key
 
@@ -66,18 +75,26 @@ for key in [
     "admissibility_verdict_present",
     "terminal_closure_present",
 ]:
+    if key in ACTIVE_TRUE_NOT_NEGATIVE_PROOF_KEYS:
+        continue
     assert status[key] is False, key
     assert dossier["expected_current_claims"][key] is False, key
     if key in seal:
+        if key in ACTIVE_TRUE_NOT_NEGATIVE_PROOF_KEYS:
+            continue
         assert seal[key] is False, key
     if key in case:
+        if key in ACTIVE_TRUE_NOT_NEGATIVE_PROOF_KEYS:
+            continue
         assert case[key] is False, key
     if key in matrix["currently_false_claims"]:
+        if key in ACTIVE_TRUE_NOT_NEGATIVE_PROOF_KEYS:
+            continue
         assert matrix["currently_false_claims"][key] is False, key
 
-assert index["active_case_states"]["CASE_001_THE_LAST_RENDER"] == proof["current_state"]
-assert case["current_state"] == proof["current_state"]
-assert seal["current_state"] == proof["current_state"]
+assert index["active_case_states"][CASE_ID] == ACTIVE_STATE, index["active_case_states"][CASE_ID]
+assert case["current_state"] == ACTIVE_STATE, case.get("current_state")
+assert seal.get("current_state", seal.get("active_current_state")) == ACTIVE_STATE, seal
 assert dossier["current_state"] == proof["current_state"]
 
 text = Path("PUBLIC_NEGATIVE_PROOF.md").read_text(encoding="utf-8")

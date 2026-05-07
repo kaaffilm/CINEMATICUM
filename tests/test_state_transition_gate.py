@@ -3,7 +3,7 @@ import subprocess
 import unittest
 from pathlib import Path
 
-TARGET = 'REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS'
+TARGET = 'RELEASE_CANDIDATE_READY'
 NEXT = 'RELEASE_CANDIDATE_ARTIFACTS_BOUND'
 CASE = 'CASE_001_THE_LAST_RENDER'
 
@@ -17,7 +17,7 @@ class TestStateTransitionGate(unittest.TestCase):
         self.assertEqual(gate["accepted_authority_object_count"], 8)
         self.assertEqual(gate["instantiated_authority_object_count"], 8)
         self.assertEqual(gate["unfilled_authority_object_slot_count"], 0)
-        self.assertFalse(gate["release_candidate_ready"])
+        self.assertTrue(gate["release_candidate_ready"])
         self.assertFalse(gate["release_candidate_artifacts_bound"])
         self.assertFalse(gate["issued"])
         self.assertFalse(gate["media_present"])

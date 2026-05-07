@@ -241,4 +241,8 @@ printf "CINEMATICUM VERIFY ALL: PASS\n"
 bash scripts/verify-release-candidate-ready-state-advancement-decision-record.sh
 python3 -m unittest tests/test_release_candidate_ready_state_advancement_execution_record.py
 bash scripts/verify-release-candidate-ready-state-advancement-execution-record.sh
+python3 -m unittest tests/test_release_candidate_ready_current_state_index_advancement_record.py
+bash scripts/verify-release-candidate-ready-current-state-index-advancement-record.sh
 python3 -m unittest tests/test_release_candidate_ready_state_advancement_decision_record.py
+bash scripts/verify-release-candidate-ready-issuance-blockade-seal.sh
+echo "CINEMATICUM VERIFY ALL: PASS"

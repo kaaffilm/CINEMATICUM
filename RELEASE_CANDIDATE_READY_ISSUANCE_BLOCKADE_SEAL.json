@@ -1,0 +1,21 @@
+{
+  "object": "RELEASE_CANDIDATE_READY_ISSUANCE_BLOCKADE_SEAL",
+  "object_type": "BLOCKADE_SEAL",
+  "jurisdiction": "CINEMATICUM",
+  "case": "CASE_001_THE_LAST_RENDER",
+  "current_state": "RELEASE_CANDIDATE_READY",
+  "release_candidate_ready": true,
+  "issuance_unblocked": false,
+  "issued": false,
+  "media_present": false,
+  "valid_transition_attempt_present": false,
+  "may_advance_now": false,
+  "blockade_scope": "RELEASE_CANDIDATE_READY_PRE_ISSUANCE_ONLY",
+  "blocks": [
+    "implicit_issuance",
+    "media_admission_without_valid_transition_attempt",
+    "issuance_unblock_without_required_future_object",
+    "state_advance_without_explicit_authority"
+  ],
+  "next_required_object": "RELEASE_CANDIDATE_READY_ISSUANCE_UNBLOCKING_REQUEST"
+}

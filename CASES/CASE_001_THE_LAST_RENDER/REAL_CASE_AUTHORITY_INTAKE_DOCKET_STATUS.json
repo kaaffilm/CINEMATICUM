@@ -36,5 +36,15 @@
   "may_advance_now": false,
   "release_candidate_ready": false,
   "issued": false,
-  "media_present": false
+  "media_present": false,
+  "case_id": "CASE_001_THE_LAST_RENDER",
+  "surface_type": "LAYER_STATUS_RECORD",
+  "current_truth_owner": false,
+  "does_not_outrank_current_state_index": true,
+  "record_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+  "active_current_state": "RELEASE_CANDIDATE_READY",
+  "intake_scope": "REAL_CASE_AUTHORITY_OBJECTS_ONLY",
+  "authority_object_slot_count": 8,
+  "unfilled_authority_object_slot_count": 8,
+  "instantiated_authority_object_count": 0
 }

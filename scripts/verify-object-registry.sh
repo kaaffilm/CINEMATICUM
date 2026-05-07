@@ -37,7 +37,7 @@ assert registry["object_type"] == "CINEMATICUM_OBJECT_REGISTRY"
 assert registry["registry_does_not_issue_film"] is True
 assert registry["registry_does_not_admit_media"] is True
 assert registry["registry_does_not_override_current_state"] is True
-assert registry["current_active_state"] == "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
+assert registry["current_active_state"] == "RELEASE_CANDIDATE_READY"
 assert registry["case_id"] == "CASE_001_THE_LAST_RENDER"
 assert registry["entries_count"] == len(registry["entries"])
 
@@ -97,7 +97,7 @@ assert not missing, missing
 
 print("CINEMATICUM OBJECT REGISTRY: PASS")
 print(f"REGISTERED_OBJECTS={registry['entries_count']}")
-print("ACTIVE_CURRENT_STATE=REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS")
+print("ACTIVE_CURRENT_STATE=RELEASE_CANDIDATE_READY")
 print("ONE_ACTIVE_CASE_STATE=true")
 print("ISSUED=false")
 print("MEDIA_PRESENT=false")

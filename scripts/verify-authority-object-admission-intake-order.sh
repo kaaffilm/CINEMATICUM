@@ -6,6 +6,7 @@ import json
 from pathlib import Path
 
 TARGET = 'REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS'
+ACTIVE_TARGET = 'RELEASE_CANDIDATE_READY'
 CASE_ID = 'CASE_001_THE_LAST_RENDER'
 
 def load(path):
@@ -43,9 +44,9 @@ for obj in (order, law, status):
     assert obj["terminal_closure_present"] is False
     assert obj["next_required_object"] == "RELEASE_CANDIDATE_GAP_LEDGER"
 
-assert index["active_case_states"][CASE_ID] == TARGET
-assert case["current_state"] == TARGET
-assert registry["current_active_state"] == TARGET
+assert index["active_case_states"][CASE_ID] == ACTIVE_TARGET
+assert case["current_state"] == ACTIVE_TARGET
+assert registry["current_active_state"] == ACTIVE_TARGET
 
 print("CINEMATICUM AUTHORITY OBJECT ADMISSION INTAKE ORDER: PASS")
 print(f"CURRENT_STATE={TARGET}")

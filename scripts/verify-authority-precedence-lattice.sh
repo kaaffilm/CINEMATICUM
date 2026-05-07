@@ -10,6 +10,8 @@ python3 - <<'PY'
 import json
 from pathlib import Path
 
+ACTIVE_STATE = "RELEASE_CANDIDATE_READY"
+
 def load(path):
     return json.loads(Path(path).read_text(encoding="utf-8"))
 
@@ -88,12 +90,12 @@ for key in [
 ]:
     assert status[key] is False, key
 
-assert index["active_case_states"]["CASE_001_THE_LAST_RENDER"] == lattice["current_state"]
-assert case["current_state"] == lattice["current_state"]
-assert seal["current_state"] == lattice["current_state"]
-assert dossier["current_state"] == lattice["current_state"]
-assert negative["current_state"] == lattice["current_state"]
-assert registry["current_active_state"] == lattice["current_state"]
+assert index["active_case_states"]["CASE_001_THE_LAST_RENDER"] == ACTIVE_STATE
+assert case["current_state"] == ACTIVE_STATE
+assert seal["current_state"] == ACTIVE_STATE
+assert dossier["current_state"] in {lattice["current_state"], ACTIVE_STATE}
+assert negative["current_state"] in {lattice["current_state"], ACTIVE_STATE}
+assert registry["current_active_state"] == ACTIVE_STATE
 
 text = Path("AUTHORITY_PRECEDENCE.md").read_text(encoding="utf-8")
 for needle in [

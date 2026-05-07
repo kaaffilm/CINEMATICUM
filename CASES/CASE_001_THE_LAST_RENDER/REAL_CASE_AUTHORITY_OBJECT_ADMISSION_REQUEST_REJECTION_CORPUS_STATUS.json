@@ -18,5 +18,11 @@
   "may_advance_now": false,
   "release_candidate_ready": false,
   "issued": false,
-  "media_present": false
+  "media_present": false,
+  "corpus_scope": "REAL_CASE_AUTHORITY_OBJECTS_ONLY",
+  "corpus_does_not_create_live_requests": true,
+  "corpus_does_not_satisfy_authority": true,
+  "corpus_does_not_advance_state": true,
+  "corpus_does_not_issue_motion_picture": true,
+  "corpus_does_not_admit_media": true
 }

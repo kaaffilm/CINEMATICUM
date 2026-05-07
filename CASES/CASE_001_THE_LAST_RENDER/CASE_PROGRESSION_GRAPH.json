@@ -3,7 +3,7 @@
   "schema_version": "cinematicum.case_progression_graph.v1",
   "case_id": "CASE_001_THE_LAST_RENDER",
   "case_title": "THE LAST RENDER",
-  "current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+  "current_state": "RELEASE_CANDIDATE_READY",
   "current_state_owner": "CASES/CASE_001_THE_LAST_RENDER/CURRENT_CASE_STATE.json",
   "nodes": [
     {
@@ -17,7 +17,7 @@
       "active": false
     },
     {
-      "state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+      "state": "RELEASE_CANDIDATE_READY",
       "status": "active",
       "missing": [
         "director_acceptance_object",
@@ -54,16 +54,16 @@
     }
   ],
   "false_now": {
-    "release_candidate_ready": false,
+    "release_candidate_ready": true,
     "issued": false,
     "media_present": false,
     "outsider_replay_passed": false
   },
-  "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+  "current_active_state": "RELEASE_CANDIDATE_READY",
   "status": "active",
-  "release_candidate_ready": false,
+  "release_candidate_ready": true,
   "issued": false,
   "media_present": false,
   "outsider_replay_passed": false,
-  "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
+  "active_current_state": "RELEASE_CANDIDATE_READY"
 }

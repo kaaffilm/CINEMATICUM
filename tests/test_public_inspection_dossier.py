@@ -12,7 +12,7 @@ class TestPublicInspectionDossier(unittest.TestCase):
         dossier = load("PUBLIC_INSPECTION_DOSSIER.json")
         index = load("CINEMATICUM_CURRENT_STATE_INDEX.json")
         case = load("CASES/CASE_001_THE_LAST_RENDER/CURRENT_CASE_STATE.json")
-        self.assertEqual(dossier["current_state"], "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS")
+        self.assertEqual(dossier["current_state"], index["active_case_states"]["CASE_001_THE_LAST_RENDER"])
         self.assertEqual(index["active_case_states"]["CASE_001_THE_LAST_RENDER"], dossier["current_state"])
         self.assertEqual(case["current_state"], dossier["current_state"])
 

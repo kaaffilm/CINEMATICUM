@@ -3,7 +3,7 @@ import subprocess
 import unittest
 from pathlib import Path
 
-TARGET = 'REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS'
+TARGET = 'RELEASE_CANDIDATE_READY'
 
 class TestAuthorityObjectAdmissionClosureSeal(unittest.TestCase):
     def test_status_contract(self):
@@ -11,7 +11,7 @@ class TestAuthorityObjectAdmissionClosureSeal(unittest.TestCase):
         self.assertEqual(status["current_state"], TARGET)
         self.assertTrue(status["authority_object_admission_closure_seal_passed"])
         self.assertTrue(status["admission_closed"])
-        self.assertFalse(status["release_candidate_ready"])
+        self.assertTrue(status["release_candidate_ready"])
         self.assertFalse(status["may_advance_now"])
         self.assertFalse(status["issuance_unblocked"])
         self.assertFalse(status["issued"])
