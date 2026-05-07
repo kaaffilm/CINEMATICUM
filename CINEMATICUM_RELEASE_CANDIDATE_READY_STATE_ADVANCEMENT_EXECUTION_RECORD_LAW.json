@@ -1,0 +1,22 @@
+{
+  "case_id": "CASE_001_THE_LAST_RENDER",
+  "forbids": [
+    "CURRENT_STATE_INDEX_MUTATION_IN_THIS_OBJECT",
+    "RELEASE_CANDIDATE_READY_TRUE_IN_THIS_OBJECT",
+    "ISSUANCE_IN_THIS_OBJECT",
+    "MEDIA_ADMISSION_IN_THIS_OBJECT"
+  ],
+  "from_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+  "governs": "RELEASE_CANDIDATE_READY_STATE_ADVANCEMENT_EXECUTION_RECORD",
+  "jurisdiction": "CINEMATICUM",
+  "law_object": "CINEMATICUM_RELEASE_CANDIDATE_READY_STATE_ADVANCEMENT_EXECUTION_RECORD_LAW",
+  "next_required_object": "RELEASE_CANDIDATE_READY_CURRENT_STATE_INDEX_ADVANCEMENT_RECORD",
+  "requires": [
+    "RELEASE_CANDIDATE_TERMINAL_CLOSURE_RECORD",
+    "RELEASE_CANDIDATE_READY_STATE_ADVANCEMENT_REQUEST",
+    "RELEASE_CANDIDATE_READY_STATE_ADVANCEMENT_DECISION_RECORD"
+  ],
+  "rule": "The release candidate ready state advancement execution record executes the prior accepted advancement decision only as authorization for the next current-state-index advancement object. It does not itself mutate the current state index, does not mark RELEASE_CANDIDATE_READY true, does not issue the motion picture, and does not admit media.",
+  "sealed": true,
+  "to_state": "RELEASE_CANDIDATE_READY"
+}

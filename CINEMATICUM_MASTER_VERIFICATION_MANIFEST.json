@@ -761,7 +761,10 @@
     "first_future_director_final_cut_authority_object_instantiation_record_does_not_satisfy_aggregate_authority",
     "first_future_director_final_cut_authority_object_instantiation_record_does_not_advance_state",
     "first_future_director_final_cut_authority_object_instantiation_record_does_not_issue_motion_picture",
-    "first_future_director_final_cut_authority_object_instantiation_record_does_not_admit_media"
+    "first_future_director_final_cut_authority_object_instantiation_record_does_not_admit_media",
+    "scripts/verify-release-candidate-ready-state-advancement-execution-record.sh",
+    "tests/test_release_candidate_ready_state_advancement_execution_record.py",
+    "scripts/verify-release-candidate-ready-state-advancement-execution-record.sh"
   ],
   "non_star_seal_redundancy_stop_rule": {
     "authority_satisfied": false,
@@ -1159,7 +1162,8 @@
     "first-future-director-final-cut-authority-object-admission-request-validation-record",
     "first-future-director-final-cut-authority-object-admission-decision-record",
     "release-candidate-manifest",
-    "release-candidate-ready-state-advancement-decision-record"
+    "release-candidate-ready-state-advancement-decision-record",
+    "release-candidate-ready-state-advancement-execution-record"
   ],
   "required_documents": [
     "FIRST_FUTURE_DIRECTOR_FINAL_CUT_AUTHORITY_OBJECT_ADMISSION_REQUEST_VALIDATION_RECORD.md"
@@ -1243,13 +1247,16 @@
     "scripts/verify-first-future-director-final-cut-authority-object-admission-request-validation-record.sh",
     "scripts/verify-first-future-director-final-cut-authority-object-admission-decision-record.sh",
     "scripts/verify-release-candidate-manifest.sh",
-    "scripts/verify-release-candidate-ready-state-advancement-decision-record.sh"
+    "scripts/verify-release-candidate-ready-state-advancement-decision-record.sh",
+    "scripts/verify-release-candidate-ready-state-advancement-execution-record.sh",
+    "scripts/verify-release-candidate-ready-state-advancement-execution-record.sh"
   ],
   "required_unit_tests": [
     "tests/test_real_case_authority_object_admission_rejection_taxonomy.py",
     "tests/test_real_case_authority_object_admission_future_continuity_seal.py",
     "tests/test_first_future_director_final_cut_authority_object_admission_request_validation_record.py",
-    "tests/test_release_candidate_ready_state_advancement_decision_record.py"
+    "tests/test_release_candidate_ready_state_advancement_decision_record.py",
+    "tests/test_release_candidate_ready_state_advancement_execution_record.py"
   ],
   "required_unittests": [
     "tests/test_authority_acceptance_law.py",
@@ -1324,7 +1331,8 @@
     "tests/test_first_future_director_final_cut_authority_object_admission_request_validation_record.py",
     "tests/test_first_future_director_final_cut_authority_object_admission_decision_record.py",
     "tests/test_release_candidate_manifest.py",
-    "tests/test_release_candidate_ready_state_advancement_decision_record.py"
+    "tests/test_release_candidate_ready_state_advancement_decision_record.py",
+    "tests/test_release_candidate_ready_state_advancement_execution_record.py"
   ],
   "schema_version": "cinematicum.master_verification_manifest.v1",
   "second_future_editorial_timeline_authority_object_instantiation_record": {

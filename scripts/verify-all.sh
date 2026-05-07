@@ -239,4 +239,6 @@ done < <(find scripts -maxdepth 1 -type f -name 'verify-*.sh' ! -name 'verify-al
 
 printf "CINEMATICUM VERIFY ALL: PASS\n"
 bash scripts/verify-release-candidate-ready-state-advancement-decision-record.sh
+python3 -m unittest tests/test_release_candidate_ready_state_advancement_execution_record.py
+bash scripts/verify-release-candidate-ready-state-advancement-execution-record.sh
 python3 -m unittest tests/test_release_candidate_ready_state_advancement_decision_record.py
