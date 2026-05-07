@@ -25,6 +25,7 @@ python3 -m unittest tests/test_release_candidate_outsider_replay_execution_recor
 python3 -m unittest tests/test_release_candidate_outsider_replay_passage_record.py
 python3 -m unittest tests/test_release_candidate_admissibility_verdict_record.py
 python3 -m unittest tests/test_release_candidate_terminal_closure_record.py
+python3 -m unittest tests/test_release_candidate_ready_state_advancement_request.py
 python3 -m unittest tests/test_real_case_authority_object_slot_index.py
 python3 -m unittest tests/test_real_case_authority_object_admission_terminal_seal.py
 python3 -m unittest tests/test_real_case_authority_object_admission_request_validator.py
@@ -133,6 +134,7 @@ bash scripts/verify-release-candidate-outsider-replay-execution-record.sh
 bash scripts/verify-release-candidate-outsider-replay-passage-record.sh
 bash scripts/verify-release-candidate-admissibility-verdict-record.sh
 bash scripts/verify-release-candidate-terminal-closure-record.sh
+bash scripts/verify-release-candidate-ready-state-advancement-request.sh
 bash scripts/verify-real-case-authority-object-slot-index.sh
 bash scripts/verify-real-case-authority-object-admission-terminal-seal.sh
 bash scripts/verify-real-case-authority-object-admission-request-validator.sh
@@ -236,3 +238,5 @@ while IFS= read -r script; do
 done < <(find scripts -maxdepth 1 -type f -name 'verify-*.sh' ! -name 'verify-all.sh' | LC_ALL=C sort)
 
 printf "CINEMATICUM VERIFY ALL: PASS\n"
+bash scripts/verify-release-candidate-ready-state-advancement-decision-record.sh
+python3 -m unittest tests/test_release_candidate_ready_state_advancement_decision_record.py

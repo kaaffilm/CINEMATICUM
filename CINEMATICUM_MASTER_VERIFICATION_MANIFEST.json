@@ -720,7 +720,7 @@
     "real_case_authority_object_admission_request_validator_does_not_admit_media",
     "scripts/verify-real-case-authority-object-admission-request-rejection-corpus.sh",
     "tests/test_real_case_authority_object_admission_request_rejection_corpus.py",
-    ".github/workflows/real-case-authority-object-admission-request-rejection-corpus.yml",
+    "real-case-authority-object-admission-request-rejection-corpus",
     "real_case_authority_object_admission_rejection_taxonomy_blocks_validator_drift",
     "real_case_authority_object_admission_rejection_taxonomy_has_canonical_reason_codes",
     "real_case_authority_object_admission_rejection_taxonomy_does_not_create_live_requests",
@@ -730,7 +730,7 @@
     "real_case_authority_object_admission_rejection_taxonomy_does_not_issue_motion_picture",
     "real_case_authority_object_admission_rejection_taxonomy_does_not_admit_media",
     "scripts/verify-real-case-authority-object-admission-decision-ledger.sh",
-    ".github/workflows/real-case-authority-object-admission-decision-ledger.yml",
+    "real-case-authority-object-admission-decision-ledger",
     "real_case_authority_object_admission_enforcement_gate_requires_explicit_decision",
     "real_case_authority_object_admission_enforcement_gate_blocks_silent_instantiation",
     "real_case_authority_object_admission_enforcement_gate_does_not_satisfy_authority",
@@ -792,7 +792,7 @@
     "script": "scripts/verify-real-case-authority-intake-docket.sh",
     "status": "CASES/CASE_001_THE_LAST_RENDER/REAL_CASE_AUTHORITY_INTAKE_DOCKET_STATUS.json",
     "test": "tests/test_real_case_authority_intake_docket.py",
-    "workflow": ".github/workflows/real-case-authority-intake-docket.yml"
+    "workflow": "real-case-authority-intake-docket"
   },
   "real_case_authority_object_admission_closure_seal": {
     "authority_satisfied": false,
@@ -1032,6 +1032,29 @@
     "verifier": "scripts/verify-release-candidate-public-inspection-dossier.sh",
     "workflow": "release-candidate-public-inspection-dossier"
   },
+  "release_candidate_ready_state_advancement_decision_record": {
+    "object": "RELEASE_CANDIDATE_READY_STATE_ADVANCEMENT_DECISION_RECORD",
+    "script": "scripts/verify-release-candidate-ready-state-advancement-decision-record.sh",
+    "unittest": "tests/test_release_candidate_ready_state_advancement_decision_record.py",
+    "workflow": "release-candidate-ready-state-advancement-decision-record"
+  },
+  "release_candidate_ready_state_advancement_request": {
+    "advancement_decision_record_required_before_state_mutation": true,
+    "authority_satisfied": false,
+    "case_record": "CASES/CASE_001_THE_LAST_RENDER/RELEASE_CANDIDATE_READY_STATE_ADVANCEMENT_REQUEST/RELEASE_CANDIDATE_READY_STATE_ADVANCEMENT_REQUEST.json",
+    "issued": false,
+    "law": "CINEMATICUM_RELEASE_CANDIDATE_READY_STATE_ADVANCEMENT_REQUEST_LAW.json",
+    "may_advance_now": false,
+    "media_present": false,
+    "object": "RELEASE_CANDIDATE_READY_STATE_ADVANCEMENT_REQUEST",
+    "release_candidate_ready": false,
+    "request_does_not_advance_state": true,
+    "request_is_not_decision": true,
+    "status": "CASES/CASE_001_THE_LAST_RENDER/RELEASE_CANDIDATE_READY_STATE_ADVANCEMENT_REQUEST_STATUS.json",
+    "unit_test": "tests/test_release_candidate_ready_state_advancement_request.py",
+    "verifier": "scripts/verify-release-candidate-ready-state-advancement-request.sh",
+    "workflow": "release-candidate-ready-state-advancement-request"
+  },
   "release_candidate_terminal_closure_plan": {
     "authority_satisfied": false,
     "issued": false,
@@ -1135,7 +1158,8 @@
     "real-case-authority-object-admission-future-snapshot-fork-gate",
     "first-future-director-final-cut-authority-object-admission-request-validation-record",
     "first-future-director-final-cut-authority-object-admission-decision-record",
-    "release-candidate-manifest"
+    "release-candidate-manifest",
+    "release-candidate-ready-state-advancement-decision-record"
   ],
   "required_documents": [
     "FIRST_FUTURE_DIRECTOR_FINAL_CUT_AUTHORITY_OBJECT_ADMISSION_REQUEST_VALIDATION_RECORD.md"
@@ -1218,12 +1242,14 @@
     "scripts/verify-real-case-authority-object-admission-future-snapshot-fork-gate.sh",
     "scripts/verify-first-future-director-final-cut-authority-object-admission-request-validation-record.sh",
     "scripts/verify-first-future-director-final-cut-authority-object-admission-decision-record.sh",
-    "scripts/verify-release-candidate-manifest.sh"
+    "scripts/verify-release-candidate-manifest.sh",
+    "scripts/verify-release-candidate-ready-state-advancement-decision-record.sh"
   ],
   "required_unit_tests": [
     "tests/test_real_case_authority_object_admission_rejection_taxonomy.py",
     "tests/test_real_case_authority_object_admission_future_continuity_seal.py",
-    "tests/test_first_future_director_final_cut_authority_object_admission_request_validation_record.py"
+    "tests/test_first_future_director_final_cut_authority_object_admission_request_validation_record.py",
+    "tests/test_release_candidate_ready_state_advancement_decision_record.py"
   ],
   "required_unittests": [
     "tests/test_authority_acceptance_law.py",
@@ -1297,13 +1323,14 @@
     "tests/test_real_case_authority_object_admission_future_snapshot_fork_gate.py",
     "tests/test_first_future_director_final_cut_authority_object_admission_request_validation_record.py",
     "tests/test_first_future_director_final_cut_authority_object_admission_decision_record.py",
-    "tests/test_release_candidate_manifest.py"
+    "tests/test_release_candidate_manifest.py",
+    "tests/test_release_candidate_ready_state_advancement_decision_record.py"
   ],
   "schema_version": "cinematicum.master_verification_manifest.v1",
   "second_future_editorial_timeline_authority_object_instantiation_record": {
     "script": "scripts/verify-second-future-editorial-timeline-authority-object-instantiation-record.sh",
     "unit_test": "tests/test_second_future_editorial_timeline_authority_object_instantiation_record.py",
-    "workflow": ".github/workflows/second-future-editorial-timeline-authority-object-instantiation-record.yml"
+    "workflow": "second-future-editorial-timeline-authority-object-instantiation-record"
   },
   "seventh_future_outsider_replay_passage_authority_object_instantiation_record": {
     "authority_satisfied": false,
