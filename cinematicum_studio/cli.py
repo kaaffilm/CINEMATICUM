@@ -8,6 +8,7 @@ from cinematicum_studio.core.db import connect, init_db
 from cinematicum_studio.generation.job_runner import generate_all, generate_shot
 from cinematicum_studio.issuance_bridge.validate_master import validate_master_ready
 from cinematicum_studio.issuance_bridge.validate_admissibility import validate_admissible_motion_picture
+from cinematicum_studio.issuance_bridge.validate_acceptance import validate_cinematic_acceptance
 from cinematicum_studio.render.render_master import render_master
 from cinematicum_studio.review.select_take import select_take
 from cinematicum_studio.timeline.build_otio import build_timeline
@@ -139,6 +140,10 @@ def main() -> None:
     p = sub.add_parser("issue-check")
     p.add_argument("case_id")
     p.set_defaults(func=cmd_issue_check)
+
+    p = sub.add_parser("acceptance-check")
+    p.add_argument("case_id")
+    p.set_defaults(func=cmd_acceptance_check)
 
     p = sub.add_parser("admissibility-check")
     p.add_argument("case_id")

@@ -4,6 +4,7 @@ from pathlib import Path
 from cinematicum_studio.core.db import init_db, connect
 from cinematicum_studio.issuance_bridge.validate_master import validate_master_ready
 from cinematicum_studio.issuance_bridge.validate_admissibility import validate_admissible_motion_picture
+from cinematicum_studio.issuance_bridge.validate_acceptance import validate_cinematic_acceptance
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -58,3 +59,10 @@ def test_local_render_proof_is_not_admissible_film():
     assert ok is False
     assert "LOCAL_RENDER_PROOF_NOT_FILM" in missing
     assert "CINEMATIC_QUALITY_ACCEPTED" in missing
+
+
+def test_selected_takes_do_not_imply_cinematic_acceptance():
+    ok, missing = validate_cinematic_acceptance(CASE_ID)
+    assert ok is False
+    assert "CONTINUITY_ACCEPTED" in missing
+    assert "DIRECTORIAL_ACCEPTANCE_ACCEPTED" in missing

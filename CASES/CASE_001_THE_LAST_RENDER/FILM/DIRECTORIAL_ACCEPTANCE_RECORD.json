@@ -1,0 +1,19 @@
+{
+  "case_id": "CASE_001_THE_LAST_RENDER",
+  "title": "THE LAST RENDER",
+  "record_type": "DIRECTORIAL_ACCEPTANCE_RECORD",
+  "classification": "FINAL_CUT_ACCEPTANCE_GATE",
+  "accepted": false,
+  "required_for_film_admissibility": true,
+  "required_for_issuance": true,
+  "acceptance_scope": [
+    "selected_takes",
+    "timeline",
+    "cinematic_continuity",
+    "sound_design",
+    "color_grade",
+    "final_cut"
+  ],
+  "hard_rule": "TIMELINE_EXISTS_DOES_NOT_IMPLY_DIRECTORIAL_ACCEPTANCE",
+  "reason": "A renderable timeline proves assembly only. It does not prove final-cut judgment or admissible motion-picture authorship."
+}

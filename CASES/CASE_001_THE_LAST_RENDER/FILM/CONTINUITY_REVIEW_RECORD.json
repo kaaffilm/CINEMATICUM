@@ -1,0 +1,19 @@
+{
+  "case_id": "CASE_001_THE_LAST_RENDER",
+  "title": "THE LAST RENDER",
+  "record_type": "CINEMATIC_CONTINUITY_REVIEW_RECORD",
+  "classification": "CONTINUITY_GATE",
+  "accepted": false,
+  "required_for_film_admissibility": true,
+  "required_for_issuance": true,
+  "review_scope": [
+    "shot_to_shot_visual_continuity",
+    "character_continuity",
+    "location_continuity",
+    "temporal_continuity",
+    "motivated_camera_language",
+    "non_random_image_progression"
+  ],
+  "hard_rule": "SELECTED_TAKES_DO_NOT_IMPLY_CONTINUITY",
+  "reason": "A selected take record proves editorial choice only. It does not prove cinematic continuity across the motion picture."
+}
