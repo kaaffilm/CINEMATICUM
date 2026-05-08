@@ -4,6 +4,7 @@ import json
 from pathlib import Path
 
 from cinematicum_studio.issuance_bridge.validate_master import validate_master_ready
+from cinematicum_studio.issuance_bridge.validate_acceptance import validate_cinematic_acceptance
 
 
 def validate_admissible_motion_picture(case_id: str) -> tuple[bool, list[str]]:
@@ -38,5 +39,9 @@ def validate_admissible_motion_picture(case_id: str) -> tuple[bool, list[str]]:
             missing.append("CINEMATIC_QUALITY_ACCEPTED")
         if quality.get("classification") == "LOCAL_RENDER_PROOF":
             missing.append("PROOF_RENDER_REJECTED_BY_CINEMATIC_QUALITY_GATE")
+
+    acceptance_ok, acceptance_missing = validate_cinematic_acceptance(case_id)
+    if not acceptance_ok:
+        missing.extend(f"ACCEPTANCE::{item}" for item in acceptance_missing)
 
     return (len(missing) == 0, missing)
