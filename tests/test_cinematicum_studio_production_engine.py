@@ -11,6 +11,7 @@ from cinematicum_studio.issuance_bridge.validate_postproduction import validate_
 from cinematicum_studio.issuance_bridge.validate_issuance import validate_issuance_ready
 from cinematicum_studio.issuance_bridge.validate_state_advancement import validate_state_advancement, ISSUANCE_REQUIRED_TOKEN
 from cinematicum_studio.issuance_bridge.validate_publication import validate_publication_ready
+from cinematicum_studio.issuance_bridge.validate_distribution import validate_distribution_ready
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -182,3 +183,26 @@ def test_cli_publication_command_executes():
     assert payload["publication_ready"] is False
     assert "ISSUANCE_READY_REQUIRED_FOR_PUBLICATION" in payload["missing"]
     assert "TERMINAL_STATE_REQUIRED_FOR_PUBLICATION" in payload["missing"]
+
+def test_distribution_requires_publication_ready():
+    ok, missing = validate_distribution_ready(CASE_ID)
+    assert ok is False
+    assert "PUBLICATION_READY_REQUIRED_FOR_DISTRIBUTION" in missing
+    assert any(item.startswith("PUBLICATION::") for item in missing)
+    assert "DISTRIBUTION_READINESS_ACCEPTED" in missing
+    assert "PUBLIC_EXPORT_ALLOWED" in missing
+
+
+def test_cli_distribution_command_executes():
+    result = subprocess.run(
+        [sys.executable, "-m", "cinematicum_studio.cli", "distribution-check", CASE_ID],
+        check=True,
+        capture_output=True,
+        text=True,
+    )
+    payload = json.loads(result.stdout)
+    assert payload["distribution_ready"] is False
+    assert "PUBLICATION_READY_REQUIRED_FOR_DISTRIBUTION" in payload["missing"]
+    assert "DISTRIBUTION_READINESS_ACCEPTED" in payload["missing"]
+    assert "PUBLIC_EXPORT_ALLOWED" in payload["missing"]
+
