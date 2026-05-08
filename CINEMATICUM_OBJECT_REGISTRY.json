@@ -9,7 +9,7 @@
   "registry_does_not_override_current_state": true,
   "current_active_state": "RELEASE_CANDIDATE_READY",
   "case_id": "CASE_001_THE_LAST_RENDER",
-  "entries_count": 440,
+  "entries_count": 443,
   "entries": [
     {
       "path": "ADMISSIBILITY_VERDICT_SCHEMA.json",
@@ -1020,6 +1020,20 @@
       "active_current_state": "RELEASE_CANDIDATE_READY"
     },
     {
+      "path": "CASES/CASE_001_THE_LAST_RENDER/FILM/SELECTED_TAKE_RECORD.json",
+      "object_type": "UNDECLARED_OBJECT_TYPE",
+      "schema_version": "UNDECLARED_SCHEMA_VERSION",
+      "surface_class": "CASE_RECORD",
+      "case_id": "CASE_001_THE_LAST_RENDER",
+      "current_truth_owner": false,
+      "issued": false,
+      "release_candidate_ready": false,
+      "media_present": false,
+      "outsider_replay_passed": false,
+      "current_active_state": "RELEASE_CANDIDATE_READY",
+      "active_current_state": "RELEASE_CANDIDATE_READY"
+    },
+    {
       "path": "CASES/CASE_001_THE_LAST_RENDER/FILM/SHOT_GRAPH.json",
       "object_type": "UNDECLARED_OBJECT_TYPE",
       "schema_version": "UNDECLARED_SCHEMA_VERSION",
@@ -1035,6 +1049,34 @@
     },
     {
       "path": "CASES/CASE_001_THE_LAST_RENDER/FILM/STYLE_BIBLE.json",
+      "object_type": "UNDECLARED_OBJECT_TYPE",
+      "schema_version": "UNDECLARED_SCHEMA_VERSION",
+      "surface_class": "CASE_RECORD",
+      "case_id": "CASE_001_THE_LAST_RENDER",
+      "current_truth_owner": false,
+      "issued": false,
+      "release_candidate_ready": false,
+      "media_present": false,
+      "outsider_replay_passed": false,
+      "current_active_state": "RELEASE_CANDIDATE_READY",
+      "active_current_state": "RELEASE_CANDIDATE_READY"
+    },
+    {
+      "path": "CASES/CASE_001_THE_LAST_RENDER/FILM/TAKE_LEDGER.json",
+      "object_type": "UNDECLARED_OBJECT_TYPE",
+      "schema_version": "UNDECLARED_SCHEMA_VERSION",
+      "surface_class": "CASE_RECORD",
+      "case_id": "CASE_001_THE_LAST_RENDER",
+      "current_truth_owner": false,
+      "issued": false,
+      "release_candidate_ready": false,
+      "media_present": false,
+      "outsider_replay_passed": false,
+      "current_active_state": "RELEASE_CANDIDATE_READY",
+      "active_current_state": "RELEASE_CANDIDATE_READY"
+    },
+    {
+      "path": "CASES/CASE_001_THE_LAST_RENDER/FILM/TIMELINE_MANIFEST.json",
       "object_type": "UNDECLARED_OBJECT_TYPE",
       "schema_version": "UNDECLARED_SCHEMA_VERSION",
       "surface_class": "CASE_RECORD",
