@@ -9,6 +9,7 @@ from cinematicum_studio.generation.job_runner import generate_all, generate_shot
 from cinematicum_studio.issuance_bridge.validate_master import validate_master_ready
 from cinematicum_studio.issuance_bridge.validate_admissibility import validate_admissible_motion_picture
 from cinematicum_studio.issuance_bridge.validate_acceptance import validate_cinematic_acceptance
+from cinematicum_studio.issuance_bridge.validate_postproduction import validate_postproduction_acceptance
 from cinematicum_studio.render.render_master import render_master
 from cinematicum_studio.review.select_take import select_take
 from cinematicum_studio.timeline.build_otio import build_timeline
@@ -108,6 +109,15 @@ def cmd_acceptance_check(args):
     }, indent=2))
 
 
+def cmd_postproduction_check(args):
+    ok, missing = validate_postproduction_acceptance(args.case_id)
+    print(json.dumps({
+        "case_id": args.case_id,
+        "postproduction_acceptance": ok,
+        "missing": missing,
+    }, indent=2))
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(prog="cinematicum")
     sub = parser.add_subparsers(required=True)
@@ -154,6 +164,10 @@ def main() -> None:
     p = sub.add_parser("acceptance-check")
     p.add_argument("case_id")
     p.set_defaults(func=cmd_acceptance_check)
+
+    p = sub.add_parser("postproduction-check")
+    p.add_argument("case_id")
+    p.set_defaults(func=cmd_postproduction_check)
 
     p = sub.add_parser("admissibility-check")
     p.add_argument("case_id")
