@@ -9,7 +9,7 @@
   "registry_does_not_override_current_state": true,
   "current_active_state": "RELEASE_CANDIDATE_READY",
   "case_id": "CASE_001_THE_LAST_RENDER",
-  "entries_count": 430,
+  "entries_count": 431,
   "entries": [
     {
       "path": "ADMISSIBILITY_VERDICT_SCHEMA.json",
@@ -1639,6 +1639,20 @@
       "path": "CASES/CASE_001_THE_LAST_RENDER/MASTER_VERIFICATION_MANIFEST_CLOSURE_STATUS.json",
       "object_type": "CINEMATICUM_CASE_MASTER_VERIFICATION_MANIFEST_CLOSURE_STATUS",
       "schema_version": "cinematicum.case_master_verification_manifest_closure_status.v1",
+      "surface_class": "LAYER_STATUS_RECORD",
+      "case_id": "CASE_001_THE_LAST_RENDER",
+      "current_truth_owner": false,
+      "issued": false,
+      "release_candidate_ready": false,
+      "media_present": false,
+      "outsider_replay_passed": false,
+      "current_active_state": "RELEASE_CANDIDATE_READY",
+      "active_current_state": "RELEASE_CANDIDATE_READY"
+    },
+    {
+      "path": "CASES/CASE_001_THE_LAST_RENDER/MOTION_PICTURE_ISSUANCE_ACT_STATUS.json",
+      "object_type": "CINEMATICUM_CASE_MOTION_PICTURE_ISSUANCE_ACT_STATUS",
+      "schema_version": "cinematicum.case_motion_picture_issuance_act_status.v1",
       "surface_class": "LAYER_STATUS_RECORD",
       "case_id": "CASE_001_THE_LAST_RENDER",
       "current_truth_owner": false,
@@ -5431,10 +5445,10 @@
     },
     {
       "path": "MOTION_PICTURE_ISSUANCE_ACT.json",
-      "object_type": "UNDECLARED_OBJECT_TYPE",
+      "object_type": "MOTION_PICTURE_ISSUANCE_ACT",
       "schema_version": "cinematicum.motion_picture_issuance_act.v1",
       "surface_class": "CASE_RECORD",
-      "case_id": null,
+      "case_id": "CASE_001_THE_LAST_RENDER",
       "current_truth_owner": false,
       "issued": false,
       "release_candidate_ready": false,

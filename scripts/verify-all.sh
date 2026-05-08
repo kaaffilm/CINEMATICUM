@@ -249,4 +249,5 @@ python3 -m unittest tests/test_release_candidate_ready_issuance_unblocking_decis
 bash scripts/verify-release-candidate-ready-issuance-unblocking-decision-record.sh
 bash scripts/verify-release-candidate-ready-issuance-unblocking-execution-record.sh
 bash scripts/verify-release-candidate-ready-issuance-blockade-seal.sh
+bash scripts/verify-motion-picture-issuance-act.sh
 printf "CINEMATICUM VERIFY ALL: PASS\n"

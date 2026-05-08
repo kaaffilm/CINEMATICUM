@@ -1,0 +1,25 @@
+name: motion-picture-issuance-act
+
+on:
+  push:
+    paths:
+      - "MOTION_PICTURE_ISSUANCE_ACT.json"
+      - "CASES/CASE_001_THE_LAST_RENDER/MOTION_PICTURE_ISSUANCE_ACT_STATUS.json"
+      - "scripts/verify-motion-picture-issuance-act.sh"
+      - "tests/test_motion_picture_issuance_act.py"
+      - ".github/workflows/motion-picture-issuance-act.yml"
+  pull_request:
+    paths:
+      - "MOTION_PICTURE_ISSUANCE_ACT.json"
+      - "CASES/CASE_001_THE_LAST_RENDER/MOTION_PICTURE_ISSUANCE_ACT_STATUS.json"
+      - "scripts/verify-motion-picture-issuance-act.sh"
+      - "tests/test_motion_picture_issuance_act.py"
+      - ".github/workflows/motion-picture-issuance-act.yml"
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Verify motion picture issuance act
+        run: bash scripts/verify-motion-picture-issuance-act.sh
