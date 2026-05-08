@@ -11,6 +11,7 @@ from cinematicum_studio.issuance_bridge.validate_admissibility import validate_a
 from cinematicum_studio.issuance_bridge.validate_acceptance import validate_cinematic_acceptance
 from cinematicum_studio.issuance_bridge.validate_postproduction import validate_postproduction_acceptance
 from cinematicum_studio.issuance_bridge.validate_issuance import validate_issuance_ready
+from cinematicum_studio.issuance_bridge.validate_state_advancement import validate_state_advancement
 from cinematicum_studio.render.render_master import render_master
 from cinematicum_studio.review.select_take import select_take
 from cinematicum_studio.timeline.build_otio import build_timeline
@@ -128,6 +129,16 @@ def cmd_issuance_check(args):
         "missing": missing,
     }, indent=2))
 
+
+def cmd_state_advancement_check(args):
+    ok, missing = validate_state_advancement(args.case_id, args.target_state)
+    print(json.dumps({
+        "case_id": args.case_id,
+        "target_state": args.target_state,
+        "state_advancement_allowed": ok,
+        "missing": missing,
+    }, indent=2))
+
 def main() -> None:
     parser = argparse.ArgumentParser(prog="cinematicum")
     sub = parser.add_subparsers(required=True)
@@ -186,6 +197,11 @@ def main() -> None:
     p = sub.add_parser("issuance-check")
     p.add_argument("case_id")
     p.set_defaults(func=cmd_issuance_check)
+
+    p = sub.add_parser("state-advancement-check")
+    p.add_argument("case_id")
+    p.add_argument("target_state")
+    p.set_defaults(func=cmd_state_advancement_check)
 
 
     args = parser.parse_args()

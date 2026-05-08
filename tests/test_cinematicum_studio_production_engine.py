@@ -9,6 +9,7 @@ from cinematicum_studio.issuance_bridge.validate_admissibility import validate_a
 from cinematicum_studio.issuance_bridge.validate_acceptance import validate_cinematic_acceptance
 from cinematicum_studio.issuance_bridge.validate_postproduction import validate_postproduction_acceptance
 from cinematicum_studio.issuance_bridge.validate_issuance import validate_issuance_ready
+from cinematicum_studio.issuance_bridge.validate_state_advancement import validate_state_advancement, ISSUANCE_REQUIRED_TOKEN
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -132,3 +133,29 @@ def test_cli_issuance_command_executes():
     assert payload["issuance_ready"] is False
     assert "MASTER::FINAL_MASTER_MANIFEST.json" in payload["missing"]
     assert any(item.startswith("ADMISSIBILITY::") for item in payload["missing"])
+
+def test_state_advancement_to_issued_requires_issuance_ready():
+    ok, missing = validate_state_advancement(CASE_ID, "ISSUED")
+    assert ok is False
+    assert ISSUANCE_REQUIRED_TOKEN in missing
+    assert any(item.startswith("ISSUANCE::") for item in missing)
+
+
+def test_state_advancement_to_nonterminal_state_does_not_require_issuance():
+    ok, missing = validate_state_advancement(CASE_ID, "RELEASE_CANDIDATE_READY")
+    assert ok is True
+    assert missing == []
+
+
+def test_cli_state_advancement_command_executes():
+    result = subprocess.run(
+        [sys.executable, "-m", "cinematicum_studio.cli", "state-advancement-check", CASE_ID, "ISSUED"],
+        check=True,
+        capture_output=True,
+        text=True,
+    )
+    payload = json.loads(result.stdout)
+    assert payload["state_advancement_allowed"] is False
+    assert ISSUANCE_REQUIRED_TOKEN in payload["missing"]
+    assert any(item.startswith("ISSUANCE::") for item in payload["missing"])
+
