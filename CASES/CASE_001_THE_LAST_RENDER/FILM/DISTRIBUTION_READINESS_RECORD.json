@@ -1,0 +1,11 @@
+{
+  "case_id": "CASE_001_THE_LAST_RENDER",
+  "title": "THE LAST RENDER",
+  "gate": "DISTRIBUTION_READINESS",
+  "accepted": false,
+  "public_export_allowed": false,
+  "requires_publication_ready": true,
+  "required_for_external_distribution": true,
+  "hard_rule": "PUBLICATION_READY_REQUIRED_BEFORE_DISTRIBUTION",
+  "reason": "No public distribution/export readiness exists. Publication readiness must be true before any public export or distribution artifact may be treated as allowed."
+}

@@ -13,6 +13,7 @@ from cinematicum_studio.issuance_bridge.validate_postproduction import validate_
 from cinematicum_studio.issuance_bridge.validate_issuance import validate_issuance_ready
 from cinematicum_studio.issuance_bridge.validate_state_advancement import validate_state_advancement
 from cinematicum_studio.issuance_bridge.validate_publication import validate_publication_ready
+from cinematicum_studio.issuance_bridge.validate_distribution import validate_distribution_ready
 from cinematicum_studio.render.render_master import render_master
 from cinematicum_studio.review.select_take import select_take
 from cinematicum_studio.timeline.build_otio import build_timeline
@@ -149,6 +150,15 @@ def cmd_publication_check(args):
     }, indent=2))
 
 
+def cmd_distribution_check(args):
+    ok, missing = validate_distribution_ready(args.case_id)
+    print(json.dumps({
+        "case_id": args.case_id,
+        "distribution_ready": ok,
+        "missing": missing,
+    }, indent=2))
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(prog="cinematicum")
     sub = parser.add_subparsers(required=True)
@@ -211,6 +221,10 @@ def main() -> None:
     p = sub.add_parser("publication-check")
     p.add_argument("case_id")
     p.set_defaults(func=cmd_publication_check)
+
+    p = sub.add_parser("distribution-check")
+    p.add_argument("case_id")
+    p.set_defaults(func=cmd_distribution_check)
 
     p = sub.add_parser("state-advancement-check")
     p.add_argument("case_id")
