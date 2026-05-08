@@ -74,7 +74,7 @@ def build_timeline(case_id: str) -> Path:
         "case_id": case_id,
         "timeline": str(path),
         "items": [dict(r) for r in rows],
-        "timeline_present": true if False else True
+        "timeline_present": True
     }
     manifest_path = Path("CASES") / case_id / "FILM" / "TIMELINE_MANIFEST.json"
     manifest_path.write_text(json.dumps(manifest, indent=2) + "\n")
