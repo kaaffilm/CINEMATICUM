@@ -98,6 +98,16 @@ def cmd_issue_check(args: argparse.Namespace) -> None:
     raise SystemExit(0 if ok else 1)
 
 
+
+def cmd_acceptance_check(args):
+    ok, missing = validate_cinematic_acceptance(args.case_id)
+    print(json.dumps({
+        "case_id": args.case_id,
+        "cinematic_acceptance": ok,
+        "missing": missing,
+    }, indent=2))
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(prog="cinematicum")
     sub = parser.add_subparsers(required=True)
