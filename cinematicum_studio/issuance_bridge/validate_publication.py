@@ -14,6 +14,33 @@ PUBLIC_TERMINAL_STATES = {
     "PUBLISHED",
 }
 
+KNOWN_NON_TERMINAL_STATES = {
+    "RELEASE_CANDIDATE_READY",
+    "MASTER_READY",
+    "MEDIA_PRESENT",
+    "PRODUCTION_READY",
+    "IN_PRODUCTION",
+    "BOOTSTRAPPED",
+    "DRAFT",
+}
+
+KNOWN_PRODUCTION_STATES = PUBLIC_TERMINAL_STATES | KNOWN_NON_TERMINAL_STATES
+
+STATE_IDENTITY_VALUES = {
+    "CURRENT_PRODUCTION_STATE",
+}
+
+
+def _walk_strings(value):
+    if isinstance(value, str):
+        yield value
+    elif isinstance(value, dict):
+        for child in value.values():
+            yield from _walk_strings(child)
+    elif isinstance(value, list):
+        for child in value:
+            yield from _walk_strings(child)
+
 
 def _current_state() -> str | None:
     if not CURRENT_STATE_PATH.exists():
@@ -21,24 +48,30 @@ def _current_state() -> str | None:
 
     data = json.loads(CURRENT_STATE_PATH.read_text())
 
-    if not isinstance(data, dict):
-        return None
-
     preferred_keys = (
         "active_current_state",
         "current_state",
         "current_production_state",
         "production_state",
+        "active_state",
         "state",
     )
 
-    for key in preferred_keys:
-        value = data.get(key)
-        if isinstance(value, str):
+    if isinstance(data, dict):
+        for key in preferred_keys:
+            value = data.get(key)
+            if isinstance(value, str) and value not in STATE_IDENTITY_VALUES:
+                return value
+
+    for value in _walk_strings(data):
+        if value in KNOWN_PRODUCTION_STATES:
             return value
 
-    for key, value in data.items():
-        if "state" in key.lower() and isinstance(value, str):
+    for value in _walk_strings(data):
+        if value not in STATE_IDENTITY_VALUES and (
+            value.endswith("_READY")
+            or value in PUBLIC_TERMINAL_STATES
+        ):
             return value
 
     return None
