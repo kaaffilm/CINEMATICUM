@@ -1,0 +1,13 @@
+{
+  "case_id": "CASE_001_THE_LAST_RENDER",
+  "title": "THE LAST RENDER",
+  "target_runtime_seconds": 90,
+  "scenes_required": 3,
+  "shots_required": 12,
+  "takes_required_per_shot": 5,
+  "selected_take_required_per_shot": true,
+  "timeline_required": true,
+  "sound_mix_required": true,
+  "final_master_required": true,
+  "issuance_allowed_without_final_master": false
+}

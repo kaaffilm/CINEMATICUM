@@ -1,0 +1,14 @@
+{
+  "case_id": "CASE_001_THE_LAST_RENDER",
+  "gate": "MEDIA_REQUIRED_BEFORE_ISSUANCE",
+  "required_before_issuance": [
+    "generated_video_present",
+    "selected_takes_present",
+    "timeline_present",
+    "sound_mix_present",
+    "final_master_present",
+    "media_hash_manifest_present"
+  ],
+  "if_missing": "ISSUANCE_FORBIDDEN",
+  "hard_rule": "NO_FINAL_MASTER_MEDIA_NO_ISSUANCE"
+}

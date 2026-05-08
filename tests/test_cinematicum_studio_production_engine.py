@@ -1,0 +1,52 @@
+import json
+from pathlib import Path
+
+from cinematicum_studio.core.db import init_db, connect
+from cinematicum_studio.issuance_bridge.validate_master import validate_master_ready
+
+
+ROOT = Path(__file__).resolve().parents[1]
+CASE_ID = "CASE_001_THE_LAST_RENDER"
+
+
+def test_production_state_forbids_media_absent_issuance():
+    state = json.loads((ROOT / "CASES" / CASE_ID / "PRODUCTION_STATE.json").read_text())
+    assert state["final_master_present"] is False
+    assert state["issued"] is False
+    assert state["may_issue"] is False
+    assert state["blocking_reason"] == "NO_FINAL_MASTER_MEDIA"
+
+
+def test_media_requirement_gate_exists():
+    gate = json.loads((ROOT / "CASES" / CASE_ID / "MEDIA_REQUIREMENT_GATE.json").read_text())
+    assert gate["if_missing"] == "ISSUANCE_FORBIDDEN"
+    assert "final_master_present" in gate["required_before_issuance"]
+
+
+def test_studio_db_initializes():
+    path = init_db()
+    assert path.exists()
+
+
+def test_case_graph_files_exist():
+    base = ROOT / "CASES" / CASE_ID / "FILM"
+    for name in [
+        "FILM_STATE.json",
+        "SCENE_GRAPH.json",
+        "SHOT_GRAPH.json",
+        "CHARACTER_BIBLE.json",
+        "LOCATION_BIBLE.json",
+        "STYLE_BIBLE.json",
+    ]:
+        assert (base / name).exists(), name
+
+
+def test_shot_graph_has_12_shots():
+    graph = json.loads((ROOT / "CASES" / CASE_ID / "FILM" / "SHOT_GRAPH.json").read_text())
+    assert len(graph["shots"]) == 12
+
+
+def test_issuance_bridge_refuses_without_master():
+    ok, missing = validate_master_ready(CASE_ID)
+    assert ok is False
+    assert "FINAL_MASTER_MANIFEST.json" in missing
