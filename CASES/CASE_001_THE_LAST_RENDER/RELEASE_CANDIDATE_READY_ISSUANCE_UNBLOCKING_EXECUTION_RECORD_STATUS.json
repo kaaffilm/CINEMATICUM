@@ -1,0 +1,19 @@
+{
+  "object_type": "CINEMATICUM_CASE_RELEASE_CANDIDATE_READY_ISSUANCE_UNBLOCKING_EXECUTION_RECORD_STATUS",
+  "schema_version": "cinematicum.case_release_candidate_ready_issuance_unblocking_execution_record_status.v1",
+  "surface_class": "LAYER_STATUS_RECORD",
+  "case_id": "CASE_001_THE_LAST_RENDER",
+  "current_state": "RELEASE_CANDIDATE_READY",
+  "active_current_state": "ISSUANCE_UNBLOCKED",
+  "execution_object": "RELEASE_CANDIDATE_READY_ISSUANCE_UNBLOCKING_EXECUTION_RECORD",
+  "execution_id": "EXEC_001_RELEASE_CANDIDATE_READY_ISSUANCE_UNBLOCKING",
+  "release_candidate_ready": true,
+  "issuance_unblocking_execution_record_present": true,
+  "issuance_unblocking_execution_authorized": true,
+  "issuance_unblocking_executed": true,
+  "issuance_unblocked": true,
+  "issued": false,
+  "media_present": false,
+  "may_advance_now": false,
+  "next_required_object": "MOTION_PICTURE_ISSUANCE_ACT"
+}
