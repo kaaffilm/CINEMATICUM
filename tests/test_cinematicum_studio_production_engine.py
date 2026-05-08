@@ -10,6 +10,7 @@ from cinematicum_studio.issuance_bridge.validate_acceptance import validate_cine
 from cinematicum_studio.issuance_bridge.validate_postproduction import validate_postproduction_acceptance
 from cinematicum_studio.issuance_bridge.validate_issuance import validate_issuance_ready
 from cinematicum_studio.issuance_bridge.validate_state_advancement import validate_state_advancement, ISSUANCE_REQUIRED_TOKEN
+from cinematicum_studio.issuance_bridge.validate_publication import validate_publication_ready
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -159,3 +160,25 @@ def test_cli_state_advancement_command_executes():
     assert ISSUANCE_REQUIRED_TOKEN in payload["missing"]
     assert any(item.startswith("ISSUANCE::") for item in payload["missing"])
 
+
+
+def test_publication_requires_issuance_and_terminal_state():
+    ok, missing = validate_publication_ready(CASE_ID)
+    assert ok is False
+    assert "ISSUANCE_READY_REQUIRED_FOR_PUBLICATION" in missing
+    assert "TERMINAL_STATE_REQUIRED_FOR_PUBLICATION" in missing
+    assert "CURRENT_STATE::RELEASE_CANDIDATE_READY" in missing
+    assert "PUBLICATION_READINESS_ACCEPTED" in missing
+
+
+def test_cli_publication_command_executes():
+    result = subprocess.run(
+        [sys.executable, "-m", "cinematicum_studio.cli", "publication-check", CASE_ID],
+        check=True,
+        capture_output=True,
+        text=True,
+    )
+    payload = json.loads(result.stdout)
+    assert payload["publication_ready"] is False
+    assert "ISSUANCE_READY_REQUIRED_FOR_PUBLICATION" in payload["missing"]
+    assert "TERMINAL_STATE_REQUIRED_FOR_PUBLICATION" in payload["missing"]
