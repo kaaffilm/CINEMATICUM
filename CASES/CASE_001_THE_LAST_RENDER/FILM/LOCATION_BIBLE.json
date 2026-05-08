@@ -1,0 +1,11 @@
+{
+  "case_id": "CASE_001_THE_LAST_RENDER",
+  "locations": [
+    {
+      "id": "DEAD_RENDER_FACILITY",
+      "name": "Dead Render Facility",
+      "visual_description": "abandoned industrial cinema-render facility, projector beams, dead monitors, dust, cold blue-white light, analog film decay",
+      "continuity_lock": true
+    }
+  ]
+}
