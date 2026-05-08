@@ -245,6 +245,7 @@ bash scripts/verify-release-candidate-ready-current-state-index-advancement-reco
 python3 -m unittest tests/test_release_candidate_ready_state_advancement_decision_record.py
 python3 -m unittest tests/test_release_candidate_ready_issuance_unblocking_request.py
 bash scripts/verify-release-candidate-ready-issuance-unblocking-request.sh
-echo "CINEMATICUM VERIFY ALL: PASS"
+python3 -m unittest tests/test_release_candidate_ready_issuance_unblocking_decision_record.py
+bash scripts/verify-release-candidate-ready-issuance-unblocking-decision-record.sh
 bash scripts/verify-release-candidate-ready-issuance-blockade-seal.sh
 printf "CINEMATICUM VERIFY ALL: PASS\n"
