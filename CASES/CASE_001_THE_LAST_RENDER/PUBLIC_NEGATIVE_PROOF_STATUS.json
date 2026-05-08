@@ -3,7 +3,7 @@
   "schema_version": "cinematicum.case_public_negative_proof_status.v1",
   "case_id": "CASE_001_THE_LAST_RENDER",
   "case_title": "THE LAST RENDER",
-  "current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+  "current_state": "RELEASE_CANDIDATE_READY",
   "surface_type": "LAYER_STATUS_RECORD",
   "current_truth_owner": false,
   "active_current_state_owner": "CASES/CASE_001_THE_LAST_RENDER/CURRENT_CASE_STATE.json",
@@ -17,5 +17,11 @@
   "admissibility_verdict_present": false,
   "terminal_closure_present": false,
   "negative_proof_present": true,
-  "negative_proof": "Public inspection surfaces are not issuance, readiness, media admission, replay pass, verdict, or closure."
+  "negative_proof": "Public inspection surfaces are not issuance, readiness, media admission, replay pass, verdict, or closure.",
+  "active_current_state": "RELEASE_CANDIDATE_READY",
+  "active_release_candidate_ready": true,
+  "record_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+  "authority_satisfied": false,
+  "may_advance_now": false,
+  "issuance_unblocked": false
 }

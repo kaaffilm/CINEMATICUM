@@ -5,7 +5,7 @@ python3 - <<'PY'
 import json
 from pathlib import Path
 
-TARGET = "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
+TARGET = "RELEASE_CANDIDATE_READY"
 CASE_ID = "CASE_001_THE_LAST_RENDER"
 
 def load(path):
@@ -33,6 +33,11 @@ graph_state = (
 )
 assert graph_state == TARGET, graph_state
 
+assert index.get("release_candidate_ready") is True
+assert case.get("release_candidate_ready") is True
+assert matrix.get("release_candidate_ready") is True
+assert graph.get("release_candidate_ready") is True
+
 nodes = graph.get("nodes", [])
 active_nodes = [
     n for n in nodes
@@ -47,7 +52,6 @@ for key in (
     "issued",
     "media_present",
     "outsider_replay_passed",
-    "release_candidate_ready",
     "release_candidate_artifacts_bound",
 ):
     for obj in (index, case, matrix, graph):
@@ -57,7 +61,7 @@ for key in (
 print("CINEMATICUM MASTER PROGRESSION: PASS")
 print(f"CASE_001=THE_LAST_RENDER")
 print(f"ACTIVE_CURRENT_STATE={TARGET}")
-print("RELEASE_CANDIDATE_READY=false")
+print("RELEASE_CANDIDATE_READY=true")
 print("ISSUED=false")
 print("MEDIA_PRESENT=false")
 print("REPLAY_PASSED=false")

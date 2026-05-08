@@ -7,6 +7,7 @@ from pathlib import Path
 
 CASE_ID = "CASE_001_THE_LAST_RENDER"
 CURRENT_STATE = "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
+ACTIVE_STATE = "RELEASE_CANDIDATE_READY"
 NEXT = "RELEASE_CANDIDATE_OUTSIDER_REPLAY_PLAN"
 
 paths = [
@@ -18,9 +19,14 @@ paths = [
 
 objs = [json.loads(Path(p).read_text(encoding="utf-8")) for p in paths]
 
+for obj in objs[:2]:
+    assert obj["current_state"] == CURRENT_STATE, obj.get("current_state")
+
+for obj in objs[2:]:
+    assert obj["current_state"] == ACTIVE_STATE, obj.get("current_state")
+
 for obj in objs:
     assert obj["case_id"] == CASE_ID
-    assert obj["current_state"] == CURRENT_STATE
     assert obj["release_candidate_gap_ledger_present"] is True
     assert obj["release_candidate_artifacts_docket_present"] is True
     assert obj["release_candidate_manifest_present"] is True

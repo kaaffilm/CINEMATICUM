@@ -8,6 +8,8 @@ import sys
 
 CASE_ID = "CASE_001_THE_LAST_RENDER"
 CURRENT_STATE = "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
+TARGET = 'REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS'
+ACTIVE_TARGET = 'RELEASE_CANDIDATE_READY'
 
 ROOT = pathlib.Path(".")
 paths = {
@@ -59,7 +61,11 @@ stop_rule = load("stop_rule")
 stop_rule_law = load("stop_rule_law")
 zero_index = load("zero_index")
 
-assert flat_contains(case_state, CURRENT_STATE), "current state mismatch"
+index = json.loads(pathlib.Path("CINEMATICUM_CURRENT_STATE_INDEX.json").read_text(encoding="utf-8"))
+case = json.loads(pathlib.Path("CASES/CASE_001_THE_LAST_RENDER/CURRENT_CASE_STATE.json").read_text(encoding="utf-8"))
+assert proof["current_state"] == TARGET, "record current state mismatch"
+assert index["active_case_states"][CASE_ID] == ACTIVE_TARGET, "active index current state mismatch"
+assert case["current_state"] == ACTIVE_TARGET, "active case current state mismatch"
 assert proof.get("object_type") == "CURRENT_ZERO_LEDGER_NO_FURTHER_ADVANCEMENT_PROOF", proof.get("object_type")
 assert proof.get("schema_version") == "cinematicum.current_zero_ledger_no_further_advancement_proof.v1", proof.get("schema_version")
 assert law.get("object_type") == "CINEMATICUM_CURRENT_ZERO_LEDGER_NO_FURTHER_ADVANCEMENT_PROOF_LAW", law.get("object_type")

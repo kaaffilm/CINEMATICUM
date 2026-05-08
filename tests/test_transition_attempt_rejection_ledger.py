@@ -1,44 +1,51 @@
 import json
+import pathlib
 import subprocess
 import unittest
-from pathlib import Path
 
-TARGET = 'REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS'
-NEXT_OBJECT = 'RELEASE_CANDIDATE_GAP_LEDGER'
+ROOT = pathlib.Path(__file__).resolve().parents[1]
+TARGET = "RELEASE_CANDIDATE_READY"
+CASE_ID = "CASE_001_THE_LAST_RENDER"
+
+def load(path: str):
+    return json.loads((ROOT / path).read_text(encoding="utf-8"))
 
 class TestTransitionAttemptRejectionLedger(unittest.TestCase):
-    def test_no_transition_attempt_is_present(self):
-        data = json.loads(Path("CINEMATICUM_TRANSITION_ATTEMPT_REJECTION_LEDGER.json").read_text())
-        self.assertEqual(data["current_state"], TARGET)
-        self.assertEqual(data["transition_attempts_recorded"], 0)
-        self.assertFalse(data["valid_transition_attempt_present"])
-        self.assertFalse(data["may_advance_now"])
-        self.assertFalse(data["issuance_unblocked"])
-        self.assertEqual(data["next_required_object"], NEXT_OBJECT)
+    def test_ledger_matches_active_release_candidate_ready_state(self):
+        ledger = load("CINEMATICUM_TRANSITION_ATTEMPT_REJECTION_LEDGER.json")
+        status = load("CASES/CASE_001_THE_LAST_RENDER/TRANSITION_ATTEMPT_REJECTION_STATUS.json")
+        index = load("CINEMATICUM_CURRENT_STATE_INDEX.json")
+        case = load("CASES/CASE_001_THE_LAST_RENDER/CURRENT_CASE_STATE.json")
 
-    def test_non_issuance_flags_remain_false(self):
-        data = json.loads(Path("CINEMATICUM_TRANSITION_ATTEMPT_REJECTION_LEDGER.json").read_text())
-        for key in [
-            "release_candidate_ready",
-            "release_candidate_artifacts_bound",
-            "issued",
-            "media_present",
-            "outsider_replay_passed",
-            "admissibility_verdict_present",
-            "terminal_closure_present",
-        ]:
-            self.assertFalse(data[key], key)
+        self.assertEqual(index["active_case_states"][CASE_ID], TARGET)
+        self.assertEqual(case["current_state"], TARGET)
+
+        for obj in (ledger, status):
+            self.assertEqual(obj["current_state"], TARGET)
+            self.assertEqual(obj["transition_attempts_recorded"], 0)
+            self.assertFalse(obj["valid_transition_attempt_present"])
+            self.assertTrue(obj["release_candidate_ready"])
+            self.assertFalse(obj["may_advance_now"])
+            self.assertFalse(obj["issuance_unblocked"])
+            self.assertFalse(obj["issued"])
+            self.assertFalse(obj["media_present"])
+
+    def test_no_transition_attempt_is_present(self):
+        ledger = load("CINEMATICUM_TRANSITION_ATTEMPT_REJECTION_LEDGER.json")
+        self.assertEqual(ledger["transition_attempts_recorded"], 0)
+        self.assertFalse(ledger["valid_transition_attempt_present"])
 
     def test_verifier_passes(self):
         out = subprocess.run(
             ["bash", "scripts/verify-transition-attempt-rejection-ledger.sh"],
+            cwd=ROOT,
             check=True,
             text=True,
             capture_output=True,
         ).stdout
         self.assertIn("CINEMATICUM TRANSITION ATTEMPT REJECTION LEDGER: PASS", out)
-        self.assertIn("TRANSITION_ATTEMPTS_RECORDED=0", out)
-        self.assertIn("MAY_ADVANCE_NOW=false", out)
+        self.assertIn("CURRENT_STATE=RELEASE_CANDIDATE_READY", out)
+        self.assertIn("RELEASE_CANDIDATE_READY=true", out)
 
 if __name__ == "__main__":
     unittest.main()

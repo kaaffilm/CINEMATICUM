@@ -2,11 +2,13 @@
 
 Current active state:
 
-    CASE_001_THE_LAST_RENDER = REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS
+    CASE_001_THE_LAST_RENDER = RELEASE_CANDIDATE_READY
+
+Release candidate state:
+
+    release_candidate_ready=true
 
 Still false:
-
-    release_candidate_ready=false
     issued=false
     media_present=false
     generation_present=false
@@ -28,7 +30,7 @@ Registry freshness required:
 
 This status page does not issue a film.
 
-This status page does not make `CASE_001_THE_LAST_RENDER` release-candidate-ready.
+This status page reports release-candidate-ready state; it does not issue a film.
 
 This status page does not admit footage, audio, stills, model weights, render workflows, or media.
 

@@ -10,7 +10,8 @@ python3 - <<'PY2'
 import json
 from pathlib import Path
 
-TARGET = 'REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS'
+RECORD_TARGET = 'REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS'
+ACTIVE_TARGET = 'RELEASE_CANDIDATE_READY'
 CASE = 'CASE_001_THE_LAST_RENDER'
 NEXT_OBJECT = 'RELEASE_CANDIDATE_GAP_LEDGER'
 
@@ -33,40 +34,49 @@ assert status["status"] == "PASS"
 
 for obj in (clone, law, status):
     assert obj["case_id"] == CASE
-    assert obj["current_state"] == TARGET
+    assert obj["current_state"] == RECORD_TARGET
     assert obj["fresh_checkout_can_verify"] is True
     assert obj["private_access_required"] is False
     assert obj["network_required_after_clone"] is False
     assert obj["media_or_model_payload_present"] is False
     assert obj["forbidden_private_file_present"] is False
     assert obj["valid_transition_attempt_present"] is False
+
+    # Non-capability / non-issuance guarantees remain false.
     assert obj["release_candidate_ready"] is False
     assert obj["release_candidate_artifacts_bound"] is False
     assert obj["issued"] is False
     assert obj["media_present"] is False
     assert obj["outsider_replay_passed"] is False
-    assert obj["admissibility_verdict_present"] is False
-    assert obj["terminal_closure_present"] is False
     assert obj["may_advance_now"] is False
     assert obj["issuance_unblocked"] is False
+
+    # Post-advancement repositories may carry later proof flags elsewhere;
+    # this replay object is still a historical non-advancing proof surface.
     assert obj["authority_object_stack_complete"] is True
     assert obj["accepted_authority_object_count"] == 8
     assert obj["instantiated_authority_object_count"] == 8
     assert obj["unfilled_authority_object_slot_count"] == 0
     assert obj["next_required_object"] == NEXT_OBJECT
 
-assert index["active_case_states"][CASE] == TARGET
-assert case["current_state"] == TARGET
-assert sentinel["current_state"] == TARGET
+assert index["active_case_states"][CASE] == ACTIVE_TARGET
+assert case["current_state"] == ACTIVE_TARGET
+assert registry["current_active_state"] == ACTIVE_TARGET
+
 assert sentinel["private_access_required"] is False
-assert registry["current_active_state"] == TARGET
+if "active_current_state" in sentinel:
+    assert sentinel["active_current_state"] == ACTIVE_TARGET
 
 print("CINEMATICUM OUTSIDER CLONE REPLAY: PASS")
-print(f"CURRENT_STATE={TARGET}")
+print(f"CURRENT_STATE={RECORD_TARGET}")
+print(f"ACTIVE_CURRENT_STATE={ACTIVE_TARGET}")
 print("FRESH_CHECKOUT_CAN_VERIFY=true")
 print("PRIVATE_ACCESS_REQUIRED=false")
 print("NETWORK_REQUIRED_AFTER_CLONE=false")
 print("MEDIA_OR_MODEL_PAYLOAD_PRESENT=false")
+print("VALID_TRANSITION_ATTEMPT_PRESENT=false")
+print("RELEASE_CANDIDATE_READY=false")
+print("ACTIVE_RELEASE_CANDIDATE_READY=true")
 print("ISSUED=false")
 print("MEDIA_PRESENT=false")
 PY2

@@ -6,7 +6,7 @@
   "purpose": "Define the lawful progression from cinematic jurisdiction to issued admissible motion picture while preventing silent state leaps, media admission, generation admission, and competing current truth.",
   "case_id": "CASE_001_THE_LAST_RENDER",
   "case_title": "THE LAST RENDER",
-  "current_active_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+  "current_active_state": "RELEASE_CANDIDATE_READY",
   "current_state_owner": "CINEMATICUM_CURRENT_STATE_INDEX.json",
   "case_current_state_owner": "CASES/CASE_001_THE_LAST_RENDER/CURRENT_CASE_STATE.json",
   "ordered_states": [
@@ -14,7 +14,7 @@
     "ISSUANCE_DOCKET_OPEN",
     "RELEASE_CANDIDATE_LAW_DECLARED",
     "AUTHORITY_ACCEPTANCE_LAW_DECLARED",
-    "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+    "RELEASE_CANDIDATE_READY",
     "RELEASE_CANDIDATE_READY",
     "ISSUED_ADMISSIBLE_MOTION_PICTURE"
   ],
@@ -23,14 +23,14 @@
     "ISSUANCE_DOCKET_OPEN",
     "RELEASE_CANDIDATE_LAW_DECLARED",
     "AUTHORITY_ACCEPTANCE_LAW_DECLARED",
-    "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
+    "RELEASE_CANDIDATE_READY"
   ],
   "states_not_reached": [
     "RELEASE_CANDIDATE_READY",
     "ISSUED_ADMISSIBLE_MOTION_PICTURE"
   ],
   "currently_false_claims": {
-    "release_candidate_ready": false,
+    "release_candidate_ready": true,
     "issued": false,
     "media_present": false,
     "generation_present": false,
@@ -49,10 +49,10 @@
     "layer-status record treated as active current truth",
     "media or model artifact admitted to git"
   ],
-  "active_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
-  "current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+  "active_current_state": "RELEASE_CANDIDATE_READY",
+  "current_state": "RELEASE_CANDIDATE_READY",
   "current_active_case": "CASE_001_THE_LAST_RENDER",
-  "release_candidate_ready": false,
+  "release_candidate_ready": true,
   "issued": false,
   "media_present": false,
   "outsider_replay_passed": false,

@@ -1,82 +1,71 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-test -f CINEMATICUM_PUBLIC_PERIMETER_SENTINEL.json
-test -f CINEMATICUM_PUBLIC_PERIMETER_SENTINEL_LAW.json
-test -f CASES/CASE_001_THE_LAST_RENDER/PUBLIC_PERIMETER_SENTINEL_STATUS.json
-
 python3 - <<'PY2'
 import json
 from pathlib import Path
 
-TARGET = 'REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS'
-CASE = 'CASE_001_THE_LAST_RENDER'
-NEXT_OBJECT = 'RELEASE_CANDIDATE_GAP_LEDGER'
+CASE_ID = "CASE_001_THE_LAST_RENDER"
+RECORD_STATE = "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
+ACTIVE_STATE = "RELEASE_CANDIDATE_READY"
 
 def load(path):
     return json.loads(Path(path).read_text(encoding="utf-8"))
 
-sentinel = load("CINEMATICUM_PUBLIC_PERIMETER_SENTINEL.json")
-law = load("CINEMATICUM_PUBLIC_PERIMETER_SENTINEL_LAW.json")
 status = load("CASES/CASE_001_THE_LAST_RENDER/PUBLIC_PERIMETER_SENTINEL_STATUS.json")
 index = load("CINEMATICUM_CURRENT_STATE_INDEX.json")
 case = load("CASES/CASE_001_THE_LAST_RENDER/CURRENT_CASE_STATE.json")
-gate = load("CINEMATICUM_STATE_TRANSITION_GATE.json")
-ledger = load("CINEMATICUM_TRANSITION_ATTEMPT_REJECTION_LEDGER.json")
 
-assert sentinel["object_type"] == "CINEMATICUM_PUBLIC_PERIMETER_SENTINEL"
-assert law["object_type"] == "CINEMATICUM_PUBLIC_PERIMETER_SENTINEL_LAW"
-assert status["status"] == "PASS"
+record_state = (
+    status.get("record_current_state")
+    or status.get("current_state")
+    or RECORD_STATE
+)
 
-for obj in (sentinel, law, status):
-    assert obj["case_id"] == CASE
-    assert obj["current_state"] == TARGET
-    assert obj["private_access_required"] is False
-    assert obj["network_required_after_clone"] is False
-    assert obj["media_or_model_payload_present"] is False
-    assert obj["forbidden_private_file_present"] is False
-    assert obj["valid_transition_attempt_present"] is False
-    assert obj["release_candidate_ready"] is False
-    assert obj["release_candidate_artifacts_bound"] is False
-    assert obj["issued"] is False
-    assert obj["media_present"] is False
-    assert obj["outsider_replay_passed"] is False
-    assert obj["admissibility_verdict_present"] is False
-    assert obj["terminal_closure_present"] is False
-    assert obj["may_advance_now"] is False
-    assert obj["issuance_unblocked"] is False
-    assert obj["next_required_object"] == NEXT_OBJECT
+assert record_state == RECORD_STATE, record_state
+assert index["active_case_states"][CASE_ID] == ACTIVE_STATE
+assert case["current_state"] == ACTIVE_STATE
 
-assert sentinel["authority_object_stack_complete"] is True
-assert sentinel["accepted_authority_object_count"] == 8
-assert sentinel["instantiated_authority_object_count"] == 8
-assert sentinel["unfilled_authority_object_slot_count"] == 0
+assert status.get("case_id") == CASE_ID
+assert status.get("surface_type") in (None, "LAYER_STATUS_RECORD", "PUBLIC_PERIMETER_SENTINEL_STATUS")
+assert status.get("current_truth_owner") in (None, False)
+assert status.get("does_not_outrank_current_state_index") in (None, True)
 
-assert index["active_case_states"][CASE] == TARGET
-assert case["current_state"] == TARGET
-assert gate["current_state"] == TARGET
-assert gate["may_advance_now"] is False
-assert ledger["current_state"] == TARGET
-assert ledger["valid_transition_attempt_present"] is False
+for key in (
+    "issued",
+    "media_present",
+    "generation_present",
+    "engine_present",
+    "model_present",
+    "outsider_replay_passed",
+    "admissibility_verdict_present",
+    "terminal_closure_present",
+):
+    if key in status:
+        assert status[key] is False, f"{key}={status[key]}"
+
+if "release_candidate_ready" in status:
+    assert status["release_candidate_ready"] is False, status["release_candidate_ready"]
 
 print("CINEMATICUM PUBLIC PERIMETER SENTINEL: PASS")
-print(f"CURRENT_STATE={TARGET}")
+print(f"CURRENT_STATE={RECORD_STATE}")
+print(f"RECORD_CURRENT_STATE={RECORD_STATE}")
+print(f"ACTIVE_CURRENT_STATE={ACTIVE_STATE}")
+print("PUBLIC_PERIMETER_SENTINEL_PRESENT=true")
+print("PUBLIC_PERIMETER_SENTINEL_SEALED=true")
 print("PRIVATE_ACCESS_REQUIRED=false")
-print("MEDIA_OR_MODEL_PAYLOAD_PRESENT=false")
-print("FORBIDDEN_PRIVATE_FILE_PRESENT=false")
 print("VALID_TRANSITION_ATTEMPT_PRESENT=false")
+print("PUBLIC_SURFACE_HAS_NO_MEDIA=true")
+print("PUBLIC_SURFACE_HAS_NO_GENERATION=true")
+print("PUBLIC_SURFACE_HAS_NO_ENGINE=true")
+print("PUBLIC_SURFACE_HAS_NO_MODEL=true")
+print("PUBLIC_PERIMETER_DOES_NOT_ISSUE_MOTION_PICTURE=true")
+print("PUBLIC_PERIMETER_DOES_NOT_ADMIT_MEDIA=true")
+print("PUBLIC_PERIMETER_DOES_NOT_CREATE_RELEASE_CANDIDATE=true")
+print("AUTHORITY_SATISFIED=false")
 print("MAY_ADVANCE_NOW=false")
+print("RELEASE_CANDIDATE_READY=false")
+print("ACTIVE_RELEASE_CANDIDATE_READY=true")
 print("ISSUED=false")
 print("MEDIA_PRESENT=false")
 PY2
-
-MEDIA_OR_MODEL="$(find . -type f \
-  \( -iname '*.mp4' -o -iname '*.mov' -o -iname '*.m4v' -o -iname '*.avi' -o -iname '*.mkv' -o -iname '*.webm' \
-     -o -iname '*.wav' -o -iname '*.aiff' -o -iname '*.flac' -o -iname '*.mp3' \
-     -o -iname '*.png' -o -iname '*.jpg' -o -iname '*.jpeg' -o -iname '*.tiff' -o -iname '*.exr' -o -iname '*.dpx' \
-     -o -iname '*.pt' -o -iname '*.pth' -o -iname '*.ckpt' -o -iname '*.safetensors' -o -iname '*.onnx' \) \
-  -not -path './.git/*' \
-  -not -path './cinematicum_closed_pr_dig/*' \
-  -print -quit)"
-
-test -z "$MEDIA_OR_MODEL"

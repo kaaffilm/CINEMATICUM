@@ -9,7 +9,7 @@ python3 - <<'PY2'
 import json
 from pathlib import Path
 
-TARGET = 'REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS'
+TARGET = 'RELEASE_CANDIDATE_READY'
 NEXT = 'RELEASE_CANDIDATE_ARTIFACTS_BOUND'
 CASE = 'CASE_001_THE_LAST_RENDER'
 
@@ -32,7 +32,7 @@ for obj in (gate, law, status):
     assert obj["from_state"] == TARGET
     assert obj["next_required_state"] == NEXT
     assert obj["next_required_object"] == "RELEASE_CANDIDATE_GAP_LEDGER"
-    assert obj["release_candidate_ready"] is False
+    assert obj["release_candidate_ready"] is True
     assert obj["release_candidate_artifacts_bound"] is False
     assert obj["issued"] is False
     assert obj["media_present"] is False
@@ -58,7 +58,7 @@ assert candidate["blocked"] is True
 
 print("CINEMATICUM STATE TRANSITION GATE: PASS")
 print(f"CURRENT_STATE={TARGET}")
-print("RELEASE_CANDIDATE_READY=false")
+print("RELEASE_CANDIDATE_READY=true")
 print("MAY_ADVANCE_NOW=false")
 print("ISSUANCE_UNBLOCKED=false")
 print("ISSUED=false")

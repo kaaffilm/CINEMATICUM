@@ -11,16 +11,16 @@ class TestCurrentStateIndex(unittest.TestCase):
     def test_root_index_is_active_current_state_owner(self):
         index = load("CINEMATICUM_CURRENT_STATE_INDEX.json")
         self.assertEqual(index["surface_type"], "ACTIVE_CURRENT_STATE")
-        self.assertEqual(index["active_case_states"]["CASE_001_THE_LAST_RENDER"], "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS")
+        self.assertEqual(index["active_case_states"]["CASE_001_THE_LAST_RENDER"], "RELEASE_CANDIDATE_READY")
         self.assertEqual(index["issued_films"], [])
-        self.assertEqual(index["release_candidate_ready_cases"], [])
+        self.assertEqual(index["release_candidate_ready_cases"], ["CASE_001_THE_LAST_RENDER"])
         self.assertEqual(index["media_admitted_cases"], [])
 
     def test_case_current_state_is_active_and_not_issued(self):
         case = load("CASES/CASE_001_THE_LAST_RENDER/CURRENT_CASE_STATE.json")
         self.assertEqual(case["surface_type"], "ACTIVE_CURRENT_STATE")
-        self.assertEqual(case["current_state"], "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS")
-        self.assertFalse(case["release_candidate_ready"])
+        self.assertEqual(case["current_state"], "RELEASE_CANDIDATE_READY")
+        self.assertTrue(case["release_candidate_ready"])
         self.assertFalse(case["issued"])
         self.assertFalse(case["media_present"])
         self.assertFalse(case["outsider_replay_passed"])

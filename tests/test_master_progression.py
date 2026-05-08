@@ -12,7 +12,7 @@ class TestMasterProgression(unittest.TestCase):
         matrix = load("CINEMATICUM_GOVERNED_PROGRESSION_MATRIX.json")
         index = load("CINEMATICUM_CURRENT_STATE_INDEX.json")
         case = load("CASES/CASE_001_THE_LAST_RENDER/CURRENT_CASE_STATE.json")
-        self.assertEqual(matrix["current_active_state"], "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS")
+        self.assertEqual(matrix["current_active_state"], "RELEASE_CANDIDATE_READY")
         self.assertEqual(index["active_case_states"]["CASE_001_THE_LAST_RENDER"], matrix["current_active_state"])
         self.assertEqual(case["current_state"], matrix["current_active_state"])
 
@@ -20,7 +20,7 @@ class TestMasterProgression(unittest.TestCase):
         matrix = load("CINEMATICUM_GOVERNED_PROGRESSION_MATRIX.json")
         self.assertIn("RELEASE_CANDIDATE_READY", matrix["states_not_reached"])
         self.assertIn("ISSUED_ADMISSIBLE_MOTION_PICTURE", matrix["states_not_reached"])
-        self.assertFalse(matrix["currently_false_claims"]["release_candidate_ready"])
+        self.assertTrue(matrix["currently_false_claims"]["release_candidate_ready"])
         self.assertFalse(matrix["currently_false_claims"]["issued"])
         self.assertFalse(matrix["currently_false_claims"]["media_present"])
         self.assertFalse(matrix["currently_false_claims"]["outsider_replay_passed"])
@@ -36,14 +36,14 @@ class TestMasterProgression(unittest.TestCase):
         graph = load("CASES/CASE_001_THE_LAST_RENDER/CASE_PROGRESSION_GRAPH.json")
         active_nodes = [node for node in graph["nodes"] if node["status"] == "active"]
         self.assertEqual(len(active_nodes), 1)
-        self.assertEqual(active_nodes[0]["state"], "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS")
+        self.assertEqual(active_nodes[0]["state"], "RELEASE_CANDIDATE_READY")
 
     def test_graph_blocks_release_and_issuance(self):
         graph = load("CASES/CASE_001_THE_LAST_RENDER/CASE_PROGRESSION_GRAPH.json")
         states = {node["state"]: node["status"] for node in graph["nodes"]}
-        self.assertEqual(states["REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"], "active")
+        self.assertEqual(states["RELEASE_CANDIDATE_READY"], "active")
         self.assertEqual(states["ISSUED_ADMISSIBLE_MOTION_PICTURE"], "not_reached")
-        self.assertFalse(graph["false_now"]["release_candidate_ready"])
+        self.assertTrue(graph["false_now"]["release_candidate_ready"])
         self.assertFalse(graph["false_now"]["issued"])
         self.assertFalse(graph["false_now"]["media_present"])
         self.assertFalse(graph["false_now"]["outsider_replay_passed"])

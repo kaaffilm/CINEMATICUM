@@ -10,6 +10,7 @@ import json
 from pathlib import Path
 
 TARGET = 'REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS'
+ACTIVE_TARGET = 'RELEASE_CANDIDATE_READY'
 CASE = 'CASE_001_THE_LAST_RENDER'
 NEXT_OBJECT = 'RELEASE_CANDIDATE_GAP_LEDGER'
 REQUEST_PATTERN = 'fixtures/authority_object_admission_requests/rejected/*.json'
@@ -53,9 +54,9 @@ for obj in (surface, law, status):
     for key in FALSE_KEYS:
         assert obj[key] is False, key
 
-assert index["active_case_states"][CASE] == TARGET
-assert case["current_state"] == TARGET
-assert registry["current_active_state"] == TARGET
+assert index["active_case_states"][CASE] == ACTIVE_TARGET
+assert case["current_state"] == ACTIVE_TARGET
+assert registry["current_active_state"] == ACTIVE_TARGET
 assert docket["current_state"] == TARGET
 assert schema["current_state"] == TARGET
 assert validator["current_state"] == TARGET

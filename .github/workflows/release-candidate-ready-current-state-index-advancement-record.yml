@@ -1,0 +1,29 @@
+name: release-candidate-ready-current-state-index-advancement-record
+
+on:
+  push:
+    paths:
+      - 'CINEMATICUM_RELEASE_CANDIDATE_READY_CURRENT_STATE_INDEX_ADVANCEMENT_RECORD.json'
+      - 'CINEMATICUM_RELEASE_CANDIDATE_READY_CURRENT_STATE_INDEX_ADVANCEMENT_RECORD_LAW.json'
+      - 'CASES/CASE_001_THE_LAST_RENDER/RELEASE_CANDIDATE_READY_CURRENT_STATE_INDEX_ADVANCEMENT_RECORD/**'
+      - 'CASES/CASE_001_THE_LAST_RENDER/RELEASE_CANDIDATE_READY_CURRENT_STATE_INDEX_ADVANCEMENT_RECORD_STATUS.json'
+      - 'scripts/verify-release-candidate-ready-current-state-index-advancement-record.sh'
+      - 'tests/test_release_candidate_ready_current_state_index_advancement_record.py'
+  pull_request:
+    paths:
+      - 'CINEMATICUM_RELEASE_CANDIDATE_READY_CURRENT_STATE_INDEX_ADVANCEMENT_RECORD.json'
+      - 'CINEMATICUM_RELEASE_CANDIDATE_READY_CURRENT_STATE_INDEX_ADVANCEMENT_RECORD_LAW.json'
+      - 'CASES/CASE_001_THE_LAST_RENDER/RELEASE_CANDIDATE_READY_CURRENT_STATE_INDEX_ADVANCEMENT_RECORD/**'
+      - 'CASES/CASE_001_THE_LAST_RENDER/RELEASE_CANDIDATE_READY_CURRENT_STATE_INDEX_ADVANCEMENT_RECORD_STATUS.json'
+      - 'scripts/verify-release-candidate-ready-current-state-index-advancement-record.sh'
+      - 'tests/test_release_candidate_ready_current_state_index_advancement_record.py'
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Verify release candidate ready current state index advancement record
+        run: |
+          python3 -m unittest tests/test_release_candidate_ready_current_state_index_advancement_record.py
+          bash scripts/verify-release-candidate-ready-current-state-index-advancement-record.sh

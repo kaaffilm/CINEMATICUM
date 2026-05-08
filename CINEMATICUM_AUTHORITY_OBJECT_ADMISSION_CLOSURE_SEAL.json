@@ -4,7 +4,7 @@
   "institution": "CINEMATICUM",
   "case_id": "CASE_001_THE_LAST_RENDER",
   "surface_class": "CASE_RECORD",
-  "current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
+  "current_state": "RELEASE_CANDIDATE_READY",
   "closure_seal_declared": true,
   "admission_stack_closed": true,
   "required_admission_layers": [
@@ -24,7 +24,7 @@
   "seal_does_not_issue_motion_picture": true,
   "authority_satisfied": false,
   "may_advance_now": false,
-  "release_candidate_ready": false,
+  "release_candidate_ready": true,
   "issued": false,
   "media_present": false,
   "authority_object_admission_closure_seal_passed": true,

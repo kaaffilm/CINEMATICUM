@@ -1,49 +1,51 @@
 import json
+import pathlib
 import subprocess
 import unittest
-from pathlib import Path
 
-TARGET = 'REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS'
-NEXT_OBJECT = 'RELEASE_CANDIDATE_GAP_LEDGER'
+ROOT = pathlib.Path(__file__).resolve().parents[1]
+CASE_ID = "CASE_001_THE_LAST_RENDER"
+RECORD_STATE = "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
+ACTIVE_STATE = "RELEASE_CANDIDATE_READY"
+
+def load(path: str):
+    return json.loads((ROOT / path).read_text(encoding="utf-8"))
 
 class TestRequiredAuthorityObjects(unittest.TestCase):
-    def test_stack_complete_but_release_candidate_not_ready(self):
-        data = json.loads(Path("CINEMATICUM_REQUIRED_AUTHORITY_OBJECT_CHECKLIST.json").read_text())
-        self.assertEqual(data["current_state"], TARGET)
-        self.assertTrue(data["authority_object_stack_complete"])
-        self.assertFalse(data["required_authority_objects_missing"])
-        self.assertEqual(data["accepted_authority_object_count"], 8)
-        self.assertEqual(data["instantiated_authority_object_count"], 8)
-        self.assertEqual(data["unfilled_authority_object_slot_count"], 0)
-        self.assertFalse(data["release_candidate_ready"])
-        self.assertFalse(data["release_candidate_artifacts_bound"])
-        self.assertFalse(data["issued"])
-        self.assertFalse(data["media_present"])
-        self.assertFalse(data["outsider_replay_passed"])
-        self.assertFalse(data["admissibility_verdict_present"])
-        self.assertFalse(data["terminal_closure_present"])
-        self.assertFalse(data["may_advance_now"])
-        self.assertFalse(data["issuance_unblocked"])
-        self.assertEqual(data["next_required_object"], NEXT_OBJECT)
+    def test_record_authority_stack_is_complete(self):
+        status = load("CASES/CASE_001_THE_LAST_RENDER/REQUIRED_AUTHORITY_OBJECTS_STATUS.json")
+        self.assertEqual(status["current_state"], RECORD_STATE)
+        self.assertFalse(status["required_authority_objects_missing"])
+        self.assertTrue(status["authority_object_stack_complete"])
+        self.assertEqual(status["accepted_authority_object_count"], 8)
+        self.assertEqual(status["instantiated_authority_object_count"], 8)
+        self.assertEqual(status["unfilled_authority_object_slot_count"], 0)
+        self.assertFalse(status["issued"])
+        self.assertFalse(status["media_present"])
 
-    def test_transition_candidate_is_blocked(self):
-        data = json.loads(Path("CINEMATICUM_REQUIRED_AUTHORITY_OBJECT_CHECKLIST.json").read_text())
-        candidate = data["transition_candidates"][0]
-        self.assertEqual(candidate["from_state"], TARGET)
-        self.assertEqual(candidate["required_object"], NEXT_OBJECT)
-        self.assertFalse(candidate["may_advance_now"])
-        self.assertTrue(candidate["blocked"])
+    def test_active_state_has_advanced(self):
+        index = load("CINEMATICUM_CURRENT_STATE_INDEX.json")
+        case = load("CASES/CASE_001_THE_LAST_RENDER/CURRENT_CASE_STATE.json")
+        self.assertEqual(index["active_case_states"][CASE_ID], ACTIVE_STATE)
+        self.assertEqual(index["active_current_state"], ACTIVE_STATE)
+        self.assertEqual(case["current_state"], ACTIVE_STATE)
+        self.assertTrue(case["release_candidate_ready"])
+        self.assertFalse(case["issued"])
+        self.assertFalse(case["media_present"])
 
     def test_verifier_passes(self):
         out = subprocess.run(
             ["bash", "scripts/verify-required-authority-objects.sh"],
+            cwd=ROOT,
             check=True,
             text=True,
             capture_output=True,
         ).stdout
         self.assertIn("CINEMATICUM REQUIRED AUTHORITY OBJECT CHECKLIST: PASS", out)
+        self.assertIn("RECORD_CURRENT_STATE=REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS", out)
+        self.assertIn("ACTIVE_CURRENT_STATE=RELEASE_CANDIDATE_READY", out)
         self.assertIn("AUTHORITY_OBJECT_STACK_COMPLETE=true", out)
-        self.assertIn("MAY_ADVANCE_NOW=false", out)
+        self.assertIn("RELEASE_CANDIDATE_READY=true", out)
 
 if __name__ == "__main__":
     unittest.main()

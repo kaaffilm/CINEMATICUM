@@ -12,7 +12,8 @@ class TestRepositoryStatusSeal(unittest.TestCase):
         seal = load("CINEMATICUM_REPOSITORY_STATUS_SEAL.json")
         index = load("CINEMATICUM_CURRENT_STATE_INDEX.json")
         case = load("CASES/CASE_001_THE_LAST_RENDER/CURRENT_CASE_STATE.json")
-        self.assertEqual(seal["current_state"], "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS")
+        self.assertEqual(seal["current_state"], "RELEASE_CANDIDATE_READY")
+        self.assertTrue(seal["release_candidate_ready"])
         self.assertEqual(index["active_case_states"]["CASE_001_THE_LAST_RENDER"], seal["current_state"])
         self.assertEqual(case["current_state"], seal["current_state"])
 
@@ -25,8 +26,7 @@ class TestRepositoryStatusSeal(unittest.TestCase):
     def test_false_claims_remain_false(self):
         seal = load("CINEMATICUM_REPOSITORY_STATUS_SEAL.json")
         for key in [
-            "release_candidate_ready",
-            "issued",
+                        "issued",
             "media_present",
             "generation_present",
             "engine_present",
@@ -44,8 +44,8 @@ class TestRepositoryStatusSeal(unittest.TestCase):
 
     def test_public_status_doc_is_bounded(self):
         text = (ROOT / "PUBLIC_STATUS.md").read_text(encoding="utf-8")
-        self.assertIn("REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS", text)
-        self.assertIn("release_candidate_ready=false", text)
+        self.assertIn("RELEASE_CANDIDATE_READY", text)
+        self.assertIn("release_candidate_ready=true", text)
         self.assertIn("issued=false", text)
         self.assertIn("media_present=false", text)
         self.assertIn("does not issue a film", text)

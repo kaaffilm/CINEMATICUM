@@ -6,6 +6,7 @@ import json
 from pathlib import Path
 
 STATE = "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
+ACTIVE_STATE = "RELEASE_CANDIDATE_READY"
 CASE_ID = "CASE_001_THE_LAST_RENDER"
 ROOT = Path(".")
 
@@ -35,7 +36,7 @@ decision = load("CINEMATICUM_AUTHORITY_OBJECT_ADMISSION_INTAKE_REOPENING_REQUEST
 current = load("CASES/CASE_001_THE_LAST_RENDER/CURRENT_CASE_STATE.json")
 
 current_state = current.get("current_state") or current.get("active_current_state") or current.get("state")
-assert current_state == STATE
+assert current_state == ACTIVE_STATE, "active_current_state=" + str(current_state)
 
 assert gate["object_type"] == "CINEMATICUM_AUTHORITY_OBJECT_ADMISSION_INTAKE_REOPENING_REQUEST_ENFORCEMENT_GATE"
 assert law["object_type"] == "CINEMATICUM_AUTHORITY_OBJECT_ADMISSION_INTAKE_REOPENING_REQUEST_ENFORCEMENT_GATE_LAW"
