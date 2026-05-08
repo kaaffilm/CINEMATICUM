@@ -3,6 +3,7 @@ from pathlib import Path
 
 from cinematicum_studio.core.db import init_db, connect
 from cinematicum_studio.issuance_bridge.validate_master import validate_master_ready
+from cinematicum_studio.issuance_bridge.validate_admissibility import validate_admissible_motion_picture
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -47,6 +48,13 @@ def test_shot_graph_has_12_shots():
 
 
 def test_issuance_bridge_refuses_without_master():
-    ok, missing = validate_master_ready(CASE_ID)
+    ok, missing = validate_master_ready("CASE_TEST_NO_MASTER")
     assert ok is False
     assert "FINAL_MASTER_MANIFEST.json" in missing
+
+
+def test_local_render_proof_is_not_admissible_film():
+    ok, missing = validate_admissible_motion_picture(CASE_ID)
+    assert ok is False
+    assert "LOCAL_RENDER_PROOF_NOT_FILM" in missing
+    assert "CINEMATIC_QUALITY_ACCEPTED" in missing

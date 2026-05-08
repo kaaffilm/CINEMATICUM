@@ -7,6 +7,7 @@ from pathlib import Path
 from cinematicum_studio.core.db import connect, init_db
 from cinematicum_studio.generation.job_runner import generate_all, generate_shot
 from cinematicum_studio.issuance_bridge.validate_master import validate_master_ready
+from cinematicum_studio.issuance_bridge.validate_admissibility import validate_admissible_motion_picture
 from cinematicum_studio.render.render_master import render_master
 from cinematicum_studio.review.select_take import select_take
 from cinematicum_studio.timeline.build_otio import build_timeline
@@ -81,6 +82,15 @@ def cmd_render(args: argparse.Namespace) -> None:
     print(path)
 
 
+
+def cmd_admissibility_check(args: argparse.Namespace) -> None:
+    ok, missing = validate_admissible_motion_picture(args.case_id)
+    print(json.dumps({
+        "case_id": args.case_id,
+        "admissible_motion_picture": ok,
+        "missing": missing,
+    }, indent=2))
+
 def cmd_issue_check(args: argparse.Namespace) -> None:
     ok, missing = validate_master_ready(args.case_id)
     print(json.dumps({"case_id": args.case_id, "master_ready": ok, "missing": missing}, indent=2))
@@ -129,6 +139,11 @@ def main() -> None:
     p = sub.add_parser("issue-check")
     p.add_argument("case_id")
     p.set_defaults(func=cmd_issue_check)
+
+    p = sub.add_parser("admissibility-check")
+    p.add_argument("case_id")
+    p.set_defaults(func=cmd_admissibility_check)
+
 
     args = parser.parse_args()
     args.func(args)
