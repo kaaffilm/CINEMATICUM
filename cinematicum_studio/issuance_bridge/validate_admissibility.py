@@ -5,6 +5,7 @@ from pathlib import Path
 
 from cinematicum_studio.issuance_bridge.validate_master import validate_master_ready
 from cinematicum_studio.issuance_bridge.validate_acceptance import validate_cinematic_acceptance
+from cinematicum_studio.issuance_bridge.validate_postproduction import validate_postproduction_acceptance
 
 
 def validate_admissible_motion_picture(case_id: str) -> tuple[bool, list[str]]:
@@ -43,5 +44,9 @@ def validate_admissible_motion_picture(case_id: str) -> tuple[bool, list[str]]:
     acceptance_ok, acceptance_missing = validate_cinematic_acceptance(case_id)
     if not acceptance_ok:
         missing.extend(f"ACCEPTANCE::{item}" for item in acceptance_missing)
+
+    post_ok, post_missing = validate_postproduction_acceptance(case_id)
+    if not post_ok:
+        missing.extend(f"POSTPRODUCTION::{item}" for item in post_missing)
 
     return (len(missing) == 0, missing)

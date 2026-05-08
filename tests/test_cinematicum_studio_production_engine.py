@@ -7,6 +7,7 @@ from cinematicum_studio.core.db import init_db, connect
 from cinematicum_studio.issuance_bridge.validate_master import validate_master_ready
 from cinematicum_studio.issuance_bridge.validate_admissibility import validate_admissible_motion_picture
 from cinematicum_studio.issuance_bridge.validate_acceptance import validate_cinematic_acceptance
+from cinematicum_studio.issuance_bridge.validate_postproduction import validate_postproduction_acceptance
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -90,3 +91,23 @@ def test_cli_acceptance_and_admissibility_commands_execute():
     assert '"admissible_motion_picture": false' in admissibility.stdout
     assert "ACCEPTANCE::CONTINUITY_ACCEPTED" in admissibility.stdout
     assert "ACCEPTANCE::DIRECTORIAL_ACCEPTANCE_ACCEPTED" in admissibility.stdout
+
+
+def test_postproduction_and_public_verdict_gate_film_admissibility():
+    ok, missing = validate_postproduction_acceptance(CASE_ID)
+    assert ok is False
+    assert "SOUND_MIX_ACCEPTED" in missing
+    assert "COLOR_GRADE_ACCEPTED" in missing
+    assert "FINAL_CUT_ACCEPTED" in missing
+    assert "PUBLIC_ADMISSIBILITY_VERDICT_ACCEPTED" in missing
+
+
+def test_cli_postproduction_command_executes():
+    result = subprocess.run(
+        [sys.executable, "-m", "cinematicum_studio.cli", "postproduction-check", CASE_ID],
+        check=True,
+        capture_output=True,
+        text=True,
+    )
+    assert '"postproduction_acceptance": false' in result.stdout
+    assert "FINAL_CUT_ACCEPTED" in result.stdout

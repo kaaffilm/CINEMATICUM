@@ -1,0 +1,9 @@
+{
+  "case_id": "CASE_001_THE_LAST_RENDER",
+  "title": "THE LAST RENDER",
+  "gate": "PUBLIC_ADMISSIBILITY_VERDICT",
+  "accepted": false,
+  "required_for_film_admissibility": true,
+  "required_for_issuance": true,
+  "reason": "No public admissibility verdict exists. Internal proof artifacts cannot self-certify public film status."
+}
