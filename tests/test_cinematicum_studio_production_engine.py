@@ -1,4 +1,6 @@
 import json
+import subprocess
+import sys
 from pathlib import Path
 
 from cinematicum_studio.core.db import init_db, connect
@@ -66,3 +68,25 @@ def test_selected_takes_do_not_imply_cinematic_acceptance():
     assert ok is False
     assert "CONTINUITY_ACCEPTED" in missing
     assert "DIRECTORIAL_ACCEPTANCE_ACCEPTED" in missing
+
+
+def test_cli_acceptance_and_admissibility_commands_execute():
+    acceptance = subprocess.run(
+        [sys.executable, "-m", "cinematicum_studio.cli", "acceptance-check", CASE_ID],
+        check=True,
+        capture_output=True,
+        text=True,
+    )
+    assert '"cinematic_acceptance": false' in acceptance.stdout
+    assert "CONTINUITY_ACCEPTED" in acceptance.stdout
+    assert "DIRECTORIAL_ACCEPTANCE_ACCEPTED" in acceptance.stdout
+
+    admissibility = subprocess.run(
+        [sys.executable, "-m", "cinematicum_studio.cli", "admissibility-check", CASE_ID],
+        check=True,
+        capture_output=True,
+        text=True,
+    )
+    assert '"admissible_motion_picture": false' in admissibility.stdout
+    assert "ACCEPTANCE::CONTINUITY_ACCEPTED" in admissibility.stdout
+    assert "ACCEPTANCE::DIRECTORIAL_ACCEPTANCE_ACCEPTED" in admissibility.stdout
