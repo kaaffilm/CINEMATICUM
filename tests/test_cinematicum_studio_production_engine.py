@@ -8,6 +8,7 @@ from cinematicum_studio.issuance_bridge.validate_master import validate_master_r
 from cinematicum_studio.issuance_bridge.validate_admissibility import validate_admissible_motion_picture
 from cinematicum_studio.issuance_bridge.validate_acceptance import validate_cinematic_acceptance
 from cinematicum_studio.issuance_bridge.validate_postproduction import validate_postproduction_acceptance
+from cinematicum_studio.issuance_bridge.validate_issuance import validate_issuance_ready
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -111,3 +112,23 @@ def test_cli_postproduction_command_executes():
     )
     assert '"postproduction_acceptance": false' in result.stdout
     assert "FINAL_CUT_ACCEPTED" in result.stdout
+
+
+def test_issuance_requires_admissible_motion_picture():
+    ok, missing = validate_issuance_ready(CASE_ID)
+    assert ok is False
+    assert "MASTER::FINAL_MASTER_MANIFEST.json" in missing
+    assert any(item.startswith("ADMISSIBILITY::") for item in missing)
+
+
+def test_cli_issuance_command_executes():
+    result = subprocess.run(
+        [sys.executable, "-m", "cinematicum_studio.cli", "issuance-check", CASE_ID],
+        check=True,
+        capture_output=True,
+        text=True,
+    )
+    payload = json.loads(result.stdout)
+    assert payload["issuance_ready"] is False
+    assert "MASTER::FINAL_MASTER_MANIFEST.json" in payload["missing"]
+    assert any(item.startswith("ADMISSIBILITY::") for item in payload["missing"])
