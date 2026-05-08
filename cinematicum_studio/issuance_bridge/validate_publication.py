@@ -7,6 +7,7 @@ from cinematicum_studio.issuance_bridge.validate_issuance import validate_issuan
 
 CASE_ROOT = Path("CASES")
 CURRENT_STATE_PATH = Path("CURRENT_PRODUCTION_STATE.json")
+REGISTRY_PATH = Path("CINEMATICUM_OBJECT_REGISTRY.json")
 
 PUBLIC_TERMINAL_STATES = {
     "ISSUED",
@@ -31,6 +32,32 @@ STATE_IDENTITY_VALUES = {
 }
 
 
+def _state_from_registry() -> str | None:
+    if not REGISTRY_PATH.exists():
+        return None
+
+    data = json.loads(REGISTRY_PATH.read_text())
+    if not isinstance(data, dict):
+        return None
+
+    for key in ("current_active_state", "active_current_state"):
+        value = data.get(key)
+        if isinstance(value, str) and value not in STATE_IDENTITY_VALUES:
+            return value
+
+    entries = data.get("entries")
+    if isinstance(entries, list):
+        for entry in entries:
+            if not isinstance(entry, dict):
+                continue
+            for key in ("current_active_state", "active_current_state"):
+                value = entry.get(key)
+                if isinstance(value, str) and value not in STATE_IDENTITY_VALUES:
+                    return value
+
+    return None
+
+
 def _walk_strings(value):
     if isinstance(value, str):
         yield value
@@ -44,7 +71,7 @@ def _walk_strings(value):
 
 def _current_state() -> str | None:
     if not CURRENT_STATE_PATH.exists():
-        return None
+        return _state_from_registry()
 
     data = json.loads(CURRENT_STATE_PATH.read_text())
 
@@ -74,7 +101,7 @@ def _current_state() -> str | None:
         ):
             return value
 
-    return None
+    return _state_from_registry()
 
 
 def validate_publication_ready(case_id: str) -> tuple[bool, list[str]]:
