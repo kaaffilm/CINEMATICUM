@@ -121,3 +121,9 @@ tokens/
 *.pt
 *.pth
 *.gguf
+
+# CINEMATICUM Studio local media database / generated media
+.cinematicum_media/
+
+# Allow committed timeline manifests even though generic .otio is ignored
+!CASES/**/FILM/TIMELINE.otio
