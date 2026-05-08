@@ -1,0 +1,77 @@
+{
+  "case_id": "CASE_001_THE_LAST_RENDER",
+  "selected_takes": [
+    {
+      "shot_id": "SHOT_001",
+      "take_id": "SHOT_001_TAKE_001",
+      "file_path": ".cinematicum_media/CASE_001_THE_LAST_RENDER/generated/SHOT_001/TAKE_001.mp4",
+      "sha256": "b958765d18aab32402319180cb4da9df6d6c718ae2b1b6576e9b121728a1f43b"
+    },
+    {
+      "shot_id": "SHOT_002",
+      "take_id": "SHOT_002_TAKE_001",
+      "file_path": ".cinematicum_media/CASE_001_THE_LAST_RENDER/generated/SHOT_002/TAKE_001.mp4",
+      "sha256": "2224a829f5070abc96e30371b01b6df41aab6bab8f63f7c76724821c9bbd09f2"
+    },
+    {
+      "shot_id": "SHOT_003",
+      "take_id": "SHOT_003_TAKE_001",
+      "file_path": ".cinematicum_media/CASE_001_THE_LAST_RENDER/generated/SHOT_003/TAKE_001.mp4",
+      "sha256": "b5d5d6fbf411170545a0b1ffd93fd6a43b5e170495890098c1cbf5201f56ed75"
+    },
+    {
+      "shot_id": "SHOT_004",
+      "take_id": "SHOT_004_TAKE_001",
+      "file_path": ".cinematicum_media/CASE_001_THE_LAST_RENDER/generated/SHOT_004/TAKE_001.mp4",
+      "sha256": "b958765d18aab32402319180cb4da9df6d6c718ae2b1b6576e9b121728a1f43b"
+    },
+    {
+      "shot_id": "SHOT_005",
+      "take_id": "SHOT_005_TAKE_001",
+      "file_path": ".cinematicum_media/CASE_001_THE_LAST_RENDER/generated/SHOT_005/TAKE_001.mp4",
+      "sha256": "777ff8bf2d5b8552cff72aaf4072952eb2599c667c3c0f0af1467d23811c8b4c"
+    },
+    {
+      "shot_id": "SHOT_006",
+      "take_id": "SHOT_006_TAKE_001",
+      "file_path": ".cinematicum_media/CASE_001_THE_LAST_RENDER/generated/SHOT_006/TAKE_001.mp4",
+      "sha256": "2224a829f5070abc96e30371b01b6df41aab6bab8f63f7c76724821c9bbd09f2"
+    },
+    {
+      "shot_id": "SHOT_007",
+      "take_id": "SHOT_007_TAKE_001",
+      "file_path": ".cinematicum_media/CASE_001_THE_LAST_RENDER/generated/SHOT_007/TAKE_001.mp4",
+      "sha256": "2224a829f5070abc96e30371b01b6df41aab6bab8f63f7c76724821c9bbd09f2"
+    },
+    {
+      "shot_id": "SHOT_008",
+      "take_id": "SHOT_008_TAKE_001",
+      "file_path": ".cinematicum_media/CASE_001_THE_LAST_RENDER/generated/SHOT_008/TAKE_001.mp4",
+      "sha256": "777ff8bf2d5b8552cff72aaf4072952eb2599c667c3c0f0af1467d23811c8b4c"
+    },
+    {
+      "shot_id": "SHOT_009",
+      "take_id": "SHOT_009_TAKE_001",
+      "file_path": ".cinematicum_media/CASE_001_THE_LAST_RENDER/generated/SHOT_009/TAKE_001.mp4",
+      "sha256": "2224a829f5070abc96e30371b01b6df41aab6bab8f63f7c76724821c9bbd09f2"
+    },
+    {
+      "shot_id": "SHOT_010",
+      "take_id": "SHOT_010_TAKE_001",
+      "file_path": ".cinematicum_media/CASE_001_THE_LAST_RENDER/generated/SHOT_010/TAKE_001.mp4",
+      "sha256": "b958765d18aab32402319180cb4da9df6d6c718ae2b1b6576e9b121728a1f43b"
+    },
+    {
+      "shot_id": "SHOT_011",
+      "take_id": "SHOT_011_TAKE_001",
+      "file_path": ".cinematicum_media/CASE_001_THE_LAST_RENDER/generated/SHOT_011/TAKE_001.mp4",
+      "sha256": "2224a829f5070abc96e30371b01b6df41aab6bab8f63f7c76724821c9bbd09f2"
+    },
+    {
+      "shot_id": "SHOT_012",
+      "take_id": "SHOT_012_TAKE_001",
+      "file_path": ".cinematicum_media/CASE_001_THE_LAST_RENDER/generated/SHOT_012/TAKE_001.mp4",
+      "sha256": "b5d5d6fbf411170545a0b1ffd93fd6a43b5e170495890098c1cbf5201f56ed75"
+    }
+  ]
+}
