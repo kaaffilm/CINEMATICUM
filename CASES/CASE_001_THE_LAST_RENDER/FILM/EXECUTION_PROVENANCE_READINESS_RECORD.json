@@ -1,0 +1,18 @@
+{
+  "case_id": "CASE_001_THE_LAST_RENDER",
+  "title": "THE LAST RENDER",
+  "gate": "EXECUTION_PROVENANCE_READINESS",
+  "accepted": false,
+  "execution_provenance_allowed": false,
+  "signed_execution_receipt_allowed": false,
+  "tamper_evident_audit_log_allowed": false,
+  "custody_chain_attestation_allowed": false,
+  "replay_resistant_operation_record_allowed": false,
+  "nonrepudiation_claim_allowed": false,
+  "compliance_evidence_export_allowed": false,
+  "incident_reconstruction_allowed": false,
+  "requires_credential_custody_ready": true,
+  "required_for_any_attributed_or_auditable_external_operation": true,
+  "hard_rule": "CREDENTIAL_CUSTODY_READY_REQUIRED_BEFORE_EXECUTION_PROVENANCE",
+  "reason": "No execution-provenance readiness exists. Credential custody cannot self-convert into signed execution receipts, tamper-evident audit logs, custody-chain attestations, replay-resistant operation records, nonrepudiation claims, compliance evidence exports, or incident reconstruction authority."
+}

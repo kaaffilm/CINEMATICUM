@@ -30,6 +30,7 @@ from cinematicum_studio.issuance_bridge.validate_machine_mediated_authority impo
 from cinematicum_studio.issuance_bridge.validate_autonomous_delegation import validate_autonomous_delegation_ready
 from cinematicum_studio.issuance_bridge.validate_external_execution import validate_external_execution_ready
 from cinematicum_studio.issuance_bridge.validate_credential_custody import validate_credential_custody_ready
+from cinematicum_studio.issuance_bridge.validate_execution_provenance import validate_execution_provenance_ready
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -701,4 +702,33 @@ def test_cli_credential_custody_command_executes():
     assert "EXTERNAL_EXECUTION_READY_REQUIRED_FOR_CREDENTIAL_CUSTODY" in payload["missing"]
     assert "CREDENTIAL_CUSTODY_READINESS_ACCEPTED" in payload["missing"]
     assert "CUSTODY_BEARING_AUTOMATION_ALLOWED" in payload["missing"]
+
+def test_execution_provenance_requires_credential_custody_ready():
+    ok, missing = validate_execution_provenance_ready(CASE_ID)
+    assert ok is False
+    assert "CREDENTIAL_CUSTODY_READY_REQUIRED_FOR_EXECUTION_PROVENANCE" in missing
+    assert any(item.startswith("CREDENTIAL_CUSTODY::") for item in missing)
+    assert "EXECUTION_PROVENANCE_READINESS_ACCEPTED" in missing
+    assert "EXECUTION_PROVENANCE_ALLOWED" in missing
+    assert "SIGNED_EXECUTION_RECEIPT_ALLOWED" in missing
+    assert "TAMPER_EVIDENT_AUDIT_LOG_ALLOWED" in missing
+    assert "CUSTODY_CHAIN_ATTESTATION_ALLOWED" in missing
+    assert "REPLAY_RESISTANT_OPERATION_RECORD_ALLOWED" in missing
+    assert "NONREPUDIATION_CLAIM_ALLOWED" in missing
+    assert "COMPLIANCE_EVIDENCE_EXPORT_ALLOWED" in missing
+    assert "INCIDENT_RECONSTRUCTION_ALLOWED" in missing
+
+
+def test_cli_execution_provenance_command_executes():
+    result = subprocess.run(
+        [sys.executable, "-m", "cinematicum_studio.cli", "execution-provenance-check", CASE_ID],
+        check=True,
+        capture_output=True,
+        text=True,
+    )
+    payload = json.loads(result.stdout)
+    assert payload["execution_provenance_ready"] is False
+    assert "CREDENTIAL_CUSTODY_READY_REQUIRED_FOR_EXECUTION_PROVENANCE" in payload["missing"]
+    assert "EXECUTION_PROVENANCE_READINESS_ACCEPTED" in payload["missing"]
+    assert "INCIDENT_RECONSTRUCTION_ALLOWED" in payload["missing"]
 
