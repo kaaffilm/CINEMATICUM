@@ -2460,3 +2460,102 @@ def test_take_source_case_closure_admission_docket_must_match_status_mirror():
         else:
             docket_status_path.write_text(docket_status_backup)
 
+def test_take_source_case_closure_admission_must_be_in_object_registry():
+    import hashlib
+
+    film_dir = ROOT / "CASES" / CASE_ID / "FILM"
+    evidence_dir = film_dir / "SOURCE_ADMISSIBILITY_EVIDENCE"
+    closure_path = evidence_dir / "ROOT_SOURCE_AUTHORITY_001.case_closure_registry_unbound.json"
+    admission_path = evidence_dir / "ROOT_SOURCE_AUTHORITY_001.case_closure_registry_unbound.decision.json"
+    registry_path = ROOT / "CINEMATICUM_OBJECT_REGISTRY.json"
+
+    closure_backup = closure_path.read_text() if closure_path.exists() else None
+    admission_backup = admission_path.read_text() if admission_path.exists() else None
+    registry_backup = registry_path.read_text()
+
+    closure_id = "ROOT_SOURCE_AUTHORITY_CASE_CLOSURE_REGISTRY_UNBOUND"
+    root_authority_id = "ROOT_SOURCE_AUTHORITY_REGISTRY_UNBOUND"
+    admission_object_id = "ROOT_SOURCE_AUTHORITY_CASE_CLOSURE_REGISTRY_UNBOUND_ADMISSION"
+
+    try:
+        evidence_dir.mkdir(exist_ok=True)
+
+        admission_path.write_text(json.dumps({
+            "case_id": CASE_ID,
+            "object_id": admission_object_id,
+            "accepted": True,
+            "decision": "ACCEPTED",
+            "admitted_object_type": "CINEMATICUM_TAKE_SOURCE_ADMISSIBILITY_ROOT_AUTHORITY_CASE_CLOSURE",
+            "admitted_closure_id": closure_id,
+            "admitted_root_authority_id": root_authority_id,
+        }, indent=2) + "\n")
+
+        admission_sha256 = hashlib.sha256(admission_path.read_bytes()).hexdigest()
+        admission_rel = str(admission_path.relative_to(ROOT))
+
+        closure_path.write_text(json.dumps({
+            "object_type": "CINEMATICUM_TAKE_SOURCE_ADMISSIBILITY_ROOT_AUTHORITY_CASE_CLOSURE",
+            "case_id": CASE_ID,
+            "closure_id": closure_id,
+            "root_authority_id": root_authority_id,
+            "closure_authorizes_root_authority": True,
+            "scope": "TAKE_SOURCE_ADMISSIBILITY_ROOT_AUTHORITY",
+            "revoked": False,
+            "authorized_root_authorities": [
+                {
+                    "root_authority_id": root_authority_id,
+                    "scope": "TAKE_SOURCE_ADMISSIBILITY_ROOT_AUTHORITY",
+                    "closure_authorizes_root_authority": True,
+                    "revoked": False,
+                }
+            ],
+            "authority_object_admission_decision_path": admission_rel,
+            "authority_object_admission_decision_sha256": admission_sha256,
+            "authority_object_admission_object_id": admission_object_id,
+        }, indent=2) + "\n")
+
+        closure_rel = str(closure_path.relative_to(ROOT))
+
+        registry = json.loads(registry_backup)
+        registry.setdefault("entries", [])
+        registry["entries"] = [
+            entry for entry in registry["entries"]
+            if entry.get("path") != closure_rel
+        ]
+        registry["entries"].append({
+            "path": closure_rel,
+            "object_type": "CINEMATICUM_TAKE_SOURCE_ADMISSIBILITY_ROOT_AUTHORITY_CASE_CLOSURE",
+            "case_id": CASE_ID,
+            "closure_id": closure_id,
+            "root_authority_id": root_authority_id,
+            "authority_object_admission_decision_path": admission_rel,
+            "authority_object_admission_decision_sha256": "0" * 64,
+            "authority_object_admission_object_id": admission_object_id,
+            "current_truth_owner": False,
+            "issued": False,
+            "release_candidate_ready": False,
+            "media_present": False,
+            "outsider_replay_passed": False,
+            "current_active_state": "RELEASE_CANDIDATE_READY",
+            "active_current_state": "RELEASE_CANDIDATE_READY",
+        })
+        registry["entries_count"] = len(registry["entries"])
+        registry_path.write_text(json.dumps(registry, indent=2) + "\n")
+
+        ok, missing = validate_admissible_motion_picture(CASE_ID)
+
+        assert ok is False
+        assert "TAKE_SOURCE_ADMISSIBILITY_CASE_CLOSURE_ADMISSION_REGISTRY_UNBOUND" in missing
+    finally:
+        if closure_backup is None:
+            closure_path.unlink(missing_ok=True)
+        else:
+            closure_path.write_text(closure_backup)
+
+        if admission_backup is None:
+            admission_path.unlink(missing_ok=True)
+        else:
+            admission_path.write_text(admission_backup)
+
+        registry_path.write_text(registry_backup)
+
