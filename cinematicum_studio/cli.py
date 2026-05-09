@@ -11,6 +11,7 @@ from cinematicum_studio.issuance_bridge.validate_admissibility import validate_a
 from cinematicum_studio.issuance_bridge.validate_acceptance import validate_cinematic_acceptance
 from cinematicum_studio.issuance_bridge.validate_postproduction import validate_postproduction_acceptance
 from cinematicum_studio.issuance_bridge.validate_issuance import validate_issuance_ready
+from cinematicum_studio.issuance_bridge.validate_protocol_issuance import validate_protocol_issuance
 from cinematicum_studio.issuance_bridge.validate_state_advancement import validate_state_advancement
 from cinematicum_studio.issuance_bridge.validate_publication import validate_publication_ready
 from cinematicum_studio.issuance_bridge.validate_distribution import validate_distribution_ready
@@ -150,11 +151,18 @@ def cmd_postproduction_check(args):
 
 
 def cmd_issuance_check(args):
-    ok, missing = validate_issuance_ready(args.case_id)
+    media_ok, media_missing = validate_issuance_ready(args.case_id)
+    protocol_ok, protocol_missing = validate_protocol_issuance(args.case_id)
     print(json.dumps({
         "case_id": args.case_id,
-        "issuance_ready": ok,
-        "missing": missing,
+        "issued": protocol_ok,
+        "issuance_type": "PROTOCOL_FILM",
+        "protocol_perimeter_issued": protocol_ok,
+        "protocol_film_issued": protocol_ok,
+        "media_payload_present": False,
+        "motion_picture_media_issuance_ready": media_ok,
+        "protocol_issuance_missing": protocol_missing,
+        "motion_picture_media_missing": media_missing,
     }, indent=2))
 
 
