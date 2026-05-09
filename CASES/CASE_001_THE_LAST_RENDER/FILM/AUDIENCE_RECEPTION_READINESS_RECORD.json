@@ -1,0 +1,16 @@
+{
+  "case_id": "CASE_001_THE_LAST_RENDER",
+  "title": "THE LAST RENDER",
+  "gate": "AUDIENCE_RECEPTION_READINESS",
+  "accepted": false,
+  "review_record_allowed": false,
+  "critic_response_allowed": false,
+  "audience_response_allowed": false,
+  "rating_record_allowed": false,
+  "laurel_claim_allowed": false,
+  "reception_claim_allowed": false,
+  "requires_audience_attendance_ready": true,
+  "required_for_public_reception_claim": true,
+  "hard_rule": "AUDIENCE_ATTENDANCE_READY_REQUIRED_BEFORE_RECEPTION_RECORD",
+  "reason": "No audience-reception readiness exists. Reviews, ratings, critic response, audience response, laurels, or reception claims cannot self-certify valid attendance."
+}

@@ -20,6 +20,7 @@ from cinematicum_studio.issuance_bridge.validate_audience_surface import validat
 from cinematicum_studio.issuance_bridge.validate_exhibition import validate_exhibition_ready
 from cinematicum_studio.issuance_bridge.validate_screening_event import validate_screening_event_ready
 from cinematicum_studio.issuance_bridge.validate_audience_attendance import validate_audience_attendance_ready
+from cinematicum_studio.issuance_bridge.validate_audience_reception import validate_audience_reception_ready
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -413,4 +414,31 @@ def test_cli_audience_attendance_command_executes():
     assert "SCREENING_EVENT_READY_REQUIRED_FOR_AUDIENCE_ATTENDANCE" in payload["missing"]
     assert "AUDIENCE_ATTENDANCE_READINESS_ACCEPTED" in payload["missing"]
     assert "PREMIERE_PRESENCE_RECORD_ALLOWED" in payload["missing"]
+
+def test_audience_reception_requires_audience_attendance_ready():
+    ok, missing = validate_audience_reception_ready(CASE_ID)
+    assert ok is False
+    assert "AUDIENCE_ATTENDANCE_READY_REQUIRED_FOR_RECEPTION" in missing
+    assert any(item.startswith("AUDIENCE_ATTENDANCE::") for item in missing)
+    assert "AUDIENCE_RECEPTION_READINESS_ACCEPTED" in missing
+    assert "REVIEW_RECORD_ALLOWED" in missing
+    assert "CRITIC_RESPONSE_ALLOWED" in missing
+    assert "AUDIENCE_RESPONSE_ALLOWED" in missing
+    assert "RATING_RECORD_ALLOWED" in missing
+    assert "LAUREL_CLAIM_ALLOWED" in missing
+    assert "RECEPTION_CLAIM_ALLOWED" in missing
+
+
+def test_cli_audience_reception_command_executes():
+    result = subprocess.run(
+        [sys.executable, "-m", "cinematicum_studio.cli", "audience-reception-check", CASE_ID],
+        check=True,
+        capture_output=True,
+        text=True,
+    )
+    payload = json.loads(result.stdout)
+    assert payload["audience_reception_ready"] is False
+    assert "AUDIENCE_ATTENDANCE_READY_REQUIRED_FOR_RECEPTION" in payload["missing"]
+    assert "AUDIENCE_RECEPTION_READINESS_ACCEPTED" in payload["missing"]
+    assert "RECEPTION_CLAIM_ALLOWED" in payload["missing"]
 
