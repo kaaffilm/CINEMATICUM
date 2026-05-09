@@ -16,6 +16,7 @@ from cinematicum_studio.issuance_bridge.validate_release_artifact import validat
 from cinematicum_studio.issuance_bridge.validate_permanence import validate_permanence_ready
 from cinematicum_studio.issuance_bridge.validate_public_index import validate_public_index_ready
 from cinematicum_studio.issuance_bridge.validate_public_claim import validate_public_claim_ready
+from cinematicum_studio.issuance_bridge.validate_audience_surface import validate_audience_surface_ready
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -305,4 +306,30 @@ def test_cli_public_claim_command_executes():
     assert "PUBLIC_INDEX_READY_REQUIRED_FOR_PUBLIC_CLAIM" in payload["missing"]
     assert "PUBLIC_CLAIM_READINESS_ACCEPTED" in payload["missing"]
     assert "PRESS_STATEMENT_ALLOWED" in payload["missing"]
+
+def test_audience_surface_requires_public_claim_ready():
+    ok, missing = validate_audience_surface_ready(CASE_ID)
+    assert ok is False
+    assert "PUBLIC_CLAIM_READY_REQUIRED_FOR_AUDIENCE_SURFACE" in missing
+    assert any(item.startswith("PUBLIC_CLAIM::") for item in missing)
+    assert "AUDIENCE_SURFACE_READINESS_ACCEPTED" in missing
+    assert "AUDIENCE_SURFACE_ALLOWED" in missing
+    assert "WEBSITE_LISTING_ALLOWED" in missing
+    assert "TRAILER_PAGE_ALLOWED" in missing
+    assert "PRESS_KIT_ALLOWED" in missing
+    assert "SOCIAL_PUBLICATION_ALLOWED" in missing
+
+
+def test_cli_audience_surface_command_executes():
+    result = subprocess.run(
+        [sys.executable, "-m", "cinematicum_studio.cli", "audience-surface-check", CASE_ID],
+        check=True,
+        capture_output=True,
+        text=True,
+    )
+    payload = json.loads(result.stdout)
+    assert payload["audience_surface_ready"] is False
+    assert "PUBLIC_CLAIM_READY_REQUIRED_FOR_AUDIENCE_SURFACE" in payload["missing"]
+    assert "AUDIENCE_SURFACE_READINESS_ACCEPTED" in payload["missing"]
+    assert "SOCIAL_PUBLICATION_ALLOWED" in payload["missing"]
 
