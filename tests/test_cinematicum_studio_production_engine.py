@@ -36,6 +36,7 @@ from cinematicum_studio.issuance_bridge.validate_deployment_authorization import
 from cinematicum_studio.issuance_bridge.validate_runtime_operation import validate_runtime_operation_ready
 from cinematicum_studio.issuance_bridge.validate_observability import validate_observability_ready
 from cinematicum_studio.issuance_bridge.validate_incident_response import validate_incident_response_ready
+from cinematicum_studio.issuance_bridge.validate_service_recovery import validate_service_recovery_ready
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -887,4 +888,36 @@ def test_cli_incident_response_command_executes():
     assert "OBSERVABILITY_READY_REQUIRED_FOR_INCIDENT_RESPONSE" in payload["missing"]
     assert "INCIDENT_RESPONSE_READINESS_ACCEPTED" in payload["missing"]
     assert "POSTMORTEM_RECORD_ALLOWED" in payload["missing"]
+
+def test_service_recovery_requires_incident_response_ready():
+    ok, missing = validate_service_recovery_ready(CASE_ID)
+    assert ok is False
+    assert "INCIDENT_RESPONSE_READY_REQUIRED_FOR_SERVICE_RECOVERY" in missing
+    assert any(item.startswith("INCIDENT_RESPONSE::") for item in missing)
+    assert "SERVICE_RECOVERY_READINESS_ACCEPTED" in missing
+    assert "SERVICE_RECOVERY_ALLOWED" in missing
+    assert "RECOVERY_EXECUTION_ALLOWED" in missing
+    assert "FAILOVER_ALLOWED" in missing
+    assert "TRAFFIC_RESTORATION_ALLOWED" in missing
+    assert "ROLLBACK_COMPLETION_ALLOWED" in missing
+    assert "DATA_REPAIR_ALLOWED" in missing
+    assert "REPLAY_EXECUTION_ALLOWED" in missing
+    assert "PERMANENT_FIX_CLAIM_ALLOWED" in missing
+    assert "INCIDENT_CLOSURE_ALLOWED" in missing
+    assert "RESOLVED_STATUS_CLAIM_ALLOWED" in missing
+    assert "CUSTOMER_RESTORATION_NOTICE_ALLOWED" in missing
+
+
+def test_cli_service_recovery_command_executes():
+    result = subprocess.run(
+        [sys.executable, "-m", "cinematicum_studio.cli", "service-recovery-check", CASE_ID],
+        check=True,
+        capture_output=True,
+        text=True,
+    )
+    payload = json.loads(result.stdout)
+    assert payload["service_recovery_ready"] is False
+    assert "INCIDENT_RESPONSE_READY_REQUIRED_FOR_SERVICE_RECOVERY" in payload["missing"]
+    assert "SERVICE_RECOVERY_READINESS_ACCEPTED" in payload["missing"]
+    assert "RESOLVED_STATUS_CLAIM_ALLOWED" in payload["missing"]
 
