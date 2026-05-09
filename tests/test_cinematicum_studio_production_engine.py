@@ -28,6 +28,7 @@ from cinematicum_studio.issuance_bridge.validate_knowledge_graph import validate
 from cinematicum_studio.issuance_bridge.validate_model_reference_ingestion import validate_model_reference_ingestion_ready
 from cinematicum_studio.issuance_bridge.validate_machine_mediated_authority import validate_machine_mediated_authority_ready
 from cinematicum_studio.issuance_bridge.validate_autonomous_delegation import validate_autonomous_delegation_ready
+from cinematicum_studio.issuance_bridge.validate_external_execution import validate_external_execution_ready
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -641,4 +642,33 @@ def test_cli_autonomous_delegation_command_executes():
     assert "MACHINE_MEDIATED_AUTHORITY_READY_REQUIRED_FOR_AUTONOMOUS_DELEGATION" in payload["missing"]
     assert "AUTONOMOUS_DELEGATION_READINESS_ACCEPTED" in payload["missing"]
     assert "SELF_EXECUTING_AUTHORITY_ALLOWED" in payload["missing"]
+
+def test_external_execution_requires_autonomous_delegation_ready():
+    ok, missing = validate_external_execution_ready(CASE_ID)
+    assert ok is False
+    assert "AUTONOMOUS_DELEGATION_READY_REQUIRED_FOR_EXTERNAL_EXECUTION" in missing
+    assert any(item.startswith("AUTONOMOUS_DELEGATION::") for item in missing)
+    assert "EXTERNAL_EXECUTION_READINESS_ACCEPTED" in missing
+    assert "EXTERNAL_EXECUTION_ALLOWED" in missing
+    assert "REPOSITORY_MUTATION_ALLOWED" in missing
+    assert "INFRASTRUCTURE_MUTATION_ALLOWED" in missing
+    assert "THIRD_PARTY_API_EXECUTION_ALLOWED" in missing
+    assert "OPERATIONAL_COMMAND_DISPATCH_ALLOWED" in missing
+    assert "LEGAL_FINANCIAL_INSTRUCTION_ALLOWED" in missing
+    assert "EXTERNAL_SYSTEM_SIDE_EFFECT_ALLOWED" in missing
+    assert "IRREVERSIBLE_WORLD_ACTION_ALLOWED" in missing
+
+
+def test_cli_external_execution_command_executes():
+    result = subprocess.run(
+        [sys.executable, "-m", "cinematicum_studio.cli", "external-execution-check", CASE_ID],
+        check=True,
+        capture_output=True,
+        text=True,
+    )
+    payload = json.loads(result.stdout)
+    assert payload["external_execution_ready"] is False
+    assert "AUTONOMOUS_DELEGATION_READY_REQUIRED_FOR_EXTERNAL_EXECUTION" in payload["missing"]
+    assert "EXTERNAL_EXECUTION_READINESS_ACCEPTED" in payload["missing"]
+    assert "IRREVERSIBLE_WORLD_ACTION_ALLOWED" in payload["missing"]
 
