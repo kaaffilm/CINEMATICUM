@@ -16,6 +16,7 @@ from cinematicum_studio.issuance_bridge.validate_publication import validate_pub
 from cinematicum_studio.issuance_bridge.validate_distribution import validate_distribution_ready
 from cinematicum_studio.issuance_bridge.validate_release_artifact import validate_release_artifact_ready
 from cinematicum_studio.issuance_bridge.validate_permanence import validate_permanence_ready
+from cinematicum_studio.issuance_bridge.validate_public_index import validate_public_index_ready
 from cinematicum_studio.render.render_master import render_master
 from cinematicum_studio.review.select_take import select_take
 from cinematicum_studio.timeline.build_otio import build_timeline
@@ -179,6 +180,15 @@ def cmd_permanence_check(args):
     }, indent=2))
 
 
+def cmd_public_index_check(args):
+    ok, missing = validate_public_index_ready(args.case_id)
+    print(json.dumps({
+        "case_id": args.case_id,
+        "public_index_ready": ok,
+        "missing": missing,
+    }, indent=2))
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(prog="cinematicum")
     sub = parser.add_subparsers(required=True)
@@ -253,6 +263,10 @@ def main() -> None:
     p = sub.add_parser("permanence-check")
     p.add_argument("case_id")
     p.set_defaults(func=cmd_permanence_check)
+
+    p = sub.add_parser("public-index-check")
+    p.add_argument("case_id")
+    p.set_defaults(func=cmd_public_index_check)
 
     p = sub.add_parser("state-advancement-check")
     p.add_argument("case_id")

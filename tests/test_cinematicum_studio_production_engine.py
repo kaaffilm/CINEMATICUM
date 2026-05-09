@@ -14,6 +14,7 @@ from cinematicum_studio.issuance_bridge.validate_publication import validate_pub
 from cinematicum_studio.issuance_bridge.validate_distribution import validate_distribution_ready
 from cinematicum_studio.issuance_bridge.validate_release_artifact import validate_release_artifact_ready
 from cinematicum_studio.issuance_bridge.validate_permanence import validate_permanence_ready
+from cinematicum_studio.issuance_bridge.validate_public_index import validate_public_index_ready
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -254,4 +255,28 @@ def test_cli_permanence_command_executes():
     assert "RELEASE_ARTIFACT_READY_REQUIRED_FOR_PERMANENCE" in payload["missing"]
     assert "PERMANENCE_READINESS_ACCEPTED" in payload["missing"]
     assert "IMMUTABLE_RELEASE_REFERENCE_ALLOWED" in payload["missing"]
+
+def test_public_index_requires_permanence_ready():
+    ok, missing = validate_public_index_ready(CASE_ID)
+    assert ok is False
+    assert "PERMANENCE_READY_REQUIRED_FOR_PUBLIC_INDEX" in missing
+    assert any(item.startswith("PERMANENCE::") for item in missing)
+    assert "CANONICAL_PUBLIC_INDEX_READINESS_ACCEPTED" in missing
+    assert "CANONICAL_PUBLIC_INDEX_ALLOWED" in missing
+    assert "PUBLIC_DISCOVERY_RECORD_ALLOWED" in missing
+    assert "EXTERNAL_REFERENCE_ALLOWED" in missing
+
+
+def test_cli_public_index_command_executes():
+    result = subprocess.run(
+        [sys.executable, "-m", "cinematicum_studio.cli", "public-index-check", CASE_ID],
+        check=True,
+        capture_output=True,
+        text=True,
+    )
+    payload = json.loads(result.stdout)
+    assert payload["public_index_ready"] is False
+    assert "PERMANENCE_READY_REQUIRED_FOR_PUBLIC_INDEX" in payload["missing"]
+    assert "CANONICAL_PUBLIC_INDEX_READINESS_ACCEPTED" in payload["missing"]
+    assert "EXTERNAL_REFERENCE_ALLOWED" in payload["missing"]
 

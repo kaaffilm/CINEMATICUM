@@ -9,7 +9,7 @@
   "registry_does_not_override_current_state": true,
   "current_active_state": "RELEASE_CANDIDATE_READY",
   "case_id": "CASE_001_THE_LAST_RENDER",
-  "entries_count": 455,
+  "entries_count": 456,
   "entries": [
     {
       "path": "ADMISSIBILITY_VERDICT_SCHEMA.json",
@@ -954,6 +954,20 @@
       "object_type": "CINEMATICUM_CASE_FIFTH_FUTURE_RELEASE_DELIVERY_ARTIFACTS_LOCK_AUTHORITY_OBJECT_INSTANTIATION_RECORD_STATUS",
       "schema_version": "cinematicum.case_fifth_future_release_delivery_artifacts_lock_authority_object_instantiation_record_status.v1",
       "surface_class": "LAYER_STATUS_RECORD",
+      "case_id": "CASE_001_THE_LAST_RENDER",
+      "current_truth_owner": false,
+      "issued": false,
+      "release_candidate_ready": false,
+      "media_present": false,
+      "outsider_replay_passed": false,
+      "current_active_state": "RELEASE_CANDIDATE_READY",
+      "active_current_state": "RELEASE_CANDIDATE_READY"
+    },
+    {
+      "path": "CASES/CASE_001_THE_LAST_RENDER/FILM/CANONICAL_PUBLIC_INDEX_READINESS_RECORD.json",
+      "object_type": "UNDECLARED_OBJECT_TYPE",
+      "schema_version": "UNDECLARED_SCHEMA_VERSION",
+      "surface_class": "CASE_RECORD",
       "case_id": "CASE_001_THE_LAST_RENDER",
       "current_truth_owner": false,
       "issued": false,
