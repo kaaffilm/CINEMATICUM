@@ -27,6 +27,7 @@ from cinematicum_studio.issuance_bridge.validate_canonical_citation import valid
 from cinematicum_studio.issuance_bridge.validate_knowledge_graph import validate_knowledge_graph_ready
 from cinematicum_studio.issuance_bridge.validate_model_reference_ingestion import validate_model_reference_ingestion_ready
 from cinematicum_studio.issuance_bridge.validate_machine_mediated_authority import validate_machine_mediated_authority_ready
+from cinematicum_studio.issuance_bridge.validate_autonomous_delegation import validate_autonomous_delegation_ready
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -612,4 +613,32 @@ def test_cli_machine_mediated_authority_command_executes():
     assert "MODEL_REFERENCE_INGESTION_READY_REQUIRED_FOR_MACHINE_MEDIATED_AUTHORITY" in payload["missing"]
     assert "MACHINE_MEDIATED_AUTHORITY_READINESS_ACCEPTED" in payload["missing"]
     assert "AI_ENDORSEMENT_CLAIM_ALLOWED" in payload["missing"]
+
+def test_autonomous_delegation_requires_machine_mediated_authority_ready():
+    ok, missing = validate_autonomous_delegation_ready(CASE_ID)
+    assert ok is False
+    assert "MACHINE_MEDIATED_AUTHORITY_READY_REQUIRED_FOR_AUTONOMOUS_DELEGATION" in missing
+    assert any(item.startswith("MACHINE_MEDIATED_AUTHORITY::") for item in missing)
+    assert "AUTONOMOUS_DELEGATION_READINESS_ACCEPTED" in missing
+    assert "AUTONOMOUS_DELEGATION_ALLOWED" in missing
+    assert "DELEGATED_EXECUTION_ALLOWED" in missing
+    assert "AGENTIC_ROUTING_ALLOWED" in missing
+    assert "AUTOMATED_GOVERNANCE_ACTION_ALLOWED" in missing
+    assert "MACHINE_INITIATED_PUBLICATION_ALLOWED" in missing
+    assert "AUTONOMOUS_CLAIM_PROPAGATION_ALLOWED" in missing
+    assert "SELF_EXECUTING_AUTHORITY_ALLOWED" in missing
+
+
+def test_cli_autonomous_delegation_command_executes():
+    result = subprocess.run(
+        [sys.executable, "-m", "cinematicum_studio.cli", "autonomous-delegation-check", CASE_ID],
+        check=True,
+        capture_output=True,
+        text=True,
+    )
+    payload = json.loads(result.stdout)
+    assert payload["autonomous_delegation_ready"] is False
+    assert "MACHINE_MEDIATED_AUTHORITY_READY_REQUIRED_FOR_AUTONOMOUS_DELEGATION" in payload["missing"]
+    assert "AUTONOMOUS_DELEGATION_READINESS_ACCEPTED" in payload["missing"]
+    assert "SELF_EXECUTING_AUTHORITY_ALLOWED" in payload["missing"]
 
