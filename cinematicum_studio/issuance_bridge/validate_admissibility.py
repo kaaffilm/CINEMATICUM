@@ -342,6 +342,82 @@ def _take_source_admissibility_evidence_payload_authority_unbound(film_dir: Path
     return False
 
 
+def _take_source_admissibility_authority_grant_unbound(film_dir: Path) -> bool:
+    evidence_path = film_dir / "TAKE_SOURCE_ADMISSIBILITY_LEDGER.json"
+    if not evidence_path.exists():
+        return False
+
+    evidence = _load_json(evidence_path)
+    for record in evidence.get("admissible_sources", []):
+        if record.get("admissibility_evidence_accepted") is not True:
+            continue
+
+        authority_record_path = record.get("authority_record_path")
+        authority_record_sha256 = record.get("authority_record_sha256")
+        if not authority_record_path or not authority_record_sha256:
+            continue
+
+        authority_path = Path(authority_record_path)
+        if not authority_path.exists():
+            continue
+
+        try:
+            authority_path.relative_to(film_dir)
+        except ValueError:
+            continue
+
+        if _sha256_path(authority_path) != authority_record_sha256:
+            continue
+
+        try:
+            authority = _load_json(authority_path)
+        except json.JSONDecodeError:
+            return True
+
+        grant_path_value = authority.get("authority_grant_path")
+        grant_sha256 = authority.get("authority_grant_sha256")
+        grant_id = authority.get("authority_grant_id")
+
+        if not grant_path_value or not grant_sha256 or not grant_id:
+            return True
+
+        grant_path = Path(grant_path_value)
+        if not grant_path.exists():
+            return True
+
+        try:
+            grant_path.relative_to(film_dir)
+        except ValueError:
+            return True
+
+        if _sha256_path(grant_path) != grant_sha256:
+            return True
+
+        try:
+            grant = _load_json(grant_path)
+        except json.JSONDecodeError:
+            return True
+
+        if grant.get("grant_id") != grant_id:
+            return True
+        if grant.get("case_id") != record.get("case_id", evidence.get("case_id")):
+            return True
+        if grant.get("authority_id") != authority.get("authority_id"):
+            return True
+        if grant.get("authority_record_path") != authority_record_path:
+            return True
+        if grant.get("authority_record_sha256") != authority_record_sha256:
+            return True
+        if grant.get("grants_source_admissibility_authority") is not True:
+            return True
+        if grant.get("scope") != "TAKE_SOURCE_ADMISSIBILITY":
+            return True
+        if grant.get("revoked") is True:
+            return True
+
+    return False
+
+
 def validate_admissible_motion_picture(case_id: str) -> tuple[bool, list[str]]:
     """
     Hard distinction:
@@ -380,6 +456,9 @@ def validate_admissible_motion_picture(case_id: str) -> tuple[bool, list[str]]:
 
     if _take_source_admissibility_evidence_payload_authority_unbound(film_dir):
         missing.append("TAKE_SOURCE_ADMISSIBILITY_EVIDENCE_PAYLOAD_AUTHORITY_UNBOUND")
+
+    if _take_source_admissibility_authority_grant_unbound(film_dir):
+        missing.append("TAKE_SOURCE_ADMISSIBILITY_AUTHORITY_GRANT_UNBOUND")
 
     proof_path = film_dir / "LOCAL_RENDER_PROOF_CLASSIFICATION.json"
     if not proof_path.exists():
