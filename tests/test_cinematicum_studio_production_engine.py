@@ -1001,3 +1001,9 @@ def test_non_admissible_render_artifact_in_take_ledger_is_not_admissible_film(tm
     finally:
         ledger_path.write_text(backup)
 
+def test_take_ledger_without_explicit_source_admissibility_fails_closed():
+    ok, missing = validate_admissible_motion_picture(CASE_ID)
+
+    assert ok is False
+    assert "TAKE_LEDGER_SOURCE_ADMISSIBILITY_UNPROVEN" in missing
+

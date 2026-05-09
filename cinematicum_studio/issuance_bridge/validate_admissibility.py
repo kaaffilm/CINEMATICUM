@@ -49,6 +49,25 @@ def _take_ledger_declares_non_admissible_render_artifact(film_dir: Path) -> bool
 
     return False
 
+def _take_ledger_source_admissibility_unproven(film_dir: Path) -> bool:
+    ledger_path = film_dir / "TAKE_LEDGER.json"
+    if not ledger_path.exists():
+        return False
+
+    ledger = _load_json(ledger_path)
+    for shot in ledger.get("shots", []):
+        takes = shot.get("takes", [])
+        if not takes:
+            return True
+
+        for take in takes:
+            if take.get("is_admissible_film_source") is not True:
+                return True
+            if take.get("source_admissibility_classification") != "ADMISSIBLE_FINAL_FILM_SOURCE":
+                return True
+
+    return False
+
 
 def validate_admissible_motion_picture(case_id: str) -> tuple[bool, list[str]]:
     """
@@ -67,6 +86,9 @@ def validate_admissible_motion_picture(case_id: str) -> tuple[bool, list[str]]:
 
     if _take_ledger_declares_non_admissible_render_artifact(film_dir):
         missing.append("NON_ADMISSIBLE_RENDER_ARTIFACT_NOT_FILM")
+
+    if _take_ledger_source_admissibility_unproven(film_dir):
+        missing.append("TAKE_LEDGER_SOURCE_ADMISSIBILITY_UNPROVEN")
 
     proof_path = film_dir / "LOCAL_RENDER_PROOF_CLASSIFICATION.json"
     if not proof_path.exists():
