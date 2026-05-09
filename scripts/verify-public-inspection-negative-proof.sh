@@ -80,6 +80,13 @@ for key in [
     assert status[key] is False, key
     assert dossier["expected_current_claims"][key] is False, key
     if key in seal:
+        if key == "issued" and seal.get("issuance_type") == "PROTOCOL_FILM":
+            assert seal["issued"] is True, key
+            assert seal["protocol_perimeter_issued"] is True, key
+            assert seal["protocol_film_issued"] is True, key
+            assert seal["motion_picture_media_issuance_ready"] is False, key
+            assert seal["media_present"] is False, key
+            continue
         if key in ACTIVE_TRUE_NOT_NEGATIVE_PROOF_KEYS:
             continue
         assert seal[key] is False, key
