@@ -22,6 +22,7 @@ from cinematicum_studio.issuance_bridge.validate_screening_event import validate
 from cinematicum_studio.issuance_bridge.validate_audience_attendance import validate_audience_attendance_ready
 from cinematicum_studio.issuance_bridge.validate_audience_reception import validate_audience_reception_ready
 from cinematicum_studio.issuance_bridge.validate_award_eligibility import validate_award_eligibility_ready
+from cinematicum_studio.issuance_bridge.validate_institutional_recognition import validate_institutional_recognition_ready
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -469,4 +470,31 @@ def test_cli_award_eligibility_command_executes():
     assert "AUDIENCE_RECEPTION_READY_REQUIRED_FOR_AWARD_ELIGIBILITY" in payload["missing"]
     assert "AWARD_ELIGIBILITY_READINESS_ACCEPTED" in payload["missing"]
     assert "OFFICIAL_SELECTION_CLAIM_ALLOWED" in payload["missing"]
+
+def test_institutional_recognition_requires_award_eligibility_ready():
+    ok, missing = validate_institutional_recognition_ready(CASE_ID)
+    assert ok is False
+    assert "AWARD_ELIGIBILITY_READY_REQUIRED_FOR_INSTITUTIONAL_RECOGNITION" in missing
+    assert any(item.startswith("AWARD_ELIGIBILITY::") for item in missing)
+    assert "INSTITUTIONAL_RECOGNITION_READINESS_ACCEPTED" in missing
+    assert "INSTITUTIONAL_RECOGNITION_ALLOWED" in missing
+    assert "CANON_LISTING_ALLOWED" in missing
+    assert "CATALOGUE_CLAIM_ALLOWED" in missing
+    assert "RETROSPECTIVE_PROGRAMMING_ALLOWED" in missing
+    assert "CURATORIAL_SELECTION_CLAIM_ALLOWED" in missing
+    assert "CULTURAL_SIGNIFICANCE_CLAIM_ALLOWED" in missing
+
+
+def test_cli_institutional_recognition_command_executes():
+    result = subprocess.run(
+        [sys.executable, "-m", "cinematicum_studio.cli", "institutional-recognition-check", CASE_ID],
+        check=True,
+        capture_output=True,
+        text=True,
+    )
+    payload = json.loads(result.stdout)
+    assert payload["institutional_recognition_ready"] is False
+    assert "AWARD_ELIGIBILITY_READY_REQUIRED_FOR_INSTITUTIONAL_RECOGNITION" in payload["missing"]
+    assert "INSTITUTIONAL_RECOGNITION_READINESS_ACCEPTED" in payload["missing"]
+    assert "CULTURAL_SIGNIFICANCE_CLAIM_ALLOWED" in payload["missing"]
 
