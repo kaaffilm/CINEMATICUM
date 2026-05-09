@@ -1,0 +1,19 @@
+{
+  "case_id": "CASE_001_THE_LAST_RENDER",
+  "title": "THE LAST RENDER",
+  "gate": "RUNTIME_OPERATION_READINESS",
+  "accepted": false,
+  "runtime_operation_allowed": false,
+  "production_runtime_activation_allowed": false,
+  "live_traffic_exposure_allowed": false,
+  "service_account_activation_allowed": false,
+  "scheduler_activation_allowed": false,
+  "telemetry_emission_allowed": false,
+  "alert_routing_allowed": false,
+  "operational_rollback_allowed": false,
+  "external_invocation_allowed": false,
+  "requires_deployment_authorization_ready": true,
+  "required_before_any_live_runtime_operation": true,
+  "hard_rule": "DEPLOYMENT_AUTHORIZATION_READY_REQUIRED_BEFORE_RUNTIME_OPERATION",
+  "reason": "No runtime-operation readiness exists. Deployment authorization cannot self-convert into live runtime activation, traffic exposure, service account activation, scheduler activation, telemetry emission, alert routing, operational rollback, or external invocation."
+}

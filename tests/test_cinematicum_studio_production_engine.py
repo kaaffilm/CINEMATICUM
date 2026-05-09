@@ -33,6 +33,7 @@ from cinematicum_studio.issuance_bridge.validate_credential_custody import valid
 from cinematicum_studio.issuance_bridge.validate_execution_provenance import validate_execution_provenance_ready
 from cinematicum_studio.issuance_bridge.validate_change_control import validate_change_control_ready
 from cinematicum_studio.issuance_bridge.validate_deployment_authorization import validate_deployment_authorization_ready
+from cinematicum_studio.issuance_bridge.validate_runtime_operation import validate_runtime_operation_ready
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -791,4 +792,34 @@ def test_cli_deployment_authorization_command_executes():
     assert "CHANGE_CONTROL_READY_REQUIRED_FOR_DEPLOYMENT_AUTHORIZATION" in payload["missing"]
     assert "DEPLOYMENT_AUTHORIZATION_READINESS_ACCEPTED" in payload["missing"]
     assert "ROLLBACK_EXECUTION_ALLOWED" in payload["missing"]
+
+def test_runtime_operation_requires_deployment_authorization_ready():
+    ok, missing = validate_runtime_operation_ready(CASE_ID)
+    assert ok is False
+    assert "DEPLOYMENT_AUTHORIZATION_READY_REQUIRED_FOR_RUNTIME_OPERATION" in missing
+    assert any(item.startswith("DEPLOYMENT_AUTHORIZATION::") for item in missing)
+    assert "RUNTIME_OPERATION_READINESS_ACCEPTED" in missing
+    assert "RUNTIME_OPERATION_ALLOWED" in missing
+    assert "PRODUCTION_RUNTIME_ACTIVATION_ALLOWED" in missing
+    assert "LIVE_TRAFFIC_EXPOSURE_ALLOWED" in missing
+    assert "SERVICE_ACCOUNT_ACTIVATION_ALLOWED" in missing
+    assert "SCHEDULER_ACTIVATION_ALLOWED" in missing
+    assert "TELEMETRY_EMISSION_ALLOWED" in missing
+    assert "ALERT_ROUTING_ALLOWED" in missing
+    assert "OPERATIONAL_ROLLBACK_ALLOWED" in missing
+    assert "EXTERNAL_INVOCATION_ALLOWED" in missing
+
+
+def test_cli_runtime_operation_command_executes():
+    result = subprocess.run(
+        [sys.executable, "-m", "cinematicum_studio.cli", "runtime-operation-check", CASE_ID],
+        check=True,
+        capture_output=True,
+        text=True,
+    )
+    payload = json.loads(result.stdout)
+    assert payload["runtime_operation_ready"] is False
+    assert "DEPLOYMENT_AUTHORIZATION_READY_REQUIRED_FOR_RUNTIME_OPERATION" in payload["missing"]
+    assert "RUNTIME_OPERATION_READINESS_ACCEPTED" in payload["missing"]
+    assert "EXTERNAL_INVOCATION_ALLOWED" in payload["missing"]
 
