@@ -1,0 +1,16 @@
+{
+  "case_id": "CASE_001_THE_LAST_RENDER",
+  "title": "THE LAST RENDER",
+  "gate": "INSTITUTIONAL_RECOGNITION_READINESS",
+  "accepted": false,
+  "institutional_recognition_allowed": false,
+  "canon_listing_allowed": false,
+  "catalogue_claim_allowed": false,
+  "retrospective_programming_allowed": false,
+  "curatorial_selection_claim_allowed": false,
+  "cultural_significance_claim_allowed": false,
+  "requires_award_eligibility_ready": true,
+  "required_for_institutional_or_canon_claim": true,
+  "hard_rule": "AWARD_ELIGIBILITY_READY_REQUIRED_BEFORE_INSTITUTIONAL_RECOGNITION",
+  "reason": "No institutional-recognition readiness exists. Canon, catalogue, retrospective, curatorial, or cultural-significance claims cannot self-certify award or selection authority."
+}
