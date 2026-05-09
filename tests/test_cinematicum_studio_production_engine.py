@@ -31,6 +31,7 @@ from cinematicum_studio.issuance_bridge.validate_autonomous_delegation import va
 from cinematicum_studio.issuance_bridge.validate_external_execution import validate_external_execution_ready
 from cinematicum_studio.issuance_bridge.validate_credential_custody import validate_credential_custody_ready
 from cinematicum_studio.issuance_bridge.validate_execution_provenance import validate_execution_provenance_ready
+from cinematicum_studio.issuance_bridge.validate_change_control import validate_change_control_ready
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -731,4 +732,33 @@ def test_cli_execution_provenance_command_executes():
     assert "CREDENTIAL_CUSTODY_READY_REQUIRED_FOR_EXECUTION_PROVENANCE" in payload["missing"]
     assert "EXECUTION_PROVENANCE_READINESS_ACCEPTED" in payload["missing"]
     assert "INCIDENT_RECONSTRUCTION_ALLOWED" in payload["missing"]
+
+def test_change_control_requires_execution_provenance_ready():
+    ok, missing = validate_change_control_ready(CASE_ID)
+    assert ok is False
+    assert "EXECUTION_PROVENANCE_READY_REQUIRED_FOR_CHANGE_CONTROL" in missing
+    assert any(item.startswith("EXECUTION_PROVENANCE::") for item in missing)
+    assert "CHANGE_CONTROL_READINESS_ACCEPTED" in missing
+    assert "CHANGE_CONTROL_ALLOWED" in missing
+    assert "APPROVED_CHANGE_REQUEST_ALLOWED" in missing
+    assert "INDEPENDENT_REVIEW_ALLOWED" in missing
+    assert "SEPARATION_OF_DUTIES_ALLOWED" in missing
+    assert "ROLLBACK_PLAN_ALLOWED" in missing
+    assert "BLAST_RADIUS_ASSESSMENT_ALLOWED" in missing
+    assert "EMERGENCY_CHANGE_OVERRIDE_ALLOWED" in missing
+    assert "POST_EXECUTION_ATTESTATION_ALLOWED" in missing
+
+
+def test_cli_change_control_command_executes():
+    result = subprocess.run(
+        [sys.executable, "-m", "cinematicum_studio.cli", "change-control-check", CASE_ID],
+        check=True,
+        capture_output=True,
+        text=True,
+    )
+    payload = json.loads(result.stdout)
+    assert payload["change_control_ready"] is False
+    assert "EXECUTION_PROVENANCE_READY_REQUIRED_FOR_CHANGE_CONTROL" in payload["missing"]
+    assert "CHANGE_CONTROL_READINESS_ACCEPTED" in payload["missing"]
+    assert "POST_EXECUTION_ATTESTATION_ALLOWED" in payload["missing"]
 

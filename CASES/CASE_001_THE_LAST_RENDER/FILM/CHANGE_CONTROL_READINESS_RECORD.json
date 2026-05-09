@@ -1,0 +1,18 @@
+{
+  "case_id": "CASE_001_THE_LAST_RENDER",
+  "title": "THE LAST RENDER",
+  "gate": "CHANGE_CONTROL_READINESS",
+  "accepted": false,
+  "change_control_allowed": false,
+  "approved_change_request_allowed": false,
+  "independent_review_allowed": false,
+  "separation_of_duties_allowed": false,
+  "rollback_plan_allowed": false,
+  "blast_radius_assessment_allowed": false,
+  "emergency_change_override_allowed": false,
+  "post_execution_attestation_allowed": false,
+  "requires_execution_provenance_ready": true,
+  "required_before_any_authorized_change_or_override": true,
+  "hard_rule": "EXECUTION_PROVENANCE_READY_REQUIRED_BEFORE_CHANGE_CONTROL",
+  "reason": "No change-control readiness exists. Execution provenance cannot self-convert into approved change requests, independent review, separation of duties, rollback planning, blast-radius assessment, emergency override authority, or post-execution attestation."
+}
