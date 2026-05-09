@@ -24,6 +24,7 @@ from cinematicum_studio.issuance_bridge.validate_audience_reception import valid
 from cinematicum_studio.issuance_bridge.validate_award_eligibility import validate_award_eligibility_ready
 from cinematicum_studio.issuance_bridge.validate_institutional_recognition import validate_institutional_recognition_ready
 from cinematicum_studio.issuance_bridge.validate_canonical_citation import validate_canonical_citation_ready
+from cinematicum_studio.issuance_bridge.validate_knowledge_graph import validate_knowledge_graph_ready
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -525,4 +526,32 @@ def test_cli_canonical_citation_command_executes():
     assert "INSTITUTIONAL_RECOGNITION_READY_REQUIRED_FOR_CANONICAL_CITATION" in payload["missing"]
     assert "CANONICAL_CITATION_READINESS_ACCEPTED" in payload["missing"]
     assert "EXTERNAL_METADATA_REFERENCE_ALLOWED" in payload["missing"]
+
+def test_knowledge_graph_requires_canonical_citation_ready():
+    ok, missing = validate_knowledge_graph_ready(CASE_ID)
+    assert ok is False
+    assert "CANONICAL_CITATION_READY_REQUIRED_FOR_KNOWLEDGE_GRAPH" in missing
+    assert any(item.startswith("CANONICAL_CITATION::") for item in missing)
+    assert "KNOWLEDGE_GRAPH_READINESS_ACCEPTED" in missing
+    assert "KNOWLEDGE_GRAPH_ALLOWED" in missing
+    assert "SEARCH_INDEX_INGESTION_ALLOWED" in missing
+    assert "METADATA_GRAPH_NODE_ALLOWED" in missing
+    assert "PUBLIC_DATASET_RECORD_ALLOWED" in missing
+    assert "SEMANTIC_REFERENCE_ALLOWED" in missing
+    assert "LINKED_OPEN_DATA_CLAIM_ALLOWED" in missing
+    assert "MACHINE_READABLE_CATALOGUE_ALLOWED" in missing
+
+
+def test_cli_knowledge_graph_command_executes():
+    result = subprocess.run(
+        [sys.executable, "-m", "cinematicum_studio.cli", "knowledge-graph-check", CASE_ID],
+        check=True,
+        capture_output=True,
+        text=True,
+    )
+    payload = json.loads(result.stdout)
+    assert payload["knowledge_graph_ready"] is False
+    assert "CANONICAL_CITATION_READY_REQUIRED_FOR_KNOWLEDGE_GRAPH" in payload["missing"]
+    assert "KNOWLEDGE_GRAPH_READINESS_ACCEPTED" in payload["missing"]
+    assert "MACHINE_READABLE_CATALOGUE_ALLOWED" in payload["missing"]
 

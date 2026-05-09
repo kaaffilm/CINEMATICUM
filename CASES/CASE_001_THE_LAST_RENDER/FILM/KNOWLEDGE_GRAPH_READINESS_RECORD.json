@@ -1,0 +1,17 @@
+{
+  "case_id": "CASE_001_THE_LAST_RENDER",
+  "title": "THE LAST RENDER",
+  "gate": "KNOWLEDGE_GRAPH_READINESS",
+  "accepted": false,
+  "knowledge_graph_allowed": false,
+  "search_index_ingestion_allowed": false,
+  "metadata_graph_node_allowed": false,
+  "public_dataset_record_allowed": false,
+  "semantic_reference_allowed": false,
+  "linked_open_data_claim_allowed": false,
+  "machine_readable_catalogue_allowed": false,
+  "requires_canonical_citation_ready": true,
+  "required_for_machine_readable_public_propagation": true,
+  "hard_rule": "CANONICAL_CITATION_READY_REQUIRED_BEFORE_KNOWLEDGE_GRAPH_PROPAGATION",
+  "reason": "No knowledge-graph readiness exists. Search indexes, public datasets, linked-data nodes, semantic references, or machine-readable catalogue records cannot self-certify canonical citation."
+}
