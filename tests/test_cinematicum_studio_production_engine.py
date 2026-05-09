@@ -23,6 +23,7 @@ from cinematicum_studio.issuance_bridge.validate_audience_attendance import vali
 from cinematicum_studio.issuance_bridge.validate_audience_reception import validate_audience_reception_ready
 from cinematicum_studio.issuance_bridge.validate_award_eligibility import validate_award_eligibility_ready
 from cinematicum_studio.issuance_bridge.validate_institutional_recognition import validate_institutional_recognition_ready
+from cinematicum_studio.issuance_bridge.validate_canonical_citation import validate_canonical_citation_ready
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -497,4 +498,31 @@ def test_cli_institutional_recognition_command_executes():
     assert "AWARD_ELIGIBILITY_READY_REQUIRED_FOR_INSTITUTIONAL_RECOGNITION" in payload["missing"]
     assert "INSTITUTIONAL_RECOGNITION_READINESS_ACCEPTED" in payload["missing"]
     assert "CULTURAL_SIGNIFICANCE_CLAIM_ALLOWED" in payload["missing"]
+
+def test_canonical_citation_requires_institutional_recognition_ready():
+    ok, missing = validate_canonical_citation_ready(CASE_ID)
+    assert ok is False
+    assert "INSTITUTIONAL_RECOGNITION_READY_REQUIRED_FOR_CANONICAL_CITATION" in missing
+    assert any(item.startswith("INSTITUTIONAL_RECOGNITION::") for item in missing)
+    assert "CANONICAL_CITATION_READINESS_ACCEPTED" in missing
+    assert "CANONICAL_CITATION_ALLOWED" in missing
+    assert "SCHOLARLY_REFERENCE_ALLOWED" in missing
+    assert "ARCHIVE_REFERENCE_ALLOWED" in missing
+    assert "CATALOGUE_REFERENCE_ALLOWED" in missing
+    assert "INSTITUTIONAL_FOOTNOTE_ALLOWED" in missing
+    assert "EXTERNAL_METADATA_REFERENCE_ALLOWED" in missing
+
+
+def test_cli_canonical_citation_command_executes():
+    result = subprocess.run(
+        [sys.executable, "-m", "cinematicum_studio.cli", "canonical-citation-check", CASE_ID],
+        check=True,
+        capture_output=True,
+        text=True,
+    )
+    payload = json.loads(result.stdout)
+    assert payload["canonical_citation_ready"] is False
+    assert "INSTITUTIONAL_RECOGNITION_READY_REQUIRED_FOR_CANONICAL_CITATION" in payload["missing"]
+    assert "CANONICAL_CITATION_READINESS_ACCEPTED" in payload["missing"]
+    assert "EXTERNAL_METADATA_REFERENCE_ALLOWED" in payload["missing"]
 
