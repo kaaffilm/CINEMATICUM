@@ -34,6 +34,7 @@ from cinematicum_studio.issuance_bridge.validate_execution_provenance import val
 from cinematicum_studio.issuance_bridge.validate_change_control import validate_change_control_ready
 from cinematicum_studio.issuance_bridge.validate_deployment_authorization import validate_deployment_authorization_ready
 from cinematicum_studio.issuance_bridge.validate_runtime_operation import validate_runtime_operation_ready
+from cinematicum_studio.issuance_bridge.validate_observability import validate_observability_ready
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -822,4 +823,35 @@ def test_cli_runtime_operation_command_executes():
     assert "DEPLOYMENT_AUTHORIZATION_READY_REQUIRED_FOR_RUNTIME_OPERATION" in payload["missing"]
     assert "RUNTIME_OPERATION_READINESS_ACCEPTED" in payload["missing"]
     assert "EXTERNAL_INVOCATION_ALLOWED" in payload["missing"]
+
+def test_observability_requires_runtime_operation_ready():
+    ok, missing = validate_observability_ready(CASE_ID)
+    assert ok is False
+    assert "RUNTIME_OPERATION_READY_REQUIRED_FOR_OBSERVABILITY" in missing
+    assert any(item.startswith("RUNTIME_OPERATION::") for item in missing)
+    assert "OBSERVABILITY_READINESS_ACCEPTED" in missing
+    assert "OBSERVABILITY_ALLOWED" in missing
+    assert "HEALTH_STATUS_CLAIM_ALLOWED" in missing
+    assert "TELEMETRY_INTERPRETATION_ALLOWED" in missing
+    assert "ALERT_EVALUATION_ALLOWED" in missing
+    assert "SLO_EVALUATION_ALLOWED" in missing
+    assert "INCIDENT_SIGNAL_ALLOWED" in missing
+    assert "DASHBOARD_PUBLICATION_ALLOWED" in missing
+    assert "LOG_CORRELATION_ALLOWED" in missing
+    assert "METRIC_EXPORT_ALLOWED" in missing
+    assert "TRACE_ANALYSIS_ALLOWED" in missing
+
+
+def test_cli_observability_command_executes():
+    result = subprocess.run(
+        [sys.executable, "-m", "cinematicum_studio.cli", "observability-check", CASE_ID],
+        check=True,
+        capture_output=True,
+        text=True,
+    )
+    payload = json.loads(result.stdout)
+    assert payload["observability_ready"] is False
+    assert "RUNTIME_OPERATION_READY_REQUIRED_FOR_OBSERVABILITY" in payload["missing"]
+    assert "OBSERVABILITY_READINESS_ACCEPTED" in payload["missing"]
+    assert "TRACE_ANALYSIS_ALLOWED" in payload["missing"]
 
