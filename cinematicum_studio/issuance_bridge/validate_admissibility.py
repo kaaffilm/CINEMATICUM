@@ -790,6 +790,72 @@ def _take_source_admissibility_case_closure_admission_unbound(film_dir: Path) ->
     return False
 
 
+def _take_source_admissibility_case_closure_admission_ledger_unbound(film_dir: Path) -> bool:
+    evidence_dir = film_dir / "SOURCE_ADMISSIBILITY_EVIDENCE"
+    if not evidence_dir.exists():
+        return False
+
+    ledger_path = Path("CINEMATICUM_AUTHORITY_OBJECT_ADMISSION_DECISION_LEDGER.json")
+
+    for closure_path in evidence_dir.glob("*.json"):
+        try:
+            closure = _load_json(closure_path)
+        except json.JSONDecodeError:
+            continue
+
+        if closure.get("object_type") != "CINEMATICUM_TAKE_SOURCE_ADMISSIBILITY_ROOT_AUTHORITY_CASE_CLOSURE":
+            continue
+
+        admission_path_value = closure.get("authority_object_admission_decision_path")
+        admission_sha256 = closure.get("authority_object_admission_decision_sha256")
+        admission_object_id = closure.get("authority_object_admission_object_id")
+
+        # Prior gate owns malformed / missing admission references.
+        if not admission_path_value or not admission_sha256 or not admission_object_id:
+            continue
+
+        if not ledger_path.exists():
+            return True
+
+        try:
+            ledger = _load_json(ledger_path)
+        except json.JSONDecodeError:
+            return True
+
+        if ledger.get("case_id") != closure.get("case_id"):
+            return True
+
+        decision_records = ledger.get("decision_records")
+        if not isinstance(decision_records, list):
+            return True
+
+        def field(record, *names):
+            for name in names:
+                if name in record:
+                    return record.get(name)
+            return None
+
+        has_ledger_entry = any(
+            field(record, "object_id", "admission_object_id", "decision_object_id") == admission_object_id
+            and field(record, "decision_path", "decision_file_path", "file_path", "path") == admission_path_value
+            and field(record, "decision_sha256", "admission_decision_sha256", "sha256") == admission_sha256
+            and record.get("decision") in {"ACCEPT", "ACCEPTED"}
+            and record.get("accepted") is True
+            and (
+                record.get("admitted_object_type")
+                or record.get("object_type_admitted")
+            ) == "CINEMATICUM_TAKE_SOURCE_ADMISSIBILITY_ROOT_AUTHORITY_CASE_CLOSURE"
+            and record.get("admitted_closure_id") == closure.get("closure_id")
+            and record.get("admitted_root_authority_id") == closure.get("root_authority_id")
+            for record in decision_records
+        )
+
+        if not has_ledger_entry:
+            return True
+
+    return False
+
+
 def validate_admissible_motion_picture(case_id: str) -> tuple[bool, list[str]]:
     """
     Hard distinction:
@@ -843,6 +909,9 @@ def validate_admissible_motion_picture(case_id: str) -> tuple[bool, list[str]]:
 
     if _take_source_admissibility_case_closure_admission_unbound(film_dir):
         missing.append("TAKE_SOURCE_ADMISSIBILITY_CASE_CLOSURE_ADMISSION_UNBOUND")
+
+    if _take_source_admissibility_case_closure_admission_ledger_unbound(film_dir):
+        missing.append("TAKE_SOURCE_ADMISSIBILITY_CASE_CLOSURE_ADMISSION_LEDGER_UNBOUND")
 
     proof_path = film_dir / "LOCAL_RENDER_PROOF_CLASSIFICATION.json"
     if not proof_path.exists():

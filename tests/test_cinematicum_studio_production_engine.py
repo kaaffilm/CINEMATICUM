@@ -1978,3 +1978,69 @@ def test_take_source_root_authority_case_closure_requires_admission_decision():
         else:
             closure_path.write_text(closure_backup)
 
+def test_take_source_root_authority_case_closure_admission_must_be_in_decision_ledger():
+    import hashlib
+
+    film_dir = ROOT / "CASES" / CASE_ID / "FILM"
+    evidence_dir = film_dir / "SOURCE_ADMISSIBILITY_EVIDENCE"
+    closure_path = evidence_dir / "ROOT_SOURCE_AUTHORITY_001.case_closure_admission_ledger_unbound.json"
+    admission_path = evidence_dir / "ROOT_SOURCE_AUTHORITY_001.case_closure_admission.decision.json"
+
+    closure_backup = closure_path.read_text() if closure_path.exists() else None
+    admission_backup = admission_path.read_text() if admission_path.exists() else None
+
+    closure_id = "ROOT_SOURCE_AUTHORITY_CASE_CLOSURE_001"
+    root_authority_id = "ROOT_SOURCE_AUTHORITY_001"
+    admission_object_id = "ROOT_SOURCE_AUTHORITY_CASE_CLOSURE_ADMISSION_001"
+
+    try:
+        evidence_dir.mkdir(exist_ok=True)
+
+        admission_path.write_text(json.dumps({
+            "case_id": CASE_ID,
+            "object_id": admission_object_id,
+            "accepted": True,
+            "decision": "ACCEPTED",
+            "admitted_object_type": "CINEMATICUM_TAKE_SOURCE_ADMISSIBILITY_ROOT_AUTHORITY_CASE_CLOSURE",
+            "admitted_closure_id": closure_id,
+            "admitted_root_authority_id": root_authority_id,
+        }, indent=2) + "\n")
+
+        admission_sha256 = hashlib.sha256(admission_path.read_bytes()).hexdigest()
+
+        closure_path.write_text(json.dumps({
+            "object_type": "CINEMATICUM_TAKE_SOURCE_ADMISSIBILITY_ROOT_AUTHORITY_CASE_CLOSURE",
+            "case_id": CASE_ID,
+            "closure_id": closure_id,
+            "root_authority_id": root_authority_id,
+            "closure_authorizes_root_authority": True,
+            "scope": "TAKE_SOURCE_ADMISSIBILITY_ROOT_AUTHORITY",
+            "revoked": False,
+            "authorized_root_authorities": [
+                {
+                    "root_authority_id": root_authority_id,
+                    "scope": "TAKE_SOURCE_ADMISSIBILITY_ROOT_AUTHORITY",
+                    "closure_authorizes_root_authority": True,
+                    "revoked": False,
+                }
+            ],
+            "authority_object_admission_decision_path": str(admission_path.relative_to(ROOT)),
+            "authority_object_admission_decision_sha256": admission_sha256,
+            "authority_object_admission_object_id": admission_object_id,
+        }, indent=2) + "\n")
+
+        ok, missing = validate_admissible_motion_picture(CASE_ID)
+
+        assert ok is False
+        assert "TAKE_SOURCE_ADMISSIBILITY_CASE_CLOSURE_ADMISSION_LEDGER_UNBOUND" in missing
+    finally:
+        if closure_backup is None:
+            closure_path.unlink(missing_ok=True)
+        else:
+            closure_path.write_text(closure_backup)
+
+        if admission_backup is None:
+            admission_path.unlink(missing_ok=True)
+        else:
+            admission_path.write_text(admission_backup)
+
