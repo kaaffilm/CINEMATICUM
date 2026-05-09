@@ -39,6 +39,7 @@ from cinematicum_studio.issuance_bridge.validate_runtime_operation import valida
 from cinematicum_studio.issuance_bridge.validate_observability import validate_observability_ready
 from cinematicum_studio.issuance_bridge.validate_incident_response import validate_incident_response_ready
 from cinematicum_studio.issuance_bridge.validate_service_recovery import validate_service_recovery_ready
+from cinematicum_studio.issuance_bridge.validate_recovery_verification import validate_recovery_verification_ready
 from cinematicum_studio.render.render_master import render_master
 from cinematicum_studio.review.select_take import select_take
 from cinematicum_studio.timeline.build_otio import build_timeline
@@ -409,6 +410,15 @@ def cmd_service_recovery_check(args):
     }, indent=2))
 
 
+def cmd_recovery_verification_check(args):
+    ok, missing = validate_recovery_verification_ready(args.case_id)
+    print(json.dumps({
+        "case_id": args.case_id,
+        "recovery_verification_ready": ok,
+        "missing": missing,
+    }, indent=2))
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(prog="cinematicum")
     sub = parser.add_subparsers(required=True)
@@ -575,6 +585,10 @@ def main() -> None:
     p = sub.add_parser("service-recovery-check")
     p.add_argument("case_id")
     p.set_defaults(func=cmd_service_recovery_check)
+
+    p = sub.add_parser("recovery-verification-check")
+    p.add_argument("case_id")
+    p.set_defaults(func=cmd_recovery_verification_check)
 
     p = sub.add_parser("state-advancement-check")
     p.add_argument("case_id")

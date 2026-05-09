@@ -37,6 +37,7 @@ from cinematicum_studio.issuance_bridge.validate_runtime_operation import valida
 from cinematicum_studio.issuance_bridge.validate_observability import validate_observability_ready
 from cinematicum_studio.issuance_bridge.validate_incident_response import validate_incident_response_ready
 from cinematicum_studio.issuance_bridge.validate_service_recovery import validate_service_recovery_ready
+from cinematicum_studio.issuance_bridge.validate_recovery_verification import validate_recovery_verification_ready
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -920,4 +921,36 @@ def test_cli_service_recovery_command_executes():
     assert "INCIDENT_RESPONSE_READY_REQUIRED_FOR_SERVICE_RECOVERY" in payload["missing"]
     assert "SERVICE_RECOVERY_READINESS_ACCEPTED" in payload["missing"]
     assert "RESOLVED_STATUS_CLAIM_ALLOWED" in payload["missing"]
+
+def test_recovery_verification_requires_service_recovery_ready():
+    ok, missing = validate_recovery_verification_ready(CASE_ID)
+    assert ok is False
+    assert "SERVICE_RECOVERY_READY_REQUIRED_FOR_RECOVERY_VERIFICATION" in missing
+    assert any(item.startswith("SERVICE_RECOVERY::") for item in missing)
+    assert "RECOVERY_VERIFICATION_READINESS_ACCEPTED" in missing
+    assert "RECOVERY_VERIFICATION_ALLOWED" in missing
+    assert "POST_RECOVERY_HEALTH_VERIFICATION_ALLOWED" in missing
+    assert "TRAFFIC_STABILITY_VERIFICATION_ALLOWED" in missing
+    assert "DATA_INTEGRITY_VERIFICATION_ALLOWED" in missing
+    assert "ROLLBACK_VERIFICATION_ALLOWED" in missing
+    assert "REPLAY_COMPLETENESS_VERIFICATION_ALLOWED" in missing
+    assert "CUSTOMER_IMPACT_END_CLAIM_ALLOWED" in missing
+    assert "MONITORING_STABILITY_CLAIM_ALLOWED" in missing
+    assert "NORMAL_OPERATIONS_RESTORED_CLAIM_ALLOWED" in missing
+    assert "INCIDENT_DEESCALATION_ALLOWED" in missing
+    assert "RECOVERY_SUCCESS_CLAIM_ALLOWED" in missing
+
+
+def test_cli_recovery_verification_command_executes():
+    result = subprocess.run(
+        [sys.executable, "-m", "cinematicum_studio.cli", "recovery-verification-check", CASE_ID],
+        check=True,
+        capture_output=True,
+        text=True,
+    )
+    payload = json.loads(result.stdout)
+    assert payload["recovery_verification_ready"] is False
+    assert "SERVICE_RECOVERY_READY_REQUIRED_FOR_RECOVERY_VERIFICATION" in payload["missing"]
+    assert "RECOVERY_VERIFICATION_READINESS_ACCEPTED" in payload["missing"]
+    assert "NORMAL_OPERATIONS_RESTORED_CLAIM_ALLOWED" in payload["missing"]
 
