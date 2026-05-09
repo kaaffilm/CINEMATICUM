@@ -1062,6 +1062,124 @@ def _take_source_admissibility_case_closure_admission_docket_unbound(film_dir: P
     return False
 
 
+def _take_source_admissibility_case_closure_admission_docket_status_unbound(film_dir: Path) -> bool:
+    evidence_dir = film_dir / "SOURCE_ADMISSIBILITY_EVIDENCE"
+    if not evidence_dir.exists():
+        return False
+
+    docket_path = Path("CINEMATICUM_AUTHORITY_OBJECT_ADMISSION_DOCKET.json")
+    status_path = film_dir.parents[1] / "AUTHORITY_OBJECT_ADMISSION_DOCKET_STATUS.json"
+
+    if not docket_path.exists():
+        return False
+
+    try:
+        docket = _load_json(docket_path)
+    except json.JSONDecodeError:
+        return True
+
+    if not status_path.exists():
+        status = None
+    else:
+        try:
+            status = _load_json(status_path)
+        except json.JSONDecodeError:
+            return True
+
+    def field(record, *names):
+        for name in names:
+            if name in record:
+                return record.get(name)
+        return None
+
+    def docket_records(payload):
+        for key in (
+            "admitted_authority_objects",
+            "authority_object_admissions",
+            "admission_records",
+            "admitted_objects",
+            "docket_records",
+        ):
+            value = payload.get(key)
+            if isinstance(value, list):
+                return value
+        return None
+
+    records = docket_records(docket)
+    if records is None:
+        return False
+
+    for closure_path in evidence_dir.glob("*.json"):
+        try:
+            closure = _load_json(closure_path)
+        except json.JSONDecodeError:
+            continue
+
+        if closure.get("object_type") != "CINEMATICUM_TAKE_SOURCE_ADMISSIBILITY_ROOT_AUTHORITY_CASE_CLOSURE":
+            continue
+
+        case_id = closure.get("case_id")
+        admission_path_value = closure.get("authority_object_admission_decision_path")
+        admission_sha256 = closure.get("authority_object_admission_decision_sha256")
+        admission_object_id = closure.get("authority_object_admission_object_id")
+        closure_id = closure.get("closure_id")
+        root_authority_id = closure.get("root_authority_id")
+
+        # Earlier gates own malformed closure/admission/docket references.
+        if not all([case_id, admission_path_value, admission_sha256, admission_object_id, closure_id, root_authority_id]):
+            continue
+
+        has_docket_entry = any(
+            field(record, "object_id", "admission_object_id", "decision_object_id") == admission_object_id
+            and field(record, "decision_path", "decision_file_path", "file_path", "path") == admission_path_value
+            and field(record, "decision_sha256", "admission_decision_sha256", "sha256") == admission_sha256
+            and field(record, "decision", "admission_decision") in {"ACCEPT", "ACCEPTED"}
+            and field(record, "accepted", "admitted") is True
+            and field(record, "admitted_closure_id", "closure_id") == closure_id
+            and field(record, "admitted_root_authority_id", "root_authority_id") == root_authority_id
+            for record in records
+        )
+
+        if not has_docket_entry:
+            continue
+
+        if status is None:
+            return True
+
+        if status.get("case_id") != case_id:
+            return True
+        if status.get("authority_object_admission_docket_passed") != docket.get("authority_object_admission_docket_passed"):
+            return True
+        if status.get("authority_objects_admitted") != docket.get("authority_objects_admitted"):
+            return True
+        if status.get("accepted_authority_object_count") != docket.get("accepted_authority_object_count"):
+            return True
+        if status.get("instantiated_authority_object_count") != docket.get("instantiated_authority_object_count"):
+            return True
+        if status.get("unfilled_authority_object_slot_count") != docket.get("unfilled_authority_object_slot_count"):
+            return True
+
+        status_records = docket_records(status)
+        if status_records is None:
+            return True
+
+        has_status_entry = any(
+            field(record, "object_id", "admission_object_id", "decision_object_id") == admission_object_id
+            and field(record, "decision_path", "decision_file_path", "file_path", "path") == admission_path_value
+            and field(record, "decision_sha256", "admission_decision_sha256", "sha256") == admission_sha256
+            and field(record, "decision", "admission_decision") in {"ACCEPT", "ACCEPTED"}
+            and field(record, "accepted", "admitted") is True
+            and field(record, "admitted_closure_id", "closure_id") == closure_id
+            and field(record, "admitted_root_authority_id", "root_authority_id") == root_authority_id
+            for record in status_records
+        )
+
+        if not has_status_entry:
+            return True
+
+    return False
+
+
 def validate_admissible_motion_picture(case_id: str) -> tuple[bool, list[str]]:
     """
     Hard distinction:
@@ -1124,6 +1242,9 @@ def validate_admissible_motion_picture(case_id: str) -> tuple[bool, list[str]]:
 
     if _take_source_admissibility_case_closure_admission_docket_unbound(film_dir):
         missing.append("TAKE_SOURCE_ADMISSIBILITY_CASE_CLOSURE_ADMISSION_DOCKET_UNBOUND")
+
+    if _take_source_admissibility_case_closure_admission_docket_status_unbound(film_dir):
+        missing.append("TAKE_SOURCE_ADMISSIBILITY_CASE_CLOSURE_ADMISSION_DOCKET_STATUS_UNBOUND")
 
     proof_path = film_dir / "LOCAL_RENDER_PROOF_CLASSIFICATION.json"
     if not proof_path.exists():
