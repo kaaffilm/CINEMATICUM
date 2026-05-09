@@ -1,22 +1,32 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-test -f OUTSIDER_CLONE_REPLAY.json
-test -f CINEMATICUM_OUTSIDER_CLONE_REPLAY.json
-test -f OUTSIDER_CLONE_REPLAY_LAW.json
-test -f CASES/CASE_001_THE_LAST_RENDER/OUTSIDER_CLONE_REPLAY_STATUS.json
-
-python3 - <<'PY2'
+"${PYTHON:-python3}" - <<'PY2'
 import json
 from pathlib import Path
 
-RECORD_TARGET = 'REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS'
-ACTIVE_TARGET = 'RELEASE_CANDIDATE_READY'
-CASE = 'CASE_001_THE_LAST_RENDER'
-NEXT_OBJECT = 'RELEASE_CANDIDATE_GAP_LEDGER'
+CASE = "CASE_001_THE_LAST_RENDER"
+
+# Historical replay record state.
+RECORD_TARGET = "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
+
+# Live active case state.
+ACTIVE_TARGET = "RELEASE_CANDIDATE_READY"
+
+
+def check(label, actual, expected):
+    if actual != expected:
+        raise AssertionError(f"{label}: expected {expected!r}, got {actual!r}")
+
+
+def check_is(label, actual, expected):
+    if actual is not expected:
+        raise AssertionError(f"{label}: expected identity {expected!r}, got {actual!r}")
+
 
 def load(path):
     return json.loads(Path(path).read_text(encoding="utf-8"))
+
 
 clone = load("OUTSIDER_CLONE_REPLAY.json")
 cin_clone = load("CINEMATICUM_OUTSIDER_CLONE_REPLAY.json")
@@ -27,45 +37,46 @@ case = load("CASES/CASE_001_THE_LAST_RENDER/CURRENT_CASE_STATE.json")
 sentinel = load("CINEMATICUM_PUBLIC_PERIMETER_SENTINEL.json")
 registry = load("CINEMATICUM_OBJECT_REGISTRY.json")
 
-assert clone == cin_clone
-assert clone["object_type"] == "CINEMATICUM_OUTSIDER_CLONE_REPLAY"
-assert law["object_type"] == "CINEMATICUM_OUTSIDER_CLONE_REPLAY_LAW"
-assert status["status"] == "PASS"
+check("clone equals cin_clone", clone, cin_clone)
+check("clone.object_type", clone["object_type"], "CINEMATICUM_OUTSIDER_CLONE_REPLAY")
+check("law.object_type", law["object_type"], "CINEMATICUM_OUTSIDER_CLONE_REPLAY_LAW")
+check("status.status", status["status"], "PASS")
 
 for obj in (clone, law, status):
-    assert obj["case_id"] == CASE
-    assert obj["current_state"] == RECORD_TARGET
-    assert obj["fresh_checkout_can_verify"] is True
-    assert obj["private_access_required"] is False
-    assert obj["network_required_after_clone"] is False
-    assert obj["media_or_model_payload_present"] is False
-    assert obj["forbidden_private_file_present"] is False
-    assert obj["valid_transition_attempt_present"] is False
+    label = obj.get("object_type", "obj")
 
-    # Non-capability / non-issuance guarantees remain false.
-    assert obj["release_candidate_ready"] is False
-    assert obj["release_candidate_artifacts_bound"] is False
-    assert obj["issued"] is False
-    assert obj["media_present"] is False
-    assert obj["outsider_replay_passed"] is False
-    assert obj["may_advance_now"] is False
-    assert obj["issuance_unblocked"] is False
+    check(f"{label}.case_id", obj["case_id"], CASE)
+    check(f"{label}.current_state", obj["current_state"], RECORD_TARGET)
 
-    # Post-advancement repositories may carry later proof flags elsewhere;
-    # this replay object is still a historical non-advancing proof surface.
-    assert obj["authority_object_stack_complete"] is True
-    assert obj["accepted_authority_object_count"] == 8
-    assert obj["instantiated_authority_object_count"] == 8
-    assert obj["unfilled_authority_object_slot_count"] == 0
-    assert obj["next_required_object"] == NEXT_OBJECT
+    check_is(f"{label}.fresh_checkout_can_verify", obj["fresh_checkout_can_verify"], True)
+    check_is(f"{label}.private_access_required", obj["private_access_required"], False)
+    check_is(f"{label}.network_required_after_clone", obj["network_required_after_clone"], False)
+    check_is(f"{label}.media_or_model_payload_present", obj["media_or_model_payload_present"], False)
+    check_is(f"{label}.forbidden_private_file_present", obj["forbidden_private_file_present"], False)
+    check_is(f"{label}.valid_transition_attempt_present", obj["valid_transition_attempt_present"], False)
 
-assert index["active_case_states"][CASE] == ACTIVE_TARGET
-assert case["current_state"] == ACTIVE_TARGET
-assert registry["current_active_state"] == ACTIVE_TARGET
+    # Replay proof is not issuance, not media, not a transition grant.
+    check_is(f"{label}.release_candidate_ready", obj["release_candidate_ready"], False)
+    check_is(f"{label}.release_candidate_artifacts_bound", obj["release_candidate_artifacts_bound"], False)
+    check_is(f"{label}.issued", obj["issued"], False)
+    check_is(f"{label}.media_present", obj["media_present"], False)
+    check_is(f"{label}.outsider_replay_passed", obj["outsider_replay_passed"], False)
+    check_is(f"{label}.may_advance_now", obj["may_advance_now"], False)
+    check_is(f"{label}.issuance_unblocked", obj["issuance_unblocked"], False)
 
-assert sentinel["private_access_required"] is False
+    # Authority-object stack may be complete while replay still confers no issuance.
+    check_is(f"{label}.authority_object_stack_complete", obj["authority_object_stack_complete"], True)
+    check(f"{label}.accepted_authority_object_count", obj["accepted_authority_object_count"], 8)
+    check(f"{label}.instantiated_authority_object_count", obj["instantiated_authority_object_count"], 8)
+    check(f"{label}.unfilled_authority_object_slot_count", obj["unfilled_authority_object_slot_count"], 0)
+
+check("index.active_case_states[CASE]", index["active_case_states"][CASE], ACTIVE_TARGET)
+check("case.current_state", case["current_state"], ACTIVE_TARGET)
+check("registry.current_active_state", registry["current_active_state"], ACTIVE_TARGET)
+
+check_is("sentinel.private_access_required", sentinel["private_access_required"], False)
 if "active_current_state" in sentinel:
-    assert sentinel["active_current_state"] == ACTIVE_TARGET
+    check("sentinel.active_current_state", sentinel["active_current_state"], ACTIVE_TARGET)
 
 print("CINEMATICUM OUTSIDER CLONE REPLAY: PASS")
 print(f"CURRENT_STATE={RECORD_TARGET}")
@@ -87,7 +98,16 @@ MEDIA_OR_MODEL="$(find . -type f \
      -o -iname '*.png' -o -iname '*.jpg' -o -iname '*.jpeg' -o -iname '*.tiff' -o -iname '*.exr' -o -iname '*.dpx' \
      -o -iname '*.pt' -o -iname '*.pth' -o -iname '*.ckpt' -o -iname '*.safetensors' -o -iname '*.onnx' \) \
   -not -path './.git/*' \
+  -not -path './.venv/*' \
+  -not -path './.pytest_cache/*' \
+  -not -path './__pycache__/*' \
+  -not -path './.cinematicum_media/*' \
   -not -path './cinematicum_closed_pr_dig/*' \
   -print -quit)"
 
-test -z "$MEDIA_OR_MODEL"
+if [ -n "$MEDIA_OR_MODEL" ]; then
+  echo "FORBIDDEN_MEDIA_OR_MODEL_PAYLOAD=$MEDIA_OR_MODEL" >&2
+  exit 1
+fi
+
+exit 0

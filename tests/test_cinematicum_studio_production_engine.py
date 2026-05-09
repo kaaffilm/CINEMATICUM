@@ -954,3 +954,50 @@ def test_cli_recovery_verification_command_executes():
     assert "RECOVERY_VERIFICATION_READINESS_ACCEPTED" in payload["missing"]
     assert "NORMAL_OPERATIONS_RESTORED_CLAIM_ALLOWED" in payload["missing"]
 
+
+def test_missing_local_render_proof_boundary_fails_closed():
+    film_dir = ROOT / "CASES" / CASE_ID / "FILM"
+    proof_path = film_dir / "LOCAL_RENDER_PROOF_CLASSIFICATION.json"
+    backup = proof_path.read_text() if proof_path.exists() else None
+
+    try:
+        if proof_path.exists():
+            proof_path.unlink()
+
+        ok, missing = validate_admissible_motion_picture(CASE_ID)
+
+        assert ok is False
+        assert "LOCAL_RENDER_PROOF_CLASSIFICATION.json" in missing
+    finally:
+        if backup is not None:
+            proof_path.write_text(backup)
+
+def test_local_stub_render_in_take_ledger_is_not_admissible_film(tmp_path):
+    film_dir = ROOT / "CASES" / CASE_ID / "FILM"
+    ledger_path = film_dir / "TAKE_LEDGER.json"
+    backup = ledger_path.read_text()
+
+    try:
+        ledger_path.write_text(json.dumps({
+            "case_id": CASE_ID,
+            "shots": [{
+                "shot_id": "SHOT_001",
+                "takes": [{
+                    "id": "SHOT_001_TAKE_001",
+                    "case_id": CASE_ID,
+                    "shot_id": "SHOT_001",
+                    "backend": "command",
+                    "model": "cinematicum-local-ffmpeg-stub",
+                    "file_path": ".cinematicum_media/CASE_001_THE_LAST_RENDER/generated/SHOT_001/TAKE_001.mp4",
+                    "status": "GENERATED"
+                }]
+            }]
+        }, indent=2) + "\n")
+
+        ok, missing = validate_admissible_motion_picture(CASE_ID)
+
+        assert ok is False
+        assert "LOCAL_STUB_RENDER_NOT_FILM" in missing
+    finally:
+        ledger_path.write_text(backup)
+

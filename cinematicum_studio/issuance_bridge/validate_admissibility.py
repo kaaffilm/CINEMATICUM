@@ -8,6 +8,32 @@ from cinematicum_studio.issuance_bridge.validate_acceptance import validate_cine
 from cinematicum_studio.issuance_bridge.validate_postproduction import validate_postproduction_acceptance
 
 
+def _load_json(path: Path) -> dict:
+    return json.loads(path.read_text())
+
+
+def _take_ledger_uses_local_stub(film_dir: Path) -> bool:
+    ledger_path = film_dir / "TAKE_LEDGER.json"
+    if not ledger_path.exists():
+        return False
+
+    ledger = _load_json(ledger_path)
+    for shot in ledger.get("shots", []):
+        for take in shot.get("takes", []):
+            model = str(take.get("model", "")).lower()
+            backend = str(take.get("backend", "")).lower()
+            file_path = str(take.get("file_path", "")).lower()
+
+            if "cinematicum-local-ffmpeg-stub" in model:
+                return True
+            if "local_video_generator" in file_path:
+                return True
+            if backend == "command" and "stub" in model:
+                return True
+
+    return False
+
+
 def validate_admissible_motion_picture(case_id: str) -> tuple[bool, list[str]]:
     """
     Hard distinction:
@@ -23,19 +49,24 @@ def validate_admissible_motion_picture(case_id: str) -> tuple[bool, list[str]]:
 
     film_dir = Path("CASES") / case_id / "FILM"
 
+    if _take_ledger_uses_local_stub(film_dir):
+        missing.append("LOCAL_STUB_RENDER_NOT_FILM")
+
     proof_path = film_dir / "LOCAL_RENDER_PROOF_CLASSIFICATION.json"
-    if proof_path.exists():
-        proof = json.loads(proof_path.read_text())
+    if not proof_path.exists():
+        missing.append("LOCAL_RENDER_PROOF_CLASSIFICATION.json")
+    else:
+        proof = _load_json(proof_path)
         if proof.get("classification") == "LOCAL_RENDER_PROOF":
             missing.append("LOCAL_RENDER_PROOF_NOT_FILM")
-        if proof.get("is_admissible_film") is True:
+        if proof.get("is_admissible_film") is True and proof.get("classification") == "LOCAL_RENDER_PROOF":
             missing.append("INVALID_PROOF_CLASSIFICATION_ADMITS_FILM")
 
     quality_path = film_dir / "CINEMATIC_QUALITY_ACCEPTANCE_RECORD.json"
     if not quality_path.exists():
         missing.append("CINEMATIC_QUALITY_ACCEPTANCE_RECORD.json")
     else:
-        quality = json.loads(quality_path.read_text())
+        quality = _load_json(quality_path)
         if quality.get("accepted") is not True:
             missing.append("CINEMATIC_QUALITY_ACCEPTED")
         if quality.get("classification") == "LOCAL_RENDER_PROOF":
