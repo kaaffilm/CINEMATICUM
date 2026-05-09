@@ -35,6 +35,7 @@ from cinematicum_studio.issuance_bridge.validate_change_control import validate_
 from cinematicum_studio.issuance_bridge.validate_deployment_authorization import validate_deployment_authorization_ready
 from cinematicum_studio.issuance_bridge.validate_runtime_operation import validate_runtime_operation_ready
 from cinematicum_studio.issuance_bridge.validate_observability import validate_observability_ready
+from cinematicum_studio.issuance_bridge.validate_incident_response import validate_incident_response_ready
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -854,4 +855,36 @@ def test_cli_observability_command_executes():
     assert "RUNTIME_OPERATION_READY_REQUIRED_FOR_OBSERVABILITY" in payload["missing"]
     assert "OBSERVABILITY_READINESS_ACCEPTED" in payload["missing"]
     assert "TRACE_ANALYSIS_ALLOWED" in payload["missing"]
+
+def test_incident_response_requires_observability_ready():
+    ok, missing = validate_incident_response_ready(CASE_ID)
+    assert ok is False
+    assert "OBSERVABILITY_READY_REQUIRED_FOR_INCIDENT_RESPONSE" in missing
+    assert any(item.startswith("OBSERVABILITY::") for item in missing)
+    assert "INCIDENT_RESPONSE_READINESS_ACCEPTED" in missing
+    assert "INCIDENT_RESPONSE_ALLOWED" in missing
+    assert "INCIDENT_DECLARATION_ALLOWED" in missing
+    assert "PAGING_ALLOWED" in missing
+    assert "ESCALATION_ALLOWED" in missing
+    assert "INCIDENT_COMMANDER_ASSIGNMENT_ALLOWED" in missing
+    assert "MITIGATION_ACTION_ALLOWED" in missing
+    assert "CONTAINMENT_ACTION_ALLOWED" in missing
+    assert "REMEDIATION_ACTION_ALLOWED" in missing
+    assert "STATUS_PAGE_UPDATE_ALLOWED" in missing
+    assert "CUSTOMER_NOTIFICATION_ALLOWED" in missing
+    assert "POSTMORTEM_RECORD_ALLOWED" in missing
+
+
+def test_cli_incident_response_command_executes():
+    result = subprocess.run(
+        [sys.executable, "-m", "cinematicum_studio.cli", "incident-response-check", CASE_ID],
+        check=True,
+        capture_output=True,
+        text=True,
+    )
+    payload = json.loads(result.stdout)
+    assert payload["incident_response_ready"] is False
+    assert "OBSERVABILITY_READY_REQUIRED_FOR_INCIDENT_RESPONSE" in payload["missing"]
+    assert "INCIDENT_RESPONSE_READINESS_ACCEPTED" in payload["missing"]
+    assert "POSTMORTEM_RECORD_ALLOWED" in payload["missing"]
 
