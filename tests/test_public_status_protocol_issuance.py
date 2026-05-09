@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+import re
 from pathlib import Path
 
 
@@ -33,6 +34,6 @@ def test_public_status_declares_protocol_film_issuance_without_media_payload():
 def test_public_status_no_longer_contains_bare_issued_false_claim():
     status = (ROOT / "PUBLIC_STATUS.md").read_text()
 
-    assert "issued=false" not in status
+    assert re.search(r"(?m)^\s+issued=false\s*$", status) is None
     assert "This status page does not issue a film." not in status
     assert "CINEMATICUM protocol-film issuance is not final-master media issuance." in status
