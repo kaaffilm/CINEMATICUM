@@ -1,0 +1,18 @@
+{
+  "case_id": "CASE_001_THE_LAST_RENDER",
+  "title": "THE LAST RENDER",
+  "gate": "DEPLOYMENT_AUTHORIZATION_READINESS",
+  "accepted": false,
+  "deployment_authorization_allowed": false,
+  "release_promotion_allowed": false,
+  "production_deployment_allowed": false,
+  "environment_targeting_allowed": false,
+  "deployment_window_allowed": false,
+  "operator_assignment_allowed": false,
+  "deployment_lock_release_allowed": false,
+  "rollback_execution_allowed": false,
+  "requires_change_control_ready": true,
+  "required_before_any_release_promotion_or_production_deployment": true,
+  "hard_rule": "CHANGE_CONTROL_READY_REQUIRED_BEFORE_DEPLOYMENT_AUTHORIZATION",
+  "reason": "No deployment-authorization readiness exists. Approved change control cannot self-convert into release promotion, production deployment, environment targeting, deployment-window authority, operator assignment, deployment-lock release, or rollback execution."
+}

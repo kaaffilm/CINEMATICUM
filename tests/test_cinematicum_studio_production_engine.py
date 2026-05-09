@@ -32,6 +32,7 @@ from cinematicum_studio.issuance_bridge.validate_external_execution import valid
 from cinematicum_studio.issuance_bridge.validate_credential_custody import validate_credential_custody_ready
 from cinematicum_studio.issuance_bridge.validate_execution_provenance import validate_execution_provenance_ready
 from cinematicum_studio.issuance_bridge.validate_change_control import validate_change_control_ready
+from cinematicum_studio.issuance_bridge.validate_deployment_authorization import validate_deployment_authorization_ready
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -761,4 +762,33 @@ def test_cli_change_control_command_executes():
     assert "EXECUTION_PROVENANCE_READY_REQUIRED_FOR_CHANGE_CONTROL" in payload["missing"]
     assert "CHANGE_CONTROL_READINESS_ACCEPTED" in payload["missing"]
     assert "POST_EXECUTION_ATTESTATION_ALLOWED" in payload["missing"]
+
+def test_deployment_authorization_requires_change_control_ready():
+    ok, missing = validate_deployment_authorization_ready(CASE_ID)
+    assert ok is False
+    assert "CHANGE_CONTROL_READY_REQUIRED_FOR_DEPLOYMENT_AUTHORIZATION" in missing
+    assert any(item.startswith("CHANGE_CONTROL::") for item in missing)
+    assert "DEPLOYMENT_AUTHORIZATION_READINESS_ACCEPTED" in missing
+    assert "DEPLOYMENT_AUTHORIZATION_ALLOWED" in missing
+    assert "RELEASE_PROMOTION_ALLOWED" in missing
+    assert "PRODUCTION_DEPLOYMENT_ALLOWED" in missing
+    assert "ENVIRONMENT_TARGETING_ALLOWED" in missing
+    assert "DEPLOYMENT_WINDOW_ALLOWED" in missing
+    assert "OPERATOR_ASSIGNMENT_ALLOWED" in missing
+    assert "DEPLOYMENT_LOCK_RELEASE_ALLOWED" in missing
+    assert "ROLLBACK_EXECUTION_ALLOWED" in missing
+
+
+def test_cli_deployment_authorization_command_executes():
+    result = subprocess.run(
+        [sys.executable, "-m", "cinematicum_studio.cli", "deployment-authorization-check", CASE_ID],
+        check=True,
+        capture_output=True,
+        text=True,
+    )
+    payload = json.loads(result.stdout)
+    assert payload["deployment_authorization_ready"] is False
+    assert "CHANGE_CONTROL_READY_REQUIRED_FOR_DEPLOYMENT_AUTHORIZATION" in payload["missing"]
+    assert "DEPLOYMENT_AUTHORIZATION_READINESS_ACCEPTED" in payload["missing"]
+    assert "ROLLBACK_EXECUTION_ALLOWED" in payload["missing"]
 
