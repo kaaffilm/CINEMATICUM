@@ -1,0 +1,17 @@
+{
+  "case_id": "CASE_001_THE_LAST_RENDER",
+  "title": "THE LAST RENDER",
+  "gate": "MACHINE_MEDIATED_AUTHORITY_READINESS",
+  "accepted": false,
+  "machine_mediated_authority_allowed": false,
+  "generated_summary_allowed": false,
+  "model_answer_claim_allowed": false,
+  "agentic_public_action_allowed": false,
+  "automated_recommendation_allowed": false,
+  "synthetic_citation_claim_allowed": false,
+  "ai_endorsement_claim_allowed": false,
+  "requires_model_reference_ingestion_ready": true,
+  "required_for_ai_or_agentic_public_authority": true,
+  "hard_rule": "MODEL_REFERENCE_INGESTION_READY_REQUIRED_BEFORE_MACHINE_MEDIATED_AUTHORITY",
+  "reason": "No machine-mediated authority readiness exists. Generated summaries, model-answer claims, agentic public actions, automated recommendations, synthetic citation claims, or AI endorsement claims cannot self-certify from model-reference ingestion adjacency."
+}
