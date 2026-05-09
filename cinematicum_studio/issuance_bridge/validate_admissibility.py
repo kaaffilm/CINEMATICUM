@@ -1246,6 +1246,82 @@ def _take_source_admissibility_case_closure_admission_registry_unbound(film_dir:
     return False
 
 
+def _take_source_admissibility_case_closure_admission_registry_object_hash_unbound(film_dir: Path) -> bool:
+    evidence_dir = film_dir / "SOURCE_ADMISSIBILITY_EVIDENCE"
+    if not evidence_dir.exists():
+        return False
+
+    root_dir = film_dir.parents[2]
+    registry_path = root_dir / "CINEMATICUM_OBJECT_REGISTRY.json"
+
+    if not registry_path.exists():
+        return False
+
+    try:
+        registry = _load_json(registry_path)
+    except json.JSONDecodeError:
+        return True
+
+    entries = registry.get("entries")
+    if not isinstance(entries, list):
+        return True
+
+    def field(record, *names):
+        for name in names:
+            if name in record:
+                return record.get(name)
+        return None
+
+    for closure_path in evidence_dir.glob("*.json"):
+        try:
+            closure = _load_json(closure_path)
+        except json.JSONDecodeError:
+            continue
+
+        if closure.get("object_type") != "CINEMATICUM_TAKE_SOURCE_ADMISSIBILITY_ROOT_AUTHORITY_CASE_CLOSURE":
+            continue
+
+        case_id = closure.get("case_id")
+        closure_id = closure.get("closure_id")
+        root_authority_id = closure.get("root_authority_id")
+        admission_path_value = closure.get("authority_object_admission_decision_path")
+        admission_sha256 = closure.get("authority_object_admission_decision_sha256")
+        admission_object_id = closure.get("authority_object_admission_object_id")
+
+        # Earlier gates own malformed closure/admission references.
+        if not all([case_id, closure_id, root_authority_id, admission_path_value, admission_sha256, admission_object_id]):
+            continue
+
+        closure_rel = str(closure_path.relative_to(root_dir))
+        matching_entries = [
+            entry
+            for entry in entries
+            if field(entry, "path", "file_path") == closure_rel
+            and field(entry, "object_type") == "CINEMATICUM_TAKE_SOURCE_ADMISSIBILITY_ROOT_AUTHORITY_CASE_CLOSURE"
+            and field(entry, "case_id") == case_id
+            and field(entry, "closure_id") == closure_id
+            and field(entry, "root_authority_id") == root_authority_id
+            and field(entry, "authority_object_admission_decision_path", "admission_decision_path") == admission_path_value
+            and field(entry, "authority_object_admission_decision_sha256", "admission_decision_sha256") == admission_sha256
+            and field(entry, "authority_object_admission_object_id", "admission_object_id") == admission_object_id
+        ]
+
+        # Prior registry gate owns absence of the row.
+        if not matching_entries:
+            continue
+
+        closure_sha256 = _sha256_path(closure_path)
+        has_hash_bound_entry = any(
+            field(entry, "sha256", "object_sha256", "file_sha256", "content_sha256") == closure_sha256
+            for entry in matching_entries
+        )
+
+        if not has_hash_bound_entry:
+            return True
+
+    return False
+
+
 def validate_admissible_motion_picture(case_id: str) -> tuple[bool, list[str]]:
     """
     Hard distinction:
@@ -1314,6 +1390,9 @@ def validate_admissible_motion_picture(case_id: str) -> tuple[bool, list[str]]:
 
     if _take_source_admissibility_case_closure_admission_registry_unbound(film_dir):
         missing.append("TAKE_SOURCE_ADMISSIBILITY_CASE_CLOSURE_ADMISSION_REGISTRY_UNBOUND")
+
+    if _take_source_admissibility_case_closure_admission_registry_object_hash_unbound(film_dir):
+        missing.append("TAKE_SOURCE_ADMISSIBILITY_CASE_CLOSURE_ADMISSION_REGISTRY_OBJECT_HASH_UNBOUND")
 
     proof_path = film_dir / "LOCAL_RENDER_PROOF_CLASSIFICATION.json"
     if not proof_path.exists():
