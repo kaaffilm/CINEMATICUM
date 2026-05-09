@@ -31,6 +31,7 @@ from cinematicum_studio.issuance_bridge.validate_model_reference_ingestion impor
 from cinematicum_studio.issuance_bridge.validate_machine_mediated_authority import validate_machine_mediated_authority_ready
 from cinematicum_studio.issuance_bridge.validate_autonomous_delegation import validate_autonomous_delegation_ready
 from cinematicum_studio.issuance_bridge.validate_external_execution import validate_external_execution_ready
+from cinematicum_studio.issuance_bridge.validate_credential_custody import validate_credential_custody_ready
 from cinematicum_studio.render.render_master import render_master
 from cinematicum_studio.review.select_take import select_take
 from cinematicum_studio.timeline.build_otio import build_timeline
@@ -329,6 +330,15 @@ def cmd_external_execution_check(args):
     }, indent=2))
 
 
+def cmd_credential_custody_check(args):
+    ok, missing = validate_credential_custody_ready(args.case_id)
+    print(json.dumps({
+        "case_id": args.case_id,
+        "credential_custody_ready": ok,
+        "missing": missing,
+    }, indent=2))
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(prog="cinematicum")
     sub = parser.add_subparsers(required=True)
@@ -463,6 +473,10 @@ def main() -> None:
     p = sub.add_parser("external-execution-check")
     p.add_argument("case_id")
     p.set_defaults(func=cmd_external_execution_check)
+
+    p = sub.add_parser("credential-custody-check")
+    p.add_argument("case_id")
+    p.set_defaults(func=cmd_credential_custody_check)
 
     p = sub.add_parser("state-advancement-check")
     p.add_argument("case_id")

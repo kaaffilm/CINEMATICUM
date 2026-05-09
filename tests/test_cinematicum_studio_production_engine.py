@@ -29,6 +29,7 @@ from cinematicum_studio.issuance_bridge.validate_model_reference_ingestion impor
 from cinematicum_studio.issuance_bridge.validate_machine_mediated_authority import validate_machine_mediated_authority_ready
 from cinematicum_studio.issuance_bridge.validate_autonomous_delegation import validate_autonomous_delegation_ready
 from cinematicum_studio.issuance_bridge.validate_external_execution import validate_external_execution_ready
+from cinematicum_studio.issuance_bridge.validate_credential_custody import validate_credential_custody_ready
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -671,4 +672,33 @@ def test_cli_external_execution_command_executes():
     assert "AUTONOMOUS_DELEGATION_READY_REQUIRED_FOR_EXTERNAL_EXECUTION" in payload["missing"]
     assert "EXTERNAL_EXECUTION_READINESS_ACCEPTED" in payload["missing"]
     assert "IRREVERSIBLE_WORLD_ACTION_ALLOWED" in payload["missing"]
+
+def test_credential_custody_requires_external_execution_ready():
+    ok, missing = validate_credential_custody_ready(CASE_ID)
+    assert ok is False
+    assert "EXTERNAL_EXECUTION_READY_REQUIRED_FOR_CREDENTIAL_CUSTODY" in missing
+    assert any(item.startswith("EXTERNAL_EXECUTION::") for item in missing)
+    assert "CREDENTIAL_CUSTODY_READINESS_ACCEPTED" in missing
+    assert "CREDENTIAL_CUSTODY_ALLOWED" in missing
+    assert "SIGNING_KEY_USE_ALLOWED" in missing
+    assert "DEPLOY_KEY_USE_ALLOWED" in missing
+    assert "SECRET_MATERIAL_ACCESS_ALLOWED" in missing
+    assert "ADMIN_TOKEN_USE_ALLOWED" in missing
+    assert "PRODUCTION_WRITE_CREDENTIAL_ALLOWED" in missing
+    assert "RELEASE_NOTARIZATION_ALLOWED" in missing
+    assert "CUSTODY_BEARING_AUTOMATION_ALLOWED" in missing
+
+
+def test_cli_credential_custody_command_executes():
+    result = subprocess.run(
+        [sys.executable, "-m", "cinematicum_studio.cli", "credential-custody-check", CASE_ID],
+        check=True,
+        capture_output=True,
+        text=True,
+    )
+    payload = json.loads(result.stdout)
+    assert payload["credential_custody_ready"] is False
+    assert "EXTERNAL_EXECUTION_READY_REQUIRED_FOR_CREDENTIAL_CUSTODY" in payload["missing"]
+    assert "CREDENTIAL_CUSTODY_READINESS_ACCEPTED" in payload["missing"]
+    assert "CUSTODY_BEARING_AUTOMATION_ALLOWED" in payload["missing"]
 
