@@ -418,6 +418,116 @@ def _take_source_admissibility_authority_grant_unbound(film_dir: Path) -> bool:
     return False
 
 
+def _take_source_admissibility_authority_grant_issuer_unbound(film_dir: Path) -> bool:
+    evidence_path = film_dir / "TAKE_SOURCE_ADMISSIBILITY_LEDGER.json"
+    if not evidence_path.exists():
+        return False
+
+    evidence = _load_json(evidence_path)
+    for record in evidence.get("admissible_sources", []):
+        if record.get("admissibility_evidence_accepted") is not True:
+            continue
+
+        authority_record_path = record.get("authority_record_path")
+        authority_record_sha256 = record.get("authority_record_sha256")
+        if not authority_record_path or not authority_record_sha256:
+            continue
+
+        authority_path = Path(authority_record_path)
+        if not authority_path.exists():
+            continue
+
+        try:
+            authority_path.relative_to(film_dir)
+        except ValueError:
+            continue
+
+        if _sha256_path(authority_path) != authority_record_sha256:
+            continue
+
+        try:
+            authority = _load_json(authority_path)
+        except json.JSONDecodeError:
+            return True
+
+        grant_path_value = authority.get("authority_grant_path")
+        grant_sha256 = authority.get("authority_grant_sha256")
+        if not grant_path_value or not grant_sha256:
+            continue
+
+        grant_path = Path(grant_path_value)
+        if not grant_path.exists():
+            continue
+
+        try:
+            grant_path.relative_to(film_dir)
+        except ValueError:
+            continue
+
+        if _sha256_path(grant_path) != grant_sha256:
+            continue
+
+        try:
+            grant = _load_json(grant_path)
+        except json.JSONDecodeError:
+            return True
+
+        issuer_id = grant.get("grant_issuer_id")
+        issuer_record_path = grant.get("grant_issuer_record_path")
+        issuer_record_sha256 = grant.get("grant_issuer_record_sha256")
+
+        if not issuer_id or not issuer_record_path or not issuer_record_sha256:
+            return True
+
+        issuer_path = Path(issuer_record_path)
+        if not issuer_path.exists():
+            return True
+
+        try:
+            issuer_path.relative_to(film_dir)
+        except ValueError:
+            return True
+
+        if _sha256_path(issuer_path) != issuer_record_sha256:
+            return True
+
+        try:
+            issuer = _load_json(issuer_path)
+        except json.JSONDecodeError:
+            return True
+
+        if issuer.get("object_type") != "CINEMATICUM_TAKE_SOURCE_ADMISSIBILITY_GRANT_ISSUER":
+            return True
+        if issuer.get("case_id") != evidence.get("case_id"):
+            return True
+        if issuer.get("issuer_id") != issuer_id:
+            return True
+        if issuer.get("self_attested") is not False:
+            return True
+        if issuer.get("may_issue_take_source_admissibility_authority_grants") is not True:
+            return True
+
+        issued_grants = issuer.get("issued_grants")
+        if not isinstance(issued_grants, list):
+            return True
+
+        has_exact_grant = any(
+            item.get("grant_id") == grant.get("grant_id")
+            and item.get("authority_id") == grant.get("authority_id")
+            and item.get("scope") == "TAKE_SOURCE_ADMISSIBILITY"
+            and item.get("authority_record_path") == grant.get("authority_record_path")
+            and item.get("authority_record_sha256") == grant.get("authority_record_sha256")
+            and item.get("grants_source_admissibility_authority") is True
+            and item.get("revoked") is not True
+            for item in issued_grants
+        )
+
+        if not has_exact_grant:
+            return True
+
+    return False
+
+
 def validate_admissible_motion_picture(case_id: str) -> tuple[bool, list[str]]:
     """
     Hard distinction:
@@ -459,6 +569,9 @@ def validate_admissible_motion_picture(case_id: str) -> tuple[bool, list[str]]:
 
     if _take_source_admissibility_authority_grant_unbound(film_dir):
         missing.append("TAKE_SOURCE_ADMISSIBILITY_AUTHORITY_GRANT_UNBOUND")
+
+    if _take_source_admissibility_authority_grant_issuer_unbound(film_dir):
+        missing.append("TAKE_SOURCE_ADMISSIBILITY_AUTHORITY_GRANT_ISSUER_UNBOUND")
 
     proof_path = film_dir / "LOCAL_RENDER_PROOF_CLASSIFICATION.json"
     if not proof_path.exists():

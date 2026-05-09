@@ -1585,3 +1585,148 @@ def test_take_source_admissibility_authority_requires_bound_grant():
         else:
             authority_path.write_text(authority_backup)
 
+def test_take_source_admissibility_authority_grant_requires_bound_issuer():
+    import hashlib
+
+    film_dir = ROOT / "CASES" / CASE_ID / "FILM"
+    ledger_path = film_dir / "TAKE_LEDGER.json"
+    evidence_path = film_dir / "TAKE_SOURCE_ADMISSIBILITY_LEDGER.json"
+    payload_dir = film_dir / "SOURCE_ADMISSIBILITY_EVIDENCE"
+    payload_path = payload_dir / "SHOT_001_TAKE_001.payload_with_grant.json"
+    authority_path = payload_dir / "SOURCE_AUTHORITY_001.with_grant.json"
+    grant_path = payload_dir / "SOURCE_AUTHORITY_001.grant_without_issuer.json"
+
+    ledger_backup = ledger_path.read_text()
+    evidence_backup = evidence_path.read_text() if evidence_path.exists() else None
+    payload_backup = payload_path.read_text() if payload_path.exists() else None
+    authority_backup = authority_path.read_text() if authority_path.exists() else None
+    grant_backup = grant_path.read_text() if grant_path.exists() else None
+
+    try:
+        payload_dir.mkdir(exist_ok=True)
+
+        ledger_path.write_text(json.dumps({
+            "case_id": CASE_ID,
+            "shots": [
+                {
+                    "shot_id": "SHOT_001",
+                    "takes": [
+                        {
+                            "id": "SHOT_001_TAKE_001",
+                            "shot_id": "SHOT_001",
+                            "file_path": "external/final/source.mov",
+                            "sha256": "1" * 64,
+                            "is_admissible_film_source": True,
+                            "source_admissibility_classification": "ADMISSIBLE_FINAL_FILM_SOURCE",
+                        }
+                    ],
+                }
+            ],
+        }, indent=2) + "\n")
+
+        authority_path.write_text(json.dumps({
+            "object_type": "CINEMATICUM_TAKE_SOURCE_ADMISSIBILITY_AUTHORITY",
+            "case_id": CASE_ID,
+            "authority_id": "SOURCE_AUTHORITY_001",
+            "authority_classification": "INDEPENDENT_SOURCE_ADMISSIBILITY_AUTHORITY",
+            "self_attested": False,
+            "may_certify_source_admissibility": True,
+            "certified_sources": [
+                {
+                    "authority_id": "SOURCE_AUTHORITY_001",
+                    "take_id": "SHOT_001_TAKE_001",
+                    "source_sha256": "1" * 64,
+                    "source_admissibility_classification": "ADMISSIBLE_FINAL_FILM_SOURCE",
+                }
+            ],
+        }, indent=2) + "\n")
+
+        authority_sha256 = hashlib.sha256(authority_path.read_bytes()).hexdigest()
+
+        payload_path.write_text(json.dumps({
+            "object_type": "CINEMATICUM_TAKE_SOURCE_ADMISSIBILITY_EVIDENCE",
+            "case_id": CASE_ID,
+            "take_id": "SHOT_001_TAKE_001",
+            "source_sha256": "1" * 64,
+            "accepted": True,
+            "evidence_verdict": "ADMISSIBLE_FINAL_FILM_SOURCE",
+            "self_attested": False,
+            "authority_classification": "INDEPENDENT_SOURCE_ADMISSIBILITY_AUTHORITY",
+            "authority_id": "SOURCE_AUTHORITY_001",
+            "authority_record_path": str(authority_path.relative_to(ROOT)),
+            "authority_record_sha256": authority_sha256,
+        }, indent=2) + "\n")
+
+        payload_sha256 = hashlib.sha256(payload_path.read_bytes()).hexdigest()
+
+        grant_path.write_text(json.dumps({
+            "object_type": "CINEMATICUM_TAKE_SOURCE_ADMISSIBILITY_AUTHORITY_GRANT",
+            "case_id": CASE_ID,
+            "grant_id": "SOURCE_AUTHORITY_GRANT_001",
+            "authority_id": "SOURCE_AUTHORITY_001",
+            "authority_record_path": str(authority_path.relative_to(ROOT)),
+            "authority_record_sha256": authority_sha256,
+            "grants_source_admissibility_authority": True,
+            "scope": "TAKE_SOURCE_ADMISSIBILITY",
+            "revoked": False,
+        }, indent=2) + "\n")
+
+        grant_sha256 = hashlib.sha256(grant_path.read_bytes()).hexdigest()
+
+        authority = json.loads(authority_path.read_text())
+        authority["authority_grant_id"] = "SOURCE_AUTHORITY_GRANT_001"
+        authority["authority_grant_path"] = str(grant_path.relative_to(ROOT))
+        authority["authority_grant_sha256"] = grant_sha256
+        authority["certified_sources"][0]["evidence_sha256"] = payload_sha256
+        authority_path.write_text(json.dumps(authority, indent=2) + "\n")
+        authority_sha256 = hashlib.sha256(authority_path.read_bytes()).hexdigest()
+
+        payload = json.loads(payload_path.read_text())
+        payload["authority_record_sha256"] = authority_sha256
+        payload_path.write_text(json.dumps(payload, indent=2) + "\n")
+        payload_sha256 = hashlib.sha256(payload_path.read_bytes()).hexdigest()
+
+        evidence_path.write_text(json.dumps({
+            "case_id": CASE_ID,
+            "admissible_sources": [
+                {
+                    "case_id": CASE_ID,
+                    "take_id": "SHOT_001_TAKE_001",
+                    "sha256": "1" * 64,
+                    "admissibility_evidence_accepted": True,
+                    "evidence_file_path": str(payload_path.relative_to(ROOT)),
+                    "evidence_sha256": payload_sha256,
+                    "authority_id": "SOURCE_AUTHORITY_001",
+                    "authority_record_path": str(authority_path.relative_to(ROOT)),
+                    "authority_record_sha256": authority_sha256,
+                }
+            ],
+        }, indent=2) + "\n")
+
+        ok, missing = validate_admissible_motion_picture(CASE_ID)
+
+        assert ok is False
+        assert "TAKE_SOURCE_ADMISSIBILITY_AUTHORITY_GRANT_ISSUER_UNBOUND" in missing
+    finally:
+        ledger_path.write_text(ledger_backup)
+
+        if evidence_backup is None:
+            evidence_path.unlink(missing_ok=True)
+        else:
+            evidence_path.write_text(evidence_backup)
+
+        if payload_backup is None:
+            payload_path.unlink(missing_ok=True)
+        else:
+            payload_path.write_text(payload_backup)
+
+        if authority_backup is None:
+            authority_path.unlink(missing_ok=True)
+        else:
+            authority_path.write_text(authority_backup)
+
+        if grant_backup is None:
+            grant_path.unlink(missing_ok=True)
+        else:
+            grant_path.write_text(grant_backup)
+
