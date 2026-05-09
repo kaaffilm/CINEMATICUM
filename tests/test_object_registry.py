@@ -1,4 +1,5 @@
 import json
+import hashlib
 import pathlib
 import unittest
 
@@ -44,6 +45,17 @@ class TestObjectRegistry(unittest.TestCase):
         self.assertFalse(catalog["hard_boundary"]["release_candidate_ready"])
         self.assertFalse(catalog["hard_boundary"]["media_present"])
         self.assertFalse(catalog["hard_boundary"]["outsider_replay_passed"])
+
+
+    def test_registry_entries_are_hash_bound_to_object_bytes(self):
+        registry = load("CINEMATICUM_OBJECT_REGISTRY.json")
+
+        for entry in registry["entries"]:
+            path = ROOT / entry["path"]
+            self.assertTrue(path.exists(), entry["path"])
+
+            expected = hashlib.sha256(path.read_bytes()).hexdigest()
+            self.assertEqual(entry.get("sha256"), expected, entry["path"])
 
     def test_registry_current_state_matches_index(self):
         registry = load("CINEMATICUM_OBJECT_REGISTRY.json")

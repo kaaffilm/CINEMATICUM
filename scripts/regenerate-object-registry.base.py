@@ -1,11 +1,20 @@
 #!/usr/bin/env python3
 import argparse
+import hashlib
 import json
 from pathlib import Path
 
 
 ROOT = Path(__file__).resolve().parents[1]
 REGISTRY_PATH = ROOT / "CINEMATICUM_OBJECT_REGISTRY.json"
+
+
+def sha256_path(path: Path) -> str:
+    h = hashlib.sha256()
+    with path.open("rb") as f:
+        for chunk in iter(lambda: f.read(1024 * 1024), b""):
+            h.update(chunk)
+    return h.hexdigest()
 
 
 SURFACE_OVERRIDES = {
@@ -56,6 +65,7 @@ def build_registry() -> dict:
 
         entries.append({
             "path": rel,
+            "sha256": sha256_path(p),
             "object_type": data.get("object_type", "UNDECLARED_OBJECT_TYPE"),
             "schema_version": data.get("schema_version", "UNDECLARED_SCHEMA_VERSION"),
             "surface_class": surface_class,
