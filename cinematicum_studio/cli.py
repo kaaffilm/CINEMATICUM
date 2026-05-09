@@ -25,6 +25,7 @@ from cinematicum_studio.issuance_bridge.validate_audience_attendance import vali
 from cinematicum_studio.issuance_bridge.validate_audience_reception import validate_audience_reception_ready
 from cinematicum_studio.issuance_bridge.validate_award_eligibility import validate_award_eligibility_ready
 from cinematicum_studio.issuance_bridge.validate_institutional_recognition import validate_institutional_recognition_ready
+from cinematicum_studio.issuance_bridge.validate_canonical_citation import validate_canonical_citation_ready
 from cinematicum_studio.render.render_master import render_master
 from cinematicum_studio.review.select_take import select_take
 from cinematicum_studio.timeline.build_otio import build_timeline
@@ -269,6 +270,15 @@ def cmd_institutional_recognition_check(args):
     }, indent=2))
 
 
+def cmd_canonical_citation_check(args):
+    ok, missing = validate_canonical_citation_ready(args.case_id)
+    print(json.dumps({
+        "case_id": args.case_id,
+        "canonical_citation_ready": ok,
+        "missing": missing,
+    }, indent=2))
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(prog="cinematicum")
     sub = parser.add_subparsers(required=True)
@@ -379,6 +389,10 @@ def main() -> None:
     p = sub.add_parser("institutional-recognition-check")
     p.add_argument("case_id")
     p.set_defaults(func=cmd_institutional_recognition_check)
+
+    p = sub.add_parser("canonical-citation-check")
+    p.add_argument("case_id")
+    p.set_defaults(func=cmd_canonical_citation_check)
 
     p = sub.add_parser("state-advancement-check")
     p.add_argument("case_id")
