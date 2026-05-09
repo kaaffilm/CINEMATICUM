@@ -18,6 +18,7 @@ from cinematicum_studio.issuance_bridge.validate_public_index import validate_pu
 from cinematicum_studio.issuance_bridge.validate_public_claim import validate_public_claim_ready
 from cinematicum_studio.issuance_bridge.validate_audience_surface import validate_audience_surface_ready
 from cinematicum_studio.issuance_bridge.validate_exhibition import validate_exhibition_ready
+from cinematicum_studio.issuance_bridge.validate_screening_event import validate_screening_event_ready
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -359,4 +360,30 @@ def test_cli_exhibition_command_executes():
     assert "AUDIENCE_SURFACE_READY_REQUIRED_FOR_EXHIBITION" in payload["missing"]
     assert "EXHIBITION_READINESS_ACCEPTED" in payload["missing"]
     assert "STREAMING_PREMIERE_ALLOWED" in payload["missing"]
+
+def test_screening_event_requires_exhibition_ready():
+    ok, missing = validate_screening_event_ready(CASE_ID)
+    assert ok is False
+    assert "EXHIBITION_READY_REQUIRED_FOR_SCREENING_EVENT" in missing
+    assert any(item.startswith("EXHIBITION::") for item in missing)
+    assert "SCREENING_EVENT_READINESS_ACCEPTED" in missing
+    assert "SCREENING_EVENT_ALLOWED" in missing
+    assert "VENUE_SCHEDULE_ALLOWED" in missing
+    assert "TICKETING_ALLOWED" in missing
+    assert "AUDIENCE_ADMISSION_ALLOWED" in missing
+    assert "PREMIERE_EVENT_ALLOWED" in missing
+
+
+def test_cli_screening_event_command_executes():
+    result = subprocess.run(
+        [sys.executable, "-m", "cinematicum_studio.cli", "screening-event-check", CASE_ID],
+        check=True,
+        capture_output=True,
+        text=True,
+    )
+    payload = json.loads(result.stdout)
+    assert payload["screening_event_ready"] is False
+    assert "EXHIBITION_READY_REQUIRED_FOR_SCREENING_EVENT" in payload["missing"]
+    assert "SCREENING_EVENT_READINESS_ACCEPTED" in payload["missing"]
+    assert "PREMIERE_EVENT_ALLOWED" in payload["missing"]
 
