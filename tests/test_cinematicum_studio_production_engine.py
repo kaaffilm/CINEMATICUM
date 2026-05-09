@@ -1940,3 +1940,41 @@ def test_take_source_root_authority_requires_case_authority_closure():
         else:
             root_path.write_text(root_backup)
 
+def test_take_source_root_authority_case_closure_requires_admission_decision():
+    film_dir = ROOT / "CASES" / CASE_ID / "FILM"
+    evidence_dir = film_dir / "SOURCE_ADMISSIBILITY_EVIDENCE"
+    closure_path = evidence_dir / "ROOT_SOURCE_AUTHORITY_001.case_closure_unadmitted.json"
+
+    closure_backup = closure_path.read_text() if closure_path.exists() else None
+
+    try:
+        evidence_dir.mkdir(exist_ok=True)
+
+        closure_path.write_text(json.dumps({
+            "object_type": "CINEMATICUM_TAKE_SOURCE_ADMISSIBILITY_ROOT_AUTHORITY_CASE_CLOSURE",
+            "case_id": CASE_ID,
+            "closure_id": "ROOT_SOURCE_AUTHORITY_CASE_CLOSURE_001",
+            "root_authority_id": "ROOT_SOURCE_AUTHORITY_001",
+            "closure_authorizes_root_authority": True,
+            "scope": "TAKE_SOURCE_ADMISSIBILITY_ROOT_AUTHORITY",
+            "revoked": False,
+            "authorized_root_authorities": [
+                {
+                    "root_authority_id": "ROOT_SOURCE_AUTHORITY_001",
+                    "scope": "TAKE_SOURCE_ADMISSIBILITY_ROOT_AUTHORITY",
+                    "closure_authorizes_root_authority": True,
+                    "revoked": False,
+                }
+            ],
+        }, indent=2) + "\n")
+
+        ok, missing = validate_admissible_motion_picture(CASE_ID)
+
+        assert ok is False
+        assert "TAKE_SOURCE_ADMISSIBILITY_CASE_CLOSURE_ADMISSION_UNBOUND" in missing
+    finally:
+        if closure_backup is None:
+            closure_path.unlink(missing_ok=True)
+        else:
+            closure_path.write_text(closure_backup)
+

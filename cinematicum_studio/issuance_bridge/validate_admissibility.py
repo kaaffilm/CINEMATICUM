@@ -731,6 +731,65 @@ def _take_source_admissibility_root_authority_case_closure_unbound(film_dir: Pat
     return False
 
 
+def _take_source_admissibility_case_closure_admission_unbound(film_dir: Path) -> bool:
+    evidence_dir = film_dir / "SOURCE_ADMISSIBILITY_EVIDENCE"
+    if not evidence_dir.exists():
+        return False
+
+    for closure_path in evidence_dir.glob("*.json"):
+        try:
+            closure = _load_json(closure_path)
+        except json.JSONDecodeError:
+            continue
+
+        if closure.get("object_type") != "CINEMATICUM_TAKE_SOURCE_ADMISSIBILITY_ROOT_AUTHORITY_CASE_CLOSURE":
+            continue
+
+        admission_path_value = closure.get("authority_object_admission_decision_path")
+        admission_sha256 = closure.get("authority_object_admission_decision_sha256")
+        admission_object_id = closure.get("authority_object_admission_object_id")
+
+        if not admission_path_value or not admission_sha256 or not admission_object_id:
+            return True
+
+        admission_path = Path(admission_path_value)
+        if not admission_path.exists():
+            return True
+
+        try:
+            admission_path.relative_to(Path("CASES") / closure.get("case_id", ""))
+        except ValueError:
+            return True
+
+        if _sha256_path(admission_path) != admission_sha256:
+            return True
+
+        try:
+            admission = _load_json(admission_path)
+        except json.JSONDecodeError:
+            return True
+
+        if admission.get("case_id") != closure.get("case_id"):
+            return True
+        if admission.get("object_id") != admission_object_id:
+            return True
+        if admission.get("accepted") is not True:
+            return True
+        if admission.get("decision") not in {"ACCEPT", "ACCEPTED"}:
+            return True
+
+        admitted_type = admission.get("admitted_object_type") or admission.get("object_type_admitted")
+        if admitted_type != "CINEMATICUM_TAKE_SOURCE_ADMISSIBILITY_ROOT_AUTHORITY_CASE_CLOSURE":
+            return True
+
+        if admission.get("admitted_closure_id") != closure.get("closure_id"):
+            return True
+        if admission.get("admitted_root_authority_id") != closure.get("root_authority_id"):
+            return True
+
+    return False
+
+
 def validate_admissible_motion_picture(case_id: str) -> tuple[bool, list[str]]:
     """
     Hard distinction:
@@ -781,6 +840,9 @@ def validate_admissible_motion_picture(case_id: str) -> tuple[bool, list[str]]:
 
     if _take_source_admissibility_root_authority_case_closure_unbound(film_dir):
         missing.append("TAKE_SOURCE_ADMISSIBILITY_ROOT_AUTHORITY_CASE_CLOSURE_UNBOUND")
+
+    if _take_source_admissibility_case_closure_admission_unbound(film_dir):
+        missing.append("TAKE_SOURCE_ADMISSIBILITY_CASE_CLOSURE_ADMISSION_UNBOUND")
 
     proof_path = film_dir / "LOCAL_RENDER_PROOF_CLASSIFICATION.json"
     if not proof_path.exists():
