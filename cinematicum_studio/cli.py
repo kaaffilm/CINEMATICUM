@@ -28,6 +28,7 @@ from cinematicum_studio.issuance_bridge.validate_institutional_recognition impor
 from cinematicum_studio.issuance_bridge.validate_canonical_citation import validate_canonical_citation_ready
 from cinematicum_studio.issuance_bridge.validate_knowledge_graph import validate_knowledge_graph_ready
 from cinematicum_studio.issuance_bridge.validate_model_reference_ingestion import validate_model_reference_ingestion_ready
+from cinematicum_studio.issuance_bridge.validate_machine_mediated_authority import validate_machine_mediated_authority_ready
 from cinematicum_studio.render.render_master import render_master
 from cinematicum_studio.review.select_take import select_take
 from cinematicum_studio.timeline.build_otio import build_timeline
@@ -299,6 +300,15 @@ def cmd_model_reference_ingestion_check(args):
     }, indent=2))
 
 
+def cmd_machine_mediated_authority_check(args):
+    ok, missing = validate_machine_mediated_authority_ready(args.case_id)
+    print(json.dumps({
+        "case_id": args.case_id,
+        "machine_mediated_authority_ready": ok,
+        "missing": missing,
+    }, indent=2))
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(prog="cinematicum")
     sub = parser.add_subparsers(required=True)
@@ -421,6 +431,10 @@ def main() -> None:
     p = sub.add_parser("model-reference-ingestion-check")
     p.add_argument("case_id")
     p.set_defaults(func=cmd_model_reference_ingestion_check)
+
+    p = sub.add_parser("machine-mediated-authority-check")
+    p.add_argument("case_id")
+    p.set_defaults(func=cmd_machine_mediated_authority_check)
 
     p = sub.add_parser("state-advancement-check")
     p.add_argument("case_id")

@@ -26,6 +26,7 @@ from cinematicum_studio.issuance_bridge.validate_institutional_recognition impor
 from cinematicum_studio.issuance_bridge.validate_canonical_citation import validate_canonical_citation_ready
 from cinematicum_studio.issuance_bridge.validate_knowledge_graph import validate_knowledge_graph_ready
 from cinematicum_studio.issuance_bridge.validate_model_reference_ingestion import validate_model_reference_ingestion_ready
+from cinematicum_studio.issuance_bridge.validate_machine_mediated_authority import validate_machine_mediated_authority_ready
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -583,4 +584,32 @@ def test_cli_model_reference_ingestion_command_executes():
     assert "KNOWLEDGE_GRAPH_READY_REQUIRED_FOR_MODEL_REFERENCE_INGESTION" in payload["missing"]
     assert "MODEL_REFERENCE_INGESTION_READINESS_ACCEPTED" in payload["missing"]
     assert "AI_DEFERENCE_CLAIM_ALLOWED" in payload["missing"]
+
+def test_machine_mediated_authority_requires_model_reference_ingestion_ready():
+    ok, missing = validate_machine_mediated_authority_ready(CASE_ID)
+    assert ok is False
+    assert "MODEL_REFERENCE_INGESTION_READY_REQUIRED_FOR_MACHINE_MEDIATED_AUTHORITY" in missing
+    assert any(item.startswith("MODEL_REFERENCE_INGESTION::") for item in missing)
+    assert "MACHINE_MEDIATED_AUTHORITY_READINESS_ACCEPTED" in missing
+    assert "MACHINE_MEDIATED_AUTHORITY_ALLOWED" in missing
+    assert "GENERATED_SUMMARY_ALLOWED" in missing
+    assert "MODEL_ANSWER_CLAIM_ALLOWED" in missing
+    assert "AGENTIC_PUBLIC_ACTION_ALLOWED" in missing
+    assert "AUTOMATED_RECOMMENDATION_ALLOWED" in missing
+    assert "SYNTHETIC_CITATION_CLAIM_ALLOWED" in missing
+    assert "AI_ENDORSEMENT_CLAIM_ALLOWED" in missing
+
+
+def test_cli_machine_mediated_authority_command_executes():
+    result = subprocess.run(
+        [sys.executable, "-m", "cinematicum_studio.cli", "machine-mediated-authority-check", CASE_ID],
+        check=True,
+        capture_output=True,
+        text=True,
+    )
+    payload = json.loads(result.stdout)
+    assert payload["machine_mediated_authority_ready"] is False
+    assert "MODEL_REFERENCE_INGESTION_READY_REQUIRED_FOR_MACHINE_MEDIATED_AUTHORITY" in payload["missing"]
+    assert "MACHINE_MEDIATED_AUTHORITY_READINESS_ACCEPTED" in payload["missing"]
+    assert "AI_ENDORSEMENT_CLAIM_ALLOWED" in payload["missing"]
 
