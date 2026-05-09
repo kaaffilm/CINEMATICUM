@@ -23,6 +23,7 @@ from cinematicum_studio.issuance_bridge.validate_exhibition import validate_exhi
 from cinematicum_studio.issuance_bridge.validate_screening_event import validate_screening_event_ready
 from cinematicum_studio.issuance_bridge.validate_audience_attendance import validate_audience_attendance_ready
 from cinematicum_studio.issuance_bridge.validate_audience_reception import validate_audience_reception_ready
+from cinematicum_studio.issuance_bridge.validate_award_eligibility import validate_award_eligibility_ready
 from cinematicum_studio.render.render_master import render_master
 from cinematicum_studio.review.select_take import select_take
 from cinematicum_studio.timeline.build_otio import build_timeline
@@ -249,6 +250,15 @@ def cmd_audience_reception_check(args):
     }, indent=2))
 
 
+def cmd_award_eligibility_check(args):
+    ok, missing = validate_award_eligibility_ready(args.case_id)
+    print(json.dumps({
+        "case_id": args.case_id,
+        "award_eligibility_ready": ok,
+        "missing": missing,
+    }, indent=2))
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(prog="cinematicum")
     sub = parser.add_subparsers(required=True)
@@ -351,6 +361,10 @@ def main() -> None:
     p = sub.add_parser("audience-reception-check")
     p.add_argument("case_id")
     p.set_defaults(func=cmd_audience_reception_check)
+
+    p = sub.add_parser("award-eligibility-check")
+    p.add_argument("case_id")
+    p.set_defaults(func=cmd_award_eligibility_check)
 
     p = sub.add_parser("state-advancement-check")
     p.add_argument("case_id")
