@@ -19,6 +19,7 @@ from cinematicum_studio.issuance_bridge.validate_public_claim import validate_pu
 from cinematicum_studio.issuance_bridge.validate_audience_surface import validate_audience_surface_ready
 from cinematicum_studio.issuance_bridge.validate_exhibition import validate_exhibition_ready
 from cinematicum_studio.issuance_bridge.validate_screening_event import validate_screening_event_ready
+from cinematicum_studio.issuance_bridge.validate_audience_attendance import validate_audience_attendance_ready
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -386,4 +387,30 @@ def test_cli_screening_event_command_executes():
     assert "EXHIBITION_READY_REQUIRED_FOR_SCREENING_EVENT" in payload["missing"]
     assert "SCREENING_EVENT_READINESS_ACCEPTED" in payload["missing"]
     assert "PREMIERE_EVENT_ALLOWED" in payload["missing"]
+
+def test_audience_attendance_requires_screening_event_ready():
+    ok, missing = validate_audience_attendance_ready(CASE_ID)
+    assert ok is False
+    assert "SCREENING_EVENT_READY_REQUIRED_FOR_AUDIENCE_ATTENDANCE" in missing
+    assert any(item.startswith("SCREENING_EVENT::") for item in missing)
+    assert "AUDIENCE_ATTENDANCE_READINESS_ACCEPTED" in missing
+    assert "ATTENDANCE_RECORD_ALLOWED" in missing
+    assert "BOX_OFFICE_RECORD_ALLOWED" in missing
+    assert "AUDIENCE_COUNT_ALLOWED" in missing
+    assert "Q_AND_A_RECORD_ALLOWED" in missing
+    assert "PREMIERE_PRESENCE_RECORD_ALLOWED" in missing
+
+
+def test_cli_audience_attendance_command_executes():
+    result = subprocess.run(
+        [sys.executable, "-m", "cinematicum_studio.cli", "audience-attendance-check", CASE_ID],
+        check=True,
+        capture_output=True,
+        text=True,
+    )
+    payload = json.loads(result.stdout)
+    assert payload["audience_attendance_ready"] is False
+    assert "SCREENING_EVENT_READY_REQUIRED_FOR_AUDIENCE_ATTENDANCE" in payload["missing"]
+    assert "AUDIENCE_ATTENDANCE_READINESS_ACCEPTED" in payload["missing"]
+    assert "PREMIERE_PRESENCE_RECORD_ALLOWED" in payload["missing"]
 

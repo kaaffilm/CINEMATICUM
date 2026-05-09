@@ -1,0 +1,15 @@
+{
+  "case_id": "CASE_001_THE_LAST_RENDER",
+  "title": "THE LAST RENDER",
+  "gate": "AUDIENCE_ATTENDANCE_READINESS",
+  "accepted": false,
+  "attendance_record_allowed": false,
+  "box_office_record_allowed": false,
+  "audience_count_allowed": false,
+  "q_and_a_record_allowed": false,
+  "premiere_presence_record_allowed": false,
+  "requires_screening_event_ready": true,
+  "required_for_audience_attendance_claim": true,
+  "hard_rule": "SCREENING_EVENT_READY_REQUIRED_BEFORE_ATTENDANCE_RECORD",
+  "reason": "No audience-attendance readiness exists. Attendance, box-office, audience-count, Q&A, or premiere-presence claims cannot self-certify a valid screening event."
+}
