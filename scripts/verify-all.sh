@@ -2,6 +2,29 @@
 set -euo pipefail
 
 python3 scripts/regenerate-object-registry.py --write
+python3 -m pytest tests/test_protocol_issuance.py tests/test_public_status_protocol_issuance.py
+python3 - <<'VERIFY_PROTOCOL_ISSUANCE_JSON'
+import json
+import subprocess
+import sys
+
+case_id = "CASE_001_THE_LAST_RENDER"
+result = subprocess.run(
+    [sys.executable, "-m", "cinematicum_studio.cli", "issuance-check", case_id],
+    check=True,
+    capture_output=True,
+    text=True,
+)
+payload = json.loads(result.stdout)
+
+assert payload["case_id"] == case_id
+assert payload["issued"] is True
+assert payload["issuance_type"] == "PROTOCOL_FILM"
+assert payload["protocol_perimeter_issued"] is True
+assert payload["protocol_film_issued"] is True
+assert payload["media_payload_present"] is False
+assert payload["motion_picture_media_issuance_ready"] is False
+VERIFY_PROTOCOL_ISSUANCE_JSON
 python3 -m unittest tests/test_authority_object_admission_closure_seal.py
 bash scripts/verify-authority-object-admission-closure-seal.sh
 python3 -m unittest tests/test_transition_attempt_rejection_ledger.py
