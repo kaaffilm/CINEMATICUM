@@ -1007,3 +1007,45 @@ def test_take_ledger_without_explicit_source_admissibility_fails_closed():
     assert ok is False
     assert "TAKE_LEDGER_SOURCE_ADMISSIBILITY_UNPROVEN" in missing
 
+def test_take_source_admissibility_requires_external_evidence_record():
+    film_dir = ROOT / "CASES" / CASE_ID / "FILM"
+    ledger_path = film_dir / "TAKE_LEDGER.json"
+    evidence_path = film_dir / "TAKE_SOURCE_ADMISSIBILITY_LEDGER.json"
+
+    ledger_backup = ledger_path.read_text()
+    evidence_backup = evidence_path.read_text() if evidence_path.exists() else None
+
+    try:
+        ledger_path.write_text(json.dumps({
+            "case_id": CASE_ID,
+            "shots": [
+                {
+                    "shot_id": "SHOT_001",
+                    "takes": [
+                        {
+                            "id": "SHOT_001_TAKE_001",
+                            "shot_id": "SHOT_001",
+                            "file_path": "external/final/source.mov",
+                            "sha256": "0" * 64,
+                            "is_admissible_film_source": True,
+                            "source_admissibility_classification": "ADMISSIBLE_FINAL_FILM_SOURCE",
+                        }
+                    ],
+                }
+            ],
+        }, indent=2) + "\n")
+
+        if evidence_path.exists():
+            evidence_path.unlink()
+
+        ok, missing = validate_admissible_motion_picture(CASE_ID)
+
+        assert ok is False
+        assert "TAKE_SOURCE_ADMISSIBILITY_EVIDENCE_MISSING" in missing
+    finally:
+        ledger_path.write_text(ledger_backup)
+        if evidence_backup is not None:
+            evidence_path.write_text(evidence_backup)
+        elif evidence_path.exists():
+            evidence_path.unlink()
+

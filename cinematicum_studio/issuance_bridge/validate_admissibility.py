@@ -68,6 +68,42 @@ def _take_ledger_source_admissibility_unproven(film_dir: Path) -> bool:
 
     return False
 
+def _take_source_admissibility_evidence_missing(film_dir: Path) -> bool:
+    ledger_path = film_dir / "TAKE_LEDGER.json"
+    evidence_path = film_dir / "TAKE_SOURCE_ADMISSIBILITY_LEDGER.json"
+
+    if not ledger_path.exists():
+        return False
+
+    ledger = _load_json(ledger_path)
+    admissible_takes = []
+    for shot in ledger.get("shots", []):
+        for take in shot.get("takes", []):
+            if (
+                take.get("is_admissible_film_source") is True
+                and take.get("source_admissibility_classification") == "ADMISSIBLE_FINAL_FILM_SOURCE"
+            ):
+                admissible_takes.append(take)
+
+    if not admissible_takes:
+        return False
+
+    if not evidence_path.exists():
+        return True
+
+    evidence = _load_json(evidence_path)
+    records = {
+        (record.get("take_id"), record.get("sha256"))
+        for record in evidence.get("admissible_sources", [])
+        if record.get("admissibility_evidence_accepted") is True
+    }
+
+    for take in admissible_takes:
+        if (take.get("id"), take.get("sha256")) not in records:
+            return True
+
+    return False
+
 
 def validate_admissible_motion_picture(case_id: str) -> tuple[bool, list[str]]:
     """
@@ -89,6 +125,9 @@ def validate_admissible_motion_picture(case_id: str) -> tuple[bool, list[str]]:
 
     if _take_ledger_source_admissibility_unproven(film_dir):
         missing.append("TAKE_LEDGER_SOURCE_ADMISSIBILITY_UNPROVEN")
+
+    if _take_source_admissibility_evidence_missing(film_dir):
+        missing.append("TAKE_SOURCE_ADMISSIBILITY_EVIDENCE_MISSING")
 
     proof_path = film_dir / "LOCAL_RENDER_PROOF_CLASSIFICATION.json"
     if not proof_path.exists():
