@@ -146,6 +146,59 @@ def _take_source_admissibility_evidence_missing(film_dir: Path) -> bool:
     return False
 
 
+
+def _take_source_admissibility_evidence_payload_unbound(film_dir: Path) -> bool:
+    evidence_path = film_dir / "TAKE_SOURCE_ADMISSIBILITY_LEDGER.json"
+    if not evidence_path.exists():
+        return False
+
+    evidence = _load_json(evidence_path)
+    for record in evidence.get("admissible_sources", []):
+        if record.get("admissibility_evidence_accepted") is not True:
+            continue
+
+        payload = record.get("evidence_file_path")
+        expected_sha256 = record.get("evidence_sha256")
+        if not payload or not expected_sha256:
+            continue
+
+        payload_path = Path(payload)
+        if not payload_path.exists():
+            continue
+
+        try:
+            payload_path.relative_to(film_dir)
+        except ValueError:
+            continue
+
+        if _sha256_path(payload_path) != expected_sha256:
+            continue
+
+        try:
+            payload_record = _load_json(payload_path)
+        except json.JSONDecodeError:
+            return True
+
+        if payload_record.get("object_type") != "CINEMATICUM_TAKE_SOURCE_ADMISSIBILITY_EVIDENCE":
+            return True
+        if payload_record.get("case_id") != evidence.get("case_id"):
+            return True
+        if payload_record.get("take_id") != record.get("take_id"):
+            return True
+        if payload_record.get("source_sha256") != record.get("sha256"):
+            return True
+        if payload_record.get("accepted") is not True:
+            return True
+        if payload_record.get("evidence_verdict") != "ADMISSIBLE_FINAL_FILM_SOURCE":
+            return True
+        if payload_record.get("self_attested") is not False:
+            return True
+        if payload_record.get("authority_classification") != "INDEPENDENT_SOURCE_ADMISSIBILITY_AUTHORITY":
+            return True
+
+    return False
+
+
 def validate_admissible_motion_picture(case_id: str) -> tuple[bool, list[str]]:
     """
     Hard distinction:
@@ -172,6 +225,9 @@ def validate_admissible_motion_picture(case_id: str) -> tuple[bool, list[str]]:
 
     if _take_source_admissibility_evidence_payload_invalid(film_dir):
         missing.append("TAKE_SOURCE_ADMISSIBILITY_EVIDENCE_PAYLOAD_INVALID")
+
+    if _take_source_admissibility_evidence_payload_unbound(film_dir):
+        missing.append("TAKE_SOURCE_ADMISSIBILITY_EVIDENCE_PAYLOAD_UNBOUND")
 
     proof_path = film_dir / "LOCAL_RENDER_PROOF_CLASSIFICATION.json"
     if not proof_path.exists():

@@ -1101,3 +1101,80 @@ def test_take_source_admissibility_evidence_requires_bound_payload():
         elif evidence_path.exists():
             evidence_path.unlink()
 
+def test_take_source_admissibility_evidence_payload_cannot_self_attest():
+    import hashlib
+
+    film_dir = ROOT / "CASES" / CASE_ID / "FILM"
+    ledger_path = film_dir / "TAKE_LEDGER.json"
+    evidence_path = film_dir / "TAKE_SOURCE_ADMISSIBILITY_LEDGER.json"
+    payload_dir = film_dir / "SOURCE_ADMISSIBILITY_EVIDENCE"
+    payload_path = payload_dir / "SHOT_001_TAKE_001.self_attested.json"
+
+    ledger_backup = ledger_path.read_text()
+    evidence_backup = evidence_path.read_text() if evidence_path.exists() else None
+    payload_backup = payload_path.read_text() if payload_path.exists() else None
+
+    try:
+        payload_dir.mkdir(exist_ok=True)
+
+        ledger_path.write_text(json.dumps({
+            "case_id": CASE_ID,
+            "shots": [
+                {
+                    "shot_id": "SHOT_001",
+                    "takes": [
+                        {
+                            "id": "SHOT_001_TAKE_001",
+                            "shot_id": "SHOT_001",
+                            "file_path": "external/final/source.mov",
+                            "sha256": "1" * 64,
+                            "is_admissible_film_source": True,
+                            "source_admissibility_classification": "ADMISSIBLE_FINAL_FILM_SOURCE",
+                        }
+                    ],
+                }
+            ],
+        }, indent=2) + "\n")
+
+        payload_path.write_text(json.dumps({
+            "object_type": "CINEMATICUM_TAKE_SOURCE_ADMISSIBILITY_EVIDENCE",
+            "case_id": CASE_ID,
+            "take_id": "SHOT_001_TAKE_001",
+            "source_sha256": "1" * 64,
+            "accepted": True,
+            "evidence_verdict": "ADMISSIBLE_FINAL_FILM_SOURCE",
+            "self_attested": True,
+            "authority_classification": "SELF_ATTESTED_SOURCE_ADMISSIBILITY",
+        }, indent=2) + "\n")
+
+        payload_sha256 = hashlib.sha256(payload_path.read_bytes()).hexdigest()
+
+        evidence_path.write_text(json.dumps({
+            "case_id": CASE_ID,
+            "admissible_sources": [
+                {
+                    "take_id": "SHOT_001_TAKE_001",
+                    "sha256": "1" * 64,
+                    "admissibility_evidence_accepted": True,
+                    "evidence_file_path": str(payload_path.relative_to(ROOT)),
+                    "evidence_sha256": payload_sha256,
+                }
+            ],
+        }, indent=2) + "\n")
+
+        ok, missing = validate_admissible_motion_picture(CASE_ID)
+
+        assert ok is False
+        assert "TAKE_SOURCE_ADMISSIBILITY_EVIDENCE_PAYLOAD_UNBOUND" in missing
+    finally:
+        ledger_path.write_text(ledger_backup)
+        if evidence_backup is not None:
+            evidence_path.write_text(evidence_backup)
+        elif evidence_path.exists():
+            evidence_path.unlink()
+
+        if payload_backup is not None:
+            payload_path.write_text(payload_backup)
+        elif payload_path.exists():
+            payload_path.unlink()
+
