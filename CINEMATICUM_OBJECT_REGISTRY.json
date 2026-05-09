@@ -9,7 +9,7 @@
   "registry_does_not_override_current_state": true,
   "current_active_state": "RELEASE_CANDIDATE_READY",
   "case_id": "CASE_001_THE_LAST_RENDER",
-  "entries_count": 479,
+  "entries_count": 480,
   "entries": [
     {
       "path": "ADMISSIBILITY_VERDICT_SCHEMA.json",
@@ -5250,6 +5250,21 @@
       "path": "CINEMATICUM_OUTSIDER_CLONE_REPLAY.json",
       "sha256": "85e307d10fb05cc66e20b2581810941647bb0bad589cd70ad93ad729d86a72d7",
       "object_type": "CINEMATICUM_OUTSIDER_CLONE_REPLAY",
+      "schema_version": "UNDECLARED_SCHEMA_VERSION",
+      "surface_class": "CASE_RECORD",
+      "case_id": "CASE_001_THE_LAST_RENDER",
+      "current_truth_owner": false,
+      "issued": false,
+      "release_candidate_ready": false,
+      "media_present": false,
+      "outsider_replay_passed": false,
+      "current_active_state": "RELEASE_CANDIDATE_READY",
+      "active_current_state": "RELEASE_CANDIDATE_READY"
+    },
+    {
+      "path": "CINEMATICUM_PROTOCOL_ISSUANCE.json",
+      "sha256": "f472b3d3f335d3bc423640bdfa8f20c152a593c62cecec3009d2f8991fcbed22",
+      "object_type": "CINEMATICUM_PROTOCOL_ISSUANCE",
       "schema_version": "UNDECLARED_SCHEMA_VERSION",
       "surface_class": "CASE_RECORD",
       "case_id": "CASE_001_THE_LAST_RENDER",

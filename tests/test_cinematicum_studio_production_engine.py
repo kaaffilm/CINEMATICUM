@@ -158,9 +158,19 @@ def test_cli_issuance_command_executes():
         text=True,
     )
     payload = json.loads(result.stdout)
-    assert payload["issuance_ready"] is False
-    assert "MASTER::FINAL_MASTER_MANIFEST.json" in payload["missing"]
-    assert any(item.startswith("ADMISSIBILITY::") for item in payload["missing"])
+
+    assert payload["issued"] is True
+    assert payload["issuance_type"] == "PROTOCOL_FILM"
+    assert payload["protocol_perimeter_issued"] is True
+    assert payload["protocol_film_issued"] is True
+    assert payload["media_payload_present"] is False
+    assert payload["motion_picture_media_issuance_ready"] is False
+    assert "MASTER::FINAL_MASTER_MANIFEST.json" in payload["motion_picture_media_missing"]
+    assert any(
+        item.startswith("ADMISSIBILITY::")
+        for item in payload["motion_picture_media_missing"]
+    )
+    assert "issuance_ready" not in payload
 
 def test_state_advancement_to_issued_requires_issuance_ready():
     ok, missing = validate_state_advancement(CASE_ID, "ISSUED")
