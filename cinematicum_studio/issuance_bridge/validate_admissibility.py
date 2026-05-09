@@ -856,6 +856,128 @@ def _take_source_admissibility_case_closure_admission_ledger_unbound(film_dir: P
     return False
 
 
+def _take_source_admissibility_case_closure_admission_ledger_status_unbound(film_dir: Path) -> bool:
+    evidence_dir = film_dir / "SOURCE_ADMISSIBILITY_EVIDENCE"
+    if not evidence_dir.exists():
+        return False
+
+    ledger_path = Path("CINEMATICUM_AUTHORITY_OBJECT_ADMISSION_DECISION_LEDGER.json")
+    if not ledger_path.exists():
+        return False
+
+    try:
+        ledger = _load_json(ledger_path)
+    except json.JSONDecodeError:
+        return True
+
+    def field(record, *names):
+        for name in names:
+            if name in record:
+                return record.get(name)
+        return None
+
+    for closure_path in evidence_dir.glob("*.json"):
+        try:
+            closure = _load_json(closure_path)
+        except json.JSONDecodeError:
+            continue
+
+        if closure.get("object_type") != "CINEMATICUM_TAKE_SOURCE_ADMISSIBILITY_ROOT_AUTHORITY_CASE_CLOSURE":
+            continue
+
+        case_id = closure.get("case_id")
+        admission_path_value = closure.get("authority_object_admission_decision_path")
+        admission_sha256 = closure.get("authority_object_admission_decision_sha256")
+        admission_object_id = closure.get("authority_object_admission_object_id")
+
+        # Earlier gates own malformed closure/admission references.
+        if not case_id or not admission_path_value or not admission_sha256 or not admission_object_id:
+            continue
+
+        decision_records = ledger.get("decision_records")
+        if not isinstance(decision_records, list):
+            continue
+
+        matching_records = [
+            record
+            for record in decision_records
+            if field(record, "object_id", "admission_object_id", "decision_object_id") == admission_object_id
+            and field(record, "decision_path", "decision_file_path", "file_path", "path") == admission_path_value
+            and field(record, "decision_sha256", "admission_decision_sha256", "sha256") == admission_sha256
+            and record.get("decision") in {"ACCEPT", "ACCEPTED"}
+            and record.get("accepted") is True
+            and (
+                record.get("admitted_object_type")
+                or record.get("object_type_admitted")
+            ) == "CINEMATICUM_TAKE_SOURCE_ADMISSIBILITY_ROOT_AUTHORITY_CASE_CLOSURE"
+            and record.get("admitted_closure_id") == closure.get("closure_id")
+            and record.get("admitted_root_authority_id") == closure.get("root_authority_id")
+        ]
+
+        # Earlier ledger gate owns absence of the entry.
+        if not matching_records:
+            continue
+
+        status_path = Path("CASES") / case_id / "AUTHORITY_OBJECT_ADMISSION_DECISION_LEDGER_STATUS.json"
+        if not status_path.exists():
+            return True
+
+        try:
+            status = _load_json(status_path)
+        except json.JSONDecodeError:
+            return True
+
+        mirror_keys = (
+            "case_id",
+            "current_state",
+            "active_current_state",
+            "decision_record_count",
+            "admission_decision_count",
+            "accepted_decision_count",
+            "rejected_decision_count",
+            "decision_records_present",
+            "accepted_decisions_present",
+            "rejected_decisions_present",
+            "authority_satisfied",
+            "may_advance_now",
+            "release_candidate_ready",
+            "issued",
+            "media_present",
+        )
+
+        for key in mirror_keys:
+            if status.get(key) != ledger.get(key):
+                return True
+
+        accepted_count = sum(
+            1
+            for record in decision_records
+            if record.get("decision") in {"ACCEPT", "ACCEPTED"} and record.get("accepted") is True
+        )
+        rejected_count = sum(
+            1
+            for record in decision_records
+            if record.get("decision") == "REJECTED" or record.get("accepted") is False
+        )
+
+        if ledger.get("decision_record_count") != len(decision_records):
+            return True
+        if ledger.get("admission_decision_count") != len(decision_records):
+            return True
+        if ledger.get("accepted_decision_count") != accepted_count:
+            return True
+        if ledger.get("rejected_decision_count") != rejected_count:
+            return True
+        if ledger.get("decision_records_present") is not (len(decision_records) > 0):
+            return True
+        if ledger.get("accepted_decisions_present") is not (accepted_count > 0):
+            return True
+        if ledger.get("rejected_decisions_present") is not (rejected_count > 0):
+            return True
+
+    return False
+
+
 def validate_admissible_motion_picture(case_id: str) -> tuple[bool, list[str]]:
     """
     Hard distinction:
@@ -912,6 +1034,9 @@ def validate_admissible_motion_picture(case_id: str) -> tuple[bool, list[str]]:
 
     if _take_source_admissibility_case_closure_admission_ledger_unbound(film_dir):
         missing.append("TAKE_SOURCE_ADMISSIBILITY_CASE_CLOSURE_ADMISSION_LEDGER_UNBOUND")
+
+    if _take_source_admissibility_case_closure_admission_ledger_status_unbound(film_dir):
+        missing.append("TAKE_SOURCE_ADMISSIBILITY_CASE_CLOSURE_ADMISSION_LEDGER_STATUS_UNBOUND")
 
     proof_path = film_dir / "LOCAL_RENDER_PROOF_CLASSIFICATION.json"
     if not proof_path.exists():

@@ -2044,3 +2044,104 @@ def test_take_source_root_authority_case_closure_admission_must_be_in_decision_l
         else:
             admission_path.write_text(admission_backup)
 
+def test_take_source_case_closure_admission_ledger_must_match_status_mirror():
+    import hashlib
+
+    film_dir = ROOT / "CASES" / CASE_ID / "FILM"
+    evidence_dir = film_dir / "SOURCE_ADMISSIBILITY_EVIDENCE"
+    closure_path = evidence_dir / "ROOT_SOURCE_AUTHORITY_001.case_closure_admission_status_unbound.json"
+    admission_path = evidence_dir / "ROOT_SOURCE_AUTHORITY_001.case_closure_admission_status_unbound.decision.json"
+    ledger_path = ROOT / "CINEMATICUM_AUTHORITY_OBJECT_ADMISSION_DECISION_LEDGER.json"
+    status_path = ROOT / "CASES" / CASE_ID / "AUTHORITY_OBJECT_ADMISSION_DECISION_LEDGER_STATUS.json"
+
+    closure_backup = closure_path.read_text() if closure_path.exists() else None
+    admission_backup = admission_path.read_text() if admission_path.exists() else None
+    ledger_backup = ledger_path.read_text()
+    status_backup = status_path.read_text() if status_path.exists() else None
+
+    closure_id = "ROOT_SOURCE_AUTHORITY_CASE_CLOSURE_STATUS_UNBOUND"
+    root_authority_id = "ROOT_SOURCE_AUTHORITY_STATUS_UNBOUND"
+    admission_object_id = "ROOT_SOURCE_AUTHORITY_CASE_CLOSURE_STATUS_UNBOUND_ADMISSION"
+
+    try:
+        evidence_dir.mkdir(exist_ok=True)
+
+        admission_path.write_text(json.dumps({
+            "case_id": CASE_ID,
+            "object_id": admission_object_id,
+            "accepted": True,
+            "decision": "ACCEPTED",
+            "admitted_object_type": "CINEMATICUM_TAKE_SOURCE_ADMISSIBILITY_ROOT_AUTHORITY_CASE_CLOSURE",
+            "admitted_closure_id": closure_id,
+            "admitted_root_authority_id": root_authority_id,
+        }, indent=2) + "\n")
+
+        admission_sha256 = hashlib.sha256(admission_path.read_bytes()).hexdigest()
+        admission_rel = str(admission_path.relative_to(ROOT))
+
+        closure_path.write_text(json.dumps({
+            "object_type": "CINEMATICUM_TAKE_SOURCE_ADMISSIBILITY_ROOT_AUTHORITY_CASE_CLOSURE",
+            "case_id": CASE_ID,
+            "closure_id": closure_id,
+            "root_authority_id": root_authority_id,
+            "closure_authorizes_root_authority": True,
+            "scope": "TAKE_SOURCE_ADMISSIBILITY_ROOT_AUTHORITY",
+            "revoked": False,
+            "authorized_root_authorities": [
+                {
+                    "root_authority_id": root_authority_id,
+                    "scope": "TAKE_SOURCE_ADMISSIBILITY_ROOT_AUTHORITY",
+                    "closure_authorizes_root_authority": True,
+                    "revoked": False,
+                }
+            ],
+            "authority_object_admission_decision_path": admission_rel,
+            "authority_object_admission_decision_sha256": admission_sha256,
+            "authority_object_admission_object_id": admission_object_id,
+        }, indent=2) + "\n")
+
+        ledger = json.loads(ledger_backup)
+        ledger["decision_records"] = [
+            {
+                "object_id": admission_object_id,
+                "decision_path": admission_rel,
+                "decision_sha256": admission_sha256,
+                "accepted": True,
+                "decision": "ACCEPTED",
+                "admitted_object_type": "CINEMATICUM_TAKE_SOURCE_ADMISSIBILITY_ROOT_AUTHORITY_CASE_CLOSURE",
+                "admitted_closure_id": closure_id,
+                "admitted_root_authority_id": root_authority_id,
+            }
+        ]
+        ledger["decision_record_count"] = 1
+        ledger["admission_decision_count"] = 1
+        ledger["accepted_decision_count"] = 1
+        ledger["rejected_decision_count"] = 0
+        ledger["decision_records_present"] = True
+        ledger["accepted_decisions_present"] = True
+        ledger["rejected_decisions_present"] = False
+        ledger_path.write_text(json.dumps(ledger, indent=2) + "\n")
+
+        # Deliberately leave status mirror at its original zero-state values.
+        ok, missing = validate_admissible_motion_picture(CASE_ID)
+
+        assert ok is False
+        assert "TAKE_SOURCE_ADMISSIBILITY_CASE_CLOSURE_ADMISSION_LEDGER_STATUS_UNBOUND" in missing
+    finally:
+        if closure_backup is None:
+            closure_path.unlink(missing_ok=True)
+        else:
+            closure_path.write_text(closure_backup)
+
+        if admission_backup is None:
+            admission_path.unlink(missing_ok=True)
+        else:
+            admission_path.write_text(admission_backup)
+
+        ledger_path.write_text(ledger_backup)
+
+        if status_backup is None:
+            status_path.unlink(missing_ok=True)
+        else:
+            status_path.write_text(status_backup)
+
