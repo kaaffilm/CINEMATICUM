@@ -15,6 +15,7 @@ from cinematicum_studio.issuance_bridge.validate_distribution import validate_di
 from cinematicum_studio.issuance_bridge.validate_release_artifact import validate_release_artifact_ready
 from cinematicum_studio.issuance_bridge.validate_permanence import validate_permanence_ready
 from cinematicum_studio.issuance_bridge.validate_public_index import validate_public_index_ready
+from cinematicum_studio.issuance_bridge.validate_public_claim import validate_public_claim_ready
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -279,4 +280,29 @@ def test_cli_public_index_command_executes():
     assert "PERMANENCE_READY_REQUIRED_FOR_PUBLIC_INDEX" in payload["missing"]
     assert "CANONICAL_PUBLIC_INDEX_READINESS_ACCEPTED" in payload["missing"]
     assert "EXTERNAL_REFERENCE_ALLOWED" in payload["missing"]
+
+def test_public_claim_requires_public_index_ready():
+    ok, missing = validate_public_claim_ready(CASE_ID)
+    assert ok is False
+    assert "PUBLIC_INDEX_READY_REQUIRED_FOR_PUBLIC_CLAIM" in missing
+    assert any(item.startswith("PUBLIC_INDEX::") for item in missing)
+    assert "PUBLIC_CLAIM_READINESS_ACCEPTED" in missing
+    assert "PUBLIC_CLAIM_ALLOWED" in missing
+    assert "ANNOUNCEMENT_ALLOWED" in missing
+    assert "PROMOTIONAL_SURFACE_ALLOWED" in missing
+    assert "PRESS_STATEMENT_ALLOWED" in missing
+
+
+def test_cli_public_claim_command_executes():
+    result = subprocess.run(
+        [sys.executable, "-m", "cinematicum_studio.cli", "public-claim-check", CASE_ID],
+        check=True,
+        capture_output=True,
+        text=True,
+    )
+    payload = json.loads(result.stdout)
+    assert payload["public_claim_ready"] is False
+    assert "PUBLIC_INDEX_READY_REQUIRED_FOR_PUBLIC_CLAIM" in payload["missing"]
+    assert "PUBLIC_CLAIM_READINESS_ACCEPTED" in payload["missing"]
+    assert "PRESS_STATEMENT_ALLOWED" in payload["missing"]
 
