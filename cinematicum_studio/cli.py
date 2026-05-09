@@ -36,6 +36,7 @@ from cinematicum_studio.issuance_bridge.validate_execution_provenance import val
 from cinematicum_studio.issuance_bridge.validate_change_control import validate_change_control_ready
 from cinematicum_studio.issuance_bridge.validate_deployment_authorization import validate_deployment_authorization_ready
 from cinematicum_studio.issuance_bridge.validate_runtime_operation import validate_runtime_operation_ready
+from cinematicum_studio.issuance_bridge.validate_observability import validate_observability_ready
 from cinematicum_studio.render.render_master import render_master
 from cinematicum_studio.review.select_take import select_take
 from cinematicum_studio.timeline.build_otio import build_timeline
@@ -379,6 +380,15 @@ def cmd_runtime_operation_check(args):
     }, indent=2))
 
 
+def cmd_observability_check(args):
+    ok, missing = validate_observability_ready(args.case_id)
+    print(json.dumps({
+        "case_id": args.case_id,
+        "observability_ready": ok,
+        "missing": missing,
+    }, indent=2))
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(prog="cinematicum")
     sub = parser.add_subparsers(required=True)
@@ -533,6 +543,10 @@ def main() -> None:
     p = sub.add_parser("runtime-operation-check")
     p.add_argument("case_id")
     p.set_defaults(func=cmd_runtime_operation_check)
+
+    p = sub.add_parser("observability-check")
+    p.add_argument("case_id")
+    p.set_defaults(func=cmd_observability_check)
 
     p = sub.add_parser("state-advancement-check")
     p.add_argument("case_id")
