@@ -978,6 +978,90 @@ def _take_source_admissibility_case_closure_admission_ledger_status_unbound(film
     return False
 
 
+def _take_source_admissibility_case_closure_admission_docket_unbound(film_dir: Path) -> bool:
+    evidence_dir = film_dir / "SOURCE_ADMISSIBILITY_EVIDENCE"
+    if not evidence_dir.exists():
+        return False
+
+    docket_path = Path("CINEMATICUM_AUTHORITY_OBJECT_ADMISSION_DOCKET.json")
+    if not docket_path.exists():
+        return False
+
+    try:
+        docket = _load_json(docket_path)
+    except json.JSONDecodeError:
+        return True
+
+    def field(record, *names):
+        for name in names:
+            if name in record:
+                return record.get(name)
+        return None
+
+    for closure_path in evidence_dir.glob("*.json"):
+        try:
+            closure = _load_json(closure_path)
+        except json.JSONDecodeError:
+            continue
+
+        if closure.get("object_type") != "CINEMATICUM_TAKE_SOURCE_ADMISSIBILITY_ROOT_AUTHORITY_CASE_CLOSURE":
+            continue
+
+        case_id = closure.get("case_id")
+        admission_path_value = closure.get("authority_object_admission_decision_path")
+        admission_sha256 = closure.get("authority_object_admission_decision_sha256")
+        admission_object_id = closure.get("authority_object_admission_object_id")
+
+        # Earlier gates own malformed closure/admission references.
+        if not case_id or not admission_path_value or not admission_sha256 or not admission_object_id:
+            continue
+
+        if docket.get("case_id") != case_id:
+            return True
+        if docket.get("object_type") != "CINEMATICUM_AUTHORITY_OBJECT_ADMISSION_DOCKET":
+            return True
+        if docket.get("authority_object_admission_docket_passed") is not True:
+            return True
+        if docket.get("authority_objects_admitted") is not True:
+            return True
+
+        docket_records = None
+        for key in (
+            "admitted_authority_objects",
+            "authority_object_admissions",
+            "admission_records",
+            "admitted_objects",
+            "docket_records",
+        ):
+            value = docket.get(key)
+            if isinstance(value, list):
+                docket_records = value
+                break
+
+        if docket_records is None:
+            return True
+
+        has_docket_entry = any(
+            field(record, "object_id", "admission_object_id", "decision_object_id") == admission_object_id
+            and field(record, "decision_path", "decision_file_path", "file_path", "path") == admission_path_value
+            and field(record, "decision_sha256", "admission_decision_sha256", "sha256") == admission_sha256
+            and field(record, "decision", "admission_decision") in {"ACCEPT", "ACCEPTED"}
+            and field(record, "accepted", "admitted") is True
+            and (
+                field(record, "admitted_object_type", "object_type_admitted")
+                == "CINEMATICUM_TAKE_SOURCE_ADMISSIBILITY_ROOT_AUTHORITY_CASE_CLOSURE"
+            )
+            and field(record, "admitted_closure_id", "closure_id") == closure.get("closure_id")
+            and field(record, "admitted_root_authority_id", "root_authority_id") == closure.get("root_authority_id")
+            for record in docket_records
+        )
+
+        if not has_docket_entry:
+            return True
+
+    return False
+
+
 def validate_admissible_motion_picture(case_id: str) -> tuple[bool, list[str]]:
     """
     Hard distinction:
@@ -1037,6 +1121,9 @@ def validate_admissible_motion_picture(case_id: str) -> tuple[bool, list[str]]:
 
     if _take_source_admissibility_case_closure_admission_ledger_status_unbound(film_dir):
         missing.append("TAKE_SOURCE_ADMISSIBILITY_CASE_CLOSURE_ADMISSION_LEDGER_STATUS_UNBOUND")
+
+    if _take_source_admissibility_case_closure_admission_docket_unbound(film_dir):
+        missing.append("TAKE_SOURCE_ADMISSIBILITY_CASE_CLOSURE_ADMISSION_DOCKET_UNBOUND")
 
     proof_path = film_dir / "LOCAL_RENDER_PROOF_CLASSIFICATION.json"
     if not proof_path.exists():
