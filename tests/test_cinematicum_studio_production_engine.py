@@ -17,6 +17,7 @@ from cinematicum_studio.issuance_bridge.validate_permanence import validate_perm
 from cinematicum_studio.issuance_bridge.validate_public_index import validate_public_index_ready
 from cinematicum_studio.issuance_bridge.validate_public_claim import validate_public_claim_ready
 from cinematicum_studio.issuance_bridge.validate_audience_surface import validate_audience_surface_ready
+from cinematicum_studio.issuance_bridge.validate_exhibition import validate_exhibition_ready
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -332,4 +333,30 @@ def test_cli_audience_surface_command_executes():
     assert "PUBLIC_CLAIM_READY_REQUIRED_FOR_AUDIENCE_SURFACE" in payload["missing"]
     assert "AUDIENCE_SURFACE_READINESS_ACCEPTED" in payload["missing"]
     assert "SOCIAL_PUBLICATION_ALLOWED" in payload["missing"]
+
+def test_exhibition_requires_audience_surface_ready():
+    ok, missing = validate_exhibition_ready(CASE_ID)
+    assert ok is False
+    assert "AUDIENCE_SURFACE_READY_REQUIRED_FOR_EXHIBITION" in missing
+    assert any(item.startswith("AUDIENCE_SURFACE::") for item in missing)
+    assert "EXHIBITION_READINESS_ACCEPTED" in missing
+    assert "EXHIBITION_ALLOWED" in missing
+    assert "PUBLIC_SCREENING_ALLOWED" in missing
+    assert "FESTIVAL_SUBMISSION_ALLOWED" in missing
+    assert "THEATRICAL_BOOKING_ALLOWED" in missing
+    assert "STREAMING_PREMIERE_ALLOWED" in missing
+
+
+def test_cli_exhibition_command_executes():
+    result = subprocess.run(
+        [sys.executable, "-m", "cinematicum_studio.cli", "exhibition-check", CASE_ID],
+        check=True,
+        capture_output=True,
+        text=True,
+    )
+    payload = json.loads(result.stdout)
+    assert payload["exhibition_ready"] is False
+    assert "AUDIENCE_SURFACE_READY_REQUIRED_FOR_EXHIBITION" in payload["missing"]
+    assert "EXHIBITION_READINESS_ACCEPTED" in payload["missing"]
+    assert "STREAMING_PREMIERE_ALLOWED" in payload["missing"]
 
