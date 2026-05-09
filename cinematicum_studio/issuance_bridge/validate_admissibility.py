@@ -12,7 +12,18 @@ def _load_json(path: Path) -> dict:
     return json.loads(path.read_text())
 
 
-def _take_ledger_uses_local_stub(film_dir: Path) -> bool:
+NON_ADMISSIBLE_RENDER_ARTIFACT_MARKERS = (
+    "cinematicum-local-ffmpeg-stub",
+    "local_video_generator",
+    "stub",
+    "mock",
+    "placeholder",
+    "proof",
+    "synthetic",
+)
+
+
+def _take_ledger_declares_non_admissible_render_artifact(film_dir: Path) -> bool:
     ledger_path = film_dir / "TAKE_LEDGER.json"
     if not ledger_path.exists():
         return False
@@ -20,15 +31,20 @@ def _take_ledger_uses_local_stub(film_dir: Path) -> bool:
     ledger = _load_json(ledger_path)
     for shot in ledger.get("shots", []):
         for take in shot.get("takes", []):
-            model = str(take.get("model", "")).lower()
-            backend = str(take.get("backend", "")).lower()
-            file_path = str(take.get("file_path", "")).lower()
+            evidence = " ".join(
+                str(take.get(key, "")).lower()
+                for key in (
+                    "backend",
+                    "model",
+                    "file_path",
+                    "status",
+                    "classification",
+                    "artifact_type",
+                    "generator",
+                )
+            )
 
-            if "cinematicum-local-ffmpeg-stub" in model:
-                return True
-            if "local_video_generator" in file_path:
-                return True
-            if backend == "command" and "stub" in model:
+            if any(marker in evidence for marker in NON_ADMISSIBLE_RENDER_ARTIFACT_MARKERS):
                 return True
 
     return False
@@ -49,8 +65,8 @@ def validate_admissible_motion_picture(case_id: str) -> tuple[bool, list[str]]:
 
     film_dir = Path("CASES") / case_id / "FILM"
 
-    if _take_ledger_uses_local_stub(film_dir):
-        missing.append("LOCAL_STUB_RENDER_NOT_FILM")
+    if _take_ledger_declares_non_admissible_render_artifact(film_dir):
+        missing.append("NON_ADMISSIBLE_RENDER_ARTIFACT_NOT_FILM")
 
     proof_path = film_dir / "LOCAL_RENDER_PROOF_CLASSIFICATION.json"
     if not proof_path.exists():
