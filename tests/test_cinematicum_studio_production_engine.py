@@ -2659,3 +2659,38 @@ def test_take_source_case_closure_registry_entry_must_bind_object_hash():
 
         registry_path.write_text(registry_backup)
 
+def test_take_source_case_closure_registry_entry_must_bind_schema_identity():
+    registry_path = ROOT / "CINEMATICUM_OBJECT_REGISTRY.json"
+    evidence_dir = ROOT / "CASES" / CASE_ID / "FILM" / "SOURCE_ADMISSIBILITY_EVIDENCE"
+
+    registry_backup = registry_path.read_text()
+
+    try:
+        closure = None
+        for path in sorted(evidence_dir.glob("*.json")):
+            payload = json.loads(path.read_text())
+            if payload.get("object_type") == "CINEMATICUM_TAKE_SOURCE_ADMISSIBILITY_ROOT_AUTHORITY_CASE_CLOSURE":
+                closure = payload
+                break
+
+        assert closure is not None
+
+        admission_path_value = closure["authority_object_admission_decision_path"]
+        registry = json.loads(registry_backup)
+
+        for entry in registry["entries"]:
+            if entry.get("path") == admission_path_value:
+                entry["schema_version"] = "UNDECLARED_SCHEMA_VERSION"
+                break
+        else:
+            raise AssertionError(f"registry entry not found for {admission_path_value}")
+
+        registry_path.write_text(json.dumps(registry, indent=2, ensure_ascii=False) + "\n")
+
+        ok, missing = validate_admissible_motion_picture(CASE_ID)
+
+        assert ok is False
+        assert "TAKE_SOURCE_ADMISSIBILITY_CASE_CLOSURE_ADMISSION_REGISTRY_SCHEMA_UNBOUND" in missing
+    finally:
+        registry_path.write_text(registry_backup)
+

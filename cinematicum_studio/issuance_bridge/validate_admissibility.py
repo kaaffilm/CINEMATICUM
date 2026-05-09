@@ -1322,6 +1322,88 @@ def _take_source_admissibility_case_closure_admission_registry_object_hash_unbou
     return False
 
 
+
+def _take_source_admissibility_case_closure_admission_registry_schema_unbound(film_dir: Path) -> bool:
+    evidence_dir = film_dir / "SOURCE_ADMISSIBILITY_EVIDENCE"
+    if not evidence_dir.exists():
+        return False
+
+    registry_path = Path("CINEMATICUM_OBJECT_REGISTRY.json")
+    if not registry_path.exists():
+        return False
+
+    try:
+        registry = _load_json(registry_path)
+    except json.JSONDecodeError:
+        return True
+
+    entries = registry.get("entries")
+    if not isinstance(entries, list):
+        return True
+
+    entries_by_path = {
+        entry.get("path"): entry
+        for entry in entries
+        if isinstance(entry, dict)
+    }
+
+    for closure_path in evidence_dir.glob("*.json"):
+        try:
+            closure = _load_json(closure_path)
+        except json.JSONDecodeError:
+            continue
+
+        if closure.get("object_type") != "CINEMATICUM_TAKE_SOURCE_ADMISSIBILITY_ROOT_AUTHORITY_CASE_CLOSURE":
+            continue
+
+        admission_path_value = closure.get("authority_object_admission_decision_path")
+        admission_sha256 = closure.get("authority_object_admission_decision_sha256")
+
+        # Earlier gates own missing / malformed admission references.
+        if not admission_path_value or not admission_sha256:
+            continue
+
+        admission_path = Path(admission_path_value)
+        if not admission_path.exists():
+            continue
+
+        try:
+            admission_path.relative_to(Path("CASES") / closure.get("case_id", ""))
+        except ValueError:
+            continue
+
+        if _sha256_path(admission_path) != admission_sha256:
+            continue
+
+        try:
+            admission = _load_json(admission_path)
+        except json.JSONDecodeError:
+            return True
+
+        registry_entry = entries_by_path.get(admission_path.as_posix())
+
+        # Earlier registry-presence gate owns absence.
+        if registry_entry is None:
+            continue
+
+        # Earlier registry-hash gate owns byte mismatch.
+        if registry_entry.get("sha256") != _sha256_path(admission_path):
+            continue
+
+        object_type = registry_entry.get("object_type")
+        schema_version = registry_entry.get("schema_version")
+
+        if object_type in {None, "", "UNDECLARED_OBJECT_TYPE"}:
+            return True
+        if schema_version in {None, "", "UNDECLARED_SCHEMA_VERSION"}:
+            return True
+        if object_type != admission.get("object_type"):
+            return True
+        if schema_version != admission.get("schema_version"):
+            return True
+
+    return False
+
 def validate_admissible_motion_picture(case_id: str) -> tuple[bool, list[str]]:
     """
     Hard distinction:
@@ -1393,6 +1475,9 @@ def validate_admissible_motion_picture(case_id: str) -> tuple[bool, list[str]]:
 
     if _take_source_admissibility_case_closure_admission_registry_object_hash_unbound(film_dir):
         missing.append("TAKE_SOURCE_ADMISSIBILITY_CASE_CLOSURE_ADMISSION_REGISTRY_OBJECT_HASH_UNBOUND")
+
+    if _take_source_admissibility_case_closure_admission_registry_schema_unbound(film_dir):
+        missing.append("TAKE_SOURCE_ADMISSIBILITY_CASE_CLOSURE_ADMISSION_REGISTRY_SCHEMA_UNBOUND")
 
     proof_path = film_dir / "LOCAL_RENDER_PROOF_CLASSIFICATION.json"
     if not proof_path.exists():
