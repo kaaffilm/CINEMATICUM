@@ -1,0 +1,21 @@
+{
+  "case_id": "CASE_001_THE_LAST_RENDER",
+  "title": "THE LAST RENDER",
+  "gate": "RECOVERY_VERIFICATION_READINESS",
+  "accepted": false,
+  "recovery_verification_allowed": false,
+  "post_recovery_health_verification_allowed": false,
+  "traffic_stability_verification_allowed": false,
+  "data_integrity_verification_allowed": false,
+  "rollback_verification_allowed": false,
+  "replay_completeness_verification_allowed": false,
+  "customer_impact_end_claim_allowed": false,
+  "monitoring_stability_claim_allowed": false,
+  "normal_operations_restored_claim_allowed": false,
+  "incident_deescalation_allowed": false,
+  "recovery_success_claim_allowed": false,
+  "requires_service_recovery_ready": true,
+  "required_before_any_recovery_verification_claim": true,
+  "hard_rule": "SERVICE_RECOVERY_READY_REQUIRED_BEFORE_RECOVERY_VERIFICATION",
+  "reason": "No recovery-verification readiness exists. Service recovery cannot self-convert into verified health, traffic stability, data integrity, rollback verification, replay completeness, customer-impact end claims, monitoring-stability claims, normal-operations-restored claims, deescalation, or recovery-success claims."
+}
