@@ -21,6 +21,7 @@ from cinematicum_studio.issuance_bridge.validate_exhibition import validate_exhi
 from cinematicum_studio.issuance_bridge.validate_screening_event import validate_screening_event_ready
 from cinematicum_studio.issuance_bridge.validate_audience_attendance import validate_audience_attendance_ready
 from cinematicum_studio.issuance_bridge.validate_audience_reception import validate_audience_reception_ready
+from cinematicum_studio.issuance_bridge.validate_award_eligibility import validate_award_eligibility_ready
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -441,4 +442,31 @@ def test_cli_audience_reception_command_executes():
     assert "AUDIENCE_ATTENDANCE_READY_REQUIRED_FOR_RECEPTION" in payload["missing"]
     assert "AUDIENCE_RECEPTION_READINESS_ACCEPTED" in payload["missing"]
     assert "RECEPTION_CLAIM_ALLOWED" in payload["missing"]
+
+def test_award_eligibility_requires_audience_reception_ready():
+    ok, missing = validate_award_eligibility_ready(CASE_ID)
+    assert ok is False
+    assert "AUDIENCE_RECEPTION_READY_REQUIRED_FOR_AWARD_ELIGIBILITY" in missing
+    assert any(item.startswith("AUDIENCE_RECEPTION::") for item in missing)
+    assert "AWARD_ELIGIBILITY_READINESS_ACCEPTED" in missing
+    assert "AWARD_SUBMISSION_ALLOWED" in missing
+    assert "FESTIVAL_AWARD_CLAIM_ALLOWED" in missing
+    assert "JURY_PRIZE_CLAIM_ALLOWED" in missing
+    assert "CRITIC_AWARD_CLAIM_ALLOWED" in missing
+    assert "AUDIENCE_AWARD_CLAIM_ALLOWED" in missing
+    assert "OFFICIAL_SELECTION_CLAIM_ALLOWED" in missing
+
+
+def test_cli_award_eligibility_command_executes():
+    result = subprocess.run(
+        [sys.executable, "-m", "cinematicum_studio.cli", "award-eligibility-check", CASE_ID],
+        check=True,
+        capture_output=True,
+        text=True,
+    )
+    payload = json.loads(result.stdout)
+    assert payload["award_eligibility_ready"] is False
+    assert "AUDIENCE_RECEPTION_READY_REQUIRED_FOR_AWARD_ELIGIBILITY" in payload["missing"]
+    assert "AWARD_ELIGIBILITY_READINESS_ACCEPTED" in payload["missing"]
+    assert "OFFICIAL_SELECTION_CLAIM_ALLOWED" in payload["missing"]
 
