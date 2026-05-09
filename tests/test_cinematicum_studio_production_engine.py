@@ -13,6 +13,7 @@ from cinematicum_studio.issuance_bridge.validate_state_advancement import valida
 from cinematicum_studio.issuance_bridge.validate_publication import validate_publication_ready
 from cinematicum_studio.issuance_bridge.validate_distribution import validate_distribution_ready
 from cinematicum_studio.issuance_bridge.validate_release_artifact import validate_release_artifact_ready
+from cinematicum_studio.issuance_bridge.validate_permanence import validate_permanence_ready
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -229,4 +230,28 @@ def test_cli_release_artifact_command_executes():
     assert "DISTRIBUTION_READY_REQUIRED_FOR_RELEASE_ARTIFACT" in payload["missing"]
     assert "RELEASE_ARTIFACT_READINESS_ACCEPTED" in payload["missing"]
     assert "EXTERNAL_PACKAGE_ALLOWED" in payload["missing"]
+
+def test_permanence_requires_release_artifact_ready():
+    ok, missing = validate_permanence_ready(CASE_ID)
+    assert ok is False
+    assert "RELEASE_ARTIFACT_READY_REQUIRED_FOR_PERMANENCE" in missing
+    assert any(item.startswith("RELEASE_ARTIFACT::") for item in missing)
+    assert "PERMANENCE_READINESS_ACCEPTED" in missing
+    assert "ARCHIVE_LOCK_ALLOWED" in missing
+    assert "PERMANENT_PUBLIC_RECORD_ALLOWED" in missing
+    assert "IMMUTABLE_RELEASE_REFERENCE_ALLOWED" in missing
+
+
+def test_cli_permanence_command_executes():
+    result = subprocess.run(
+        [sys.executable, "-m", "cinematicum_studio.cli", "permanence-check", CASE_ID],
+        check=True,
+        capture_output=True,
+        text=True,
+    )
+    payload = json.loads(result.stdout)
+    assert payload["permanence_ready"] is False
+    assert "RELEASE_ARTIFACT_READY_REQUIRED_FOR_PERMANENCE" in payload["missing"]
+    assert "PERMANENCE_READINESS_ACCEPTED" in payload["missing"]
+    assert "IMMUTABLE_RELEASE_REFERENCE_ALLOWED" in payload["missing"]
 
