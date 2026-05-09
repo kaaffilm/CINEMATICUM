@@ -249,6 +249,57 @@ def _take_source_admissibility_authority_unbound(film_dir: Path) -> bool:
     return False
 
 
+def _take_source_admissibility_authority_source_unbound(film_dir: Path) -> bool:
+    evidence_path = film_dir / "TAKE_SOURCE_ADMISSIBILITY_LEDGER.json"
+    if not evidence_path.exists():
+        return False
+
+    evidence = _load_json(evidence_path)
+    for record in evidence.get("admissible_sources", []):
+        if record.get("admissibility_evidence_accepted") is not True:
+            continue
+
+        authority_record_path = record.get("authority_record_path")
+        authority_record_sha256 = record.get("authority_record_sha256")
+        if not authority_record_path or not authority_record_sha256:
+            continue
+
+        authority_path = Path(authority_record_path)
+        if not authority_path.exists():
+            continue
+
+        try:
+            authority_path.relative_to(film_dir)
+        except ValueError:
+            continue
+
+        if _sha256_path(authority_path) != authority_record_sha256:
+            continue
+
+        try:
+            authority = _load_json(authority_path)
+        except json.JSONDecodeError:
+            return True
+
+        certified_sources = authority.get("certified_sources")
+        if not isinstance(certified_sources, list):
+            return True
+
+        has_exact_binding = any(
+            cert.get("authority_id") == record.get("authority_id")
+            and cert.get("take_id") == record.get("take_id")
+            and cert.get("source_sha256") == record.get("sha256")
+            and cert.get("evidence_sha256") == record.get("evidence_sha256")
+            and cert.get("source_admissibility_classification") == "ADMISSIBLE_FINAL_FILM_SOURCE"
+            for cert in certified_sources
+        )
+
+        if not has_exact_binding:
+            return True
+
+    return False
+
+
 def validate_admissible_motion_picture(case_id: str) -> tuple[bool, list[str]]:
     """
     Hard distinction:
@@ -281,6 +332,9 @@ def validate_admissible_motion_picture(case_id: str) -> tuple[bool, list[str]]:
 
     if _take_source_admissibility_authority_unbound(film_dir):
         missing.append("TAKE_SOURCE_ADMISSIBILITY_AUTHORITY_UNBOUND")
+
+    if _take_source_admissibility_authority_source_unbound(film_dir):
+        missing.append("TAKE_SOURCE_ADMISSIBILITY_AUTHORITY_SOURCE_UNBOUND")
 
     proof_path = film_dir / "LOCAL_RENDER_PROOF_CLASSIFICATION.json"
     if not proof_path.exists():
