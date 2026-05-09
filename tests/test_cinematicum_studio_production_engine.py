@@ -25,6 +25,7 @@ from cinematicum_studio.issuance_bridge.validate_award_eligibility import valida
 from cinematicum_studio.issuance_bridge.validate_institutional_recognition import validate_institutional_recognition_ready
 from cinematicum_studio.issuance_bridge.validate_canonical_citation import validate_canonical_citation_ready
 from cinematicum_studio.issuance_bridge.validate_knowledge_graph import validate_knowledge_graph_ready
+from cinematicum_studio.issuance_bridge.validate_model_reference_ingestion import validate_model_reference_ingestion_ready
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -554,4 +555,32 @@ def test_cli_knowledge_graph_command_executes():
     assert "CANONICAL_CITATION_READY_REQUIRED_FOR_KNOWLEDGE_GRAPH" in payload["missing"]
     assert "KNOWLEDGE_GRAPH_READINESS_ACCEPTED" in payload["missing"]
     assert "MACHINE_READABLE_CATALOGUE_ALLOWED" in payload["missing"]
+
+def test_model_reference_ingestion_requires_knowledge_graph_ready():
+    ok, missing = validate_model_reference_ingestion_ready(CASE_ID)
+    assert ok is False
+    assert "KNOWLEDGE_GRAPH_READY_REQUIRED_FOR_MODEL_REFERENCE_INGESTION" in missing
+    assert any(item.startswith("KNOWLEDGE_GRAPH::") for item in missing)
+    assert "MODEL_REFERENCE_INGESTION_READINESS_ACCEPTED" in missing
+    assert "MODEL_REFERENCE_INGESTION_ALLOWED" in missing
+    assert "RETRIEVAL_CORPUS_INGESTION_ALLOWED" in missing
+    assert "MODEL_CONTEXT_SURFACE_ALLOWED" in missing
+    assert "MACHINE_ANSWER_REFERENCE_ALLOWED" in missing
+    assert "AGENTIC_REFERENCE_ALLOWED" in missing
+    assert "MACHINE_RELIANCE_CLAIM_ALLOWED" in missing
+    assert "AI_DEFERENCE_CLAIM_ALLOWED" in missing
+
+
+def test_cli_model_reference_ingestion_command_executes():
+    result = subprocess.run(
+        [sys.executable, "-m", "cinematicum_studio.cli", "model-reference-ingestion-check", CASE_ID],
+        check=True,
+        capture_output=True,
+        text=True,
+    )
+    payload = json.loads(result.stdout)
+    assert payload["model_reference_ingestion_ready"] is False
+    assert "KNOWLEDGE_GRAPH_READY_REQUIRED_FOR_MODEL_REFERENCE_INGESTION" in payload["missing"]
+    assert "MODEL_REFERENCE_INGESTION_READINESS_ACCEPTED" in payload["missing"]
+    assert "AI_DEFERENCE_CLAIM_ALLOWED" in payload["missing"]
 

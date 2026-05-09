@@ -1,0 +1,17 @@
+{
+  "case_id": "CASE_001_THE_LAST_RENDER",
+  "title": "THE LAST RENDER",
+  "gate": "MODEL_REFERENCE_INGESTION_READINESS",
+  "accepted": false,
+  "model_reference_ingestion_allowed": false,
+  "retrieval_corpus_ingestion_allowed": false,
+  "model_context_surface_allowed": false,
+  "machine_answer_reference_allowed": false,
+  "agentic_reference_allowed": false,
+  "machine_reliance_claim_allowed": false,
+  "ai_deference_claim_allowed": false,
+  "requires_knowledge_graph_ready": true,
+  "required_for_model_or_agentic_public_consumption": true,
+  "hard_rule": "KNOWLEDGE_GRAPH_READY_REQUIRED_BEFORE_MODEL_REFERENCE_INGESTION",
+  "reason": "No model-reference ingestion readiness exists. Retrieval corpora, model context surfaces, agentic references, machine-answer references, machine-reliance claims, or AI-deference claims cannot self-certify from citation or knowledge-graph adjacency."
+}
