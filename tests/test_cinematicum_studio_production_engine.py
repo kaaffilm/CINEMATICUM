@@ -1049,3 +1049,55 @@ def test_take_source_admissibility_requires_external_evidence_record():
         elif evidence_path.exists():
             evidence_path.unlink()
 
+def test_take_source_admissibility_evidence_requires_bound_payload():
+    film_dir = ROOT / "CASES" / CASE_ID / "FILM"
+    ledger_path = film_dir / "TAKE_LEDGER.json"
+    evidence_path = film_dir / "TAKE_SOURCE_ADMISSIBILITY_LEDGER.json"
+
+    ledger_backup = ledger_path.read_text()
+    evidence_backup = evidence_path.read_text() if evidence_path.exists() else None
+
+    try:
+        ledger_path.write_text(json.dumps({
+            "case_id": CASE_ID,
+            "shots": [
+                {
+                    "shot_id": "SHOT_001",
+                    "takes": [
+                        {
+                            "id": "SHOT_001_TAKE_001",
+                            "shot_id": "SHOT_001",
+                            "file_path": "external/final/source.mov",
+                            "sha256": "1" * 64,
+                            "is_admissible_film_source": True,
+                            "source_admissibility_classification": "ADMISSIBLE_FINAL_FILM_SOURCE",
+                        }
+                    ],
+                }
+            ],
+        }, indent=2) + "\n")
+
+        evidence_path.write_text(json.dumps({
+            "case_id": CASE_ID,
+            "admissible_sources": [
+                {
+                    "take_id": "SHOT_001_TAKE_001",
+                    "sha256": "1" * 64,
+                    "admissibility_evidence_accepted": True,
+                    "evidence_file_path": str(film_dir / "SOURCE_ADMISSIBILITY_EVIDENCE" / "missing.json"),
+                    "evidence_sha256": "2" * 64,
+                }
+            ],
+        }, indent=2) + "\n")
+
+        ok, missing = validate_admissible_motion_picture(CASE_ID)
+
+        assert ok is False
+        assert "TAKE_SOURCE_ADMISSIBILITY_EVIDENCE_PAYLOAD_INVALID" in missing
+    finally:
+        ledger_path.write_text(ledger_backup)
+        if evidence_backup is not None:
+            evidence_path.write_text(evidence_backup)
+        elif evidence_path.exists():
+            evidence_path.unlink()
+

@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import hashlib
 import json
 from pathlib import Path
 
@@ -68,6 +69,46 @@ def _take_ledger_source_admissibility_unproven(film_dir: Path) -> bool:
 
     return False
 
+
+
+def _sha256_path(path: Path) -> str:
+    h = hashlib.sha256()
+    with path.open("rb") as f:
+        for chunk in iter(lambda: f.read(1024 * 1024), b""):
+            h.update(chunk)
+    return h.hexdigest()
+
+
+def _take_source_admissibility_evidence_payload_invalid(film_dir: Path) -> bool:
+    evidence_path = film_dir / "TAKE_SOURCE_ADMISSIBILITY_LEDGER.json"
+    if not evidence_path.exists():
+        return False
+
+    evidence = _load_json(evidence_path)
+    for record in evidence.get("admissible_sources", []):
+        if record.get("admissibility_evidence_accepted") is not True:
+            continue
+
+        payload = record.get("evidence_file_path")
+        expected_sha256 = record.get("evidence_sha256")
+
+        if not payload or not expected_sha256:
+            return True
+
+        payload_path = Path(payload)
+        if not payload_path.exists():
+            return True
+
+        try:
+            payload_path.relative_to(film_dir)
+        except ValueError:
+            return True
+
+        if _sha256_path(payload_path) != expected_sha256:
+            return True
+
+    return False
+
 def _take_source_admissibility_evidence_missing(film_dir: Path) -> bool:
     ledger_path = film_dir / "TAKE_LEDGER.json"
     evidence_path = film_dir / "TAKE_SOURCE_ADMISSIBILITY_LEDGER.json"
@@ -128,6 +169,9 @@ def validate_admissible_motion_picture(case_id: str) -> tuple[bool, list[str]]:
 
     if _take_source_admissibility_evidence_missing(film_dir):
         missing.append("TAKE_SOURCE_ADMISSIBILITY_EVIDENCE_MISSING")
+
+    if _take_source_admissibility_evidence_payload_invalid(film_dir):
+        missing.append("TAKE_SOURCE_ADMISSIBILITY_EVIDENCE_PAYLOAD_INVALID")
 
     proof_path = film_dir / "LOCAL_RENDER_PROOF_CLASSIFICATION.json"
     if not proof_path.exists():
