@@ -2,8 +2,12 @@
 set -euo pipefail
 
 python3 scripts/regenerate-object-registry.py --write
-python3 -m pytest tests/test_protocol_issuance.py tests/test_public_status_protocol_issuance.py
-python3 - <<'VERIFY_PROTOCOL_ISSUANCE_JSON'
+PYTEST_PYTHON="${PY:-python3}"
+if [ -x ".venv/bin/python" ]; then
+  PYTEST_PYTHON=".venv/bin/python"
+fi
+"$PYTEST_PYTHON" -m pytest tests/test_protocol_issuance.py tests/test_public_status_protocol_issuance.py
+"$PYTEST_PYTHON" - <<'VERIFY_PROTOCOL_ISSUANCE_JSON'
 import json
 import subprocess
 import sys
