@@ -659,6 +659,78 @@ def _take_source_admissibility_authority_grant_issuer_root_unbound(film_dir: Pat
     return False
 
 
+def _take_source_admissibility_root_authority_case_closure_unbound(film_dir: Path) -> bool:
+    evidence_dir = film_dir / "SOURCE_ADMISSIBILITY_EVIDENCE"
+    if not evidence_dir.exists():
+        return False
+
+    for root_path in evidence_dir.glob("*.json"):
+        try:
+            root = _load_json(root_path)
+        except json.JSONDecodeError:
+            continue
+
+        if root.get("object_type") != "CINEMATICUM_TAKE_SOURCE_ADMISSIBILITY_ROOT_AUTHORITY":
+            continue
+
+        root_authority_id = root.get("root_authority_id")
+        closure_id = root.get("case_authority_closure_id")
+        closure_path_value = root.get("case_authority_closure_path")
+        closure_sha256 = root.get("case_authority_closure_sha256")
+
+        if not root_authority_id or not closure_id or not closure_path_value or not closure_sha256:
+            return True
+
+        closure_path = Path(closure_path_value)
+        if not closure_path.exists():
+            return True
+
+        try:
+            closure_path.relative_to(film_dir)
+        except ValueError:
+            return True
+
+        if _sha256_path(closure_path) != closure_sha256:
+            return True
+
+        try:
+            closure = _load_json(closure_path)
+        except json.JSONDecodeError:
+            return True
+
+        if closure.get("object_type") != "CINEMATICUM_TAKE_SOURCE_ADMISSIBILITY_ROOT_AUTHORITY_CASE_CLOSURE":
+            return True
+        if closure.get("case_id") != root.get("case_id"):
+            return True
+        if closure.get("closure_id") != closure_id:
+            return True
+        if closure.get("root_authority_id") != root_authority_id:
+            return True
+        if closure.get("closure_authorizes_root_authority") is not True:
+            return True
+        if closure.get("scope") != "TAKE_SOURCE_ADMISSIBILITY_ROOT_AUTHORITY":
+            return True
+        if closure.get("revoked") is True:
+            return True
+
+        authorized_roots = closure.get("authorized_root_authorities")
+        if not isinstance(authorized_roots, list):
+            return True
+
+        has_exact_root = any(
+            item.get("root_authority_id") == root_authority_id
+            and item.get("scope") == "TAKE_SOURCE_ADMISSIBILITY_ROOT_AUTHORITY"
+            and item.get("closure_authorizes_root_authority") is True
+            and item.get("revoked") is not True
+            for item in authorized_roots
+        )
+
+        if not has_exact_root:
+            return True
+
+    return False
+
+
 def validate_admissible_motion_picture(case_id: str) -> tuple[bool, list[str]]:
     """
     Hard distinction:
@@ -706,6 +778,9 @@ def validate_admissible_motion_picture(case_id: str) -> tuple[bool, list[str]]:
 
     if _take_source_admissibility_authority_grant_issuer_root_unbound(film_dir):
         missing.append("TAKE_SOURCE_ADMISSIBILITY_AUTHORITY_GRANT_ISSUER_ROOT_UNBOUND")
+
+    if _take_source_admissibility_root_authority_case_closure_unbound(film_dir):
+        missing.append("TAKE_SOURCE_ADMISSIBILITY_ROOT_AUTHORITY_CASE_CLOSURE_UNBOUND")
 
     proof_path = film_dir / "LOCAL_RENDER_PROOF_CLASSIFICATION.json"
     if not proof_path.exists():

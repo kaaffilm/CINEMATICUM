@@ -1904,3 +1904,39 @@ def test_take_source_admissibility_grant_issuer_requires_root_authority():
         else:
             issuer_path.write_text(issuer_backup)
 
+def test_take_source_root_authority_requires_case_authority_closure():
+    film_dir = ROOT / "CASES" / CASE_ID / "FILM"
+    evidence_dir = film_dir / "SOURCE_ADMISSIBILITY_EVIDENCE"
+    root_path = evidence_dir / "ROOT_SOURCE_AUTHORITY_001.rootless.json"
+
+    root_backup = root_path.read_text() if root_path.exists() else None
+
+    try:
+        evidence_dir.mkdir(exist_ok=True)
+
+        root_path.write_text(json.dumps({
+            "object_type": "CINEMATICUM_TAKE_SOURCE_ADMISSIBILITY_ROOT_AUTHORITY",
+            "case_id": CASE_ID,
+            "root_authority_id": "ROOT_SOURCE_AUTHORITY_001",
+            "self_attested": False,
+            "may_authorize_take_source_admissibility_grant_issuers": True,
+            "authorized_grant_issuers": [
+                {
+                    "issuer_id": "SOURCE_GRANT_ISSUER_001",
+                    "scope": "TAKE_SOURCE_ADMISSIBILITY",
+                    "may_issue_take_source_admissibility_authority_grants": True,
+                    "revoked": False,
+                }
+            ],
+        }, indent=2) + "\n")
+
+        ok, missing = validate_admissible_motion_picture(CASE_ID)
+
+        assert ok is False
+        assert "TAKE_SOURCE_ADMISSIBILITY_ROOT_AUTHORITY_CASE_CLOSURE_UNBOUND" in missing
+    finally:
+        if root_backup is None:
+            root_path.unlink(missing_ok=True)
+        else:
+            root_path.write_text(root_backup)
+
