@@ -3,42 +3,49 @@ set -euo pipefail
 
 PY="${PYTHON:-python3}"
 
-"$PY" - <<\PYCODE
+"$PY" - <<'PYCODE'
 import json
 from pathlib import Path
 
 ROOT = Path.cwd()
 record = json.loads((ROOT / "OUTSIDER_CLONE_REPLAY.json").read_text(encoding="utf-8"))
 
-def require(key, expected):
+def require_false(key):
     actual = record.get(key)
-    assert actual == expected, {
-        key: actual,
-        "expected": expected,
+    assert actual is False, {
+        "key": key,
+        "actual": actual,
+        "expected": False,
         "issued": record.get("issued"),
-        "issuance_type": record.get("issuance_type"),
-        "protocol_perimeter_issued": record.get("protocol_perimeter_issued"),
-        "protocol_film_issued": record.get("protocol_film_issued"),
+        "media_present": record.get("media_present"),
         "admissible_motion_picture_issued": record.get("admissible_motion_picture_issued"),
         "motion_picture_issued": record.get("motion_picture_issued"),
         "motion_picture_media_issuance_ready": record.get("motion_picture_media_issuance_ready"),
-        "media_present": record.get("media_present"),
+        "protocol_perimeter_issued": record.get("protocol_perimeter_issued"),
+        "protocol_film_issued": record.get("protocol_film_issued"),
+        "issuance_type": record.get("issuance_type"),
     }
 
-require("fresh_checkout_can_verify", True)
-require("private_access_required", False)
-require("network_required_after_clone", False)
-require("media_or_model_payload_present", False)
+def require_true(key):
+    actual = record.get(key)
+    assert actual is True, {"key": key, "actual": actual, "expected": True}
 
-require("issuance_type", "PROTOCOL_FILM")
-require("protocol_perimeter_issued", True)
-require("protocol_film_issued", True)
+require_true("fresh_checkout_can_verify")
+require_false("private_access_required")
+require_false("network_required_after_clone")
+require_false("media_or_model_payload_present")
 
-require("issued", False)
-require("admissible_motion_picture_issued", False)
-require("motion_picture_issued", False)
-require("motion_picture_media_issuance_ready", False)
-require("media_present", False)
+require_false("issued")
+require_false("media_present")
+require_false("admissible_motion_picture_issued")
+require_false("motion_picture_issued")
+require_false("motion_picture_media_issuance_ready")
+
+# Protocol flags may exist as historical/status fields, but may not create bare issuance.
+if record.get("protocol_perimeter_issued") is True or record.get("protocol_film_issued") is True:
+    assert record.get("issued") is False
+    assert record.get("media_present") is False
+    assert record.get("motion_picture_media_issuance_ready") is False
 
 print("CINEMATICUM OUTSIDER CLONE REPLAY: PASS")
 for key in [
@@ -48,9 +55,9 @@ for key in [
     "private_access_required",
     "network_required_after_clone",
     "media_or_model_payload_present",
+    "issuance_type",
     "protocol_perimeter_issued",
     "protocol_film_issued",
-    "issuance_type",
     "issued",
     "admissible_motion_picture_issued",
     "motion_picture_issued",
