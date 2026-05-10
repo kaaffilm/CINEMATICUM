@@ -2458,7 +2458,7 @@
     },
     {
       "path": "CASES/CASE_001_THE_LAST_RENDER/MOTION_PICTURE_ISSUANCE_ACT_STATUS.json",
-      "sha256": "b68e6f4e8311c62be561a3dabc0e04eb1570c1486f730477411801c411b1daa1",
+      "sha256": "c4a736f61cc1b803b38f801a1e716d4a64d2dc554bfd4b69e7bf57eb1f48e1de",
       "object_type": "CINEMATICUM_CASE_MOTION_PICTURE_ISSUANCE_ACT_STATUS",
       "schema_version": "cinematicum.case_motion_picture_issuance_act_status.v1",
       "surface_class": "LAYER_STATUS_RECORD",
@@ -3043,7 +3043,7 @@
     },
     {
       "path": "CASES/CASE_001_THE_LAST_RENDER/RELEASE_CANDIDATE_PUBLIC_INSPECTION_DOSSIER/RELEASE_CANDIDATE_PUBLIC_INSPECTION_DOSSIER.json",
-      "sha256": "86843f915f06979879080647786e8638cf7ac62326ed0dd7c258459885101638",
+      "sha256": "828f61d9b46dcfe2b747b89fd8272ead1b59b899d7a8f6838844db34c233e258",
       "object_type": "CINEMATICUM_RELEASE_CANDIDATE_PUBLIC_INSPECTION_DOSSIER",
       "schema_version": "cinematicum.release_candidate_public_inspection_dossier.v1",
       "surface_class": "CASE_RECORD",
@@ -3058,7 +3058,7 @@
     },
     {
       "path": "CASES/CASE_001_THE_LAST_RENDER/RELEASE_CANDIDATE_PUBLIC_INSPECTION_DOSSIER_STATUS.json",
-      "sha256": "fff4c1da9d172018bf6fa31188eab713f9685a0a6d0ae7551f213c120d237c10",
+      "sha256": "742df4568e7602608f2fcde69348e2be60a5c7e72abdcb78497bac75007b1f98",
       "object_type": "CINEMATICUM_RELEASE_CANDIDATE_PUBLIC_INSPECTION_DOSSIER",
       "schema_version": "cinematicum.release_candidate_public_inspection_dossier.v1",
       "surface_class": "CASE_RECORD",
@@ -5278,7 +5278,7 @@
     },
     {
       "path": "CINEMATICUM_PROTOCOL_ISSUANCE.json",
-      "sha256": "f472b3d3f335d3bc423640bdfa8f20c152a593c62cecec3009d2f8991fcbed22",
+      "sha256": "3bffa43748e59c251e0fa6c54e47a14f625322deee4291826e7d1a7995378bc6",
       "object_type": "CINEMATICUM_PROTOCOL_ISSUANCE",
       "schema_version": "UNDECLARED_SCHEMA_VERSION",
       "surface_class": "CASE_RECORD",
@@ -5983,7 +5983,7 @@
     },
     {
       "path": "CINEMATICUM_RELEASE_CANDIDATE_PUBLIC_INSPECTION_DOSSIER.json",
-      "sha256": "9fd409f3a5caa313862c537dae82c6e4a03688fa13251ac28660051f67893bd1",
+      "sha256": "3ffbe95166bde28fd506665cb020993f374ed587a9f23cbf3035100d32ad6446",
       "object_type": "CINEMATICUM_RELEASE_CANDIDATE_PUBLIC_INSPECTION_DOSSIER",
       "schema_version": "cinematicum.release_candidate_public_inspection_dossier.v1",
       "surface_class": "CASE_RECORD",
@@ -5998,7 +5998,7 @@
     },
     {
       "path": "CINEMATICUM_RELEASE_CANDIDATE_PUBLIC_INSPECTION_DOSSIER_LAW.json",
-      "sha256": "9fd409f3a5caa313862c537dae82c6e4a03688fa13251ac28660051f67893bd1",
+      "sha256": "3ffbe95166bde28fd506665cb020993f374ed587a9f23cbf3035100d32ad6446",
       "object_type": "CINEMATICUM_RELEASE_CANDIDATE_PUBLIC_INSPECTION_DOSSIER",
       "schema_version": "cinematicum.release_candidate_public_inspection_dossier.v1",
       "surface_class": "CASE_RECORD",
@@ -6193,7 +6193,7 @@
     },
     {
       "path": "CINEMATICUM_REPOSITORY_STATUS_SEAL.json",
-      "sha256": "f49c5c466fefd866805002f2922f16e7f75b4d3130a0336e906457f99977dc21",
+      "sha256": "e822adb58dc76572355dc58079858f353c220e04beef13be221851233b1a6dd2",
       "object_type": "CINEMATICUM_REPOSITORY_STATUS_SEAL",
       "schema_version": "cinematicum.repository_status_seal.v1",
       "surface_class": "LAYER_STATUS_RECORD",
@@ -6583,7 +6583,7 @@
     },
     {
       "path": "MOTION_PICTURE_ISSUANCE_ACT.json",
-      "sha256": "09c8d9e5ea4bf660355d1b74f27957665c9a817265f88ce6f7c21d2dd1dc885c",
+      "sha256": "98acd1fa8a2628c9e341aa67726b7cdd9bf79c3e986fdf74b34c13b3e70d2c7c",
       "object_type": "MOTION_PICTURE_ISSUANCE_ACT",
       "schema_version": "cinematicum.motion_picture_issuance_act.v1",
       "surface_class": "CASE_RECORD",
@@ -6613,7 +6613,7 @@
     },
     {
       "path": "OUTSIDER_CLONE_REPLAY.json",
-      "sha256": "85e307d10fb05cc66e20b2581810941647bb0bad589cd70ad93ad729d86a72d7",
+      "sha256": "fe2e08b414fe4504369425ce47ddaefb52f0812320843f33a4837e489046b0fc",
       "object_type": "CINEMATICUM_OUTSIDER_CLONE_REPLAY",
       "schema_version": "UNDECLARED_SCHEMA_VERSION",
       "surface_class": "CASE_RECORD",
@@ -6688,7 +6688,7 @@
     },
     {
       "path": "PUBLIC_INSPECTION_DOSSIER.json",
-      "sha256": "f0933917a90b310d7462211a9d82f05d04cdd198a6f7ec45967743f96ab5d2df",
+      "sha256": "c3f4cfc65a0ad71a95fad845680baca88d598584b92d637bb2f0a019c1d07762",
       "object_type": "CINEMATICUM_PUBLIC_INSPECTION_DOSSIER",
       "schema_version": "cinematicum.public_inspection_dossier.v1",
       "surface_class": "CASE_RECORD",
@@ -6703,7 +6703,7 @@
     },
     {
       "path": "PUBLIC_INSPECTION_DOSSIER_LAW.json",
-      "sha256": "106a9060265d972abacbbc5d33fd62d281282256dddac1e0d265ede8f7d34ec9",
+      "sha256": "87bfeee06d8952494720fb85039679114f2eac4cd2a6955264a7f17e6a128133",
       "object_type": "CINEMATICUM_PUBLIC_INSPECTION_DOSSIER_LAW",
       "schema_version": "cinematicum.public_inspection_dossier_law.v1",
       "surface_class": "LAW_OBJECT",
@@ -6718,7 +6718,7 @@
     },
     {
       "path": "PUBLIC_INSPECTION_NEGATIVE_PROOF.json",
-      "sha256": "e8c6f0490e5ca9e2b82090c89fbdff7c6687a52667536c97243d22f77c914c46",
+      "sha256": "7302953f498d2549eb475067282d95dd95274051549c3f72d3845f613e8b5cea",
       "object_type": "CINEMATICUM_PUBLIC_INSPECTION_NEGATIVE_PROOF",
       "schema_version": "cinematicum.public_inspection_negative_proof.v1",
       "surface_class": "CASE_RECORD",
@@ -6733,7 +6733,7 @@
     },
     {
       "path": "PUBLIC_INSPECTION_NEGATIVE_PROOF_LAW.json",
-      "sha256": "a83a40cda6bc67db3b0c2c8ec4db3a7bfbc3df2a2ca95443d7827a9680bad8bb",
+      "sha256": "0c3a47532915a1055ad68ddf5f073020446a01d1340c9d0b2bb22e7795861176",
       "object_type": "CINEMATICUM_PUBLIC_INSPECTION_NEGATIVE_PROOF_LAW",
       "schema_version": "cinematicum.public_inspection_negative_proof_law.v1",
       "surface_class": "LAW_OBJECT",
@@ -7123,7 +7123,7 @@
     },
     {
       "path": "proofs/issuance-proof/CASE_001_THE_LAST_RENDER/ISSUANCE_SEMANTIC_BOUNDARY_PROOF.json",
-      "sha256": "11e3f439eb8d60147dc40904d6a237522e0d82f5c4c2d1ce112c80310bebf146",
+      "sha256": "ce91ceabb18e56e465023d7b51b66a68f611b16aace9b1d4346bddc95d375564",
       "object_type": "UNDECLARED_OBJECT_TYPE",
       "schema_version": "cinematicum.issuance_semantic_boundary_proof.v1",
       "surface_class": "CASE_RECORD",
