@@ -9,7 +9,7 @@
   "registry_does_not_override_current_state": true,
   "current_active_state": "RELEASE_CANDIDATE_READY",
   "case_id": "CASE_001_THE_LAST_RENDER",
-  "entries_count": 483,
+  "entries_count": 484,
   "entries": [
     {
       "path": "ADMISSIBILITY_VERDICT_SCHEMA.json",
@@ -2458,7 +2458,7 @@
     },
     {
       "path": "CASES/CASE_001_THE_LAST_RENDER/MOTION_PICTURE_ISSUANCE_ACT_STATUS.json",
-      "sha256": "84c4bdbc613e1667ab68b13eea00cddf0f48ec9ab15a8ee3ab3b41ef53c99f7a",
+      "sha256": "b68e6f4e8311c62be561a3dabc0e04eb1570c1486f730477411801c411b1daa1",
       "object_type": "CINEMATICUM_CASE_MOTION_PICTURE_ISSUANCE_ACT_STATUS",
       "schema_version": "cinematicum.case_motion_picture_issuance_act_status.v1",
       "surface_class": "LAYER_STATUS_RECORD",
@@ -6583,7 +6583,7 @@
     },
     {
       "path": "MOTION_PICTURE_ISSUANCE_ACT.json",
-      "sha256": "73f2bbe79c61dddbb464c9819cd5b42c34e39ff2e736ed1fa3ca6ae052bfdc4a",
+      "sha256": "09c8d9e5ea4bf660355d1b74f27957665c9a817265f88ce6f7c21d2dd1dc885c",
       "object_type": "MOTION_PICTURE_ISSUANCE_ACT",
       "schema_version": "cinematicum.motion_picture_issuance_act.v1",
       "surface_class": "CASE_RECORD",
@@ -6718,7 +6718,7 @@
     },
     {
       "path": "PUBLIC_INSPECTION_NEGATIVE_PROOF.json",
-      "sha256": "50d03b33e7556ae5c0146a48f3ee89c08470eff7e3d2815d6f6c4646794042a5",
+      "sha256": "e8c6f0490e5ca9e2b82090c89fbdff7c6687a52667536c97243d22f77c914c46",
       "object_type": "CINEMATICUM_PUBLIC_INSPECTION_NEGATIVE_PROOF",
       "schema_version": "cinematicum.public_inspection_negative_proof.v1",
       "surface_class": "CASE_RECORD",
@@ -7111,6 +7111,21 @@
       "sha256": "4229bc2154ee1585b3e0608868a68d1f2d9f88c14fee8bcd73b6a2840b2252a5",
       "object_type": "UNDECLARED_OBJECT_TYPE",
       "schema_version": "cinematicum.issuance_not_ready_proof.v1",
+      "surface_class": "CASE_RECORD",
+      "case_id": "CASE_001_THE_LAST_RENDER",
+      "current_truth_owner": false,
+      "issued": false,
+      "release_candidate_ready": false,
+      "media_present": false,
+      "outsider_replay_passed": false,
+      "current_active_state": "RELEASE_CANDIDATE_READY",
+      "active_current_state": "RELEASE_CANDIDATE_READY"
+    },
+    {
+      "path": "proofs/issuance-proof/CASE_001_THE_LAST_RENDER/ISSUANCE_SEMANTIC_BOUNDARY_PROOF.json",
+      "sha256": "11e3f439eb8d60147dc40904d6a237522e0d82f5c4c2d1ce112c80310bebf146",
+      "object_type": "UNDECLARED_OBJECT_TYPE",
+      "schema_version": "cinematicum.issuance_semantic_boundary_proof.v1",
       "surface_class": "CASE_RECORD",
       "case_id": "CASE_001_THE_LAST_RENDER",
       "current_truth_owner": false,
