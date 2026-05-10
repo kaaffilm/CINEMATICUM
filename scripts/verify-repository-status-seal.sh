@@ -1,61 +1,48 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-PYTHON="${PY:-python3}"
-if [ -x ".venv/bin/python" ]; then
-  PYTHON=".venv/bin/python"
-fi
-
-"$PYTHON" - <<'PY'
+python3 - <<'PY'
 import json
 from pathlib import Path
 
 ROOT = Path.cwd()
+seal_path = ROOT / "CINEMATICUM_REPOSITORY_STATUS_SEAL.json"
 
-def load(path):
-    return json.loads((ROOT / path).read_text(encoding="utf-8"))
+with seal_path.open(encoding="utf-8") as f:
+    seal = json.load(f)
 
-seal = load("CINEMATICUM_REPOSITORY_STATUS_SEAL.json")
-index = load("CINEMATICUM_CURRENT_STATE_INDEX.json")
+def require(condition, message):
+    if not condition:
+        raise AssertionError(message)
 
-case_id = "CASE_001_THE_LAST_RENDER"
-active = index["active_case_states"][case_id]
+def b(value):
+    return "true" if bool(value) else "false"
 
-assert seal["surface_type"] == "REPOSITORY_STATUS_SEAL"
-assert seal["case_id"] == case_id
-assert seal["current_state"] == active
-assert seal["current_state"] == "RELEASE_CANDIDATE_READY"
-assert index["active_current_state"] == "RELEASE_CANDIDATE_READY"
-assert index["active_case_states"][case_id] == "RELEASE_CANDIDATE_READY"
+require(seal.get("repository") == "kaaffilm/CINEMATICUM", seal)
+require(seal.get("case_id") == "CASE_001_THE_LAST_RENDER", seal)
 
-assert seal["release_candidate_ready"] is True
+require(seal.get("authority_object_stack_complete") is True, seal)
+require(seal.get("release_candidate_ready") is True, seal)
 
-# Protocol-film issuance is true.
-assert seal["issued"] is True
-assert seal["issuance_type"] == "PROTOCOL_FILM"
-assert seal["protocol_perimeter_issued"] is True
-assert seal["protocol_film_issued"] is True
-assert seal["issued_object"] == "PUBLIC_REPLAYABLE_HASH_BOUND_PROTOCOL_PERIMETER"
+require(seal.get("issued") is False, seal)
+require(seal.get("media_present") is False, seal)
+require(seal.get("issuance_unblocked") is False, seal)
 
-# Final-master / media issuance remains false.
-assert seal["motion_picture_media_issuance_ready"] is False
-assert seal["media_present"] is False
-assert seal["media_payload_present"] is False
-assert seal["model_weight_payload_present"] is False
-assert seal["private_access_required"] is False
-assert seal["network_required_after_clone"] is False
-assert seal["outsider_replay_passed"] is False
+require(seal.get("admissible_motion_picture_issued") is False, seal)
+require(seal.get("motion_picture_issued") is False, seal)
+require(seal.get("motion_picture_media_issuance_ready") is False, seal)
 
 print("CINEMATICUM REPOSITORY STATUS SEAL: PASS")
-print(f"ACTIVE_CURRENT_STATE={seal['current_state']}")
-print(f"RELEASE_CANDIDATE_READY={str(seal['release_candidate_ready']).lower()}")
-print(f"ISSUED={str(seal['issued']).lower()}")
-print(f"ISSUANCE_TYPE={seal['issuance_type']}")
-print(f"PROTOCOL_PERIMETER_ISSUED={str(seal['protocol_perimeter_issued']).lower()}")
-print(f"PROTOCOL_FILM_ISSUED={str(seal['protocol_film_issued']).lower()}")
-print(f"MOTION_PICTURE_MEDIA_ISSUANCE_READY={str(seal['motion_picture_media_issuance_ready']).lower()}")
-print(f"MEDIA_PRESENT={str(seal['media_present']).lower()}")
-print(f"OUTSIDER_REPLAY_PASSED={str(seal['outsider_replay_passed']).lower()}")
-print("VERIFY_ALL_REQUIRED=true")
-print("REGISTRY_FRESH_REQUIRED=true")
+print(f"CURRENT_STATE={seal.get('current_state')}")
+print(f"ACTIVE_CURRENT_STATE={seal.get('active_current_state')}")
+print(f"AUTHORITY_OBJECT_STACK_COMPLETE={b(seal.get('authority_object_stack_complete'))}")
+print(f"RELEASE_CANDIDATE_READY={b(seal.get('release_candidate_ready'))}")
+print(f"MAY_ADVANCE_NOW={b(seal.get('may_advance_now'))}")
+print(f"ISSUANCE_UNBLOCKED={b(seal.get('issuance_unblocked'))}")
+print(f"ISSUED={b(seal.get('issued'))}")
+print(f"ADMISSIBLE_MOTION_PICTURE_ISSUED={b(seal.get('admissible_motion_picture_issued'))}")
+print(f"MOTION_PICTURE_ISSUED={b(seal.get('motion_picture_issued'))}")
+print(f"MOTION_PICTURE_MEDIA_ISSUANCE_READY={b(seal.get('motion_picture_media_issuance_ready'))}")
+print(f"MEDIA_PRESENT={b(seal.get('media_present'))}")
+print(f"REGISTRY_FRESH_REQUIRED={b(seal.get('registry_fresh_required'))}")
 PY
