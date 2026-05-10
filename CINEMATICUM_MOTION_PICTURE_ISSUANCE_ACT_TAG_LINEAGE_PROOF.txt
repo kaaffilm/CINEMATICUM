@@ -1,0 +1,66 @@
+CINEMATICUM MOTION PICTURE ISSUANCE ACT TAG LINEAGE PROOF
+
+canonical proof tag:
+cinematicum-motion-picture-issuance-act-proof
+
+canonical proof commit:
+e61aa476cbd7165aaf6c3ba07250eebf3b8b6222
+
+canonical proof meaning:
+motion picture issuance act present
+release candidate ready issuance unblocked
+admissible motion picture not issued
+motion picture not issued
+media not present
+motion picture media issuance not ready
+
+lineage notes:
+- cinematicum-motion-picture-issuance-act-frontier and cinematicum-motion-picture-issuance-act-frontier-proof remain frontier seals at 914a8b8.
+- cinematicum-motion-picture-issuance-act-proof is the canonical verify-all proof at e61aa47.
+- older act-prefixed tags do not override the canonical proof tag.
+- no act-prefixed tag admits media or converts authority-record issuance into media-body issuance.
+
+LOCAL HEAD:
+e61aa47 (HEAD -> main, tag: cinematicum-motion-picture-issuance-act-proof, origin/main, origin/HEAD) Seal motion picture issuance act proof
+914a8b8 (tag: cinematicum-motion-picture-issuance-act-frontier-proof, tag: cinematicum-motion-picture-issuance-act-frontier) Add frontier verification proof
+32207fc Seal motion picture issuance act frontier
+fc37a5c Add global no-media issuance boundary regression
+14cffde Align public inspection surfaces with no-media boundary
+
+LOCAL CANONICAL TAG:
+tag cinematicum-motion-picture-issuance-act-proof
+
+CINEMATICUM motion picture issuance act proof: act present, unblocked, not issued, no media
+-----BEGIN PGP SIGNATURE-----
+
+iJEEABYKADkWIQR2i9AkGTjJJ+UgvlyW0oKKeMfHmAUCagC5mhsUgAAAAAAEAA5t
+YW51MiwyLjUrMS4xMiwwLDMACgkQltKCinjHx5iN8wD7BcjB9V/E27dLCGAOKc4u
+cht03oRwJCF6VA/G8exzwCEA/iVSb4ttRiYRl33RrBGpN2RbJuYzvK71TRxylwn5
+rG0F
+=Kn+g
+-----END PGP SIGNATURE-----
+e61aa47 (HEAD -> main, tag: cinematicum-motion-picture-issuance-act-proof, origin/main, origin/HEAD) Seal motion picture issuance act proof
+ab4500399c17a18f8d50bec62a60b40009fe4f3b
+e61aa476cbd7165aaf6c3ba07250eebf3b8b6222
+
+REMOTE ACT TAGS:
+c5c8c4159fbe440ff07768db8e720532aca9437b	refs/tags/cinematicum-motion-picture-issuance-act-ce7d9c2
+ce7d9c2d1a4b90f75b76f3648d5195e177b80bfa	refs/tags/cinematicum-motion-picture-issuance-act-ce7d9c2^{}
+eb8dcdfb45af7b0403f6aee89ab9bdd60ba0ef7b	refs/tags/cinematicum-motion-picture-issuance-act-frontier
+914a8b8804377e62b1d154176fb789a0525a213a	refs/tags/cinematicum-motion-picture-issuance-act-frontier^{}
+5724eb348f934be4618b697fd6ad89cadb2576ba	refs/tags/cinematicum-motion-picture-issuance-act-frontier-proof
+914a8b8804377e62b1d154176fb789a0525a213a	refs/tags/cinematicum-motion-picture-issuance-act-frontier-proof^{}
+ab4500399c17a18f8d50bec62a60b40009fe4f3b	refs/tags/cinematicum-motion-picture-issuance-act-proof
+e61aa476cbd7165aaf6c3ba07250eebf3b8b6222	refs/tags/cinematicum-motion-picture-issuance-act-proof^{}
+
+INVARIANT SNAPSHOT:
+motion_picture_issuance_act_present=True
+release_candidate_ready=True
+issuance_unblocked=True
+issued=False
+admissible_motion_picture_issued=False
+motion_picture_issued=False
+media_present=False
+media_payload_present=None
+motion_picture_media_issuance_ready=False
+next_required_object=NONE
