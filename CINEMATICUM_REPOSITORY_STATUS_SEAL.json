@@ -18,7 +18,7 @@
   "generation_present": false,
   "institution": "CINEMATICUM",
   "issuance_type": "PROTOCOL_FILM",
-  "issued": true,
+  "issued": false,
   "issued_object": "PUBLIC_REPLAYABLE_HASH_BOUND_PROTOCOL_PERIMETER",
   "master_progression_owner": "CINEMATICUM_GOVERNED_PROGRESSION_MATRIX.json",
   "media_payload_present": false,
@@ -42,5 +42,8 @@
   "seal_statement": "CINEMATICUM is issued as a protocol film perimeter. It has not issued final-master media.",
   "surface_type": "REPOSITORY_STATUS_SEAL",
   "terminal_closure_present": false,
-  "verify_all_pass_required": true
+  "verify_all_pass_required": true,
+  "protocol_issued": true,
+  "admissible_motion_picture_issued": false,
+  "motion_picture_issued": false
 }

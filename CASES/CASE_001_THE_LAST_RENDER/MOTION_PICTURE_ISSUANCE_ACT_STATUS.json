@@ -13,5 +13,7 @@
   "issued": false,
   "media_present": false,
   "may_advance_now": false,
-  "next_required_object": "NONE"
+  "next_required_object": "NONE",
+  "motion_picture_issued": false,
+  "motion_picture_media_issuance_ready": false
 }

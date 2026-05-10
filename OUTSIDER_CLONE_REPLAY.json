@@ -23,5 +23,8 @@
   "unfilled_authority_object_slot_count": 0,
   "next_required_object": "RELEASE_CANDIDATE_GAP_LEDGER",
   "object_type": "CINEMATICUM_OUTSIDER_CLONE_REPLAY",
-  "surface_type": "OUTSIDER_CLONE_REPLAY"
+  "surface_type": "OUTSIDER_CLONE_REPLAY",
+  "admissible_motion_picture_issued": false,
+  "motion_picture_issued": false,
+  "motion_picture_media_issuance_ready": false
 }

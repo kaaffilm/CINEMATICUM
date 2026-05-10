@@ -34,5 +34,7 @@
   "issuance_is_authority_record": true,
   "final_transformation": true,
   "may_advance_now": false,
-  "next_required_object": "NONE"
+  "next_required_object": "NONE",
+  "motion_picture_issued": false,
+  "motion_picture_media_issuance_ready": false
 }
