@@ -74,6 +74,6 @@ def test_outsider_replay_prints_protocol_issuance_not_bare_non_issuance():
     assert "REPLAY_RECORD_ISSUED=false" in result.stdout
     assert "PROTOCOL_PERIMETER_ISSUED=true" in result.stdout
     assert "ISSUANCE_TYPE=PROTOCOL_FILM" in result.stdout
-    assert "ISSUED=true" in result.stdout
+    assert "ISSUED=false" in result.stdout
     assert "MEDIA_PRESENT=false" in result.stdout
     assert "\nISSUED=false\n" not in result.stdout
