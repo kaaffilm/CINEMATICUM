@@ -17,7 +17,7 @@
   ],
   "proves_absence_of": {
     "release_candidate_ready": true,
-    "issued": true,
+    "issued": false,
     "media_present": true,
     "generation_present": true,
     "engine_present": true,

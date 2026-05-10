@@ -1,0 +1,15 @@
+{
+  "schema_version": "cinematicum.issuance_semantic_boundary_proof.v1",
+  "case_id": "CASE_001_THE_LAST_RENDER",
+  "boundary": "protocol_issuance_is_not_motion_picture_media_issuance",
+  "protocol_perimeter_may_be_issued": true,
+  "protocol_film_may_be_issued": true,
+  "admissible_motion_picture_issued": false,
+  "motion_picture_media_issuance_ready": false,
+  "media_present": false,
+  "forbidden_pair": {
+    "admissible_motion_picture_issued": true,
+    "media_present": false
+  },
+  "allowed_current_reading": "CASE_001 may have protocol/perimeter issuance while the admissible motion picture remains unissued until media/audience-body issuance conditions are satisfied."
+}

@@ -9,8 +9,8 @@
   "release_candidate_ready": true,
   "issuance_unblocked": true,
   "motion_picture_issuance_act_present": true,
-  "admissible_motion_picture_issued": true,
-  "issued": true,
+  "admissible_motion_picture_issued": false,
+  "issued": false,
   "media_present": false,
   "may_advance_now": false,
   "next_required_object": "NONE"
