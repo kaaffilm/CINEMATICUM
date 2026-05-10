@@ -30,5 +30,16 @@
     "create terminal closure",
     "override current-state objects",
     "replace the object registry"
-  ]
+  ],
+  "issued": false,
+  "admissible_motion_picture_issued": false,
+  "motion_picture_issued": false,
+  "motion_picture_media_issuance_ready": false,
+  "media_present": false,
+  "media_payload_present": false,
+  "replay_passed": false,
+  "outsider_replay_passed": false,
+  "public_inspection_verdict_present": false,
+  "admissibility_verdict_present": false,
+  "terminal_closure_present": false
 }

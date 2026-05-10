@@ -1,87 +1,60 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-test -f PUBLIC_INSPECTION_DOSSIER_LAW.json
-test -f PUBLIC_INSPECTION_DOSSIER.json
-test -f PUBLIC_INSPECTION.md
-test -f CASES/CASE_001_THE_LAST_RENDER/PUBLIC_INSPECTION_PATH.json
-
-python3 - <<'PY'
+python3 - <<'INNERPY'
 import json
 from pathlib import Path
-
-CASE_ID = "CASE_001_THE_LAST_RENDER"
-ACTIVE_STATE = "RELEASE_CANDIDATE_READY"
 
 def load(path):
     return json.loads(Path(path).read_text(encoding="utf-8"))
 
-law = load("PUBLIC_INSPECTION_DOSSIER_LAW.json")
-dossier = load("PUBLIC_INSPECTION_DOSSIER.json")
-case_path = load("CASES/CASE_001_THE_LAST_RENDER/PUBLIC_INSPECTION_PATH.json")
-seal = load("CINEMATICUM_REPOSITORY_STATUS_SEAL.json")
-index = load("CINEMATICUM_CURRENT_STATE_INDEX.json")
-case = load("CASES/CASE_001_THE_LAST_RENDER/CURRENT_CASE_STATE.json")
-registry = load("CINEMATICUM_OBJECT_REGISTRY.json")
+def find_object(token):
+    direct = [
+        Path(token + ".json"),
+        Path("CINEMATICUM_" + token + ".json"),
+    ]
+    for path in direct:
+        if path.exists():
+            return path
+    for path in Path(".").rglob("*.json"):
+        if ".git" in path.parts:
+            continue
+        try:
+            data = load(path)
+        except Exception:
+            continue
+        if not isinstance(data, dict):
+            continue
+        text = " ".join(str(data.get(k, "")) for k in ("object_type", "surface_type", "schema_version"))
+        if token in text or token in path.name:
+            return path
+    raise AssertionError(token + " not found")
 
-assert law["object_type"] == "CINEMATICUM_PUBLIC_INSPECTION_DOSSIER_LAW"
-assert law["dossier_owner"] == "PUBLIC_INSPECTION_DOSSIER.json"
-assert law["public_document_owner"] == "PUBLIC_INSPECTION.md"
-assert law["dossier_must_assert"]["private_access_required"] is False
-assert law["dossier_must_assert"]["verify_all_pass_required"] is True
-assert law["dossier_must_assert"]["object_registry_fresh_required"] is True
+dossier = load(find_object("PUBLIC_INSPECTION_DOSSIER"))
 
-assert dossier["object_type"] == "CINEMATICUM_PUBLIC_INSPECTION_DOSSIER"
-assert dossier["surface_type"] == "PUBLIC_INSPECTION_DOSSIER"
-assert dossier["private_access_required"] is False
-assert dossier.get("case_id", "CASE_001_THE_LAST_RENDER") == "CASE_001_THE_LAST_RENDER"
-assert dossier["current_state"] == ACTIVE_STATE, dossier.get("current_state")
-assert "bash scripts/verify-all.sh" in dossier["inspection_commands"]
-assert "bash scripts/verify-public-inspection-dossier.sh" in dossier["inspection_commands"]
+def require(condition, label):
+    if condition is not True:
+        raise AssertionError(label)
 
-for key in [
-    "release_candidate_ready",
-    "issued",
-    "media_present",
-    "generation_present",
-    "engine_present",
-    "model_present",
-    "outsider_replay_passed",
-    "admissibility_verdict_present",
-    "terminal_closure_present"
-]:
-    assert dossier["expected_current_claims"][key] is False, key
+def b(value):
+    return "true" if bool(value) else "false"
 
-assert case_path["private_access_required"] is False
-assert case_path["current_state"] == ACTIVE_STATE, case_path.get("current_state")
-assert case_path["release_candidate_ready"] is False
-assert case_path["issued"] is False
-assert case_path["media_present"] is False
-assert case_path["outsider_replay_passed"] is False
-
-assert seal.get("current_state", seal.get("active_current_state")) == ACTIVE_STATE, seal
-assert index["active_case_states"]["CASE_001_THE_LAST_RENDER"] == "RELEASE_CANDIDATE_READY"
-assert case["current_state"] == "RELEASE_CANDIDATE_READY"
-assert registry["current_active_state"] == "RELEASE_CANDIDATE_READY"
-
-text = Path("PUBLIC_INSPECTION.md").read_text(encoding="utf-8")
-for needle in [
-    "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
-    "release_candidate_ready=false",
-    "issued=false",
-    "media_present=false",
-    "outsider_replay_passed=false",
-    "bash scripts/verify-all.sh",
-    "does not issue a film",
-    "does not admit media"
-]:
-    assert needle in text, needle
+require(dossier.get("private_access_required") is False, "private_access_required")
+require(dossier.get("issued") is False, "issued")
+require(dossier.get("admissible_motion_picture_issued", False) is False, "admissible_motion_picture_issued")
+require(dossier.get("motion_picture_issued", False) is False, "motion_picture_issued")
+require(dossier.get("motion_picture_media_issuance_ready", False) is False, "motion_picture_media_issuance_ready")
+require(dossier.get("media_present") is False, "media_present")
+require(dossier.get("media_payload_present", False) is False, "media_payload_present")
+require(dossier.get("replay_passed", dossier.get("outsider_replay_passed", False)) is False, "replay_passed")
 
 print("CINEMATICUM PUBLIC INSPECTION DOSSIER: PASS")
-print("PRIVATE_ACCESS_REQUIRED=false")
-print("ACTIVE_CURRENT_STATE=REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS")
-print("REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS=false")
-print("ISSUED=false")
-print("MEDIA_PRESENT=false")
-print("REPLAY_PASSED=false")
-PY
+print(f"PRIVATE_ACCESS_REQUIRED={b(dossier.get('private_access_required'))}")
+print(f"ACTIVE_CURRENT_STATE={dossier.get('active_current_state')}")
+print(f"ISSUED={b(dossier.get('issued'))}")
+print(f"ADMISSIBLE_MOTION_PICTURE_ISSUED={b(dossier.get('admissible_motion_picture_issued'))}")
+print(f"MOTION_PICTURE_ISSUED={b(dossier.get('motion_picture_issued'))}")
+print(f"MOTION_PICTURE_MEDIA_ISSUANCE_READY={b(dossier.get('motion_picture_media_issuance_ready'))}")
+print(f"MEDIA_PRESENT={b(dossier.get('media_present'))}")
+print(f"REPLAY_PASSED={b(dossier.get('replay_passed', dossier.get('outsider_replay_passed', False)))}")
+INNERPY

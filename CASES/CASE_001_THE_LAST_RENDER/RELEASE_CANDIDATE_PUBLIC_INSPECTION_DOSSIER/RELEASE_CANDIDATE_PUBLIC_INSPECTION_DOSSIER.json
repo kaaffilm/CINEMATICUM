@@ -51,5 +51,10 @@
   "unfilled_authority_object_slot_count": 0,
   "active_current_state": "RELEASE_CANDIDATE_READY",
   "record_current_state": "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS",
-  "active_release_candidate_ready": true
+  "active_release_candidate_ready": true,
+  "admissible_motion_picture_issued": false,
+  "motion_picture_issued": false,
+  "motion_picture_media_issuance_ready": false,
+  "media_payload_present": false,
+  "replay_passed": false
 }

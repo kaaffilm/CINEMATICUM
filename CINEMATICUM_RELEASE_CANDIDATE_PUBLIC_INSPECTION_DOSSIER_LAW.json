@@ -47,5 +47,10 @@
   "schema_version": "cinematicum.release_candidate_public_inspection_dossier.v1",
   "surface_class": "CASE_RECORD",
   "terminal_closure_present": false,
-  "unfilled_authority_object_slot_count": 0
+  "unfilled_authority_object_slot_count": 0,
+  "admissible_motion_picture_issued": false,
+  "motion_picture_issued": false,
+  "motion_picture_media_issuance_ready": false,
+  "media_payload_present": false,
+  "replay_passed": false
 }
