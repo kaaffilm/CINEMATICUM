@@ -28,15 +28,17 @@ class TestRepositoryStatusSeal(unittest.TestCase):
         self.assertEqual(seal["current_truth_owner"], "CINEMATICUM_CURRENT_STATE_INDEX.json")
         self.assertEqual(seal["case_current_truth_owner"], "CASES/CASE_001_THE_LAST_RENDER/CURRENT_CASE_STATE.json")
 
-    def test_protocol_film_issuance_is_true(self):
+    def test_no_media_boundary_is_not_bare_issuance(self):
         seal = load("CINEMATICUM_REPOSITORY_STATUS_SEAL.json")
-        issuance = load("CINEMATICUM_PROTOCOL_ISSUANCE.json")
 
-        self.assertTrue(seal["issued"])
-        self.assertEqual(seal["issuance_type"], "PROTOCOL_FILM")
-        self.assertTrue(seal["protocol_perimeter_issued"])
-        self.assertTrue(seal["protocol_film_issued"])
-        self.assertEqual(seal["issued_object"], issuance["issued_object"])
+        self.assertEqual(seal["active_current_state"], "RELEASE_CANDIDATE_READY")
+        self.assertEqual(seal.get("issuance_type"), "PROTOCOL_FILM")
+
+        self.assertFalse(seal["issued"])
+        self.assertFalse(seal["media_present"])
+        self.assertFalse(seal["motion_picture_media_issuance_ready"])
+        self.assertFalse(seal.get("admissible_motion_picture_issued", False))
+        self.assertFalse(seal.get("motion_picture_issued", False))
 
     def test_media_claims_remain_false(self):
         seal = load("CINEMATICUM_REPOSITORY_STATUS_SEAL.json")
