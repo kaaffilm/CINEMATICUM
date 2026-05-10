@@ -277,4 +277,5 @@ bash scripts/verify-release-candidate-ready-issuance-unblocking-decision-record.
 bash scripts/verify-release-candidate-ready-issuance-unblocking-execution-record.sh
 bash scripts/verify-release-candidate-ready-issuance-blockade-seal.sh
 bash scripts/verify-motion-picture-issuance-act.sh
+python3 -m unittest tests.test_no_media_global_issuance_boundary
 printf "CINEMATICUM VERIFY ALL: PASS\n"

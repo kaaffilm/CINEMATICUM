@@ -8,7 +8,7 @@
   "motion_picture_media_issuance_ready": false,
   "media_present": false,
   "forbidden_pair": {
-    "admissible_motion_picture_issued": true,
+    "admissible_motion_picture_issued": false,
     "media_present": false
   },
   "allowed_current_reading": "CASE_001 may have protocol/perimeter issuance while the admissible motion picture remains unissued until media/audience-body issuance conditions are satisfied."
