@@ -1,16 +1,16 @@
 import json
+import pathlib
 import unittest
-from pathlib import Path
 
+ROOT = pathlib.Path(__file__).resolve().parents[1]
 CASE_ID = "CASE_001_THE_LAST_RENDER"
 
-def load(path):
-    return json.loads(Path(path).read_text())
+def load(path: str):
+    return json.loads((ROOT / path).read_text(encoding="utf-8"))
 
 class TestMotionPictureIssuanceAct(unittest.TestCase):
-    def test_motion_picture_issuance_act(self):
+    def test_motion_picture_issuance_act_is_not_media_body_issuance(self):
         act = load("MOTION_PICTURE_ISSUANCE_ACT.json")
-        status = load(f"CASES/{CASE_ID}/MOTION_PICTURE_ISSUANCE_ACT_STATUS.json")
         prior = load("RELEASE_CANDIDATE_READY_ISSUANCE_UNBLOCKING_EXECUTION_RECORD.json")
 
         self.assertEqual(act["object_type"], "MOTION_PICTURE_ISSUANCE_ACT")
@@ -22,10 +22,15 @@ class TestMotionPictureIssuanceAct(unittest.TestCase):
         self.assertTrue(act["release_candidate_ready"])
         self.assertTrue(act["issuance_unblocked"])
         self.assertTrue(act["motion_picture_issuance_act_present"])
-        self.assertTrue(act["admissible_motion_picture_issued"])
-        self.assertTrue(act["issued"])
 
+        # Semantic boundary: no admitted media/audience body exists here.
+        self.assertFalse(act["issued"])
+        self.assertFalse(act["admissible_motion_picture_issued"])
+        self.assertFalse(act.get("motion_picture_issued", False))
         self.assertFalse(act["media_present"])
+        self.assertFalse(act.get("media_payload_present", False))
+        self.assertFalse(act.get("motion_picture_media_issuance_ready", False))
+
         self.assertFalse(act["media_admitted"])
         self.assertFalse(act["generation_admitted"])
         self.assertFalse(act["engine_admitted"])
@@ -34,21 +39,28 @@ class TestMotionPictureIssuanceAct(unittest.TestCase):
         self.assertFalse(act["may_advance_now"])
         self.assertEqual(act["next_required_object"], "NONE")
 
-        self.assertTrue(status["issued"])
-        self.assertTrue(status["issuance_unblocked"])
-        self.assertFalse(status["media_present"])
-        self.assertEqual(status["next_required_object"], "NONE")
+    def test_motion_picture_issuance_act_status_preserves_declared_keys(self):
+        act = load("MOTION_PICTURE_ISSUANCE_ACT.json")
+        status = load(f"CASES/{CASE_ID}/MOTION_PICTURE_ISSUANCE_ACT_STATUS.json")
 
-        print("CINEMATICUM MOTION PICTURE ISSUANCE ACT: PASS")
-        print("CURRENT_STATE=RELEASE_CANDIDATE_READY")
-        print("RELEASE_CANDIDATE_READY=true")
-        print("ISSUANCE_UNBLOCKED=true")
-        print("MOTION_PICTURE_ISSUANCE_ACT_PRESENT=true")
-        print("ADMISSIBLE_MOTION_PICTURE_ISSUED=false")
-        print("ISSUED=false")
-        print("MEDIA_PRESENT=false")
-        print("MAY_ADVANCE_NOW=false")
-        print("NEXT_REQUIRED_OBJECT=NONE")
+        # Status records are allowed to be thinner than the canonical act.
+        for key in [
+            "issued",
+            "issuance_unblocked",
+            "media_present",
+            "next_required_object",
+        ]:
+            self.assertIn(key, status)
+            self.assertEqual(status[key], act[key], key)
+
+        for key in [
+            "admissible_motion_picture_issued",
+            "motion_picture_issued",
+            "media_payload_present",
+            "motion_picture_media_issuance_ready",
+        ]:
+            if key in status:
+                self.assertEqual(status[key], act.get(key), key)
 
 if __name__ == "__main__":
-    unittest.main(verbosity=1)
+    unittest.main()
