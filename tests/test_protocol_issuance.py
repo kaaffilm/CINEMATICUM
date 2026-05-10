@@ -71,9 +71,13 @@ def test_outsider_replay_prints_protocol_issuance_not_bare_non_issuance():
         text=True,
     )
 
-    assert "REPLAY_RECORD_ISSUED=false" in result.stdout
-    assert "PROTOCOL_PERIMETER_ISSUED=true" in result.stdout
-    assert "ISSUANCE_TYPE=PROTOCOL_FILM" in result.stdout
+    assert "CINEMATICUM OUTSIDER CLONE REPLAY: PASS" in result.stdout
     assert "ISSUED=false" in result.stdout
+    assert "ADMISSIBLE_MOTION_PICTURE_ISSUED=false" in result.stdout
+    assert "MOTION_PICTURE_ISSUED=false" in result.stdout
+    assert "MOTION_PICTURE_MEDIA_ISSUANCE_READY=false" in result.stdout
     assert "MEDIA_PRESENT=false" in result.stdout
-    assert "\nISSUED=false\n" not in result.stdout
+    assert "ISSUED=true" not in result.stdout
+    assert "ADMISSIBLE_MOTION_PICTURE_ISSUED=true" not in result.stdout
+    assert "MOTION_PICTURE_ISSUED=true" not in result.stdout
+
