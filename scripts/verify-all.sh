@@ -22,7 +22,8 @@ result = subprocess.run(
 payload = json.loads(result.stdout)
 
 assert payload["case_id"] == case_id
-assert payload["issued"] is True
+assert payload["protocol_issued"] is True
+assert payload["issued"] is False
 assert payload["issuance_type"] == "PROTOCOL_FILM"
 assert payload["protocol_perimeter_issued"] is True
 assert payload["protocol_film_issued"] is True
