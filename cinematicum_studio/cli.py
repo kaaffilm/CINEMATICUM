@@ -155,7 +155,8 @@ def cmd_issuance_check(args):
     protocol_ok, protocol_missing = validate_protocol_issuance(args.case_id)
     print(json.dumps({
         "case_id": args.case_id,
-        "issued": protocol_ok,
+        "protocol_issued": protocol_ok,
+        "issued": False,
         "issuance_type": "PROTOCOL_FILM",
         "protocol_perimeter_issued": protocol_ok,
         "protocol_film_issued": protocol_ok,

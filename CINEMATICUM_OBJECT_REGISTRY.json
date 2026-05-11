@@ -5278,7 +5278,7 @@
     },
     {
       "path": "CINEMATICUM_PROTOCOL_ISSUANCE.json",
-      "sha256": "3bffa43748e59c251e0fa6c54e47a14f625322deee4291826e7d1a7995378bc6",
+      "sha256": "070e0c9b7d6d684ede370e124837843453d7205c311359eacc915bc5b43f6f3e",
       "object_type": "CINEMATICUM_PROTOCOL_ISSUANCE",
       "schema_version": "UNDECLARED_SCHEMA_VERSION",
       "surface_class": "CASE_RECORD",

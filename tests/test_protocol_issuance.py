@@ -23,8 +23,9 @@ def test_protocol_film_is_issued_without_media_payload():
 
     data = json.loads((ROOT / "CINEMATICUM_PROTOCOL_ISSUANCE.json").read_text())
 
-    assert data["canonical_claim"] == "CINEMATICUM is a real protocol perimeter and a issued film."
-    assert data["issued"] is True
+    assert data["canonical_claim"] == "CINEMATICUM is issued as a public replayable hash-bound protocol-film perimeter."
+    assert data["protocol_issued"] is True
+    assert data["issued"] is False
     assert data["issuance_type"] == "PROTOCOL_FILM"
     assert data["protocol_perimeter_issued"] is True
     assert data["protocol_film_issued"] is True
@@ -53,7 +54,8 @@ def test_issuance_check_reports_protocol_issued_and_media_not_ready():
     )
     data = json.loads(result.stdout)
 
-    assert data["issued"] is True
+    assert data["protocol_issued"] is True
+    assert data["issued"] is False
     assert data["issuance_type"] == "PROTOCOL_FILM"
     assert data["protocol_perimeter_issued"] is True
     assert data["protocol_film_issued"] is True

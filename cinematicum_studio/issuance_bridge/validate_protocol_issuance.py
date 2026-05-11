@@ -20,7 +20,9 @@ def validate_protocol_issuance(case_id: str) -> tuple[bool, list[str]]:
         "object_type": "CINEMATICUM_PROTOCOL_ISSUANCE",
         "case_id": case_id,
         "film_identity": "CINEMATICUM",
-        "issued": True,
+        "protocol_issued": True,
+        "issued": False,
+        "issued_alias_retired": True,
         "protocol_perimeter_issued": True,
         "protocol_film_issued": True,
         "issuance_type": "PROTOCOL_FILM",
@@ -38,7 +40,7 @@ def validate_protocol_issuance(case_id: str) -> tuple[bool, list[str]]:
             missing.append(f"PROTOCOL_ISSUANCE::{key}")
 
     claim = data.get("canonical_claim")
-    if claim != "CINEMATICUM is a real protocol perimeter and a issued film.":
+    if claim != "CINEMATICUM is issued as a public replayable hash-bound protocol-film perimeter.":
         missing.append("PROTOCOL_ISSUANCE::CANONICAL_CLAIM")
 
     return len(missing) == 0, missing

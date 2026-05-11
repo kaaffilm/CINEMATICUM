@@ -6,8 +6,8 @@ Current active state:
 
 Protocol film issuance state:
 
-    CINEMATICUM is a real protocol perimeter and a issued film.
-    issued=true
+    CINEMATICUM is issued as a public replayable hash-bound protocol-film perimeter.
+    protocol_issued=true
     issuance_type=PROTOCOL_FILM
     protocol_perimeter_issued=true
     protocol_film_issued=true
@@ -15,6 +15,10 @@ Protocol film issuance state:
 
 Motion-picture media issuance state:
 
+    issued=false
+    motion_picture_issued=false
+    admissible_motion_picture_issued=false
+    final_master_media_issued=false
     motion_picture_media_issuance_ready=false
     media_present=false
     generation_present=false
@@ -48,11 +52,11 @@ Registry freshness required:
 
 ## Boundary
 
-This status page reports the issued protocol-film perimeter; it does not by itself issue anything.
+This status page reports protocol-film perimeter issuance only.
 
 CINEMATICUM protocol-film issuance is not final-master media issuance.
 
-CINEMATICUM is issued as a public replayable hash-bound protocol perimeter.
+Bare `issued` is reserved for motion-picture media issuance and remains false.
 
 CINEMATICUM does not claim admitted footage, audio, stills, model weights, render workflows, or media payloads.
 
