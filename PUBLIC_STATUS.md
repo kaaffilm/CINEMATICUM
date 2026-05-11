@@ -15,7 +15,7 @@ Protocol film issuance state:
 
 Motion-picture media issuance state:
 
-    issued=false
+    motion_picture_media_issued=false
     motion_picture_issued=false
     admissible_motion_picture_issued=false
     final_master_media_issued=false
@@ -53,6 +53,8 @@ Registry freshness required:
 ## Boundary
 
 This status page reports protocol-film perimeter issuance only.
+
+Protocol-film perimeter issuance does not by itself issue anything.
 
 CINEMATICUM protocol-film issuance is not final-master media issuance.
 

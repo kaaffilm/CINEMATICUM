@@ -33,9 +33,10 @@ def test_public_status_declares_protocol_film_issuance_without_media_payload():
     assert "motion_picture_media_issuance_ready=false" in status
 
 
-def test_public_status_reserves_bare_issued_for_media_issuance():
+def test_public_status_omits_bare_issued_from_public_status():
     status = (ROOT / "PUBLIC_STATUS.md").read_text()
 
-    assert re.search(r"(?m)^\s+issued=false\s*$", status) is not None
+    assert re.search(r"(?m)^\s+issued=false\s*$", status) is None
+    assert re.search(r"(?m)^\s+motion_picture_media_issued=false\s*$", status) is not None
     assert "Bare `issued` is reserved for motion-picture media issuance and remains false." in status
     assert "CINEMATICUM protocol-film issuance is not final-master media issuance." in status
