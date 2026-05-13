@@ -40,22 +40,27 @@ class TestRepositoryStatusSeal(unittest.TestCase):
         self.assertTrue(seal.get("admissible_motion_picture_issued", False))
         self.assertTrue(seal.get("motion_picture_issued", False))
 
-    def test_media_claims_remain_false(self):
-        seal = load("CINEMATICUM_REPOSITORY_STATUS_SEAL.json")
-
+    def test_hash_bound_motion_picture_media_claims_are_true_without_raw_git_payload(self):
+        seal = self.load_seal()
         for key in [
+            "issued",
             "media_present",
-            "media_payload_present",
             "motion_picture_media_issuance_ready",
-            "generation_present",
-            "engine_present",
-            "model_present",
-            "model_weight_payload_present",
-            "outsider_replay_passed",
-            "admissibility_verdict_present",
-            "terminal_closure_present",
+            "admissible_motion_picture_issued",
+            "motion_picture_issued",
         ]:
-            self.assertFalse(seal[key], key)
+            self.assertTrue(seal[key], key)
+
+        self.assertTrue(seal["protocol_film_issued"])
+        self.assertTrue(seal["protocol_perimeter_issued"])
+        self.assertFalse(seal["raw_media_stored_in_git"])
+        self.assertFalse(seal["media_payload_present"])
+        self.assertFalse(seal["outsider_replay_passed"])
+        self.assertTrue(seal["private_access_required"])
+        self.assertEqual(
+            seal["motion_picture_media_admission_record"],
+            "records/motion_picture_issuance/MOTION_PICTURE_MEDIA_ADMISSION_RECORD.json",
+        )
 
     def test_required_verification_flags(self):
         seal = load("CINEMATICUM_REPOSITORY_STATUS_SEAL.json")
