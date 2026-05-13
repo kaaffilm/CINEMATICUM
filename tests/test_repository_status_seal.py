@@ -1,3 +1,4 @@
+from pathlib import Path
 import json
 import pathlib
 import re
@@ -11,6 +12,9 @@ def load(path: str):
 
 
 class TestRepositoryStatusSeal(unittest.TestCase):
+    def load_seal(self):
+        return json.loads(Path("CINEMATICUM_REPOSITORY_STATUS_SEAL.json").read_text())
+
     def test_seal_matches_current_state_owners(self):
         seal = load("CINEMATICUM_REPOSITORY_STATUS_SEAL.json")
         index = load("CINEMATICUM_CURRENT_STATE_INDEX.json")
