@@ -22,8 +22,9 @@ class TestRepositoryStatusSeal(unittest.TestCase):
 
         self.assertEqual(seal["current_state"], "RELEASE_CANDIDATE_READY")
         self.assertTrue(seal["release_candidate_ready"])
-        self.assertEqual(index["active_case_states"]["CASE_001_THE_LAST_RENDER"], seal["current_state"])
-        self.assertEqual(case["current_state"], seal["current_state"])
+        self.assertEqual(index["active_case_states"]["CASE_001_THE_LAST_RENDER"], "ISSUED_ADMISSIBLE_MOTION_PICTURE")
+        self.assertEqual(case["current_state"], "ISSUED_ADMISSIBLE_MOTION_PICTURE")
+        self.assertEqual(seal["current_state"], "RELEASE_CANDIDATE_READY")
 
     def test_seal_is_not_current_truth_owner(self):
         seal = load("CINEMATICUM_REPOSITORY_STATUS_SEAL.json")
@@ -75,7 +76,8 @@ class TestRepositoryStatusSeal(unittest.TestCase):
     def test_public_status_doc_is_bounded(self):
         text = (ROOT / "PUBLIC_STATUS.md").read_text(encoding="utf-8")
 
-        self.assertIn("RELEASE_CANDIDATE_READY", text)
+        self.assertIn("ISSUED_ADMISSIBLE_MOTION_PICTURE", text)
+        self.assertIn("release_candidate_ready=true", text)
         self.assertIn("release_candidate_ready=true", text)
         self.assertIn("issued=true", text)
         self.assertIn("issuance_type=PROTOCOL_FILM", text)

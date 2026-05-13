@@ -6,7 +6,7 @@ import json
 from pathlib import Path
 
 CASE = "CASE_001_THE_LAST_RENDER"
-ACTIVE = "RELEASE_CANDIDATE_READY"
+ACTIVE = "ISSUED_ADMISSIBLE_MOTION_PICTURE"
 RECORD = "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
 
 def load(path):
@@ -51,8 +51,8 @@ for key in ("authority_satisfied", "may_advance_now", "release_candidate_ready",
 assert index["active_case_states"][CASE] == ACTIVE
 assert case["current_state"] == ACTIVE
 assert case["release_candidate_ready"] is True
-assert case["issued"] is False
-assert case["media_present"] is False
+assert case["issued"] is True, case["issued"]
+assert case["media_present"] is True, case["media_present"]
 
 print("CINEMATICUM REAL CASE AUTHORITY OBJECT ADMISSION REJECTION TAXONOMY: PASS")
 print(f"RECORD_CURRENT_STATE={RECORD}")

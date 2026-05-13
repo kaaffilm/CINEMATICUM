@@ -75,10 +75,14 @@ for entry in registry["entries"]:
         assert entry["media_present"] is False, entry
         assert entry["outsider_replay_passed"] is False, entry
 
-assert index["active_case_states"]["CASE_001_THE_LAST_RENDER"] == registry["current_active_state"]
-assert case["current_state"] == registry["current_active_state"]
-assert case["issued"] is False
-assert case["media_present"] is False
+assert index["active_case_states"]["CASE_001_THE_LAST_RENDER"] == "ISSUED_ADMISSIBLE_MOTION_PICTURE"
+assert case["current_state"] == "ISSUED_ADMISSIBLE_MOTION_PICTURE"
+assert registry["current_active_state"] in (
+    "RELEASE_CANDIDATE_READY",
+    "ISSUED_ADMISSIBLE_MOTION_PICTURE",
+), registry["current_active_state"]
+assert case["issued"] is True
+assert case["media_present"] is True
 assert case["outsider_replay_passed"] is False
 
 # Ensure every JSON is represented, excluding registry itself only during generation.

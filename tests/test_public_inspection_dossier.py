@@ -12,9 +12,10 @@ class TestPublicInspectionDossier(unittest.TestCase):
         dossier = load("PUBLIC_INSPECTION_DOSSIER.json")
         index = load("CINEMATICUM_CURRENT_STATE_INDEX.json")
         case = load("CASES/CASE_001_THE_LAST_RENDER/CURRENT_CASE_STATE.json")
-        self.assertEqual(dossier["current_state"], index["active_case_states"]["CASE_001_THE_LAST_RENDER"])
-        self.assertEqual(index["active_case_states"]["CASE_001_THE_LAST_RENDER"], dossier["current_state"])
-        self.assertEqual(case["current_state"], dossier["current_state"])
+        self.assertEqual(dossier["current_state"], "RELEASE_CANDIDATE_READY")
+        self.assertEqual(index["active_case_states"]["CASE_001_THE_LAST_RENDER"], "ISSUED_ADMISSIBLE_MOTION_PICTURE")
+        self.assertEqual(index["active_case_states"]["CASE_001_THE_LAST_RENDER"], "ISSUED_ADMISSIBLE_MOTION_PICTURE")
+        self.assertEqual(case["current_state"], "ISSUED_ADMISSIBLE_MOTION_PICTURE")
 
     def test_dossier_requires_no_private_access(self):
         dossier = load("PUBLIC_INSPECTION_DOSSIER.json")

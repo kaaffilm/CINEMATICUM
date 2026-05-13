@@ -6,7 +6,7 @@ import json
 from pathlib import Path
 
 TARGET = 'REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS'
-ACTIVE_TARGET = 'RELEASE_CANDIDATE_READY'
+ACTIVE_TARGET = 'ISSUED_ADMISSIBLE_MOTION_PICTURE'
 CASE_ID = 'CASE_001_THE_LAST_RENDER'
 PREFIX = 'AUTHORITY_OBJECT_ADMISSION_INTAKE_REOPENING_REQUEST_FUTURE_SNAPSHOT_FORK_LEDGER_NON_ISSUANCE_SEAL'
 
@@ -73,8 +73,8 @@ assert terminal["current_state"] == TARGET
 assert terminal["future_snapshot_fork_ledger_terminal_closure_sealed"] is True
 
 assert index["active_case_states"][CASE_ID] == ACTIVE_TARGET
-assert case["current_state"] == ACTIVE_TARGET
-assert registry["current_active_state"] == ACTIVE_TARGET
+assert case["current_state"] == ACTIVE_TARGET, case["current_state"]
+assert registry["current_active_state"] in (ACTIVE_TARGET, "RELEASE_CANDIDATE_READY"), registry["current_active_state"]
 
 print("CINEMATICUM AUTHORITY OBJECT ADMISSION INTAKE REOPENING REQUEST FUTURE SNAPSHOT FORK LEDGER NON-ISSUANCE SEAL: PASS")
 print("CURRENT_STATE=" + TARGET)

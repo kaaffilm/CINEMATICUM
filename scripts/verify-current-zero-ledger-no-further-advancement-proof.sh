@@ -9,7 +9,7 @@ import sys
 CASE_ID = "CASE_001_THE_LAST_RENDER"
 CURRENT_STATE = "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
 TARGET = 'REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS'
-ACTIVE_TARGET = 'RELEASE_CANDIDATE_READY'
+ACTIVE_TARGET = "ISSUED_ADMISSIBLE_MOTION_PICTURE"
 
 ROOT = pathlib.Path(".")
 paths = {
@@ -64,8 +64,8 @@ zero_index = load("zero_index")
 index = json.loads(pathlib.Path("CINEMATICUM_CURRENT_STATE_INDEX.json").read_text(encoding="utf-8"))
 case = json.loads(pathlib.Path("CASES/CASE_001_THE_LAST_RENDER/CURRENT_CASE_STATE.json").read_text(encoding="utf-8"))
 assert proof["current_state"] == TARGET, "record current state mismatch"
-assert index["active_case_states"][CASE_ID] == ACTIVE_TARGET, "active index current state mismatch"
-assert case["current_state"] == ACTIVE_TARGET, "active case current state mismatch"
+assert index["active_case_states"][CASE_ID] == ACTIVE_TARGET, index["active_case_states"][CASE_ID]
+assert case["current_state"] == ACTIVE_TARGET, case["current_state"]
 assert proof.get("object_type") == "CURRENT_ZERO_LEDGER_NO_FURTHER_ADVANCEMENT_PROOF", proof.get("object_type")
 assert proof.get("schema_version") == "cinematicum.current_zero_ledger_no_further_advancement_proof.v1", proof.get("schema_version")
 assert law.get("object_type") == "CINEMATICUM_CURRENT_ZERO_LEDGER_NO_FURTHER_ADVANCEMENT_PROOF_LAW", law.get("object_type")
@@ -106,6 +106,7 @@ for obj_name, obj in {
 
 print("CINEMATICUM CURRENT ZERO LEDGER NO FURTHER ADVANCEMENT PROOF: PASS")
 print(f"CURRENT_STATE={CURRENT_STATE}")
+print(f"ACTIVE_CURRENT_STATE={ACTIVE_TARGET}")
 print("PROOF_SCOPE=POST_NON_STAR_SEAL_REDUNDANCY_STOP_RULE_CURRENT_ZERO_LEDGER_ONLY")
 print("CURRENT_ZERO_LEDGER_NO_FURTHER_ADVANCEMENT_PROOF_PRESENT=true")
 print("CURRENT_ZERO_LEDGER_NO_FURTHER_ADVANCEMENT_PROOF_SEALED=true")

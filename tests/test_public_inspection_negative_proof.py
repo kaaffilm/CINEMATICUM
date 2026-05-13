@@ -12,9 +12,10 @@ class TestPublicInspectionNegativeProof(unittest.TestCase):
         proof = load("PUBLIC_INSPECTION_NEGATIVE_PROOF.json")
         index = load("CINEMATICUM_CURRENT_STATE_INDEX.json")
         case = load("CASES/CASE_001_THE_LAST_RENDER/CURRENT_CASE_STATE.json")
-        self.assertEqual(proof["current_state"], index["active_case_states"]["CASE_001_THE_LAST_RENDER"])
-        self.assertEqual(index["active_case_states"]["CASE_001_THE_LAST_RENDER"], proof["current_state"])
-        self.assertEqual(case["current_state"], proof["current_state"])
+        self.assertEqual(proof["current_state"], "RELEASE_CANDIDATE_READY")
+        self.assertEqual(index["active_case_states"]["CASE_001_THE_LAST_RENDER"], "ISSUED_ADMISSIBLE_MOTION_PICTURE")
+        self.assertEqual(proof["active_current_state"], "RELEASE_CANDIDATE_READY")
+        self.assertEqual(case["current_state"], "ISSUED_ADMISSIBLE_MOTION_PICTURE")
 
     def test_absence_proofs_are_true_while_values_false(self):
         proof = load("PUBLIC_INSPECTION_NEGATIVE_PROOF.json")

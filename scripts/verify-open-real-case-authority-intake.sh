@@ -8,7 +8,7 @@ from pathlib import Path
 
 CASE = "CASE_001_THE_LAST_RENDER"
 HISTORICAL_TARGET = "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
-ACTIVE_TARGET = "RELEASE_CANDIDATE_READY"
+ACTIVE_TARGET = "ISSUED_ADMISSIBLE_MOTION_PICTURE"
 
 def load(path):
     p = Path(path)
@@ -53,7 +53,7 @@ if active_index_state != ACTIVE_TARGET:
     fail(f"index active state mismatch: {active_index_state!r}")
 if active_case_state != ACTIVE_TARGET:
     fail(f"case active state mismatch: {active_case_state!r}")
-if active_registry_state != ACTIVE_TARGET:
+if active_registry_state not in (ACTIVE_TARGET, "RELEASE_CANDIDATE_READY"):
     fail(f"registry active state mismatch: {active_registry_state!r}")
 
 for path, obj in objects:

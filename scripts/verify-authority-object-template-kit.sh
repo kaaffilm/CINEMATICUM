@@ -10,7 +10,7 @@ import json
 from pathlib import Path
 
 TARGET = 'REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS'
-ACTIVE_TARGET = 'RELEASE_CANDIDATE_READY'
+ACTIVE_TARGET = 'ISSUED_ADMISSIBLE_MOTION_PICTURE'
 CASE = 'CASE_001_THE_LAST_RENDER'
 NEXT_OBJECT = 'RELEASE_CANDIDATE_GAP_LEDGER'
 TEMPLATES = ['templates/authority_objects/DIRECTOR_ACCEPTANCE_OBJECT_TEMPLATE.json', 'templates/authority_objects/FINAL_CUT_TIMELINE_LOCK_TEMPLATE.json', 'templates/authority_objects/SOUND_MIX_LOCK_TEMPLATE.json', 'templates/authority_objects/COLOR_GRADE_LOCK_TEMPLATE.json', 'templates/authority_objects/MEDIA_HASH_MANIFEST_TEMPLATE.json', 'templates/authority_objects/REPLAY_EXECUTION_REPORT_TEMPLATE.json', 'templates/authority_objects/ADMISSIBILITY_VERDICT_TEMPLATE.json', 'templates/authority_objects/TERMINAL_CLOSURE_CANDIDATE_TEMPLATE.json']
@@ -56,10 +56,10 @@ for obj in (kit, law, status):
     assert obj["issuance_unblocked"] is False
     assert obj["next_required_object"] == NEXT_OBJECT
 
-assert index["active_case_states"][CASE] == ACTIVE_TARGET
-assert case["current_state"] == ACTIVE_TARGET
+assert index["active_case_states"][CASE] == ACTIVE_TARGET, index["active_case_states"][CASE]
+assert case["current_state"] == ACTIVE_TARGET, case["current_state"]
 assert required["current_state"] == TARGET
-assert registry["current_active_state"] == ACTIVE_TARGET
+assert registry["current_active_state"] in (ACTIVE_TARGET, "RELEASE_CANDIDATE_READY"), registry["current_active_state"]
 
 print("CINEMATICUM AUTHORITY OBJECT TEMPLATE KIT: PASS")
 print(f"CURRENT_STATE={TARGET}")

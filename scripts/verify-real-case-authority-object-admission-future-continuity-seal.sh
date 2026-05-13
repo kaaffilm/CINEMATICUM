@@ -7,7 +7,7 @@ from pathlib import Path
 
 CASE_ID = "CASE_001_THE_LAST_RENDER"
 RECORD_STATE = "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
-ACTIVE_STATE = "RELEASE_CANDIDATE_READY"
+ACTIVE_STATE = "ISSUED_ADMISSIBLE_MOTION_PICTURE"
 
 def load(path):
     return json.loads(Path(path).read_text(encoding="utf-8"))
@@ -50,11 +50,11 @@ for obj in records:
         if key in obj:
             assert obj[key] is False, f"{key}={obj[key]}"
 
-assert index["active_case_states"][CASE_ID] == ACTIVE_STATE
-assert case["current_state"] == ACTIVE_STATE
+assert index["active_case_states"][CASE_ID] == ACTIVE_STATE, index["active_case_states"][CASE_ID]
+assert case["current_state"] == ACTIVE_STATE, case["current_state"]
 assert case["release_candidate_ready"] is True
-assert case["issued"] is False
-assert case["media_present"] is False
+assert case["issued"] is True, case["issued"]
+assert case["media_present"] is True, case["media_present"]
 
 print("CINEMATICUM REAL CASE AUTHORITY OBJECT ADMISSION FUTURE CONTINUITY SEAL: PASS")
 print(f"CURRENT_STATE={RECORD_STATE}")
