@@ -9,7 +9,7 @@
   "registry_does_not_override_current_state": true,
   "current_active_state": "RELEASE_CANDIDATE_READY",
   "case_id": "CASE_001_THE_LAST_RENDER",
-  "entries_count": 484,
+  "entries_count": 485,
   "entries": [
     {
       "path": "ADMISSIBILITY_VERDICT_SCHEMA.json",
@@ -6193,7 +6193,7 @@
     },
     {
       "path": "CINEMATICUM_REPOSITORY_STATUS_SEAL.json",
-      "sha256": "e822adb58dc76572355dc58079858f353c220e04beef13be221851233b1a6dd2",
+      "sha256": "46c1bb47633fb587af1392a8f9c1887e334de3c190168535ed95dec78b659243",
       "object_type": "CINEMATICUM_REPOSITORY_STATUS_SEAL",
       "schema_version": "cinematicum.repository_status_seal.v1",
       "surface_class": "LAYER_STATUS_RECORD",
@@ -7143,6 +7143,21 @@
       "schema_version": "cinematicum.publication_not_ready_proof.v1",
       "surface_class": "CASE_RECORD",
       "case_id": "CASE_001_THE_LAST_RENDER",
+      "current_truth_owner": false,
+      "issued": false,
+      "release_candidate_ready": false,
+      "media_present": false,
+      "outsider_replay_passed": false,
+      "current_active_state": "RELEASE_CANDIDATE_READY",
+      "active_current_state": "RELEASE_CANDIDATE_READY"
+    },
+    {
+      "path": "records/motion_picture_issuance/MOTION_PICTURE_MEDIA_ADMISSION_RECORD.json",
+      "sha256": "ad0a2df11ee2cc016960b31de9130d9c6e5aaeb7a46ee16c092138c03154f25e",
+      "object_type": "UNDECLARED_OBJECT_TYPE",
+      "schema_version": "UNDECLARED_SCHEMA_VERSION",
+      "surface_class": "CASE_RECORD",
+      "case_id": "THE_LAST_RENDER",
       "current_truth_owner": false,
       "issued": false,
       "release_candidate_ready": false,
