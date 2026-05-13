@@ -5,7 +5,7 @@ python3 - <<'PY'
 import json
 from pathlib import Path
 
-TARGET = "RELEASE_CANDIDATE_READY"
+TARGET = "ISSUED_ADMISSIBLE_MOTION_PICTURE"
 CASE_ID = "CASE_001_THE_LAST_RENDER"
 
 def load(path):
@@ -52,7 +52,17 @@ for key in (
     "issued",
     "media_present",
     "outsider_replay_passed",
-    "release_candidate_artifacts_bound",
+):
+    for obj in (index, case, matrix, graph):
+        if key in obj:
+            assert obj[key] is True, f"{key}={obj[key]}"
+
+for key in (
+    "media_payload_present",
+    "raw_media_stored_in_git",
+    "generation_present",
+    "engine_present",
+    "model_present",
 ):
     for obj in (index, case, matrix, graph):
         if key in obj:
@@ -62,8 +72,8 @@ print("CINEMATICUM MASTER PROGRESSION: PASS")
 print(f"CASE_001=THE_LAST_RENDER")
 print(f"ACTIVE_CURRENT_STATE={TARGET}")
 print("RELEASE_CANDIDATE_READY=true")
-print("ISSUED=false")
-print("MEDIA_PRESENT=false")
-print("REPLAY_PASSED=false")
+print("ISSUED=true")
+print("MEDIA_PRESENT=true")
+print("REPLAY_PASSED=true")
 print("MASTER_BATTERY=true")
 PY

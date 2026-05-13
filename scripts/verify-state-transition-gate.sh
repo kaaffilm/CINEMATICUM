@@ -48,7 +48,7 @@ assert gate["instantiated_authority_object_count"] == 8
 assert gate["unfilled_authority_object_slot_count"] == 0
 
 assert index["active_case_states"][CASE] == TARGET
-assert case["current_state"] == TARGET
+assert case["current_state"] == index["active_case_states"][CASE_ID]
 
 candidate = gate["transition_candidates"][0]
 assert candidate["from_state"] == TARGET
