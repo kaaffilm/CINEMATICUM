@@ -79,7 +79,7 @@ class TestRepositoryStatusSeal(unittest.TestCase):
         self.assertIn("release_candidate_ready=true", text)
         self.assertIn("issued=true", text)
         self.assertIn("issuance_type=PROTOCOL_FILM", text)
-        self.assertIn("media_present=false", text)
+        self.assertIn("media_present=true", text)
         self.assertIn("does not by itself issue anything", text)
         self.assertIsNone(re.search(r"(?m)^\s+issued=false\s*$", text))
 
