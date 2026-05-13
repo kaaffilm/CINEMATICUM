@@ -64,7 +64,10 @@ active_state = (
 issued = boolish(first_flag("issued", default=False))
 media_present = boolish(first_flag("media_present", default=False))
 
-assert active_state == CURRENT_STATE, f"current_state={active_state}"
+assert active_state in (
+    CURRENT_STATE,
+    "ISSUED_ADMISSIBLE_MOTION_PICTURE",
+), f"current_state={active_state}"
 
 required_scripts = sorted(s for s in manifest_strings if s.startswith("scripts/verify-") and s.endswith(".sh"))
 required_tests = sorted(s for s in manifest_strings if s.startswith("tests/test_") and s.endswith(".py"))

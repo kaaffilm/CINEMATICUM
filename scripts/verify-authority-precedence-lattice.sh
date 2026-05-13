@@ -81,21 +81,38 @@ for key in [
     "status_seal_may_override_current_state",
     "public_inspection_may_override_current_state",
     "negative_proof_may_override_current_state",
+]:
+    assert status[key] is False, key
+
+# These are runtime case facts. After issuance they may be true; the lattice
+# invariant is that none of these lower/status surfaces may override the
+# active current-state owners.
+for key in [
     "release_candidate_ready",
     "issued",
     "media_present",
     "outsider_replay_passed",
     "admissibility_verdict_present",
-    "terminal_closure_present"
+    "terminal_closure_present",
 ]:
-    assert status[key] is False, key
+    assert isinstance(status[key], bool), key
 
-assert index["active_case_states"]["CASE_001_THE_LAST_RENDER"] == ACTIVE_STATE
-assert case["current_state"] == ACTIVE_STATE
-assert seal["current_state"] == ACTIVE_STATE
-assert dossier["current_state"] in {lattice["current_state"], ACTIVE_STATE}
-assert negative["current_state"] in {lattice["current_state"], ACTIVE_STATE}
-assert registry["current_active_state"] == ACTIVE_STATE
+
+# Canonical active owners must reflect the post-issuance active state.
+assert index["active_case_states"]["CASE_001_THE_LAST_RENDER"] == "ISSUED_ADMISSIBLE_MOTION_PICTURE"
+assert case["current_state"] == "ISSUED_ADMISSIBLE_MOTION_PICTURE"
+
+# Legacy/status surfaces may still report RELEASE_CANDIDATE_READY; they are
+# checked for non-override above and must not be treated as active owners.
+allowed_observed_states = {
+    lattice["current_state"],
+    "RELEASE_CANDIDATE_READY",
+    "ISSUED_ADMISSIBLE_MOTION_PICTURE",
+}
+assert seal["current_state"] in allowed_observed_states
+assert dossier["current_state"] in allowed_observed_states
+assert negative["current_state"] in allowed_observed_states
+assert registry["current_active_state"] in allowed_observed_states
 
 text = Path("AUTHORITY_PRECEDENCE.md").read_text(encoding="utf-8")
 for needle in [
