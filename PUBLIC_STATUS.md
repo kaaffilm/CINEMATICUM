@@ -15,17 +15,17 @@ Protocol film issuance state:
 
 Motion-picture media issuance state:
 
-    motion_picture_media_issued=false
-    motion_picture_issued=false
-    admissible_motion_picture_issued=false
-    final_master_media_issued=false
-    motion_picture_media_issuance_ready=false
-    media_present=false
+    motion_picture_media_issued=true
+    motion_picture_issued=true
+    admissible_motion_picture_issued=true
+    final_master_media_issued=true
+    motion_picture_media_issuance_ready=true
+    media_present=true
     generation_present=false
     engine_present=false
     model_present=false
     model_weight_payload_present=false
-    private_access_required=false
+    private_access_required=true
     network_required_after_clone=false
 
 Release candidate state:
@@ -34,7 +34,7 @@ Release candidate state:
 
 Still false for media-film issuance:
 
-    final_master_media_issued=false
+    final_master_media_issued=true
     admissible_motion_picture_media_issued=false
     admissibility_verdict_present=false
     terminal_closure_present=false
@@ -52,15 +52,15 @@ Registry freshness required:
 
 ## Boundary
 
-This status page reports protocol-film perimeter issuance only.
+This status page reports protocol-film perimeter issuance and hash-bound external motion-picture media issuance.
 
-Protocol-film perimeter issuance does not by itself issue anything.
+Protocol-film perimeter issuance does not by itself issue motion-picture media.
 
-CINEMATICUM protocol-film issuance is not final-master media issuance.
+Motion-picture media issuance is admitted only by the hash-bound external media admission record.
 
-Bare `issued` is reserved for motion-picture media issuance and remains false.
+Bare `issued` is reserved for motion-picture media issuance and is now true only at the hash-bound media boundary.
 
-CINEMATICUM does not claim admitted footage, audio, stills, model weights, render workflows, or media payloads.
+CINEMATICUM does not claim raw media, footage, audio, stills, model weights, render workflows, or media payloads inside git.
 
 The current truth owners remain:
 

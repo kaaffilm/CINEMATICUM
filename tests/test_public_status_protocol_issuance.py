@@ -29,14 +29,15 @@ def test_public_status_declares_protocol_film_issuance_without_media_payload():
     assert "issuance_type=PROTOCOL_FILM" in status
     assert "protocol_perimeter_issued=true" in status
     assert "protocol_film_issued=true" in status
-    assert "media_present=false" in status
-    assert "motion_picture_media_issuance_ready=false" in status
+    assert "media_present=true" in status
+    assert "motion_picture_media_issuance_ready=true" in status
 
 
-def test_public_status_omits_bare_issued_from_public_status():
+def test_public_status_omits_unqualified_bare_issued_from_public_status():
     status = (ROOT / "PUBLIC_STATUS.md").read_text()
 
     assert re.search(r"(?m)^\s+issued=false\s*$", status) is None
-    assert re.search(r"(?m)^\s+motion_picture_media_issued=false\s*$", status) is not None
-    assert "Bare `issued` is reserved for motion-picture media issuance and remains false." in status
-    assert "CINEMATICUM protocol-film issuance is not final-master media issuance." in status
+    assert re.search(r"(?m)^\s+issued=true\s*$", status) is None
+    assert re.search(r"(?m)^\s+motion_picture_media_issued=true\s*$", status) is not None
+    assert "Bare `issued` is reserved for motion-picture media issuance and is now true only at the hash-bound media boundary." in status
+    assert "Motion-picture media issuance is admitted only by the hash-bound external media admission record." in status

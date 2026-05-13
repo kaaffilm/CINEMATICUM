@@ -50,7 +50,22 @@ def walk_json(value, path):
             yield from walk_json(child, f"{path}[{index}]")
 
 
+def hash_bound_external_media_present(obj):
+    return (
+        obj.get("media_present") is True
+        and obj.get("raw_media_stored_in_git") is False
+        and isinstance(obj.get("media_sha256"), str)
+        and bool(obj.get("media_sha256"))
+        and (
+            obj.get("object") == "MOTION_PICTURE_MEDIA_ADMISSION_RECORD"
+            or bool(obj.get("motion_picture_media_admission_record"))
+        )
+    )
+
+
 def media_absent(obj):
+    if hash_bound_external_media_present(obj):
+        return False
     return any(obj.get(key) is False for key in MEDIA_ABSENCE_KEYS)
 
 
