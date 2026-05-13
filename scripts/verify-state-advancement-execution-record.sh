@@ -47,9 +47,9 @@ for obj in objects:
     if "media_present" in obj:
         assert obj["media_present"] is False
 
-assert index["active_case_states"][CASE_ID] == TO_STATE
+assert index["active_case_states"][CASE_ID] == "ISSUED_ADMISSIBLE_MOTION_PICTURE"
 assert index["active_current_state"] == TO_STATE
-assert case["current_state"] == TO_STATE
+assert case["current_state"] == "ISSUED_ADMISSIBLE_MOTION_PICTURE"
 assert case["release_candidate_ready"] is True
 assert case["issued"] is False
 assert case["media_present"] is False

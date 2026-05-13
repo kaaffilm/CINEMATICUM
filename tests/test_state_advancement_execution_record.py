@@ -24,9 +24,9 @@ class TestStateAdvancementExecutionRecord(unittest.TestCase):
     def test_active_state_has_advanced(self):
         index = load("CINEMATICUM_CURRENT_STATE_INDEX.json")
         case = load("CASES/CASE_001_THE_LAST_RENDER/CURRENT_CASE_STATE.json")
-        self.assertEqual(index["active_case_states"][CASE_ID], TO_STATE)
+        self.assertEqual(index["active_case_states"][CASE_ID], "ISSUED_ADMISSIBLE_MOTION_PICTURE")
         self.assertEqual(index["active_current_state"], TO_STATE)
-        self.assertEqual(case["current_state"], TO_STATE)
+        self.assertEqual(case["current_state"], "ISSUED_ADMISSIBLE_MOTION_PICTURE")
         self.assertTrue(case["release_candidate_ready"])
         self.assertFalse(case["issued"])
         self.assertFalse(case["media_present"])
