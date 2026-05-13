@@ -9,7 +9,7 @@ def load(path: str):
     return json.loads((ROOT / path).read_text(encoding="utf-8"))
 
 class TestMotionPictureIssuanceAct(unittest.TestCase):
-    def test_motion_picture_issuance_act_is_not_media_body_issuance(self):
+    def test_motion_picture_issuance_act_issues_hash_bound_external_media(self):
         act = load("MOTION_PICTURE_ISSUANCE_ACT.json")
         prior = load("RELEASE_CANDIDATE_READY_ISSUANCE_UNBLOCKING_EXECUTION_RECORD.json")
 
@@ -23,15 +23,26 @@ class TestMotionPictureIssuanceAct(unittest.TestCase):
         self.assertTrue(act["issuance_unblocked"])
         self.assertTrue(act["motion_picture_issuance_act_present"])
 
-        # Semantic boundary: no admitted media/audience body exists here.
-        self.assertFalse(act["issued"])
-        self.assertFalse(act["admissible_motion_picture_issued"])
-        self.assertFalse(act.get("motion_picture_issued", False))
-        self.assertFalse(act["media_present"])
+        # Semantic boundary: media is issued only as hash-bound external media.
+        self.assertEqual(act["issued_object"], "HASH_BOUND_MOTION_PICTURE_MEDIA")
+        self.assertTrue(act["issued"])
+        self.assertTrue(act["admissible_motion_picture_issued"])
+        self.assertTrue(act.get("motion_picture_issued", False))
+        self.assertTrue(act.get("motion_picture_media_issued", False))
+        self.assertTrue(act["media_present"])
+        self.assertTrue(act.get("motion_picture_media_issuance_ready", False))
+        self.assertTrue(act["media_admitted"])
         self.assertFalse(act.get("media_payload_present", False))
-        self.assertFalse(act.get("motion_picture_media_issuance_ready", False))
+        self.assertFalse(act["raw_media_stored_in_git"])
+        self.assertEqual(
+            act["motion_picture_media_admission_record"],
+            "records/motion_picture_issuance/MOTION_PICTURE_MEDIA_ADMISSION_RECORD.json",
+        )
+        self.assertEqual(
+            act["media_sha256"],
+            "1822a3c1f7a1718fbd38e6ecabb74f9f0abff6369553051569cdd4178971f5a8",
+        )
 
-        self.assertFalse(act["media_admitted"])
         self.assertFalse(act["generation_admitted"])
         self.assertFalse(act["engine_admitted"])
         self.assertFalse(act["raw_media_in_git"])
