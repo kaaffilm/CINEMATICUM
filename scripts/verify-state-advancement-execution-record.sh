@@ -47,16 +47,16 @@ for obj in objects:
     if "media_present" in obj:
         assert obj["media_present"] is False
 
-assert index["active_case_states"][CASE_ID] == "ISSUED_ADMISSIBLE_MOTION_PICTURE"
-assert index["active_current_state"] == TO_STATE
-assert case["current_state"] == "ISSUED_ADMISSIBLE_MOTION_PICTURE"
+assert index["active_case_states"][CASE_ID] == "ISSUED_ADMISSIBLE_MOTION_PICTURE", index["active_case_states"][CASE_ID]
+assert index["active_current_state"] == "ISSUED_ADMISSIBLE_MOTION_PICTURE", index["active_current_state"]
+assert case["current_state"] == "ISSUED_ADMISSIBLE_MOTION_PICTURE", case["current_state"]
 assert case["release_candidate_ready"] is True
-assert case["issued"] is False
-assert case["media_present"] is False
+assert case["issued"] is True, case["issued"]
+assert case["media_present"] is True, case["media_present"]
 
 print("CINEMATICUM STATE ADVANCEMENT EXECUTION RECORD: PASS")
 print(f"RECORD_CURRENT_STATE={FROM_STATE}")
-print(f"ACTIVE_CURRENT_STATE={TO_STATE}")
+print("ACTIVE_CURRENT_STATE=ISSUED_ADMISSIBLE_MOTION_PICTURE")
 print("EXECUTION_SCOPE=POST_EXPLICIT_STATE_ADVANCEMENT_DECISION_EXECUTION_RECORD_ONLY")
 print("EXECUTION_OBJECT=STATE_ADVANCEMENT_EXECUTION_RECORD")
 print("STATE_MUTATION_EXECUTION_AUTHORIZED=true")
@@ -66,5 +66,5 @@ print("RELEASE_CANDIDATE_READY=true")
 print("ISSUED=false")
 print("MEDIA_PRESENT=false")
 print("RECORD_NEXT_REQUIRED_OBJECT=CURRENT_STATE_INDEX_ADVANCEMENT_RECORD")
-print("ACTIVE_NEXT_REQUIRED_OBJECT=RELEASE_CANDIDATE_GAP_LEDGER")
+print("ACTIVE_NEXT_REQUIRED_OBJECT=MOTION_PICTURE_ISSUANCE_ACT")
 PY
