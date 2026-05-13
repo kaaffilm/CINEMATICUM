@@ -2,12 +2,13 @@
 
 Current active state:
 
-    CASE_001_THE_LAST_RENDER = RELEASE_CANDIDATE_READY
+    CASE_001_THE_LAST_RENDER = ISSUED_ADMISSIBLE_MOTION_PICTURE
 
 Protocol film issuance state:
 
     CINEMATICUM is issued as a public replayable hash-bound protocol-film perimeter.
     protocol_issued=true
+    unqualified_issued=false
     issuance_type=PROTOCOL_FILM
     protocol_perimeter_issued=true
     protocol_film_issued=true
@@ -31,13 +32,17 @@ Motion-picture media issuance state:
 Release candidate state:
 
     release_candidate_ready=true
+    motion_picture_issued=true
+    admissible_motion_picture_media_issued=true
+    media_present=true
 
-Still false for media-film issuance:
+Terminal motion-picture media issuance state:
 
-    final_master_media_issued=true
-    admissible_motion_picture_media_issued=false
-    admissibility_verdict_present=false
-    terminal_closure_present=false
+    admissible_motion_picture_media_issued=true
+    admissibility_verdict_present=true
+    terminal_closure_present=true
+    media_payload_present=false
+    raw_media_stored_in_git=false
 
 Verification required:
 
@@ -67,3 +72,5 @@ The current truth owners remain:
 - `CINEMATICUM_PROTOCOL_ISSUANCE.json`
 - `CINEMATICUM_CURRENT_STATE_INDEX.json`
 - `CASES/CASE_001_THE_LAST_RENDER/CURRENT_CASE_STATE.json`
+- `MOTION_PICTURE_ISSUANCE_ACT.json`
+- `records/motion_picture_issuance/MOTION_PICTURE_MEDIA_ADMISSION_RECORD.json`

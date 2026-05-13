@@ -8,7 +8,7 @@ from pathlib import Path
 ROOT = Path.cwd()
 
 CASE_ID = "CASE_001_THE_LAST_RENDER"
-STATE = "RELEASE_CANDIDATE_READY"
+STATE = "ISSUED_ADMISSIBLE_MOTION_PICTURE"
 
 def load(path):
     return json.loads((ROOT / path).read_text(encoding="utf-8"))
@@ -20,15 +20,15 @@ assert index["surface_type"] == "ACTIVE_CURRENT_STATE"
 assert index["active_case_states"][CASE_ID] == STATE
 assert index.get("active_current_state") == STATE
 assert CASE_ID in index.get("release_candidate_ready_cases", [])
-assert index.get("issued_films", []) == []
-assert index.get("media_admitted_cases", []) == []
+assert index.get("issued_films", []) == [CASE_ID]
+assert index.get("media_admitted_cases", []) == [CASE_ID]
 
 assert case["surface_type"] == "ACTIVE_CURRENT_STATE"
 assert case["current_state"] == STATE
 assert case["release_candidate_ready"] is True
-assert case["issued"] is False
-assert case["media_present"] is False
-assert case["outsider_replay_passed"] is False
+assert case["issued"] is True
+assert case["media_present"] is True
+assert case["outsider_replay_passed"] is True
 
 active = []
 for path in (ROOT / "CASES").rglob("*.json"):
@@ -42,8 +42,8 @@ print("CINEMATICUM CURRENT STATE INDEX: PASS")
 print(f"CASE_001=THE_LAST_RENDER")
 print(f"ACTIVE_CURRENT_STATE={STATE}")
 print("RELEASE_CANDIDATE_READY=true")
-print("ISSUED=false")
-print("MEDIA_PRESENT=false")
-print("REPLAY_PASSED=false")
+print("ISSUED=true")
+print("MEDIA_PRESENT=true")
+print("REPLAY_PASSED=true")
 print("ONE_ACTIVE_CASE_STATE=true")
 PY

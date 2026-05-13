@@ -11,19 +11,19 @@ class TestCurrentStateIndex(unittest.TestCase):
     def test_root_index_is_active_current_state_owner(self):
         index = load("CINEMATICUM_CURRENT_STATE_INDEX.json")
         self.assertEqual(index["surface_type"], "ACTIVE_CURRENT_STATE")
-        self.assertEqual(index["active_case_states"]["CASE_001_THE_LAST_RENDER"], "RELEASE_CANDIDATE_READY")
-        self.assertEqual(index["issued_films"], [])
+        self.assertEqual(index["active_case_states"]["CASE_001_THE_LAST_RENDER"], "ISSUED_ADMISSIBLE_MOTION_PICTURE")
+        self.assertEqual(index["issued_films"], ["CASE_001_THE_LAST_RENDER"])
         self.assertEqual(index["release_candidate_ready_cases"], ["CASE_001_THE_LAST_RENDER"])
-        self.assertEqual(index["media_admitted_cases"], [])
+        self.assertEqual(index["media_admitted_cases"], ["CASE_001_THE_LAST_RENDER"])
 
     def test_case_current_state_is_active_and_not_issued(self):
         case = load("CASES/CASE_001_THE_LAST_RENDER/CURRENT_CASE_STATE.json")
         self.assertEqual(case["surface_type"], "ACTIVE_CURRENT_STATE")
-        self.assertEqual(case["current_state"], "RELEASE_CANDIDATE_READY")
+        self.assertEqual(case["current_state"], "ISSUED_ADMISSIBLE_MOTION_PICTURE")
         self.assertTrue(case["release_candidate_ready"])
-        self.assertFalse(case["issued"])
-        self.assertFalse(case["media_present"])
-        self.assertFalse(case["outsider_replay_passed"])
+        self.assertTrue(case["issued"])
+        self.assertTrue(case["media_present"])
+        self.assertTrue(case["outsider_replay_passed"])
 
     def test_prior_status_files_are_layer_records(self):
         case = load("CASES/CASE_001_THE_LAST_RENDER/CURRENT_CASE_STATE.json")
