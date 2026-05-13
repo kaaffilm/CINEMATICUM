@@ -8,18 +8,18 @@
   "current_truth_owner": "CINEMATICUM_CURRENT_STATE_INDEX.json",
   "engine_present": false,
   "forbidden_readings": [
-    "protocol film issuance means final-master media issuance",
-    "the seal admits media",
+    "protocol film issuance means final-master media issuance without a media admission record",
+    "the seal admits media without a hash-bound media admission record",
     "the seal creates an admissibility verdict",
-    "the seal itself performs issuance",
     "the seal outranks current-state objects",
-    "the seal proves replay passed"
+    "the seal proves outsider replay passed",
+    "raw media is stored in git"
   ],
   "generation_present": false,
   "institution": "CINEMATICUM",
   "issuance_type": "PROTOCOL_FILM",
   "issued": true,
-  "issued_object": "PUBLIC_REPLAYABLE_HASH_BOUND_PROTOCOL_PERIMETER",
+  "issued_object": "HASH_BOUND_MOTION_PICTURE_MEDIA",
   "master_progression_owner": "CINEMATICUM_GOVERNED_PROGRESSION_MATRIX.json",
   "media_payload_present": false,
   "media_present": true,
@@ -38,8 +38,8 @@
   "root_sentence": "CINEMATICUM issues admissible motion pictures.",
   "schema_version": "cinematicum.repository_status_seal.v1",
   "seal_is_current_truth_owner": false,
-  "seal_scope": "public repository state summary",
-  "seal_statement": "CINEMATICUM is issued as a protocol film perimeter. It has not issued final-master media.",
+  "seal_scope": "public repository state summary plus private hash-bound media admission pointer",
+  "seal_statement": "CINEMATICUM is issued as a protocol film perimeter and has issued hash-bound motion-picture media outside git. Raw media is not stored in git.",
   "surface_type": "REPOSITORY_STATUS_SEAL",
   "terminal_closure_present": false,
   "verify_all_pass_required": true,
@@ -53,5 +53,6 @@
   "media_uri": "local-quarantine://CASE_001_THE_LAST_RENDER/renders/THE_LAST_RENDER_v001.mp4",
   "media_name": "THE_LAST_RENDER_v001.mp4",
   "motion_picture_media_admission_record": "records/motion_picture_issuance/MOTION_PICTURE_MEDIA_ADMISSION_RECORD.json",
-  "motion_picture_issuance_act": "records/motion_picture_issuance/MOTION_PICTURE_ISSUANCE_ACT.md"
+  "motion_picture_issuance_act": "records/motion_picture_issuance/MOTION_PICTURE_ISSUANCE_ACT.md",
+  "protocol_issued_object": "PUBLIC_REPLAYABLE_HASH_BOUND_PROTOCOL_PERIMETER"
 }

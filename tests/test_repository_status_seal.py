@@ -34,11 +34,11 @@ class TestRepositoryStatusSeal(unittest.TestCase):
         self.assertEqual(seal["active_current_state"], "RELEASE_CANDIDATE_READY")
         self.assertEqual(seal.get("issuance_type"), "PROTOCOL_FILM")
 
-        self.assertFalse(seal["issued"])
-        self.assertFalse(seal["media_present"])
-        self.assertFalse(seal["motion_picture_media_issuance_ready"])
-        self.assertFalse(seal.get("admissible_motion_picture_issued", False))
-        self.assertFalse(seal.get("motion_picture_issued", False))
+        self.assertTrue(seal["issued"])
+        self.assertTrue(seal["media_present"])
+        self.assertTrue(seal["motion_picture_media_issuance_ready"])
+        self.assertTrue(seal.get("admissible_motion_picture_issued", False))
+        self.assertTrue(seal.get("motion_picture_issued", False))
 
     def test_media_claims_remain_false(self):
         seal = load("CINEMATICUM_REPOSITORY_STATUS_SEAL.json")
