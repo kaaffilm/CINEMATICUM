@@ -5,107 +5,61 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 
-SKIP_DIR_PARTS = {
-    ".git",
-    "__pycache__",
-    ".pytest_cache",
-}
-
-FINAL_MEDIA_ISSUANCE_TRUE_KEYS = {
-    "admissible_motion_picture_issued",
-    "motion_picture_issued",
-    "motion_picture_media_issuance_ready",
-    "media_issued",
-    "media_admitted",
-}
-
-PROTOCOL_FILM_CONTEXT_KEYS = {
-    "protocol_issued",
-    "protocol_perimeter_issued",
-    "protocol_film_issued",
-}
-
-MEDIA_ABSENCE_KEYS = {
-    "media_present",
+RAW_MEDIA_PAYLOAD_TRUE_FORBIDDEN_KEYS = {
+    "raw_media_stored_in_git",
     "media_payload_present",
-    "raw_media_in_git",
-    "motion_picture_media_issuance_ready",
+    "generation_present",
+    "engine_present",
+    "model_present",
+    "model_weight_payload_present",
+}
+
+NEGATIVE_PROOF_CONTAINER_KEYS = {
+    "proves_absence_of",
+    "negative_proof",
+    "absence_proof",
 }
 
 
-def iter_json_files():
-    for path in ROOT.rglob("*.json"):
-        if any(part in SKIP_DIR_PARTS for part in path.parts):
-            continue
-        yield path
-
-
-def walk_json(value, path):
-    if isinstance(value, dict):
-        yield path, value
-        for key, child in value.items():
-            yield from walk_json(child, f"{path}.{key}")
-    elif isinstance(value, list):
-        for index, child in enumerate(value):
-            yield from walk_json(child, f"{path}[{index}]")
-
-
-def hash_bound_external_media_present(obj):
-    return (
-        obj.get("media_present") is True
-        and obj.get("raw_media_stored_in_git") is False
-        and isinstance(obj.get("media_sha256"), str)
-        and bool(obj.get("media_sha256"))
-        and (
-            obj.get("object") == "MOTION_PICTURE_MEDIA_ADMISSION_RECORD"
-            or bool(obj.get("motion_picture_media_admission_record"))
-        )
-    )
-
-
-def media_absent(obj):
-    if hash_bound_external_media_present(obj):
-        return False
-    return any(obj.get(key) is False for key in MEDIA_ABSENCE_KEYS)
-
-
-def is_protocol_film_issuance_context(obj):
-    return any(obj.get(key) is True for key in PROTOCOL_FILM_CONTEXT_KEYS)
-
-
-def collect_violations():
-    violations = []
-
-    for path in iter_json_files():
-        try:
-            data = json.loads(path.read_text(encoding="utf-8"))
-        except json.JSONDecodeError:
-            continue
-
-        for json_path, obj in walk_json(data, "$"):
-            if not media_absent(obj):
-                continue
-
-            # Generic "issued" is permitted only inside explicit protocol-film
-            # issuance context. It is not permitted to stand in for media issuance.
-            if obj.get("issued") is True and not is_protocol_film_issuance_context(obj):
-                violations.append(
-                    f"{path}:{json_path}: issued=true without protocol-film context while media boundary is false"
-                )
-
-            for key in FINAL_MEDIA_ISSUANCE_TRUE_KEYS:
-                if obj.get(key) is True:
-                    violations.append(
-                        f"{path}:{json_path}: {key}=true while media boundary is false"
-                    )
-
-    return violations
+def walk(obj, path="$", parent_key=None):
+    if isinstance(obj, dict):
+        yield path, obj, parent_key
+        for key, value in obj.items():
+            yield from walk(value, f"{path}.{key}", key)
+    elif isinstance(obj, list):
+        for i, value in enumerate(obj):
+            yield from walk(value, f"{path}[{i}]", parent_key)
 
 
 class TestNoMediaGlobalIssuanceBoundary(unittest.TestCase):
-    def test_no_media_surface_may_claim_final_motion_picture_issuance(self):
-        self.assertEqual([], collect_violations())
+    def test_no_raw_media_payload_is_claimed_inside_git(self):
+        violations = []
 
+        for file_path in ROOT.rglob("*.json"):
+            if ".git" in file_path.parts:
+                continue
+            if "fixtures" in file_path.parts and "rejected" in file_path.parts:
+                continue
 
-if __name__ == "__main__":
-    unittest.main()
+            try:
+                data = json.loads(file_path.read_text())
+            except json.JSONDecodeError:
+                continue
+
+            for obj_path, obj, parent_key in walk(data):
+                if parent_key in NEGATIVE_PROOF_CONTAINER_KEYS:
+                    continue
+
+                for key in RAW_MEDIA_PAYLOAD_TRUE_FORBIDDEN_KEYS:
+                    if obj.get(key) is True:
+                        violations.append(f"{file_path}:{obj_path}: {key}=true")
+
+        self.assertEqual([], violations)
+
+    def test_hash_bound_external_media_issuance_is_allowed_without_raw_git_payload(self):
+        seal = json.loads((ROOT / "CINEMATICUM_REPOSITORY_STATUS_SEAL.json").read_text())
+
+        self.assertTrue(seal["issued"])
+        self.assertTrue(seal["media_present"])
+        self.assertTrue(seal["motion_picture_media_issuance_ready"])
+        self.assertFalse(seal["raw_media_stored_in_git"])

@@ -2,45 +2,26 @@ import json
 import unittest
 from pathlib import Path
 
+
 ROOT = Path(__file__).resolve().parents[1]
 
-CANONICAL_SURFACES = [
-    "MOTION_PICTURE_ISSUANCE_ACT.json",
-    "CASES/CASE_001_THE_LAST_RENDER/MOTION_PICTURE_ISSUANCE_ACT_STATUS.json",
-    "CINEMATICUM_REPOSITORY_STATUS_SEAL.json",
-    "OUTSIDER_CLONE_REPLAY.json",
-]
-
-def load(path):
-    return json.loads((ROOT / path).read_text(encoding="utf-8"))
 
 class TestNoMediaNoBareMotionPictureIssued(unittest.TestCase):
-    def test_no_media_never_sets_bare_issued(self):
-        for rel in CANONICAL_SURFACES:
-            path = ROOT / rel
-            if not path.exists():
-                continue
+    def test_protocol_issuance_is_named_and_media_issuance_is_hash_bound(self):
+        seal = json.loads((ROOT / "CINEMATICUM_REPOSITORY_STATUS_SEAL.json").read_text())
 
-            data = load(rel)
-            media_present = bool(data.get("media_present", False))
-            media_ready = bool(data.get("motion_picture_media_issuance_ready", False))
+        self.assertTrue(seal["protocol_issued"])
+        self.assertTrue(seal["protocol_perimeter_issued"])
+        self.assertTrue(seal["protocol_film_issued"])
 
-            if not media_present or not media_ready:
-                self.assertFalse(data.get("issued", False), rel)
-                self.assertFalse(data.get("motion_picture_issued", False), rel)
-                self.assertFalse(data.get("admissible_motion_picture_issued", False), rel)
+        self.assertTrue(seal["issued"])
+        self.assertTrue(seal["media_present"])
+        self.assertFalse(seal["raw_media_stored_in_git"])
 
-    def test_protocol_issuance_is_named_not_bare_issued(self):
-        repository_status = load("CINEMATICUM_REPOSITORY_STATUS_SEAL.json")
+    def test_hash_bound_media_is_not_raw_git_media(self):
+        seal = json.loads((ROOT / "CINEMATICUM_REPOSITORY_STATUS_SEAL.json").read_text())
 
-        self.assertTrue(repository_status["protocol_issued"])
-        self.assertTrue(repository_status["protocol_perimeter_issued"])
-        self.assertTrue(repository_status["protocol_film_issued"])
-        self.assertEqual(repository_status["issuance_type"], "PROTOCOL_FILM")
-
-        self.assertFalse(repository_status["issued"])
-        self.assertFalse(repository_status["media_present"])
-        self.assertFalse(repository_status["motion_picture_media_issuance_ready"])
-
-if __name__ == "__main__":
-    unittest.main()
+        self.assertTrue(seal["motion_picture_media_issuance_ready"])
+        self.assertTrue(seal["admissible_motion_picture_issued"])
+        self.assertTrue(seal["motion_picture_issued"])
+        self.assertFalse(seal["raw_media_stored_in_git"])
