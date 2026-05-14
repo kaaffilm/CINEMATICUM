@@ -2,9 +2,10 @@
   "active_current_state": "RELEASE_CANDIDATE_READY",
   "admissibility_verdict_present": true,
   "admissible_motion_picture_issued": false,
+  "blocked_by": "MEDIA_SUBSTANCE_GATE",
   "case_id": "CASE_001_THE_LAST_RENDER",
   "case_title": "THE LAST RENDER",
-  "current_active_state": "RELEASE_CANDIDATE_READY",
+  "current_active_state": "ISSUED_ADMISSIBLE_MOTION_PICTURE",
   "current_state": "RELEASE_CANDIDATE_READY",
   "current_state_owner": "CASES/CASE_001_THE_LAST_RENDER/CURRENT_CASE_STATE.json",
   "false_now": {
@@ -42,11 +43,11 @@
       "substance_gate_status": null
     },
     {
-      "active": true,
+      "active": false,
       "media_substance_passed": false,
       "reached": true,
       "state": "RELEASE_CANDIDATE_READY",
-      "status": "active",
+      "status": "reached",
       "substance_gate_required": null,
       "substance_gate_status": null
     },
@@ -59,15 +60,15 @@
       "substance_gate_status": null
     },
     {
-      "active": false,
+      "active": true,
+      "blocked_by": "MEDIA_SUBSTANCE_GATE",
       "media_substance_passed": false,
       "missing": [],
       "reached": false,
       "state": "ISSUED_ADMISSIBLE_MOTION_PICTURE",
-      "status": "blocked",
+      "status": "active",
       "substance_gate_required": null,
-      "substance_gate_status": null,
-      "blocked_by": "MEDIA_SUBSTANCE_GATE"
+      "substance_gate_status": null
     }
   ],
   "object_type": "CINEMATICUM_CASE_PROGRESSION_GRAPH",
@@ -78,6 +79,5 @@
   "status": "terminal_issued",
   "substance_gate_required": null,
   "substance_gate_status": null,
-  "terminal_closure_present": true,
-  "blocked_by": "MEDIA_SUBSTANCE_GATE"
+  "terminal_closure_present": true
 }

@@ -7,7 +7,7 @@
   "registry_does_not_issue_film": true,
   "registry_does_not_admit_media": true,
   "registry_does_not_override_current_state": true,
-  "current_active_state": "RELEASE_CANDIDATE_READY",
+  "current_active_state": "ISSUED_ADMISSIBLE_MOTION_PICTURE",
   "case_id": "CASE_001_THE_LAST_RENDER",
   "entries_count": 485,
   "entries": [
@@ -754,7 +754,7 @@
     },
     {
       "path": "CASES/CASE_001_THE_LAST_RENDER/CASE_PROGRESSION_GRAPH.json",
-      "sha256": "032b1520e79c7167bca5dc8bbc6f0e1d7552e7eff2d25042dc7c6c6742d434c7",
+      "sha256": "dcaf348c73c95fc3e3edd9cb2e78d49b822e5f5459248f9a162ae002bb61a399",
       "object_type": "CINEMATICUM_CASE_PROGRESSION_GRAPH",
       "schema_version": "cinematicum.case_progression_graph.v1",
       "surface_class": "PROGRESSION_GRAPH",
@@ -767,13 +767,13 @@
     },
     {
       "path": "CASES/CASE_001_THE_LAST_RENDER/CURRENT_CASE_STATE.json",
-      "sha256": "e87a7376dc69ae9b6ec502952ab404d3ebd0a8768243df94cedbee7ebfff57a9",
+      "sha256": "e1271f890b98dbfcb30c2ded988668b4646a1ee5bb1ff9a77eb93b123e6cf91a",
       "object_type": "CINEMATICUM_CURRENT_CASE_STATE",
       "schema_version": "cinematicum.current_case_state.v1",
       "surface_class": "ACTIVE_CURRENT_STATE",
       "case_id": "CASE_001_THE_LAST_RENDER",
       "current_truth_owner": true,
-      "issued": false,
+      "issued": true,
       "release_candidate_ready": true,
       "media_present": false,
       "outsider_replay_passed": true
@@ -2132,7 +2132,7 @@
     },
     {
       "path": "CASES/CASE_001_THE_LAST_RENDER/MOTION_PICTURE_ISSUANCE_ACT_STATUS.json",
-      "sha256": "9f60b016aa83c965551192dadcd4d2f701dd29704929da61fc6d41a957ae6c7c",
+      "sha256": "c9bbb57af7ff2295743efcbba312222d34439239926175c348405c2f910be3c5",
       "object_type": "CINEMATICUM_CASE_MOTION_PICTURE_ISSUANCE_ACT_STATUS",
       "schema_version": "cinematicum.case_motion_picture_issuance_act_status.v1",
       "surface_class": "LAYER_STATUS_RECORD",
@@ -2210,16 +2210,16 @@
     },
     {
       "path": "CASES/CASE_001_THE_LAST_RENDER/PUBLIC_INSPECTION_PATH.json",
-      "sha256": "887671166100d181432bedbf4d6dc68d2ed75aaced55c99708b7f1a45a85ff7a",
+      "sha256": "a49cbdb4b74f09c59984786b9e47f0623a90aa200fee5630fa8fa22a4fdf3ecc",
       "object_type": "CINEMATICUM_CASE_PUBLIC_INSPECTION_PATH",
       "schema_version": "cinematicum.case_public_inspection_path.v1",
       "surface_class": "CASE_RECORD",
       "case_id": "CASE_001_THE_LAST_RENDER",
       "current_truth_owner": false,
-      "issued": false,
-      "release_candidate_ready": false,
+      "issued": true,
+      "release_candidate_ready": true,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": true
     },
     {
       "path": "CASES/CASE_001_THE_LAST_RENDER/PUBLIC_NEGATIVE_PROOF_STATUS.json",
@@ -4264,16 +4264,16 @@
     },
     {
       "path": "CINEMATICUM_CURRENT_STATE_INDEX.json",
-      "sha256": "871677ea9d0132a2c5d1a64a2acd2eb875674e8a25fa35d3156dff6340e9d7c3",
+      "sha256": "f93cc986bf5c7bdd9dbd789fc2144165e363c39bea84022ee6943bfde393df84",
       "object_type": "CINEMATICUM_CURRENT_STATE_INDEX",
       "schema_version": "cinematicum.current_state_index.v1",
       "surface_class": "ACTIVE_CURRENT_STATE",
-      "case_id": null,
+      "case_id": "CASE_001_THE_LAST_RENDER",
       "current_truth_owner": true,
-      "issued": false,
+      "issued": true,
       "release_candidate_ready": true,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": true
     },
     {
       "path": "CINEMATICUM_CURRENT_STATE_INDEX_ADVANCEMENT_RECORD_LAW.json",
@@ -4446,13 +4446,13 @@
     },
     {
       "path": "CINEMATICUM_GOVERNED_PROGRESSION_MATRIX.json",
-      "sha256": "24e40e4d01a278a528216d9059a905a0ef563a6527191e3de0b19f56daa71fc9",
+      "sha256": "208fe2deeac217bcb2ca498ac88f4f0672c9161040bf131c4d7e5404b1cd0190",
       "object_type": "CINEMATICUM_GOVERNED_PROGRESSION_MATRIX",
       "schema_version": "cinematicum.governed_progression_matrix.v1",
       "surface_class": "PROGRESSION_GRAPH",
       "case_id": "CASE_001_THE_LAST_RENDER",
       "current_truth_owner": false,
-      "issued": false,
+      "issued": true,
       "release_candidate_ready": true,
       "media_present": false,
       "outsider_replay_passed": true
@@ -5369,7 +5369,7 @@
     },
     {
       "path": "CINEMATICUM_REPOSITORY_STATUS_SEAL.json",
-      "sha256": "b41835d6aee83c04799c5dbfec017b218f96bf1275572aff5016bb04b21e6085",
+      "sha256": "b5e1244a6100e06bf40136c5c831a1f5abb6b3fc55130d7ece54a756fc85a539",
       "object_type": "CINEMATICUM_REPOSITORY_STATUS_SEAL",
       "schema_version": "cinematicum.repository_status_seal.v1",
       "surface_class": "LAYER_STATUS_RECORD",
@@ -5707,16 +5707,16 @@
     },
     {
       "path": "MOTION_PICTURE_ISSUANCE_ACT.json",
-      "sha256": "7cc39a6ad0bbbdf238f3ad3705cf00d52804cf5db5a724e930bb652019e22690",
+      "sha256": "6e2c0857f71f43268cc96f2d210e8f004c747028cb4d83edde74344eaf922167",
       "object_type": "MOTION_PICTURE_ISSUANCE_ACT",
       "schema_version": "cinematicum.motion_picture_issuance_act.v1",
       "surface_class": "CASE_RECORD",
       "case_id": "CASE_001_THE_LAST_RENDER",
       "current_truth_owner": false,
-      "issued": false,
+      "issued": true,
       "release_candidate_ready": true,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": true
     },
     {
       "path": "OBJECT_REGISTRY_REGENERATION_GUARD_LAW.json",
@@ -5798,16 +5798,16 @@
     },
     {
       "path": "PUBLIC_INSPECTION_DOSSIER.json",
-      "sha256": "c3f4cfc65a0ad71a95fad845680baca88d598584b92d637bb2f0a019c1d07762",
+      "sha256": "9a0c5587367021a5bff6d70162149d00f9d658bce55c4f5cd2d424fbd2bf05e4",
       "object_type": "CINEMATICUM_PUBLIC_INSPECTION_DOSSIER",
       "schema_version": "cinematicum.public_inspection_dossier.v1",
       "surface_class": "CASE_RECORD",
       "case_id": "CASE_001_THE_LAST_RENDER",
       "current_truth_owner": false,
-      "issued": false,
-      "release_candidate_ready": false,
+      "issued": true,
+      "release_candidate_ready": true,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": true
     },
     {
       "path": "PUBLIC_INSPECTION_DOSSIER_LAW.json",
@@ -5824,16 +5824,16 @@
     },
     {
       "path": "PUBLIC_INSPECTION_NEGATIVE_PROOF.json",
-      "sha256": "7302953f498d2549eb475067282d95dd95274051549c3f72d3845f613e8b5cea",
+      "sha256": "5e75dd65afcd90251ba26dec541684066362a74c6e4225d49f93639a6d35c7d1",
       "object_type": "CINEMATICUM_PUBLIC_INSPECTION_NEGATIVE_PROOF",
       "schema_version": "cinematicum.public_inspection_negative_proof.v1",
       "surface_class": "CASE_RECORD",
       "case_id": "CASE_001_THE_LAST_RENDER",
       "current_truth_owner": false,
-      "issued": false,
-      "release_candidate_ready": false,
+      "issued": true,
+      "release_candidate_ready": true,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": true
     },
     {
       "path": "PUBLIC_INSPECTION_NEGATIVE_PROOF_LAW.json",
@@ -6201,16 +6201,16 @@
     },
     {
       "path": "records/motion_picture_issuance/MOTION_PICTURE_MEDIA_ADMISSION_RECORD.json",
-      "sha256": "536c2c87971257269b90a03eca57b6bf399649159f5f242e18d868ae477acbe4",
+      "sha256": "bb1957215d78546ecd9b4ce06d87342127710eb92ac58043f8d138bbcda4840c",
       "object_type": "UNDECLARED_OBJECT_TYPE",
       "schema_version": "UNDECLARED_SCHEMA_VERSION",
       "surface_class": "CASE_RECORD",
-      "case_id": "THE_LAST_RENDER",
+      "case_id": "CASE_001_THE_LAST_RENDER",
       "current_truth_owner": false,
-      "issued": false,
+      "issued": true,
       "release_candidate_ready": true,
       "media_present": false,
-      "outsider_replay_passed": false
+      "outsider_replay_passed": true
     },
     {
       "path": "templates/authority_objects/ADMISSIBILITY_VERDICT_TEMPLATE.json",
@@ -6317,13 +6317,13 @@
       "outsider_replay_passed": false
     }
   ],
-  "active_current_state": "RELEASE_CANDIDATE_READY",
-  "issued": false,
+  "active_current_state": "ISSUED_ADMISSIBLE_MOTION_PICTURE",
+  "issued": true,
   "media_present": false,
   "release_candidate_ready": true,
-  "issued_object": null,
+  "issued_object": "ADMISSIBLE_MOTION_PICTURE",
   "active_case_states": {
-    "CASE_001_THE_LAST_RENDER": "RELEASE_CANDIDATE_READY"
+    "CASE_001_THE_LAST_RENDER": "ISSUED_ADMISSIBLE_MOTION_PICTURE"
   },
   "one_active_case_state": true
 }
