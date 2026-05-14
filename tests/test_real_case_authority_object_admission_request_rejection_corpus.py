@@ -6,7 +6,7 @@ import unittest
 ROOT = pathlib.Path(__file__).resolve().parents[1]
 CASE_ID = "CASE_001_THE_LAST_RENDER"
 RECORD_STATE = "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
-ACTIVE_STATE = "ISSUED_ADMISSIBLE_MOTION_PICTURE"
+ACTIVE_STATE = "RELEASE_CANDIDATE_READY"
 
 def load(path: str):
     return json.loads((ROOT / path).read_text(encoding="utf-8"))
@@ -40,8 +40,8 @@ class RealCaseAuthorityObjectAdmissionRequestRejectionCorpusTest(unittest.TestCa
         self.assertEqual(index["active_current_state"], ACTIVE_STATE)
         self.assertEqual(case["current_state"], ACTIVE_STATE)
         self.assertTrue(case["release_candidate_ready"])
-        self.assertTrue(case["issued"])
-        self.assertTrue(case["media_present"])
+        self.assertFalse(case["issued"])
+        self.assertFalse(case["media_present"])
 
     def test_verifier_passes_and_reports_closed_non_capability_surface(self):
         result = subprocess.run(
@@ -53,7 +53,7 @@ class RealCaseAuthorityObjectAdmissionRequestRejectionCorpusTest(unittest.TestCa
         )
         self.assertIn("CINEMATICUM REAL CASE AUTHORITY OBJECT ADMISSION REQUEST REJECTION CORPUS: PASS", result.stdout)
         self.assertIn("RECORD_CURRENT_STATE=REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS", result.stdout)
-        self.assertIn("ACTIVE_CURRENT_STATE=ISSUED_ADMISSIBLE_MOTION_PICTURE", result.stdout)
+        self.assertIn("ACTIVE_CURRENT_STATE=RELEASE_CANDIDATE_READY", result.stdout)
         self.assertIn("FIXTURES_ARE_LIVE_REQUESTS=false", result.stdout)
         self.assertIn("ALL_FIXTURES_REJECTED=true", result.stdout)
         self.assertIn("CORPUS_DOES_NOT_ADVANCE_STATE=true", result.stdout)

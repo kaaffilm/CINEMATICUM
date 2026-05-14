@@ -15,8 +15,8 @@ class TestMasterVerificationManifestClosure(unittest.TestCase):
         index = load("CINEMATICUM_CURRENT_STATE_INDEX.json")
         case = load("CASES/CASE_001_THE_LAST_RENDER/CURRENT_CASE_STATE.json")
         self.assertEqual(closure["current_state"], "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS")
-        self.assertEqual(index["active_case_states"]["CASE_001_THE_LAST_RENDER"], "ISSUED_ADMISSIBLE_MOTION_PICTURE")
-        self.assertEqual(case["current_state"], "ISSUED_ADMISSIBLE_MOTION_PICTURE")
+        self.assertEqual(index["active_case_states"]["CASE_001_THE_LAST_RENDER"], "RELEASE_CANDIDATE_READY")
+        self.assertEqual(case["current_state"], "RELEASE_CANDIDATE_READY")
 
     def test_manifest_required_scripts_exist_and_are_in_verify_all(self):
         manifest = load("CINEMATICUM_MASTER_VERIFICATION_MANIFEST.json")

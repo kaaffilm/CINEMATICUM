@@ -43,9 +43,9 @@ active_state = index["active_case_states"][CASE_ID]
 case_state = case["current_state"]
 registry_state = registry.get("current_active_state")
 
-assert active_state in {TARGET, "ISSUED_ADMISSIBLE_MOTION_PICTURE"}, active_state
+assert active_state in {TARGET, "RELEASE_CANDIDATE_READY"}, active_state
 assert case_state == active_state, (case_state, active_state)
-assert registry_state in {TARGET, active_state, "ISSUED_ADMISSIBLE_MOTION_PICTURE"}, registry_state
+assert registry_state in {TARGET, active_state, "RELEASE_CANDIDATE_READY"}, registry_state
 
 print("CINEMATICUM AUTHORITY OBJECT ADMISSION CLOSURE SEAL: PASS")
 print(f"CURRENT_STATE={TARGET}")

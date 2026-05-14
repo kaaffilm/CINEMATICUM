@@ -6,7 +6,7 @@ import unittest
 ROOT = pathlib.Path(__file__).resolve().parents[1]
 CASE_ID = "CASE_001_THE_LAST_RENDER"
 RECORD_STATE = "REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS"
-ACTIVE_STATE = "ISSUED_ADMISSIBLE_MOTION_PICTURE"
+ACTIVE_STATE = "RELEASE_CANDIDATE_READY"
 
 def load(path: str):
     return json.loads((ROOT / path).read_text(encoding="utf-8"))
@@ -30,8 +30,8 @@ class TestRequiredAuthorityObjects(unittest.TestCase):
         self.assertEqual(index["active_current_state"], ACTIVE_STATE)
         self.assertEqual(case["current_state"], ACTIVE_STATE)
         self.assertTrue(case["release_candidate_ready"])
-        self.assertTrue(case["issued"])
-        self.assertTrue(case["media_present"])
+        self.assertFalse(case["issued"])
+        self.assertFalse(case["media_present"])
 
     def test_verifier_passes(self):
         out = subprocess.run(
@@ -43,7 +43,7 @@ class TestRequiredAuthorityObjects(unittest.TestCase):
         ).stdout
         self.assertIn("CINEMATICUM REQUIRED AUTHORITY OBJECT CHECKLIST: PASS", out)
         self.assertIn("RECORD_CURRENT_STATE=REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS", out)
-        self.assertIn("ACTIVE_CURRENT_STATE=ISSUED_ADMISSIBLE_MOTION_PICTURE", out)
+        self.assertIn("ACTIVE_CURRENT_STATE=RELEASE_CANDIDATE_READY", out)
         self.assertIn("AUTHORITY_OBJECT_STACK_COMPLETE=true", out)
         self.assertIn("RELEASE_CANDIDATE_READY=true", out)
 

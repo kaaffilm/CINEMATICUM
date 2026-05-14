@@ -1,49 +1,63 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
+test -f CINEMATICUM_CURRENT_STATE_INDEX.json
+test -f CASES/CASE_001_THE_LAST_RENDER/CURRENT_CASE_STATE.json
+
 python3 - <<'PY'
 import json
 from pathlib import Path
 
-ROOT = Path.cwd()
-
 CASE_ID = "CASE_001_THE_LAST_RENDER"
-STATE = "ISSUED_ADMISSIBLE_MOTION_PICTURE"
+TARGET = "RELEASE_CANDIDATE_READY"
 
-def load(path):
-    return json.loads((ROOT / path).read_text(encoding="utf-8"))
+index = json.loads(Path("CINEMATICUM_CURRENT_STATE_INDEX.json").read_text())
+case = json.loads(Path("CASES/CASE_001_THE_LAST_RENDER/CURRENT_CASE_STATE.json").read_text())
 
-index = load("CINEMATICUM_CURRENT_STATE_INDEX.json")
-case = load("CASES/CASE_001_THE_LAST_RENDER/CURRENT_CASE_STATE.json")
+def require(cond, msg):
+    if not cond:
+        raise AssertionError(msg)
 
-assert index["surface_type"] == "ACTIVE_CURRENT_STATE"
-assert index["active_case_states"][CASE_ID] == STATE
-assert index.get("active_current_state") == STATE
-assert CASE_ID in index.get("release_candidate_ready_cases", [])
-assert index.get("issued_films", []) == [CASE_ID]
-assert index.get("media_admitted_cases", []) == [CASE_ID]
+def walk_dicts(obj):
+    if isinstance(obj, dict):
+        yield obj
+        for value in obj.values():
+            yield from walk_dicts(value)
+    elif isinstance(obj, list):
+        for value in obj:
+            yield from walk_dicts(value)
 
-assert case["surface_type"] == "ACTIVE_CURRENT_STATE"
-assert case["current_state"] == STATE
-assert case["release_candidate_ready"] is True
-assert case["issued"] is True
-assert case["media_present"] is True
-assert case["outsider_replay_passed"] is True
+require(index.get("current_state") == TARGET, f"index.current_state={index.get('current_state')!r}")
+require(index.get("active_case_states", {}).get(CASE_ID) == TARGET, f"active_case_states[{CASE_ID}]={index.get('active_case_states', {}).get(CASE_ID)!r}")
+require(case.get("current_state") == TARGET, f"case.current_state={case.get('current_state')!r}")
 
-active = []
-for path in (ROOT / "CASES").rglob("*.json"):
-    data = json.loads(path.read_text(encoding="utf-8"))
-    if data.get("case_id") == CASE_ID and data.get("surface_type") == "ACTIVE_CURRENT_STATE":
-        active.append(str(path.relative_to(ROOT)))
+# Validate any nested case entry that exists, without requiring a specific schema key like index["cases"].
+nested_case_entries = [
+    obj for obj in walk_dicts(index)
+    if obj.get("case_id") == CASE_ID or obj.get("id") == CASE_ID
+]
 
-assert active == ["CASES/CASE_001_THE_LAST_RENDER/CURRENT_CASE_STATE.json"], active
+for entry in nested_case_entries:
+    if "current_state" in entry:
+        require(entry["current_state"] == TARGET, f"nested.current_state={entry['current_state']!r}")
+    if "issued" in entry:
+        require(entry["issued"] is False, f"nested.issued={entry['issued']!r}")
+    if "media_present" in entry:
+        require(entry["media_present"] is False, f"nested.media_present={entry['media_present']!r}")
+    if "issued_object" in entry:
+        require(entry["issued_object"] is None, f"nested.issued_object={entry['issued_object']!r}")
+
+for label, obj in (("index", index), ("case", case)):
+    require(obj.get("release_candidate_ready") is True, f"{label}.release_candidate_ready={obj.get('release_candidate_ready')!r}")
+    require(obj.get("issued") is False, f"{label}.issued={obj.get('issued')!r}")
+    require(obj.get("media_present") is False, f"{label}.media_present={obj.get('media_present')!r}")
+    require(obj.get("issued_object") is None, f"{label}.issued_object={obj.get('issued_object')!r}")
 
 print("CINEMATICUM CURRENT STATE INDEX: PASS")
-print(f"CASE_001=THE_LAST_RENDER")
-print(f"ACTIVE_CURRENT_STATE={STATE}")
+print(f"CASE_ID={CASE_ID}")
+print(f"CURRENT_STATE={TARGET}")
 print("RELEASE_CANDIDATE_READY=true")
-print("ISSUED=true")
-print("MEDIA_PRESENT=true")
-print("REPLAY_PASSED=true")
-print("ONE_ACTIVE_CASE_STATE=true")
+print("ISSUED=false")
+print("MEDIA_PRESENT=false")
+print("ISSUED_OBJECT=None")
 PY

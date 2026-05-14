@@ -6,7 +6,7 @@
   "purpose": "Define the lawful progression from cinematic jurisdiction to issued admissible motion picture while preventing silent state leaps, media admission, generation admission, and competing current truth.",
   "case_id": "CASE_001_THE_LAST_RENDER",
   "case_title": "THE LAST RENDER",
-  "current_active_state": "ISSUED_ADMISSIBLE_MOTION_PICTURE",
+  "current_active_state": "RELEASE_CANDIDATE_READY",
   "current_state_owner": "CINEMATICUM_CURRENT_STATE_INDEX.json",
   "case_current_state_owner": "CASES/CASE_001_THE_LAST_RENDER/CURRENT_CASE_STATE.json",
   "ordered_states": [
@@ -22,14 +22,13 @@
     "ISSUANCE_DOCKET_OPEN",
     "RELEASE_CANDIDATE_LAW_DECLARED",
     "AUTHORITY_ACCEPTANCE_LAW_DECLARED",
-    "RELEASE_CANDIDATE_READY",
-    "ISSUED_ADMISSIBLE_MOTION_PICTURE"
+    "RELEASE_CANDIDATE_READY"
   ],
   "states_not_reached": [],
   "currently_false_claims": {
     "release_candidate_ready": true,
-    "issued": true,
-    "media_present": true,
+    "issued": false,
+    "media_present": false,
     "generation_present": false,
     "engine_present": false,
     "model_present": false,
@@ -46,20 +45,22 @@
     "layer-status record treated as active current truth",
     "media or model artifact admitted to git"
   ],
-  "active_current_state": "ISSUED_ADMISSIBLE_MOTION_PICTURE",
-  "current_state": "ISSUED_ADMISSIBLE_MOTION_PICTURE",
+  "active_current_state": "RELEASE_CANDIDATE_READY",
+  "current_state": "RELEASE_CANDIDATE_READY",
   "current_active_case": "CASE_001_THE_LAST_RENDER",
   "release_candidate_ready": true,
-  "issued": true,
-  "media_present": true,
+  "issued": false,
+  "media_present": false,
   "outsider_replay_passed": true,
   "admissibility_verdict_present": true,
   "terminal_closure_present": true,
   "status": "terminal_issued",
   "motion_picture_media_issued": true,
-  "motion_picture_issued": true,
-  "admissible_motion_picture_issued": true,
-  "motion_picture_media_issuance_ready": true,
+  "motion_picture_issued": false,
+  "admissible_motion_picture_issued": false,
+  "motion_picture_media_issuance_ready": false,
   "media_payload_present": false,
-  "raw_media_stored_in_git": false
+  "raw_media_stored_in_git": false,
+  "media_sha256": "1822a3c1f7a1718fbd38e6ecabb74f9f0abff6369553051569cdd4178971f5a8",
+  "issued_object": null
 }

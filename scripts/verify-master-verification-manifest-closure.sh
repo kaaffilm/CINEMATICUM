@@ -66,7 +66,7 @@ media_present = boolish(first_flag("media_present", default=False))
 
 assert active_state in (
     CURRENT_STATE,
-    "ISSUED_ADMISSIBLE_MOTION_PICTURE",
+    "RELEASE_CANDIDATE_READY",
 ), f"current_state={active_state}"
 
 required_scripts = sorted(s for s in manifest_strings if s.startswith("scripts/verify-") and s.endswith(".sh"))

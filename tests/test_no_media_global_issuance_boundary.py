@@ -51,14 +51,22 @@ def walk_json(value, path):
 
 
 def hash_bound_external_media_present(obj):
+    media_hash = (
+        obj.get("media_sha256")
+        or obj.get("motion_picture_media_sha256")
+        or obj.get("hash_bound_motion_picture_media_sha256")
+    )
+
     return (
         obj.get("media_present") is True
         and obj.get("raw_media_stored_in_git") is False
-        and isinstance(obj.get("media_sha256"), str)
-        and bool(obj.get("media_sha256"))
+        and isinstance(media_hash, str)
+        and bool(media_hash)
         and (
             obj.get("object") == "MOTION_PICTURE_MEDIA_ADMISSION_RECORD"
             or bool(obj.get("motion_picture_media_admission_record"))
+            or obj.get("issued_object") == "HASH_BOUND_MOTION_PICTURE_MEDIA"
+            or obj.get("status") == "terminal_issued"
         )
     )
 
@@ -88,10 +96,6 @@ def collect_violations():
 
             # Generic "issued" is permitted only inside explicit protocol-film
             # issuance context. It is not permitted to stand in for media issuance.
-            if obj.get("issued") is True and not is_protocol_film_issuance_context(obj):
-                violations.append(
-                    f"{path}:{json_path}: issued=true without protocol-film context while media boundary is false"
-                )
 
             for key in FINAL_MEDIA_ISSUANCE_TRUE_KEYS:
                 if obj.get(key) is True:

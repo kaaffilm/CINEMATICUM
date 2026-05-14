@@ -3,7 +3,7 @@
   "schema_version": "cinematicum.case_progression_graph.v1",
   "case_id": "CASE_001_THE_LAST_RENDER",
   "case_title": "THE LAST RENDER",
-  "current_state": "ISSUED_ADMISSIBLE_MOTION_PICTURE",
+  "current_state": "RELEASE_CANDIDATE_READY",
   "current_state_owner": "CASES/CASE_001_THE_LAST_RENDER/CURRENT_CASE_STATE.json",
   "nodes": [
     {
@@ -28,7 +28,7 @@
       "active": false
     },
     {
-      "state": "ISSUED_ADMISSIBLE_MOTION_PICTURE",
+      "state": "RELEASE_CANDIDATE_READY",
       "status": "active",
       "missing": [],
       "reached": true,
@@ -37,23 +37,23 @@
   ],
   "false_now": {
     "release_candidate_ready": true,
-    "issued": true,
-    "media_present": true,
+    "issued": false,
+    "media_present": false,
     "outsider_replay_passed": true
   },
-  "current_active_state": "ISSUED_ADMISSIBLE_MOTION_PICTURE",
+  "current_active_state": "RELEASE_CANDIDATE_READY",
   "status": "terminal_issued",
   "release_candidate_ready": true,
-  "issued": true,
-  "media_present": true,
+  "issued": false,
+  "media_present": false,
   "outsider_replay_passed": true,
-  "active_current_state": "ISSUED_ADMISSIBLE_MOTION_PICTURE",
+  "active_current_state": "RELEASE_CANDIDATE_READY",
   "admissibility_verdict_present": true,
   "terminal_closure_present": true,
-  "motion_picture_media_issued": true,
-  "motion_picture_issued": true,
-  "admissible_motion_picture_issued": true,
-  "motion_picture_media_issuance_ready": true,
+  "motion_picture_media_issued": false,
+  "motion_picture_issued": false,
+  "admissible_motion_picture_issued": false,
+  "motion_picture_media_issuance_ready": false,
   "media_payload_present": false,
   "raw_media_stored_in_git": false
 }

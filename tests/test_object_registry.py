@@ -63,7 +63,7 @@ class TestObjectRegistry(unittest.TestCase):
         self.assertEqual(registry["current_active_state"], "RELEASE_CANDIDATE_READY")
         self.assertEqual(
             index["active_case_states"]["CASE_001_THE_LAST_RENDER"],
-            "ISSUED_ADMISSIBLE_MOTION_PICTURE",
+            "RELEASE_CANDIDATE_READY",
         )
 
 if __name__ == "__main__":

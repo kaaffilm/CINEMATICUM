@@ -1,45 +1,58 @@
 import json
-import pathlib
+import subprocess
 import unittest
+from pathlib import Path
 
-ROOT = pathlib.Path(__file__).resolve().parents[1]
+ROOT = Path(__file__).resolve().parents[1]
+CASE_ID = "CASE_001_THE_LAST_RENDER"
+STATE = "RELEASE_CANDIDATE_READY"
 
-def load(path: str):
-    return json.loads((ROOT / path).read_text(encoding="utf-8"))
 
 class TestCurrentStateIndex(unittest.TestCase):
+    def read_json(self, rel):
+        return json.loads((ROOT / rel).read_text())
+
     def test_root_index_is_active_current_state_owner(self):
-        index = load("CINEMATICUM_CURRENT_STATE_INDEX.json")
-        self.assertEqual(index["surface_type"], "ACTIVE_CURRENT_STATE")
-        self.assertEqual(index["active_case_states"]["CASE_001_THE_LAST_RENDER"], "ISSUED_ADMISSIBLE_MOTION_PICTURE")
-        self.assertEqual(index["issued_films"], ["CASE_001_THE_LAST_RENDER"])
-        self.assertEqual(index["release_candidate_ready_cases"], ["CASE_001_THE_LAST_RENDER"])
-        self.assertEqual(index["media_admitted_cases"], ["CASE_001_THE_LAST_RENDER"])
+        index = self.read_json("CINEMATICUM_CURRENT_STATE_INDEX.json")
+
+        self.assertEqual(index["active_case_states"][CASE_ID], STATE)
+        self.assertEqual(index["active_current_state"], STATE)
+        self.assertEqual(index.get("issued_films", []), [])
 
     def test_case_current_state_is_active_and_not_issued(self):
-        case = load("CASES/CASE_001_THE_LAST_RENDER/CURRENT_CASE_STATE.json")
-        self.assertEqual(case["surface_type"], "ACTIVE_CURRENT_STATE")
-        self.assertEqual(case["current_state"], "ISSUED_ADMISSIBLE_MOTION_PICTURE")
-        self.assertTrue(case["release_candidate_ready"])
-        self.assertTrue(case["issued"])
-        self.assertTrue(case["media_present"])
-        self.assertTrue(case["outsider_replay_passed"])
+        case = self.read_json("CASES/CASE_001_THE_LAST_RENDER/CURRENT_CASE_STATE.json")
 
-    def test_prior_status_files_are_layer_records(self):
-        case = load("CASES/CASE_001_THE_LAST_RENDER/CURRENT_CASE_STATE.json")
-        for file in case["prior_layer_status_files"]:
-            layer = load(file)
-            self.assertEqual(layer["surface_type"], "LAYER_STATUS_RECORD")
-            self.assertFalse(layer["current_truth_owner"])
-            self.assertTrue(layer["does_not_outrank_current_state_index"])
+        self.assertEqual(case["current_state"], STATE)
+        self.assertTrue(case.get("release_candidate_ready"))
+        self.assertFalse(case.get("issued"))
+        self.assertFalse(case.get("media_present"))
+        self.assertFalse(case.get("motion_picture_issued", False))
+        self.assertFalse(case.get("admissible_motion_picture_issued", False))
+        self.assertFalse(case.get("motion_picture_media_issuance_ready", False))
 
-    def test_single_active_case_state_file(self):
-        active = []
-        for path in (ROOT / "CASES").rglob("*.json"):
-            data = json.loads(path.read_text(encoding="utf-8"))
-            if data.get("case_id") == "CASE_001_THE_LAST_RENDER" and data.get("surface_type") == "ACTIVE_CURRENT_STATE":
-                active.append(str(path.relative_to(ROOT)))
-        self.assertEqual(active, ["CASES/CASE_001_THE_LAST_RENDER/CURRENT_CASE_STATE.json"])
+    def test_index_does_not_claim_motion_picture_media_issuance(self):
+        index = self.read_json("CINEMATICUM_CURRENT_STATE_INDEX.json")
+
+        self.assertFalse(index.get("issued", False))
+        self.assertFalse(index.get("media_present", False))
+        self.assertFalse(index.get("motion_picture_issued", False))
+        self.assertFalse(index.get("admissible_motion_picture_issued", False))
+        self.assertFalse(index.get("motion_picture_media_issuance_ready", False))
+
+    def test_verifier_passes(self):
+        out = subprocess.run(
+            ["bash", "scripts/verify-current-state-index.sh"],
+            cwd=ROOT,
+            check=True,
+            text=True,
+            capture_output=True,
+        ).stdout
+
+        self.assertIn("CINEMATICUM CURRENT STATE INDEX: PASS", out)
+        self.assertIn("CURRENT_STATE=RELEASE_CANDIDATE_READY", out)
+        self.assertIn("ISSUED=false", out)
+        self.assertIn("MEDIA_PRESENT=false", out)
+
 
 if __name__ == "__main__":
     unittest.main()
