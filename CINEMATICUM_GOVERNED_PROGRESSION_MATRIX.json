@@ -1,17 +1,13 @@
 {
-  "active_case_states": {
-    "CASE_001_THE_LAST_RENDER": "ISSUED_ADMISSIBLE_MOTION_PICTURE"
-  },
-  "active_current_state": "ISSUED_ADMISSIBLE_MOTION_PICTURE",
+  "active_current_state": "RELEASE_CANDIDATE_READY",
   "admissibility_verdict_present": true,
-  "admissible_motion_picture_issued": true,
-  "blocked_by": null,
+  "admissible_motion_picture_issued": false,
   "case_current_state_owner": "CASES/CASE_001_THE_LAST_RENDER/CURRENT_CASE_STATE.json",
   "case_id": "CASE_001_THE_LAST_RENDER",
   "case_title": "THE LAST RENDER",
   "current_active_case": "CASE_001_THE_LAST_RENDER",
-  "current_active_state": "ISSUED_ADMISSIBLE_MOTION_PICTURE",
-  "current_state": "ISSUED_ADMISSIBLE_MOTION_PICTURE",
+  "current_active_state": "RELEASE_CANDIDATE_READY",
+  "current_state": "RELEASE_CANDIDATE_READY",
   "current_state_owner": "CINEMATICUM_CURRENT_STATE_INDEX.json",
   "currently_false_claims": {
     "admissibility_verdict_present": true,
@@ -27,7 +23,6 @@
     "substance_gate_status": null,
     "terminal_closure_present": true
   },
-  "final_master_media_issued": true,
   "forbidden_regressions": [
     "schema treated as object",
     "replay requirements treated as replay pass",
@@ -38,19 +33,14 @@
     "media or model artifact admitted to git"
   ],
   "institution": "CINEMATICUM",
-  "issuance_blocked": false,
-  "issued": true,
-  "issued_object": "ADMISSIBLE_MOTION_PICTURE",
-  "issued_object_scope": "hash-bound admissible motion picture issued outside git",
+  "issued": false,
+  "issued_object": null,
   "media_payload_present": false,
   "media_present": false,
   "media_substance_passed": false,
-  "mission_done": true,
-  "model_weights_in_git": false,
-  "motion_picture_issued": true,
-  "motion_picture_media_issuance_ready": true,
-  "motion_picture_media_issued": true,
-  "network_required_after_clone": false,
+  "motion_picture_issued": false,
+  "motion_picture_media_issuance_ready": false,
+  "motion_picture_media_issued": false,
   "object_type": "CINEMATICUM_GOVERNED_PROGRESSION_MATRIX",
   "ordered_states": [
     "CINEMATIC_JURISDICTION_DECLARED",
@@ -61,12 +51,7 @@
     "ISSUED_ADMISSIBLE_MOTION_PICTURE"
   ],
   "outsider_replay_passed": true,
-  "protocol_film_issued": true,
-  "protocol_issued": true,
-  "protocol_perimeter_issued": true,
   "purpose": "Define the lawful progression from cinematic jurisdiction to issued admissible motion picture while preventing silent state leaps, media admission, generation admission, and competing current truth.",
-  "raw_media_in_git": false,
-  "raw_media_policy": "not stored in git",
   "raw_media_stored_in_git": false,
   "release_candidate_ready": true,
   "root_sentence": "CINEMATICUM issues admissible motion pictures.",
@@ -83,5 +68,9 @@
   "status": "terminal_issued",
   "substance_gate_required": null,
   "substance_gate_status": null,
-  "terminal_closure_present": true
+  "terminal_closure_present": true,
+  "active_case_states": {
+    "CASE_001_THE_LAST_RENDER": "RELEASE_CANDIDATE_READY"
+  },
+  "blocked_by": "MEDIA_SUBSTANCE_GATE"
 }

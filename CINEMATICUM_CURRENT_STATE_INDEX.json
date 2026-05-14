@@ -1,6 +1,6 @@
 {
   "active_case_states": {
-    "CASE_001_THE_LAST_RENDER": "ISSUED_ADMISSIBLE_MOTION_PICTURE",
+    "CASE_001_THE_LAST_RENDER": "RELEASE_CANDIDATE_READY",
     "media_substance_passed": false,
     "substance_gate_required": null,
     "substance_gate_status": null
@@ -8,11 +8,9 @@
   "active_cases": [
     "CASE_001_THE_LAST_RENDER"
   ],
-  "active_current_state": "ISSUED_ADMISSIBLE_MOTION_PICTURE",
-  "admissibility_verdict_present": true,
-  "admissible_motion_picture_issued": true,
-  "blocked_by": null,
-  "case_id": "CASE_001_THE_LAST_RENDER",
+  "active_current_state": "RELEASE_CANDIDATE_READY",
+  "admissible_motion_picture_issued": false,
+  "blocked_by": "MEDIA_SUBSTANCE_GATE",
   "case_state_files": {
     "CASE_001_THE_LAST_RENDER": "CASES/CASE_001_THE_LAST_RENDER/CURRENT_CASE_STATE.json",
     "media_substance_passed": false,
@@ -39,36 +37,25 @@
     "substance_gate_required": null,
     "substance_gate_status": null
   },
-  "current_active_state": "ISSUED_ADMISSIBLE_MOTION_PICTURE",
+  "current_active_state": "RELEASE_CANDIDATE_READY",
   "current_truth_rule": "This index is the root current-state pointer. Layer status records may describe staged law surfaces but must not outrank this index.",
-  "final_master_media_issued": true,
   "institution": "CINEMATICUM",
-  "issuance_blocked": false,
-  "issued": true,
+  "issued": false,
   "issued_films": [],
-  "issued_object": "ADMISSIBLE_MOTION_PICTURE",
-  "issued_object_scope": "hash-bound admissible motion picture issued outside git",
+  "issued_object": null,
   "media_admitted_cases": [],
   "media_payload_present": false,
   "media_present": false,
   "media_substance_passed": false,
-  "mission_done": true,
-  "model_weights_in_git": false,
-  "motion_picture_issued": true,
-  "motion_picture_media_issuance_ready": true,
-  "motion_picture_media_issued": true,
-  "network_required_after_clone": false,
+  "mission_done": false,
+  "motion_picture_issued": false,
+  "motion_picture_media_issuance_ready": false,
+  "motion_picture_media_issued": false,
   "object_type": "CINEMATICUM_CURRENT_STATE_INDEX",
-  "outsider_replay_passed": true,
   "outsider_replay_passed_cases": [
     "CASE_001_THE_LAST_RENDER"
   ],
   "pr6_boundary": "Current-state indexing only; no release readiness, replay pass, media, or issuance.",
-  "protocol_film_issued": true,
-  "protocol_issued": true,
-  "protocol_perimeter_issued": true,
-  "raw_media_in_git": false,
-  "raw_media_policy": "not stored in git",
   "raw_media_stored_in_git": false,
   "release_candidate_ready": true,
   "release_candidate_ready_cases": [
@@ -78,6 +65,5 @@
   "schema_version": "cinematicum.current_state_index.v1",
   "substance_gate_required": null,
   "substance_gate_status": null,
-  "surface_type": "ACTIVE_CURRENT_STATE",
-  "terminal_closure_present": true
+  "surface_type": "ACTIVE_CURRENT_STATE"
 }
