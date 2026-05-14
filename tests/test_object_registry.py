@@ -60,7 +60,7 @@ class TestObjectRegistry(unittest.TestCase):
     def test_registry_current_state_matches_index(self):
         registry = load("CINEMATICUM_OBJECT_REGISTRY.json")
         index = load("CINEMATICUM_CURRENT_STATE_INDEX.json")
-        self.assertEqual(registry["current_active_state"], "RELEASE_CANDIDATE_READY")
+        self.assertEqual(registry["current_active_state"], index["active_case_states"]["CASE_001_THE_LAST_RENDER"])
         self.assertEqual(
             index["active_case_states"]["CASE_001_THE_LAST_RENDER"],
             "ISSUED_ADMISSIBLE_MOTION_PICTURE",

@@ -60,7 +60,7 @@ if "issued_object" in registry:
 if "active_case_states" in registry:
     require(registry["active_case_states"][CASE_ID] == TARGET, f"registry.active_case_states[{CASE_ID}]={registry['active_case_states'][CASE_ID]!r}")
 
-registered_objects = len(registry.get("objects", registry.get("registered_objects", [])))
+registered_objects = len(registry.get("entries", registry.get("objects", registry.get("registered_objects", []))))
 
 print("CINEMATICUM OBJECT REGISTRY: PASS")
 print(f"REGISTERED_OBJECTS={registered_objects}")

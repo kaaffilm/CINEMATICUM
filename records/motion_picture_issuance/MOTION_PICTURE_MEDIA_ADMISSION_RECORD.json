@@ -21,5 +21,6 @@
   "motion_picture_issued": true,
   "issued": true,
   "created_utc": "2026-05-13T20:19:08.939750+00:00",
-  "motion_picture_media_issued": true
+  "motion_picture_media_issued": true,
+  "issued_object": "HASH_BOUND_MOTION_PICTURE_MEDIA"
 }
