@@ -60,7 +60,7 @@ class TestRepositoryStatusSeal(unittest.TestCase):
         self.assertTrue(seal["protocol_perimeter_issued"])
         self.assertFalse(seal["raw_media_stored_in_git"])
         self.assertFalse(seal["media_payload_present"])
-        self.assertFalse(seal["outsider_replay_passed"])
+        self.assertTrue(seal["outsider_replay_passed"])
         self.assertTrue(seal["private_access_required"])
         self.assertEqual(
             seal["motion_picture_media_admission_record"],
