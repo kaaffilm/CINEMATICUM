@@ -47,8 +47,8 @@ assert gate["accepted_authority_object_count"] == 8
 assert gate["instantiated_authority_object_count"] == 8
 assert gate["unfilled_authority_object_slot_count"] == 0
 
-assert index["active_case_states"][CASE] == "ISSUED_ADMISSIBLE_MOTION_PICTURE"
-assert case["current_state"] == "ISSUED_ADMISSIBLE_MOTION_PICTURE"
+assert index["active_case_states"][CASE] == "RELEASE_CANDIDATE_READY"
+assert case["current_state"] == "RELEASE_CANDIDATE_READY"
 
 candidate = gate["transition_candidates"][0]
 assert candidate["from_state"] == TARGET
