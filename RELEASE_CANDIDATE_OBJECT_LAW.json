@@ -36,5 +36,5 @@
     "RELEASE_CANDIDATE_READY": "future state; requires concrete release objects and replay pass",
     "ISSUED_ADMISSIBLE_MOTION_PICTURE": "future state; requires motion picture issuance act"
   },
-  "forbidden_pr3_transition": "ISSUED_ADMISSIBLE_MOTION_PICTURE"
+  "forbidden_pr3_transition": "RELEASE_CANDIDATE_READY"
 }

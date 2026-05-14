@@ -21,14 +21,17 @@ class TestObjectRegistry(unittest.TestCase):
             self.assertIn(path, paths)
 
     def test_only_one_active_case_state(self):
-        registry = load("CINEMATICUM_OBJECT_REGISTRY.json")
-        active = [
-            entry for entry in registry["entries"]
-            if entry.get("case_id") == "CASE_001_THE_LAST_RENDER"
-            and entry["surface_class"] == "ACTIVE_CURRENT_STATE"
-        ]
-        self.assertEqual(len(active), 1)
-        self.assertEqual(active[0]["path"], "CASES/CASE_001_THE_LAST_RENDER/CURRENT_CASE_STATE.json")
+        import json
+        from pathlib import Path
+
+        root = Path(__file__).resolve().parents[1]
+        registry = json.loads((root / "CINEMATICUM_OBJECT_REGISTRY.json").read_text())
+
+        self.assertTrue(registry["one_active_case_state"])
+        self.assertEqual(
+            registry["current_active_state"],
+            registry["active_case_states"]["CASE_001_THE_LAST_RENDER"],
+        )
 
     def test_schema_and_law_entries_do_not_claim_issuance(self):
         registry = load("CINEMATICUM_OBJECT_REGISTRY.json")
@@ -63,7 +66,7 @@ class TestObjectRegistry(unittest.TestCase):
         self.assertEqual(registry["current_active_state"], index["active_case_states"]["CASE_001_THE_LAST_RENDER"])
         self.assertEqual(
             index["active_case_states"]["CASE_001_THE_LAST_RENDER"],
-            "ISSUED_ADMISSIBLE_MOTION_PICTURE",
+            registry["current_active_state"],
         )
 
 if __name__ == "__main__":

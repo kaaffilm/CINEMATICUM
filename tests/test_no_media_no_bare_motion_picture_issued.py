@@ -1,27 +1,25 @@
 import json
+import pathlib
 import unittest
-from pathlib import Path
 
+ROOT = pathlib.Path(__file__).resolve().parents[1]
 
-ROOT = Path(__file__).resolve().parents[1]
+def load(path):
+    return json.loads((ROOT / path).read_text(encoding="utf-8"))
 
+class TestSubstanceGatedNoMediaIssuance(unittest.TestCase):
+    def test_no_motion_picture_media_issuance_without_substance(self):
+        seal = load("CINEMATICUM_REPOSITORY_STATUS_SEAL.json")
+        act = load("MOTION_PICTURE_ISSUANCE_ACT.json")
+        for obj in (seal, act):
+            self.assertFalse(obj.get("issued", False))
+            self.assertFalse(obj.get("media_present", False))
+            self.assertFalse(obj.get("motion_picture_media_issuance_ready", False))
+            self.assertFalse(obj.get("motion_picture_issued", False))
+            self.assertFalse(obj.get("admissible_motion_picture_issued", False))
+            self.assertFalse(obj.get("media_substance_passed", False))
+            self.assertEqual(obj.get("blocked_by"), "MEDIA_SUBSTANCE_GATE")
+            self.assertFalse(obj.get("raw_media_stored_in_git", False))
 
-class TestNoMediaNoBareMotionPictureIssued(unittest.TestCase):
-    def test_protocol_issuance_is_named_and_media_issuance_is_hash_bound(self):
-        seal = json.loads((ROOT / "CINEMATICUM_REPOSITORY_STATUS_SEAL.json").read_text())
-
-        self.assertTrue(seal["protocol_issued"])
-        self.assertTrue(seal["protocol_perimeter_issued"])
-        self.assertTrue(seal["protocol_film_issued"])
-
-        self.assertTrue(seal["issued"])
-        self.assertTrue(seal["media_present"])
-        self.assertFalse(seal["raw_media_stored_in_git"])
-
-    def test_hash_bound_media_is_not_raw_git_media(self):
-        seal = json.loads((ROOT / "CINEMATICUM_REPOSITORY_STATUS_SEAL.json").read_text())
-
-        self.assertTrue(seal["motion_picture_media_issuance_ready"])
-        self.assertTrue(seal["admissible_motion_picture_issued"])
-        self.assertTrue(seal["motion_picture_issued"])
-        self.assertFalse(seal["raw_media_stored_in_git"])
+if __name__ == "__main__":
+    unittest.main()

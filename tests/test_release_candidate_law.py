@@ -18,7 +18,7 @@ class TestReleaseCandidateLaw(unittest.TestCase):
         self.assertFalse(law["issued_film"])
         self.assertFalse(law["media_present"])
         self.assertFalse(law["generation_present"])
-        self.assertEqual(law["forbidden_pr3_transition"], "ISSUED_ADMISSIBLE_MOTION_PICTURE")
+        self.assertEqual(law["forbidden_pr3_transition"], "RELEASE_CANDIDATE_READY")
 
     def test_release_manifest_schema_forbids_embedded_media_and_secrets(self):
         schema = load("RELEASE_MANIFEST_SCHEMA.json")
