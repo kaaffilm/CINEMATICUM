@@ -5,7 +5,7 @@ python3 - <<'PY'
 import json
 from pathlib import Path
 
-TARGET = "RELEASE_CANDIDATE_READY"
+TARGET = "ISSUED_ADMISSIBLE_MOTION_PICTURE"
 CASE_ID = "CASE_001_THE_LAST_RENDER"
 
 def load(path):

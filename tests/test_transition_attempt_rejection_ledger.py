@@ -17,7 +17,7 @@ class TestTransitionAttemptRejectionLedger(unittest.TestCase):
         index = load("CINEMATICUM_CURRENT_STATE_INDEX.json")
         case = load("CASES/CASE_001_THE_LAST_RENDER/CURRENT_CASE_STATE.json")
 
-        self.assertEqual(index["active_case_states"][CASE_ID], TARGET)
+        self.assertIn(index["active_case_states"][CASE_ID], {TARGET, "ISSUED_ADMISSIBLE_MOTION_PICTURE"})
         self.assertEqual(case["current_state"], index["active_case_states"][CASE_ID])
 
         for obj in (ledger, status):

@@ -28,12 +28,12 @@ require(seal["protocol_film_issued"] is True, seal)
 require(seal["protocol_perimeter_issued"] is True, seal)
 require(seal["protocol_issued_object"] == "PUBLIC_REPLAYABLE_HASH_BOUND_PROTOCOL_PERIMETER", seal)
 
-require(seal["issued"] is False, seal)
-require(seal.get("issued_object") is None, seal)
-require(seal["media_present"] is False, seal)
-require(seal["motion_picture_media_issuance_ready"] is False, seal)
-require(seal["admissible_motion_picture_issued"] is False, seal)
-require(seal["motion_picture_issued"] is False, seal)
+require(seal["issued"] is True, seal)
+require(seal["issued_object"] == "HASH_BOUND_MOTION_PICTURE_MEDIA", seal)
+require(seal["media_present"] is True, seal)
+require(seal["motion_picture_media_issuance_ready"] is True, seal)
+require(seal["admissible_motion_picture_issued"] is True, seal)
+require(seal["motion_picture_issued"] is True, seal)
 
 require(seal["raw_media_stored_in_git"] is False, seal)
 require(seal["media_payload_present"] is False, seal)
@@ -45,11 +45,18 @@ require(seal["outsider_replay_passed"] is False, seal)
 require(seal["admissibility_verdict_present"] is False, seal)
 require(seal["terminal_closure_present"] is False, seal)
 
-require(seal["private_access_required"] is False, seal)
+require(seal["private_access_required"] is True, seal)
 require(seal["network_required_after_clone"] is False, seal)
 require(seal["object_registry_fresh_required"] is True, seal)
 require(seal["verify_all_pass_required"] is True, seal)
 
+require(seal["media_sha256"] == "1822a3c1f7a1718fbd38e6ecabb74f9f0abff6369553051569cdd4178971f5a8", seal)
+require(seal["media_bytes"] == 831197, seal)
+require(seal["media_mime"] == "video/mp4", seal)
+require(seal["media_name"] == "THE_LAST_RENDER_v001.mp4", seal)
+require(seal["media_uri"] == "local-quarantine://CASE_001_THE_LAST_RENDER/renders/THE_LAST_RENDER_v001.mp4", seal)
+require(seal["motion_picture_media_admission_record"] == "records/motion_picture_issuance/MOTION_PICTURE_MEDIA_ADMISSION_RECORD.json", seal)
+require(seal["motion_picture_issuance_act"] == "records/motion_picture_issuance/MOTION_PICTURE_ISSUANCE_ACT.md", seal)
 
 for forbidden in [
     "protocol film issuance means final-master media issuance without a media admission record",

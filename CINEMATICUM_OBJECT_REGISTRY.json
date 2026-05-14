@@ -868,7 +868,7 @@
     },
     {
       "path": "CASES/CASE_001_THE_LAST_RENDER/CASE_PROGRESSION_GRAPH.json",
-      "sha256": "8fd56c555e6da9499efb26344f3f095c2b59db78f4e63b4cda89bac70fb6d243",
+      "sha256": "c3149fb1bad261522141ec302c6f70fdbc06dd8c20d285fc45b7f2428df9680e",
       "object_type": "CINEMATICUM_CASE_PROGRESSION_GRAPH",
       "schema_version": "cinematicum.case_progression_graph.v1",
       "surface_class": "PROGRESSION_GRAPH",
@@ -883,7 +883,7 @@
     },
     {
       "path": "CASES/CASE_001_THE_LAST_RENDER/CURRENT_CASE_STATE.json",
-      "sha256": "35a106bc9b9e07223cba553ad3b8a30ebfd958bd87a930bae52ffd00b3ae1c32",
+      "sha256": "432dbb10f6408c243cb0fd14f2d4e6d2ba2c8d31eb2bb99830008aefc9044dba",
       "object_type": "CINEMATICUM_CURRENT_CASE_STATE",
       "schema_version": "cinematicum.current_case_state.v1",
       "surface_class": "ACTIVE_CURRENT_STATE",
@@ -4918,7 +4918,7 @@
     },
     {
       "path": "CINEMATICUM_CURRENT_STATE_INDEX.json",
-      "sha256": "70a433bd824c03b41284cacdc1fc93c3b4c77319921bb080fd2ee1c780e48e74",
+      "sha256": "bf7daf38f327b6665f74df342a20a1992f88aa8166ea3de509c82b8618debd81",
       "object_type": "CINEMATICUM_CURRENT_STATE_INDEX",
       "schema_version": "cinematicum.current_state_index.v1",
       "surface_class": "ACTIVE_CURRENT_STATE",
@@ -5128,7 +5128,7 @@
     },
     {
       "path": "CINEMATICUM_GOVERNED_PROGRESSION_MATRIX.json",
-      "sha256": "adab53f2d7b9f475eff3dc39ffdafc13ebb26b81b8eb183fe27873d6ffba04af",
+      "sha256": "0d0e204c18a4c7cdcbeb4748da2bb6d931926f577333a2130c2edc3cbe8ddf2b",
       "object_type": "CINEMATICUM_GOVERNED_PROGRESSION_MATRIX",
       "schema_version": "cinematicum.governed_progression_matrix.v1",
       "surface_class": "PROGRESSION_GRAPH",
@@ -6193,7 +6193,7 @@
     },
     {
       "path": "CINEMATICUM_REPOSITORY_STATUS_SEAL.json",
-      "sha256": "d17008095a268b4c7ae7135a0d88682d2a49ca378a00354650eb51e5be790574",
+      "sha256": "36d9d409571c7e663963e2600c52feaeea7fbc660feca67d14a9e162abe82967",
       "object_type": "CINEMATICUM_REPOSITORY_STATUS_SEAL",
       "schema_version": "cinematicum.repository_status_seal.v1",
       "surface_class": "LAYER_STATUS_RECORD",

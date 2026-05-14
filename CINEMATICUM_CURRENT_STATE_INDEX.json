@@ -1,17 +1,19 @@
 {
   "active_case_states": {
-    "CASE_001_THE_LAST_RENDER": "RELEASE_CANDIDATE_READY"
+    "CASE_001_THE_LAST_RENDER": "ISSUED_ADMISSIBLE_MOTION_PICTURE"
   },
   "active_cases": [
     "CASE_001_THE_LAST_RENDER"
   ],
-  "active_current_state": "RELEASE_CANDIDATE_READY",
+  "active_current_state": "ISSUED_ADMISSIBLE_MOTION_PICTURE",
   "case_state_files": {
     "CASE_001_THE_LAST_RENDER": "CASES/CASE_001_THE_LAST_RENDER/CURRENT_CASE_STATE.json"
   },
   "current_truth_rule": "This index is the root current-state pointer. Layer status records may describe staged law surfaces but must not outrank this index.",
   "institution": "CINEMATICUM",
-  "issued_films": [],
+  "issued_films": [
+    "CASE_001_THE_LAST_RENDER"
+  ],
   "media_admitted_cases": [
     "CASE_001_THE_LAST_RENDER"
   ],
@@ -28,28 +30,25 @@
   "surface_type": "ACTIVE_CURRENT_STATE",
   "case_states": {
     "CASE_001_THE_LAST_RENDER": {
-      "current_state": "RELEASE_CANDIDATE_READY",
+      "current_state": "ISSUED_ADMISSIBLE_MOTION_PICTURE",
       "release_candidate_ready": true,
-      "issued": false,
-      "media_present": false,
+      "issued": true,
+      "media_present": true,
       "motion_picture_media_issued": true,
-      "motion_picture_issued": false,
-      "admissible_motion_picture_issued": false,
-      "motion_picture_media_issuance_ready": false,
+      "motion_picture_issued": true,
+      "admissible_motion_picture_issued": true,
+      "motion_picture_media_issuance_ready": true,
       "media_payload_present": false,
       "raw_media_stored_in_git": false
     }
   },
   "release_candidate_ready": true,
-  "issued": false,
-  "media_present": false,
-  "motion_picture_media_issued": false,
-  "motion_picture_issued": false,
-  "admissible_motion_picture_issued": false,
-  "motion_picture_media_issuance_ready": false,
+  "issued": true,
+  "media_present": true,
+  "motion_picture_media_issued": true,
+  "motion_picture_issued": true,
+  "admissible_motion_picture_issued": true,
+  "motion_picture_media_issuance_ready": true,
   "media_payload_present": false,
-  "raw_media_stored_in_git": false,
-  "media_sha256": "1822a3c1f7a1718fbd38e6ecabb74f9f0abff6369553051569cdd4178971f5a8",
-  "issued_object": null,
-  "current_state": "RELEASE_CANDIDATE_READY"
+  "raw_media_stored_in_git": false
 }

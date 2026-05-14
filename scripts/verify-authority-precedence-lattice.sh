@@ -99,15 +99,15 @@ for key in [
 
 
 # Canonical active owners must reflect the post-issuance active state.
-assert index["active_case_states"]["CASE_001_THE_LAST_RENDER"] == "RELEASE_CANDIDATE_READY"
-assert case["current_state"] == "RELEASE_CANDIDATE_READY"
+assert index["active_case_states"]["CASE_001_THE_LAST_RENDER"] == "ISSUED_ADMISSIBLE_MOTION_PICTURE"
+assert case["current_state"] == "ISSUED_ADMISSIBLE_MOTION_PICTURE"
 
 # Legacy/status surfaces may still report RELEASE_CANDIDATE_READY; they are
 # checked for non-override above and must not be treated as active owners.
 allowed_observed_states = {
     lattice["current_state"],
     "RELEASE_CANDIDATE_READY",
-    "RELEASE_CANDIDATE_READY",
+    "ISSUED_ADMISSIBLE_MOTION_PICTURE",
 }
 assert seal["current_state"] in allowed_observed_states
 assert dossier["current_state"] in allowed_observed_states

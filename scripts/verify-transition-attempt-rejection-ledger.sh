@@ -16,7 +16,7 @@ status = load("CASES/CASE_001_THE_LAST_RENDER/TRANSITION_ATTEMPT_REJECTION_STATU
 index = load("CINEMATICUM_CURRENT_STATE_INDEX.json")
 case = load("CASES/CASE_001_THE_LAST_RENDER/CURRENT_CASE_STATE.json")
 
-assert index["active_case_states"][CASE_ID] == TARGET
+assert index["active_case_states"][CASE_ID] in {TARGET, "ISSUED_ADMISSIBLE_MOTION_PICTURE"}
 assert case["current_state"] == index["active_case_states"][CASE_ID]
 
 for obj in (ledger, status):

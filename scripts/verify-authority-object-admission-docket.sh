@@ -10,7 +10,7 @@ import json
 from pathlib import Path
 
 TARGET = 'REAL_CASE_AUTHORITY_OBJECTS_INSTANTIATED_PENDING_RELEASE_CANDIDATE_ARTIFACTS'
-ACTIVE_TARGET = 'RELEASE_CANDIDATE_READY'
+ACTIVE_TARGET = 'ISSUED_ADMISSIBLE_MOTION_PICTURE'
 CASE = 'CASE_001_THE_LAST_RENDER'
 NEXT_OBJECT = 'RELEASE_CANDIDATE_GAP_LEDGER'
 FALSE_KEYS = ['release_candidate_ready', 'release_candidate_artifacts_bound', 'issued', 'media_present', 'outsider_replay_passed', 'admissibility_verdict_present', 'terminal_closure_present', 'may_advance_now', 'issuance_unblocked']

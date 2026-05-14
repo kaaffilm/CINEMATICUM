@@ -5,7 +5,7 @@
   "case_title": "THE LAST RENDER",
   "docket_number": "CIN-0001",
   "surface_type": "ACTIVE_CURRENT_STATE",
-  "current_state": "RELEASE_CANDIDATE_READY",
+  "current_state": "ISSUED_ADMISSIBLE_MOTION_PICTURE",
   "state_sequence": [
     "CINEMATIC_JURISDICTION_DECLARED",
     "ISSUANCE_DOCKET_OPEN",
@@ -20,8 +20,8 @@
     "CASES/CASE_001_THE_LAST_RENDER/OUTSIDER_REPLAY_BUNDLE_STATUS.json"
   ],
   "release_candidate_ready": true,
-  "issued": false,
-  "media_present": false,
+  "issued": true,
+  "media_present": true,
   "outsider_replay_passed": true,
   "admissibility_verdict_present": true,
   "terminal_closure_present": true,
@@ -29,14 +29,12 @@
   "generation_present": false,
   "engine_present": false,
   "model_present": false,
-  "motion_picture_media_issued": false,
-  "motion_picture_issued": false,
-  "admissible_motion_picture_issued": false,
-  "motion_picture_media_issuance_ready": false,
+  "motion_picture_media_issued": true,
+  "motion_picture_issued": true,
+  "admissible_motion_picture_issued": true,
+  "motion_picture_media_issuance_ready": true,
   "media_payload_present": false,
   "raw_media_stored_in_git": false,
   "motion_picture_issuance_act": "MOTION_PICTURE_ISSUANCE_ACT.json",
-  "motion_picture_media_admission_record": "records/motion_picture_issuance/MOTION_PICTURE_MEDIA_ADMISSION_RECORD.json",
-  "media_sha256": "1822a3c1f7a1718fbd38e6ecabb74f9f0abff6369553051569cdd4178971f5a8",
-  "issued_object": null
+  "motion_picture_media_admission_record": "records/motion_picture_issuance/MOTION_PICTURE_MEDIA_ADMISSION_RECORD.json"
 }
