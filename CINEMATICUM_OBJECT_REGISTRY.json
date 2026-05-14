@@ -6193,7 +6193,7 @@
     },
     {
       "path": "CINEMATICUM_REPOSITORY_STATUS_SEAL.json",
-      "sha256": "36d9d409571c7e663963e2600c52feaeea7fbc660feca67d14a9e162abe82967",
+      "sha256": "bf0e5dcb62aae34895b6de728689d3f66e3431c370b025acbd967d74081bc0ac",
       "object_type": "CINEMATICUM_REPOSITORY_STATUS_SEAL",
       "schema_version": "cinematicum.repository_status_seal.v1",
       "surface_class": "LAYER_STATUS_RECORD",
