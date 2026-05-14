@@ -36,5 +36,7 @@
   "media_payload_present": false,
   "raw_media_stored_in_git": false,
   "motion_picture_issuance_act": "MOTION_PICTURE_ISSUANCE_ACT.json",
-  "motion_picture_media_admission_record": "records/motion_picture_issuance/MOTION_PICTURE_MEDIA_ADMISSION_RECORD.json"
+  "motion_picture_media_admission_record": "records/motion_picture_issuance/MOTION_PICTURE_MEDIA_ADMISSION_RECORD.json",
+  "issued_object": "HASH_BOUND_MOTION_PICTURE_MEDIA",
+  "active_current_state": "ISSUED_ADMISSIBLE_MOTION_PICTURE"
 }

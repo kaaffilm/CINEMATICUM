@@ -55,5 +55,6 @@
   "admissible_motion_picture_issued": true,
   "motion_picture_media_issuance_ready": true,
   "media_payload_present": false,
-  "raw_media_stored_in_git": false
+  "raw_media_stored_in_git": false,
+  "issued_object": "HASH_BOUND_MOTION_PICTURE_MEDIA"
 }
