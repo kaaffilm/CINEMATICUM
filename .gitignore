@@ -2,3 +2,7 @@
 **pycache**/
 *.pyc
 dist/
+
+# generated local film media
+source/films/
+dist/films/
