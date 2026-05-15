@@ -6201,7 +6201,7 @@
     },
     {
       "path": "records/motion_picture_issuance/MOTION_PICTURE_MEDIA_ADMISSION_RECORD.json",
-      "sha256": "536c2c87971257269b90a03eca57b6bf399649159f5f242e18d868ae477acbe4",
+      "sha256": "088ac879b48c69c27c944f6f60491cf7f7550dae006bfb0d963fb4045fffeb92",
       "object_type": "UNDECLARED_OBJECT_TYPE",
       "schema_version": "UNDECLARED_SCHEMA_VERSION",
       "surface_class": "CASE_RECORD",

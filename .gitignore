@@ -1,7 +1,5 @@
 # CINEMATICUM heavy/local boundary
-
 # local model and execution workspaces
-
 /models/
 /model-cache/
 /ComfyUI/
@@ -11,9 +9,7 @@
 /venv/
 /.venv/
 /node_modules/
-
 # generated image/video/audio media
-
 /frames/
 /renders/
 /exports/
@@ -34,9 +30,7 @@
 *.jpeg
 *.tiff
 *.exr
-
 # model weights / checkpoints
-
 *.safetensors
 *.ckpt
 *.pth
@@ -44,9 +38,7 @@
 *.onnx
 *.gguf
 *.bin
-
 # local receipts
-
 CINEMATICUM_*_RECEIPT.json
 # source purity
 __pycache__/
@@ -56,19 +48,12 @@ __pycache__/
 .coverage
 htmlcov/
 .DS_Store
-
 # CINEMATICUM privacy / source-purity boundary
-.DS_Store
 .AppleDouble
 .LSOverride
 Thumbs.db
-__pycache__/
-*.py[cod]
-.pytest_cache/
 .mypy_cache/
 .ruff_cache/
-.coverage
-htmlcov/
 .venv/
 venv/
 env/
@@ -91,21 +76,8 @@ secrets/
 private/
 credentials/
 tokens/
-*.mp4
-*.mov
 *.m4v
-*.avi
-*.mkv
-*.webm
-*.wav
-*.aiff
-*.flac
 *.mp3
-*.png
-*.jpg
-*.jpeg
-*.tiff
-*.exr
 *.dpx
 *.blend
 *.psd
@@ -115,21 +87,11 @@ tokens/
 *.fcpxml
 *.otio
 *.mlpackage
-*.ckpt
-*.safetensors
-*.onnx
-*.pt
-*.pth
-*.gguf
-
 # CINEMATICUM Studio local media database / generated media
 .cinematicum_media/
-
 # Allow committed timeline manifests even though generic .otio is ignored
 !CASES/**/FILM/TIMELINE.otio
-
 # CINEMATICUM aggressive local/privacy boundary
-
 # local editor / IDE / machine state
 .idea/
 .vscode/
@@ -141,11 +103,9 @@ tokens/
 *.backup
 *.orig
 *.rej
-.DS_Store
 .Spotlight-V100/
 .Trashes/
 .fseventsd/
-
 # local shell / direnv / runtime config
 .envrc
 .direnv/
@@ -158,7 +118,6 @@ tokens/
 .yarn/
 .pip-cache/
 pip-wheel-metadata/
-
 # logs / traces / debug dumps
 *.log
 logs/
@@ -171,7 +130,6 @@ log/
 *.prof
 *.profraw
 *.profdata
-
 # test / coverage / typecheck / lint caches
 .tox/
 .nox/
@@ -182,11 +140,9 @@ coverage.xml
 .hypothesis/
 .dmypy.json
 dmypy.json
-
 # notebooks and notebook checkpoints
 .ipynb_checkpoints/
 *.nbconvert.ipynb
-
 # local databases / state stores
 *.sqlite
 *.sqlite3
@@ -196,7 +152,6 @@ dmypy.json
 *.duckdb
 *.parquet
 *.feather
-
 # archives / transfer bundles
 *.zip
 *.tar
@@ -207,7 +162,6 @@ dmypy.json
 *.gz
 *.bz2
 *.xz
-
 # credentials / keys / auth material
 *.asc
 *.gpg
@@ -226,7 +180,6 @@ known_hosts
 .docker/config.json
 .ssh/
 .gnupg/
-
 # AI / vendor / local assistant state
 .codex/
 .cursor/
@@ -235,7 +188,6 @@ known_hosts
 .windsurf/
 .aider*
 *.aider.chat.history.md
-
 # local human-private workspaces
 /local/
 _LOCAL/
@@ -246,7 +198,6 @@ scratch/
 scratchpad/
 notes/private/
 redteam/private/
-
 # large/generated non-canonical outputs
 outputs/
 out/
@@ -254,3 +205,5 @@ generated/
 artifacts/local/
 reports/local/
 replays/local/
+CINEMATICUM_LOCAL_MEDIA_QUARANTINE/
+cinematicum-proof/
