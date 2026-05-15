@@ -1,0 +1,18 @@
+{
+  "look": "cold industrial night to gray dawn",
+  "grade": "low saturation, controlled contrast, wet concrete texture, practical-light motivated highlights",
+  "lighting": [
+    "sodium exterior",
+    "flickering security practical",
+    "cold server light",
+    "red emergency light",
+    "gray dawn rain"
+  ],
+  "forbidden": [
+    "toy color",
+    "flat UI palette",
+    "procedural fractal look",
+    "cartoon render",
+    "game-engine plastic"
+  ]
+}

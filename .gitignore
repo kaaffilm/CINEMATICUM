@@ -7,3 +7,4 @@ dist/
 source/films/
 dist/films/
 # local film media
+.local_quarantine/

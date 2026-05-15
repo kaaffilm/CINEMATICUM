@@ -1,0 +1,11 @@
+{
+  "film": "THE_LAST_RENDER",
+  "shot_id": "011_switch_macro_hesitation",
+  "filename": "011_switch_macro_hesitation.mp4",
+  "duration_seconds": 4,
+  "width": 1920,
+  "height": 1080,
+  "fps": 24,
+  "prompt": "Photorealistic live-action cinematic shot. Real human technician. Real abandoned industrial render facility. Wet concrete, rain haze, dust, motivated practical lighting, natural motion blur, 35mm cinema lens grammar, serious grounded physical tone, high dynamic range, no UI fantasy. Scene: macro close-up of old red kill switch; wet sleeve; human hesitation",
+  "negative_prompt": "toy, placeholder, proof object, abstract diagram, fractal, ppm still, slideshow, cartoon, anime, low-detail CGI, game look, plastic texture, fake geometry, interface mockup, watermark"
+}

@@ -1,16 +1,19 @@
-.RECIPEPREFIX := >
 FILM=THE_LAST_RENDER
 
-.PHONY: check render open status
-
 check:
->python3 scripts/qc-no-toy-stack.py
+	python3 scripts/qc-no-toy-stack.py
+
+source-qc:
+	python3 scripts/qc-source-shots.py
 
 render:
->bash scripts/render-the-last-render-film.sh
+	bash scripts/render-the-last-render-film.sh
+
+final-qc:
+	python3 scripts/qc-final-film.py
 
 open:
->open dist/films/$(FILM)/$(FILM).mp4
+	open dist/films/$(FILM)/$(FILM).mp4
 
-status:
->git status --short
+clean-local:
+	rm -rf dist/films/$(FILM)

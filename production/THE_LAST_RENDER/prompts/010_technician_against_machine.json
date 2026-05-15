@@ -1,0 +1,11 @@
+{
+  "film": "THE_LAST_RENDER",
+  "shot_id": "010_technician_against_machine",
+  "filename": "010_technician_against_machine.mp4",
+  "duration_seconds": 6,
+  "width": 1920,
+  "height": 1080,
+  "fps": 24,
+  "prompt": "Photorealistic live-action cinematic shot. Real human technician. Real abandoned industrial render facility. Wet concrete, rain haze, dust, motivated practical lighting, natural motion blur, 35mm cinema lens grammar, serious grounded physical tone, high dynamic range, no UI fantasy. Scene: technician framed small against huge machine; slow push-in, fan vibration in frame",
+  "negative_prompt": "toy, placeholder, proof object, abstract diagram, fractal, ppm still, slideshow, cartoon, anime, low-detail CGI, game look, plastic texture, fake geometry, interface mockup, watermark"
+}

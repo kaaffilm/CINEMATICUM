@@ -1,0 +1,16 @@
+name: no-toy-film-stack
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  stack-qc:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.x"
+      - run: python3 -m py_compile scripts/qc-no-toy-stack.py scripts/qc-source-shots.py scripts/qc-final-film.py scripts/render-the-last-render-film.py
+      - run: python3 scripts/qc-no-toy-stack.py

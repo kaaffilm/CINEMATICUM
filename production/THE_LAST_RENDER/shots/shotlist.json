@@ -1,0 +1,122 @@
+{
+  "film": "THE_LAST_RENDER",
+  "artifact_class": "realistic_source_shot_short_film",
+  "runtime_target_seconds": 107,
+  "fps": 24,
+  "width": 1920,
+  "height": 1080,
+  "fake_fallback_allowed": false,
+  "toy_renderer_allowed": false,
+  "procedural_placeholder_allowed": false,
+  "required_source_dir": "source/films/THE_LAST_RENDER/shots",
+  "shots": [
+    {
+      "id": "001_service_road_rain",
+      "filename": "001_service_road_rain.mp4",
+      "duration": 6,
+      "description": "night rain on an industrial service road; a lone technician approaches a distant concrete render facility"
+    },
+    {
+      "id": "002_facility_wide",
+      "filename": "002_facility_wide.mp4",
+      "duration": 6,
+      "description": "wide static view of the abandoned facility, sodium light, rain haze, human figure very small"
+    },
+    {
+      "id": "003_security_light_threshold",
+      "filename": "003_security_light_threshold.mp4",
+      "duration": 5,
+      "description": "wet concrete entrance under flickering security light; sealed metal door dominates frame"
+    },
+    {
+      "id": "004_door_access_panel",
+      "filename": "004_door_access_panel.mp4",
+      "duration": 5,
+      "description": "gloved hand opens corroded access panel; green indicator pulse reflected in rainwater"
+    },
+    {
+      "id": "005_door_refuses_body",
+      "filename": "005_door_refuses_body.mp4",
+      "duration": 5,
+      "description": "heavy door opens halfway and jams against the technician; darkness behind threshold"
+    },
+    {
+      "id": "006_corridor_tracking",
+      "filename": "006_corridor_tracking.mp4",
+      "duration": 8,
+      "description": "long handheld corridor tracking shot; dead monitors, hanging cables, leaking water"
+    },
+    {
+      "id": "007_monitor_wall_loop",
+      "filename": "007_monitor_wall_loop.mp4",
+      "duration": 6,
+      "description": "monitor wall repeats unfinished render frame; technician reflection visible in black glass"
+    },
+    {
+      "id": "008_stairwell_descent",
+      "filename": "008_stairwell_descent.mp4",
+      "duration": 7,
+      "description": "concrete stairwell descent, red emergency practical light, mist, controlled handheld tension"
+    },
+    {
+      "id": "009_machine_room_reveal",
+      "filename": "009_machine_room_reveal.mp4",
+      "duration": 9,
+      "description": "wide reveal of server-machine room; central render machine glowing cold blue through dust"
+    },
+    {
+      "id": "010_technician_against_machine",
+      "filename": "010_technician_against_machine.mp4",
+      "duration": 6,
+      "description": "technician framed small against huge machine; slow push-in, fan vibration in frame"
+    },
+    {
+      "id": "011_switch_macro_hesitation",
+      "filename": "011_switch_macro_hesitation.mp4",
+      "duration": 4,
+      "description": "macro close-up of old red kill switch; wet sleeve; human hesitation"
+    },
+    {
+      "id": "012_switch_pull",
+      "filename": "012_switch_pull.mp4",
+      "duration": 3,
+      "description": "switch pulled down; hard mechanical snap; sparks jump from machine housing"
+    },
+    {
+      "id": "013_render_rupture",
+      "filename": "013_render_rupture.mp4",
+      "duration": 6,
+      "description": "machine room floods with broken red-white projection, smoke, rolling shutter stress, panic light"
+    },
+    {
+      "id": "014_machine_blackout",
+      "filename": "014_machine_blackout.mp4",
+      "duration": 5,
+      "description": "near-black machine room; fans spin down; dust visible in emergency light"
+    },
+    {
+      "id": "015_dead_screen_reflection",
+      "filename": "015_dead_screen_reflection.mp4",
+      "duration": 5,
+      "description": "monitor freezes then collapses to black; faint technician reflection remains"
+    },
+    {
+      "id": "016_return_corridor_silence",
+      "filename": "016_return_corridor_silence.mp4",
+      "duration": 7,
+      "description": "technician returns through silent corridor; water drip replaces machine noise"
+    },
+    {
+      "id": "017_dawn_exit",
+      "filename": "017_dawn_exit.mp4",
+      "duration": 8,
+      "description": "exterior dawn rain; technician exits facility into gray sky"
+    },
+    {
+      "id": "018_empty_facility_lockoff",
+      "filename": "018_empty_facility_lockoff.mp4",
+      "duration": 6,
+      "description": "locked-off final wide shot; facility silent in rain; figure leaves frame"
+    }
+  ]
+}

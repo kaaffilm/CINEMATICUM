@@ -1,0 +1,11 @@
+{
+  "film": "THE_LAST_RENDER",
+  "shot_id": "006_corridor_tracking",
+  "filename": "006_corridor_tracking.mp4",
+  "duration_seconds": 8,
+  "width": 1920,
+  "height": 1080,
+  "fps": 24,
+  "prompt": "Photorealistic live-action cinematic shot. Real human technician. Real abandoned industrial render facility. Wet concrete, rain haze, dust, motivated practical lighting, natural motion blur, 35mm cinema lens grammar, serious grounded physical tone, high dynamic range, no UI fantasy. Scene: long handheld corridor tracking shot; dead monitors, hanging cables, leaking water",
+  "negative_prompt": "toy, placeholder, proof object, abstract diagram, fractal, ppm still, slideshow, cartoon, anime, low-detail CGI, game look, plastic texture, fake geometry, interface mockup, watermark"
+}

@@ -1,0 +1,11 @@
+{
+  "film": "THE_LAST_RENDER",
+  "shot_id": "009_machine_room_reveal",
+  "filename": "009_machine_room_reveal.mp4",
+  "duration_seconds": 9,
+  "width": 1920,
+  "height": 1080,
+  "fps": 24,
+  "prompt": "Photorealistic live-action cinematic shot. Real human technician. Real abandoned industrial render facility. Wet concrete, rain haze, dust, motivated practical lighting, natural motion blur, 35mm cinema lens grammar, serious grounded physical tone, high dynamic range, no UI fantasy. Scene: wide reveal of server-machine room; central render machine glowing cold blue through dust",
+  "negative_prompt": "toy, placeholder, proof object, abstract diagram, fractal, ppm still, slideshow, cartoon, anime, low-detail CGI, game look, plastic texture, fake geometry, interface mockup, watermark"
+}

@@ -1,0 +1,15 @@
+{
+  "required_layers": [
+    "rain exterior",
+    "distant transformer hum",
+    "metal door strain",
+    "corridor water drip",
+    "server fan bed",
+    "monitor electrical whine",
+    "switch mechanical snap",
+    "rupture impact",
+    "fan spin-down",
+    "dawn rain silence"
+  ],
+  "final_mix_optional_path": "production/THE_LAST_RENDER/sound/final_mix.wav"
+}
