@@ -1,8 +1,0 @@
-{
-  "schema_version": "cinematicum.publication_not_ready_proof.v1",
-  "case_id": "CASE_001_THE_LAST_RENDER",
-  "publication_ready": false,
-  "issuance_ready": false,
-  "motion_picture_issued": false,
-  "boundary": "Publication cannot be accepted until issuance readiness is accepted."
-}

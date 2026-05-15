@@ -1,9 +1,0 @@
-{
-  "case_id": "CASE_001_THE_LAST_RENDER",
-  "title": "THE LAST RENDER",
-  "gate": "COLOR_GRADE_ACCEPTANCE",
-  "accepted": false,
-  "required_for_film_admissibility": true,
-  "required_for_issuance": true,
-  "reason": "No accepted final color grade exists. Generated proof imagery cannot satisfy final visual finishing."
-}

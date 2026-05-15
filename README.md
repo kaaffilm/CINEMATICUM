@@ -1,26 +1,10 @@
 # CINEMATICUM
 
-CINEMATICUM renders a real playable motion-picture file.
-
-## Render
+CINEMATICUM now does one thing:
 
 ```bash
 bin/cinematicum render
+open dist/films/THE_LAST_RENDER/THE_LAST_RENDER.mp4
 ````
 
-Output:
-
-```text
-dist/films/THE_LAST_RENDER/THE_LAST_RENDER.mp4
-dist/films/THE_LAST_RENDER/THE_LAST_RENDER.manifest.json
-```
-
-Boundary:
-
-```text
-A proof is not a film.
-A hash record is not a film.
-A fake generator is not a film.
-The artifact is the playable MP4.
-```
-
+The artifact is a real playable MP4.

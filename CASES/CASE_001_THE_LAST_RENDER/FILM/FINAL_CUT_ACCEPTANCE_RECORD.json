@@ -1,9 +1,0 @@
-{
-  "case_id": "CASE_001_THE_LAST_RENDER",
-  "title": "THE LAST RENDER",
-  "gate": "FINAL_CUT_ACCEPTANCE",
-  "accepted": false,
-  "required_for_film_admissibility": true,
-  "required_for_issuance": true,
-  "reason": "No accepted final cut exists. Timeline assembly alone is not final-cut authorship."
-}

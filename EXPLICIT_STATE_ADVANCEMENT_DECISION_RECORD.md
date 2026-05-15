@@ -1,5 +1,0 @@
-# EXPLICIT STATE ADVANCEMENT DECISION RECORD
-
-EXPLICIT_STATE_ADVANCEMENT_DECISION_RECORD accepts REQ_001_EXPLICIT_STATE_ADVANCEMENT_REQUEST after FUTURE_AUTHORITY_SATISFACTION_GATE has passed. It authorizes a later state-mutation record but does not itself mutate CURRENT_STATE, create RELEASE_CANDIDATE_READY, admit media, or issue a motion picture.
-
-Next required object: STATE_ADVANCEMENT_EXECUTION_RECORD.

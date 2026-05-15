@@ -1,2 +1,14 @@
 #!/usr/bin/env bash
-python3 -m cinematicum_studio.cli "$@"
+set -euo pipefail
+
+case "${1:-}" in
+  render|film|generate)
+    shift || true
+    exec scripts/render-real-film.sh "$@"
+    ;;
+  *)
+    echo "Usage: bin/cinematicum render"
+    echo "Optional env: DURATION=60 FPS=24 WIDTH=1280 HEIGHT=720"
+    exit 2
+    ;;
+esac

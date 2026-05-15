@@ -1,9 +1,0 @@
-{
-  "case_id": "CASE_001_THE_LAST_RENDER",
-  "title": "THE LAST RENDER",
-  "gate": "SOUND_MIX_ACCEPTANCE",
-  "accepted": false,
-  "required_for_film_admissibility": true,
-  "required_for_issuance": true,
-  "reason": "No accepted final sound mix exists. Silent or placeholder render output cannot satisfy motion-picture completion."
-}

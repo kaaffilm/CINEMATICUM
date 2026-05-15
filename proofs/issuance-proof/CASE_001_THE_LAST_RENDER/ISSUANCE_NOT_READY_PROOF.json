@@ -1,9 +1,0 @@
-{
-  "schema_version": "cinematicum.issuance_not_ready_proof.v1",
-  "case_id": "CASE_001_THE_LAST_RENDER",
-  "proof_type": "negative_issuance_boundary",
-  "issued": false,
-  "reason": "Required final-master, admissibility, continuity, director-acceptance, postproduction, and public-admissibility objects are not all present.",
-  "allowed_public_statement": "release candidate",
-  "disallowed_public_statement": "issued admissible motion picture"
-}
