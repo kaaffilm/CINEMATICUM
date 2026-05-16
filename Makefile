@@ -1,42 +1,56 @@
 SHELL := /bin/bash
+PYTHON ?= python3
 
 FILM := THE_LAST_RENDER
 OUT := dist/films/$(FILM)/$(FILM).mp4
 SOURCE_SHOTS := source/films/$(FILM)/shots
 
-.PHONY: help qc-stack qc-source source-shots render qc-final qc list-shots open clean-local backend-status backend-selftest film
+.PHONY: help qc-stack qc-source qc-source-media source-shots render qc-final qc list-shots open clean-local backend-status backend-selftest film
 
 help:
 	@echo "CINEMATICUM real film stack"
 	@echo ""
-	@echo "make qc-stack     - verify no-toy production stack exists"
-	@echo "make qc-source    - verify required source shot MP4s exist"
-	@echo "make source-shots - acquire required real shot MP4s through VIDEO_GEN_COMMAND"
-	@echo "make render       - assemble real source shots"
-	@echo "make qc-final     - verify final rendered MP4"
-	@echo "make qc           - run stack/source/final QC"
-	@echo "make list-shots   - print required source shot filenames"
-	@echo "make backend-status - verify backend executable is real"
-	@echo "make backend-selftest - verify backend writes a valid MP4"
-	@echo "make film         - one-button real film path"
-	@echo "make open         - open final film"
+	@echo "make qc-stack        - verify no-toy production stack exists"
+	@echo "make qc-source       - verify required source shot MP4s exist and pass media forensics"
+	@echo "make qc-source-media - inspect source shot MP4 realism gates"
+	@echo "make source-shots    - generate/acquire required real shot MP4s via VIDEO_GEN_COMMAND"
+	@echo "make render          - assemble real source shots"
+	@echo "make qc-final        - verify final rendered MP4"
+	@echo "make backend-status  - verify backend executable is real"
+	@echo "make backend-selftest - verify backend writes a valid realistic MP4"
+	@echo "make film            - one-button real film path"
+	@echo "make list-shots      - print required source shot filenames"
+	@echo "make open            - open final film"
 
 qc-stack:
-	python3 scripts/qc-no-toy-stack.py
+	$(PYTHON) scripts/qc-no-toy-stack.py
 
 qc-source:
-	python3 scripts/qc-source-shots.py
+	$(PYTHON) scripts/qc-source-shots.py
+	$(PYTHON) scripts/qc-source-shot-media.py
+
+qc-source-media:
+	$(PYTHON) scripts/qc-source-shot-media.py
 
 source-shots:
-	python3 scripts/generate-source-shots-with-backend.py
+	$(PYTHON) scripts/generate-source-shots-with-backend.py
 
 render:
 	bash scripts/render-the-last-render-film.sh
 
 qc-final:
-	python3 scripts/qc-final-film.py
+	$(PYTHON) scripts/qc-final-film.py
 
 qc: qc-stack qc-source qc-final
+
+list-shots:
+	$(PYTHON) -c 'import json; from pathlib import Path; p=Path("production/THE_LAST_RENDER/shots/shotlist.json"); data=json.loads(p.read_text()); shots=data.get("shots", data); [print(s.get("file") or s.get("filename") or s.get("source") or s.get("path") or (s.get("id","") + ".mp4")) for s in shots]'
+
+open:
+	open "$(OUT)"
+
+clean-local:
+	rm -rf dist/films/$(FILM)
 
 backend-status:
 	@test -n "$$VIDEO_GEN_COMMAND" || (echo "REAL_BACKEND_NOT_CONFIGURED=true"; echo "SET=VIDEO_GEN_COMMAND=/path/to/real/backend make film"; exit 1)
@@ -52,18 +66,7 @@ backend-selftest: backend-status
 	 CINEMATICUM_PROMPT_JSON=production/THE_LAST_RENDER/prompts/001_service_road_rain.json \
 	 CINEMATICUM_OUTPUT_MP4=/tmp/cinematicum-backend-selftest/backend_contract_selftest.mp4 \
 	 "$$VIDEO_GEN_COMMAND"
-	@test -s /tmp/cinematicum-backend-selftest/backend_contract_selftest.mp4 || (echo "BACKEND_CONTRACT_FAIL=true"; echo "REASON=backend_did_not_write_output_mp4"; exit 1)
-	@ffprobe -v error -select_streams v:0 -show_entries stream=codec_name,width,height -of default=nw=1 /tmp/cinematicum-backend-selftest/backend_contract_selftest.mp4 >/dev/null || (echo "BACKEND_CONTRACT_FAIL=true"; echo "REASON=backend_output_is_not_valid_video_mp4"; exit 1)
-	@echo "BACKEND_CONTRACT_SELFTEST_PASS=true"
+	@$(PYTHON) scripts/qc-backend-output.py /tmp/cinematicum-backend-selftest/backend_contract_selftest.mp4
 
 film: qc-stack backend-status backend-selftest source-shots qc-source render qc-final
 	@echo "REAL_FILM_READY=$(OUT)"
-
-list-shots:
-	@python3 -c 'import json; from pathlib import Path; p=Path("production/THE_LAST_RENDER/shots/shotlist.json"); data=json.loads(p.read_text()); shots=data.get("shots", data); [print(s.get("file") or s.get("filename") or s.get("source") or s.get("path") or (s.get("id","") + ".mp4")) for s in shots]'
-
-open:
-	open "$(OUT)"
-
-clean-local:
-	rm -rf dist/films/$(FILM)
