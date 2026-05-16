@@ -4,7 +4,7 @@ FILM := THE_LAST_RENDER
 OUT := dist/films/$(FILM)/$(FILM).mp4
 SOURCE_SHOTS := source/films/$(FILM)/shots
 
-.PHONY: help qc-stack qc-source source-shots render qc-final qc list-shots open clean-local backend-status film
+.PHONY: help qc-stack qc-source source-shots render qc-final qc list-shots open clean-local backend-status backend-selftest film
 
 help:
 	@echo "CINEMATICUM real film stack"
@@ -17,6 +17,7 @@ help:
 	@echo "make qc           - run stack/source/final QC"
 	@echo "make list-shots   - print required source shot filenames"
 	@echo "make backend-status - verify backend executable is real"
+	@echo "make backend-selftest - verify backend writes a valid MP4"
 	@echo "make film         - one-button real film path"
 	@echo "make open         - open final film"
 
@@ -44,7 +45,18 @@ backend-status:
 	@test -x "$$VIDEO_GEN_COMMAND" || (echo "BACKEND_EXECUTABLE_NOT_FOUND=$$VIDEO_GEN_COMMAND"; echo "USE_ACTUAL_EXECUTABLE_PATH=true"; exit 1)
 	@echo "VIDEO_GEN_COMMAND=$$VIDEO_GEN_COMMAND"
 
-film: qc-stack backend-status source-shots qc-source render qc-final
+backend-selftest: backend-status
+	@rm -rf /tmp/cinematicum-backend-selftest
+	@mkdir -p /tmp/cinematicum-backend-selftest
+	@CINEMATICUM_SHOT_ID=backend_contract_selftest \
+	 CINEMATICUM_PROMPT_JSON=production/THE_LAST_RENDER/prompts/001_service_road_rain.json \
+	 CINEMATICUM_OUTPUT_MP4=/tmp/cinematicum-backend-selftest/backend_contract_selftest.mp4 \
+	 "$$VIDEO_GEN_COMMAND"
+	@test -s /tmp/cinematicum-backend-selftest/backend_contract_selftest.mp4 || (echo "BACKEND_CONTRACT_FAIL=true"; echo "REASON=backend_did_not_write_output_mp4"; exit 1)
+	@ffprobe -v error -select_streams v:0 -show_entries stream=codec_name,width,height -of default=nw=1 /tmp/cinematicum-backend-selftest/backend_contract_selftest.mp4 >/dev/null || (echo "BACKEND_CONTRACT_FAIL=true"; echo "REASON=backend_output_is_not_valid_video_mp4"; exit 1)
+	@echo "BACKEND_CONTRACT_SELFTEST_PASS=true"
+
+film: qc-stack backend-status backend-selftest source-shots qc-source render qc-final
 	@echo "REAL_FILM_READY=$(OUT)"
 
 list-shots:
