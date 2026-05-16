@@ -20,11 +20,18 @@ if not SHOTLIST.exists():
     fail(f"SHOTLIST_MISSING={SHOTLIST}")
 
 backend = os.environ.get("VIDEO_GEN_COMMAND", "").strip()
-if not backend:
+PLACEHOLDERS = {
+    "your_real_video_backend_command",
+    "your_generator_command_here",
+    "real_video_backend",
+    "your_backend",
+}
+if not backend or backend in PLACEHOLDERS:
     print("SOURCE_SHOT_GENERATION_REFUSED=true")
-    print("REASON=VIDEO_GEN_COMMAND_NOT_SET")
+    print("REASON=REAL_VIDEO_BACKEND_NOT_CONFIGURED")
     print("THIS_STACK_DOES_NOT_FAKE_REALISTIC_FILM=true")
-    print("SET_BACKEND_EXAMPLE=VIDEO_GEN_COMMAND='your_real_video_backend_command' make source-shots")
+    print("REQUIRED=Set VIDEO_GEN_COMMAND to an actual executable wrapper")
+    print("EXAMPLE=VIDEO_GEN_COMMAND=./scripts/backends/your-real-backend.sh make source-shots")
     print(f"OUTPUT_DIR={OUT}")
     raise SystemExit(1)
 
@@ -59,6 +66,19 @@ for shot in shots:
     env["CINEMATICUM_FILM"] = FILM
 
     cmd = shlex.split(backend)
+    exe = cmd[0]
+    if "/" in exe:
+        if not Path(exe).exists():
+            print("SOURCE_SHOT_GENERATION_FAIL=true")
+            print(f"REASON=BACKEND_EXECUTABLE_NOT_FOUND:{exe}")
+            raise SystemExit(1)
+    else:
+        import shutil
+        if shutil.which(exe) is None:
+            print("SOURCE_SHOT_GENERATION_FAIL=true")
+            print(f"REASON=BACKEND_EXECUTABLE_NOT_FOUND:{exe}")
+            raise SystemExit(1)
+
     print(f"GENERATE_SOURCE_SHOT={filename}")
     result = subprocess.run(cmd, env=env)
     if result.returncode != 0:

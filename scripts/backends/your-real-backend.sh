@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+: "${CINEMATICUM_SHOT_ID:?missing CINEMATICUM_SHOT_ID}"
+: "${CINEMATICUM_PROMPT_JSON:?missing CINEMATICUM_PROMPT_JSON}"
+: "${CINEMATICUM_OUTPUT_MP4:?missing CINEMATICUM_OUTPUT_MP4}"
+
+cat <<EOF
+REAL_BACKEND_NOT_CONNECTED=true
+SHOT_ID=$CINEMATICUM_SHOT_ID
+PROMPT_JSON=$CINEMATICUM_PROMPT_JSON
+OUTPUT_MP4=$CINEMATICUM_OUTPUT_MP4
+
+Replace this file with a real video-generation call.
+It must write the finished MP4 to CINEMATICUM_OUTPUT_MP4.
+EOF
+
+exit 1
