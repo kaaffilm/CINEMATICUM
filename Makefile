@@ -4,13 +4,14 @@ FILM := THE_LAST_RENDER
 OUT := dist/films/$(FILM)/$(FILM).mp4
 SOURCE_SHOTS := source/films/$(FILM)/shots
 
-.PHONY: help qc-stack qc-source render qc-final qc list-shots open clean-local
+.PHONY: help qc-stack qc-source source-shots render qc-final qc list-shots open clean-local
 
 help:
 	echo "CINEMATICUM real film stack"
 	echo ""
 	echo "make qc-stack    - verify no-toy production stack exists"
 	echo "make qc-source   - verify required source shot MP4s exist"
+	echo "make source-shots - generate/acquire required real shot MP4s via VIDEO_GEN_COMMAND"
 	echo "make render      - assemble real source shots or use VIDEO_GEN_COMMAND"
 	echo "make qc-final    - verify final rendered MP4"
 	echo "make qc          - run stack/source/final QC"
@@ -22,6 +23,9 @@ qc-stack:
 
 qc-source:
 	python3 scripts/qc-source-shots.py
+
+source-shots:
+	python3 scripts/generate-source-shots-with-backend.py
 
 render:
 	bash scripts/render-the-last-render-film.sh
