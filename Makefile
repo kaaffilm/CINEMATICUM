@@ -43,3 +43,13 @@ open:
 
 clean-local:
 	rm -rf dist/films/$(FILM)
+
+.PHONY: film backend-status
+
+backend-status:
+	@test -n "$$VIDEO_GEN_COMMAND" || (echo "REAL_BACKEND_NOT_CONFIGURED=true"; echo "SET=VIDEO_GEN_COMMAND=/path/to/real/backend make film"; exit 1)
+	@test "$$VIDEO_GEN_COMMAND" != "./scripts/backends/your-real-backend.sh" || (echo "PLACEHOLDER_BACKEND_REFUSED=true"; echo "REPLACE=scripts/backends/your-real-backend.sh with a real video backend call"; exit 1)
+	@echo "VIDEO_GEN_COMMAND=$$VIDEO_GEN_COMMAND"
+
+film: qc-stack backend-status source-shots qc-source render qc-final
+	@echo "REAL_FILM_READY=$(OUT)"
