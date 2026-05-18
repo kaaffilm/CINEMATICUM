@@ -71,3 +71,7 @@ backend-selftest: backend-status
 
 film: qc-stack backend-status backend-selftest source-shots qc-source render qc-final
 	@echo "REAL_FILM_READY=$(OUT)"
+
+.PHONY: qc-final-media-selftest
+qc-final-media-selftest:
+	bash scripts/qc-final-film-media-selftest.sh
