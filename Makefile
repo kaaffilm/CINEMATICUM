@@ -86,3 +86,28 @@ film-native: qc-stack native-backend-status
 save-api-workflow:
 	@test -n "$$API_WORKFLOW" || (echo "SET=API_WORKFLOW=/path/to/exported-api.json make save-api-workflow"; exit 1)
 	node scripts/local/save-comfyui-current-api-workflow.mjs production/THE_LAST_RENDER/workflows/comfyui-api.json "$$API_WORKFLOW"
+.PHONY: select-wan-workflow convert-native-workflow native-workflow-status native-backend-status source-shot-one-native film-native start-comfyui
+
+select-wan-workflow:
+	node scripts/local/select-wan-workflow.mjs
+
+convert-native-workflow:
+	node scripts/local/convert-comfyui-ui-workflow-to-api.mjs
+
+native-workflow-status:
+	node scripts/local/native-workflow-status.mjs
+
+start-comfyui:
+	bash scripts/local/start-comfyui-daemon.sh
+
+native-backend-status: start-comfyui
+	test -f production/THE_LAST_RENDER/workflows/comfyui-api.json || $(MAKE) select-wan-workflow
+	$(MAKE) convert-native-workflow
+	$(MAKE) native-workflow-status
+	@echo "CINEMATICUM_NATIVE_BACKEND_READY=true"
+
+source-shot-one-native: native-backend-status
+	VIDEO_GEN_COMMAND="$(CURDIR)/scripts/backends/cinematicum-native-comfyui-backend.mjs" $(MAKE) source-shot-one
+
+film-native: qc-stack native-backend-status
+	VIDEO_GEN_COMMAND="$(CURDIR)/scripts/backends/cinematicum-native-comfyui-backend.mjs" $(MAKE) film
