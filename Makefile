@@ -40,6 +40,7 @@ render:
 
 qc-final:
 	$(PYTHON) scripts/qc-final-film.py
+	$(PYTHON) scripts/qc-final-film-media.py
 
 qc: qc-stack qc-source qc-final
 
