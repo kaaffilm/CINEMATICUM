@@ -55,23 +55,34 @@ backend-selftest: backend-status
 	@CINEMATICUM_SHOT_ID=backend_contract_selftest CINEMATICUM_PROMPT_JSON=production/THE_LAST_RENDER/prompts/001_service_road_rain.json CINEMATICUM_OUTPUT_MP4=/tmp/cinematicum-backend-selftest/backend_contract_selftest.mp4 "$$VIDEO_GEN_COMMAND"
 	@python3 scripts/qc-backend-output.py /tmp/cinematicum-backend-selftest/backend_contract_selftest.mp4
 
-native-backend-status:
-	@node "$(NATIVE_BACKEND)" --status
-
-source-shot-one-native: native-backend-status
-	VIDEO_GEN_COMMAND="$(NATIVE_BACKEND)" $(MAKE) source-shot-one
-
 source-shots-native: native-backend-status
 	VIDEO_GEN_COMMAND="$(NATIVE_BACKEND)" $(MAKE) source-shots
 
 film: qc-stack backend-status backend-selftest source-shots qc-source render qc-final
 	@echo "REAL_FILM_READY=$(OUT)"
 
-film-native: qc-stack native-backend-status
-	VIDEO_GEN_COMMAND="$(NATIVE_BACKEND)" $(MAKE) film
-
 open:
 	open "$(OUT)"
 
 clean-local:
 	rm -rf dist/films/$(FILM)
+
+.PHONY: native-workflow-status native-backend-status source-shot-one-native film-native save-api-workflow
+
+native-workflow-status:
+	node scripts/local/native-workflow-status.mjs
+
+native-backend-status: native-workflow-status
+	@echo "CINEMATICUM_NATIVE_BACKEND_READY=true"
+	@echo "COMFYUI_URL=http://127.0.0.1:8188"
+	@echo "WORKFLOW_JSON=production/THE_LAST_RENDER/workflows/comfyui-api.json"
+
+source-shot-one-native: native-backend-status
+	VIDEO_GEN_COMMAND="$(CURDIR)/scripts/backends/cinematicum-native-comfyui-backend.mjs" $(MAKE) source-shot-one
+
+film-native: qc-stack native-backend-status
+	VIDEO_GEN_COMMAND="$(CURDIR)/scripts/backends/cinematicum-native-comfyui-backend.mjs" $(MAKE) film
+
+save-api-workflow:
+	@test -n "$$API_WORKFLOW" || (echo "SET=API_WORKFLOW=/path/to/exported-api.json make save-api-workflow"; exit 1)
+	node scripts/local/save-comfyui-current-api-workflow.mjs production/THE_LAST_RENDER/workflows/comfyui-api.json "$$API_WORKFLOW"
