@@ -74,4 +74,8 @@ film: qc-stack backend-status backend-selftest source-shots qc-source render qc-
 
 .PHONY: qc-final-media-selftest
 qc-final-media-selftest:
-	bash scripts/qc-final-film-media-selftest.sh
+	bash scripts/qc-final-film-media-selftest.sh\n
+.PHONY: source-shot-one
+source-shot-one:
+	python3 scripts/generate-one-source-shot-with-backend.py
+	python3 scripts/qc-source-shot-media.py source/films/$(FILM)/shots/$${SHOT_ID}.mp4
