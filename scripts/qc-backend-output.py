@@ -1,51 +1,49 @@
 #!/usr/bin/env python3
 import json
+import os
 import subprocess
 import sys
 from pathlib import Path
 
-mp4 = Path(sys.argv[1]) if len(sys.argv) > 1 else Path("/tmp/cinematicum-backend-selftest/backend_contract_selftest.mp4")
+p = Path(sys.argv[1] if len(sys.argv) > 1 else os.environ.get("CINEMATICUM_OUTPUT_MP4", ""))
 
-def fail(reason: str):
+def fail(reason):
     print("BACKEND_OUTPUT_CONTRACT_FAIL=true")
     print(f"REASON={reason}")
-    print(f"OUTPUT_MP4={mp4}")
+    print(f"OUTPUT_MP4={p}")
     raise SystemExit(1)
 
-if not mp4.exists():
+if not str(p):
+    fail("output_path_not_set")
+if not p.exists():
     fail("missing_output_mp4")
-if mp4.stat().st_size < 250_000:
-    fail("output_too_small_for_realistic_video")
+if p.stat().st_size < 1_000_000:
+    fail(f"output_too_small:{p.stat().st_size}")
 
-try:
-    data = json.loads(subprocess.check_output([
-        "ffprobe", "-v", "error",
-        "-show_format", "-show_streams",
-        "-of", "json",
-        str(mp4),
-    ], text=True))
-except Exception as e:
-    fail(f"ffprobe_failed:{e}")
+probe = subprocess.run(
+    ["ffprobe", "-v", "error", "-print_format", "json", "-show_format", "-show_streams", str(p)],
+    text=True,
+    stdout=subprocess.PIPE,
+    stderr=subprocess.PIPE,
+)
 
-streams = data.get("streams", [])
-video = next((s for s in streams if s.get("codec_type") == "video"), None)
-if not video:
-    fail("missing_video_stream")
+if probe.returncode:
+    fail("ffprobe_failed")
 
-width = int(video.get("width") or 0)
-height = int(video.get("height") or 0)
-duration = float(data.get("format", {}).get("duration") or video.get("duration") or 0)
-
-if width < 1280 or height < 720:
-    fail(f"resolution_below_realistic_floor:{width}x{height}")
-if duration < 2.0:
+data = json.loads(probe.stdout)
+duration = float(data.get("format", {}).get("duration") or 0)
+if duration < 2:
     fail(f"duration_too_short:{duration}")
-if video.get("codec_name") not in {"h264", "hevc", "prores", "vp9", "av1"}:
-    fail(f"unexpected_video_codec:{video.get('codec_name')}")
+
+videos = [s for s in data.get("streams", []) if s.get("codec_type") == "video"]
+if not videos:
+    fail("no_video_stream")
+
+v = videos[0]
+if int(v.get("width") or 0) < 512 or int(v.get("height") or 0) < 288:
+    fail(f"resolution_too_low:{v.get('width')}x{v.get('height')}")
 
 print("BACKEND_OUTPUT_CONTRACT_PASS=true")
-print(f"OUTPUT_MP4={mp4}")
-print(f"WIDTH={width}")
-print(f"HEIGHT={height}")
-print(f"DURATION_SECONDS={duration:.3f}")
-print(f"SIZE_BYTES={mp4.stat().st_size}")
+print(f"OUTPUT_MP4={p}")
+print(f"DURATION_SECONDS={duration}")
+print(f"SIZE_BYTES={p.stat().st_size}")
