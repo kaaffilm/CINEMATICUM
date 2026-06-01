@@ -1,0 +1,25 @@
+name: external-auditor-pack
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+
+jobs:
+  verify-external-auditor-pack:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          fetch-tags: true
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - name: Verify external auditor pack
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: node scripts/verify-external-auditor-pack.mjs
