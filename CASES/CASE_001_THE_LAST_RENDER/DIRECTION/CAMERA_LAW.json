@@ -1,0 +1,34 @@
+{
+  "object_type": "CINEMATICUM_CAMERA_LAW",
+  "schema_version": "0.9.0",
+  "case_id": "CASE_001_THE_LAST_RENDER",
+  "camera_axioms": [
+    "Camera motion is evidence pressure, not ornament.",
+    "Symmetry means jurisdiction.",
+    "Drift means uncertainty.",
+    "Stillness means terminal recognition.",
+    "Reverse motion means rejected claim."
+  ],
+  "allowed_motion_classes": [
+    "slow_inward_drift",
+    "lateral_tracking",
+    "micro_push_in",
+    "fragmented_parallax",
+    "vertical_rise",
+    "locked_symmetrical_hold",
+    "hard_cut_from_void",
+    "reverse_dolly",
+    "centered_close_authority",
+    "terminal_stillness"
+  ],
+  "disallowed_motion_classes": [
+    "random shake",
+    "style-only orbit",
+    "unmotivated zoom",
+    "decorative pan"
+  ],
+  "proves_camera_law_exists": true,
+  "proves_truth": false,
+  "proves_admissibility": false,
+  "proves_external_reality": false
+}

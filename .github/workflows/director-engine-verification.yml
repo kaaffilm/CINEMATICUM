@@ -1,0 +1,13 @@
+name: director-engine-verification
+
+on:
+  pull_request:
+  push:
+
+jobs:
+  verify-director-engine:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Verify DIRECTOR ENGINE
+        run: node scripts/verify-case-001-director-engine.mjs

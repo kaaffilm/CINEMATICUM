@@ -1,0 +1,25 @@
+{
+  "object_type": "CINEMATICUM_DIRECTORIAL_PRINCIPLES",
+  "schema_version": "0.9.0",
+  "case_id": "CASE_001_THE_LAST_RENDER",
+  "film_title": "THE LAST RENDER",
+  "governing_sentence": "The last witness does not survive the collapse; he becomes the only frame the collapse cannot erase.",
+  "emotional_axis": [
+    "abandonment",
+    "recognition",
+    "machine memory",
+    "witness burden",
+    "terminal authorship"
+  ],
+  "negative_law": [
+    "No shot may exist as decoration only.",
+    "No transition may hide a missing causal relation.",
+    "No image may claim external reality.",
+    "No proof object may claim truth or admissibility."
+  ],
+  "directorial_target": "Every shot must increase witness pressure or reduce epistemic escape.",
+  "proves_directorial_intent": true,
+  "proves_truth": false,
+  "proves_admissibility": false,
+  "proves_external_reality": false
+}

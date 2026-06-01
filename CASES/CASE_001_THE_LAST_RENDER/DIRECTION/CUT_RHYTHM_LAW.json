@@ -1,0 +1,54 @@
+{
+  "object_type": "CINEMATICUM_CUT_RHYTHM_LAW",
+  "schema_version": "0.9.0",
+  "case_id": "CASE_001_THE_LAST_RENDER",
+  "total_duration_seconds": 60,
+  "frame_count": 1440,
+  "fps": 24,
+  "rhythm": [
+    {
+      "segment": "opening",
+      "shots": [
+        "S001",
+        "S002"
+      ],
+      "function": "orientation under pressure"
+    },
+    {
+      "segment": "wound",
+      "shots": [
+        "S003",
+        "S004",
+        "S005"
+      ],
+      "function": "continuity damage"
+    },
+    {
+      "segment": "refusal",
+      "shots": [
+        "S006",
+        "S007",
+        "S008"
+      ],
+      "function": "claim filtering"
+    },
+    {
+      "segment": "witness",
+      "shots": [
+        "S009",
+        "S010"
+      ],
+      "function": "terminal recognition"
+    }
+  ],
+  "cut_rule": "Cuts must move from spatial condition to epistemic consequence.",
+  "forbidden_cut_states": [
+    "montage without causal pressure",
+    "beauty cut without function",
+    "transition that hides missing proof"
+  ],
+  "proves_cut_rhythm_law_exists": true,
+  "proves_truth": false,
+  "proves_admissibility": false,
+  "proves_external_reality": false
+}
