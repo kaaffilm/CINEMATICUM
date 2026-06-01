@@ -1,9 +1,19 @@
 #!/usr/bin/env node
 import { execFileSync } from "node:child_process";
+
 import { existsSync, mkdirSync, mkdtempSync, readFileSync, rmSync, statSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
 import { createHash } from "node:crypto";
+
+const packageJson = JSON.parse(readFileSync("package.json", "utf8"));
+const packageName = packageJson.name;
+const packageVersion = packageJson.version;
+const packageTarballName = `${packageName.replace("@", "").replace("/", "-")}-${packageVersion}.tgz`;
+const packageTarball = join("dist", packageTarballName);
+
+
+
 
 function run(cmd, args, opts = {}) {
   return execFileSync(cmd, args, {
@@ -34,7 +44,7 @@ mkdirSync(dist, { recursive: true });
 
 runInherit("node", ["scripts/verify-case-001-product-boundary.mjs"], { cwd: ROOT });
 
-for (const f of ["kaaffilm-cinematicum-1.1.0.tgz", "CASE_001_THE_LAST_RENDER_INSTALLABLE_PACKAGE_PROOF.json"]) {
+for (const f of [packageTarballName, "CASE_001_THE_LAST_RENDER_INSTALLABLE_PACKAGE_PROOF.json"]) {
   const p = join(dist, f);
   if (existsSync(p)) rmSync(p, { force: true });
 }
@@ -44,7 +54,7 @@ const tgzName = packOutput.trim().split(/\n/).pop();
 const tgz = resolve(dist, tgzName);
 
 if (!existsSync(tgz)) throw new Error(`package tarball missing: ${tgz}`);
-if (!tgzName.includes("kaaffilm-cinematicum-1.1.0.tgz")) throw new Error(`unexpected package tarball: ${tgzName}`);
+if (!String(tgzName).includes(packageTarballName)) throw new Error(`unexpected package tarball: ${tgzName}; expected ${packageTarballName}`);
 
 const smoke = mkdtempSync(join(tmpdir(), "cinematicum-install-smoke-"));
 runInherit("npm", ["init", "-y"], { cwd: smoke });
@@ -70,11 +80,11 @@ if (studio.network_runtime_required !== false) throw new Error("studio requires 
 
 const result = {
   object_type: "CINEMATICUM_INSTALLABLE_PRODUCT_BOUNDARY_VERIFICATION_RESULT",
-  schema_version: "1.1.0",
+  schema_version: packageVersion,
   valid: true,
   errors: [],
-  package_name: "@kaaffilm/cinematicum",
-  package_version: "1.1.0",
+  package_name: packageName,
+  package_version: packageVersion,
   package_tarball: `dist/${tgzName}`,
   package_tarball_sha256: sha256(tgz),
   package_tarball_size_bytes: statSync(tgz).size,
