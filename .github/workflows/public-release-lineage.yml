@@ -1,0 +1,25 @@
+name: public-release-lineage
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+
+jobs:
+  verify-public-release-lineage:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          fetch-tags: true
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - name: Verify public release lineage ledger
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: node scripts/verify-public-release-lineage-ledger.mjs
