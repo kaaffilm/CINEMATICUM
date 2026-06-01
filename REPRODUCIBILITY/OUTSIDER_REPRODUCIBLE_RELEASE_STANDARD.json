@@ -1,0 +1,33 @@
+{
+  "object_type": "CINEMATICUM_OUTSIDER_REPRODUCIBLE_RELEASE_STANDARD",
+  "schema_version": "1.2.0",
+  "jurisdiction": "CINEMATICUM",
+  "case_id": "CASE_001_THE_LAST_RENDER",
+  "standard": "An outsider must be able to verify the issued film artifact from a sealed release bundle without trusting the author's working tree.",
+  "required_properties": [
+    "deterministic_release_bundle",
+    "deterministic_manifest",
+    "release_asset_hash_ledger",
+    "single_json_cli_commands",
+    "gitless_runtime_verification",
+    "networkless_runtime_verification",
+    "artifact_hash_recovered_from_extracted_bundle",
+    "truth_not_claimed",
+    "admissibility_not_claimed",
+    "external_reality_not_claimed"
+  ],
+  "forbidden_dependencies": [
+    "external API",
+    "external media",
+    "network runtime dependency",
+    "manual media selection",
+    "candidate selection",
+    "author working tree trust",
+    "git repository requirement after bundle extraction"
+  ],
+  "canonical_artifact_sha256": "f23d3da43ed0dfc0a4f97b7c6ad722107cc2531ac584780424ace2c45ff5a192",
+  "proves_outsider_reproducible_release": true,
+  "proves_truth": false,
+  "proves_admissibility": false,
+  "proves_external_reality": false
+}

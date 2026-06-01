@@ -1,0 +1,20 @@
+{
+  "object_type": "CINEMATICUM_RELEASE_ASSET_HASH_LEDGER",
+  "schema_version": "1.2.0",
+  "case_id": "CASE_001_THE_LAST_RENDER",
+  "deterministic": true,
+  "generated_at": "1970-01-01T00:00:00.000Z",
+  "release_bundle": "dist/CASE_001_THE_LAST_RENDER_OUTSIDER_REPRODUCIBLE_RELEASE_BUNDLE.tar.gz",
+  "release_bundle_sha256": "0cc6f70f229671d4ba3a14e9d9c999d7824d34cca14a9ab44d099a5df60bd128",
+  "release_bundle_size_bytes": 2273299,
+  "outsider_replay_manifest": "REPRODUCIBILITY/OUTSIDER_REPLAY_MANIFEST.json",
+  "outsider_replay_manifest_sha256": "14d2fdc55da12b78af07283cad6a90a6ae8ec240eab3772d853afb244bb6652a",
+  "bundle_embedded_manifest_sha256": "14d2fdc55da12b78af07283cad6a90a6ae8ec240eab3772d853afb244bb6652a",
+  "canonical_artifact_path": "CASES/CASE_001_THE_LAST_RENDER/FILM/CASE_001_THE_LAST_RENDER_GODCUT_0001.mp4",
+  "canonical_artifact_sha256": "f23d3da43ed0dfc0a4f97b7c6ad722107cc2531ac584780424ace2c45ff5a192",
+  "proves_outsider_reproducible_release": true,
+  "proves_film_issued": true,
+  "proves_truth": false,
+  "proves_admissibility": false,
+  "proves_external_reality": false
+}

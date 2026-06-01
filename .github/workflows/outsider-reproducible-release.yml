@@ -1,0 +1,17 @@
+name: outsider-reproducible-release
+
+on:
+  pull_request:
+  push:
+    branches: [ main ]
+
+jobs:
+  verify-outsider-reproducible-release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "24"
+      - name: Verify outsider reproducible release boundary
+        run: node scripts/verify-outsider-reproducible-release.mjs
