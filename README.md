@@ -142,3 +142,22 @@ node scripts/verify-outsider-reproducible-release.mjs
 ```
 
 <!-- CINEMATICUM_OUTSIDER_REPRODUCIBLE_RELEASE_V12_END -->
+
+<!-- CINEMATICUM_PUBLIC_RELEASE_CONSUMPTION_V130_START -->
+
+## CINEMATICUM v1.3 — Public Release Consumption Receipt
+
+CINEMATICUM v1.3 adds a public release consumption receipt.
+
+The verifier starts from the public GitHub release assets for `v1.2.0-outsider-reproducible-release`, downloads the release bundle and reproducibility ledgers, verifies their SHA-256 values, extracts the outsider bundle into a temporary clean directory, runs the bundled CLI commands, verifies the film artifact hash, and emits:
+
+```text
+CONSUMPTION/CASE_001_PUBLIC_RELEASE_CONSUMPTION_RECEIPT.json
+```
+
+This proves public release asset consumption and extracted outsider replay.
+
+It does not prove truth, admissibility, or external reality.
+
+<!-- CINEMATICUM_PUBLIC_RELEASE_CONSUMPTION_V130_END -->
+
