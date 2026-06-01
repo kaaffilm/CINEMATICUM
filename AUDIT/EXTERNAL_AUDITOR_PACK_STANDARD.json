@@ -1,0 +1,27 @@
+{
+  "object_type": "CINEMATICUM_EXTERNAL_AUDITOR_PACK_STANDARD",
+  "schema_version": "1.5.0",
+  "jurisdiction": "CINEMATICUM",
+  "purpose": "Define a minimal external auditor pack for public release replay.",
+  "standard": {
+    "pack_must_be_public_pointer_only": true,
+    "pack_must_not_embed_source_tree": true,
+    "pack_must_not_embed_film_media": true,
+    "pack_must_not_require_private_repository_state": true,
+    "pack_must_name_public_release_urls": true,
+    "pack_must_name_expected_asset_hashes": true,
+    "pack_must_name_expected_json_object_types": true,
+    "pack_must_name_truth_boundary": true
+  },
+  "claims_allowed": [
+    "public_release_lineage_available",
+    "public_release_assets_auditable",
+    "outsider_replay_protocol_defined",
+    "film_issuance_chain_preserved"
+  ],
+  "claims_forbidden": [
+    "truth",
+    "admissibility",
+    "external_reality"
+  ]
+}

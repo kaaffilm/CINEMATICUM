@@ -179,3 +179,21 @@ It does not prove truth, admissibility, or external reality.
 
 <!-- CINEMATICUM_PUBLIC_RELEASE_LINEAGE_V140_END -->
 
+<!-- CINEMATICUM_EXTERNAL_AUDITOR_PACK_V150_START -->
+
+## CINEMATICUM v1.5 — External Auditor Pack
+
+CINEMATICUM v1.5 adds a minimal external auditor pack:
+
+```text
+AUDIT/CINEMATICUM_EXTERNAL_AUDITOR_PACK.json
+```
+
+The pack is public-pointer-only. It does not embed the source tree or film media. It names the public release URLs, expected asset hashes, expected replay commands, expected JSON object types, expected artifact hash, and the runtime boundary after public asset acquisition.
+
+It proves that an external auditor has a machine-readable audit contract.
+
+It does not prove truth, admissibility, or external reality.
+
+<!-- CINEMATICUM_EXTERNAL_AUDITOR_PACK_V150_END -->
+

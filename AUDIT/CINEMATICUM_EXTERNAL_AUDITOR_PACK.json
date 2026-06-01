@@ -1,0 +1,281 @@
+{
+  "object_type": "CINEMATICUM_EXTERNAL_AUDITOR_PACK",
+  "schema_version": "1.5.0",
+  "jurisdiction": "CINEMATICUM",
+  "valid": true,
+  "errors": [],
+  "repository": "kaaffilm/CINEMATICUM",
+  "package_name": "@kaaffilm/cinematicum",
+  "package_version": "1.5.0",
+  "generated_from_head": "ed89382855b922be756e83e3cb64e3e29c5d9155",
+  "standard": {
+    "path": "AUDIT/EXTERNAL_AUDITOR_PACK_STANDARD.json",
+    "sha256": "b380b2f9b2def8779b5b58a6dc24bc635ca87e6977eb36936a8d0bd4ab63f388",
+    "object_type": "CINEMATICUM_EXTERNAL_AUDITOR_PACK_STANDARD"
+  },
+  "public_release_lineage": {
+    "tag": "v1.4.0-public-release-lineage-ledger",
+    "release_url": "https://github.com/kaaffilm/CINEMATICUM/releases/tag/v1.4.0-public-release-lineage-ledger",
+    "ledger_path": "RELEASES/CINEMATICUM_PUBLIC_RELEASE_LINEAGE_LEDGER.json",
+    "ledger_sha256": "2df9366a58c1481c31f0f2dcc76497b5eed05430c79592cdc2bbb26194ce0241",
+    "ledger_object_type": "CINEMATICUM_PUBLIC_RELEASE_LINEAGE_LEDGER",
+    "release_count": 5,
+    "ancestry_edges_verified": 4
+  },
+  "public_releases": [
+    {
+      "tag": "v0.9.0-director-engine",
+      "tag_commit": "02d8fed4675aafa13630d5b99102d9319e70853e",
+      "release_url": "https://github.com/kaaffilm/CINEMATICUM/releases/tag/v0.9.0-director-engine",
+      "release_name": "v0.9.0-director-engine",
+      "release_published_at": "2026-06-01T13:43:20Z",
+      "release_target_commitish": "main",
+      "public_assets": [
+        {
+          "name": "CAMERA_LAW.json",
+          "size": 900,
+          "url": "https://github.com/kaaffilm/CINEMATICUM/releases/download/v0.9.0-director-engine/CAMERA_LAW.json"
+        },
+        {
+          "name": "CUT_RHYTHM_LAW.json",
+          "size": 1154,
+          "url": "https://github.com/kaaffilm/CINEMATICUM/releases/download/v0.9.0-director-engine/CUT_RHYTHM_LAW.json"
+        },
+        {
+          "name": "director-engine-build-result.json",
+          "size": 1009,
+          "url": "https://github.com/kaaffilm/CINEMATICUM/releases/download/v0.9.0-director-engine/director-engine-build-result.json"
+        },
+        {
+          "name": "DIRECTORIAL_PRINCIPLES.json",
+          "size": 881,
+          "url": "https://github.com/kaaffilm/CINEMATICUM/releases/download/v0.9.0-director-engine/DIRECTORIAL_PRINCIPLES.json"
+        },
+        {
+          "name": "DIRECTOR_DECISION_GRAPH.json",
+          "size": 3357,
+          "url": "https://github.com/kaaffilm/CINEMATICUM/releases/download/v0.9.0-director-engine/DIRECTOR_DECISION_GRAPH.json"
+        },
+        {
+          "name": "DIRECTOR_ENGINE_MANIFEST.json",
+          "size": 3184,
+          "url": "https://github.com/kaaffilm/CINEMATICUM/releases/download/v0.9.0-director-engine/DIRECTOR_ENGINE_MANIFEST.json"
+        },
+        {
+          "name": "SCORE_LAW.json",
+          "size": 1573,
+          "url": "https://github.com/kaaffilm/CINEMATICUM/releases/download/v0.9.0-director-engine/SCORE_LAW.json"
+        },
+        {
+          "name": "SHOT_GRAMMAR.json",
+          "size": 4678,
+          "url": "https://github.com/kaaffilm/CINEMATICUM/releases/download/v0.9.0-director-engine/SHOT_GRAMMAR.json"
+        }
+      ]
+    },
+    {
+      "tag": "v1.0.0-product-boundary",
+      "tag_commit": "9a5edf11cf56eacf62ef5a302ce67a0c9f66919a",
+      "release_url": "https://github.com/kaaffilm/CINEMATICUM/releases/tag/v1.0.0-product-boundary",
+      "release_name": "v1.0.0-product-boundary",
+      "release_published_at": "2026-06-01T13:51:13Z",
+      "release_target_commitish": "main",
+      "public_assets": [
+        {
+          "name": "CASE_001_PRODUCT_BOUNDARY.json",
+          "size": 994,
+          "url": "https://github.com/kaaffilm/CINEMATICUM/releases/download/v1.0.0-product-boundary/CASE_001_PRODUCT_BOUNDARY.json"
+        },
+        {
+          "name": "CASE_001_THE_LAST_RENDER_RELEASE_BUNDLE.tar.gz",
+          "size": 2263796,
+          "url": "https://github.com/kaaffilm/CINEMATICUM/releases/download/v1.0.0-product-boundary/CASE_001_THE_LAST_RENDER_RELEASE_BUNDLE.tar.gz"
+        },
+        {
+          "name": "CASE_001_THE_LAST_RENDER_RELEASE_BUNDLE_MANIFEST.json",
+          "size": 5010,
+          "url": "https://github.com/kaaffilm/CINEMATICUM/releases/download/v1.0.0-product-boundary/CASE_001_THE_LAST_RENDER_RELEASE_BUNDLE_MANIFEST.json"
+        }
+      ]
+    },
+    {
+      "tag": "v1.1.0-installable-product-boundary",
+      "tag_commit": "8b2a4f45d49db3d2b1c182374f0346bb90cf444f",
+      "release_url": "https://github.com/kaaffilm/CINEMATICUM/releases/tag/v1.1.0-installable-product-boundary",
+      "release_name": "v1.1.0-installable-product-boundary",
+      "release_published_at": "2026-06-01T17:02:34Z",
+      "release_target_commitish": "main",
+      "public_assets": [
+        {
+          "name": "CASE_001_THE_LAST_RENDER_RELEASE_BUNDLE.tar.gz",
+          "size": 2263791,
+          "url": "https://github.com/kaaffilm/CINEMATICUM/releases/download/v1.1.0-installable-product-boundary/CASE_001_THE_LAST_RENDER_RELEASE_BUNDLE.tar.gz"
+        },
+        {
+          "name": "CASE_001_THE_LAST_RENDER_RELEASE_BUNDLE_MANIFEST.json",
+          "size": 5010,
+          "url": "https://github.com/kaaffilm/CINEMATICUM/releases/download/v1.1.0-installable-product-boundary/CASE_001_THE_LAST_RENDER_RELEASE_BUNDLE_MANIFEST.json"
+        },
+        {
+          "name": "INSTALLABLE_PRODUCT_BOUNDARY.json",
+          "size": 1012,
+          "url": "https://github.com/kaaffilm/CINEMATICUM/releases/download/v1.1.0-installable-product-boundary/INSTALLABLE_PRODUCT_BOUNDARY.json"
+        },
+        {
+          "name": "kaaffilm-cinematicum-1.1.0.tgz",
+          "size": 2295398,
+          "url": "https://github.com/kaaffilm/CINEMATICUM/releases/download/v1.1.0-installable-product-boundary/kaaffilm-cinematicum-1.1.0.tgz"
+        }
+      ]
+    },
+    {
+      "tag": "v1.2.0-outsider-reproducible-release",
+      "tag_commit": "bbd5469810d0a5a446c94fa37fe1c71e47e68b97",
+      "release_url": "https://github.com/kaaffilm/CINEMATICUM/releases/tag/v1.2.0-outsider-reproducible-release",
+      "release_name": "v1.2.0-outsider-reproducible-release",
+      "release_published_at": "2026-06-01T17:58:39Z",
+      "release_target_commitish": "main",
+      "public_assets": [
+        {
+          "name": "CASE_001_THE_LAST_RENDER_OUTSIDER_REPRODUCIBLE_RELEASE_BUNDLE.tar.gz",
+          "size": 2273296,
+          "url": "https://github.com/kaaffilm/CINEMATICUM/releases/download/v1.2.0-outsider-reproducible-release/CASE_001_THE_LAST_RENDER_OUTSIDER_REPRODUCIBLE_RELEASE_BUNDLE.tar.gz"
+        },
+        {
+          "name": "OUTSIDER_REPLAY_MANIFEST.json",
+          "size": 7140,
+          "url": "https://github.com/kaaffilm/CINEMATICUM/releases/download/v1.2.0-outsider-reproducible-release/OUTSIDER_REPLAY_MANIFEST.json"
+        },
+        {
+          "name": "OUTSIDER_REPRODUCIBLE_RELEASE_STANDARD.json",
+          "size": 1211,
+          "url": "https://github.com/kaaffilm/CINEMATICUM/releases/download/v1.2.0-outsider-reproducible-release/OUTSIDER_REPRODUCIBLE_RELEASE_STANDARD.json"
+        },
+        {
+          "name": "RELEASE_ASSET_HASH_LEDGER.json",
+          "size": 1103,
+          "url": "https://github.com/kaaffilm/CINEMATICUM/releases/download/v1.2.0-outsider-reproducible-release/RELEASE_ASSET_HASH_LEDGER.json"
+        }
+      ]
+    },
+    {
+      "tag": "v1.3.0-public-release-consumption-receipt",
+      "tag_commit": "9f813accad2b6304a9ec6a9f2311c34bb7cf13bb",
+      "release_url": "https://github.com/kaaffilm/CINEMATICUM/releases/tag/v1.3.0-public-release-consumption-receipt",
+      "release_name": "v1.3.0-public-release-consumption-receipt",
+      "release_published_at": "2026-06-01T18:02:49Z",
+      "release_target_commitish": "main",
+      "public_assets": [
+        {
+          "name": "CASE_001_PUBLIC_RELEASE_CONSUMPTION_RECEIPT.json",
+          "size": 2626,
+          "url": "https://github.com/kaaffilm/CINEMATICUM/releases/download/v1.3.0-public-release-consumption-receipt/CASE_001_PUBLIC_RELEASE_CONSUMPTION_RECEIPT.json"
+        },
+        {
+          "name": "PUBLIC_RELEASE_CONSUMPTION_STANDARD.json",
+          "size": 1320,
+          "url": "https://github.com/kaaffilm/CINEMATICUM/releases/download/v1.3.0-public-release-consumption-receipt/PUBLIC_RELEASE_CONSUMPTION_STANDARD.json"
+        }
+      ]
+    },
+    {
+      "tag": "v1.4.0-public-release-lineage-ledger",
+      "tag_commit": "ed89382855b922be756e83e3cb64e3e29c5d9155",
+      "release_url": "https://github.com/kaaffilm/CINEMATICUM/releases/tag/v1.4.0-public-release-lineage-ledger",
+      "release_name": "v1.4.0-public-release-lineage-ledger",
+      "release_published_at": "2026-06-01T18:06:24Z",
+      "release_target_commitish": "main",
+      "public_assets": [
+        {
+          "name": "CINEMATICUM_PUBLIC_RELEASE_LINEAGE_LEDGER.json",
+          "size": 7957,
+          "url": "https://github.com/kaaffilm/CINEMATICUM/releases/download/v1.4.0-public-release-lineage-ledger/CINEMATICUM_PUBLIC_RELEASE_LINEAGE_LEDGER.json"
+        }
+      ]
+    }
+  ],
+  "expected_public_assets_to_acquire": [
+    {
+      "source_release_tag": "v1.2.0-outsider-reproducible-release",
+      "source_release_url": "https://github.com/kaaffilm/CINEMATICUM/releases/tag/v1.2.0-outsider-reproducible-release",
+      "name": "CASE_001_THE_LAST_RENDER_OUTSIDER_REPRODUCIBLE_RELEASE_BUNDLE.tar.gz",
+      "sha256": "6d6d26e428515b8a7f68bb35c2b7a7d80dc561857dbdb9d1df99d93a6eb0e1f8",
+      "purpose": "runtime-complete outsider replay bundle"
+    },
+    {
+      "source_release_tag": "v1.2.0-outsider-reproducible-release",
+      "source_release_url": "https://github.com/kaaffilm/CINEMATICUM/releases/tag/v1.2.0-outsider-reproducible-release",
+      "name": "RELEASE_ASSET_HASH_LEDGER.json",
+      "sha256": "13fb510ccb3b77c1f45024b46e9fb3ffdd392da2e25f5bf4e9a484cace475f27",
+      "purpose": "public release asset hash ledger"
+    },
+    {
+      "source_release_tag": "v1.2.0-outsider-reproducible-release",
+      "source_release_url": "https://github.com/kaaffilm/CINEMATICUM/releases/tag/v1.2.0-outsider-reproducible-release",
+      "name": "OUTSIDER_REPLAY_MANIFEST.json",
+      "sha256": "201b2a329aae3fc1dd5946e15c4ff4ef3a7a6b13f702e5da070285151d5a2964",
+      "purpose": "outsider replay manifest"
+    },
+    {
+      "source_release_tag": "v1.4.0-public-release-lineage-ledger",
+      "source_release_url": "https://github.com/kaaffilm/CINEMATICUM/releases/tag/v1.4.0-public-release-lineage-ledger",
+      "name": "CINEMATICUM_PUBLIC_RELEASE_LINEAGE_LEDGER.json",
+      "sha256": "2df9366a58c1481c31f0f2dcc76497b5eed05430c79592cdc2bbb26194ce0241",
+      "purpose": "machine-readable public release lineage ledger"
+    }
+  ],
+  "expected_replay_commands_after_asset_acquisition": [
+    {
+      "command": "node bin/cinematicum.cjs proof",
+      "expected_object_type": "CINEMATICUM_PRODUCT_PROOF_SUMMARY"
+    },
+    {
+      "command": "node bin/cinematicum.cjs artifact",
+      "expected_object_type": "CINEMATICUM_PRODUCT_ARTIFACT_POINTER"
+    },
+    {
+      "command": "node bin/cinematicum.cjs studio",
+      "expected_object_type": "CINEMATICUM_STUDIO_POINTER"
+    },
+    {
+      "command": "node bin/cinematicum.cjs verify",
+      "expected_object_type": "CINEMATICUM_CLI_LEAF_VERIFICATION_RESULT"
+    },
+    {
+      "command": "node bin/cinematicum.cjs export",
+      "expected_object_type": "CINEMATICUM_PRODUCT_RELEASE_BUNDLE_EXPORT_RESULT"
+    }
+  ],
+  "expected_artifact_sha256": "f23d3da43ed0dfc0a4f97b7c6ad722107cc2531ac584780424ace2c45ff5a192",
+  "auditor_protocol": [
+    "Fetch the public release assets listed in expected_public_assets_to_acquire.",
+    "Verify each listed SHA-256 before extraction or replay.",
+    "Extract CASE_001_THE_LAST_RENDER_OUTSIDER_REPRODUCIBLE_RELEASE_BUNDLE.tar.gz into a clean temporary directory.",
+    "Confirm no .git directory exists inside the extracted outsider bundle.",
+    "Run each expected replay command from the extracted bundle root.",
+    "Parse each command output as a single JSON object.",
+    "Compare each output object_type against expected_replay_commands_after_asset_acquisition.",
+    "Confirm the extracted artifact SHA-256 equals expected_artifact_sha256.",
+    "Confirm no network runtime is required after public asset acquisition."
+  ],
+  "dependency_boundary": {
+    "private_source_required": false,
+    "local_repository_required_for_auditor": false,
+    "git_required_after_extraction": false,
+    "source_tree_embedded": false,
+    "film_media_embedded_in_auditor_pack": false,
+    "public_network_required_to_acquire_assets": true,
+    "network_runtime_required_after_asset_acquisition": false,
+    "external_api_used_after_asset_acquisition": false,
+    "external_media_used_after_asset_acquisition": false,
+    "manual_media_selection_used": false,
+    "candidate_selection_used": false
+  },
+  "proves_external_auditor_pack_exists": true,
+  "proves_public_release_assets_are_identified": true,
+  "proves_expected_replay_contract_is_machine_readable": true,
+  "proves_film_issuance_chain_preserved": true,
+  "proves_truth": false,
+  "proves_admissibility": false,
+  "proves_external_reality": false
+}
