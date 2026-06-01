@@ -1,0 +1,220 @@
+{
+  "object_type": "CINEMATICUM_PUBLIC_RELEASE_LINEAGE_LEDGER",
+  "schema_version": "1.4.0",
+  "jurisdiction": "CINEMATICUM",
+  "valid": true,
+  "errors": [],
+  "repository": "kaaffilm/CINEMATICUM",
+  "package_name": "@kaaffilm/cinematicum",
+  "package_version": "1.4.0",
+  "generated_from_head": "9f813accad2b6304a9ec6a9f2311c34bb7cf13bb",
+  "release_chain": [
+    {
+      "version": "0.9.0",
+      "boundary": "DIRECTOR_ENGINE",
+      "tag": "v0.9.0-director-engine",
+      "tag_commit": "02d8fed4675aafa13630d5b99102d9319e70853e",
+      "release_url": "https://github.com/kaaffilm/CINEMATICUM/releases/tag/v0.9.0-director-engine",
+      "release_name": "v0.9.0-director-engine",
+      "release_published_at": "2026-06-01T13:43:20Z",
+      "release_target_commitish": "main",
+      "proves": [
+        "director_engine_exists",
+        "compiler_generated_film",
+        "film_issued"
+      ],
+      "refuses": [
+        "truth",
+        "admissibility",
+        "external_reality"
+      ],
+      "proves_truth": false,
+      "proves_admissibility": false,
+      "proves_external_reality": false
+    },
+    {
+      "version": "1.0.0",
+      "boundary": "PRODUCT_BOUNDARY",
+      "tag": "v1.0.0-product-boundary",
+      "tag_commit": "9a5edf11cf56eacf62ef5a302ce67a0c9f66919a",
+      "release_url": "https://github.com/kaaffilm/CINEMATICUM/releases/tag/v1.0.0-product-boundary",
+      "release_name": "v1.0.0-product-boundary",
+      "release_published_at": "2026-06-01T13:51:13Z",
+      "release_target_commitish": "main",
+      "proves": [
+        "product_boundary_exists",
+        "studio_surface_exists",
+        "director_engine_exists",
+        "compiler_generated_film",
+        "film_issued"
+      ],
+      "refuses": [
+        "truth",
+        "admissibility",
+        "external_reality"
+      ],
+      "proves_truth": false,
+      "proves_admissibility": false,
+      "proves_external_reality": false
+    },
+    {
+      "version": "1.1.0",
+      "boundary": "INSTALLABLE_PRODUCT_BOUNDARY",
+      "tag": "v1.1.0-installable-product-boundary",
+      "tag_commit": "8b2a4f45d49db3d2b1c182374f0346bb90cf444f",
+      "release_url": "https://github.com/kaaffilm/CINEMATICUM/releases/tag/v1.1.0-installable-product-boundary",
+      "release_name": "v1.1.0-installable-product-boundary",
+      "release_published_at": "2026-06-01T17:02:34Z",
+      "release_target_commitish": "main",
+      "proves": [
+        "installable_product_boundary",
+        "clean_npm_install_smoke",
+        "single_json_cli_surface",
+        "film_issued"
+      ],
+      "refuses": [
+        "truth",
+        "admissibility",
+        "external_reality"
+      ],
+      "proves_truth": false,
+      "proves_admissibility": false,
+      "proves_external_reality": false
+    },
+    {
+      "version": "1.2.0",
+      "boundary": "OUTSIDER_REPRODUCIBLE_RELEASE",
+      "tag": "v1.2.0-outsider-reproducible-release",
+      "tag_commit": "bbd5469810d0a5a446c94fa37fe1c71e47e68b97",
+      "release_url": "https://github.com/kaaffilm/CINEMATICUM/releases/tag/v1.2.0-outsider-reproducible-release",
+      "release_name": "v1.2.0-outsider-reproducible-release",
+      "release_published_at": "2026-06-01T17:58:39Z",
+      "release_target_commitish": "main",
+      "proves": [
+        "runtime_complete_outsider_bundle",
+        "deterministic_release_bundle",
+        "gitless_extracted_replay",
+        "film_issued"
+      ],
+      "refuses": [
+        "truth",
+        "admissibility",
+        "external_reality"
+      ],
+      "proves_truth": false,
+      "proves_admissibility": false,
+      "proves_external_reality": false
+    },
+    {
+      "version": "1.3.0",
+      "boundary": "PUBLIC_RELEASE_CONSUMPTION_RECEIPT",
+      "tag": "v1.3.0-public-release-consumption-receipt",
+      "tag_commit": "9f813accad2b6304a9ec6a9f2311c34bb7cf13bb",
+      "release_url": "https://github.com/kaaffilm/CINEMATICUM/releases/tag/v1.3.0-public-release-consumption-receipt",
+      "release_name": "v1.3.0-public-release-consumption-receipt",
+      "release_published_at": "2026-06-01T18:02:49Z",
+      "release_target_commitish": "main",
+      "proves": [
+        "public_release_assets_consumed",
+        "release_bundle_sha_verified",
+        "extracted_outsider_bundle_replayed",
+        "film_issued"
+      ],
+      "refuses": [
+        "truth",
+        "admissibility",
+        "external_reality"
+      ],
+      "proves_truth": false,
+      "proves_admissibility": false,
+      "proves_external_reality": false
+    }
+  ],
+  "ancestry": [
+    {
+      "from_tag": "v0.9.0-director-engine",
+      "from_commit": "02d8fed4675aafa13630d5b99102d9319e70853e",
+      "to_tag": "v1.0.0-product-boundary",
+      "to_commit": "9a5edf11cf56eacf62ef5a302ce67a0c9f66919a",
+      "ancestor_relation_verified": true
+    },
+    {
+      "from_tag": "v1.0.0-product-boundary",
+      "from_commit": "9a5edf11cf56eacf62ef5a302ce67a0c9f66919a",
+      "to_tag": "v1.1.0-installable-product-boundary",
+      "to_commit": "8b2a4f45d49db3d2b1c182374f0346bb90cf444f",
+      "ancestor_relation_verified": true
+    },
+    {
+      "from_tag": "v1.1.0-installable-product-boundary",
+      "from_commit": "8b2a4f45d49db3d2b1c182374f0346bb90cf444f",
+      "to_tag": "v1.2.0-outsider-reproducible-release",
+      "to_commit": "bbd5469810d0a5a446c94fa37fe1c71e47e68b97",
+      "ancestor_relation_verified": true
+    },
+    {
+      "from_tag": "v1.2.0-outsider-reproducible-release",
+      "from_commit": "bbd5469810d0a5a446c94fa37fe1c71e47e68b97",
+      "to_tag": "v1.3.0-public-release-consumption-receipt",
+      "to_commit": "9f813accad2b6304a9ec6a9f2311c34bb7cf13bb",
+      "ancestor_relation_verified": true
+    }
+  ],
+  "local_proof_files": [
+    {
+      "path": "CONSUMPTION/CASE_001_PUBLIC_RELEASE_CONSUMPTION_RECEIPT.json",
+      "sha256": "327171ec5022bd05a8a0656e5a7dec57826c77b27bd6ff077e63e16b5a9c3901"
+    },
+    {
+      "path": "CONSUMPTION/PUBLIC_RELEASE_CONSUMPTION_STANDARD.json",
+      "sha256": "4d8367810673e24a47dbd8874c32217b308ca11fa746e35c58b2b6a52ea9505f"
+    },
+    {
+      "path": "REPRODUCIBILITY/OUTSIDER_REPLAY_MANIFEST.json",
+      "sha256": "14d2fdc55da12b78af07283cad6a90a6ae8ec240eab3772d853afb244bb6652a"
+    },
+    {
+      "path": "REPRODUCIBILITY/RELEASE_ASSET_HASH_LEDGER.json",
+      "sha256": "5fa57e5bcfbf6790b82c754cd18e0f437a2c8569971582e5468873f96d6a9787"
+    },
+    {
+      "path": "REPRODUCIBILITY/OUTSIDER_REPRODUCIBLE_RELEASE_STANDARD.json",
+      "sha256": "fd2f502311f219d29fd3b9793775a0961b18177a5b005254cc306aa413906bce"
+    },
+    {
+      "path": "PRODUCT/INSTALLABLE_PRODUCT_BOUNDARY.json",
+      "sha256": "480cde5e98d8ccf8c396db2ef31a0a3f22777f383acef75cb8e109f0c78b5dfa"
+    },
+    {
+      "path": "PRODUCT/CASE_001_PRODUCT_BOUNDARY.json",
+      "sha256": "07544c384c2173148966729a796a7053745e21b6e33a2550620aab9a6f1e8be8"
+    }
+  ],
+  "public_consumption_receipt": {
+    "path": "CONSUMPTION/CASE_001_PUBLIC_RELEASE_CONSUMPTION_RECEIPT.json",
+    "object_type": "CINEMATICUM_PUBLIC_RELEASE_CONSUMPTION_RECEIPT",
+    "schema_version": "1.3.0",
+    "source_release_tag": "v1.2.0-outsider-reproducible-release",
+    "extracted_artifact_sha256": "f23d3da43ed0dfc0a4f97b7c6ad722107cc2531ac584780424ace2c45ff5a192",
+    "proves_public_release_assets_consumed": true,
+    "proves_extracted_outsider_replay": true,
+    "proves_truth": false,
+    "proves_admissibility": false,
+    "proves_external_reality": false
+  },
+  "chain_properties": {
+    "release_tags_exist": true,
+    "releases_exist": true,
+    "releases_are_not_drafts": true,
+    "releases_are_not_prereleases": true,
+    "ordered_git_ancestry_verified": true,
+    "public_consumption_receipt_valid": true
+  },
+  "proves_public_release_lineage": true,
+  "proves_release_chain_is_machine_readable": true,
+  "proves_public_consumption_receipt_is_bound_to_lineage": true,
+  "proves_film_issuance_chain_preserved": true,
+  "proves_truth": false,
+  "proves_admissibility": false,
+  "proves_external_reality": false
+}

@@ -161,3 +161,21 @@ It does not prove truth, admissibility, or external reality.
 
 <!-- CINEMATICUM_PUBLIC_RELEASE_CONSUMPTION_V130_END -->
 
+<!-- CINEMATICUM_PUBLIC_RELEASE_LINEAGE_V140_START -->
+
+## CINEMATICUM v1.4 — Public Release Lineage Ledger
+
+CINEMATICUM v1.4 adds a public release lineage ledger.
+
+The verifier checks the public release chain from v0.9 through v1.3, verifies each GitHub release exists, verifies releases are not drafts or prereleases, checks ordered Git ancestry between release tags, binds the public release consumption receipt into the lineage, and emits:
+
+```text
+RELEASES/CINEMATICUM_PUBLIC_RELEASE_LINEAGE_LEDGER.json
+```
+
+This proves a machine-readable public release chain.
+
+It does not prove truth, admissibility, or external reality.
+
+<!-- CINEMATICUM_PUBLIC_RELEASE_LINEAGE_V140_END -->
+
