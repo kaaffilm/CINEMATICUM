@@ -1,0 +1,91 @@
+{
+  "object_type": "CINEMATICUM_DIRECTOR_ENGINE_MANIFEST",
+  "schema_version": "0.9.0",
+  "jurisdiction": "CINEMATICUM",
+  "case_id": "CASE_001_THE_LAST_RENDER",
+  "status": "DIRECTOR_ENGINE_LOCKED",
+  "issued_artifact": {
+    "path": "CASES/CASE_001_THE_LAST_RENDER/FILM/CASE_001_THE_LAST_RENDER_GODCUT_0001.mp4",
+    "sha256": "f23d3da43ed0dfc0a4f97b7c6ad722107cc2531ac584780424ace2c45ff5a192",
+    "size_bytes": 2284796,
+    "width": 1280,
+    "height": 720,
+    "duration_seconds": 60,
+    "frame_count": 1440,
+    "shots": 10
+  },
+  "upstream_proofs": [
+    {
+      "path": "CASES/CASE_001_THE_LAST_RENDER/PROOFS/godcut-verification-result.json",
+      "sha256": "642f95d4584e948b326d6eb2960b86696499296162b7c6c363939bb823d24cb3",
+      "size_bytes": 823
+    },
+    {
+      "path": "CASES/CASE_001_THE_LAST_RENDER/PROOFS/godcut-compile-result.json",
+      "sha256": "3cec4b758b179c94f189cf25faa689ca6fb68bf9ae9fa0878de3a216804e33b6",
+      "size_bytes": 1179
+    },
+    {
+      "path": "STUDIO/CASE_001_GODCUT/studio-manifest.json",
+      "sha256": "dbc94d21c52676c50628e790b7495dfc8d2aa5a843d9a0d5c327ca7047dffdfb",
+      "size_bytes": 1472
+    }
+  ],
+  "direction_objects": [
+    {
+      "path": "ENGINES/DIRECTOR/DIRECTOR_ENGINE_STANDARD.json",
+      "sha256": "bf103952a333c48af4b904502553e570a41df041562ac725d3cecfad60841311",
+      "size_bytes": 951
+    },
+    {
+      "path": "CASES/CASE_001_THE_LAST_RENDER/DIRECTION/DIRECTORIAL_PRINCIPLES.json",
+      "sha256": "e68f6b7b59c9095e498e6e78e1a70012b2e786b6718c1cbeeb0491631b51bded",
+      "size_bytes": 881
+    },
+    {
+      "path": "CASES/CASE_001_THE_LAST_RENDER/DIRECTION/SHOT_GRAMMAR.json",
+      "sha256": "5e538b6b7fc48d17d87f4447f051c6bc291ceca309a2647d77d2eb29d12bc42d",
+      "size_bytes": 4678
+    },
+    {
+      "path": "CASES/CASE_001_THE_LAST_RENDER/DIRECTION/CAMERA_LAW.json",
+      "sha256": "ebda712944a5e6135148be5f32faa38ff6377c98170373ff2b35d54a85bf4537",
+      "size_bytes": 900
+    },
+    {
+      "path": "CASES/CASE_001_THE_LAST_RENDER/DIRECTION/CUT_RHYTHM_LAW.json",
+      "sha256": "64ffcd41b67d119476c2d7084c96b9a46a8a11905e869dc5db5ea7eb1a0bb40c",
+      "size_bytes": 1154
+    },
+    {
+      "path": "CASES/CASE_001_THE_LAST_RENDER/DIRECTION/SCORE_LAW.json",
+      "sha256": "dd17663920a6a8f25d9ad48ab0f9a17fb5090bebfb0ceff877ed7384f2b0687c",
+      "size_bytes": 1573
+    },
+    {
+      "path": "CASES/CASE_001_THE_LAST_RENDER/DIRECTION/DIRECTOR_DECISION_GRAPH.json",
+      "sha256": "85367ad479bda79615f3c599a67168a454301afb6661d1ad40882a83cb54b13f",
+      "size_bytes": 3357
+    }
+  ],
+  "director_engine_capabilities": [
+    "shot-function grammar",
+    "camera-motion law",
+    "cut-rhythm law",
+    "score-cue law",
+    "decision graph",
+    "binary artifact linkage",
+    "claim-boundary enforcement"
+  ],
+  "external_api_used": false,
+  "external_media_used": false,
+  "manual_media_selection_used": false,
+  "candidate_selection_used": false,
+  "network_runtime_required": false,
+  "proves_director_engine_exists": true,
+  "proves_compiler_generated_film": true,
+  "proves_film_issued": true,
+  "proves_truth": false,
+  "proves_admissibility": false,
+  "proves_external_reality": false
+}

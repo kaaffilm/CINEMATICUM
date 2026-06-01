@@ -1,0 +1,34 @@
+{
+  "object_type": "CINEMATICUM_DIRECTOR_ENGINE_STANDARD",
+  "schema_version": "0.9.0",
+  "jurisdiction": "CINEMATICUM",
+  "purpose": "Convert an issued compiler film from a binary artifact into a machine-verifiable directed work.",
+  "required_laws": [
+    "directorial_principles",
+    "shot_grammar",
+    "camera_law",
+    "cut_rhythm_law",
+    "score_law",
+    "director_decision_graph"
+  ],
+  "prohibited_inputs": [
+    "external API",
+    "external media",
+    "manual media selection",
+    "candidate selection",
+    "unverified binary artifact",
+    "truth claim",
+    "admissibility claim",
+    "external reality claim"
+  ],
+  "required_outputs": [
+    "director engine manifest",
+    "hash-bound direction objects",
+    "proof of linkage to issued GODCUT artifact",
+    "explicit non-truth boundary"
+  ],
+  "proves_director_engine_exists": true,
+  "proves_truth": false,
+  "proves_admissibility": false,
+  "proves_external_reality": false
+}

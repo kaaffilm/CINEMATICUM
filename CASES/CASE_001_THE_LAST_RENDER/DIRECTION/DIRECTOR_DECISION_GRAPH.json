@@ -1,0 +1,147 @@
+{
+  "object_type": "CINEMATICUM_DIRECTOR_DECISION_GRAPH",
+  "schema_version": "0.9.0",
+  "case_id": "CASE_001_THE_LAST_RENDER",
+  "nodes": [
+    {
+      "id": "film_thesis",
+      "type": "thesis",
+      "value": "The last witness does not survive the collapse; he becomes the only frame the collapse cannot erase."
+    },
+    {
+      "id": "S001",
+      "type": "shot",
+      "value": "establish terminal architecture"
+    },
+    {
+      "id": "S002",
+      "type": "shot",
+      "value": "introduce corrupted path"
+    },
+    {
+      "id": "S003",
+      "type": "shot",
+      "value": "isolate the admissible eye"
+    },
+    {
+      "id": "S004",
+      "type": "shot",
+      "value": "show erased continuity"
+    },
+    {
+      "id": "S005",
+      "type": "shot",
+      "value": "turn loss into image pressure"
+    },
+    {
+      "id": "S006",
+      "type": "shot",
+      "value": "test refusal boundary"
+    },
+    {
+      "id": "S007",
+      "type": "shot",
+      "value": "materialize first proof"
+    },
+    {
+      "id": "S008",
+      "type": "shot",
+      "value": "deny external-reality overclaim"
+    },
+    {
+      "id": "S009",
+      "type": "shot",
+      "value": "bind subject to record"
+    },
+    {
+      "id": "S010",
+      "type": "shot",
+      "value": "complete issuance without truth claim"
+    },
+    {
+      "id": "boundary",
+      "type": "negative_claim_boundary",
+      "value": "No truth, admissibility, or external reality claim."
+    },
+    {
+      "id": "issued_artifact",
+      "type": "binary_artifact",
+      "value": "CASES/CASE_001_THE_LAST_RENDER/FILM/CASE_001_THE_LAST_RENDER_GODCUT_0001.mp4",
+      "sha256": "f23d3da43ed0dfc0a4f97b7c6ad722107cc2531ac584780424ace2c45ff5a192"
+    }
+  ],
+  "edges": [
+    {
+      "from": "S001",
+      "to": "S002",
+      "relation": "causal_cinematic_pressure"
+    },
+    {
+      "from": "S002",
+      "to": "S003",
+      "relation": "causal_cinematic_pressure"
+    },
+    {
+      "from": "S003",
+      "to": "S004",
+      "relation": "causal_cinematic_pressure"
+    },
+    {
+      "from": "S004",
+      "to": "S005",
+      "relation": "causal_cinematic_pressure"
+    },
+    {
+      "from": "S005",
+      "to": "S006",
+      "relation": "causal_cinematic_pressure"
+    },
+    {
+      "from": "S006",
+      "to": "S007",
+      "relation": "causal_cinematic_pressure"
+    },
+    {
+      "from": "S007",
+      "to": "S008",
+      "relation": "causal_cinematic_pressure"
+    },
+    {
+      "from": "S008",
+      "to": "S009",
+      "relation": "causal_cinematic_pressure"
+    },
+    {
+      "from": "S009",
+      "to": "S010",
+      "relation": "causal_cinematic_pressure"
+    },
+    {
+      "from": "film_thesis",
+      "to": "S001",
+      "relation": "initiates"
+    },
+    {
+      "from": "S010",
+      "to": "issued_artifact",
+      "relation": "materializes_as"
+    },
+    {
+      "from": "boundary",
+      "to": "issued_artifact",
+      "relation": "limits_claim_scope"
+    }
+  ],
+  "graph_invariants": [
+    "Every shot node has a function.",
+    "Every shot node has a camera behavior.",
+    "Every shot node has a score cue.",
+    "No node proves truth.",
+    "No node proves admissibility.",
+    "No node proves external reality."
+  ],
+  "proves_director_decision_graph_exists": true,
+  "proves_truth": false,
+  "proves_admissibility": false,
+  "proves_external_reality": false
+}

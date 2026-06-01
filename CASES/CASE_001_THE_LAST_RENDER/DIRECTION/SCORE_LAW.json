@@ -1,0 +1,69 @@
+{
+  "object_type": "CINEMATICUM_SCORE_LAW",
+  "schema_version": "0.9.0",
+  "case_id": "CASE_001_THE_LAST_RENDER",
+  "score_axioms": [
+    "Sound may intensify witness pressure.",
+    "Sound may not certify truth.",
+    "Silence is an admissible cut state.",
+    "A resolved chord may close issuance but not external reality."
+  ],
+  "cue_map": [
+    {
+      "shot_id": "S001",
+      "cue": "low drone / cold harmonic",
+      "proves_truth": false
+    },
+    {
+      "shot_id": "S002",
+      "cue": "granular pulse",
+      "proves_truth": false
+    },
+    {
+      "shot_id": "S003",
+      "cue": "single sine witness tone",
+      "proves_truth": false
+    },
+    {
+      "shot_id": "S004",
+      "cue": "broken clock rhythm",
+      "proves_truth": false
+    },
+    {
+      "shot_id": "S005",
+      "cue": "sub-bass expansion",
+      "proves_truth": false
+    },
+    {
+      "shot_id": "S006",
+      "cue": "near silence",
+      "proves_truth": false
+    },
+    {
+      "shot_id": "S007",
+      "cue": "sharp transient",
+      "proves_truth": false
+    },
+    {
+      "shot_id": "S008",
+      "cue": "descending minor interval",
+      "proves_truth": false
+    },
+    {
+      "shot_id": "S009",
+      "cue": "heartbeat-form pulse",
+      "proves_truth": false
+    },
+    {
+      "shot_id": "S010",
+      "cue": "resolved low chord",
+      "proves_truth": false
+    }
+  ],
+  "procedural_audio_required": true,
+  "external_audio_forbidden": true,
+  "proves_score_law_exists": true,
+  "proves_truth": false,
+  "proves_admissibility": false,
+  "proves_external_reality": false
+}
