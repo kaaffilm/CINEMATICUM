@@ -1,0 +1,22 @@
+name: godcut-verification
+
+on:
+  pull_request:
+  push:
+    branches: [ main ]
+
+jobs:
+  verify-godcut:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - name: Verify GODCUT if present
+        run: |
+          if [ -f CASES/CASE_001_THE_LAST_RENDER/FILM/GODCUT_0001_MANIFEST.json ]; then
+            node scripts/verify-case-001-godcut.mjs
+          else
+            echo "GODCUT not present on this ref; skipping."
+          fi

@@ -1,0 +1,46 @@
+{
+  "object_type": "CINEMATICUM_GODCUT_ENGINE_STANDARD",
+  "schema_version": "0.7.0",
+  "jurisdiction": "CINEMATICUM",
+  "case_id": "CASE_001_THE_LAST_RENDER",
+  "purpose": "Compile a stronger autonomous cinematic object without external API, external media, manual media selection, or candidate selection.",
+  "hard_requirements": {
+    "external_api_used": false,
+    "external_media_used": false,
+    "manual_media_selection_used": false,
+    "candidate_selection_used": false,
+    "raw_frames_tracked": false,
+    "artifact_must_be_binary_hash_verified": true,
+    "artifact_must_include_audio": true,
+    "artifact_must_include_timeline": true,
+    "artifact_must_include_manifest": true,
+    "artifact_must_include_verification_result": true
+  },
+  "minimum_cinematic_requirements": {
+    "resolution": "1280x720",
+    "duration_seconds": 60,
+    "fps": 24,
+    "frame_count": 1440,
+    "shots": 10,
+    "audio": "procedural mono score encoded as AAC",
+    "visual_language": [
+      "negative-space architecture",
+      "luminous legal slit",
+      "admissible witness emergence",
+      "memory-grid collapse",
+      "black-box archive corridor",
+      "final witness aperture"
+    ]
+  },
+  "forbidden_claims": [
+    "truth verified",
+    "external reality verified",
+    "admissibility decided outside CINEMATICUM standard",
+    "external API used",
+    "external media used",
+    "manual media selected",
+    "candidate selected",
+    "unhashed media",
+    "unverified binary artifact"
+  ]
+}
