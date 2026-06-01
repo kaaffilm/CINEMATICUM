@@ -1,0 +1,28 @@
+{
+  "object_type": "CINEMATICUM_INSTALLABLE_PRODUCT_BOUNDARY_VERIFICATION_RESULT",
+  "schema_version": "1.1.0",
+  "valid": true,
+  "errors": [],
+  "package_name": "@kaaffilm/cinematicum",
+  "package_version": "1.1.0",
+  "package_tarball": "dist/kaaffilm-cinematicum-1.1.0.tgz",
+  "package_tarball_sha256": "a61ffaa341dbe97b646a29a5831e0d99829a4c7b063601bf766ce3ed4c255430",
+  "package_tarball_size_bytes": 2295400,
+  "installed_bin_verified": true,
+  "commands_verified_from_clean_install": [
+    "cinematicum proof",
+    "cinematicum artifact",
+    "cinematicum studio",
+    "cinematicum verify",
+    "cinematicum export"
+  ],
+  "artifact_sha256": "f23d3da43ed0dfc0a4f97b7c6ad722107cc2531ac584780424ace2c45ff5a192",
+  "proves_installable_product_boundary": true,
+  "proves_director_engine_exists": true,
+  "proves_studio_surface_exists": true,
+  "proves_compiler_generated_film": true,
+  "proves_film_issued": true,
+  "proves_truth": false,
+  "proves_admissibility": false,
+  "proves_external_reality": false
+}

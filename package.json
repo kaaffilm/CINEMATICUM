@@ -1,17 +1,34 @@
 {
-  "name": "cinematicum",
-  "version": "1.0.0",
-  "private": true,
-  "description": "Autonomous motion-picture compiler, studio surface, and verifiable film issuance boundary.",
+  "name": "@kaaffilm/cinematicum",
+  "version": "1.1.0",
+  "private": false,
+  "description": "Self-contained cinematic proof engine for Case 001 GODCUT issuance.",
   "license": "SEE LICENSE IN LICENSE",
   "bin": {
     "cinematicum": "bin/cinematicum.cjs"
   },
   "scripts": {
-    "verify:godcut": "node scripts/verify-case-001-godcut.mjs",
-    "verify:godstudio": "node scripts/verify-case-001-godstudio.mjs",
-    "verify:director": "node scripts/verify-case-001-director-engine.mjs",
-    "verify:product": "node scripts/verify-case-001-product-boundary.mjs",
-    "export:case001": "node scripts/export-case-001-release-bundle.mjs"
-  }
+    "verify": "node scripts/verify-case-001-product-boundary.mjs",
+    "verify:installable": "node scripts/verify-case-001-installable-package.mjs",
+    "packfile": "npm pack --pack-destination dist"
+  },
+  "type": "commonjs",
+  "files": [
+    "bin",
+    "scripts",
+    "CASES",
+    "STUDIO",
+    "PRODUCT",
+    "ENGINES",
+    "README.md",
+    "LICENSE"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kaaffilm/CINEMATICUM.git"
+  },
+  "bugs": {
+    "url": "https://github.com/kaaffilm/CINEMATICUM/issues"
+  },
+  "homepage": "https://github.com/kaaffilm/CINEMATICUM#readme"
 }

@@ -3,6 +3,26 @@ import { createHash } from "node:crypto";
 import { execSync } from "node:child_process";
 import { existsSync, readFileSync, statSync } from "node:fs";
 
+function trackedFilesForVerification() {
+  try {
+    return execSync("git rev-parse --is-inside-work-tree >/dev/null 2>&1 && git ls-files", {
+      encoding: "utf8",
+      shell: "/bin/sh"
+    }).split(/\r?\n/).filter(Boolean);
+  } catch {
+    return execSync("find . -type f | sed 's#^./##'", {
+      encoding: "utf8",
+      shell: "/bin/sh"
+    })
+      .split(/\r?\n/)
+      .filter(Boolean)
+      .filter((p) => !p.startsWith(".git/"))
+      .filter((p) => !p.startsWith("node_modules/"))
+      .filter((p) => !p.startsWith("dist/"));
+  }
+}
+
+
 const CASE_ID = "CASE_001_THE_LAST_RENDER";
 const manifestPath = `CASES/${CASE_ID}/DIRECTION/DIRECTOR_ENGINE_MANIFEST.json`;
 const resultPath = `CASES/${CASE_ID}/PROOFS/director-engine-build-result.json`;
@@ -89,7 +109,7 @@ assert(manifest.proves_truth === false, "manifest truth overclaim");
 assert(manifest.proves_admissibility === false, "manifest admissibility overclaim");
 assert(manifest.proves_external_reality === false, "manifest external reality overclaim");
 
-const tracked = execSync("git ls-files", { encoding: "utf8" }).split("\n").filter(Boolean);
+const tracked = trackedFilesForVerification();
 const rawFrames = tracked.filter((p) => p.endsWith(".ppm") || p.includes("/frames/"));
 assert(rawFrames.length === 0, `raw frame files tracked: ${rawFrames.slice(0, 5).join(", ")}`);
 
