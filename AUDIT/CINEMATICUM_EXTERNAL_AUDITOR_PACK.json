@@ -7,7 +7,7 @@
   "repository": "kaaffilm/CINEMATICUM",
   "package_name": "@kaaffilm/cinematicum",
   "package_version": "1.5.0",
-  "generated_from_head": "ed89382855b922be756e83e3cb64e3e29c5d9155",
+  "generated_from_head_kind": "intentionally_not_embedded_to_avoid_self_referential_commit_binding",
   "standard": {
     "path": "AUDIT/EXTERNAL_AUDITOR_PACK_STANDARD.json",
     "sha256": "b380b2f9b2def8779b5b58a6dc24bc635ca87e6977eb36936a8d0bd4ab63f388",

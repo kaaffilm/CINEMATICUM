@@ -168,7 +168,7 @@ try {
     repository: repo,
     package_name: packageJson.name,
     package_version: packageJson.version,
-    generated_from_head: run("git", ["rev-parse", "HEAD"]),
+    generated_from_head_kind: "intentionally_not_embedded_to_avoid_self_referential_commit_binding",
     standard: {
       path: standardPath,
       sha256: sha256File(standardPath),
