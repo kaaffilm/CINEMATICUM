@@ -1,0 +1,98 @@
+{
+  "object_type": "CINEMATICUM_GODCUT_TIMELINE",
+  "schema_version": "0.7.0",
+  "jurisdiction": "CINEMATICUM",
+  "case_id": "CASE_001_THE_LAST_RENDER",
+  "artifact_path": "CASES/CASE_001_THE_LAST_RENDER/FILM/CASE_001_THE_LAST_RENDER_GODCUT_0001.mp4",
+  "width": 1280,
+  "height": 720,
+  "fps": 24,
+  "duration_seconds": 60,
+  "frame_count": 1440,
+  "shots": [
+    {
+      "shot_id": "S001",
+      "name": "dead_render_facility",
+      "start_seconds": 0,
+      "end_seconds": 6,
+      "duration_seconds": 6,
+      "function": "A dark autonomous render chamber wakes without outside media."
+    },
+    {
+      "shot_id": "S002",
+      "name": "legal_slit",
+      "start_seconds": 6,
+      "end_seconds": 12,
+      "duration_seconds": 6,
+      "function": "A thin luminous admissibility slit opens across a black wall."
+    },
+    {
+      "shot_id": "S003",
+      "name": "witness_plate",
+      "start_seconds": 12,
+      "end_seconds": 18,
+      "duration_seconds": 6,
+      "function": "A witness plate enters frame under procedural light pressure."
+    },
+    {
+      "shot_id": "S004",
+      "name": "memory_grid",
+      "start_seconds": 18,
+      "end_seconds": 24,
+      "duration_seconds": 6,
+      "function": "A corrupted memory grid stabilizes into cinematic order."
+    },
+    {
+      "shot_id": "S005",
+      "name": "black_box_corridor",
+      "start_seconds": 24,
+      "end_seconds": 30,
+      "duration_seconds": 6,
+      "function": "The black-box corridor records motion without judging it."
+    },
+    {
+      "shot_id": "S006",
+      "name": "pressure_field",
+      "start_seconds": 30,
+      "end_seconds": 36,
+      "duration_seconds": 6,
+      "function": "A pressure field bends toward the last admissible witness."
+    },
+    {
+      "shot_id": "S007",
+      "name": "archive_gate",
+      "start_seconds": 36,
+      "end_seconds": 42,
+      "duration_seconds": 6,
+      "function": "The archive gate seals the generated motion object."
+    },
+    {
+      "shot_id": "S008",
+      "name": "witness_aperture",
+      "start_seconds": 42,
+      "end_seconds": 48,
+      "duration_seconds": 6,
+      "function": "The witness aperture becomes the center of the film."
+    },
+    {
+      "shot_id": "S009",
+      "name": "terminal_cut",
+      "start_seconds": 48,
+      "end_seconds": 54,
+      "duration_seconds": 6,
+      "function": "The terminal cut collapses the world into a verified frame."
+    },
+    {
+      "shot_id": "S010",
+      "name": "final_silence",
+      "start_seconds": 54,
+      "end_seconds": 60,
+      "duration_seconds": 6,
+      "function": "The film ends as an issued compiler artifact, not a truth claim."
+    }
+  ],
+  "external_api_used": false,
+  "external_media_used": false,
+  "manual_media_selection_used": false,
+  "candidate_selection_used": false
+}
