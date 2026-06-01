@@ -1,0 +1,13 @@
+name: godstudio-verification
+
+on:
+  pull_request:
+  push:
+
+jobs:
+  verify-godstudio:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Verify GODSTUDIO release console
+        run: node scripts/verify-case-001-godstudio.mjs
