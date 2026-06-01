@@ -1,0 +1,33 @@
+{
+  "object_type": "CINEMATICUM_PRODUCT_BOUNDARY",
+  "schema_version": "1.0.0",
+  "jurisdiction": "CINEMATICUM",
+  "case_id": "CASE_001_THE_LAST_RENDER",
+  "status": "PRODUCT_BOUNDARY_READY",
+  "public_commands": [
+    "cinematicum verify",
+    "cinematicum proof",
+    "cinematicum artifact",
+    "cinematicum studio",
+    "cinematicum export"
+  ],
+  "hard_boundary": {
+    "external_api_used": false,
+    "external_media_used": false,
+    "manual_media_selection_used": false,
+    "candidate_selection_used": false,
+    "network_runtime_required": false,
+    "truth_claimed": false,
+    "admissibility_claimed": false,
+    "external_reality_claimed": false
+  },
+  "proves_product_boundary_exists": true,
+  "proves_release_bundle_exists": true,
+  "proves_director_engine_exists": true,
+  "proves_studio_surface_exists": true,
+  "proves_compiler_generated_film": true,
+  "proves_film_issued": true,
+  "proves_truth": false,
+  "proves_admissibility": false,
+  "proves_external_reality": false
+}

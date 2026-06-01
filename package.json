@@ -1,0 +1,17 @@
+{
+  "name": "cinematicum",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Autonomous motion-picture compiler, studio surface, and verifiable film issuance boundary.",
+  "license": "SEE LICENSE IN LICENSE",
+  "bin": {
+    "cinematicum": "bin/cinematicum.cjs"
+  },
+  "scripts": {
+    "verify:godcut": "node scripts/verify-case-001-godcut.mjs",
+    "verify:godstudio": "node scripts/verify-case-001-godstudio.mjs",
+    "verify:director": "node scripts/verify-case-001-director-engine.mjs",
+    "verify:product": "node scripts/verify-case-001-product-boundary.mjs",
+    "export:case001": "node scripts/export-case-001-release-bundle.mjs"
+  }
+}

@@ -1,0 +1,15 @@
+name: product-boundary-verification
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+
+jobs:
+  verify-product-boundary:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Verify CINEMATICUM product boundary
+        run: node scripts/verify-case-001-product-boundary.mjs
