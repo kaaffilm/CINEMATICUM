@@ -1,0 +1,41 @@
+{
+  "object_type": "CINEMATICUM_GODSTUDIO_RELEASE_CONSOLE",
+  "schema_version": "0.8.0",
+  "jurisdiction": "CINEMATICUM",
+  "case_id": "CASE_001_THE_LAST_RENDER",
+  "title": "CASE 001 — THE LAST RENDER",
+  "status": "GODSTUDIO_RELEASE_CONSOLE_READY",
+  "artifact_path": "CASES/CASE_001_THE_LAST_RENDER/FILM/CASE_001_THE_LAST_RENDER_GODCUT_0001.mp4",
+  "artifact_sha256": "f23d3da43ed0dfc0a4f97b7c6ad722107cc2531ac584780424ace2c45ff5a192",
+  "artifact_size_bytes": 2284796,
+  "width": 1280,
+  "height": 720,
+  "duration_seconds": 60,
+  "frame_count": 1440,
+  "shots": 10,
+  "linked_objects": [
+    "CASES/CASE_001_THE_LAST_RENDER/FILM/GODCUT_0001_MANIFEST.json",
+    "CASES/CASE_001_THE_LAST_RENDER/FILM/GODCUT_0001_TIMELINE.json",
+    "CASES/CASE_001_THE_LAST_RENDER/PROOFS/godcut-compile-result.json",
+    "CASES/CASE_001_THE_LAST_RENDER/PROOFS/godcut-verification-result.json"
+  ],
+  "studio_capabilities": [
+    "local_playback",
+    "shot_timeline_inspection",
+    "proof_surface",
+    "release_manifest_surface",
+    "binary_hash_surface",
+    "no_external_runtime_dependency"
+  ],
+  "external_api_used": false,
+  "external_media_used": false,
+  "manual_media_selection_used": false,
+  "candidate_selection_used": false,
+  "network_runtime_required": false,
+  "proves_studio_surface_exists": true,
+  "proves_compiler_generated_film": true,
+  "proves_film_issued": true,
+  "proves_truth": false,
+  "proves_admissibility": false,
+  "proves_external_reality": false
+}
