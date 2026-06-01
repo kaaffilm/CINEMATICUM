@@ -1,0 +1,17 @@
+name: installable-product-boundary-verification
+
+on:
+  pull_request:
+  push:
+    branches: [ main ]
+
+jobs:
+  verify-installable-product-boundary:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Verify installable CINEMATICUM product boundary
+        run: |
+          node --version
+          npm --version
+          node scripts/verify-case-001-installable-package.mjs

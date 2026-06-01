@@ -75,3 +75,32 @@ Boundary:
 
 The product boundary proves command availability, local studio surface, release-bundle export, director-engine linkage, compiler-generated film linkage, and issued GODCUT artifact integrity.
 <!-- CINEMATICUM_PRODUCT_BOUNDARY_V1_END -->
+
+<!-- CINEMATICUM_INSTALLABLE_PRODUCT_BOUNDARY_V11_START -->
+## CINEMATICUM v1.1 Installable Product Boundary
+
+CINEMATICUM now has an installable package boundary.
+
+The package must prove, from a clean temporary install, that these commands work without cloning the working tree manually:
+
+```bash
+cinematicum proof
+cinematicum artifact
+cinematicum studio
+cinematicum verify
+cinematicum export
+```
+
+The installable boundary preserves:
+
+- no external API
+- no external media
+- no network runtime dependency
+- no manual media selection
+- no candidate selection
+- no truth claim
+- no admissibility claim
+- no external reality claim
+
+The release package is a product transport. It does not convert the film into truth, admissibility, or external reality.
+<!-- CINEMATICUM_INSTALLABLE_PRODUCT_BOUNDARY_V11_END -->
