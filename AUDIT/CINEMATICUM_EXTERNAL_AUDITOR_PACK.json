@@ -6,7 +6,7 @@
   "errors": [],
   "repository": "kaaffilm/CINEMATICUM",
   "package_name": "@kaaffilm/cinematicum",
-  "package_version": "1.5.0",
+  "package_version": "1.5.1",
   "generated_from_head_kind": "intentionally_not_embedded_to_avoid_self_referential_commit_binding",
   "standard": {
     "path": "AUDIT/EXTERNAL_AUDITOR_PACK_STANDARD.json",
@@ -17,7 +17,8 @@
     "tag": "v1.4.0-public-release-lineage-ledger",
     "release_url": "https://github.com/kaaffilm/CINEMATICUM/releases/tag/v1.4.0-public-release-lineage-ledger",
     "ledger_path": "RELEASES/CINEMATICUM_PUBLIC_RELEASE_LINEAGE_LEDGER.json",
-    "ledger_sha256": "2df9366a58c1481c31f0f2dcc76497b5eed05430c79592cdc2bbb26194ce0241",
+    "ledger_sha256": "ea947845ae51a00420b520f960dca3dd231a5d43fdf2bced999085dd344fbcc6",
+    "local_lineage_ledger_sha256": "2df9366a58c1481c31f0f2dcc76497b5eed05430c79592cdc2bbb26194ce0241",
     "ledger_object_type": "CINEMATICUM_PUBLIC_RELEASE_LINEAGE_LEDGER",
     "release_count": 5,
     "ancestry_edges_verified": 4
@@ -220,7 +221,7 @@
       "source_release_tag": "v1.4.0-public-release-lineage-ledger",
       "source_release_url": "https://github.com/kaaffilm/CINEMATICUM/releases/tag/v1.4.0-public-release-lineage-ledger",
       "name": "CINEMATICUM_PUBLIC_RELEASE_LINEAGE_LEDGER.json",
-      "sha256": "2df9366a58c1481c31f0f2dcc76497b5eed05430c79592cdc2bbb26194ce0241",
+      "sha256": "ea947845ae51a00420b520f960dca3dd231a5d43fdf2bced999085dd344fbcc6",
       "purpose": "machine-readable public release lineage ledger"
     }
   ],

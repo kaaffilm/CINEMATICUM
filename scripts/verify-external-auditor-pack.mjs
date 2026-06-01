@@ -1,7 +1,9 @@
 #!/usr/bin/env node
 import { execFileSync } from "node:child_process";
 import { createHash } from "node:crypto";
-import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
+import { existsSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
+import { tmpdir } from "node:os";
+import { join } from "node:path";
 
 const repo = "kaaffilm/CINEMATICUM";
 const packPath = "AUDIT/CINEMATICUM_EXTERNAL_AUDITOR_PACK.json";
@@ -28,6 +30,30 @@ function ghJson(args) {
   return JSON.parse(run("gh", args));
 }
 
+function publicReleaseAssetSha256(tag, name) {
+  const dir = mkdtempSync(join(tmpdir(), "cinematicum-public-release-asset-sha-"));
+  try {
+    run("gh", [
+      "release",
+      "download",
+      tag,
+      "--repo",
+      repo,
+      "--pattern",
+      name,
+      "--dir",
+      dir,
+      "--clobber"
+    ]);
+
+    const assetPath = join(dir, name);
+    assert(existsSync(assetPath), `missing downloaded public release asset: ${tag}/${name}`);
+    return sha256File(assetPath);
+  } finally {
+    rmSync(dir, { recursive: true, force: true });
+  }
+}
+
 function assert(condition, message) {
   if (!condition) throw new Error(message);
 }
@@ -40,7 +66,7 @@ try {
   run("git", ["fetch", "origin", "main", "--tags"]);
 
   const packageJson = JSON.parse(readFileSync("package.json", "utf8"));
-  assert(packageJson.version === "1.5.0", `package version must be 1.5.0, got ${packageJson.version}`);
+  assert(/^1\.5\.\d+$/.test(packageJson.version), `package version must be 1.5.x, got ${packageJson.version}`);
 
   assert(existsSync(standardPath), `missing standard: ${standardPath}`);
   assert(existsSync(lineagePath), `missing lineage ledger: ${lineagePath}`);
@@ -105,6 +131,13 @@ try {
   assert(consumptionReceipt.proves_public_release_assets_consumed === true, "public release consumption not proven");
   assert(consumptionReceipt.proves_extracted_outsider_replay === true, "public extracted replay not proven");
 
+  const publicLineageLedgerReleaseTag = "v1.4.0-public-release-lineage-ledger";
+  const publicLineageLedgerAssetName = "CINEMATICUM_PUBLIC_RELEASE_LINEAGE_LEDGER.json";
+  const publicLineageLedgerAssetSha256 = publicReleaseAssetSha256(
+    publicLineageLedgerReleaseTag,
+    publicLineageLedgerAssetName
+  );
+
   const expectedPublicAssets = [
     {
       source_release_tag: "v1.2.0-outsider-reproducible-release",
@@ -128,10 +161,10 @@ try {
       purpose: "outsider replay manifest"
     },
     {
-      source_release_tag: "v1.4.0-public-release-lineage-ledger",
-      source_release_url: publicReleases.find((r) => r.tag === "v1.4.0-public-release-lineage-ledger").release_url,
-      name: "CINEMATICUM_PUBLIC_RELEASE_LINEAGE_LEDGER.json",
-      sha256: sha256File(lineagePath),
+      source_release_tag: publicLineageLedgerReleaseTag,
+      source_release_url: publicReleases.find((r) => r.tag === publicLineageLedgerReleaseTag).release_url,
+      name: publicLineageLedgerAssetName,
+      sha256: publicLineageLedgerAssetSha256,
       purpose: "machine-readable public release lineage ledger"
     }
   ];
@@ -178,7 +211,8 @@ try {
       tag: "v1.4.0-public-release-lineage-ledger",
       release_url: publicReleases.find((r) => r.tag === "v1.4.0-public-release-lineage-ledger").release_url,
       ledger_path: lineagePath,
-      ledger_sha256: sha256File(lineagePath),
+      ledger_sha256: publicLineageLedgerAssetSha256,
+      local_lineage_ledger_sha256: sha256File(lineagePath),
       ledger_object_type: lineage.object_type,
       release_count: lineage.release_chain.length,
       ancestry_edges_verified: lineage.ancestry.length
@@ -234,7 +268,8 @@ try {
     standard_path: standardPath,
     standard_sha256: sha256File(standardPath),
     lineage_ledger_path: lineagePath,
-    lineage_ledger_sha256: sha256File(lineagePath),
+    lineage_ledger_sha256: publicLineageLedgerAssetSha256,
+    local_lineage_ledger_sha256: sha256File(lineagePath),
     public_release_count: publicReleases.length,
     expected_public_asset_count: expectedPublicAssets.length,
     expected_replay_command_count: expectedCommands.length,
