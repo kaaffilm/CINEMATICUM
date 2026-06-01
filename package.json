@@ -1,8 +1,8 @@
 {
   "name": "@kaaffilm/cinematicum",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "private": false,
-  "description": "Self-contained cinematic proof engine for Case 001 GODCUT issuance.",
+  "description": "CINEMATICUM installable autonomous film product boundary with outsider reproducible release verification.",
   "license": "SEE LICENSE IN LICENSE",
   "bin": {
     "cinematicum": "bin/cinematicum.cjs"
@@ -10,7 +10,9 @@
   "scripts": {
     "verify": "node scripts/verify-case-001-product-boundary.mjs",
     "verify:installable": "node scripts/verify-case-001-installable-package.mjs",
-    "packfile": "npm pack --pack-destination dist"
+    "packfile": "npm pack --pack-destination dist",
+    "verify:outsider-release": "node scripts/verify-outsider-reproducible-release.mjs",
+    "export:deterministic-release": "node scripts/export-deterministic-release-bundle.mjs"
   },
   "type": "commonjs",
   "files": [

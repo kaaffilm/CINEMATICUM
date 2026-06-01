@@ -104,3 +104,41 @@ The installable boundary preserves:
 
 The release package is a product transport. It does not convert the film into truth, admissibility, or external reality.
 <!-- CINEMATICUM_INSTALLABLE_PRODUCT_BOUNDARY_V11_END -->
+
+<!-- CINEMATICUM_OUTSIDER_REPRODUCIBLE_RELEASE_V12_START -->
+
+## CINEMATICUM v1.2 — Outsider Reproducible Release Boundary
+
+CINEMATICUM v1.2 seals the public release surface.
+
+The v1.2 boundary proves that an outsider can verify the issued GODCUT film artifact from a deterministic release bundle without trusting the author's working tree.
+
+Verified boundary:
+
+- deterministic release bundle
+- deterministic outsider replay manifest
+- release asset hash ledger
+- replay from extracted bundle
+- single JSON command surface
+- gitless runtime verification
+- no external API
+- no external media
+- no network runtime dependency
+- no manual media selection
+- no candidate selection
+- truth/admissibility/external reality not claimed
+
+Canonical issued artifact:
+
+```text
+CASES/CASE_001_THE_LAST_RENDER/FILM/CASE_001_THE_LAST_RENDER_GODCUT_0001.mp4
+sha256: f23d3da43ed0dfc0a4f97b7c6ad722107cc2531ac584780424ace2c45ff5a192
+```
+
+Verification:
+
+```bash
+node scripts/verify-outsider-reproducible-release.mjs
+```
+
+<!-- CINEMATICUM_OUTSIDER_REPRODUCIBLE_RELEASE_V12_END -->
