@@ -1,0 +1,62 @@
+{
+  "object_type": "CINEMATICUM_PUBLIC_AUDITOR_RUNNER_STANDARD",
+  "schema_version": "1.7.0",
+  "jurisdiction": "CINEMATICUM",
+  "runner_path": "AUDIT/CINEMATICUM_PUBLIC_AUDITOR_RUNNER.mjs",
+  "receipt_path": "AUDIT/CINEMATICUM_PUBLIC_AUDITOR_RUNNER_RECEIPT.json",
+  "source_auditor_pack_release_tag": "v1.5.1-external-auditor-pack-public-sha-repair",
+  "expected_public_auditor_pack_canonical_sha256": "cb7541f94e8e0186a7372cbfda3beb37e5d7dac91fbbd972193272ee0cfdd13c",
+  "expected_public_auditor_pack_standard_sha256": "b380b2f9b2def8779b5b58a6dc24bc635ca87e6977eb36936a8d0bd4ab63f388",
+  "expected_artifact_sha256": "f23d3da43ed0dfc0a4f97b7c6ad722107cc2531ac584780424ace2c45ff5a192",
+  "expected_public_assets": [
+    {
+      "source_release_tag": "v1.2.0-outsider-reproducible-release",
+      "name": "CASE_001_THE_LAST_RENDER_OUTSIDER_REPRODUCIBLE_RELEASE_BUNDLE.tar.gz",
+      "sha256": "6d6d26e428515b8a7f68bb35c2b7a7d80dc561857dbdb9d1df99d93a6eb0e1f8"
+    },
+    {
+      "source_release_tag": "v1.2.0-outsider-reproducible-release",
+      "name": "RELEASE_ASSET_HASH_LEDGER.json",
+      "sha256": "13fb510ccb3b77c1f45024b46e9fb3ffdd392da2e25f5bf4e9a484cace475f27"
+    },
+    {
+      "source_release_tag": "v1.2.0-outsider-reproducible-release",
+      "name": "OUTSIDER_REPLAY_MANIFEST.json",
+      "sha256": "201b2a329aae3fc1dd5946e15c4ff4ef3a7a6b13f702e5da070285151d5a2964"
+    },
+    {
+      "source_release_tag": "v1.4.0-public-release-lineage-ledger",
+      "name": "CINEMATICUM_PUBLIC_RELEASE_LINEAGE_LEDGER.json",
+      "sha256": "ea947845ae51a00420b520f960dca3dd231a5d43fdf2bced999085dd344fbcc6"
+    }
+  ],
+  "expected_replay_commands": [
+    {
+      "command": "node bin/cinematicum.cjs proof",
+      "object_type": "CINEMATICUM_PRODUCT_PROOF_SUMMARY"
+    },
+    {
+      "command": "node bin/cinematicum.cjs artifact",
+      "object_type": "CINEMATICUM_PRODUCT_ARTIFACT_POINTER"
+    },
+    {
+      "command": "node bin/cinematicum.cjs studio",
+      "object_type": "CINEMATICUM_STUDIO_POINTER"
+    },
+    {
+      "command": "node bin/cinematicum.cjs verify",
+      "object_type": "CINEMATICUM_CLI_LEAF_VERIFICATION_RESULT"
+    },
+    {
+      "command": "node bin/cinematicum.cjs export",
+      "object_type": "CINEMATICUM_PRODUCT_RELEASE_BUNDLE_EXPORT_RESULT"
+    }
+  ],
+  "private_source_required": false,
+  "local_repository_required_for_auditor": false,
+  "source_tree_embedded": false,
+  "film_media_embedded_in_auditor_pack": false,
+  "proves_truth": false,
+  "proves_admissibility": false,
+  "proves_external_reality": false
+}
