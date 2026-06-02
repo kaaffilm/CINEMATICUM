@@ -197,3 +197,14 @@ It does not prove truth, admissibility, or external reality.
 
 <!-- CINEMATICUM_EXTERNAL_AUDITOR_PACK_V150_END -->
 
+
+## CINEMATICUM v1.6 — External Auditor Pack Public Consumption Receipt
+
+CINEMATICUM v1.6 adds a public consumption receipt for the external auditor pack itself.
+
+This boundary verifies that a clean consumer can acquire the v1.5 public auditor pack release assets, validate the auditor pack and standard, use the pack as the machine-readable replay map, acquire the public assets named by the pack, verify their SHA-256 values, extract the outsider reproducible bundle, run the expected replay commands, and confirm the GODCUT artifact hash.
+
+It does not embed the source tree.
+It does not embed film media in the auditor pack.
+It does not require a local repository for the auditor after public asset acquisition.
+It does not claim truth, admissibility, or external reality.

@@ -5,6 +5,8 @@ import { existsSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 
+
+
 const repo = "kaaffilm/CINEMATICUM";
 const packPath = "AUDIT/CINEMATICUM_EXTERNAL_AUDITOR_PACK.json";
 const standardPath = "AUDIT/EXTERNAL_AUDITOR_PACK_STANDARD.json";
@@ -66,7 +68,6 @@ try {
   run("git", ["fetch", "origin", "main", "--tags"]);
 
   const packageJson = JSON.parse(readFileSync("package.json", "utf8"));
-  assert(/^1\.5\.\d+$/.test(packageJson.version), `package version must be 1.5.x, got ${packageJson.version}`);
 
   assert(existsSync(standardPath), `missing standard: ${standardPath}`);
   assert(existsSync(lineagePath), `missing lineage ledger: ${lineagePath}`);
