@@ -208,3 +208,19 @@ It does not embed the source tree.
 It does not embed film media in the auditor pack.
 It does not require a local repository for the auditor after public asset acquisition.
 It does not claim truth, admissibility, or external reality.
+
+## CINEMATICUM v1.7 — Standalone Public Auditor Runner
+
+CINEMATICUM v1.7 adds a standalone public auditor runner.
+
+The runner is designed to be executed outside the source repository. It consumes the public v1.5.1 auditor pack release, verifies the public auditor pack canonical hash, verifies the public assets named by the pack, extracts the outsider reproducible release bundle, runs the bundled CINEMATICUM CLI commands, verifies the expected JSON object types, and checks the issued film artifact hash.
+
+It does not require private source, a local repository, embedded source tree, or film media embedded in the auditor pack. Network is required only to acquire public release assets. After acquisition, replay runs from the extracted public bundle.
+
+It does not claim truth, admissibility, or external reality.
+
+```bash
+node AUDIT/CINEMATICUM_PUBLIC_AUDITOR_RUNNER.mjs
+node scripts/verify-public-auditor-runner.mjs
+````
+
