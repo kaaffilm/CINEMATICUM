@@ -1,0 +1,46 @@
+{
+  "object_type": "CINEMATICUM_EXTERNAL_AUDITOR_PACK_CONSUMPTION_STANDARD",
+  "schema_version": "1.6.0",
+  "jurisdiction": "CINEMATICUM",
+  "purpose": "Verify that the external auditor pack can be acquired from the public v1.5 release, parsed as a replay map, and used to consume the named public release assets without private source or embedded film media.",
+  "source_release_tag": "v1.5.1-external-auditor-pack-public-sha-repair",
+  "required_public_release_assets": [
+    "CINEMATICUM_EXTERNAL_AUDITOR_PACK.json",
+    "EXTERNAL_AUDITOR_PACK_STANDARD.json"
+  ],
+  "required_pack_object_type": "CINEMATICUM_EXTERNAL_AUDITOR_PACK",
+  "required_standard_object_type": "CINEMATICUM_EXTERNAL_AUDITOR_PACK_STANDARD",
+  "required_receipt_object_type": "CINEMATICUM_EXTERNAL_AUDITOR_PACK_CONSUMPTION_RECEIPT",
+  "required_boundaries": {
+    "private_source_required": false,
+    "local_repository_required_for_auditor": false,
+    "git_required_after_extraction": false,
+    "source_tree_embedded": false,
+    "film_media_embedded_in_auditor_pack": false,
+    "public_network_required_to_acquire_assets": true,
+    "network_runtime_required_after_asset_acquisition": false,
+    "external_api_used_after_asset_acquisition": false,
+    "external_media_used_after_asset_acquisition": false,
+    "manual_media_selection_used": false,
+    "candidate_selection_used": false
+  },
+  "proves_external_auditor_pack_publicly_consumable": true,
+  "proves_auditor_pack_drives_public_replay": true,
+  "proves_film_issuance_chain_preserved": true,
+  "proves_truth": false,
+  "proves_admissibility": false,
+  "proves_external_reality": false,
+  "source_release_url": "https://github.com/kaaffilm/CINEMATICUM/releases/tag/v1.5.1-external-auditor-pack-public-sha-repair",
+  "expected_public_auditor_pack_canonical_sha256": "cb7541f94e8e0186a7372cbfda3beb37e5d7dac91fbbd972193272ee0cfdd13c",
+  "expected_public_auditor_pack_assets": [
+    {
+      "name": "CINEMATICUM_EXTERNAL_AUDITOR_PACK.json",
+      "sha256_canonical_json": "cb7541f94e8e0186a7372cbfda3beb37e5d7dac91fbbd972193272ee0cfdd13c",
+      "expected_sha256_canonical_json": "cb7541f94e8e0186a7372cbfda3beb37e5d7dac91fbbd972193272ee0cfdd13c"
+    },
+    {
+      "name": "EXTERNAL_AUDITOR_PACK_STANDARD.json",
+      "sha256": "b380b2f9b2def8779b5b58a6dc24bc635ca87e6977eb36936a8d0bd4ab63f388"
+    }
+  ]
+}

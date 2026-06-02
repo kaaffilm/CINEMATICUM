@@ -1,0 +1,22 @@
+name: verify-external-auditor-pack-consumption
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  verify-external-auditor-pack-consumption:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "24"
+      - name: Verify external auditor pack public consumption receipt
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: node scripts/verify-external-auditor-pack-consumption-receipt.mjs
