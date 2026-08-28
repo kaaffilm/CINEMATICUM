@@ -224,3 +224,38 @@ node AUDIT/CINEMATICUM_PUBLIC_AUDITOR_RUNNER.mjs
 node scripts/verify-public-auditor-runner.mjs
 ````
 
+
+<!-- CINEMATICUM_RECIPROCAL_PRODUCTION_AUTHORITY_ACK_V1_START -->
+
+## Cross-repository authority acknowledgement
+
+This production/replay repository acknowledges CINEMATICUM/CINEMATICUM at accepted merge 517fd51f43ae8a17db219da352f5b83998d45fbd as the canonical CINEMATICUM issuance jurisdiction.
+
+This repository remains the canonical pinned production/replay artifact track for its own production artifacts, replay artifacts, and public release replay evidence.
+
+It does not hold truth authority, admissibility authority, or admissible-motion-picture issuance authority.
+
+The acknowledged Case 001 issuance status is CASE_OPEN_NOT_ISSUED.
+
+The production GODCUT remains pinned at:
+
+CASES/CASE_001_THE_LAST_RENDER/FILM/CASE_001_THE_LAST_RENDER_GODCUT_0001.mp4
+SHA-256: f23d3da43ed0dfc0a4f97b7c6ad722107cc2531ac584780424ace2c45ff5a192
+
+Production artifact existence, artifact issuance, or successful replay does not imply admissibility or admissible-motion-picture issuance.
+
+This acknowledgement does not delete, archive, rewrite, or source-merge either repository.
+
+This acknowledgement becomes effective only if this change is independently approved and merged to production main.
+
+On that accepted merge, the two-repository role split becomes reciprocally bound, full cross-repository canonicality becomes resolved, and Kaaffilm adapter implementation becomes eligible without source merge.
+
+Machine-readable acknowledgement:
+
+AUTHORITY/CINEMATICUM_PRODUCTION_REPOSITORY_AUTHORITY_ACKNOWLEDGEMENT.json
+
+Verification command:
+
+node scripts/verify-production-repository-authority-acknowledgement.mjs
+
+<!-- CINEMATICUM_RECIPROCAL_PRODUCTION_AUTHORITY_ACK_V1_END -->
