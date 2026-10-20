@@ -1,5 +1,23 @@
 # CINEMATICUM
 
+## CINEMATICUM Studio — editable production workspace
+
+Open the actual media editor with `make studio`. On macOS, `make studio-install-macos`
+builds a native **CINEMATICUM Studio.app** window using the installed Xcode tools.
+The application imports your media, edits a frame-based multitrack timeline, previews
+composition, grades footage, mixes audio, animates transforms and titles, and exports
+H.264 or ProRes through FFmpeg. Blender scene renders and configured local ComfyUI
+video workflows produce media that can be added to the same timeline.
+
+Start with [the Studio guide](scripts/studio/README.md). Run `make studio-doctor`
+to inspect the actual installed engines, or `make studio-test` for the media and
+application tests. Production footage is supplied by the user; missing media are
+never replaced with a procedural film. Studio exports do not change Case 001's
+issuance status or the authority relationship between the repositories.
+
+This is the first working editor implementation. Full professional feature parity
+with the referenced applications and paid model integrations are not implemented.
+
 Strict realistic production stack for **THE LAST RENDER**.
 
 This repository does not accept toy procedural media as a final film.
@@ -259,3 +277,4 @@ Verification command:
 node scripts/verify-production-repository-authority-acknowledgement.mjs
 
 <!-- CINEMATICUM_RECIPROCAL_PRODUCTION_AUTHORITY_ACK_V1_END -->
+

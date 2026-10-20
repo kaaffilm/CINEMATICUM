@@ -1,0 +1,27 @@
+name: Studio media verification
+on:
+  pull_request:
+    paths:
+      - 'scripts/studio/**'
+      - '.github/workflows/studio-verification.yml'
+  push:
+    paths:
+      - 'scripts/studio/**'
+      - '.github/workflows/studio-verification.yml'
+permissions:
+  contents: read
+jobs:
+  media-and-http:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install media engine
+        run: sudo apt-get update -qq && sudo apt-get install -y ffmpeg
+      - name: Verify real media, adapters, and project API
+        run: python3 -m unittest discover -s scripts/studio -p 'test_*.py' -v
+      - name: Check editor JavaScript
+        run: node --check scripts/studio/web/app.js

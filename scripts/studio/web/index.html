@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="dark">
+<title>CINEMATICUM Studio</title>
+<link rel="stylesheet" href="/style.css">
+<script src="/app.js" defer></script>
+</head>
+<body>
+<div class="app" id="app">
+  <header class="app-header">
+    <a class="brand" href="/" aria-label="Cinematicum Studio home"><span class="brand-mark">C</span><span>CINEMATICUM<small>STUDIO</small></span></a>
+    <div class="project-switcher"><select id="project-select" aria-label="Open project"></select><button id="rename-project" class="icon-button" title="Rename project" aria-label="Rename project">✎</button><span id="save-state" class="save-state">LOCAL PROJECT</span></div>
+    <div class="header-actions"><button id="new-project" class="quiet">New project</button><button id="save-project" title="Save project · ⌘/Ctrl S">Save</button><button id="export-button" class="primary">Export <span>↗</span></button></div>
+  </header>
+  <nav class="workspace-tabs" aria-label="Editing workspace">
+    <div class="mode-tabs"><button class="mode active" data-mode="edit">Edit</button><button class="mode" data-mode="color">Color</button><button class="mode" data-mode="composite">Composite</button><button class="mode" data-mode="generate">Generate</button><button class="mode" data-mode="3d">3D</button></div>
+    <div class="project-format" id="project-format"></div><button id="refresh-engines" class="quiet small" title="Check installed render engines">Check engines <span>↻</span></button>
+  </nav>
+  <main class="workspace">
+    <aside class="media-panel" aria-label="Media bin">
+      <div class="panel-heading"><h2>Media</h2><span id="asset-count">0</span><button id="import-button" class="icon-button" aria-label="Import media" title="Import video, audio, images or Blender scenes">＋</button></div>
+      <div class="media-search"><span>⌕</span><input id="media-search" type="search" placeholder="Find media" aria-label="Search media"></div>
+      <div id="media-bin" class="media-bin" tabindex="0" aria-label="Media assets; drop files to import"></div>
+      <div class="media-footer"><span id="media-footer-label">Files stay on this computer</span><button id="import-footer" class="text-button">Import files</button></div>
+    </aside>
+    <section class="viewer-panel" aria-label="Picture viewer">
+      <div class="viewer-heading"><div><span class="viewer-label">PROGRAM</span><span id="viewer-project"></span></div><div class="preview-switch"><button id="source-preview" class="active" title="Interactive source preview">Source</button><button id="rendered-preview" title="Play the last rendered preview" disabled>Rendered</button></div></div>
+      <div id="viewer-stage" class="viewer-stage">
+        <canvas id="preview-canvas" width="1280" height="720" aria-label="Interactive timeline picture"></canvas>
+        <video id="render-video" controls playsinline hidden aria-label="Rendered timeline preview"></video>
+        <div id="empty-viewer" class="empty-viewer"><div class="empty-frame"><span>＋</span></div><h1>Your next film starts here.</h1><p>Import footage, sound, or images.<br>Then add them to the timeline.</p><button id="import-center" class="primary">Import media</button><span class="empty-note">VIDEO · AUDIO · IMAGE · BLENDER</span></div>
+      </div>
+      <div class="transport"><span id="timecode" class="timecode">00:00:00:00</span><div class="transport-buttons"><button id="jump-start" class="icon-button" title="Go to start" aria-label="Go to start">|◀</button><button id="step-back" class="icon-button" title="Previous frame · ←" aria-label="Previous frame">‹</button><button id="play-button" class="play-button" title="Play / pause · Space" aria-label="Play timeline">▶</button><button id="step-forward" class="icon-button" title="Next frame · →" aria-label="Next frame">›</button><button id="jump-end" class="icon-button" title="Go to end" aria-label="Go to end">▶|</button></div><span id="duration" class="timecode muted">00:00:00:00</span></div>
+      <div class="preview-footer"><span id="preview-note">Source preview · render to review exact effects and sound</span><button id="preview-render" class="text-button">Render preview <span>↗</span></button></div>
+    </section>
+    <aside class="inspector-panel" aria-label="Clip inspector"><div class="panel-heading"><h2 id="inspector-heading">Inspector</h2><span id="selection-kind"></span></div><div id="inspector" class="inspector"></div></aside>
+  </main>
+  <section class="timeline-panel" aria-label="Editing timeline">
+    <div class="timeline-toolbar"><div class="timeline-tools"><span class="section-label">TIMELINE</span><span class="tool-divider"></span><button id="undo-button" class="icon-button" title="Undo · ⌘/Ctrl Z" aria-label="Undo edit" disabled>↶</button><button id="redo-button" class="icon-button" title="Redo · ⌘/Ctrl Shift Z" aria-label="Redo edit" disabled>↷</button><button id="split-button" title="Split at playhead · S" disabled>Split <kbd>S</kbd></button><button id="duplicate-button" title="Duplicate selected clip" disabled>Duplicate</button><button id="delete-button" class="icon-button" title="Delete selected clip" aria-label="Delete selected clip" disabled>⌫</button><span class="tool-divider"></span><button id="add-title">＋ Title</button><button id="automation-button">Automate</button></div><div class="timeline-options"><label class="snap-toggle"><input id="snap-toggle" type="checkbox" checked> Snap</label><button id="zoom-out" class="icon-button" aria-label="Zoom timeline out">−</button><input id="timeline-zoom" aria-label="Timeline zoom" type="range" min="12" max="160" value="48"><button id="zoom-in" class="icon-button" aria-label="Zoom timeline in">＋</button><button id="fit-timeline" class="quiet small">Fit</button></div></div>
+    <div id="timeline-scroll" class="timeline-scroll"><div id="timeline-content" class="timeline-content"></div></div>
+    <div class="timeline-footer"><span id="timeline-hint">Double-click media to add it · drag clips to arrange · drag edges to trim</span><span id="timeline-stats">0 clips</span></div>
+  </section>
+  <div id="job-bar" class="job-bar" hidden><span id="job-indicator" class="job-indicator"></span><div class="job-info"><strong id="job-label">Rendering</strong><span id="job-detail"></span></div><progress id="job-progress" max="100" value="0"></progress><button id="cancel-job" class="quiet small">Cancel</button><button id="view-job" class="quiet small" hidden>Play export</button><a id="download-job" class="button small" hidden download>Download</a><button id="close-job" class="icon-button" aria-label="Dismiss completed job" hidden>×</button></div>
+</div>
+<div id="toast" role="status" aria-live="polite" hidden></div>
+<input id="media-input" type="file" accept="video/*,audio/*,image/*,.blend" multiple hidden>
+<input id="workflow-input" type="file" accept="application/json,.json" hidden>
+<dialog id="project-dialog"><form id="project-form"><div class="dialog-header"><div><span class="eyebrow">CINEMATICUM STUDIO</span><h2>New project</h2></div><button type="button" id="cancel-project" class="icon-button" aria-label="Close new project">×</button></div><label>Project name<input id="new-name" name="name" maxlength="120" required value="Untitled film"></label><div class="field-row"><label>Width<input id="new-width" name="width" type="number" min="128" max="4096" step="2" value="1920" required></label><label>Height<input id="new-height" name="height" type="number" min="128" max="4096" step="2" value="1080" required></label><label>Frame rate<select id="new-fps" name="fps"><option value="24">24 fps</option><option value="25">25 fps</option><option value="30">30 fps</option><option value="48">48 fps</option><option value="50">50 fps</option><option value="60">60 fps</option></select></label></div><p class="muted">Media imports are copied into this project. Edits never change your original files.</p><button type="submit" class="primary full">Create project</button></form></dialog>
+<dialog id="export-dialog"><div class="dialog-header"><div><span class="eyebrow">RENDER & EXPORT</span><h2>Make the picture.</h2></div><button id="close-export" class="icon-button" aria-label="Close export">×</button></div><div id="export-summary" class="export-summary"></div><button class="export-choice" data-export="h264"><span><strong>H.264 · MP4</strong><small>Review, sharing, and delivery</small></span><span>↗</span></button><button class="export-choice" data-export="prores"><span><strong>ProRes · MOV</strong><small>Editing and finishing intermediate</small></span><span>↗</span></button><p class="muted">Renders the current timeline, including compositing, titles, effects, and mixed audio.</p></dialog>
+<dialog id="automation-dialog"><div class="dialog-header"><div><span class="eyebrow">EDITING RECIPES</span><h2>One operation. Every clip.</h2></div><button id="close-automation" class="icon-button" aria-label="Close automation">×</button></div><button class="export-choice" data-recipe="monochrome"><span><strong>Monochrome all clips</strong><small>Set every clip's saturation to zero</small></span><span>↗</span></button><button class="export-choice" data-recipe="mute"><span><strong>Mute all clip audio</strong><small>Set every clip's gain to zero</small></span><span>↗</span></button><button class="export-choice" data-recipe="sequence"><span><strong>Close gaps on selected track</strong><small>Arrange clips end to end, starting at frame zero</small></span><span>↗</span></button><p class="muted">Recipes update and save the project. Undo remains available.</p></dialog>
+<dialog id="workflow-dialog"><form id="workflow-form"><div class="dialog-header"><div><span class="eyebrow">COMFYUI WORKFLOW</span><h2>Connect your prompt.</h2></div><button type="button" id="close-workflow" class="icon-button" aria-label="Close workflow setup">×</button></div><p class="muted">Choose the exact node inputs CINEMATICUM should control. Every other workflow input keeps its original value.</p><label>Positive prompt input<select id="workflow-positive" required></select></label><label style="margin-top:16px">Negative prompt input · optional<select id="workflow-negative"></select></label><label style="margin-top:16px">Seed input · optional<select id="workflow-seed"></select></label><button type="submit" class="primary full" style="margin-top:22px">Connect workflow</button></form></dialog>
+</body>
+</html>
