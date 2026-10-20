@@ -1,0 +1,7 @@
+__pycache__
+*.pyc
+bundles/*.part
+bundles/*.part.json
+bundles/resolved.json
+bundles/*.tmp
+tests

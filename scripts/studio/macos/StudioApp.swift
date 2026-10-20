@@ -431,7 +431,7 @@ final class StudioAppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate
 
     @objc private func saveProject(_ sender: Any?) {
         guard isLocal(webView.url), !quitting else { return }
-        webView.evaluateJavaScript("document.getElementById('save-project')?.click()", completionHandler: nil)
+        webView.evaluateJavaScript("if (typeof cinematicumSave === 'function') cinematicumSave();", completionHandler: nil)
     }
 
     @objc private func exportProject(_ sender: Any?) {

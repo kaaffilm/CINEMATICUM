@@ -1,5 +1,42 @@
 # CINEMATICUM Studio
 
+## Complete native editor workspaces
+
+Studio 0.3 adds embedded workspaces for the actual Linux applications: Kdenlive,
+Shotcut, Cinelerra-GG, Natron, Friction, Glaxnimate, and Blender. Their own editing
+interfaces, native project files, plugins bundled by upstream, and render engines
+run in an app-owned Docker Desktop container. Xpra streams the desktop and audio
+into the CINEMATICUM window. The **Assembly** button returns to Studio's existing
+local timeline. These are separately maintained native document models; this
+integration does not translate all seven into one lossless timeline format.
+
+Start Docker Desktop, open Studio, and choose **Install editors** once. The
+installer downloads the exact packages in `full_runtime/engines.json`, checks
+published hashes where available, records a SHA-256 acquisition lock for every
+archive, verifies that lock again before extraction, and builds the local image.
+Source changes reuse the verified package cache. No privileged container or
+Docker socket mount is used. The image and native projects stay on this Mac.
+
+Each project's native documents live in `nativeprojects/PROJECT_ID` inside the
+Studio workspace; the editors see that folder as `/projects/PROJECT_ID`.
+Imported Studio media is available read-only at `/media`. Save completed media
+in `/projects/PROJECT_ID/exports`, then choose **Import exports** to copy and
+validate the results into the Assembly media bin. Native documents remain
+editable in their originating editor. Saving from the Studio header forwards
+the native editor's Save command when its workspace is active.
+
+Closing the Studio window disconnects the viewer and preserves native editor
+processes, including unsaved documents, for reopening. Save and close projects
+inside their editors before stopping Docker Desktop. Studio does not silently
+terminate these documents or another application's containers.
+
+On Apple Silicon this deployment runs Linux x86-64 applications with software
+Mesa graphics and CPU rendering. It does not provide Metal/CUDA passthrough,
+native capture hardware integration, a reference-quality HDR monitor stream,
+or a claim of identical performance to native Mac builds. Friction's selected
+upstream release is a release candidate. The commercial AI providers remain
+unconnected; their names are not reported as installed engines.
+
 A working local audiovisual editor. Media are imported into an owned project,
 edited on a frame-based timeline, previewed, and exported through real render
 engines. No missing shot is replaced with filler. Exporting media has no film

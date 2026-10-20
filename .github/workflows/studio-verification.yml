@@ -28,3 +28,4 @@ jobs:
           node --check scripts/studio/web/app.js
           node --check scripts/studio/web/compositor-ui.js
           node --check scripts/studio/web/scene-editor.js
+          node --check scripts/studio/web/native-editors.js

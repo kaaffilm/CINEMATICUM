@@ -7,8 +7,10 @@
 <title>CINEMATICUM Studio</title>
 <link rel="stylesheet" href="/style.css">
 <link rel="stylesheet" href="/scene-editor.css">
+<link rel="stylesheet" href="/native-editors.css">
 <script src="/compositor-ui.js" defer></script>
 <script src="/scene-editor.js" defer></script>
+<script src="/native-editors.js" defer></script>
 <script src="/app.js" defer></script>
 </head>
 <body>
@@ -18,8 +20,9 @@
     <div class="project-switcher"><select id="project-select" aria-label="Open project"></select><button id="rename-project" class="icon-button" title="Rename project" aria-label="Rename project">✎</button><span id="save-state" class="save-state">LOCAL PROJECT</span></div>
     <div class="header-actions"><button id="new-project" class="quiet">New project</button><button id="save-project" title="Save project · ⌘/Ctrl S">Save</button><button id="export-button" class="primary">Export <span>↗</span></button></div>
   </header>
+  <section id="native-editors-root" hidden></section>
   <nav class="workspace-tabs" aria-label="Editing workspace">
-    <div class="mode-tabs"><button class="mode active" data-mode="edit">Edit</button><button class="mode" data-mode="color">Color</button><button class="mode" data-mode="composite">Composite</button><button class="mode" data-mode="generate">Generate</button><button class="mode" data-mode="3d">3D</button></div>
+    <div class="mode-tabs"><button id="native-workspace-button" class="mode">Full editors</button><button class="mode active" data-mode="edit">Edit</button><button class="mode" data-mode="color">Color</button><button class="mode" data-mode="composite">Composite</button><button class="mode" data-mode="generate">Generate</button><button class="mode" data-mode="3d">3D</button></div>
     <div class="project-format" id="project-format"></div><button id="refresh-engines" class="quiet small" title="Check installed render engines">Check engines <span>↻</span></button>
   </nav>
   <main class="workspace">

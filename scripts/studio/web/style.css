@@ -83,3 +83,10 @@
 .clip-transform-details[open]>summary{margin-bottom:17px;color:var(--accent)}
 @media(max-width:1300px){.compositor-title{display:none}.compositor-footer>span:nth-child(2){display:none}.compositor-toolbar select{max-width:117px}.scene-workspace-heading>div>span:last-child{display:none}}
 @media(max-height:760px){.app[data-workspace="3d"]{grid-template-rows:51px 35px minmax(390px,1fr) 210px}.app[data-workspace="composite"]{grid-template-rows:51px 35px minmax(350px,1fr) 205px}.app[data-workspace="composite"] .viewer-stage{min-height:64px;flex-basis:26%}.compositor-editor{min-height:200px}.app[data-workspace="composite"] .viewer-heading{height:31px;min-height:31px}.empty-actions button{font-size:10px;padding:6px 9px}}
+
+/* Complete editor workspaces occupy the application canvas. */
+.app.native-active,.app.native-active[data-workspace]{grid-template-rows:58px minmax(0,1fr)}
+.app.native-active>.workspace-tabs,.app.native-active>.workspace,.app.native-active>.timeline-panel{display:none!important}
+.app.native-active #export-button{display:none}
+.app.native-active #save-project{display:block}
+.app.native-active #native-editors-root{grid-row:2;min-height:0}

@@ -1,0 +1,85 @@
+{
+  "schema": 1,
+  "platform": "linux/amd64",
+  "engines": [
+    {
+      "id": "shotcut",
+      "label": "Shotcut",
+      "version": "26.10.3",
+      "release": "v26.9.27",
+      "kind": "appimage",
+      "url": "https://github.com/mltframework/shotcut/releases/download/v26.9.27/shotcut-linux-x86_64-26.10.3.AppImage",
+      "sha256": "a876d10ea083d2d61e62045c410d8951936264978bdd39f46b0a5ae380e0bc47",
+      "size": 216024256,
+      "checksum_source": "https://api.github.com/repos/mltframework/shotcut/releases/latest",
+      "homepage": "https://shotcut.org/",
+      "entrypoints": ["AppRun"]
+    },
+    {
+      "id": "kdenlive",
+      "label": "Kdenlive",
+      "version": "26.08.2",
+      "kind": "appimage",
+      "url": "https://download.kde.org/stable/kdenlive/26.08/linux/kdenlive-26.08.2-x86_64.AppImage",
+      "sha256": "3194c0979bcfb7ec4a0b33ebc05178a51cffdf5b180c3a89bcf4da94e025bc78",
+      "checksum_source": "https://download.kde.org/stable/kdenlive/26.08/linux/kdenlive-26.08.2-x86_64.AppImage.sha256",
+      "homepage": "https://kdenlive.org/",
+      "entrypoints": ["AppRun"]
+    },
+    {
+      "id": "cinelerra",
+      "label": "Cinelerra-GG",
+      "version": "20260831",
+      "kind": "appimage",
+      "url": "https://download.cinelerra-gg.org/download.php?file=images%2FCinGG-20260831-x86_64.AppImage",
+      "filename": "CinGG-20260831-x86_64.AppImage",
+      "homepage": "https://www.cinelerra-gg.org/",
+      "entrypoints": ["AppRun"]
+    },
+    {
+      "id": "natron",
+      "label": "Natron",
+      "version": "2.5.0",
+      "kind": "tar",
+      "url": "https://github.com/NatronGitHub/Natron/releases/download/v2.5.0/Natron-2.5.0-Linux-x86_64-no-installer.tar.xz",
+      "size": 147079928,
+      "homepage": "https://natrongithub.github.io/",
+      "entrypoints": ["Natron", "bin/Natron"]
+    },
+    {
+      "id": "friction",
+      "label": "Friction",
+      "version": "1.0.0-rc.3",
+      "release_channel": "upstream-current-release-candidate",
+      "kind": "appimage",
+      "url": "https://github.com/friction2d/friction/releases/download/v1.0.0-rc.3/Friction-1.0.0-rc.3-x86_64.AppImage",
+      "sha256": "315f89a00b581bed3a3f548397819aae3c6a7af28d7f9c9cca215be4b0981acb",
+      "size": 35377472,
+      "checksum_source": "https://api.github.com/repos/friction2d/friction/releases/latest",
+      "homepage": "https://friction.graphics/",
+      "entrypoints": ["AppRun"]
+    },
+    {
+      "id": "glaxnimate",
+      "label": "Glaxnimate",
+      "version": "0.6.0",
+      "kind": "appimage",
+      "url": "https://download.kde.org/stable/glaxnimate/0.6.0/linux/glaxnimate-0.6.0-x86_64.AppImage",
+      "sha256": "cd8ecda980464520f1171cc9029968b0b3e3c1e6ccb1b7f4e40294796f9292b0",
+      "checksum_source": "https://download.kde.org/stable/glaxnimate/0.6.0/linux/glaxnimate-0.6.0-x86_64.AppImage.sha256",
+      "homepage": "https://glaxnimate.org/",
+      "entrypoints": ["AppRun"]
+    },
+    {
+      "id": "blender",
+      "label": "Blender",
+      "version": "5.2.2",
+      "kind": "tar",
+      "url": "https://mirror.blender.org/release/Blender5.2/blender-5.2.2-linux-x64.tar.xz",
+      "sha256": "84098912789dc450e95697c4184fb8a90acbe5111c2ba4aede3fecb57806a168",
+      "checksum_source": "https://download.blender.org/release/Blender5.2/blender-5.2.2.sha256",
+      "homepage": "https://www.blender.org/",
+      "entrypoints": ["blender"]
+    }
+  ]
+}
