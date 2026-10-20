@@ -70,6 +70,10 @@ def run(binary, evidence):
             saved = store.get(project["id"])
             result["checks"]["one_clip_saved"] = len(saved["clips"]) == 1 and saved["clips"][0]["duration"] == 12
             result["checks"]["exposure_saved"] = bool(saved["clips"]) and saved["clips"][0].get("grade", {}).get("exposure") == .75
+            graph = saved["clips"][0].get("compositor", {}) if saved["clips"] else {}
+            nodes = {node["id"]: node for node in graph.get("nodes", [])}
+            result["checks"]["node_graph_saved"] = len(nodes) == 4 and nodes.get(graph.get("output"), {}).get("type") == "merge"
+            result["checks"]["mask_parameter_saved"] = any(node["type"] == "mask" and node["params"]["feather"] == .25 for node in nodes.values())
             result["checks"]["raster_title_saved"] = len(saved["titles"]) == 1 and bool(saved["titles"][0].get("asset_id")) and saved["titles"][0]["text"] == "ENGINE TEST"
             jobs = [j for j in store.jobs.values() if j["project_id"] == project["id"] and j["kind"] == "render"]
             completed = [j for j in jobs if j["state"] == "completed"]

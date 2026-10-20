@@ -33,8 +33,10 @@ import webbrowser
 
 from engine import probe_media, validate_project, render_project, MEDIA_EXTENSIONS
 from adapters import AdapterError, check_comfyui, find_blender, generate_comfyui, render_blender, validate_workflow
+from generation_readiness import workflow_readiness
+from scene import validate_scene, render_scene
 
-VERSION = "0.1.0"
+VERSION = "0.2.0"
 MAX_UPLOAD = 8 * 1024 * 1024 * 1024
 MAX_JSON = 8 * 1024 * 1024
 IDENTIFIER = re.compile(r"^[a-f0-9]{32}$")
@@ -227,6 +229,11 @@ class Store:
             normalized = validate_project(p, directory)
             if isinstance(normalized, dict):
                 p = normalized
+            if not isinstance(p.get("settings", {}), dict):
+                raise ValueError("Project settings must be an object")
+            p.setdefault("settings", {})
+            if p["settings"].get("scene") is not None:
+                p["settings"]["scene"] = validate_scene(p["settings"]["scene"], width=p["width"], height=p["height"])
             p["revision"] = current.get("revision", 0) + 1
             p["updated_at"] = time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
             atomic_json(directory / "project.json", p)
@@ -296,6 +303,8 @@ class Store:
             except (OSError, subprocess.SubprocessError):
                 pass
         result = {"version": VERSION, "ffmpeg": bool(ffmpeg and ffprobe), "blender": bool(find_blender()), "comfyui": check_comfyui(self.comfy_url), "titles": "overlay" in filters, "raster_titles": "overlay" in filters, "drawtext": "drawtext" in filters, "h264": "libx264" in encoders, "prores": "prores_ks" in encoders, "workspace": str(self.root), "color_space": "SDR Rec.709", "commercial_providers": "No paid provider is configured in this build."}
+        result["scene_authoring"] = result["blender"] and result["ffmpeg"]
+        result["node_compositor"] = all(name in filters for name in ("geq", "overlay", "split", "gblur"))
         self._cap_cache, self._cap_time = copy.deepcopy(result), time.monotonic()
         return result
 
@@ -340,10 +349,11 @@ class Store:
             try:
                 result = fn(job_id, progress, event)
                 with self.lock:
-                    if event.is_set():
-                        job.update(state="cancelled", error="Job cancelled")
-                    else:
-                        job.update(state="completed", progress=1, result=result)
+                    # A successful worker return commits its published result.
+                    # Workers must raise on cooperative cancellation before that
+                    # commit. A late request must not hide already published
+                    # media/source files or discard their successful result.
+                    job.update(state="completed", progress=1, result=result, error=None)
             except Exception as exc:
                 with self.lock:
                     job.update(state="cancelled" if event.is_set() else "failed", error=str(exc)[-6000:])
@@ -416,8 +426,9 @@ class Store:
             raise ValueError("A prompt of 1–32000 characters is required")
         if isinstance(seed, bool) or not isinstance(seed, int) or not 0 <= seed < 2**53:
             raise ValueError("Seed must be an integer from 0 to 9007199254740991")
-        if not check_comfyui(self.comfy_url).get("available"):
-            raise ValueError("ComfyUI is unavailable. Start the configured local ComfyUI server first.")
+        readiness = workflow_readiness(self.comfy_url, workflow)
+        if not readiness["ready"]:
+            raise ValueError("Generation preflight failed: " + " ".join(readiness["errors"][:5]))
 
         def work(job_id, progress, event):
             with tempfile.TemporaryDirectory(prefix="generation-", dir=str(directory)) as scratch:
@@ -427,6 +438,57 @@ class Store:
                 asset = self.admit(project_id, result["path"], "Generated take" + Path(result["path"]).suffix, result.get("provenance"))
                 return {"asset": asset, "url": f"/api/projects/{project_id}/media/{asset['id']}"}
         return self.submit(project_id, "generate", work, {"prompt": prompt, "negative": negative, "seed": seed, "workflow": workflow})
+
+    def generation_readiness(self, project_id):
+        directory = self.project_dir(project_id)
+        path = directory / "workflow.json"
+        return workflow_readiness(self.comfy_url, read_json(path) if path.is_file() else None)
+
+    def scene_render(self, project_id, payload):
+        """Render a bounded editable scene recipe and preserve its Blender source."""
+        project = self.get(project_id)
+        recipe = validate_scene(payload.get("scene", project.get("settings", {}).get("scene")),
+                                width=project["width"], height=project["height"])
+        if not recipe["objects"]:
+            raise ValueError("Add at least one object before rendering the 3D scene")
+        start = payload.get("frame_start", 1)
+        end = payload.get("frame_end", recipe["frame_end"])
+        if (any(isinstance(v, bool) or not isinstance(v, int) for v in (start, end))
+                or not 1 <= start <= end <= recipe["frame_end"]):
+            raise ValueError("Scene render frames must be within the scene's frame range (1–7200)")
+        if not find_blender():
+            raise ValueError("Blender is required to render a scene")
+        directory = self.project_dir(project_id)
+        snapshot = {"scene": recipe, "frame_start": start, "frame_end": end,
+                    "fps": project["fps"], "project_revision": project["revision"]}
+
+        def work(job_id, progress, event):
+            source = directory / "exports" / (job_id + ".blend")
+            manifest = directory / "exports" / (job_id + ".json")
+            source_published = False
+            try:
+                with tempfile.TemporaryDirectory(prefix="scene-", dir=str(directory)) as scratch:
+                    result = render_scene(recipe, Path(scratch), fps=project["fps"],
+                                          frame_start=start, frame_end=end, progress=progress, cancel_event=event)
+                    if event.is_set():
+                        raise RuntimeError("Scene render cancelled")
+                    generated_source = Path(result["scene_path"])
+                    if not generated_source.is_file() or generated_source.stat().st_size == 0:
+                        raise RuntimeError("Scene renderer did not preserve its Blender source")
+                    os.replace(str(generated_source), str(source))
+                    asset = self.admit(project_id, result["path"], recipe.get("name", "Scene") + " render.mp4", result.get("provenance"))
+                    source_published = True
+                    report = {"asset": asset, "url": f"/api/projects/{project_id}/media/{asset['id']}",
+                              "scene_url": f"/api/projects/{project_id}/exports/{source.name}",
+                              "scene_filename": source.name, "scene_sha256": digest_file(source),
+                              "project_revision": project["revision"]}
+                    atomic_json(manifest, {"result": report, "snapshot": snapshot, "issuance_effect": "NONE"})
+                    return report
+            finally:
+                if not source_published:
+                    source.unlink(missing_ok=True)
+                    manifest.unlink(missing_ok=True)
+        return self.submit(project_id, "scene", work, snapshot)
 
     def blender(self, project_id, payload):
         p = self.get(project_id)
@@ -508,6 +570,13 @@ class ConflictError(ValueError):
 class Handler(BaseHTTPRequestHandler):
     server_version = "CINEMATICUM/" + VERSION
     protocol_version = "HTTP/1.0"
+
+    def handle(self):
+        try:
+            super().handle()
+        except (ConnectionResetError, BrokenPipeError):
+            # Closing the native window may abandon a media request.
+            return
 
     @property
     def store(self):
@@ -639,7 +708,7 @@ class Handler(BaseHTTPRequestHandler):
     def dispatch_get(self):
         parsed = urlparse(self.path)
         parts = unquote(parsed.path).strip("/").split("/")
-        if parsed.path in {"/", "/index.html", "/app.js", "/style.css"}:
+        if parsed.path in {"/", "/index.html", "/app.js", "/style.css", "/compositor-ui.js", "/scene-editor.js", "/scene-editor.css"}:
             return self.file(WEB / ("index.html" if parsed.path == "/" else parsed.path[1:]))
         if parts == ["api", "bootstrap"]:
             projects = self.store.projects()
@@ -655,15 +724,17 @@ class Handler(BaseHTTPRequestHandler):
             project_id = parts[2]
             if len(parts) == 3:
                 return self.json(200, self.store.get(project_id))
+            if len(parts) == 4 and parts[3] == "generation-readiness":
+                return self.json(200, self.store.generation_readiness(project_id))
             if len(parts) == 5 and parts[3] == "media":
                 asset, path = self.store.asset(project_id, parts[4])
                 return self.file(path, download=asset["kind"] == "scene")
             if len(parts) == 5 and parts[3] == "thumbnail":
                 return self.thumbnail(project_id, parts[4])
             if len(parts) == 5 and parts[3] == "exports":
-                if not re.fullmatch(r"[a-f0-9]{32}\.(mp4|mov|json)", parts[4]):
+                if not re.fullmatch(r"[a-f0-9]{32}\.(mp4|mov|json|blend)", parts[4]):
                     raise ValueError("Invalid export filename")
-                return self.file(self.store.project_dir(project_id) / "exports" / parts[4], download="download" in parse_qs(parsed.query))
+                return self.file(self.store.project_dir(project_id) / "exports" / parts[4], download=parts[4].endswith(".blend") or "download" in parse_qs(parsed.query))
         raise FileNotFoundError("Route does not exist")
 
     def dispatch_write(self):
@@ -717,6 +788,8 @@ class Handler(BaseHTTPRequestHandler):
                 return self.json(202, self.store.generation(project_id, payload))
             if action == "blender":
                 return self.json(202, self.store.blender(project_id, payload))
+            if action == "scene":
+                return self.json(202, self.store.scene_render(project_id, payload))
             if action == "automate":
                 return self.json(200, self.store.automate(project_id, payload))
         raise FileNotFoundError("Route does not exist")

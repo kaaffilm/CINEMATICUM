@@ -61,9 +61,9 @@ updates do not replace that folder. On Linux the default is
    change its start or layer; use the clip edges or Inspector for exact trims.
 3. Put picture layers on V1–V4 and audio on A1–A2. Higher picture layers composite
    above lower layers. Gaps render black, and audio gaps render silence.
-4. Use Color for exposure, contrast, saturation, and temperature. Composite adds
-   position, scale, rotation, opacity, keyframes, blur, sharpening, vignette, and
-   chroma key. Add titles with position, size, color, duration, and fades.
+4. Use Color for exposure, contrast, saturation, and temperature. Composite
+   provides an editable node graph as well as clip transforms and effects.
+   Add titles with position, size, color, duration, and fades.
 5. Source preview is interactive and approximate. Render preview evaluates the
    complete FFmpeg composition and plays the actual encoded output.
 6. Save the project, or export H.264 MP4 or ProRes MOV. Export snapshots retain
@@ -75,7 +75,44 @@ the selection, and Cmd/Ctrl-Z and Cmd/Ctrl-S undo and save. Titles use actual
 transparent PNG plates generated from the editor canvas, so the Mac does not
 need FFmpeg's optional `drawtext` filter.
 
-## Blender
+## Node compositing
+
+Select a picture clip and open **Composite**. Add and connect grade, blur,
+sharpen, chroma-key, rectangle/ellipse mask, and merge nodes. Connections,
+parameters, node positions, and the chosen output are saved with the clip.
+The **Masked correction** action creates an editable branch: the original
+picture is merged with a graded, masked version of itself. Masks support
+feathering and inversion; merge inputs are ordered background, foreground.
+
+The graph processes that clip's trimmed source before ordinary clip
+transforms, grading, effects, and placement on the timeline. Higher timeline
+layers combine different footage sources. The graph currently branches and
+recombines one clip; it is not a separate multi-source shot composition.
+Render preview evaluates the connected output and plays the resulting file.
+The interactive source viewer does not evaluate graph nodes.
+
+Graphs allow up to 32 nodes, one source, and no missing connections or cycles.
+A resource limit bounds canvas pixels multiplied by active graph nodes to
+268,435,456. Disconnected nodes remain editable but are not rendered.
+
+## Create and render 3D scenes
+
+Open **3D** to author a scene inside Studio. Add cubes, spheres, planes, and
+cylinders; edit object transforms and materials; position lights and the
+render camera; and set pose keyframes. The offline WebGL viewport supports
+orbit, pan, zoom, object selection, camera framing, and animation playback.
+Scene recipes are stored in the same project and participate in undo and save.
+
+**Render scene** builds the authored scene in Blender using Cycles CPU,
+renders actual frames, and admits the encoded movie into the media bin.
+The completed job also offers the editable `.blend` source. Add the movie to
+the timeline to edit and composite it with footage, sound, and titles.
+WebGL lighting is an interactive approximation; Blender produces the rendered
+materials, shadows, and lighting. Supported authored scenes contain up to
+96 primitive objects, 16 lights, 128 pose keys per object, and 7,200 frames.
+Transforms use Z-up coordinates and linear XYZ Euler interpolation.
+
+### Existing Blender scenes
 
 Import an existing `.blend` file, select it in the 3D panel, and choose an
 inclusive Blender frame range. The existing camera, scene, lighting, materials,
@@ -90,8 +127,8 @@ those secondary outputs; it is not an operating-system sandbox for untrusted
 Blender files. Render cancellation stops only the child process group owned by
 that job.
 
-This is a scene-rendering integration; Studio does not yet include Blender's
-interactive modeling, rigging, sculpting, or simulation interface.
+The primitive scene editor does not include Blender's mesh editing, rigging,
+sculpting, or simulation interface.
 Pack external resources in the source `.blend` before importing it: only the
 selected scene file is copied, not a directory of linked assets.
 
@@ -100,8 +137,12 @@ selected scene file is copied, not a directory of linked assets.
 Start your existing ComfyUI installation, then use **Check engines** in Studio.
 The endpoint defaults to `http://127.0.0.1:8188`. Configure a different endpoint
 when starting the server with `COMFYUI_URL` or `--comfy-url`; jobs cannot choose
-their own server. An engine check confirms connectivity, not that the required
-models or video workflow are installed. For the native app, quit Studio first,
+their own server. An engine check confirms connectivity. **Validate workflow**
+additionally checks required nodes, model names, inputs, links, and output
+nodes against the running ComfyUI server. Generation repeats this preflight
+before submitting a job. Passing preflight does not prove sufficient memory
+or successful video execution. The local adapter rejects paid/API nodes.
+For the native app, quit Studio first,
 then launch its executable with an environment override:
 
 ```bash
@@ -173,7 +214,9 @@ foreign browser origins and invalid Host headers. Supported routes:
 | `GET /api/projects/{id}/media/{asset_id}` | Play imported media; byte ranges supported |
 | `POST /api/projects/{id}/render` | Snapshot and queue preview/H.264/ProRes export |
 | `POST /api/projects/{id}/workflow` | Validate and save API workflow JSON |
+| `GET /api/projects/{id}/generation-readiness` | Inspect workflow and installed node/model compatibility |
 | `POST /api/projects/{id}/generate` | Queue configured ComfyUI generation |
+| `POST /api/projects/{id}/scene` | Render an authored scene and preserve editable Blender source |
 | `POST /api/projects/{id}/blender` | Render an imported scene |
 | `POST /api/projects/{id}/automate` | Apply an atomic editing recipe |
 | `GET /api/jobs/{id}` | Read progress, errors, and verified output |
@@ -189,7 +232,7 @@ assets, 256 clips, 128 titles, six hours, and a maximum canvas area of
 
 This first implementation does not yet provide ACES/OCIO color management,
 HDR finishing, fractional project rates, multicam, optical-flow retiming,
-tracking/roto, a node compositor, a full 3D editor, plugin-host compatibility,
+tracking/roto, arbitrary mesh editing, plugin-host compatibility,
 AAF/XML/OTIO project interchange, a full audio workstation, collaborative
 editing, or a production-grade realtime playback cache. Source
 formats that a browser cannot decode can still render through FFmpeg; use an
@@ -206,11 +249,15 @@ implemented; full feature parity is not claimed.
 ```bash
 make studio-test
 node --check scripts/studio/web/app.js
+node --check scripts/studio/web/compositor-ui.js
+node --check scripts/studio/web/scene-editor.js
 make qc-stack
 ```
 
 Tests decode exported frames and audio to check timing, gaps, grading,
 transparency, chroma key, motion, title fades, audio gain, and ProRes output.
+Node tests decode branching, output rewiring, masks, feathering, merge alpha,
+and filtered edges. Scene tests validate recipes and generated Blender source.
 Adapter tests cover protocol failures, explicit prompt binding, cancellation,
 and compositor file-output controls. API tests cover output admission, upload,
 save/reopen, revision conflicts, byte-range playback, actual export, and

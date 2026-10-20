@@ -22,6 +22,11 @@ import threading
 import time
 import uuid
 
+if __package__:
+    from .compositor import compile_graph, validate_graph
+else:
+    from compositor import compile_graph, validate_graph
+
 
 VIDEO_EXTENSIONS = {".mp4", ".mov", ".mkv", ".webm", ".m4v", ".avi", ".mpg", ".mpeg", ".mxf"}
 AUDIO_EXTENSIONS = {".wav", ".mp3", ".aac", ".m4a", ".flac", ".ogg", ".aif", ".aiff", ".opus"}
@@ -266,6 +271,12 @@ def validate_project(project, project_dir):
             fit = min(width / a["width"], height / a["height"])
             if a["width"] * a["height"] * (fit * largest_scale) ** 2 > 67_108_864:
                 raise ValueError("Clip transform exceeds the 67-million-pixel working-image limit. Reduce scale or project dimensions.")
+        if c.get("compositor") is not None:
+            if c["track"] < 0 or a["kind"] == "audio":
+                raise ValueError("Compositor graphs belong to picture clips on video tracks.")
+            fitted_width = max(2, int(a["width"] * fit / 2) * 2)
+            fitted_height = max(2, int(a["height"] * fit / 2) * 2)
+            c["compositor"] = validate_graph(c["compositor"], fitted_width, fitted_height)
         if a["kind"] != "audio" and a.get("color_transfer") in {"smpte2084", "arib-std-b67"}:
             raise ValueError("HDR PQ/HLG media needs an explicit SDR conversion. This workspace renders SDR Rec.709.")
     title_ids = set()
@@ -367,6 +378,19 @@ def _graph(project, project_dir, temp_dir):
             scale = _curve(clip, "scale", fps)
             chain = [f"trim=start={_decimal(source_in)}:duration={_decimal(length)}", "setpts=PTS-STARTPTS", f"fps={fps}",
                      f"scale=w='max(2,trunc({_decimal(base_w)}*({scale})/2)*2)':h='max(2,trunc({_decimal(base_h)}*({scale})/2)*2)':eval=frame:flags=lanczos", "setsar=1"]
+            stream = f"{index}:{asset['video_stream_index']}"
+            if clip.get("compositor") is not None:
+                # Normalize once before the node DAG. All branches share the
+                # same geometry/timing, then the existing clip controls apply.
+                fitted_width, fitted_height = max(2, int(base_w / 2) * 2), max(2, int(base_h / 2) * 2)
+                input_label = f"compositor{index}input"
+                filters.append(f"[{stream}]trim=start={_decimal(source_in)}:duration={_decimal(length)},"
+                               f"setpts=PTS-STARTPTS,fps={fps},scale={fitted_width}:{fitted_height}:flags=lanczos,"
+                               f"setsar=1,format=rgba[{input_label}]")
+                clauses, stream = compile_graph(clip["compositor"], input_label, f"compositor{index}")
+                filters.extend(clauses)
+                chain = [f"scale=w='max(2,trunc({_decimal(base_w)}*({scale})/2)*2)':"
+                         f"h='max(2,trunc({_decimal(base_h)}*({scale})/2)*2)':eval=frame:flags=lanczos", "setsar=1"]
             g, e = clip["grade"], clip["effects"]
             if g["exposure"]:
                 chain += [f"exposure=exposure={_decimal(g['exposure'])}"]
@@ -393,7 +417,7 @@ def _graph(project, project_dir, temp_dir):
             elif clip["opacity"] != 1:
                 chain += [f"colorchannelmixer=aa={_decimal(clip['opacity'])}"]
             chain += [f"setpts=PTS+{_decimal(start)}/TB"]
-            filters += [f"[{index}:{asset['video_stream_index']}]" + ",".join(chain) + f"[picture{index}]"]
+            filters += [f"[{stream}]" + ",".join(chain) + f"[picture{index}]"]
             x = _curve(clip, "x", fps, f"(t-{_decimal(start)})")
             y = _curve(clip, "y", fps, f"(t-{_decimal(start)})")
             next_canvas = f"canvas{index+1}"

@@ -6,8 +6,11 @@ Open the actual media editor with `make studio`. On macOS, `make studio-install-
 builds a native **CINEMATICUM Studio.app** window using the installed Xcode tools.
 The application imports your media, edits a frame-based multitrack timeline, previews
 composition, grades footage, mixes audio, animates transforms and titles, and exports
-H.264 or ProRes through FFmpeg. Blender scene renders and configured local ComfyUI
-video workflows produce media that can be added to the same timeline.
+H.264 or ProRes through FFmpeg. Its node compositor processes actual exported frames.
+The in-app 3D workspace creates primitive scenes, materials, lighting, cameras, and
+pose animation; Blender renders those scenes into timeline media and editable
+`.blend` sources. Configured local ComfyUI workflows can also produce media after
+node and model compatibility checks.
 
 Start with [the Studio guide](scripts/studio/README.md). Run `make studio-doctor`
 to inspect the actual installed engines, or `make studio-test` for the media and

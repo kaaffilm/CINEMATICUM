@@ -11,6 +11,7 @@ final class SmokeDelegate: NSObject, NSApplicationDelegate, WKNavigationDelegate
     let url: URL
     let output: URL
     let timeout: Double
+    let scriptOverride: String?
     var window: NSWindow!
     var webView: WKWebView!
     var pageErrors = [String]()
@@ -18,10 +19,11 @@ final class SmokeDelegate: NSObject, NSApplicationDelegate, WKNavigationDelegate
     var finishing = false
     var finished = false
 
-    init(url: URL, output: URL, timeout: Double) {
+    init(url: URL, output: URL, timeout: Double, scriptOverride: String? = nil) {
         self.url = url
         self.output = output
         self.timeout = timeout
+        self.scriptOverride = scriptOverride
         super.init()
     }
 
@@ -65,7 +67,7 @@ final class SmokeDelegate: NSObject, NSApplicationDelegate, WKNavigationDelegate
         started = true
         // Only DOM controls are operated. No application state or HTTP mutations
         // are called directly, and no production test globals are introduced.
-        let script = #"""
+        let script = scriptOverride ?? #"""
         const began = performance.now(), steps = [];
         const $ = selector => document.querySelector(selector);
         const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
@@ -114,6 +116,23 @@ final class SmokeDelegate: NSObject, NSApplicationDelegate, WKNavigationDelegate
             return false;
           }, 'Source viewer never decoded a picture');
           steps.push('decode_source_picture');
+          click('[data-mode="composite"]');
+          click('[data-graph-action="masked"]');
+          await until(() => document.querySelectorAll('[data-node]').length === 4, 'Masked correction graph was not created');
+          const featherSelector = '[data-node-param="feather"][type="number"]';
+          const originalFeather = Number($(featherSelector).value);
+          $(featherSelector).value = '.35';
+          $(featherSelector).dispatchEvent(new Event('change', {bubbles:true}));
+          click('#undo-button');
+          await until(() => Number($(featherSelector)?.value) === originalFeather, 'Undo did not restore graph parameter');
+          $(featherSelector).value = '.25';
+          $(featherSelector).dispatchEvent(new Event('change', {bubbles:true}));
+          const mergeOutput = $('[data-graph-output]').value;
+          $('[data-graph-output]').value = 'source';
+          $('[data-graph-output]').dispatchEvent(new Event('change', {bubbles:true}));
+          click('#undo-button');
+          await until(() => $('[data-graph-output]').value === mergeOutput, 'Undo did not restore graph output');
+          steps.push('author_masked_node_graph_and_undo');
           click('[data-mode="color"]');
           field('grade.exposure', .75);
           if ($('#save-state').textContent !== 'UNSAVED') throw new Error('Grade edit did not mark the project dirty');
@@ -139,10 +158,20 @@ final class SmokeDelegate: NSObject, NSApplicationDelegate, WKNavigationDelegate
           await until(() => video.currentTime > .05, 'Rendered video did not play');
           video.pause();
           steps.push('play_export');
+          const playback = {src:video.getAttribute('src'), currentSrc:video.currentSrc,
+                            duration:video.duration, time:video.currentTime};
+          const editedClip = $('.timeline-clip[data-type="clip"]');
+          editedClip.dispatchEvent(new PointerEvent('pointerdown', {bubbles:true,button:0,pointerId:2,isPrimary:true}));
+          window.dispatchEvent(new PointerEvent('pointerup', {bubbles:true,button:0,pointerId:2,isPrimary:true}));
+          click('[data-mode="composite"]');
+          const graphBounds = $('.compositor-stage').getBoundingClientRect();
+          if (graphBounds.width < 200 || graphBounds.height < 100 || document.querySelectorAll('[data-node]').length !== 4)
+            throw new Error('Compositor workspace was not visibly laid out');
+          steps.push('inspect_visible_node_workspace');
           return {passed:true, steps, project_id:$('#project-select').value, asset_id:assetID,
                   source_playback_timecode:playedTimecode, scrub_timecode:'00:00:00:06',
-                  video_src:video.getAttribute('src'), video_current_src:video.currentSrc,
-                  video_duration:video.duration, video_current_time:video.currentTime,
+                  video_src:playback.src, video_current_src:playback.currentSrc,
+                  video_duration:playback.duration, video_current_time:playback.time,
                   job_label:$('#job-label').textContent, toast:$('#toast').textContent,
                   elapsed_ms:Math.round(performance.now()-began)};
         } catch(error) {
@@ -217,7 +246,12 @@ if #available(macOS 11.0, *) {
         fputs("Usage: cinematicum-webkit-smoke --url http://127.0.0.1:PORT --output screenshot.png [--timeout 14]\n", stderr)
         exit(2)
     }
-    let delegate = SmokeDelegate(url: url, output: URL(fileURLWithPath: destination), timeout: Double(argument("--timeout") ?? "14") ?? 14)
+    var scriptOverride: String? = nil
+    if let scriptPath = argument("--script") {
+        do { scriptOverride = try String(contentsOfFile: scriptPath, encoding: .utf8) }
+        catch { fputs("Could not read the requested test script: \(error)\n", stderr); exit(2) }
+    }
+    let delegate = SmokeDelegate(url: url, output: URL(fileURLWithPath: destination), timeout: Double(argument("--timeout") ?? "14") ?? 14, scriptOverride: scriptOverride)
     let application = NSApplication.shared
     application.setActivationPolicy(.regular)
     application.delegate = delegate

@@ -24,4 +24,7 @@ jobs:
       - name: Verify real media, adapters, and project API
         run: python3 -m unittest discover -s scripts/studio -p 'test_*.py' -v
       - name: Check editor JavaScript
-        run: node --check scripts/studio/web/app.js
+        run: |
+          node --check scripts/studio/web/app.js
+          node --check scripts/studio/web/compositor-ui.js
+          node --check scripts/studio/web/scene-editor.js

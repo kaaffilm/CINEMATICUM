@@ -38,8 +38,8 @@ def bundle_info():
         "CFBundleDisplayName": "CINEMATICUM Studio",
         "CFBundleExecutable": EXECUTABLE_NAME,
         "CFBundlePackageType": "APPL",
-        "CFBundleShortVersionString": "0.1.0",
-        "CFBundleVersion": "1",
+        "CFBundleShortVersionString": "0.2.0",
+        "CFBundleVersion": "2",
         "LSMinimumSystemVersion": "12.0",
         "NSHighResolutionCapable": True,
         "NSPrincipalClass": "NSApplication",
@@ -77,7 +77,7 @@ def existing_bundle_identity(path):
 
 def copy_runtime(destination, source=STUDIO_SOURCE):
     destination.mkdir(parents=True)
-    for name in ("server.py", "engine.py", "adapters.py"):
+    for name in ("server.py", "engine.py", "adapters.py", "compositor.py", "scene.py", "generation_readiness.py"):
         path = source / name
         if path.is_symlink() or not path.is_file():
             raise ValueError("Required runtime source is missing or is a symlink: %s" % path)
