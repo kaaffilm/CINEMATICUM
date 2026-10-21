@@ -25,15 +25,21 @@ import time
 import uuid
 
 if __package__:
-    from .compositor import compile_graph, validate_graph, media_sources, validate_media_sources, lens_nodes, LENS_MAP_NAMES
+    from .compositor import (compile_graph, validate_graph, media_sources, validate_media_sources, lens_nodes, LENS_MAP_NAMES,
+                            roto_nodes, HIGH16_FILTERS, high16_geq, high16_grade, high16_place, high16_source_over, high16_associate, high16_unassociate)
+    from .projective_warp import validate_planar_motion, compile_planar_warp
     from .lens_assets import prepare_lens_maps
+    from .roto_assets import prepare_roto_mask
     from .timebase import parse_rate, project_rate
     from .tracking import validate_motion
     from .color_pipeline import validate_pipeline, compile_pipeline
     from .media_orientation import still_display_info
 else:
-    from compositor import compile_graph, validate_graph, media_sources, validate_media_sources, lens_nodes, LENS_MAP_NAMES
+    from compositor import (compile_graph, validate_graph, media_sources, validate_media_sources, lens_nodes, LENS_MAP_NAMES,
+                           roto_nodes, HIGH16_FILTERS, high16_geq, high16_grade, high16_place, high16_source_over, high16_associate, high16_unassociate)
+    from projective_warp import validate_planar_motion, compile_planar_warp
     from lens_assets import prepare_lens_maps
+    from roto_assets import prepare_roto_mask
     from timebase import parse_rate, project_rate
     from tracking import validate_motion
     from color_pipeline import validate_pipeline, compile_pipeline
@@ -102,7 +108,7 @@ def probe_media(path):
     with _PROBE_LOCK:
         if cache_key in _PROBE_CACHE:
             _PROBE_CACHE.move_to_end(cache_key)
-            return dict(_PROBE_CACHE[cache_key])
+            return copy.deepcopy(_PROBE_CACHE[cache_key])
     try:
         result = subprocess.run(
             [_executable("ffprobe"), "-v", "error", "-protocol_whitelist", "file,pipe",
@@ -208,6 +214,7 @@ def probe_media(path):
         "duration": 0.0 if image else duration,
         "width": width, "height": height, "has_audio": bool(audios),
         "frames": frames, "codec": video.get("codec_name") or (audios[0].get("codec_name") if audios else None),
+        "pixel_format": video.get("pix_fmt"),
         "color_transfer": video.get("color_transfer", "unknown"),
         "fps": video.get("avg_frame_rate", "0/0"),
         "video_stream_index": video.get("index"),
@@ -215,6 +222,12 @@ def probe_media(path):
         "audio_sample_rate": int(audios[0].get("sample_rate", 0) or 0) if audios else 0,
         "audio_channels": int(audios[0].get("channels", 0) or 0) if audios else 0,
         "audio_duration": audio_duration,
+        "audio_streams": [{"index": stream.get("index"), "channels": int(stream.get("channels", 0) or 0),
+                           "container_id": str(stream["id"])[:128] if stream.get("id") is not None else None,
+                           "sample_rate": int(stream.get("sample_rate", 0) or 0),
+                           "codec": stream.get("codec_name"), "language": stream.get("tags", {}).get("language", ""),
+                           "duration": tick_duration(stream) or float(stream.get("duration", 0) or 0) or duration}
+                          for stream in audios],
         "size": path.stat().st_size,
     }
     if orientation is not None:
@@ -224,10 +237,10 @@ def probe_media(path):
         _PROBE_CACHE[cache_key] = metadata
         while len(_PROBE_CACHE) > 512:
             _PROBE_CACHE.popitem(last=False)
-    return dict(metadata)
+    return copy.deepcopy(metadata)
 
 
-def validate_project(project, project_dir):
+def _validate_single_project(project, project_dir, sequence_assets=None):
     """Return a normalized independent project, or fail before render starts."""
     if not isinstance(project, dict) or project.get("version") != 1:
         raise ValueError("Unsupported project format. Expected version 1.")
@@ -242,6 +255,18 @@ def validate_project(project, project_dir):
     p["height"] = height = _number(p.get("height", 720), "Height", 16, 8192, True)
     if width % 2 or height % 2 or width * height > 33_554_432:
         raise ValueError("Project dimensions must be even, with at most 33.5 million pixels.")
+    settings = p.get("settings", {})
+    if not isinstance(settings, dict):
+        raise ValueError("Project settings must be an object.")
+    precision = settings.get("image_precision", "standard8")
+    if not isinstance(precision, str) or precision not in {"standard8", "high16"}:
+        raise ValueError("Image precision must be standard8 or high16.")
+    if not isinstance(settings.get("transparent_background", False), bool):
+        raise ValueError("Transparent background must be true or false.")
+    if settings.get("transparent_background") and precision != "high16":
+        raise ValueError("A transparent movie background requires High 16-bit processing.")
+    if precision == "high16" and width * height > 8_388_608:
+        raise ValueError("High 16-bit movies support at most 8,388,608 canvas pixels (up to 3840 × 2160).")
     for key, limit in (("assets", 512), ("clips", 256), ("titles", 128)):
         if not isinstance(p.get(key, []), list) or len(p.get(key, [])) > limit:
             raise ValueError(f"{key} must be a list with at most {limit} items.")
@@ -287,6 +312,8 @@ def validate_project(project, project_dir):
         assets[ident] = a
     ids = set()
     maximum = rate.max_timeline_frames(MAX_TIMELINE_SECONDS)
+    if "sequence_duration" in p:
+        p["sequence_duration"] = _number(p["sequence_duration"], "Sequence out frame", 0, maximum, True)
     for c in p["clips"]:
         if not isinstance(c, dict):
             raise ValueError("Invalid timeline clip.")
@@ -294,9 +321,14 @@ def validate_project(project, project_dir):
         if ident in ids:
             raise ValueError("Clip ids must be unique.")
         ids.add(ident)
-        if c.get("asset_id") not in assets:
-            raise ValueError(f"Clip {ident} refers to missing media.")
-        a = assets[c["asset_id"]]
+        if c.get("sequence_id") is not None:
+            if not sequence_assets or c["sequence_id"] not in sequence_assets or c.get("asset_id") is not None:
+                raise ValueError(f"Clip {ident} refers to an invalid nested sequence.")
+            a = sequence_assets[c["sequence_id"]]
+        else:
+            if c.get("asset_id") not in assets:
+                raise ValueError(f"Clip {ident} refers to missing media.")
+            a = assets[c["asset_id"]]
         if a["kind"] == "scene":
             raise ValueError("Render the Blender scene to a movie before placing it on the timeline.")
         c["track"] = _number(c.get("track", 0), "Track", -16, 15, True)
@@ -346,6 +378,19 @@ def validate_project(project, project_dir):
         if audio["fade_in"] + audio["fade_out"] > audio["fade_duration"]:
             raise ValueError("Audio fades cannot overlap beyond their fade duration.")
         audio["pan"] = _number(audio.get("pan", 0), "Audio stereo balance", -1, 1)
+        stream = None
+        if audio.get("stream_index") is not None:
+            selected_stream = _number(audio["stream_index"], "Source audio stream", 0, 255, True)
+            stream = next((item for item in a.get("audio_streams", []) if item["index"] == selected_stream), None)
+            if stream is None:
+                raise ValueError("The selected audio stream does not exist in this source.")
+            if (c["in"] + c["duration"] * c["speed"]) / fps > stream["duration"] + .5 / fps:
+                raise ValueError("The clip extends beyond its selected audio stream.")
+        if audio.get("channels") is not None:
+            channels = audio["channels"]
+            count = (stream or {}).get("channels", a.get("audio_channels", 0))
+            if not isinstance(channels, list) or len(channels) != 2 or any(type(value) is not int or not 0 <= value < count for value in channels):
+                raise ValueError("Map exactly two output channels to existing zero-based source channels.")
         grade = c.setdefault("grade", {})
         effects = c.setdefault("effects", {})
         if not isinstance(grade, dict) or not isinstance(effects, dict):
@@ -383,10 +428,15 @@ def validate_project(project, project_dir):
         c["keyframes"] = sorted(keyframes, key=lambda k: k["frame"])
         if c.get("tracking") is not None:
             c["tracking"] = validate_motion(c["tracking"], c["animation_start"], c["animation_duration"])
+        if c.get("planar_motion") is not None:
+            if c["track"] < 0 or a["kind"] == "audio":
+                raise ValueError("Planar transforms belong to picture clips.")
+            c["planar_motion"] = validate_planar_motion(c["planar_motion"], c["animation_start"], c["animation_duration"])
         largest_scale = max([c["scale"]] + [k.get("scale", c["scale"]) for k in keyframes])
         if a["kind"] != "audio":
-            fit = min(width / a["width"], height / a["height"])
-            working_width, working_height = a["width"] * fit * largest_scale, a["height"] * fit * largest_scale
+            layout = c["planar_motion"]["canvas"] if c.get("planar_motion", {}).get("mode") == "corner_pin" else a
+            fit = min(width / layout["width"], height / layout["height"])
+            working_width, working_height = layout["width"] * fit * largest_scale, layout["height"] * fit * largest_scale
             working_pixels = working_width * working_height
             if any("rotation" in key for key in keyframes):
                 extent = math.ceil(math.hypot(working_width, working_height) / 2) * 2
@@ -398,14 +448,16 @@ def validate_project(project, project_dir):
                 working_pixels = max(working_pixels, (math.ceil(rotated_width / 2) * 2) * (math.ceil(rotated_height / 2) * 2))
             if working_pixels > 67_108_864:
                 raise ValueError("Clip transform exceeds the 67-million-pixel working-image limit. Reduce scale or project dimensions.")
+            if precision == "high16" and working_pixels > 16_777_216:
+                raise ValueError("High 16-bit clip transforms support at most 16,777,216 working pixels. Reduce scale or rotation bounds.")
         if c.get("compositor") is not None:
             if c["track"] < 0 or a["kind"] == "audio":
                 raise ValueError("Compositor graphs belong to picture clips on video tracks.")
-            fitted_width = max(2, int(a["width"] * fit / 2) * 2)
-            fitted_height = max(2, int(a["height"] * fit / 2) * 2)
+            fitted_width = max(2, int(layout["width"] * fit / 2) * 2)
+            fitted_height = max(2, int(layout["height"] * fit / 2) * 2)
             c["compositor"] = validate_graph(c["compositor"], fitted_width, fitted_height,
                                              animation_duration=c["animation_duration"],
-                                             animation_start=c["animation_start"])
+                                             animation_start=c["animation_start"], precision=precision)
             validate_media_sources(c["compositor"], assets, fps)
         if Path(a["path"]).suffix.lower() == ".exr":
             raise ValueError("Develop this EXR through OCIO before adding its display image to the timeline. The float original stays preserved.")
@@ -415,6 +467,14 @@ def validate_project(project, project_dir):
             c["color_pipeline"] = validate_pipeline(c["color_pipeline"], project_dir)
         if a["kind"] != "audio" and a.get("color_transfer") in {"smpte2084", "arib-std-b67"}:
             raise ValueError("HDR PQ/HLG media needs an explicit SDR conversion. This workspace renders SDR Rec.709.")
+    if any(c.get("planar_motion") is not None for c in p["clips"]):
+        if __package__:
+            from .planar_tracking import validate_planar_binding
+        else:
+            from planar_tracking import validate_planar_binding
+        for c in p["clips"]:
+            if c.get("planar_motion") is not None:
+                validate_planar_binding(c["planar_motion"], p, c, assets)
     title_ids = set()
     for title in p["titles"]:
         if not isinstance(title, dict):
@@ -440,7 +500,133 @@ def validate_project(project, project_dir):
                 raise ValueError("A raster title must refer to an imported PNG image.")
             if raster["width"] != width or raster["height"] != height:
                 raise ValueError("Raster title size must match the project canvas. Rebuild the title after changing resolution.")
+    if "caption_style" in p:
+        style = p["caption_style"]
+        if not isinstance(style, dict) or set(style) - {"size", "color", "y", "burn_in"}:
+            raise ValueError("Caption style must contain supported appearance fields.")
+        if "size" in style:
+            style["size"] = _number(style["size"], "Caption size", 6, 500, True)
+        if "y" in style:
+            style["y"] = _number(style["y"], "Caption position", -2, 2)
+        if "color" in style and (not isinstance(style["color"], str) or not re.fullmatch(r"#[0-9a-fA-F]{6}", style["color"])):
+            raise ValueError("Caption color must be an RGB hex color.")
+        if "burn_in" in style and not isinstance(style["burn_in"], bool):
+            raise ValueError("Caption burn-in must be true or false.")
+    if "captions" in p or any(title.get("caption_id") is not None for title in p["titles"]):
+        if __package__:
+            from .editorial import validate_captions
+        else:
+            from editorial import validate_captions
+        p["captions"] = validate_captions(p.get("captions", []), rate, maximum)
+        cues = {cue["id"]: cue for cue in p["captions"]}
+        plates = set()
+        for title in p["titles"]:
+            if title.get("caption_id") is not None:
+                cue = cues.get(_identifier(title["caption_id"], "Caption plate reference"))
+                if not cue or any(title[key] != cue[key] for key in ("start", "duration", "text")):
+                    raise ValueError("Caption plates must match their cue timing/text. Edit them through Captions.")
+                if cue["id"] in plates:
+                    raise ValueError("A caption cue cannot have duplicate burn-in plates.")
+                plates.add(cue["id"])
+        if p.get("caption_style", {}).get("burn_in") and plates != set(cues):
+            raise ValueError("Caption burn-in needs one matching plate per cue. Reapply the caption edit.")
+    settings = p.get("settings", {})
+    if not isinstance(settings, dict):
+        raise ValueError("Project settings must be an object.")
+    if "timecode_mode" in settings:
+        mode = settings["timecode_mode"]
+        if mode not in ("ndf", "df"):
+            raise ValueError("Timecode mode must be ndf or df.")
+        if mode == "df":
+            if __package__:
+                from .timebase import format_timecode
+            else:
+                from timebase import format_timecode
+            format_timecode(0, rate, drop_frame=True)
     return p
+
+
+def validate_project(project, project_dir):
+    """Validate every owned sequence and its acyclic live dependencies."""
+    if not isinstance(project, dict):
+        raise ValueError("Project must be an object.")
+    if not any(key in project for key in ("sequence_id", "sequence_name", "sequences", "multicam_groups")):
+        return _validate_single_project(project, project_dir)
+    if project.get("version") != 1:
+        raise ValueError("Unsupported project format. Expected version 1.")
+    project = copy.deepcopy(project)
+    project["width"] = _number(project.get("width", 1280), "Width", 16, 8192, True)
+    project["height"] = _number(project.get("height", 720), "Height", 16, 8192, True)
+    rate = project_rate(project)
+    stored = project.get("sequences", [])
+    if not isinstance(stored, list):
+        raise ValueError("Stored sequences must be a list.")
+    for sequence in [project] + stored:
+        if not isinstance(sequence, dict):
+            raise ValueError("Stored sequences must be objects.")
+        for field, seconds in (("clips", 1), ("titles", 3)):
+            items = sequence.get(field, [])
+            if not isinstance(items, list):
+                raise ValueError("Sequence " + field + " must be a list.")
+            for item in items:
+                if not isinstance(item, dict):
+                    raise ValueError("Sequence items must be objects.")
+                item.setdefault("start", 0)
+                item.setdefault("duration", rate.frames_for_seconds(seconds))
+    if __package__:
+        from .editorial import validate_sequence_graph, sequence_asset, sequence_project, SEQUENCE_FIELDS
+    else:
+        from editorial import validate_sequence_graph, sequence_asset, sequence_project, SEQUENCE_FIELDS
+    views = validate_sequence_graph(project)
+    assets = {ident: sequence_asset(project, ident, views) for ident in views}
+    normalized = {}
+    for ident, sequence in views.items():
+        normalized[ident] = _validate_single_project(sequence_project(project, sequence), project_dir, assets)
+    active = project.get("sequence_id", "main")
+    result = normalized[active]
+    result["sequences"] = []
+    for ident, value in normalized.items():
+        if ident == active:
+            continue
+        item = {"id": ident, "name": value["sequence_name"]}
+        for field in SEQUENCE_FIELDS:
+            if field in value:
+                item[field] = value[field]
+        result["sequences"].append(item)
+    groups = result.get("multicam_groups", [])
+    if not isinstance(groups, list) or len(groups) > 64:
+        raise ValueError("Multicamera groups must be a list of at most 64 entries.")
+    group_ids = set()
+    media = {asset["id"]: asset for asset in result["assets"]}
+    for group in groups:
+        if not isinstance(group, dict) or group.get("id") in group_ids:
+            raise ValueError("Invalid or duplicate multicamera group.")
+        group_ids.add(_identifier(group.get("id"), "Multicamera group id"))
+        angles = group.get("angles")
+        if not isinstance(angles, list) or not 2 <= len(angles) <= 16:
+            raise ValueError("A multicamera group requires 2–16 angles.")
+        angle_ids, source_ids = set(), set()
+        for angle in angles:
+            if not isinstance(angle, dict) or angle.get("id") in angle_ids or angle.get("asset_id") not in media or angle.get("asset_id") in source_ids or media[angle["asset_id"]]["kind"] != "video":
+                raise ValueError("A multicamera angle must reference a distinct valid video angle.")
+            angle_ids.add(_identifier(angle.get("id"), "Multicamera angle id"))
+            source_ids.add(angle["asset_id"])
+            source_frame = _number(angle.get("in", 0), "Multicamera source frame", 0, 10_000_000, True)
+            if source_frame >= media[angle["asset_id"]]["duration"] * result["fps"]:
+                raise ValueError("A multicamera synchronization point is beyond its source.")
+    group_map = {group["id"]: group for group in groups}
+    for value in normalized.values():
+        for clip in value["clips"]:
+            multicam = clip.get("multicam")
+            if multicam is None:
+                continue
+            if not isinstance(multicam, dict) or not isinstance(multicam.get("group_id"), str):
+                raise ValueError("Invalid multicamera clip binding.")
+            group = group_map.get(multicam["group_id"])
+            angle = next((angle for angle in (group or {}).get("angles", []) if angle["id"] == multicam.get("angle_id")), None)
+            if not angle or angle["asset_id"] != clip.get("asset_id"):
+                raise ValueError("A multicamera clip must retain its selected angle's source identity.")
+    return result
 
 
 def get_capabilities():
@@ -461,6 +647,9 @@ def get_capabilities():
             "drawtext": "drawtext" in filters, "raster_titles": "overlay" in filters,
             "h264": "libx264" in encoders,
             "prores": "prores_ks" in encoders, "color_space": "SDR Rec.709",
+            "master16": "ffv1" in encoders and HIGH16_FILTERS <= filters,
+            "high_depth_movie": HIGH16_FILTERS <= filters,
+            "image_precisions": ["standard8", "high16"] if HIGH16_FILTERS <= filters else ["standard8"],
             "keyframes": list(ANIMATED_PROPERTIES), "interpolations": sorted(INTERPOLATIONS),
             "retime": all(name in filters for name in ("reverse", "areverse", "atempo")),
             "audio_mixer": all(name in filters for name in ("aeval", "afade", "pan", "amix")),
@@ -549,7 +738,7 @@ def _tempo_filters(speed):
     return ["atempo=" + _decimal(value) for value in factors]
 
 
-def _video_timing(clip, fps):
+def _video_timing(clip, fps, nested=False):
     rate = parse_rate(fps)
     source_frames = Fraction(str(clip["in"]))
     consumed_frames = clip["duration"] * Fraction(str(clip["speed"]))
@@ -561,10 +750,27 @@ def _video_timing(clip, fps):
     # a fractional split, even when input PTS have only millisecond precision.
     speed = Fraction(str(clip["speed"]))
     speed_expression = f"({speed.numerator}/{speed.denominator})"
-    chain = ["setpts=PTS-STARTPTS", f"trim=end={rate.seconds_decimal(source_frames + consumed_frames)}",
+    if nested and speed == 1 and source_frames.denominator == 1:
+        chain = [f"trim=start_frame={int(source_frames)}:end_frame={int(source_frames) + clip['duration']}",
+                 "setpts=PTS-STARTPTS", f"settb=expr={rate.time_base}"]
+        if clip["reverse"]:
+            chain.extend(["reverse", "setpts=PTS-STARTPTS"])
+        return chain
+    # Nested pictures are already an exact project-frame stream. A time-based
+    # trim on that coarse time base rounds a fractional end and can discard its
+    # overlapping last frame before a slow retime. Count the admitted frames
+    # directly; demuxed media keeps its timestamp-based boundary below.
+    source_trim = (f"trim=end_frame={math.ceil(source_frames + consumed_frames)}" if nested
+                   else f"trim=end={rate.seconds_decimal(source_frames + consumed_frames)}")
+    chain = ["setpts=PTS-STARTPTS", source_trim,
              f"settb=expr={rate.conform_time_base}",
              f"setpts=round((PTS-{rate.seconds_expression(source_frames)}/TB)/{speed_expression})",
              f"fps=fps={rate.ffmpeg}:start_time=0:round=near:eof_action=pass", f"trim=end_frame={clip['duration']}"]
+    if nested:
+        # Filter-produced frames lack the demuxer's end-duration timestamp.
+        # Supply one terminal sampling interval; the validated post-conform
+        # frame count clips it before any extra picture can enter the edit.
+        chain.insert(2, "tpad=stop_mode=clone:stop=1")
     if clip["reverse"]:
         # Reverse after conforming the selected range so splitting a retimed
         # reverse clip preserves its exact output frame sequence.
@@ -577,19 +783,39 @@ def _quote_filter_path(path):
     return str(path).replace("\\", "\\\\").replace(":", "\\:").replace("'", "'\\''")
 
 
-def _graph(project, project_dir, temp_dir, cancel_event=None):
+def _graph(project, project_dir, temp_dir, cancel_event=None, _context=None, _namespace=""):
+    if __package__:
+        from .editorial import sequence_views, sequence_project, sequence_asset
+    else:
+        from editorial import sequence_views, sequence_project, sequence_asset
+    if _context is None:
+        if __package__:
+            from .planar_tracking import verify_planar_source_files
+        else:
+            from planar_tracking import verify_planar_source_files
+        try:
+            verify_planar_source_files(project, project_dir, cancel_event=cancel_event)
+        except RuntimeError:
+            if cancel_event is not None and cancel_event.is_set():
+                raise RenderCancelled("Planar source verification cancelled")
+            raise
+        _context = {"next_input": 0, "next_sequence": 0, "root": project, "views": sequence_views(project)}
     rate = project_rate(project)
     fps, width, height = rate.fps, project["width"], project["height"]
+    precision = project.get("settings", {}).get("image_precision", "standard8")
+    high = precision == "high16"
+    rgba_format = "gbrap16le" if high else "rgba"
     frames = max([c["start"] + c["duration"] for c in project["clips"]] +
-                 [t["start"] + t["duration"] for t in project["titles"]] + [0])
+                 [t["start"] + t["duration"] for t in project["titles"]] +
+                 [t["start"] + t["duration"] for t in project.get("captions", [])] + [project.get("sequence_duration", 0)])
     if frames < 1:
         raise ValueError("Add footage, audio or a title before rendering.")
     duration = float(rate.seconds_for_frames(frames))
     assets = {a["id"]: a for a in project["assets"]}
-    filters = [f"color=c=black:s={width}x{height}:r={rate.ffmpeg},trim=end_frame={frames},format=rgba[canvas0]"]
+    background = "black@0" if _namespace or project.get("settings", {}).get("transparent_background") else "black"
+    filters = [f"color=c={background}:s={width}x{height}:r={rate.ffmpeg},format={rgba_format},trim=end_frame={frames}[canvas0]"]
     filters += [f"anullsrc=r=48000:cl=stereo,atrim=end_sample={rate.samples_for_frames(frames)}[silence]"]
     inputs, audio, canvas = [], ["[silence]"], "canvas0"
-    input_count = 0
     prepared_lenses = {}
 
     def developed_display(asset):
@@ -599,10 +825,9 @@ def _graph(project, project_dir, temp_dir, cancel_event=None):
                 and provenance.get("version") == 1 and provenance.get("display_encoding") == "sRGB")
 
     def add_input(asset):
-        nonlocal input_count
         source = _media_path(project_dir, asset["path"])
-        number = input_count
-        input_count += 1
+        number = _context["next_input"]
+        _context["next_input"] += 1
         inputs.extend(["-threads", "2", "-protocol_whitelist", "file,pipe"])
         if asset["kind"] == "image":
             inputs.extend(["-loop", "1", "-framerate", rate.ffmpeg])
@@ -612,30 +837,61 @@ def _graph(project, project_dir, temp_dir, cancel_event=None):
                       if track_state(project, clip["track"])[0]),
                      key=lambda item: (item[1]["track"], item[0]))
     for index, (_, clip) in enumerate(ordered):
-        asset = assets[clip["asset_id"]]
-        input_index = add_input(asset)
+        nested = clip.get("sequence_id") is not None
+        if nested:
+            asset = sequence_asset(_context["root"], clip["sequence_id"], _context["views"])
+            _context["next_sequence"] += 1
+            input_index = "__seq" + str(_context["next_sequence"])
+            child_dir = Path(temp_dir) / input_index
+            child_dir.mkdir()
+            child_project = sequence_project(_context["root"], _context["views"][clip["sequence_id"]])
+            child_inputs, child_graph, _ = _graph(child_project, project_dir, child_dir, cancel_event,
+                                                _context=_context, _namespace=input_index)
+            inputs.extend(child_inputs)
+            filters.append(child_graph)
+        else:
+            asset = assets[clip["asset_id"]]
+            input_index = add_input(asset)
         start, length, source_in = clip["start"] / fps, clip["duration"] / fps, clip["in"] / fps
         if clip["track"] >= 0:
-            fit = min(width / asset["width"], height / asset["height"])
-            base_w, base_h = max(2, asset["width"] * fit), max(2, asset["height"] * fit)
+            layout = clip["planar_motion"]["canvas"] if clip.get("planar_motion", {}).get("mode") == "corner_pin" else asset
+            fit = min(width / layout["width"], height / layout["height"])
+            base_w, base_h = max(2, layout["width"] * fit), max(2, layout["height"] * fit)
+            fitted_width, fitted_height = max(2, int(base_w / 2) * 2), max(2, int(base_h / 2) * 2)
             largest_scale = max([clip["scale"]] + [key["scale"] for key in clip["keyframes"] if "scale" in key])
             scale = _curve(clip, "scale", rate)
-            timing = _video_timing(clip, rate)
+            timing = _video_timing(clip, rate, nested=nested)
+            if high:
+                timing.append("format=gbrap16le")
             if clip.get("color_pipeline") is not None:
                 # Decode/white-balance/gamut conversion and creative LUTs feed
                 # both the compositor and the direct clip path identically.
                 timing += compile_pipeline(clip["color_pipeline"], project_dir, temp_dir,
-                                           prefix="color%d" % index, input_unorm16=developed_display(asset))
-            chain = timing + [f"scale=w='max(2,trunc({_decimal(base_w)}*({scale})/2)*2)':h='max(2,trunc({_decimal(base_h)}*({scale})/2)*2)':eval=frame:flags=lanczos", "setsar=1"]
-            stream = f"{input_index}:{asset['video_stream_index']}"
+                                           prefix="color%d" % index, input_unorm16=developed_display(asset), precision=precision)
+            if high:
+                timing.append("format=gbrap16le")
+            if clip.get("planar_motion"):
+                timing += compile_planar_warp(clip["planar_motion"], clip["animation_offset"],
+                                              fitted_width, fitted_height, pixel_format=rgba_format)
+            scaling = [f"scale=w='max(2,trunc({_decimal(base_w)}*({scale})/2)*2)':h='max(2,trunc({_decimal(base_h)}*({scale})/2)*2)':eval=frame:flags=lanczos", "setsar=1"]
+            if high:
+                # GEQ caches its input geometry. Stabilize the scale domain
+                # before any per-pixel alpha/grade operation, not after it.
+                if clip["rotation"] or any("rotation" in key or "scale" in key for key in clip["keyframes"]):
+                    fixed_width = max(2, int(base_w * largest_scale / 2) * 2)
+                    fixed_height = max(2, int(base_h * largest_scale / 2) * 2)
+                    scaling += [f"pad=w={fixed_width}:h={fixed_height}:x='(ow-iw)/2':y='(oh-ih)/2':color=black@0:eval=frame"]
+                scaling = ["format=gbrap16le", high16_associate()] + scaling + [high16_unassociate()]
+            chain = timing + scaling
+            stream = f"{input_index}_vout" if nested else f"{input_index}:{asset['video_stream_index']}"
             if clip.get("compositor") is not None:
                 # Normalize once before the node DAG. All branches share the
                 # same geometry/timing, then the existing clip controls apply.
-                fitted_width, fitted_height = max(2, int(base_w / 2) * 2), max(2, int(base_h / 2) * 2)
                 input_label = f"compositor{index}input"
-                filters.append(f"[{stream}]" + ",".join(timing) + ","
-                               f"scale={fitted_width}:{fitted_height}:flags=lanczos,"
-                               f"setsar=1,format=rgba[{input_label}]")
+                fit_filters = [f"scale={fitted_width}:{fitted_height}:flags=lanczos", "setsar=1", "format=" + rgba_format]
+                if high:
+                    fit_filters = ["format=gbrap16le", high16_associate()] + fit_filters + [high16_unassociate()]
+                filters.append(f"[{stream}]" + ",".join(timing + fit_filters) + f"[{input_label}]")
                 external_labels = {}
                 for ordinal, node in enumerate(media_sources(clip["compositor"])):
                     external_asset = assets[node["params"]["asset_id"]]
@@ -649,7 +905,7 @@ def _graph(project, project_dir, temp_dir, cancel_event=None):
                         # applying another OCIO view or scene tone mapping.
                         external_color = compile_pipeline(
                             {"version": 1, "enabled": True, "input_transfer": "srgb", "input_primaries": "rec709"},
-                            project_dir, temp_dir, prefix=f"externalcolor{index}_{ordinal}", input_unorm16=True)
+                            project_dir, temp_dir, prefix=f"externalcolor{index}_{ordinal}", input_unorm16=True, precision=precision)
                     # Each node has an independent project-rate source clock.
                     # Preserve zero-origin frame numbers before the DAG trims
                     # its selected range and applies domain offsets/padding.
@@ -658,8 +914,10 @@ def _graph(project, project_dir, temp_dir, cancel_event=None):
                                    f"settb=expr={rate.conform_time_base},"
                                    f"fps=fps={rate.ffmpeg}:start_time=0:round=near:eof_action=pass,"
                                    + (",".join(external_color) + "," if external_color else "") +
+                                   ("format=gbrap16le," + high16_associate() + "," if high else "") +
                                    f"scale={fitted_width}:{fitted_height}:force_original_aspect_ratio=decrease:flags=lanczos,"
-                                   f"format=rgba,pad={fitted_width}:{fitted_height}:(ow-iw)/2:(oh-ih)/2:color=black@0,"
+                                   f"format={rgba_format},pad={fitted_width}:{fitted_height}:(ow-iw)/2:(oh-ih)/2:color=black@0,"
+                                   + (high16_unassociate() + "," if high else "") +
                                    f"setsar=1[{label}]")
                 lens_labels = {}
                 for ordinal, node in enumerate(lens_nodes(clip["compositor"])):
@@ -676,8 +934,8 @@ def _graph(project, project_dir, temp_dir, cancel_event=None):
                             raise
                     labels = {}
                     for name in LENS_MAP_NAMES:
-                        map_index = input_count
-                        input_count += 1
+                        map_index = _context["next_input"]
+                        _context["next_input"] += 1
                         # Decode each static map once, then repeat its frame in
                         # the graph. Image-input looping would decode six large
                         # PNGs on every picture frame.
@@ -689,39 +947,80 @@ def _graph(project, project_dir, temp_dir, cancel_event=None):
                         filters.append(f"[{map_index}:v:0]loop=loop={clip['duration'] - 1}:size=1:start=0,"
                                        f"settb=expr={rate.time_base},setpts=N[{label}]")
                     lens_labels[node["id"]] = labels
+                roto_labels = {}
+                for ordinal, node in enumerate(roto_nodes(clip["compositor"])):
+                    matte = prepare_roto_mask(node, fitted_width, fitted_height, temp_dir,
+                                              frame_offset=clip["animation_offset"], frame_count=clip["duration"],
+                                              animation_start=clip["animation_start"], animation_duration=clip["animation_duration"],
+                                              rate=rate.ffmpeg, cancel_event=cancel_event)
+                    matte_index = _context["next_input"]
+                    _context["next_input"] += 1
+                    inputs.extend(["-threads", "1", "-protocol_whitelist", "file,pipe"])
+                    if matte["static"]:
+                        inputs.extend(["-framerate", rate.ffmpeg])
+                    inputs.extend(["-i", str(matte["path"])])
+                    label = f"compositor{index}roto{ordinal}"
+                    roto_labels[node["id"]] = label
+                    repeat = f"loop=loop={clip['duration'] - 1}:size=1:start=0," if matte["static"] else ""
+                    filters.append(f"[{matte_index}:v:0]" + repeat + f"settb=expr={rate.time_base},setpts=N,trim=end_frame={clip['duration']}[{label}]")
                 clauses, stream = compile_graph(clip["compositor"], input_label, f"compositor{index}",
                                                 fps=rate.fps, frame_offset=clip["animation_offset"],
                                                 animation_duration=clip["animation_duration"],
                                                 animation_start=clip["animation_start"],
                                                 frame_count=clip["duration"], external_labels=external_labels,
-                                                lens_labels=lens_labels)
+                                                lens_labels=lens_labels, roto_labels=roto_labels, precision=precision)
                 filters.extend(clauses)
-                chain = [f"scale=w='max(2,trunc({_decimal(base_w)}*({scale})/2)*2)':"
-                         f"h='max(2,trunc({_decimal(base_h)}*({scale})/2)*2)':eval=frame:flags=lanczos", "setsar=1"]
+                chain = scaling.copy()
             g, e = clip["grade"], clip["effects"]
-            if g["exposure"]:
+            if high and any(g[name] != default for name, default in (("exposure", 0), ("contrast", 1), ("saturation", 1), ("temperature", 0))):
+                chain += ["format=gbrap16le", high16_grade(*(_decimal(g[name]) for name in ("exposure", "contrast", "saturation", "temperature")))]
+            if not high and g["exposure"]:
                 chain += [f"exposure=exposure={_decimal(g['exposure'])}"]
-            if g["contrast"] != 1 or g["saturation"] != 1:
+            if not high and (g["contrast"] != 1 or g["saturation"] != 1):
                 chain += [f"eq=contrast={_decimal(g['contrast'])}:saturation={_decimal(g['saturation'])}"]
-            if g["temperature"]:
+            if not high and g["temperature"]:
                 warm = g["temperature"] * .12
                 chain += [f"colorbalance=rs={_decimal(warm)}:rm={_decimal(warm)}:rh={_decimal(warm)}:bs={_decimal(-warm)}:bm={_decimal(-warm)}:bh={_decimal(-warm)}"]
             if e["blur"]:
-                chain += [f"gblur=sigma={_decimal(e['blur'])}"]
+                chain += [f"gblur=sigma={_decimal(e['blur'])}" + (":planes=7" if high else "")]
             if e["sharpen"]:
                 chain += [f"unsharp=5:5:{_decimal(e['sharpen'])}:5:5:0"]
             if e["vignette"]:
-                chain += ["vignette=angle=PI/5"]
-            chain += ["format=rgba"]
+                if high:
+                    # Cosine-fourth optical falloff on normalized image radius;
+                    # explicit RGB math avoids vignette's rgb24 negotiation.
+                    falloff = "pow(cos(min(PI/2,sqrt(pow((X-(W-1)/2)/W,2)+pow((Y-(H-1)/2)/H,2))*PI/5)),4)"
+                    chain += ["format=gbrap16le", high16_geq(*(f"{c}(X,Y)*({falloff})" for c in "rgb"))]
+                else:
+                    chain += ["vignette=angle=PI/5"]
+            chain += ["format=" + rgba_format]
             if e["chroma_key"]:
-                chain += [f"colorkey=0x{e['chroma_key'][1:]}:0.18:0.08"]
+                if high:
+                    # Multiply the keyed coverage by source alpha. colorkey
+                    # otherwise replaces coverage, exposing hidden source RGB.
+                    target = f"clipkey{index}"
+                    filters.append(f"[{stream}]" + ",".join(chain) + f"[{target}input]")
+                    key_graph = {"version": 1, "nodes": [{"id": "source", "type": "source", "inputs": [], "params": {}},
+                        {"id": "key", "type": "chroma_key", "inputs": ["source"], "params": {"color": e["chroma_key"]}}], "output": "key"}
+                    key_filters, stream = compile_graph(key_graph, target + "input", target, precision=precision)
+                    filters.extend(key_filters)
+                    chain = []
+                else:
+                    chain += [f"colorkey=0x{e['chroma_key'][1:]}:0.18:0.08"]
+            picture_width = f"max(2,trunc({_decimal(base_w)}*({_curve(clip, 'scale', rate, 'T')})/2)*2)"
+            picture_height = f"max(2,trunc({_decimal(base_h)}*({_curve(clip, 'scale', rate, 'T')})/2)*2)"
+            rotates = clip["rotation"] or any("rotation" in key for key in clip["keyframes"])
+            if high and rotates:
+                chain += ["format=gbrap16le", high16_associate()]
             if clip["rotation"] or any("rotation" in key or "scale" in key for key in clip["keyframes"]):
                 # Pixel filters can cache geometry at configuration time. Keep
                 # their input canvas fixed through scale animation so a trimmed
                 # first frame cannot alter centers, alpha or working bounds.
                 pad_width = max(2, int(base_w * largest_scale / 2) * 2)
                 pad_height = max(2, int(base_h * largest_scale / 2) * 2)
-                chain += [f"pad=w={pad_width}:h={pad_height}:x='(ow-iw)/2':y='(oh-ih)/2':color=black@0:eval=frame"]
+                if not high:
+                    chain += [f"pad=w={pad_width}:h={pad_height}:x='(ow-iw)/2':y='(oh-ih)/2':color=black@0:eval=frame"]
+                picture_width, picture_height = str(pad_width), str(pad_height)
             if any("rotation" in key for key in clip["keyframes"]):
                 angle = _curve(clip, "rotation", rate)
                 # Rotate configures its canvas once. Derive it from the whole
@@ -731,20 +1030,26 @@ def _graph(project, project_dir, temp_dir, cancel_event=None):
                 # `none` disables background initialization; it can retain old
                 # picture data. Explicit zero alpha makes every frame clean.
                 chain += [f"rotate=angle='({angle})*PI/180':ow={extent}:oh={extent}:c=black@0"]
+                picture_width = picture_height = str(extent)
             elif clip["rotation"]:
                 angle = math.radians(clip["rotation"])
                 rotated_width = math.ceil((abs(base_w * math.cos(angle)) + abs(base_h * math.sin(angle))) * largest_scale / 2) * 2
                 rotated_height = math.ceil((abs(base_w * math.sin(angle)) + abs(base_h * math.cos(angle))) * largest_scale / 2) * 2
                 chain += [f"rotate={_decimal(angle)}:ow={rotated_width}:oh={rotated_height}:c=black@0"]
+                picture_width, picture_height = str(rotated_width), str(rotated_height)
+            if high and rotates:
+                chain += ["format=gbrap16le", high16_unassociate()]
             if any("opacity" in k for k in clip["keyframes"]):
                 opacity = _curve(clip, "opacity", rate, "T")
-                chain += [f"geq=r='r(X,Y)':g='g(X,Y)':b='b(X,Y)':a='alpha(X,Y)*({opacity})'"]
+                chain += [high16_geq(alpha=f"alpha(X,Y)*({opacity})") if high else
+                          f"geq=r='r(X,Y)':g='g(X,Y)':b='b(X,Y)':a='alpha(X,Y)*({opacity})'"]
             elif clip["opacity"] != 1:
                 chain += [f"colorchannelmixer=aa={_decimal(clip['opacity'])}"]
             # Integer-frame placement avoids a rounded 5/24-second offset
             # becoming 4 ticks when FFmpeg converts the expression to PTS.
-            chain += [f"settb=expr={rate.time_base}", f"setpts=PTS+{clip['start']}"]
-            filters += [f"[{stream}]" + ",".join(chain) + f"[picture{index}]"]
+            if not high:
+                chain += [f"settb=expr={rate.time_base}", f"setpts=PTS+{clip['start']}"]
+                filters += [f"[{stream}]" + ",".join(chain) + f"[picture{index}]"]
             x = _curve(clip, "x", rate, f"(t-{rate.seconds_expression(clip['start'])})")
             y = _curve(clip, "y", rate, f"(t-{rate.seconds_expression(clip['start'])})")
             if clip.get("tracking"):
@@ -762,8 +1067,20 @@ def _graph(project, project_dir, temp_dir, cancel_event=None):
                 x = f"({x})+(({dx})*cos({angle})-({dy})*sin({angle}))/{width}"
                 y = f"({y})+(({dx})*sin({angle})+({dy})*cos({angle}))/{height}"
             next_canvas = f"canvas{index+1}"
-            filters += [f"[{canvas}][picture{index}]overlay=x='(W-w)/2+W*({x})':y='(H-h)/2+H*({y})':"
-                        f"enable='gte(t*{rate.expression},{clip['start']}-0.0000001)*lt(t*{rate.expression},{clip['start']+clip['duration']}-0.0000001)':eof_action=pass:repeatlast=0:format=auto[{next_canvas}]"]
+            if high:
+                # GEQ runs before timeline padding, so its T is clip-local.
+                # The authored/tracking math above uses absolute overlay time.
+                absolute = f"(T+{rate.seconds_expression(clip['start'])})"
+                local_x, local_y = re.sub(r"\bt\b", absolute, x), re.sub(r"\bt\b", absolute, y)
+                high16_place(chain, width, height, picture_width, picture_height, local_x, local_y)
+                chain += [f"settb=expr={rate.time_base}", "setpts=N",
+                          f"tpad=start={clip['start']}:stop={frames-clip['start']-clip['duration']}:color=black@0",
+                          f"trim=end_frame={frames}", "setpts=N"]
+                filters.append(f"[{stream}]" + ",".join(chain) + f"[picture{index}]")
+                high16_source_over(filters, canvas, f"picture{index}", next_canvas)
+            else:
+                filters += [f"[{canvas}][picture{index}]overlay=x='(W-w)/2+W*({x})':y='(H-h)/2+H*({y})':"
+                            f"enable='gte(t*{rate.expression},{clip['start']}-0.0000001)*lt(t*{rate.expression},{clip['start']+clip['duration']}-0.0000001)':eof_action=pass:repeatlast=0:format=auto[{next_canvas}]"]
             canvas = next_canvas
         track_gain = track_state(project, clip["track"])[1]
         largest_volume = max([clip["volume"]] + [k["volume"] for k in clip["keyframes"] if "volume" in k])
@@ -783,7 +1100,9 @@ def _graph(project, project_dir, temp_dir, cancel_event=None):
                 source_begin = round(source_position + phase * speed)
                 source_end = source_begin + source_samples
             source_begin = max(0, source_begin)
-            chain = ["asetpts=PTS-STARTPTS", "aresample=48000", "aformat=sample_fmts=fltp:channel_layouts=stereo",
+            mapping = clip["audio"].get("channels")
+            channel_map = [f"pan=stereo|c0=c{mapping[0]}|c1=c{mapping[1]}"] if mapping is not None else []
+            chain = ["asetpts=PTS-STARTPTS", "aresample=48000"] + channel_map + ["aformat=sample_fmts=fltp:channel_layouts=stereo",
                      f"atrim=start_sample={source_begin}:end_sample={source_end}", "asetpts=PTS-STARTPTS"]
             if clip["reverse"]:
                 chain.append("areverse")
@@ -805,8 +1124,13 @@ def _graph(project, project_dir, temp_dir, cancel_event=None):
                 right = min(1, 1 + audio_settings["pan"])
                 chain.append(f"pan=stereo|c0={_decimal(left)}*c0|c1={_decimal(right)}*c1")
             chain.append(f"adelay={delay}S:all=1")
-            filters += [f"[{input_index}:{asset['audio_stream_index']}]" + ",".join(chain) + f"[audio{index}]"]
+            audio_stream = f"{input_index}_aout" if nested else f"{input_index}:{clip['audio'].get('stream_index', asset['audio_stream_index'])}"
+            filters += [f"[{audio_stream}]" + ",".join(chain) + f"[audio{index}]"]
             audio.append(f"[audio{index}]")
+        elif nested:
+            filters.append(f"[{input_index}_aout]anullsink")
+        if nested and clip["track"] < 0:
+            filters.append(f"[{input_index}_vout]nullsink")
     for index, title in enumerate(project["titles"]):
         start, end, fade = title["start"] / fps, (title["start"] + title["duration"]) / fps, title["fade"] / fps
         if title.get("asset_id") is not None:
@@ -815,30 +1139,113 @@ def _graph(project, project_dir, temp_dir, cancel_event=None):
             # Timing and opacity fades stay frame-based in this compositor.
             raster = assets[title["asset_id"]]
             input_index = add_input(raster)
-            chain = [f"trim=end_frame={title['duration']}", "setpts=PTS-STARTPTS", "format=rgba", "setsar=1"]
+            chain = [f"trim=end_frame={title['duration']}", "setpts=PTS-STARTPTS", "format=" + rgba_format, "setsar=1"]
             if fade:
-                chain += [f"fade=t=in:st=0:d={_decimal(fade)}:alpha=1",
-                          f"fade=t=out:st={_decimal(end-start-fade)}:d={_decimal(fade)}:alpha=1"]
-            chain += [f"settb=expr={rate.time_base}", f"setpts=PTS+{title['start']}"]
+                if high:
+                    chain += [high16_geq(alpha=f"alpha(X,Y)*clip(min(N/{title['fade']},({title['duration']}-N)/{title['fade']}),0,1)")]
+                else:
+                    chain += [f"fade=t=in:st=0:d={_decimal(fade)}:alpha=1",
+                              f"fade=t=out:st={_decimal(end-start-fade)}:d={_decimal(fade)}:alpha=1"]
+            if high:
+                chain += ["format=gbrap16le", f"settb=expr={rate.time_base}", "setpts=N",
+                          f"tpad=start={title['start']}:stop={frames-title['start']-title['duration']}:color=black@0",
+                          f"trim=end_frame={frames}", "setpts=N"]
+            else:
+                chain += [f"settb=expr={rate.time_base}", f"setpts=PTS+{title['start']}"]
             filters += [f"[{input_index}:{raster['video_stream_index']}]" + ",".join(chain) + f"[raster{index}]"]
             output = f"title{index}"
-            filters += [f"[{canvas}][raster{index}]overlay=x=0:y=0:"
-                        f"enable='gte(t*{rate.expression},{title['start']}-0.0000001)*lt(t*{rate.expression},{title['start']+title['duration']}-0.0000001)':eof_action=pass:repeatlast=0:format=auto[{output}]"]
+            if high:
+                high16_source_over(filters, canvas, f"raster{index}", output)
+            else:
+                filters += [f"[{canvas}][raster{index}]overlay=x=0:y=0:"
+                            f"enable='gte(t*{rate.expression},{title['start']}-0.0000001)*lt(t*{rate.expression},{title['start']+title['duration']}-0.0000001)':eof_action=pass:repeatlast=0:format=auto[{output}]"]
             canvas = output
             continue
         filename = Path(temp_dir) / f"title-{index}.txt"
         filename.write_text(title["text"], encoding="utf-8")
         alpha = "1" if not fade else f"min(1,min((t-{_decimal(start)})/{_decimal(fade)},({_decimal(end)}-t)/{_decimal(fade)}))"
         output = f"title{index}"
-        filters += [f"[{canvas}]drawtext=textfile='{_quote_filter_path(filename)}':expansion=none:"
-                    f"fontcolor={title['color']}:fontsize={title['size']}:"
-                    f"x='(w-tw)/2+w*{_decimal(title['x'])}':y='(h-th)/2+h*{_decimal(title['y'])}':"
-                    f"alpha='{alpha}':enable='gte(t*{rate.expression},{title['start']}-0.0000001)*lt(t*{rate.expression},{title['start']+title['duration']}-0.0000001)'[{output}]"]
+        draw = (f"drawtext=textfile='{_quote_filter_path(filename)}':expansion=none:"
+                f"fontcolor={title['color']}:fontsize={title['size']}:"
+                f"x='(w-tw)/2+w*{_decimal(title['x'])}':y='(h-th)/2+h*{_decimal(title['y'])}':"
+                f"alpha='{alpha}':enable='gte(t*{rate.expression},{title['start']}-0.0000001)*lt(t*{rate.expression},{title['start']+title['duration']}-0.0000001)'")
+        if high:
+            # drawtext's pixel blender writes associated color on a clear
+            # plate. Unassociate it before the same source-over kernel used by
+            # raster titles; drawing directly into a transparent canvas would
+            # otherwise store dark, twice-multiplied antialiased glyph edges.
+            straight = high16_unassociate()
+            filters.append(f"color=c=black@0:s={width}x{height}:r={rate.ffmpeg},format=gbrap16le,"
+                           f"trim=end_frame={frames},{draw},{straight}[{output}plate]")
+            high16_source_over(filters, canvas, output + "plate", output)
+        else:
+            filters.append(f"[{canvas}]{draw}[{output}]")
         canvas = output
-    filters += [f"[{canvas}]trim=end_frame={frames},setpts=PTS-STARTPTS,scale=out_color_matrix=bt709:out_range=tv[vout]"]
+    display = ",format=gbrap16le" if high else "" if _namespace else ",scale=out_color_matrix=bt709:out_range=tv"
+    filters += [f"[{canvas}]trim=end_frame={frames},setpts=PTS-STARTPTS{display}[vout]"]
+    limiter = "" if _namespace else "alimiter=limit=0.98:level=false:latency=true,"
     filters += ["".join(audio) + f"amix=inputs={len(audio)}:duration=longest:normalize=0,"
-                f"alimiter=limit=0.98:level=false:latency=true,atrim=end_sample={rate.samples_for_frames(frames)},asetpts=PTS-STARTPTS[aout]"]
-    return inputs, ";\n".join(filters), frames
+                + limiter + f"atrim=end_sample={rate.samples_for_frames(frames)},asetpts=PTS-STARTPTS[aout]"]
+    graph = ";\n".join(filters)
+    if _namespace:
+        # Input stream selectors and already-qualified descendants remain global.
+        def qualify(match):
+            label = match.group(1)
+            if re.match(r"^[0-9]+:", label) or label.startswith("__seq"):
+                return match.group(0)
+            return "[" + _namespace + "_" + label + "]"
+        graph = re.sub(r"\[([^]\n]+)\]", qualify, graph)
+    return inputs, graph, frames
+
+
+def _verify_master_packets(path, temp_dir, frames, samples, cancel_event=None):
+    """Count FFV1 frames and PCM sample bytes independently of MKV time tags.
+
+    Matroska timestamps have millisecond granularity on these FFmpeg builds;
+    comparing its rounded DURATION tag to a 48 kHz sample count is invalid.
+    FFV1 encodes one complete picture per packet, and interleaved stereo
+    PCM16 encodes exactly four bytes per sample. Stream the packet inventory to
+    a temporary file so a six-hour master does not become an in-memory list.
+    """
+    inventory = Path(temp_dir) / "master-packets.csv"
+    with inventory.open("wb") as destination, tempfile.TemporaryFile() as errors:
+        process = subprocess.Popen([_executable("ffprobe"), "-v", "error", "-show_packets",
+            "-show_entries", "packet=stream_index,size", "-of", "csv=p=0", str(path)],
+            stdin=subprocess.DEVNULL, stdout=destination, stderr=errors)
+        began = time.monotonic()
+        try:
+            while process.poll() is None:
+                if cancel_event is not None and cancel_event.is_set():
+                    raise RenderCancelled("Master verification cancelled")
+                if time.monotonic() - began > 300:
+                    raise RuntimeError("16-bit master packet verification exceeded five minutes.")
+                time.sleep(.05)
+            if process.returncode:
+                raise RuntimeError("Cannot verify the 16-bit master's picture and PCM packets.")
+        finally:
+            if process.poll() is None:
+                process.terminate()
+                try:
+                    process.wait(timeout=3)
+                except subprocess.TimeoutExpired:
+                    process.kill()
+                    process.wait()
+    pictures = audio_bytes = 0
+    with inventory.open("r", encoding="ascii") as source:
+        for line in source:
+            fields = line.strip().split(",")
+            if len(fields) != 2 or not all(value.isdigit() for value in fields):
+                raise RuntimeError("Invalid packet inventory in the 16-bit master.")
+            stream, size = map(int, fields)
+            if stream == 0:
+                pictures += 1
+            elif stream == 1:
+                audio_bytes += size
+            else:
+                raise RuntimeError("The 16-bit master contains an unexpected stream.")
+    if pictures != frames or audio_bytes != samples * 4:
+        raise RuntimeError("The 16-bit master's actual frame/sample counts do not match the timeline.")
+    return {"video_packets": pictures, "pcm_samples": samples, "pcm_bytes": audio_bytes}
 
 
 def render_project(project, project_dir, output_path, profile="h264", progress=None, cancel_event=None):
@@ -847,19 +1254,24 @@ def render_project(project, project_dir, output_path, profile="h264", progress=N
     progress receives a fraction from 0 to 1. Cancellation terminates only this
     subprocess. H.264 exports contain stereo 48 kHz AAC; ProRes uses PCM audio.
     """
-    if profile not in {"preview", "h264", "prores"}:
+    if profile not in {"preview", "h264", "prores", "master16"}:
         raise ValueError("Unknown render profile.")
     p = validate_project(project, project_dir)
+    high = p.get("settings", {}).get("image_precision", "standard8") == "high16"
+    if profile == "master16" and not high:
+        raise ValueError("Enable High 16-bit movie processing before exporting a 16-bit master.")
     caps = get_capabilities()
     if not caps["ffmpeg"] or not caps["ffprobe"]:
         raise ValueError("FFmpeg and ffprobe are required to render.")
     if any(t.get("asset_id") is None for t in p["titles"]) and not caps["drawtext"]:
         raise ValueError("This FFmpeg build has no drawtext filter. Save the title in the editor to rasterize its text before rendering.")
-    if not caps["prores" if profile == "prores" else "h264"]:
+    if high and not caps["high_depth_movie"]:
+        raise ValueError("This FFmpeg build lacks required high-depth compositor kernels.")
+    if not caps[profile if profile in {"prores", "master16"} else "h264"]:
         raise ValueError(f"This FFmpeg build does not include the {profile} encoder.")
     output = Path(output_path).resolve()
-    if output.suffix.lower() != (".mov" if profile == "prores" else ".mp4"):
-        raise ValueError("Use .mov for ProRes or .mp4 for H.264/preview output.")
+    if output.suffix.lower() != (".mov" if profile == "prores" else ".mkv" if profile == "master16" else ".mp4"):
+        raise ValueError("Use .mkv for 16-bit lossless masters, .mov for ProRes, or .mp4 for H.264/preview output.")
     # Never permit an output path to replace an imported source.
     if any(output == _media_path(project_dir, a["path"]) for a in p["assets"]):
         raise ValueError("An export cannot overwrite source media.")
@@ -871,6 +1283,13 @@ def render_project(project, project_dir, output_path, profile="h264", progress=N
     try:
         with tempfile.TemporaryDirectory(prefix="cinematicum-render-") as temp_dir:
             inputs, graph, frames = _graph(p, project_dir, temp_dir, cancel_event=cancel_event)
+            if high and profile != "master16":
+                # RGB behind zero alpha must never become visible just because
+                # a delivery encoder lacks alpha. Composite against black in
+                # high depth, then make the one explicit delivery conversion.
+                graph = graph.replace("[vout]", "[deliveryinput]")
+                flatten = high16_geq(*(f"{c}(X,Y)*alpha(X,Y)/65535" for c in "rgb"), alpha="65535")
+                graph += ";\n[deliveryinput]" + flatten + ",scale=out_color_matrix=bt709:out_range=tv[vout]"
             rate = project_rate(p)
             duration = float(rate.seconds_for_frames(frames))
             graph_path = Path(temp_dir) / "filter.txt"
@@ -882,13 +1301,21 @@ def render_project(project, project_dir, output_path, profile="h264", progress=N
             # limit can stop muxing before the audio limiter flushes its final
             # 239 samples. A 48 kHz movie clock also preserves AAC edit-list
             # duration instead of rounding it to the MOV default millisecond.
-            if profile == "prores":
+            if profile == "master16":
+                command += ["-c:v", "ffv1", "-level:v", "3", "-coder:v", "1", "-context:v", "1",
+                            "-slicecrc:v", "1", "-pix_fmt", "gbrap16le", "-c:a", "pcm_s16le"]
+            elif profile == "prores":
                 command += ["-c:v", "prores_ks", "-profile:v", "3", "-pix_fmt", "yuv422p10le", "-c:a", "pcm_s16le"]
             else:
                 command += ["-c:v", "libx264", "-preset", "veryfast" if profile == "preview" else "medium",
                             "-crf", "26" if profile == "preview" else "18", "-pix_fmt", "yuv420p", "-c:a", "aac", "-b:a", "192k"]
-            command += ["-ar", "48000", "-ac", "2", "-color_primaries", "bt709", "-color_trc", "bt709", "-colorspace", "bt709",
-                        "-movie_timescale", "48000", "-movflags", "+faststart", "-progress", "pipe:1", "-nostats", str(partial)]
+            command += ["-ar", "48000", "-ac", "2", "-color_primaries", "bt709", "-color_trc", "bt709",
+                        "-colorspace", "rgb" if profile == "master16" else "bt709"]
+            if profile == "master16":
+                command += ["-color_range", "pc"]
+            else:
+                command += ["-movie_timescale", "48000", "-movflags", "+faststart"]
+            command += ["-progress", "pipe:1", "-nostats", str(partial)]
             with tempfile.TemporaryFile(mode="w+b") as error_log:
                 process = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=error_log, text=True, bufsize=1)
                 messages = queue.Queue()
@@ -947,18 +1374,35 @@ def render_project(project, project_dir, output_path, profile="h264", progress=N
             if abs(actual["duration"] - duration) > max(.1, 1 / p["fps"]):
                 raise RuntimeError("Rendered media has an unexpected duration.")
             expected_audio = rate.samples_for_frames(frames) / 48000
-            if abs(actual["audio_duration"] - expected_audio) > 2 / 48000:
+            packet_receipt = None
+            if profile == "master16":
+                if (actual["codec"] != "ffv1" or actual["pixel_format"] != "gbrap16le"
+                        or actual["audio_sample_rate"] != 48000 or actual["audio_channels"] != 2
+                        or actual["audio_streams"][0]["codec"] != "pcm_s16le"):
+                    raise RuntimeError("The master encoder did not preserve 16-bit RGB+alpha and stereo PCM.")
+                packet_receipt = _verify_master_packets(partial, temp_dir, frames, rate.samples_for_frames(frames), cancel_event)
+            elif abs(actual["audio_duration"] - expected_audio) > 2 / 48000:
                 raise RuntimeError("Rendered audio does not preserve the exact timeline sample duration.")
             digest = hashlib.sha256()
             with partial.open("rb") as stream:
                 for chunk in iter(lambda: stream.read(1024 * 1024), b""):
+                    if cancel_event is not None and cancel_event.is_set():
+                        raise RenderCancelled("Export verification cancelled; completed exports are unchanged.")
                     digest.update(chunk)
+            if cancel_event is not None and cancel_event.is_set():
+                raise RenderCancelled("Export verification cancelled; completed exports are unchanged.")
             os.replace(partial, output)
             if progress:
                 progress(1.0)
             return {"path": str(output), "sha256": digest.hexdigest(), "duration": duration,
                     "width": p["width"], "height": p["height"], "fps": p["fps"], "frame_rate": rate.as_dict(), "frames": frames,
                     "size": output.stat().st_size, "profile": profile, "color_space": "SDR Rec.709",
+                    "image_precision": "high16" if high else "standard8", "processing_bits": 16 if high else 8,
+                    "pixel_format": actual["pixel_format"], "encoding": actual["codec"],
+                    "alpha_mode": "straight" if profile == "master16" else "opaque",
+                    "transparent_background": bool(p.get("settings", {}).get("transparent_background")) and profile == "master16",
+                    "dynamic_range": "SDR UNORM; no scene-linear HDR/ACES movie mastering",
+                    "packet_verification": packet_receipt,
                     "elapsed_seconds": round(time.monotonic() - started, 3), "has_audio": True,
                     "issuance_status_changed": False}
     finally:

@@ -30,17 +30,32 @@ LENS_MAP_NAMES = ("x0", "x1", "y0", "y1", "wx", "wy")
 LENS_CONTRACTION_LIMIT = .45
 LENS_COEFFICIENTS = ("k1", "k2", "k3", "p1", "p2")
 MAX_WORKING_PIXELS = 268_435_456
+HIGH16_FORMAT = "gbrap16le"
+# These are the actual high-depth kernels, not merely output encoder formats.
+HIGH16_FILTERS = {"format", "geq", "blend", "mergeplanes", "split", "scale",
+                  "pad", "crop", "tpad", "alphaextract", "premultiply",
+                  "unpremultiply", "maskedmerge", "remap", "colorkey",
+                  "gblur", "curves", "rotate", "fade", "lut1d", "lut3d"}
 MAX_CURVE_POINTS = 12
 MAX_POLYGON_POINTS = 24
+MAX_BEZIER_POINTS = 32
 MAX_ANIMATION_KEYS = 128
 MAX_PATH_KEYS = 64
 MAX_GRAPH_KEYS = 1024
 MAX_ANIMATION_VALUES = 8192
 MAX_ANIMATION_FRAME = 6 * 60 * 60 * 60
-INTERPOLATIONS = {"linear", "constant", "ease_in", "ease_out", "ease_in_out"}
+INTERPOLATIONS = {"linear", "constant", "ease_in", "ease_out", "ease_in_out", "cubic"}
 CURVE_CHANNELS = ("master", "red", "green", "blue")
 BLEND_MODES = {"normal", "multiply", "screen", "add", "difference"}
 DEFAULT_POLYGON = [[.1, .85], [.5, .1], [.9, .85]]
+# x/y anchor, incoming control x/y, outgoing control x/y, local feather scale.
+# The four real cubic segments retain their handles; rendering never replaces
+# the saved path with a polygon. Flattening is adaptive at the output resolution.
+DEFAULT_BEZIER = [[.5, .1, .2790861, .1, .7209139, .1, 1],
+                 [.9, .5, .9, .2790861, .9, .7209139, 1],
+                 [.5, .9, .7209139, .9, .2790861, .9, 1],
+                 [.1, .5, .1, .7209139, .1, .2790861, 1]]
+MASKABLE = {"grade", "curves", "blur", "sharpen", "chroma_key", "lens_distortion"}
 INPUT_COUNTS = {"source": 0, "media_source": 0, "grade": 1, "curves": 1, "blur": 1, "sharpen": 1,
                 "chroma_key": 1, "mask": 1, "merge": 2, "lens_distortion": 1}
 PARAMETERS = {
@@ -66,6 +81,7 @@ ANIMATABLE = {kind: set(values) for kind, values in PARAMETERS.items()}
 ANIMATABLE["sharpen"] = set()
 ANIMATABLE["lens_distortion"] = set()
 ANIMATABLE["mask"].add("points")
+ANIMATABLE["mask"].add("bezier")
 
 
 def _number(value, label, low, high):
@@ -107,6 +123,23 @@ def _polygon(value):
            for a, b in zip(result, result[1:] + result[:1])):
         raise ValueError("Compositor polygon vertices must not overlap their neighbors.")
     return result
+
+
+def _bezier(value):
+    if not isinstance(value, list) or not 2 <= len(value) <= MAX_BEZIER_POINTS:
+        raise ValueError(f"Compositor Bezier path needs 2–{MAX_BEZIER_POINTS} anchors.")
+    result = []
+    for anchor in value:
+        if not isinstance(anchor, list) or len(anchor) != 7:
+            raise ValueError("Bezier anchors require x/y, incoming and outgoing x/y handles, and feather scale.")
+        result.append([_number(v, "Bezier coordinate", -2, 3) for v in anchor[:6]] +
+                      [_number(anchor[6], "Bezier feather scale", 0, 4)])
+    return result
+
+
+def node_dependencies(node):
+    """Image and optional mask edges participate equally in cycle/lifetime rules."""
+    return node["inputs"] + ([node["mask_input"]] if node.get("mask_input") else [])
 
 
 def lens_domain(params):
@@ -186,13 +219,13 @@ def _animation(raw, kind, params, start, duration):
         raise ValueError(f"Unsupported animation channel for compositor {kind}.")
     clean, key_count, value_count = {}, 0, 0
     for name, keys in raw.items():
-        limit = MAX_PATH_KEYS if name == "points" else MAX_ANIMATION_KEYS
+        limit = MAX_PATH_KEYS if name in {"points", "bezier"} else MAX_ANIMATION_KEYS
         if not isinstance(keys, list) or not 1 <= len(keys) <= limit:
             raise ValueError(f"Compositor {name} animation requires 1–{limit} keys.")
         seen, channel = set(), []
         for key in keys:
-            if not isinstance(key, dict) or set(key) - {"frame", "value", "interpolation"}:
-                raise ValueError("Compositor animation keys support frame, value, and interpolation only.")
+            if not isinstance(key, dict) or set(key) - {"frame", "value", "interpolation", "in_tangent", "out_tangent"}:
+                raise ValueError("Compositor animation keys support frame, value, interpolation and cubic tangents only.")
             frame = _frame(key.get("frame"), "keyframe", start, duration - 1)
             if frame in seen:
                 raise ValueError("Compositor animation key times must be unique within each channel.")
@@ -200,16 +233,20 @@ def _animation(raw, kind, params, start, duration):
             interpolation = key.get("interpolation", "linear")
             if not isinstance(interpolation, str) or interpolation not in INTERPOLATIONS:
                 raise ValueError("Unsupported compositor keyframe interpolation.")
-            if name == "points":
-                value = _polygon(key.get("value"))
-                if len(value) != len(params["points"]):
-                    raise ValueError("Animated polygon keys must preserve their vertex count and order.")
-                value_count += len(value) * 2
+            if name in {"points", "bezier"}:
+                value = (_polygon if name == "points" else _bezier)(key.get("value"))
+                if len(value) != len(params[name]):
+                    raise ValueError("Animated path keys must preserve their anchor count and order.")
+                value_count += len(value) * (2 if name == "points" else 7)
             else:
                 _, low, high = PARAMETERS[kind][name]
                 value = _number(key.get("value"), f"{kind}.{name} key value", low, high)
                 value_count += 1
-            channel.append({"frame": frame, "value": value, "interpolation": interpolation})
+            entry = {"frame": frame, "value": value, "interpolation": interpolation}
+            for tangent in ("in_tangent", "out_tangent"):
+                if tangent in key:
+                    entry[tangent] = _number(key[tangent], tangent, 0, 3)
+            channel.append(entry)
         key_count += len(channel)
         clean[name] = sorted(channel, key=lambda key: key["frame"])
     return clean, key_count, value_count
@@ -244,7 +281,10 @@ def animation_value(base, keys, frame):
             mode = left.get("interpolation", "linear")
             amount = (0 if mode == "constant" else t * t if mode == "ease_in"
                       else 1 - (1 - t) ** 2 if mode == "ease_out"
-                      else t * t * (3 - 2 * t) if mode == "ease_in_out" else t)
+                      else t * t * (3 - 2 * t) if mode == "ease_in_out"
+                      else ((left.get("out_tangent", 0) + right.get("in_tangent", 0) - 2) * t ** 3
+                            + (3 - 2 * left.get("out_tangent", 0) - right.get("in_tangent", 0)) * t ** 2
+                            + left.get("out_tangent", 0) * t) if mode == "cubic" else t)
             return _interpolate_values(left["value"], right["value"], amount)
     return _interpolate_values(points[-1]["value"], points[-1]["value"], 0)
 
@@ -265,7 +305,7 @@ def _walk(nodes, starts):
         if colors.get(ident) == 2:
             return
         colors[ident] = 1
-        for source in nodes[ident]["inputs"]:
+        for source in node_dependencies(nodes[ident]):
             visit(source)
         colors[ident] = 2
         ordered.append(ident)
@@ -275,7 +315,8 @@ def _walk(nodes, starts):
     return ordered
 
 
-def validate_graph(graph, width=None, height=None, *, animation_duration=None, animation_start=0):
+def validate_graph(graph, width=None, height=None, *, animation_duration=None, animation_start=0,
+                   precision="standard8"):
     """Normalize a bounded graph without modifying the caller's object.
 
     Unused nodes are retained for editing and validated, but only ancestors of
@@ -283,6 +324,8 @@ def validate_graph(graph, width=None, height=None, *, animation_duration=None, a
     and height are relative to the incoming picture. Feather is a normalized
     inward falloff from the edge (0 gives a hard edge, 1 falls off to center).
     """
+    if not isinstance(precision, str) or precision not in {"standard8", "high16"}:
+        raise ValueError("Compositor precision must be standard8 or high16.")
     if (not isinstance(graph, dict) or set(graph) - {"version", "nodes", "output"}
             or type(graph.get("version")) is not int or graph["version"] != 1):
         raise ValueError("Compositor requires version 1, nodes, and an output node ID.")
@@ -295,8 +338,8 @@ def validate_graph(graph, width=None, height=None, *, animation_duration=None, a
     normalized, by_id = [], {}
     graph_keys = graph_values = 0
     for raw in raw_nodes:
-        if not isinstance(raw, dict) or set(raw) - {"id", "type", "inputs", "params", "position", "animation", "tracking_source"}:
-            raise ValueError("Compositor nodes support id, type, inputs, params, position, animation, and mask tracking_source only.")
+        if not isinstance(raw, dict) or set(raw) - {"id", "type", "inputs", "params", "position", "animation", "tracking_source", "mask_input", "mask_invert"}:
+            raise ValueError("Compositor nodes contain unsupported fields.")
         ident = _identifier(raw.get("id"))
         if ident in by_id:
             raise ValueError("Compositor node IDs must be unique.")
@@ -310,7 +353,7 @@ def validate_graph(graph, width=None, height=None, *, animation_duration=None, a
         params = raw.get("params", {})
         extra = ({"direction"} if kind == "lens_distortion"
                  else {"asset_id", "source_in", "duration", "offset", "outside"} if kind == "media_source"
-                 else {"color"} if kind == "chroma_key" else {"shape", "invert", "points"} if kind == "mask"
+                 else {"color"} if kind == "chroma_key" else {"shape", "invert", "points", "bezier"} if kind == "mask"
                  else {"mode"} if kind == "merge" else set(CURVE_CHANNELS) if kind == "curves" else set())
         if not isinstance(params, dict) or set(params) - set(PARAMETERS[kind]) - extra:
             raise ValueError(f"Unsupported parameter for compositor {kind}.")
@@ -341,10 +384,12 @@ def validate_graph(graph, width=None, height=None, *, animation_duration=None, a
             clean["color"] = color.lower()
         if kind == "mask":
             shape, invert = params.get("shape", "rectangle"), params.get("invert", False)
-            if not isinstance(shape, str) or shape not in {"rectangle", "ellipse", "polygon"} or not isinstance(invert, bool):
-                raise ValueError("Compositor masks require rectangle/ellipse/polygon shape and boolean invert.")
+            if not isinstance(shape, str) or shape not in {"rectangle", "ellipse", "polygon", "bezier"} or not isinstance(invert, bool):
+                raise ValueError("Compositor masks require rectangle/ellipse/polygon/bezier shape and boolean invert.")
             points = _polygon(params.get("points", DEFAULT_POLYGON))
             clean.update(shape=shape, invert=invert, points=points)
+            if "bezier" in params or shape == "bezier" or isinstance(raw.get("animation"), dict) and "bezier" in raw["animation"]:
+                clean["bezier"] = _bezier(params.get("bezier", DEFAULT_BEZIER))
         if kind == "curves":
             for channel in CURVE_CHANNELS:
                 points = _points(params.get(channel, [[0, 0], [1, 1]]), "curves." + channel, 2, MAX_CURVE_POINTS)
@@ -359,6 +404,16 @@ def validate_graph(graph, width=None, height=None, *, animation_duration=None, a
                 raise ValueError("Compositor blend mode must be normal, multiply, screen, add, or difference.")
             clean["mode"] = mode
         node = {"id": ident, "type": kind, "inputs": inputs, "params": clean}
+        if "mask_input" in raw:
+            if kind not in MASKABLE:
+                raise ValueError("An effect mask may connect only to an image-processing effect.")
+            node["mask_input"] = _identifier(raw["mask_input"])
+            invert = raw.get("mask_invert", False)
+            if not isinstance(invert, bool):
+                raise ValueError("Effect mask inversion must be boolean.")
+            node["mask_invert"] = invert
+        elif "mask_invert" in raw:
+            raise ValueError("Effect mask inversion requires a mask connection.")
         if "tracking_source" in raw:
             source = raw["tracking_source"]
             if (kind != "mask" or not isinstance(source, dict)
@@ -392,7 +447,7 @@ def validate_graph(graph, width=None, height=None, *, animation_duration=None, a
     if sum(node["type"] == "lens_distortion" for node in normalized) > MAX_LENS_NODES:
         raise ValueError(f"Compositor supports at most {MAX_LENS_NODES} calibrated lens nodes.")
     for node in normalized:
-        if any(ident not in by_id for ident in node["inputs"]):
+        if any(ident not in by_id for ident in node_dependencies(node)):
             raise ValueError("Compositor connection refers to a missing node.")
     output = _identifier(graph.get("output"))
     if output not in by_id:
@@ -406,9 +461,25 @@ def validate_graph(graph, width=None, height=None, *, animation_duration=None, a
     working_images = sum(5 if by_id[key]["type"] == "merge" and by_id[key]["params"]["mode"] != "normal"
                          else 22 if by_id[key]["type"]=="lens_distortion"
                          else 2 if by_id[key]["type"] == "curves" else 1 for key in active)
+    # Associated-colour interpolation keeps 16-bit RGB+alpha branches and
+    # separate 8-bit source/effect mattes until the final alpha merge.
+    working_images += 10 * sum(bool(by_id[key].get("mask_input")) for key in active)
+    if precision == "high16":
+        # Count the explicit alpha-aware streams at twice the legacy RGBA byte
+        # size. No complete movie is buffered; these are concurrent frames.
+        working_images = 2 * (working_images + 7 * sum(by_id[key]["type"] == "merge" for key in active))
     if width is not None and height is not None and width * height * working_images > MAX_WORKING_PIXELS:
         raise ValueError("Compositor exceeds its working-image budget. Reduce graph complexity or project resolution.")
     return {"version": 1, "nodes": normalized, "output": output}
+
+
+def roto_nodes(graph, *, active_only=True):
+    if graph is None:
+        return []
+    nodes = {node["id"]: node for node in graph["nodes"]}
+    order = _walk(nodes, [graph["output"]]) if active_only else list(nodes)
+    return [nodes[ident] for ident in order if nodes[ident]["type"] == "mask"
+            and nodes[ident]["params"].get("shape") == "bezier"]
 
 
 def media_sources(graph, *, active_only=True):
@@ -667,6 +738,10 @@ def _channel_expression(node, name, variable, coordinate=None):
         t = f"(({variable})-({left['frame']}))/{right['frame'] - left['frame']}"
         amount = (f"pow({t},2)" if mode == "ease_in" else f"1-pow(1-({t}),2)" if mode == "ease_out"
                   else f"pow({t},2)*(3-2*({t}))" if mode == "ease_in_out" else t)
+        if mode == "cubic":
+            outgoing, incoming = left.get("out_tangent", 0), right.get("in_tangent", 0)
+            amount = (f"({_decimal(outgoing+incoming-2)})*pow({t},3)+"
+                      f"({_decimal(3-2*outgoing-incoming)})*pow({t},2)+({_decimal(outgoing)})*({t})")
         leaves.append(f"({_decimal(a)}+({_decimal(b-a)})*({amount}))")
     leaves.append(_decimal(value(points[-1])))
 
@@ -760,9 +835,117 @@ def _mask_alpha_expression(params):
     return setup + f"lum(X,Y)*({mask})"
 
 
+def high16_geq(red="r(X,Y)", green="g(X,Y)", blue="b(X,Y)", alpha="alpha(X,Y)"):
+    """Trusted planar UNORM16 expression; caller supplies generated math only."""
+    return "geq=" + ":".join(c + "='" + v + "'" for c, v in zip("rgba", (red, green, blue, alpha))) + ":interpolation=nearest"
+
+
+def high16_associate():
+    # GEQ changes samples, not alpha-mode metadata. All arithmetic operands use
+    # the same straight metadata, so FFmpeg 8 cannot silently multiply a weight
+    # by its alpha a second time during format/alpha-mode negotiation.
+    return high16_geq(*(f"floor({c}(X,Y)*alpha(X,Y)/65535+0.5)" for c in "rgb"))
+
+
+def high16_unassociate():
+    return high16_geq(*(f"if(gt(alpha(X,Y),0),floor(clip({c}(X,Y)*65535/alpha(X,Y),0,65535)+0.5),0)" for c in "rgb"))
+
+
+def high16_attach_matte(filters, color, gray, output):
+    """Replace alpha with a gray16 matte without FFmpeg's 8-bit alphamerge."""
+    alpha = output + "replacementalpha"
+    filters.append(f"[{gray}]format=gbrap16le," + high16_geq(alpha="r(X,Y)") + f"[{alpha}]")
+    filters.append(f"[{color}][{alpha}]mergeplanes=0x00010213:format=gbrap16le[{output}]")
+
+
+def _high16_weighted_values(filters, before, after, mask, output, invert=False):
+    """Interpolate four 16-bit planes with an RGBA stream's alpha as weight."""
+    weight = "65535-alpha(X,Y)" if invert else "alpha(X,Y)"
+    filters.append(f"[{mask}]split=2[{output}m0][{output}m1]")
+    filters.append(f"[{output}m0]" + high16_geq(*([f"65535-({weight})"] * 4)) + f"[{output}w0]")
+    filters.append(f"[{output}m1]" + high16_geq(*([weight] * 4)) + f"[{output}w1]")
+    for ordinal, source in enumerate((before, after)):
+        filters.append(f"[{source}][{output}w{ordinal}]blend=all_expr='floor(A*B/65535+0.5)':shortest=1:repeatlast=0[{output}p{ordinal}]")
+    filters.append(f"[{output}p0][{output}p1]blend=all_expr='min(65535,A+B)':shortest=1:repeatlast=0[{output}]")
+
+
+def high16_masked_mix(filters, before, after, mask, output, invert=False):
+    """Coverage-correct effect masking in associated 16-bit RGB and alpha."""
+    for name, source in (("before", before), ("after", after)):
+        filters.append(f"[{source}]format=gbrap16le," + high16_associate() + f"[{output}{name}]")
+    _high16_weighted_values(filters, output + "before", output + "after", mask, output + "associated", invert)
+    filters.append(f"[{output}associated]" + high16_unassociate() + f",format=gbrap16le[{output}]")
+
+
+def high16_source_over(filters, background, foreground, output, mode="normal", opacity="1"):
+    """Source-over with independent RGB/alpha math and no 8/10-bit overlay.
+
+    All operands stay planar 16-bit. At fractional coverage each associated
+    multiply rounds to the nearest UNORM16 code; repeated graph operations
+    can accumulate this quantization. This is deliberately a bounded SDR path,
+    not a claim of unbounded scene-linear or floating-point compositing.
+    """
+    if mode not in BLEND_MODES:
+        raise ValueError("Unsupported high-depth blend mode.")
+    filters.append(f"[{foreground}]format=gbrap16le," + high16_geq(alpha=f"floor(alpha(X,Y)*({opacity})+0.5)") + f"[{output}fg]")
+    fg, bg = output + "fg", background
+    if mode != "normal":
+        filters.append(f"[{background}]split=3[{output}base][{output}bgcolor][{output}bgweight]")
+        filters.append(f"[{fg}]split=3[{output}fgcolor][{output}fgplain][{output}fgmatte]")
+        expression = {"multiply": "A*B/65535", "screen": "65535-(65535-A)*(65535-B)/65535",
+                      "add": "min(65535,A+B)", "difference": "abs(A-B)"}[mode]
+        filters.append(f"[{output}bgcolor][{output}fgcolor]blend=all_expr='{expression}':shortest=1:repeatlast=0[{output}blend]")
+        _high16_weighted_values(filters, output + "fgplain", output + "blend", output + "bgweight", output + "effective")
+        filters.append(f"[{output}effective][{output}fgmatte]mergeplanes=0x00010213:format=gbrap16le[{output}fgblend]")
+        fg, bg = output + "fgblend", output + "base"
+    filters.append(f"[{fg}]split=2[{output}fgp][{output}fga]")
+    filters.append(f"[{output}fgp]" + high16_associate() + f"[{output}fgassociated]")
+    filters.append(f"[{output}fga]" + high16_geq(*(["65535-alpha(X,Y)"] * 4)) + f"[{output}inverse]")
+    filters.append(f"[{bg}]format=gbrap16le," + high16_associate() + f"[{output}bgassociated]")
+    filters.append(f"[{output}bgassociated][{output}inverse]blend=all_expr='floor(A*B/65535+0.5)':shortest=1:repeatlast=0[{output}under]")
+    filters.append(f"[{output}under][{output}fgassociated]blend=all_expr='min(65535,A+B)':shortest=1:repeatlast=0,"
+                   + high16_unassociate() + f",format=gbrap16le[{output}]")
+
+
+def high16_grade(exposure="0", contrast="1", saturation="1", temperature="0"):
+    """SDR RGB grade: exposure, 0.5 pivot contrast, Rec.709 saturation, warmth.
+
+    Generated scalar expressions may be animated. Values are clamped only at
+    this node's UNORM16 output. Alpha is copied; no 8-bit YUV eq is negotiated.
+    """
+    setup = (f"st(0,pow(2,({exposure})));st(1,({contrast}));st(2,({saturation}));"
+             f"st(3,({temperature})*0.12);"
+             "st(4,(r(X,Y)/65535*ld(0)-0.5)*ld(1)+0.5);"
+             "st(5,(g(X,Y)/65535*ld(0)-0.5)*ld(1)+0.5);"
+             "st(6,(b(X,Y)/65535*ld(0)-0.5)*ld(1)+0.5);"
+             "st(7,0.2126*ld(4)+0.7152*ld(5)+0.0722*ld(6));")
+    return high16_geq(*(setup + f"65535*clip(ld(7)+(ld({slot})-ld(7))*ld(2){warm},0,1)"
+                        for slot, warm in ((4, "+ld(3)"), (5, ""), (6, "-ld(3)"))))
+
+
+def high16_place(chain, width, height, picture_width, picture_height, x, y):
+    """Place a transformed sprite on a full canvas through inverse sampling.
+
+    The pad is max(project,sprite), never the sum of their areas; the following
+    crop restores project dimensions. Sample associated colors to avoid dark
+    fringes. X/Y have integer pixel centers and offsets are in project units.
+    """
+    left, top = f"(({width}-({picture_width}))/2+{width}*({x}))", f"(({height}-({picture_height}))/2+{height}*({y}))"
+    setup = f"st(0,X-({left}));st(1,Y-({top}));st(2,floor(ld(0)));st(3,floor(ld(1)));st(4,ld(0)-ld(2));st(5,ld(1)-ld(3));"
+    inside = "gte(ld(0),0)*lte(ld(0),W-1)*gte(ld(1),0)*lte(ld(1),H-1)"
+    def bilinear(c):
+        return (f"(1-ld(5))*((1-ld(4))*{c}(ld(2),ld(3))+ld(4)*{c}(min(W-1,ld(2)+1),ld(3)))"
+                f"+ld(5)*((1-ld(4))*{c}(ld(2),min(H-1,ld(3)+1))+ld(4)*{c}(min(W-1,ld(2)+1),min(H-1,ld(3)+1)))")
+    chain += ["format=gbrap16le", high16_associate(),
+              f"pad=w='max(iw,{width})':h='max(ih,{height})':x=0:y=0:color=black@0:eval=frame",
+              high16_geq(*(setup + f"if({inside},floor(({bilinear(c)})+0.5),0)" for c in ("r", "g", "b", "alpha"))),
+              f"crop={width}:{height}:0:0", high16_unassociate(), "format=gbrap16le"]
+
+
 def compile_graph(graph, input_label, prefix, *, fps=24, frame_offset=0,
                   animation_duration=None, animation_start=0,
-                  frame_count=None, external_labels=None, lens_labels=None):
+                  frame_count=None, external_labels=None, lens_labels=None, roto_labels=None,
+                  precision="standard8"):
     """Return filter clauses and a single-use output label for a normalized graph.
 
     Explicit split nodes are emitted wherever an image feeds multiple ports,
@@ -783,7 +966,10 @@ def compile_graph(graph, input_label, prefix, *, fps=24, frame_offset=0,
     valid_label = lambda value: isinstance(value, str) and re.fullmatch(r"[A-Za-z][A-Za-z0-9_]*", value)
     if not valid_label(prefix) or not valid_label(input_label):
         raise ValueError("Invalid internal compositor stream label.")
-    graph = validate_graph(graph, animation_duration=animation_duration, animation_start=animation_start)
+    graph = validate_graph(graph, animation_duration=animation_duration, animation_start=animation_start,
+                           precision=precision)
+    high = precision == "high16"
+    rgba_format = HIGH16_FORMAT if high else "rgba"
     frame_offset = _frame(frame_offset, "animation offset", -MAX_ANIMATION_FRAME, MAX_ANIMATION_FRAME)
     _number(fps, "frame rate", 1, 60)
     nodes = {node["id"]: node for node in graph["nodes"]}
@@ -810,11 +996,19 @@ def compile_graph(graph, input_label, prefix, *, fps=24, frame_offset=0,
             or set(map_labels) & ({input_label} | set(external_labels.values()))
             or any(value.startswith(prefix + "n") for value in map_labels)):
         raise ValueError("Compositor lens maps require valid, distinct internal input labels.")
-    if required or required_lenses:
+    required_roto = {node["id"] for node in roto_nodes(graph)}
+    roto_labels = {} if roto_labels is None else roto_labels
+    if (not isinstance(roto_labels, dict) or set(roto_labels) != required_roto
+            or any(not valid_label(value) for value in roto_labels.values())
+            or len(set(roto_labels.values())) != len(roto_labels)
+            or set(roto_labels.values()) & ({input_label} | set(external_labels.values()) | set(map_labels))
+            or any(value.startswith(prefix + "n") for value in roto_labels.values())):
+        raise ValueError("Bezier mask streams must match their reachable nodes and use distinct internal labels.")
+    if required or required_lenses or required_roto:
         frame_count = _frame(frame_count, "output frame count", 1, MAX_ANIMATION_FRAME)
         if frame_offset + frame_count > MAX_ANIMATION_FRAME:
             raise ValueError("Compositor output exceeds its frame domain limit.")
-    uses = Counter(source for ident in order for source in nodes[ident]["inputs"])
+    uses = Counter(source for ident in order for source in node_dependencies(nodes[ident]))
     uses[graph["output"]] += 1
     filters, available = [], {}
     if not any(nodes[ident]["type"] == "source" for ident in order):
@@ -843,6 +1037,10 @@ def compile_graph(graph, input_label, prefix, *, fps=24, frame_offset=0,
         # Carry the original matte independently and rejoin it explicitly.
         rgb, matte, alpha, color = target + "rgb", target + "matte", target + "alpha", target + "color"
         filters.append(f"[{source}]split=2[{rgb}][{matte}]")
+        if high:
+            filters.append(f"[{rgb}]" + ",".join(chain + ["format=gbrap16le"]) + f"[{color}]")
+            filters.append(f"[{color}][{matte}]mergeplanes=0x00010213:format=gbrap16le[{target}]")
+            return
         filters.append(f"[{matte}]alphaextract[{alpha}]")
         filters.append(f"[{rgb}]" + ",".join(chain + ["format=rgb24"]) + f"[{color}]")
         filters.append(f"[{color}][{alpha}]alphamerge,format=rgba[{target}]")
@@ -852,6 +1050,12 @@ def compile_graph(graph, input_label, prefix, *, fps=24, frame_offset=0,
         kind, params = node["type"], node["params"]
         incoming = [available[source].pop(0) for source in node["inputs"]]
         output = prefix + "n" + str(index)
+        effect_base = effect_mask = None
+        if node.get("mask_input"):
+            effect_mask = available[node["mask_input"]].pop(0)
+            effect_base, processed_input = output + "maskbase", output + "processin"
+            filters.append(f"[{incoming[0]}]split=2[{effect_base}][{processed_input}]")
+            incoming[0] = processed_input
         if kind == "source":
             output = input_label
         elif kind == "media_source":
@@ -865,7 +1069,7 @@ def compile_graph(graph, input_label, prefix, *, fps=24, frame_offset=0,
                      "setpts=PTS-STARTPTS"]
             if lead or tail:
                 chain.append(f"tpad=start={lead}:stop={tail}:start_mode={mode}:stop_mode={mode}:color=black@0")
-            chain += [f"trim=start_frame={window}:end_frame={window + frame_count}", "setpts=PTS-STARTPTS", "format=rgba"]
+            chain += [f"trim=start_frame={window}:end_frame={window + frame_count}", "setpts=PTS-STARTPTS", "format=" + rgba_format]
             filters.append(f"[{external_labels[ident]}]" + ",".join(chain) + f"[{output}]")
         elif kind == "lens_distortion":
             if not any(params[name] for name in LENS_COEFFICIENTS):
@@ -892,7 +1096,7 @@ def compile_graph(graph, input_label, prefix, *, fps=24, frame_offset=0,
                 filters.append(f"[{output}c00][{output}c10][{output}wxa]maskedmerge[{output}top]")
                 filters.append(f"[{output}c01][{output}c11][{output}wxb]maskedmerge[{output}bottom]")
                 filters.append(f"[{output}top][{output}bottom][{output}wyy]maskedmerge,"
-                               f"unpremultiply=inplace=1,format=rgba[{output}]")
+                               f"unpremultiply=inplace=1,format={rgba_format}[{output}]")
         elif kind == "grade":
             animated = node.get("animation", {})
             exposure, eq, balance = "exposure@" + output, "eq@" + output, "colorbalance@" + output
@@ -909,6 +1113,12 @@ def compile_graph(graph, input_label, prefix, *, fps=24, frame_offset=0,
                 warm = params["temperature"] * .12
                 chain.append(f"{balance}=rs={_decimal(warm)}:rm={_decimal(warm)}:rh={_decimal(warm)}:"
                              f"bs={_decimal(-warm)}:bm={_decimal(-warm)}:bh={_decimal(-warm)}")
+            if high:
+                if any(params[name] != PARAMETERS['grade'][name][0] for name in params) or animated:
+                    chain = [high16_grade(*(_channel_expression(node, name, f"N+({frame_offset})")
+                                          for name in ("exposure", "contrast", "saturation", "temperature")))]
+                else:
+                    chain = []
             if chain:
                 preserve_alpha(incoming[0], output, chain)
             else:
@@ -940,19 +1150,36 @@ def compile_graph(graph, input_label, prefix, *, fps=24, frame_offset=0,
             filters.append(f"[{keyed}]" + ",".join(commands + ["format=rgba"]) + f",{target}=0x{params['color'][1:]}:"
                            f"{_decimal(params['similarity'])}:{_decimal(params['blend'])},alphaextract[{key_alpha}]")
             filters.append(f"[{alpha}][{key_alpha}]blend=all_mode=multiply[{matte}]")
-            filters.append(f"[{rgb}][{matte}]alphamerge,format=rgba[{output}]")
+            if high:
+                # colorkey supports packed rgba64; explicitly request it so
+                # its alpha extraction also remains 16-bit.
+                filters[-2] = filters[-2].replace("format=rgba,", "format=rgba64le,")
+                high16_attach_matte(filters, rgb, matte, output)
+            else:
+                filters.append(f"[{rgb}][{matte}]alphamerge,format=rgba[{output}]")
         elif kind == "mask":
-            expression = _animated_mask_alpha_expression(node, frame_offset) if node.get("animation") else _mask_alpha_expression(params)
             color, matte, alpha = output + "color", output + "matte", output + "alpha"
             # Apply geometry only to an extracted grayscale matte. This avoids
             # RGB conversions and their unnecessary alpha quantization.
             filters.append(f"[{incoming[0]}]split=2[{color}][{matte}]")
-            filters.append(f"[{matte}]alphaextract,geq=lum='{expression}'[{alpha}]")
-            filters.append(f"[{color}][{alpha}]alphamerge,format=rgba[{output}]")
+            if params["shape"] == "bezier":
+                original = output + "originalalpha"
+                filters.append(f"[{matte}]alphaextract,format=gray16le[{original}]")
+                filters.append(f"[{original}][{roto_labels[ident]}]blend=all_mode=multiply:shortest=1:repeatlast=0[{alpha}]")
+            else:
+                expression = _animated_mask_alpha_expression(node, frame_offset) if node.get("animation") else _mask_alpha_expression(params)
+                filters.append(f"[{matte}]alphaextract,geq=lum='{expression}'" + (":interpolation=nearest" if high else "") + f"[{alpha}]")
+            if high:
+                high16_attach_matte(filters, color, alpha, output)
+            else:
+                filters.append(f"[{color}][{alpha}]alphamerge,format=rgba[{output}]")
         elif kind == "merge":
             foreground = output + "foreground"
             background = incoming[0]
-            if params["mode"] == "normal":
+            if high:
+                high16_source_over(filters, incoming[0], incoming[1], output, params["mode"],
+                                   _channel_expression(node, "opacity", f"N+({frame_offset})"))
+            elif params["mode"] == "normal":
                 target = "colorchannelmixer@" + output
                 commands = command_chain(node, [("opacity", target, "aa", 1)])
                 filters.append(f"[{incoming[1]}]" + ",".join(commands + [f"{target}=aa={_decimal(params['opacity'])}"]) + f"[{foreground}]")
@@ -982,8 +1209,37 @@ def compile_graph(graph, input_label, prefix, *, fps=24, frame_offset=0,
                                f"shortest=1:repeatlast=0:format=rgb:alpha=straight,format=rgb24[{names['effective']}]")
                 filters.append(f"[{names['effective']}][{names['fa']}]alphamerge,format=rgba[{foreground}]")
                 background = names["base"]
-            filters.append(f"[{background}][{foreground}]overlay=x=0:y=0:eof_action=endall:"
-                           f"shortest=1:repeatlast=0:format=auto:alpha=straight,format=rgba[{output}]")
+            if not high:
+                filters.append(f"[{background}][{foreground}]overlay=x=0:y=0:eof_action=endall:"
+                               f"shortest=1:repeatlast=0:format=auto:alpha=straight,format=rgba[{output}]")
+        if effect_mask is not None and high:
+            masked_output = output + "masked"
+            high16_masked_mix(filters, effect_base, output, effect_mask, masked_output, node.get("mask_invert", False))
+            output = masked_output
+        elif effect_mask is not None:
+            # Interpolate associated colour and alpha, then unassociate. A
+            # keyed transparent result must not leak the hidden source RGB.
+            # White RGB with mask alpha yields equal premultiplied weights in
+            # all four planes and agrees with FFmpeg 8 alpha-mode negotiation.
+            before, after, weight = output + "before", output + "after", output + "weight"
+            masked_output = output + "masked"
+            filters.append(f"[{effect_base}]split=2[{before}rgb][{before}matte]")
+            filters.append(f"[{output}]split=2[{after}rgb][{after}matte]")
+            filters.append(f"[{effect_mask}]split=2[{weight}rgb][{weight}matte]")
+            filters.append(f"[{before}rgb]format=gbrap16le,premultiply=inplace=1[{before}]")
+            filters.append(f"[{after}rgb]format=gbrap16le,premultiply=inplace=1[{after}]")
+            filters.append(f"[{before}matte]alphaextract,format=gray[{before}alpha]")
+            filters.append(f"[{after}matte]alphaextract,format=gray[{after}alpha]")
+            invert_filter = ",lut=y='255-val'" if node.get("mask_invert") else ""
+            filters.append(f"[{weight}matte]alphaextract,format=gray{invert_filter}[{weight}alpha]")
+            filters.append(f"[{before}alpha][{after}alpha][{weight}alpha]maskedmerge[{masked_output}alpha]")
+            alpha_expression = "65535-r(X,Y)" if node.get("mask_invert") else "r(X,Y)"
+            filters.append(f"[{weight}rgb]alphaextract,format=gbrap16le,"
+                           f"geq=r='65535':g='65535':b='65535':a='{alpha_expression}',"
+                           f"premultiply=inplace=1[{weight}]")
+            filters.append(f"[{before}][{after}][{weight}]maskedmerge,unpremultiply=inplace=1,format=rgb24[{masked_output}rgb]")
+            filters.append(f"[{masked_output}rgb][{masked_output}alpha]alphamerge,format=rgba[{masked_output}]")
+            output = masked_output
         count = uses[ident]
         if count > 1:
             labels = [prefix + "n" + str(index) + "use" + str(port) for port in range(count)]

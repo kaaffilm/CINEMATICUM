@@ -44,12 +44,12 @@ from camera_io import import_camera
 from color_pipeline import import_cube, list_luts
 import recovery
 
-VERSION = "0.8.0"
+VERSION = "0.9.0"
 MAX_UPLOAD = 8 * 1024 * 1024 * 1024
 MAX_JSON = 8 * 1024 * 1024
 IDENTIFIER = re.compile(r"^[a-f0-9]{32}$")
 MEDIA_SUFFIXES = MEDIA_EXTENSIONS | {".blend"}
-EPHEMERAL_JOBS = {"frame-preview", "tracking-frame"}
+EPHEMERAL_JOBS = {"frame-preview", "tracking-frame", "audio-source"}
 WEB = Path(__file__).resolve().parent / "web"
 REPOSITORY = Path(__file__).resolve().parents[2]
 
@@ -118,6 +118,8 @@ class Store:
         self._workspace_lock_fd = None
         self.pool = None
         self.preview_pool = None
+        self.audio_pool = None
+        self.audio_pending = {}
         self.waveform_slots = threading.BoundedSemaphore(2)
         self.stop_decoding = threading.Event()
         self._acquire_workspace_lock()
@@ -135,13 +137,22 @@ class Store:
                 for abandoned in project_dir.glob("archive-upload-*.zip"):
                     if re.fullmatch(r"archive-upload-[a-f0-9]{32}\.zip", abandoned.name) and not abandoned.is_symlink() and abandoned.is_file():
                         abandoned.unlink()
+                for abandoned in project_dir.glob("relink-upload-*"):
+                    if (re.fullmatch(r"relink-upload-[a-f0-9]{32}\.[a-zA-Z0-9]+", abandoned.name)
+                            and abandoned.suffix.lower() in MEDIA_SUFFIXES
+                            and not abandoned.is_symlink() and abandoned.is_file()):
+                        abandoned.unlink()
             self.token = secrets.token_urlsafe(32)
             self.comfy_url = comfy_url.rstrip("/")
+            self.external_comfy_url = self.comfy_url
+            self.managed_generation = None
+            self.managed_generation_url = None
             self.jobs = {}
             self.events = {}
             self.futures = {}
             self.pool = ThreadPoolExecutor(max_workers=1, thread_name_prefix="cinematicum-render")
             self.preview_pool = ThreadPoolExecutor(max_workers=1, thread_name_prefix="cinematicum-frame")
+            self.audio_pool = ThreadPoolExecutor(max_workers=2, thread_name_prefix="cinematicum-source-audio")
             self._cap_cache = None
             self._cap_time = 0
             for path in (self.root / "jobs").glob("*.json"):
@@ -158,6 +169,8 @@ class Store:
                 self.pool.shutdown(wait=True, cancel_futures=True)
             if self.preview_pool is not None:
                 self.preview_pool.shutdown(wait=True, cancel_futures=True)
+            if self.audio_pool is not None:
+                self.audio_pool.shutdown(wait=True, cancel_futures=True)
             self._release_workspace_lock()
             raise
 
@@ -277,6 +290,10 @@ class Store:
             p["revision"] = current.get("revision", 0) + 1
             p["updated_at"] = time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
             recovery.preserve_saved(directory, current, atomic_json)
+            # Validation reprobes server-owned media. Persist upgraded stream
+            # identities so reopening a pre-0.9 asset retains exact audio binding.
+            if p["assets"] != read_json(directory / "assets.json", []):
+                atomic_json(directory / "assets.json", p["assets"])
             atomic_json(directory / "project.json", p)
             try:
                 recovery.acknowledge(directory, receipt, current.get("revision", 0))
@@ -397,11 +414,21 @@ class Store:
                 encoders = subprocess.check_output([ffmpeg, "-hide_banner", "-encoders"], stderr=subprocess.DEVNULL, timeout=5, text=True)
             except (OSError, subprocess.SubprocessError):
                 pass
-        result = {"version": VERSION, "ffmpeg": bool(ffmpeg and ffprobe), "blender": bool(find_blender()), "comfyui": check_comfyui(self.comfy_url), "titles": "overlay" in filters, "raster_titles": "overlay" in filters, "drawtext": "drawtext" in filters, "h264": "libx264" in encoders, "prores": "prores_ks" in encoders, "workspace": str(self.root), "color_space": "SDR Rec.709", "commercial_providers": "No paid provider is configured in this build."}
+        try:
+            generation_status = check_comfyui(self.generation_endpoint())
+        except ValueError as error:
+            generation_status = {"available": False, "reason": str(error)}
+        result = {"version": VERSION, "ffmpeg": bool(ffmpeg and ffprobe), "blender": bool(find_blender()), "comfyui": generation_status, "titles": "overlay" in filters, "raster_titles": "overlay" in filters, "drawtext": "drawtext" in filters, "h264": "libx264" in encoders, "prores": "prores_ks" in encoders, "workspace": str(self.root), "color_space": "SDR Rec.709", "commercial_providers": "No paid provider is configured in this build."}
         result["scene_authoring"] = result["blender"] and result["ffmpeg"]
         result["node_compositor"] = all(name in filters for name in ("geq", "overlay", "split", "gblur"))
         result["point_tracking"] = "find_rect" in filters
+        from planar_tracking import planar_capabilities
+        result["planar_tracking"] = planar_capabilities()
         result["color_pipeline"] = all(name in filters for name in ("geq", "lut1d", "lut3d"))
+        from engine import get_capabilities
+        movie_capabilities = get_capabilities()
+        for name in ("high_depth_movie", "master16", "image_precisions"):
+            result[name] = movie_capabilities[name]
         result["camera_import"] = True
         from imaging import imaging_capabilities
         result["imaging"] = imaging_capabilities()
@@ -419,9 +446,12 @@ class Store:
     def submit(self, project_id, kind, fn, snapshot=None, cleanup=None):
         with self.lock:
             self._require_open()
-            active = sum(j["state"] in {"queued", "running"} for j in self.jobs.values())
-            if active >= 8:
-                raise ValueError("Render queue is full. Wait for or cancel a queued job.")
+            active = sum(j["state"] in {"queued", "running"}
+                         and (j.get("kind") == "audio-source") == (kind == "audio-source")
+                         for j in self.jobs.values())
+            if active >= (32 if kind == "audio-source" else 8):
+                raise ValueError("Source audio preparation queue is full. Retry when preparation completes."
+                                 if kind == "audio-source" else "Render queue is full. Wait for or cancel a queued job.")
             job_id = uuid.uuid4().hex
             job = {"id": job_id, "project_id": project_id, "kind": kind, "state": "queued", "progress": 0, "created_at": time.time(), "error": None, "result": None}
             event = threading.Event()
@@ -479,7 +509,8 @@ class Store:
                     self.futures.pop(job_id, None)
 
         with self.lock:
-            future = (self.preview_pool if kind in EPHEMERAL_JOBS else self.pool).submit(execute)
+            pool = self.audio_pool if kind == "audio-source" else self.preview_pool if kind in EPHEMERAL_JOBS else self.pool
+            future = pool.submit(execute)
             self.futures[job_id] = future
             # A cancelled queued Future never invokes execute(). It still owns
             # an uploaded input, so cancellation and shutdown release it here.
@@ -512,7 +543,7 @@ class Store:
 
     def render(self, project_id, payload):
         profile = payload.get("profile", "h264")
-        if profile not in {"preview", "h264", "prores"}:
+        if profile not in {"preview", "h264", "prores", "master16"}:
             raise ValueError("Unknown export profile")
         project = payload.get("project", self.get(project_id))
         p = copy.deepcopy(project)
@@ -522,12 +553,14 @@ class Store:
         normalized = validate_project(p, directory)
         if isinstance(normalized, dict):
             p = normalized
-        if not p.get("clips") and not p.get("titles"):
+        if profile == "master16" and p.get("settings", {}).get("image_precision", "standard8") != "high16":
+            raise ValueError("Select 16-bit SDR movie processing before exporting a 16-bit master.")
+        if not p.get("clips") and not p.get("titles") and not p.get("sequence_duration"):
             raise ValueError("Add media to the timeline before rendering")
         snapshot = copy.deepcopy(p)
 
         def work(job_id, progress, event):
-            suffix = ".mov" if profile == "prores" else ".mp4"
+            suffix = ".mov" if profile == "prores" else ".mkv" if profile == "master16" else ".mp4"
             output = directory / "exports" / (job_id + suffix)
             report = render_project(snapshot, directory, output, profile=profile, progress=progress, cancel_event=event)
             if event.is_set():
@@ -549,7 +582,8 @@ class Store:
         project = validate_project(project, directory)
         frame = payload.get("frame")
         total = max([c["start"] + c["duration"] for c in project["clips"]] +
-                    [t["start"] + t["duration"] for t in project["titles"]] + [0])
+                    [t["start"] + t["duration"] for t in project["titles"]] +
+                    [c["start"] + c["duration"] for c in project.get("captions", [])] + [project.get("sequence_duration", 0)])
         if type(frame) is not int or not 0 <= frame < total:
             raise ValueError("Preview frame must be inside this timeline")
         identity = preview_identity(project, frame)
@@ -708,8 +742,24 @@ class Store:
         directory = self.project_dir(project_id)
         clip_id, measured = payload.get("clip_id"), payload.get("track")
         if motion:
-            return {"motion": stabilization_motion(project, directory, clip_id, measured)}
+            return {"motion": stabilization_motion(project, directory, clip_id, measured,
+                                                    mode=payload.get("mode", "stabilize"))}
         return {"track": validate_track_for_clip(project, directory, clip_id, measured)}
+
+    def tracking_setup(self, project_id, payload):
+        if payload != {}:
+            raise ValueError("Tracking setup accepts an empty options object.")
+        self.get(project_id)
+
+        def work(job_id, progress, event):
+            from install_tracking import install
+            progress(.05)
+            result = install(cancel_event=event)
+            with self.lock:
+                self._cap_cache = None
+            from planar_tracking import planar_capabilities
+            return {"installation": result, "status": planar_capabilities()}
+        return self.submit(project_id, "tracking-setup", work)
 
     def interchange(self, project_id, payload, importing=False):
         from interchange import export_otio, import_otio
@@ -723,7 +773,7 @@ class Store:
         return {"url": f"/api/projects/{project_id}/exports/{output.name}", "filename": output.name,
                 "warnings": result.get("warnings", []), "sha256": digest_file(output)}
 
-    def waveform(self, project_id, asset_id, bins):
+    def waveform(self, project_id, asset_id, bins, stream_index=None, channels=None):
         asset, path = self.asset(project_id, asset_id)
         if not asset.get("has_audio"):
             raise ValueError("This source has no audio stream")
@@ -731,7 +781,7 @@ class Store:
             raise ValueError("Waveform decoding is busy. Retry shortly.")
         try:
             return extract_waveform(path, self.project_dir(project_id) / "waveforms", bins=bins,
-                                    cancel_event=self.stop_decoding)
+                                    cancel_event=self.stop_decoding, stream_index=stream_index, channels=channels)
         finally:
             self.waveform_slots.release()
 
@@ -748,13 +798,16 @@ class Store:
             raise ValueError("A prompt of 1–32000 characters is required")
         if isinstance(seed, bool) or not isinstance(seed, int) or not 0 <= seed < 2**53:
             raise ValueError("Seed must be an integer from 0 to 9007199254740991")
-        readiness = workflow_readiness(self.comfy_url, workflow, prompt=prompt, negative=negative, seed=seed)
+        base_url = self.generation_endpoint()
+        readiness = workflow_readiness(base_url, workflow, prompt=prompt, negative=negative, seed=seed)
         if not readiness["ready"]:
             raise ValueError("Generation preflight failed: " + " ".join(readiness["errors"][:5]))
 
         def work(job_id, progress, event):
+            if self.generation_endpoint() != base_url:
+                raise ValueError("The generation runtime changed before this shot started. Submit it again to the current engine.")
             with tempfile.TemporaryDirectory(prefix="generation-", dir=str(directory)) as scratch:
-                result = generate_comfyui(self.comfy_url, workflow, prompt, negative, seed, Path(scratch), progress=progress, cancel_event=event)
+                result = generate_comfyui(base_url, workflow, prompt, negative, seed, Path(scratch), progress=progress, cancel_event=event)
                 if event.is_set():
                     raise RuntimeError("Generation cancelled locally")
                 asset = self.admit(project_id, result["path"], "Generated take" + Path(result["path"]).suffix, result.get("provenance"))
@@ -764,7 +817,195 @@ class Store:
     def generation_readiness(self, project_id):
         directory = self.project_dir(project_id)
         path = directory / "workflow.json"
-        return workflow_readiness(self.comfy_url, read_json(path) if path.is_file() else None)
+        return workflow_readiness(self.generation_endpoint(), read_json(path) if path.is_file() else None)
+
+    def generation_endpoint(self):
+        """Never reuse a dead managed child's ephemeral port as a new engine."""
+        with self.lock:
+            self._require_open()
+            if self.managed_generation_url is not None:
+                status = self.managed_generation.status() if self.managed_generation is not None else {}
+                if (not status.get("running") or not status.get("ready")
+                        or status.get("base_url") != self.managed_generation_url
+                        or self.comfy_url != self.managed_generation_url):
+                    raise ValueError("The local generation engine stopped. Open Local generation setup and start it again.")
+            return self.comfy_url
+
+    def generation_manager(self):
+        with self.lock:
+            self._require_open()
+            if self.managed_generation is None:
+                from managed_generation import ManagedGeneration
+                self.managed_generation = ManagedGeneration()
+            return self.managed_generation
+
+    def generation_runtime_status(self):
+        return self.generation_manager().status()
+
+    def generation_runtime_job(self, project_id, action, payload):
+        self.project_dir(project_id)
+        if action not in {"setup", "start"} or not isinstance(payload, dict) or payload:
+            raise ValueError("Generation setup and start accept an empty options object")
+        manager = self.generation_manager()
+        with self.lock:
+            if any(job["kind"] in {"generate", "generation-setup", "generation-start"}
+                   and job["state"] in {"queued", "running"} for job in self.jobs.values()):
+                raise ValueError("A generation runtime operation is already active")
+
+        def work(job_id, progress, event):
+            result = manager.install(progress, event) if action == "setup" else manager.start(progress, event)
+            with self.lock:
+                if action == "start":
+                    base_url = result.get("base_url")
+                    endpoint = urlparse(base_url) if isinstance(base_url, str) else None
+                    if (endpoint is None or endpoint.scheme != "http" or endpoint.hostname != "127.0.0.1"
+                            or not endpoint.port or endpoint.username or endpoint.password or endpoint.path
+                            or endpoint.query or endpoint.fragment):
+                        raise ValueError("Managed generation did not return its owned loopback endpoint")
+                    self.comfy_url = base_url
+                    self.managed_generation_url = base_url
+                self._cap_cache = None
+            return result
+        with self.lock:
+            if any(job["kind"] in {"generate", "generation-setup", "generation-start"}
+                   and job["state"] in {"queued", "running"} for job in self.jobs.values()):
+                raise ValueError("A generation runtime operation is already active")
+            return self.submit(project_id, "generation-" + action, work)
+
+    def generation_runtime_stop(self):
+        with self.lock:
+            if any(job["kind"] in {"generate", "generation-setup", "generation-start"}
+                   and job["state"] in {"queued", "running"} for job in self.jobs.values()):
+                raise ValueError("Finish or cancel the active generation job before stopping its runtime")
+            result = self.generation_manager().stop()
+            self.comfy_url = self.external_comfy_url
+            self.managed_generation_url = None
+            self._cap_cache = None
+            return result
+
+    def generation_default_workflow(self, project_id, options):
+        directory = self.project_dir(project_id)
+        workflow = validate_workflow(self.generation_manager().default_workflow(options))
+        with self.lock:
+            self._require_open()
+            destination = directory / "workflow.json"
+            if destination.is_symlink():
+                raise ValueError("Workflow destination must not be a symlink")
+            if destination.is_file():
+                previous = read_json(destination)
+                if previous != workflow:
+                    history = directory / "workflow-history"
+                    if history.is_symlink():
+                        raise ValueError("Workflow history must not be a symlink")
+                    history.mkdir(exist_ok=True)
+                    prior_bytes = destination.read_bytes()
+                    prior_sha = hashlib.sha256(prior_bytes).hexdigest()
+                    archived = history / (prior_sha + ".json")
+                    if archived.is_symlink():
+                        raise ValueError("Workflow history entry must not be a symlink")
+                    if archived.exists():
+                        if not archived.is_file() or digest_file(archived) != prior_sha:
+                            raise ValueError("The previous workflow archive is incomplete; the current workflow was preserved")
+                    else:
+                        temporary = history / (".workflow-" + uuid.uuid4().hex + ".part")
+                        try:
+                            with temporary.open("xb") as output:
+                                output.write(prior_bytes)
+                                output.flush()
+                                os.fsync(output.fileno())
+                            # A hard link publishes complete bytes atomically and
+                            # never overwrites a concurrently created archive.
+                            try:
+                                os.link(temporary, archived)
+                            except FileExistsError:
+                                if archived.is_symlink() or not archived.is_file() or digest_file(archived) != prior_sha:
+                                    raise ValueError("Workflow history changed; the current workflow was preserved")
+                        finally:
+                            temporary.unlink(missing_ok=True)
+            atomic_json(destination, workflow)
+        return {"workflow_path": "workflow.json", "workflow": workflow,
+                "previous_workflow_retained": True}
+
+    def media_inventory(self, project_id):
+        from media_management import inventory
+        return inventory(self.get(project_id), self.project_dir(project_id))
+
+    def media_proxy(self, project_id, payload):
+        from media_management import create_proxy, asset_record, proxy_recipe
+        if not isinstance(payload, dict) or set(payload) - {"asset_id", "long_edge"}:
+            raise ValueError("Proxy creation accepts one asset and a preview size.")
+        project, directory = self.get(project_id), self.project_dir(project_id)
+        asset_record(project, payload.get("asset_id"))
+        edge = payload.get("long_edge", 960)
+        proxy_recipe(edge)
+
+        def work(job_id, progress, event):
+            result = create_proxy(project, directory, payload["asset_id"], edge,
+                                  progress=progress, cancel_event=event)
+            result["url"] = f"/api/projects/{project_id}/media-proxy/{payload['asset_id']}?long_edge={edge}"
+            return result
+        return self.submit(project_id, "media-proxy", work,
+                           {"asset_id": payload["asset_id"], "long_edge": edge})
+
+    def audio_source(self, project_id, payload):
+        from audio_source import cached_source, create_source, source_identity, source_recipe
+        from media_management import asset_record
+        if not isinstance(payload, dict) or set(payload) - {"asset_id", "stream_index", "channels", "playback_rate"}:
+            raise ValueError("Source audio preparation accepts one asset, its stream ID and source channel mapping.")
+        project, directory = self.get(project_id), self.project_dir(project_id)
+        asset = asset_record(project, payload.get("asset_id"))
+        stream_index, channels = payload.get("stream_index"), payload.get("channels")
+        playback_rate = payload.get("playback_rate", 1)
+        recipe = source_recipe(asset, stream_index, channels, playback_rate)
+        key = source_identity(asset, recipe)
+        url = f"/api/projects/{project_id}/audio-source/{key}"
+        cached = cached_source(project, directory, asset["id"], stream_index, channels, playback_rate)
+        if cached:
+            return {**cached, "url": url}
+        identity = (project_id, key)
+        with self.lock:
+            self._require_open()
+            pending_id = self.audio_pending.get(identity)
+            pending = self.jobs.get(pending_id)
+            if pending and pending["state"] in {"queued", "running"}:
+                return {"job": copy.deepcopy(pending)}
+            old_jobs = sorted((job for job in self.jobs.values() if job.get("kind") == "audio-source"
+                               and job["state"] not in {"queued", "running"}),
+                              key=lambda job: job["created_at"], reverse=True)
+            for old in old_jobs[128:]:
+                self.jobs.pop(old["id"], None)
+
+            def work(job_id, progress, event):
+                result = create_source(project, directory, asset["id"], stream_index, channels,
+                                       progress=progress, cancel_event=event, playback_rate=playback_rate)
+                return {**result, "url": url}
+
+            def cleanup():
+                with self.lock:
+                    self.audio_pending.pop(identity, None)
+
+            job = self.submit(project_id, "audio-source", work, cleanup=cleanup)
+            self.audio_pending[identity] = job["id"]
+            return {"job": job}
+
+    def media_relink(self, project_id, asset_id, incoming):
+        from media_management import relink_original
+        with self.lock:
+            return relink_original(self.get(project_id), self.project_dir(project_id), asset_id, incoming)
+
+    def editorial(self, project_id, payload):
+        from editorial import apply_action
+        project = self.analysis_snapshot(project_id, payload)
+        result = apply_action(project, payload.get("action"), payload.get("values", {}), self.project_dir(project_id))
+        if payload.get("action") == "captions_export":
+            extension = result["format"]
+            if extension not in {"srt", "vtt"}:
+                raise ValueError("Unsupported caption sidecar format.")
+            output = self.project_dir(project_id) / "exports" / (uuid.uuid4().hex + "." + extension)
+            output.write_text(result["text"], encoding="utf-8")
+            result["url"] = f"/api/projects/{project_id}/exports/{output.name}"
+            result["sha256"] = digest_file(output)
+        return result
 
     def scene_render(self, project_id, payload):
         """Render a bounded editable scene recipe and preserve its Blender source."""
@@ -916,6 +1157,9 @@ class Store:
                     event.set()
             self.pool.shutdown(wait=True, cancel_futures=True)
             self.preview_pool.shutdown(wait=True, cancel_futures=True)
+            self.audio_pool.shutdown(wait=True, cancel_futures=True)
+            if self.managed_generation is not None:
+                self.managed_generation.shutdown()
             with self.lock:
                 self._closed = True
                 self._release_workspace_lock()
@@ -991,10 +1235,16 @@ class Handler(BaseHTTPRequestHandler):
             raise ValueError("Incomplete request body")
         return json.loads(data, parse_constant=lambda x: (_ for _ in ()).throw(ValueError("Non-finite JSON number")))
 
-    def file(self, path, download=False):
+    def file(self, path, download=False, etag=None):
         path = Path(path)
         if not path.is_file():
             raise FileNotFoundError("File is missing")
+        if etag is not None:
+            if not isinstance(etag, str) or not re.fullmatch(r"[a-f0-9]{64}", etag):
+                raise ValueError("Invalid media content identity")
+            etag = '"' + etag + '"'
+            if self.headers.get("If-Match") not in {None, etag}:
+                return self.json(412, {"error": "The prepared audio changed. Prepare the source again before playback."})
         size = path.stat().st_size
         start, end = 0, size - 1
         partial = False
@@ -1027,6 +1277,8 @@ class Handler(BaseHTTPRequestHandler):
         self.send_header("Accept-Ranges", "bytes")
         self.send_header("Content-Length", str(length))
         self.send_header("Cache-Control", "no-store")
+        if etag is not None:
+            self.send_header("ETag", etag)
         if partial:
             self.send_header("Content-Range", f"bytes {start}-{end}/{size}")
         if download:
@@ -1066,7 +1318,7 @@ class Handler(BaseHTTPRequestHandler):
     def dispatch_get(self):
         parsed = urlparse(self.path)
         parts = unquote(parsed.path).strip("/").split("/")
-        if parsed.path in {"/", "/index.html", "/app.js", "/style.css", "/editing.js", "/viewer-tools.js", "/compositor-ui.js", "/scene-editor.js", "/scene-editor.css", "/tracking-ui.js", "/interchange-ui.js", "/camera-io-ui.js", "/color-pipeline-ui.js", "/imaging-ui.js", "/recovery-ui.js", "/production-ui.js", "/archive-ui.js"}:
+        if parsed.path in {"/", "/index.html", "/app.js", "/style.css", "/editing.js", "/viewer-tools.js", "/compositor-ui.js", "/scene-editor.js", "/scene-editor.css", "/tracking-ui.js", "/interchange-ui.js", "/camera-io-ui.js", "/color-pipeline-ui.js", "/imaging-ui.js", "/recovery-ui.js", "/production-ui.js", "/archive-ui.js", "/media-management-ui.js", "/editorial-ui.js", "/sequence-playback.js", "/managed-generation-ui.js", "/audio-routing.js", "/pcm-playback.js"}:
             return self.file(WEB / ("index.html" if parsed.path == "/" else parsed.path[1:]))
         if parts == ["api", "bootstrap"]:
             projects = self.store.projects()
@@ -1078,6 +1330,8 @@ class Handler(BaseHTTPRequestHandler):
         if parts == ["api", "imaging-capabilities"]:
             from imaging import imaging_capabilities
             return self.json(200, imaging_capabilities())
+        if parts == ["api", "generation-runtime"]:
+            return self.json(200, self.store.generation_runtime_status())
         if parts == ["api", "projects"]:
             return self.json(200, self.store.projects())
         if len(parts) == 3 and parts[:2] == ["api", "jobs"]:
@@ -1090,6 +1344,8 @@ class Handler(BaseHTTPRequestHandler):
                 return self.json(200, self.store.recovery(project_id))
             if len(parts) == 4 and parts[3] == "generation-readiness":
                 return self.json(200, self.store.generation_readiness(project_id))
+            if len(parts) == 4 and parts[3] == "media-inventory":
+                return self.json(200, self.store.media_inventory(project_id))
             if len(parts) == 4 and parts[3] == "color-luts":
                 return self.json(200, {"luts": list_luts(self.store.project_dir(project_id))})
             if len(parts) == 4 and parts[3] == "imaging-catalog":
@@ -1110,19 +1366,33 @@ class Handler(BaseHTTPRequestHandler):
             if len(parts) == 5 and parts[3] == "media":
                 asset, path = self.store.asset(project_id, parts[4])
                 return self.file(path, download=asset["kind"] == "scene")
+            if len(parts) == 5 and parts[3] == "media-proxy":
+                from media_management import proxy_file
+                edge = int(parse_qs(parsed.query).get("long_edge", ["960"])[0])
+                path, receipt = proxy_file(self.store.get(project_id), self.store.project_dir(project_id), parts[4], edge)
+                return self.file(path)
+            if len(parts) == 5 and parts[3] == "audio-source":
+                from audio_source import source_file
+                path, receipt = source_file(self.store.get(project_id), self.store.project_dir(project_id), parts[4])
+                return self.file(path, etag=receipt["sha256"])
             if len(parts) == 5 and parts[3] == "thumbnail":
                 return self.thumbnail(project_id, parts[4])
             if len(parts) == 5 and parts[3] == "waveform":
-                bins = int(parse_qs(parsed.query).get("bins", ["512"])[0])
-                return self.json(200, self.store.waveform(project_id, parts[4], bins))
+                values = parse_qs(parsed.query)
+                bins = int(values.get("bins", ["512"])[0])
+                stream_index = int(values["stream_index"][0]) if "stream_index" in values else None
+                if ("left" in values) != ("right" in values):
+                    raise ValueError("Choose both source audio channels for the waveform")
+                channels = [int(values["left"][0]), int(values["right"][0])] if "left" in values else None
+                return self.json(200, self.store.waveform(project_id, parts[4], bins, stream_index, channels))
             if len(parts) == 5 and parts[3] == "previews":
                 if not re.fullmatch(r"[a-f0-9]{64}\.png", parts[4]):
                     raise ValueError("Invalid frame preview filename")
                 return self.file(self.store.project_dir(project_id) / "previews" / parts[4])
             if len(parts) == 5 and parts[3] == "exports":
-                if not re.fullmatch(r"[a-f0-9]{32}(\.(mp4|mov|json|blend|otio|zip|cinematicum\.zip)|-shot-plan\.json)", parts[4]):
+                if not re.fullmatch(r"[a-f0-9]{32}(\.(mp4|mov|mkv|json|blend|otio|zip|srt|vtt|cinematicum\.zip)|-shot-plan\.json)", parts[4]):
                     raise ValueError("Invalid export filename")
-                return self.file(self.store.project_dir(project_id) / "exports" / parts[4], download=parts[4].endswith((".blend", ".otio", ".zip", "-shot-plan.json")) or "download" in parse_qs(parsed.query))
+                return self.file(self.store.project_dir(project_id) / "exports" / parts[4], download=parts[4].endswith((".blend", ".otio", ".mkv", ".zip", ".srt", ".vtt", "-shot-plan.json")) or "download" in parse_qs(parsed.query))
             if len(parts) == 5 and parts[3] == "analysis":
                 if not re.fullmatch(r"[a-f0-9]{32}\.(png|json)", parts[4]):
                     raise ValueError("Invalid analysis filename")
@@ -1235,6 +1505,28 @@ class Handler(BaseHTTPRequestHandler):
                     return self.json(201, self.store.admit(project_id, tmp, name))
                 finally:
                     tmp.unlink(missing_ok=True)
+            if action == "media-relink":
+                if self.headers.get_content_type() != "application/octet-stream":
+                    raise ValueError("Expected the selected original as application/octet-stream")
+                length = self.length(MAX_UPLOAD)
+                asset_id = query.get("asset_id", [""])[0]
+                from media_management import asset_record
+                asset = asset_record(self.store.get(project_id), asset_id)
+                tmp = directory / ("relink-upload-" + uuid.uuid4().hex + Path(asset["path"]).suffix)
+                try:
+                    with tmp.open("xb") as stream:
+                        remaining = length
+                        while remaining:
+                            block = self.rfile.read(min(1024 * 1024, remaining))
+                            if not block:
+                                raise ValueError("Original-media upload was interrupted.")
+                            stream.write(block)
+                            remaining -= len(block)
+                        stream.flush()
+                        os.fsync(stream.fileno())
+                    return self.json(200, self.store.media_relink(project_id, asset_id, tmp))
+                finally:
+                    tmp.unlink(missing_ok=True)
             if action == "workflow":
                 graph = self.body()
                 workflow = validate_workflow(graph)
@@ -1256,6 +1548,21 @@ class Handler(BaseHTTPRequestHandler):
                 return self.json(202, self.store.render(project_id, payload))
             if action == "generate":
                 return self.json(202, self.store.generation(project_id, payload))
+            if action in {"generation-setup", "generation-start"}:
+                return self.json(202, self.store.generation_runtime_job(project_id, action.split("-", 1)[1], payload))
+            if action == "generation-stop":
+                if payload:
+                    raise ValueError("Generation stop accepts an empty options object")
+                return self.json(200, self.store.generation_runtime_stop())
+            if action == "generation-workflow":
+                return self.json(201, self.store.generation_default_workflow(project_id, payload))
+            if action == "media-proxy":
+                return self.json(202, self.store.media_proxy(project_id, payload))
+            if action == "audio-source":
+                result = self.store.audio_source(project_id, payload)
+                return self.json(202 if "job" in result else 200, result)
+            if action == "editorial":
+                return self.json(200, self.store.editorial(project_id, payload))
             if action == "blender":
                 return self.json(202, self.store.blender(project_id, payload))
             if action == "scene":
@@ -1266,6 +1573,8 @@ class Handler(BaseHTTPRequestHandler):
                 return self.json(202, self.store.frame_preview(project_id, payload))
             if action in {"tracking-frame", "tracking"}:
                 return self.json(202, self.store.tracking(project_id, payload, seed_only=action == "tracking-frame"))
+            if action == "tracking-setup":
+                return self.json(202, self.store.tracking_setup(project_id, payload))
             if action in {"tracking-motion", "tracking-validate"}:
                 return self.json(200, self.store.tracking_plan(project_id, payload, motion=action == "tracking-motion"))
             if action in {"interchange-export", "interchange-import"}:

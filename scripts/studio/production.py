@@ -297,11 +297,16 @@ def conform_plan(document, project, project_dir, bindings=None, *, replace_forma
         raise ValueError("Unlock the timeline tracks before replacing this edit with the planned cut.")
     same_format = (project_rate(candidate) == project_rate(plan)
                    and (candidate["width"], candidate["height"]) == (plan["width"], plan["height"]))
+    if candidate.get("sequences") and not same_format:
+        raise ValueError("All sequences share the project format. Assemble a differently formatted plan in a new project to preserve the other edits.")
     if (candidate["clips"] or candidate["titles"]) and not same_format and not replace_format:
         raise ValueError("The existing edit has a different format. Explicitly confirm replacing its timeline and format.")
     candidate.update(name=plan["film"], width=plan["width"], height=plan["height"], fps=plan["fps"],
-                     frame_rate=copy.deepcopy(plan["frame_rate"]), titles=[],
+                     frame_rate=copy.deepcopy(plan["frame_rate"]), titles=[], captions=[], sequence_duration=0,
                      tracks=[{"id": 0, "name": "Production picture", "gain": 1, "mute": False, "solo": False, "locked": False}])
+    candidate.pop("caption_style", None)
+    if project_rate(candidate).fraction not in (Fraction(30000, 1001), Fraction(60000, 1001)):
+        candidate.setdefault("settings", {}).pop("timecode_mode", None)
     candidate["clips"] = [{"id": "production_" + hashlib.sha256(row["id"].encode()).hexdigest()[:24],
                            "asset_id": row["asset_id"], "track": 0, "start": row["start_frame"],
                            "in": row["in_frame"], "duration": row["duration_frames"], "speed": 1, "reverse": False,

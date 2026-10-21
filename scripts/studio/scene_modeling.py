@@ -21,7 +21,8 @@ from spatial_import import (MAX_GEOMETRY_BYTES, MAX_SCENE_TRIANGLES, MAX_SCENE_V
 
 MAX_CAGE_VERTICES = 10000
 MAX_CAGE_FACES = 10000
-MAX_MODIFIERS = 4
+MAX_MODIFIERS = 8
+MODIFIER_TYPES = {'mirror', 'bevel', 'subdivision', 'solidify', 'array', 'decimate', 'smooth', 'simple_deform'}
 MODELING_TIMEOUT = 45
 _EVALUATION_SLOT = threading.BoundedSemaphore(1)
 _SHA256 = re.compile(r'[0-9a-f]{64}\Z')
@@ -116,14 +117,19 @@ def _cage_mesh(vertices, faces):
 
 def validate_modifiers(value):
     if not isinstance(value, list) or len(value) > MAX_MODIFIERS:
-        raise ValueError('A mesh supports up to four nondestructive modifiers.')
+        raise ValueError('A mesh supports up to eight nondestructive modifiers.')
     result, ids = [], set()
     for source in value:
-        if not isinstance(source, dict) or not isinstance(source.get('type'), str) or source['type'] not in {'mirror', 'bevel', 'subdivision'}:
-            raise ValueError('Choose a Mirror, Bevel, or Subdivision modifier.')
+        if not isinstance(source, dict) or not isinstance(source.get('type'), str) or source['type'] not in MODIFIER_TYPES:
+            raise ValueError('Choose a supported mesh modifier.')
         kind = source['type']
         fields = {'mirror': {'axis', 'bisect', 'flip', 'merge_distance'},
-                  'bevel': {'width', 'segments', 'angle'}, 'subdivision': {'levels', 'method'}}[kind]
+                  'bevel': {'width', 'segments', 'angle'}, 'subdivision': {'levels', 'method'},
+                  'solidify': {'thickness', 'offset', 'even', 'rim'},
+                  'array': {'count', 'offset', 'merge', 'merge_distance'},
+                  'decimate': {'ratio', 'symmetry', 'axis'},
+                  'smooth': {'factor', 'iterations', 'axes'},
+                  'simple_deform': {'method', 'axis', 'angle', 'factor'}}[kind]
         _mapping(source, {'id', 'type', 'enabled', *fields}, 'Modifier')
         ident = source.get('id')
         if not isinstance(ident, str) or not _ID.fullmatch(ident) or ident in ids:
@@ -141,11 +147,43 @@ def validate_modifiers(value):
             item.update(width=_number(source.get('width', .1), 'Bevel width', .0001, 2),
                         segments=_number(source.get('segments', 2), 'Bevel segments', 1, 6, True),
                         angle=_number(source.get('angle', 30), 'Bevel angle', 0, 180))
-        else:
+        elif kind == 'subdivision':
             method = source.get('method', 'CATMULL_CLARK')
             if not isinstance(method, str) or method not in {'CATMULL_CLARK', 'SIMPLE'}:
                 raise ValueError('Subdivision must use Catmull–Clark or Simple.')
             item.update(method=method, levels=_number(source.get('levels', 1), 'Subdivision level', 1, 3, True))
+        elif kind == 'solidify':
+            item.update(thickness=_number(source.get('thickness', .1), 'Shell thickness', -100, 100),
+                        offset=_number(source.get('offset', -1), 'Shell offset', -1, 1),
+                        even=_boolean(source.get('even', True), 'Even shell thickness'),
+                        rim=_boolean(source.get('rim', True), 'Shell rim'))
+        elif kind == 'array':
+            item.update(count=_number(source.get('count', 2), 'Array count', 1, 64, True),
+                        offset=_vector(source.get('offset', [2, 0, 0]), 'Array offset', -100, 100),
+                        merge=_boolean(source.get('merge', False), 'Array merge'),
+                        merge_distance=_number(source.get('merge_distance', .001), 'Array merge distance', .000001, .1))
+        elif kind == 'decimate':
+            axis = source.get('axis', 'X')
+            if not isinstance(axis, str) or axis not in {'X', 'Y', 'Z'}:
+                raise ValueError('Decimate symmetry axis must be X, Y, or Z.')
+            item.update(ratio=_number(source.get('ratio', .5), 'Decimate ratio', .01, 1),
+                        symmetry=_boolean(source.get('symmetry', False), 'Decimate symmetry'), axis=axis)
+        elif kind == 'smooth':
+            axes = source.get('axes', [True, True, True])
+            if not isinstance(axes, list) or len(axes) != 3:
+                raise ValueError('Smooth axes need three boolean values.')
+            item.update(factor=_number(source.get('factor', .5), 'Smooth factor', -1, 1),
+                        iterations=_number(source.get('iterations', 1), 'Smooth iterations', 1, 20, True),
+                        axes=[_boolean(v, 'Smooth axis') for v in axes])
+        elif kind == 'simple_deform':
+            method, axis = source.get('method', 'TWIST'), source.get('axis', 'Z')
+            if not isinstance(method, str) or method not in {'TWIST', 'BEND', 'TAPER', 'STRETCH'}:
+                raise ValueError('Deform method must be Twist, Bend, Taper, or Stretch.')
+            if not isinstance(axis, str) or axis not in {'X', 'Y', 'Z'}:
+                raise ValueError('Deform axis must be X, Y, or Z.')
+            item.update(method=method, axis=axis,
+                        angle=_number(source.get('angle', 45), 'Deform angle', -720, 720),
+                        factor=_number(source.get('factor', .25), 'Deform factor', -.95, 10))
         result.append(item)
     return result
 
@@ -159,8 +197,12 @@ def _complexity(mesh, modifiers):
             estimate *= 2
         elif item['type'] == 'subdivision':
             estimate *= 4 ** item['levels']
-        else:
+        elif item['type'] == 'bevel':
             estimate *= 2 + 12 * item['segments']
+        elif item['type'] == 'array':
+            estimate *= item['count']
+        elif item['type'] == 'solidify':
+            estimate *= 8
         if estimate > 150000:
             raise ValueError('This modifier stack can exceed the geometry budget. Reduce the cage, segments, or subdivision levels.')
 
@@ -284,14 +326,144 @@ def _compact(points, faces):
     return [points[v] for v in used], [[remap[v] for v in face] for face in faces]
 
 
+def _uv_vector(value, label, low=-10000, high=10000):
+    if not isinstance(value, list) or len(value) != 2:
+        raise ValueError(label + ' needs two coordinates.')
+    return [_number(v, label, low, high) for v in value]
+
+
+def _compact_uvs(mesh):
+    used = sorted({index for triangle in mesh['uv_indices'] for index in triangle if index >= 0})
+    mapping = {index: i for i, index in enumerate(used)}
+    mesh['uvs'] = [mesh['uvs'][i] for i in used]
+    mesh['uv_indices'] = [[mapping.get(i, -1) for i in triangle] for triangle in mesh['uv_indices']]
+    mesh.pop('sha256', None)
+    return validate_mesh(mesh)
+
+
+def _uv_operation(obj, operation):
+    mesh, faces = copy.deepcopy(obj['mesh']), obj['modeling']['faces']
+    kind = operation['type']
+    if kind in {'uv_project', 'uv_split_faces'}:
+        selected = (set(range(len(faces))) if operation.get('faces') is None else
+                    set(_indices(operation['faces'], len(faces), 'UV face selection')))
+        if not mesh['uv_indices']:
+            mesh['uv_indices'] = [[-1, -1, -1] for _ in mesh['triangles']]
+        if kind == 'uv_split_faces' and not mesh['uvs']:
+            raise ValueError('Project UVs before separating an island.')
+        method = operation.get('method', 'box')
+        if kind == 'uv_project' and (not isinstance(method, str) or method not in {'xy', 'xz', 'yz', 'box', 'face'}):
+            raise ValueError('UV projection must be XY, XZ, YZ, Box, or individual Face.')
+        margin = _number(operation.get('margin', .02), 'UV margin', 0, .2)
+        vertices = mesh['vertices']
+        minimum = [min(p[axis] for p in vertices) for axis in range(3)]
+        span = [max(p[axis] for p in vertices) - minimum[axis] for axis in range(3)]
+        offset, duplicate, projected = 0, {}, {}
+        for index, face in enumerate(faces):
+            count = len(face) - 2
+            if index in selected:
+                if kind == 'uv_split_faces':
+                    for triangle in range(offset, offset + count):
+                        for corner, source in enumerate(mesh['uv_indices'][triangle]):
+                            if source < 0:
+                                continue
+                            if source not in duplicate:
+                                duplicate[source] = len(mesh['uvs'])
+                                mesh['uvs'].append(list(mesh['uvs'][source]))
+                            mesh['uv_indices'][triangle][corner] = duplicate[source]
+                else:
+                    normal = [0., 0., 0.]
+                    for a, b in zip(face, face[1:] + face[:1]):
+                        p, q = vertices[a], vertices[b]
+                        normal[0] += (p[1]-q[1]) * (p[2]+q[2])
+                        normal[1] += (p[2]-q[2]) * (p[0]+q[0])
+                        normal[2] += (p[0]-q[0]) * (p[1]+q[1])
+                    axis = max(range(3), key=lambda a: abs(normal[a]))
+                    axes = {'xy': (0, 1), 'xz': (0, 2), 'yz': (1, 2)}.get(method, [(1, 2), (0, 2), (0, 1)][axis])
+                    lows, spans = [minimum[a] for a in axes], [span[a] for a in axes]
+                    if method == 'face':
+                        lows = [min(vertices[v][a] for v in face) for a in axes]
+                        spans = [max(vertices[v][a] for v in face) - lows[j] for j, a in enumerate(axes)]
+                    tile = axis * 2 + int(normal[axis] < 0)
+                    corners = {}
+                    for vertex in face:
+                        uv = [((vertices[vertex][a] - lows[j]) / spans[j] if spans[j] > 1e-12 else .5)
+                              for j, a in enumerate(axes)]
+                        if method == 'box':
+                            uv = [(tile % 3 + margin + uv[0] * (1-2*margin)) / 3,
+                                  (tile // 3 + margin + uv[1] * (1-2*margin)) / 2]
+                        else:
+                            uv = [margin + v * (1-2*margin) for v in uv]
+                        group = index if method == 'face' else tile if method == 'box' else 0
+                        token = (group, vertex)
+                        if token not in projected:
+                            projected[token] = len(mesh['uvs'])
+                            mesh['uvs'].append(uv)
+                        corners[vertex] = projected[token]
+                    for triangle in range(offset, offset + count):
+                        mesh['uv_indices'][triangle] = [corners[v] for v in mesh['triangles'][triangle]]
+            offset += count
+    elif kind == 'uv_transform':
+        if not mesh['uvs']:
+            raise ValueError('Project UVs before editing their coordinates.')
+        selected = _indices(operation.get('indices'), len(mesh['uvs']), 'UV selection')
+        delta = _uv_vector(operation.get('delta', [0, 0]), 'UV translation')
+        scale = _uv_vector(operation.get('scale', [1, 1]), 'UV scale', -100, 100)
+        angle = math.radians(_number(operation.get('angle', 0), 'UV rotation', -3600, 3600))
+        pivot = _uv_vector(operation.get('pivot', [sum(mesh['uvs'][i][axis] for i in selected) / len(selected)
+                                                   for axis in range(2)]), 'UV pivot')
+        co, si = math.cos(angle), math.sin(angle)
+        for index in selected:
+            x, y = [(mesh['uvs'][index][j] - pivot[j]) * scale[j] for j in range(2)]
+            mesh['uvs'][index] = [pivot[0] + x*co - y*si + delta[0], pivot[1] + x*si + y*co + delta[1]]
+    elif kind == 'uv_pack':
+        if not mesh['uvs']:
+            raise ValueError('Project UVs before packing islands.')
+        margin = _number(operation.get('margin', .02), 'Island margin', 0, .2)
+        links = {index: set() for triangle in mesh['uv_indices'] for index in triangle if index >= 0}
+        if not links:
+            raise ValueError('Project UVs onto faces before packing islands.')
+        for triangle in mesh['uv_indices']:
+            valid = [index for index in triangle if index >= 0]
+            for index in valid:
+                links[index].update(valid)
+        unseen, islands = set(links), []
+        while unseen:
+            todo, island = [min(unseen)], set()
+            while todo:
+                index = todo.pop()
+                if index in island:
+                    continue
+                island.add(index)
+                todo.extend(links[index] - island)
+            unseen.difference_update(island)
+            islands.append(sorted(island))
+        columns = math.ceil(math.sqrt(len(islands)))
+        rows = math.ceil(len(islands) / columns)
+        cell = 1 / max(columns, rows)
+        for number, island in enumerate(islands):
+            low = [min(mesh['uvs'][i][a] for i in island) for a in range(2)]
+            extent = [max(mesh['uvs'][i][a] for i in island) - low[a] for a in range(2)]
+            factor = cell * (1-2*margin) / max(max(extent), 1e-12)
+            center = [(number % columns + .5) * cell, (number // columns + .5) * cell]
+            for index in island:
+                mesh['uvs'][index] = [center[a] + (mesh['uvs'][index][a] - low[a] - extent[a]/2) * factor
+                                      for a in range(2)]
+    obj['mesh'] = _compact_uvs(mesh)
+
+
 def prepare_operation(obj, operation):
     """Pure topology stage; never updates the caller's object or source record."""
     obj = copy.deepcopy(obj)
-    op = _mapping(operation, {'type', 'indices', 'delta', 'face', 'faces', 'distance', 'modifiers'}, 'Modeling operation')
+    op = _mapping(operation, {'type', 'indices', 'delta', 'face', 'faces', 'distance', 'modifiers',
+                              'method', 'margin', 'scale', 'angle', 'pivot'}, 'Modeling operation')
     kind = op.get('type')
     allowed = {'convert': set(), 'move_vertices': {'indices', 'delta'}, 'extrude_face': {'face', 'distance'},
                'delete_faces': {'faces'}, 'subdivide_faces': {'faces'}, 'set_modifiers': {'modifiers'},
-               'apply_modifiers': set(), 'refresh': set()}
+               'apply_modifiers': set(), 'refresh': set(),
+               'uv_project': {'faces', 'method', 'margin'}, 'uv_split_faces': {'faces'},
+               'uv_transform': {'indices', 'delta', 'scale', 'angle', 'pivot'}, 'uv_pack': {'margin'},
+               'uv_unwrap': {'angle', 'margin'}}
     if not isinstance(kind, str) or kind not in allowed or set(op) - {'type', *allowed.get(kind, set())}:
         raise ValueError('Choose a supported modeling operation and its exact fields.')
     warnings = []
@@ -313,7 +485,12 @@ def prepare_operation(obj, operation):
     elif kind == 'convert':
         raise ValueError('This object is already an editable mesh.')
     modeling = obj['modeling']
-    if kind == 'set_modifiers':
+    if kind == 'uv_unwrap':
+        _number(op.get('angle', 66), 'Unwrap angle', 1, 89)
+        _number(op.get('margin', .02), 'Unwrap margin', 0, .2)
+    elif kind.startswith('uv_'):
+        _uv_operation(obj, op)
+    elif kind == 'set_modifiers':
         modeling['modifiers'] = validate_modifiers(op.get('modifiers'))
     elif kind == 'apply_modifiers':
         if not modeling['modifiers']:
@@ -426,7 +603,7 @@ def blender_modeling_source():
     return Path(__file__).with_name('modeling_blender.py').read_text(encoding='utf-8')
 
 
-def evaluate_object(obj, cancel_event=None):
+def evaluate_object(obj, cancel_event=None, unwrap=None):
     _cancelled(cancel_event)
     binary = find_blender()
     if not binary:
@@ -447,7 +624,13 @@ def evaluate_object(obj, cancel_event=None):
             source += 'bpy.ops.object.select_all(action="SELECT")\nbpy.ops.object.delete(use_global=False)\n'
             source += 'item = json.loads(Path(%r).read_text(encoding="utf-8"))\n' % str(spec)
             source += 'obj = cinematicum_model_object(item, bpy.context.scene.collection)\n'
+            if unwrap is not None:
+                angle = _number(unwrap.get('angle', 66), 'Unwrap angle', 1, 89)
+                margin = _number(unwrap.get('margin', .02), 'Unwrap margin', 0, .2)
+                source += 'cinematicum_unwrap(obj, %r, %r)\n' % (angle, margin)
             source += 'result = {"engine_version": bpy.app.version_string, "mesh": cinematicum_extract_model(obj)}\n'
+            if unwrap is not None:
+                source += 'result["control_mesh"] = cinematicum_control_uvs(obj, item)\n'
             source += 'Path(%r).write_text(json.dumps(result, allow_nan=False), encoding="utf-8")\n' % str(output)
             script.write_text(source, encoding='utf-8')
             _run_owned([binary, '--background', '--factory-startup', '--disable-autoexec', '--threads', '2',
@@ -455,6 +638,11 @@ def evaluate_object(obj, cancel_event=None):
             if not output.is_file() or output.stat().st_size > 12 * 1024 * 1024:
                 raise AdapterError('The geometry engine produced no bounded mesh result.')
             result = json.loads(output.read_text(encoding='utf-8'))
+            if unwrap is not None:
+                control = validate_mesh(result.get('control_mesh'))
+                if any(control[p] != candidate['mesh'][p] for p in ('vertices', 'triangles', 'normals', 'normal_indices')):
+                    raise AdapterError('UV unwrapping unexpectedly changed control geometry.')
+                candidate['mesh'] = control
             candidate['modeling']['evaluation'] = {'key': evaluation_key(candidate),
                                                    'engine_version': result['engine_version'],
                                                    'mesh': validate_mesh(result['mesh'])}
@@ -473,13 +661,24 @@ def model_mesh(payload, cancel_event=None):
     scene = default_scene()
     scene['frame_end'] = 7200
     scene['lights'] = []
-    scene['objects'] = [payload.get('object')]
+    source = copy.deepcopy(payload.get('object'))
+    parent_id = source.pop('parent_id', None) if isinstance(source, dict) else None
+    if parent_id is not None and (not isinstance(parent_id, str) or not _ID.fullmatch(parent_id)):
+        raise ValueError('Object parent ID is invalid.')
+    # Geometry editing is local to one object; its parent is validated by the
+    # full scene on save/render, not fabricated into this isolated worker.
+    scene['objects'] = [source]
     obj = validate_scene(scene)['objects'][0]
+    if parent_id is not None:
+        obj['parent_id'] = parent_id
     operation = payload.get('operation')
     if isinstance(operation, dict) and operation.get('type') == 'apply_modifiers':
         obj = evaluate_object(obj, cancel_event)
     candidate, warnings = prepare_operation(obj, operation)
-    candidate = evaluate_object(candidate, cancel_event)
+    if isinstance(operation, dict) and operation.get('type') == 'uv_unwrap':
+        candidate = evaluate_object(candidate, cancel_event, unwrap=operation)
+    else:
+        candidate = evaluate_object(candidate, cancel_event)
     mesh = candidate['modeling']['evaluation']['mesh']
     return {'object': candidate, 'warnings': warnings,
             'statistics': {'control_vertices': len(candidate['mesh']['vertices']),

@@ -10,7 +10,7 @@
     }
     needsFrame(state) {
       return state.project&&!state.playing&&!state.rendered&&state.mode!=='3d'&&state.mode!=='generate'&&
-        (state.mode==='color'||state.mode==='composite'||state.project.clips.some(c=>c.compositor||c.reverse||c.tracking||c.color_pipeline?.enabled));
+        (state.mode==='color'||state.mode==='composite'||state.project.clips.some(c=>c.sequence_id||c.compositor||c.reverse||c.tracking||c.color_pipeline?.enabled));
     }
     invalidate() {
       clearTimeout(this.timer);const serial=++this.serial;

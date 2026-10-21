@@ -13,7 +13,9 @@ def cinematicum_add_modifiers(obj, specifications):
     for index, spec in enumerate(specifications):
         kind = spec['type']
         modifier = obj.modifiers.new('CINEMATICUM %02d %s' % (index + 1, kind.title()),
-                                    {'mirror': 'MIRROR', 'bevel': 'BEVEL', 'subdivision': 'SUBSURF'}[kind])
+                                    {'mirror': 'MIRROR', 'bevel': 'BEVEL', 'subdivision': 'SUBSURF',
+                                     'solidify': 'SOLIDIFY', 'array': 'ARRAY', 'decimate': 'DECIMATE',
+                                     'smooth': 'SMOOTH', 'simple_deform': 'SIMPLE_DEFORM'}[kind])
         modifier.show_viewport = spec['enabled']
         modifier.show_render = spec['enabled']
         if kind == 'mirror':
@@ -31,12 +33,41 @@ def cinematicum_add_modifiers(obj, specifications):
             modifier.angle_limit = math.radians(spec['angle'])
             modifier.use_clamp_overlap = True
             modifier.affect = 'EDGES'
-        else:
+        elif kind == 'subdivision':
             modifier.subdivision_type = spec['method']
             modifier.levels = spec['levels']
             modifier.render_levels = spec['levels']
             modifier.quality = 3
             modifier.use_limit_surface = True
+        elif kind == 'solidify':
+            modifier.thickness = spec['thickness']
+            modifier.offset = spec['offset']
+            modifier.use_even_offset = spec['even']
+            modifier.use_rim = spec['rim']
+        elif kind == 'array':
+            modifier.fit_type = 'FIXED_COUNT'
+            modifier.count = spec['count']
+            modifier.use_relative_offset = False
+            modifier.use_constant_offset = True
+            modifier.constant_offset_displace = spec['offset']
+            modifier.use_merge_vertices = spec['merge']
+            modifier.merge_threshold = spec['merge_distance']
+        elif kind == 'decimate':
+            modifier.decimate_type = 'COLLAPSE'
+            modifier.ratio = spec['ratio']
+            modifier.use_symmetry = spec['symmetry']
+            modifier.symmetry_axis = spec['axis']
+        elif kind == 'smooth':
+            modifier.factor = spec['factor']
+            modifier.iterations = spec['iterations']
+            modifier.use_x, modifier.use_y, modifier.use_z = spec['axes']
+        elif kind == 'simple_deform':
+            modifier.deform_method = spec['method']
+            modifier.deform_axis = spec['axis']
+            if spec['method'] in ('TWIST', 'BEND'):
+                modifier.angle = math.radians(spec['angle'])
+            else:
+                modifier.factor = spec['factor']
 
 
 def cinematicum_model_object(item, collection):
@@ -49,13 +80,23 @@ def cinematicum_model_object(item, collection):
             polygon.use_smooth = True
     if len(data.vertices) != len(geometry['vertices']) or len(data.polygons) != len(modeling['faces']):
         raise RuntimeError('The modeling control cage was not preserved by Blender.')
-    # Imported triangle cages retain their actual independent corner channels.
+    # Canonical triangle UVs retain independent per-face corners even for an
+    # editable quad/n-gon cage. Never weld coincident seam coordinates.
+    if geometry['uvs']:
+        uv = data.uv_layers.new(name='UVMap')
+        offset = 0
+        for polygon, face in zip(data.polygons, modeling['faces']):
+            count, corners = len(face) - 2, {}
+            for triangle, indices in zip(geometry['triangles'][offset:offset+count], geometry['uv_indices'][offset:offset+count]):
+                for vertex, index in zip(triangle, indices):
+                    value = geometry['uvs'][index] if index >= 0 else (0, 0)
+                    if vertex in corners and tuple(corners[vertex]) != tuple(value):
+                        raise RuntimeError('A control face has conflicting UV corners; triangulate it before UV editing.')
+                    corners[vertex] = value
+            for loop, vertex in zip(polygon.loop_indices, face):
+                uv.data[loop].uv = corners[vertex]
+            offset += count
     if modeling['faces'] == geometry['triangles']:
-        if geometry['uvs']:
-            uv = data.uv_layers.new(name='UVMap')
-            for polygon, indices in zip(data.polygons, geometry['uv_indices']):
-                for loop, index in zip(polygon.loop_indices, indices):
-                    uv.data[loop].uv = geometry['uvs'][index] if index >= 0 else (0, 0)
         if geometry['normals']:
             for polygon in data.polygons:
                 polygon.use_smooth = True
@@ -114,6 +155,45 @@ def cinematicum_extract_model(obj):
         return mesh
     finally:
         evaluated.to_mesh_clear()
+
+
+def cinematicum_unwrap(obj, angle, margin):
+    bpy.ops.object.select_all(action='DESELECT')
+    obj.select_set(True)
+    bpy.context.view_layer.objects.active = obj
+    bpy.ops.object.mode_set(mode='EDIT')
+    try:
+        bpy.ops.mesh.select_all(action='SELECT')
+        bpy.ops.uv.smart_project(angle_limit=math.radians(angle), island_margin=margin,
+                                 correct_aspect=True)
+    finally:
+        bpy.ops.object.mode_set(mode='OBJECT')
+    if obj.data.uv_layers.active is None:
+        raise RuntimeError('The geometry engine produced no UV unwrap.')
+
+
+def cinematicum_control_uvs(obj, item):
+    geometry = json.loads(json.dumps(item['mesh']))
+    geometry.pop('sha256', None)
+    geometry['uvs'], geometry['uv_indices'] = [], []
+    uv = obj.data.uv_layers.active
+    offset, unique = 0, {}
+    for polygon, face in zip(obj.data.polygons, item['modeling']['faces']):
+        corners = {}
+        for loop, vertex in zip(polygon.loop_indices, face):
+            value = tuple(uv.data[loop].uv)
+            # Share a UV point only across the same cage vertex and coordinate.
+            # This retains disconnected or deliberately split islands.
+            key = (vertex, value)
+            if key not in unique:
+                unique[key] = len(geometry['uvs'])
+                geometry['uvs'].append(list(value))
+            corners[vertex] = unique[key]
+        count = len(face) - 2
+        for triangle in geometry['triangles'][offset:offset+count]:
+            geometry['uv_indices'].append([corners[vertex] for vertex in triangle])
+        offset += count
+    return geometry
 
 
 def cinematicum_verify_model(obj, item):

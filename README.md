@@ -2,52 +2,78 @@
 
 ## CINEMATICUM Studio — editable production workspace
 
-Open the actual media editor with `make studio`. On macOS, `make studio-install-macos`
-builds a native **CINEMATICUM Studio.app** window using the installed Xcode tools.
-The application imports your media, edits a frame-based multitrack timeline with
-exact rational rates, retiming and reverse, previews composition, grades footage with RGB curves and
-scopes, mixes audio with real waveforms, animates transforms and titles, and exports
-H.264 or ProRes through FFmpeg. Its node compositor processes actual exported frames and
-paused authoring frames, with independently animated polygon masks and alpha-correct blend modes.
-Measured source tracking drives reversible stabilization and tracked masks. Bounded
-OpenTimelineIO exchange preserves cuts, gaps, media identity and private authoring data.
-The in-app 3D workspace has direct transform handles and a draggable dope sheet
-for primitive and imported OBJ mesh scenes, materials, lighting, cameras, and pose animation; Blender renders those scenes into timeline media and editable
-`.blend` sources. Configured local ComfyUI workflows can also produce media after
-node and model compatibility checks.
+Open the media editor with `make studio`. On macOS, `make studio-install-macos`
+builds **CINEMATICUM Studio.app** using the installed Xcode tools. CINEMATICUM owns
+the timeline, compositor, mixer, color controls and 3D authoring interface. They
+share editable project data and undo history; FFmpeg, Blender and optional imaging
+workers execute the processing.
 
-Studio 0.8 adds recovery checkpoints and saved-version history, portable project
-archive/restore, and production shot-plan binding and exact-frame assembly.
-Authored 3D scenes export scene-linear float32 RGBA EXR sequences and actual
-depth/normal/vector/diffuse/emission passes, alongside the review movie and
-editable scene. It also repairs nested-media OTIO preservation, EXIF orientation,
-camera aiming, mesh UV continuity, generation schema checks and decoder cleanup.
-The [0.8 verification record](scripts/studio/VERIFICATION_0_8.md) separates
-executed tests from remaining professional feature gaps.
+The 0.9 source adds multiple editable sequences and live nested picture/sound,
+manual synchronized multicamera cuts, SRT/WebVTT captions and burn-in, source
+audio-stream/channel mapping, and 29.97/59.94 drop-frame display. Preview proxies
+are verified against the original decoded frame clock; exact-original relinking
+restores recorded media identity. Exports continue to use original media.
 
-The previous upgrade added independent media inputs in the node compositor, calibrated
-Brown lens distortion and undistortion, slip/slide/roll edits, and direct mesh
-vertex/face editing with live Mirror, Bevel and Catmull–Clark modifiers. The Develop
-workspace executes OpenColorIO views, LibRaw camera development and aligned bracket
-merging, preserving scene-linear float OpenEXR alongside the display image used in
-the timeline. It uses an optional pinned imaging runtime on Apple Silicon macOS.
+The compositor now has editable cubic Bézier roto with animated handles and
+point feather, bounded SVG boundary exchange, and combined 1D-shaper/3D Cube
+LUT processing. The 3D workspace adds object parenting with inherited animation,
+editable UVs, actual Blender smart unwrap, island packing and eight live modifier
+types. Cycles device selection validates the executing engine's actual devices.
+A normal owned Metal scene job completed in 82.430497 seconds; independent
+verification passed 18 checks on its actual pixels, retained scene and device
+receipt. Other GPU backends have not been verified on hardware.
 
-The existing fSpy/COLMAP solved-camera import, off-axis projection, physical lens
-and aperture controls, transmissive/emissive materials and Cycles settings remain
-part of the same workspace. Timeline input color performs explicit transfer,
-gamut and white conversion plus project-owned 1D/3D Cube LUTs. Native updates
-retain verified ZIP backups and one launchable app. Each implemented tool's limits
-and the substantial remaining professional feature gaps are recorded in the audit.
+These additions retain exact rational timeline timing, retiming/reverse,
+slip/slide/roll editing, measured source tracking, scopes, multi-source node
+compositing, calibrated fSpy/COLMAP cameras, physical lens/material controls and
+H.264/ProRes export. Authored Cycles scenes retain editable `.blend` files and
+scene-linear float EXR sequences with optional render passes. The Develop
+workspace performs real OCIO transforms, camera RAW still development and aligned
+bracket merging through an optional imaging runtime. Movie editing remains SDR;
+RAW-movie and HDR finishing are not implemented.
 
-Start with [the Studio guide](scripts/studio/README.md) and
-[the source comparison and capability audit](scripts/studio/CAPABILITY_AUDIT.md). Run `make studio-doctor`
-to inspect the actual installed engines, or `make studio-test` for the media and
-application tests. Production footage is supplied by the user; missing media are
-never replaced with a procedural film. Studio exports do not change Case 001's
-issuance status or the authority relationship between the repositories.
+Recovery checkpoints, saved-version history, portable project archive/restore
+and production shot-plan binding/assembly remain part of the same app. Managed
+ComfyUI installation, owned MPS startup and one real Wan 1.3B take are verified:
+192 × 128, nine frames at 16 fps, four sampling steps, seed 42. Generation took
+44.410 seconds. Independent media verification and native Add/Play/Save each
+passed 14 checks, including all nine actual source pictures. This is a small
+execution proof; production quality and the default 480 × 272, 17-frame,
+20-step workflow remain unverified after that attempt was cancelled when the
+app terminated. The reason for that ordinary termination remains unknown.
 
-This is the CINEMATICUM-owned editor implementation. Full professional feature parity
-with the referenced applications and paid model integrations are not implemented.
+Native audio acceptance is still open: a fresh test of the second MOV audio
+stream returned silence after an earlier passing capture. The current fix is
+under review. An installed 0.9 candidate exists, but three of its 53 runtime
+files differ from the latest audio JavaScript under review. The original
+production checkout has no Studio, and the existing draft PR remains at 0.8;
+the current 0.9 work has not been published as a release.
+
+Start with [the Studio guide](scripts/studio/README.md),
+[the source comparison and capability audit](scripts/studio/CAPABILITY_AUDIT.md),
+[the 0.9 verification record](scripts/studio/VERIFICATION_0_9.md), and
+[the current unfinished-work register](scripts/studio/UNFINISHED_0_9.md). These
+records separate source implementation, executed acceptance and deployment.
+Run `make studio-doctor` to inspect installed engines or `make studio-test` for
+application/media tests. Film footage must be imported or actually generated;
+missing media are never replaced with a procedural film. Studio exports do not change
+Case 001's issuance status or repository authority.
+
+Full professional feature parity with all referenced applications and commercial
+AI-provider integrations is not implemented. The audit and machine-readable
+ledger record the remaining work rather than treating an installed engine or a
+visible control as proof of the full feature set.
+
+## Historical production and replay CLI
+
+The sections below retain the **THE LAST RENDER** compiler/replay history and
+its v1.0–v1.7 package boundaries. That version line is separate from Studio 0.9.
+In particular, the old `cinematicum studio` command and its no-network,
+no-external-media/no-selection boundary describe that historical replay
+surface. Studio 0.9 imports and selects media, renders authored scenes, and
+optionally downloads and runs a managed generation engine. Those historical
+restrictions do not describe Studio's current authoring workflow, and neither
+version line changes the repository's issuance authority.
 
 Strict realistic production stack for **THE LAST RENDER**.
 
@@ -101,7 +127,7 @@ No procedural fallback. No fake media. No proof-only issuance.
 <!-- CINEMATICUM_PRODUCT_BOUNDARY_V1_START -->
 ## CINEMATICUM v1.0 Product Boundary
 
-CINEMATICUM is now operable as a local product surface.
+This historical v1.0 boundary records the local compiler/replay product surface.
 
 ```bash
 node bin/cinematicum.cjs verify
@@ -128,7 +154,8 @@ The product boundary proves command availability, local studio surface, release-
 <!-- CINEMATICUM_INSTALLABLE_PRODUCT_BOUNDARY_V11_START -->
 ## CINEMATICUM v1.1 Installable Product Boundary
 
-CINEMATICUM now has an installable package boundary.
+This historical v1.1 boundary records the installable compiler/replay package;
+it is separate from the native Studio application described above.
 
 The package must prove, from a clean temporary install, that these commands work without cloning the working tree manually:
 

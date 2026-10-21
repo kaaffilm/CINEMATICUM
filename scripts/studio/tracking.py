@@ -65,7 +65,10 @@ def _identity(project, clip, asset):
 
 
 def _prepare(project, project_dir, clip_id, request):
-    from engine import validate_project, _media_path
+    if __package__:
+        from .engine import validate_project, _media_path
+    else:
+        from engine import validate_project, _media_path
     project = validate_project(project, project_dir)
     clip = next((c for c in project["clips"] if c["id"] == clip_id), None)
     if clip is None:
@@ -83,18 +86,19 @@ def _prepare(project, project_dir, clip_id, request):
     # frames. Moving the in point would reround half-frame timestamp ties and
     # can measure different pictures from those used by the timeline.
     window["reverse"] = False
-    factor = min(1, ANALYSIS_EDGE / max(asset["width"], asset["height"]))
+    planar = request.get("mode") in {"affine", "projective"}
+    factor = min(1, (640 if planar else ANALYSIS_EDGE) / max(asset["width"], asset["height"]))
     width = max(16, int(asset["width"] * factor / 2) * 2)
     height = max(16, int(asset["height"] * factor / 2) * 2)
     return project, clip, asset, _media_path(project_dir, asset["path"]), window, first, count, width, height
 
 
-def _run(command, directory, label, cancel_event, deadline, output=None):
+def _run(command, directory, label, cancel_event, deadline, output=None, env=None):
     errors = Path(directory) / (label + ".stderr")
     with errors.open("wb") as stderr:
         with (Path(output).open("wb") if output else open('/dev/null', 'wb')) as stdout:
             process = subprocess.Popen(command, stdin=subprocess.DEVNULL, stdout=stdout, stderr=stderr,
-                                       start_new_session=True)
+                                       start_new_session=True, env=env)
             try:
                 while process.poll() is None:
                     if cancel_event is not None and cancel_event.is_set():
@@ -119,8 +123,14 @@ def _run(command, directory, label, cancel_event, deadline, output=None):
 
 
 def _decode_first(prepared, directory, cancel_event, deadline):
-    from engine import _video_timing, _executable
-    from timebase import project_rate
+    if __package__:
+        from .engine import _video_timing, _executable
+    else:
+        from engine import _video_timing, _executable
+    if __package__:
+        from .timebase import project_rate
+    else:
+        from timebase import project_rate
     project, clip, asset, source, window, first, count, width, height = prepared
     begin = clip["duration"] - first - count if clip["reverse"] else first
     chain = _video_timing(window, project_rate(project)) + [
@@ -145,7 +155,10 @@ def _decode_first(prepared, directory, cancel_event, deadline):
 
 def tracking_frame(project, project_dir, clip_id, request, output, cancel_event=None):
     """Extract the exact conformed seed frame; display coordinates match tracking."""
-    from engine import _executable
+    if __package__:
+        from .engine import _executable
+    else:
+        from engine import _executable
     prepared = _prepare(project, project_dir, clip_id, request)
     project, clip, asset, source, window, first, count, width, height = prepared
     deadline = time.monotonic() + 120
@@ -165,7 +178,18 @@ def tracking_frame(project, project_dir, clip_id, request, output, cancel_event=
 
 
 def track_clip(project, project_dir, clip_id, request, progress=None, cancel_event=None):
-    from engine import _executable, _quote_filter_path
+    if isinstance(request, dict) and request.get("mode") in {"affine", "projective"}:
+        if __package__:
+            from .planar_tracking import track_planar
+        else:
+            from planar_tracking import track_planar
+        return track_planar(project, project_dir, clip_id, request, progress, cancel_event)
+    if isinstance(request, dict) and request.get("mode", "point") != "point":
+        raise ValueError("Choose point, affine or projective tracking")
+    if __package__:
+        from .engine import _executable, _quote_filter_path
+    else:
+        from engine import _executable, _quote_filter_path
     prepared = _prepare(project, project_dir, clip_id, request)
     project, clip, asset, source, window, first, count, width, height = prepared
     x = _number(request.get("x"), "Seed X", 0, 1)
@@ -260,11 +284,25 @@ def validate_track(track, expected_source):
 
 
 def validate_track_for_clip(project, project_dir, clip_id, track):
+    if isinstance(track, dict) and track.get("kind") == "planar-track":
+        if __package__:
+            from .planar_tracking import validate_planar_for_clip
+        else:
+            from planar_tracking import validate_planar_for_clip
+        return validate_planar_for_clip(project, project_dir, clip_id, track)
     prepared = _prepare(project, project_dir, clip_id, {"frame_count": 1})
     return validate_track(track, _identity(prepared[0], prepared[1], prepared[2]))
 
 
-def stabilization_motion(project, project_dir, clip_id, track):
+def stabilization_motion(project, project_dir, clip_id, track, mode="stabilize"):
+    if isinstance(track, dict) and track.get("kind") == "planar-track":
+        if __package__:
+            from .planar_tracking import planar_motion
+        else:
+            from planar_tracking import planar_motion
+        return planar_motion(project, project_dir, clip_id, track, mode)
+    if mode != "stabilize":
+        raise ValueError("Corner pinning requires a measured planar track")
     prepared = _prepare(project, project_dir, clip_id, {"frame_count": 1})
     project, clip, asset = prepared[:3]
     track = validate_track(track, _identity(project, clip, asset))

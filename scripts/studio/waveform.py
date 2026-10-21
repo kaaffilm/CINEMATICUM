@@ -21,7 +21,7 @@ else:
     from engine import RenderCancelled, _executable, _quote_filter_path, probe_media
 
 
-SCHEMA = 1
+SCHEMA = 2
 SAMPLE_RATE = 48000
 MAX_STATS_BYTES = 16 * 1024 * 1024
 
@@ -105,14 +105,17 @@ def _parse_statistics(path, requested_bins, samples_per_bin):
             "bins": len(counts), "cached": False}
 
 
-def extract_waveform(source, cache_dir, bins=512, cancel_event=None):
-    """Measure the admitted file's first audio stream and cache actual statistics.
+def extract_waveform(source, cache_dir, bins=512, cancel_event=None, *, stream_index=None, channels=None):
+    """Measure an admitted source's selected audio stream/channel mapping.
 
     ``bins`` is the desired number of time blocks (32–4096). Container duration
     metadata chooses a block width; the returned duration and sample_counts
     come from decoded samples, including a final partial block. All amplitudes
     use normalized floating-point PCM. The two channels match export's stereo
     downmix, and values above 1 are retained if the source has that headroom.
+    ``stream_index`` is the absolute container stream ID, not its audio ordinal.
+    ``channels`` optionally selects the source channel feeding each stereo output,
+    in the same order and with the same unity-gain pan as movie export.
     """
     _cancelled(cancel_event)
     if isinstance(bins, bool) or not isinstance(bins, int) or not 32 <= bins <= 4096:
@@ -121,7 +124,19 @@ def extract_waveform(source, cache_dir, bins=512, cancel_event=None):
     metadata = probe_media(source)
     if not metadata.get("has_audio"):
         raise ValueError("This source has no audio stream.")
-    duration = metadata.get("audio_duration") or metadata["duration"]
+    selected_index = metadata["audio_stream_index"] if stream_index is None else stream_index
+    if isinstance(selected_index, bool) or not isinstance(selected_index, int):
+        raise ValueError("Waveform audio stream must be an integer source stream ID.")
+    stream = next((item for item in metadata["audio_streams"] if item["index"] == selected_index), None)
+    if stream is None:
+        raise ValueError("Waveform audio stream is not present in this source.")
+    if channels is not None:
+        if (not isinstance(channels, list) or len(channels) != 2
+                or any(isinstance(value, bool) or not isinstance(value, int)
+                       or not 0 <= value < stream["channels"] for value in channels)):
+            raise ValueError("Waveform channel mapping must select two valid source channel IDs.")
+        channels = list(channels)
+    duration = stream.get("duration") or metadata.get("audio_duration") or metadata["duration"]
     if not math.isfinite(duration) or duration <= 0:
         raise ValueError("The audio stream has no finite duration.")
     samples_per_bin = max(1, math.ceil(duration * SAMPLE_RATE / bins))
@@ -134,24 +149,25 @@ def extract_waveform(source, cache_dir, bins=512, cancel_event=None):
     cache_dir = cache_dir.resolve()
     stat = source.stat()
     fingerprint = [SCHEMA, str(source), stat.st_size, stat.st_mtime_ns, stat.st_ctime_ns,
-                   stat.st_ino, bins, SAMPLE_RATE, metadata["audio_stream_index"]]
+                   stat.st_ino, bins, SAMPLE_RATE, selected_index, channels]
     key = hashlib.sha256(json.dumps(fingerprint, separators=(",", ":")).encode()).hexdigest()
     cache_path = cache_dir / (key + ".json")
     cached = _cached_result(cache_path, bins)
-    if cached is not None:
+    if cached is not None and cached.get("source_stream_index") == selected_index and cached.get("source_channels") == channels:
         _cancelled(cancel_event)
         return cached
     process = None
     with tempfile.TemporaryDirectory(prefix="cinematicum-waveform-") as temp_dir:
         stats_path = Path(temp_dir) / "stats.txt"
-        graph = (f"aresample={SAMPLE_RATE},aformat=sample_fmts=flt:channel_layouts=stereo,"
+        channel_filter = "" if channels is None else f"pan=stereo|c0=c{channels[0]}|c1=c{channels[1]},"
+        graph = (channel_filter + f"aresample={SAMPLE_RATE},aformat=sample_fmts=flt:channel_layouts=stereo,"
                  f"asetpts=PTS-STARTPTS,asetnsamples=n={samples_per_bin}:p=0,"
                  "astats=metadata=1:reset=1:measure_perchannel=Min_level+Max_level+RMS_level:"
                  "measure_overall=Number_of_samples,"
                  f"ametadata=mode=print:file='{_quote_filter_path(stats_path)}'")
         command = [_executable("ffmpeg"), "-v", "error", "-nostdin", "-threads", "2",
                    "-protocol_whitelist", "file,pipe", "-i", str(source),
-                   "-map", f"0:{metadata['audio_stream_index']}", "-vn", "-af", graph,
+                   "-map", f"0:{selected_index}", "-vn", "-af", graph,
                    "-f", "null", "-"]
         started = time.monotonic()
         try:
@@ -174,6 +190,7 @@ def extract_waveform(source, cache_dir, bins=512, cancel_event=None):
             if not stats_path.is_file() or stats_path.stat().st_size > MAX_STATS_BYTES:
                 raise ValueError("Waveform decoding returned no bounded statistics file.")
             result = _parse_statistics(stats_path, bins, samples_per_bin)
+            result.update(source_stream_index=selected_index, source_channels=channels)
         finally:
             if process is not None and process.poll() is None:
                 process.terminate()

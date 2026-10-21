@@ -1,14 +1,15 @@
 {
   "version": 1,
-  "build": "0.8.0",
+  "build": "0.9.0",
   "reviewed_on": "2026-10-21",
   "parity_complete": false,
-  "evidence_note": "Paths identify implementation and acceptance harnesses. Actual executions and their environments are recorded in versioned verification reports. Optional-engine availability is distinct from successful operation/model execution. Core editor/server use the Python standard library; imaging uses a separate pinned runtime.",
+  "evidence_note": "Paths identify implementation and acceptance harnesses; actual results are recorded in VERIFICATION_0_9.md. A normal Metal job completed in 82.430497 seconds and passed 18 independent checks. Managed ComfyUI setup/start and one 192x128, nine-frame, four-step Wan take completed; independent media and native playback each passed 14 checks, matching all nine source frames. This does not establish production quality or default-size/long-session generation. The default attempt was cancelled on ordinary app termination, cause unknown. Native second-MOV-stream audio remains unaccepted after an intermittently silent fresh capture. The frozen current-source Python suite passed 515 tests in 153.974 seconds with zero failures and zero skips, including genuine RAW and official OTIO integration; this does not override the separate native audio failure. An installed 0.9 candidate exists, but three of its 53 runtime files differ from current audio JavaScript; the original production checkout has no Studio, the draft PR remains at 0.8, and 0.9 is unpublished. Core editor/server use the Python standard library; imaging/roto and managed generation use separate runtimes. Capability statuses remain conservative and do not imply full parity.",
+  "unfinished_work": "UNFINISHED_0_9.md",
   "capabilities": [
     {
       "id": "editor.rational_clock",
       "status": "implemented",
-      "scope": "Reduced rational rates 1\u201360; exact media timestamps and absolute 48 kHz sample grid.",
+      "scope": "Reduced rational rates 1–60; exact media timestamps and absolute 48 kHz sample grid.",
       "evidence": [
         "timebase.py",
         "engine.py",
@@ -18,54 +19,72 @@
     {
       "id": "editor.timeline",
       "status": "partial",
-      "scope": "Own multitrack editing, trim/split/ripple delete, slip/slide/outgoing-cut roll, speed/reverse and track controls. No nested sequences, multicam, proxy workflow or optical-flow retiming.",
+      "scope": "Own multitrack edit/trim/split/ripple/slip/slide/roll, constant speed/reverse, track controls, shared-format live sequences, manual multicam, captions and verified preview proxies. Variable speed ramps, optical-flow retiming, automatic multicamera sync and general offline/online conform remain missing.",
       "evidence": [
         "engine.py",
         "web/editing.js",
         "web/app.js",
         "test_timeline_audio.py",
         "test_trim_edits.py",
-        "test_trim_ui_macos.py"
+        "test_trim_ui_macos.py",
+        "editorial.py",
+        "web/editorial-ui.js",
+        "test_editorial.py"
       ]
     },
     {
       "id": "editor.otio",
       "status": "partial",
-      "scope": "Cut/gap AV exchange with SHA-bound private authoring data. Nested compositor inputs, retained disconnected inputs and title plates are remapped by verified content identity. Mismatched same-ID bytes and incomplete private dependencies cannot restore silently. General nested OTIO/AAF/XML semantics remain unsupported.",
+      "scope": "Bounded cut/gap AV and nested Stack/Track exchange with source ranges, shared rational clock and explicit/trailing/all-gap duration. SHA-bound private authoring restores active/inactive sequences and all dependent media only when regenerated public timing/structure agrees. No transitions, OTIO retime/reverse, same-track overlaps, trimmed Tracks/top-level Stack, disabled nested items, general AAF/XML/native-project semantics.",
       "evidence": [
         "interchange.py",
         "test_interchange.py",
-        "test_interchange_ui_macos.py"
+        "test_interchange_ui_macos.py",
+        "sequence_interchange.py",
+        "test_editorial.py",
+        "test_editorial_ui_macos.py"
       ]
     },
     {
       "id": "composite.graph",
       "status": "partial",
-      "scope": "One primary clip source plus up to eight independent project video/image sources in a 32-node graph; explicit ranges, signed offsets, transparent/hold behavior and actual ordered merges. No nested/deep/general plugin graph.",
+      "scope": "One primary clip source plus eight independent project video/image sources in a 32-node graph; signed offsets, ranges, transparent/hold endpoints and ordered merges. Grade/curves/blur/sharpen/key/lens nodes have optional invertible alpha effect-mask inputs. Bounded graph JSON exchange uses current-project media IDs. No nested/deep/plugin graph.",
       "evidence": [
         "compositor.py",
         "engine.py",
         "web/compositor-ui.js",
         "test_compositor.py",
         "test_multi_source_compositor.py",
-        "test_multi_source_ui_macos.py"
+        "test_multi_source_ui_macos.py",
+        "roto_assets.py",
+        "test_roto.py",
+        "test_roto_ui_macos.py"
       ]
     },
     {
       "id": "composite.animation",
       "status": "implemented_bounded",
-      "scope": "Independent channels with five interpolation modes; polygon topology retained, 128 scalar keys or 64 path keys per channel.",
+      "scope": "Independent channels with linear, hold, ease-in/out, ease-in-out and monotone cubic progress tangents (0–3). Up to 128 scalar or 64 path keys per channel; 1,024 keys/8,192 animated values per graph. Bézier split/remove updates all path keys; arbitrary overshooting time curves remain unsupported.",
       "evidence": [
         "compositor.py",
         "web/compositor-ui.js",
-        "test_compositor_animation_ui_macos.py"
+        "test_compositor_animation_ui_macos.py",
+        "test_roto.py",
+        "test_roto_ui_macos.py"
       ]
     },
     {
       "id": "composite.roto_bezier",
-      "status": "missing",
-      "scope": "No Bezier/feather-point hierarchy, roto paint or general effect-mask ports.",
-      "evidence": []
+      "status": "implemented_bounded",
+      "scope": "Own cubic anchor/incoming/outgoing-handle and point-feather editing; 2–32 anchors, 64 path keys, global inward feather and per-point scale 0–4. Actual NumPy tiled 16-bit coverage, 2×2 sampling and 0.125-output-pixel flattening feed paused/export graph. One closed supported SVG path import/export with owned feather metadata; no general SVG document, roto-layer hierarchy or paint. Worker output limited to 4 GiB.",
+      "evidence": [
+        "roto.py",
+        "roto_assets.py",
+        "compositor.py",
+        "web/compositor-ui.js",
+        "test_roto.py",
+        "test_roto_ui_macos.py"
+      ]
     },
     {
       "id": "composite.deep",
@@ -136,21 +155,30 @@
     },
     {
       "id": "motion.vector_document",
-      "status": "missing",
-      "scope": "No general vector document/Bezier drawing, Lottie/SVG interchange or full text animators.",
-      "evidence": []
+      "status": "partial",
+      "scope": "Bounded cubic roto path editing and one-path SVG boundary exchange exist. Full vector document/layer/gradient/operator model, general SVG/Lottie interchange and text animators remain missing.",
+      "evidence": [
+        "web/compositor-ui.js",
+        "roto.py",
+        "test_roto.py"
+      ]
     },
     {
       "id": "scene.authoring",
       "status": "partial",
-      "scope": "Own WebGL primitive/mesh scene controls, bounded vertex/face edits and live modifiers, materials/camera/lights/keys, actual headless Cycles and retained .blend.",
+      "scope": "Own WebGL primitive/mesh controls, object parenting and inherited local pose keys, bounded vertex/face/UV edits and eight live modifier types, materials/camera/lights, actual headless Cycles and retained .blend. Not unrestricted Blender authoring.",
       "evidence": [
         "scene.py",
         "scene_modeling.py",
         "modeling_blender.py",
         "web/scene-editor.js",
         "test_scene_motion_blender.py",
-        "test_scene_modeling_blender.py"
+        "test_scene_modeling_blender.py",
+        "scene_hierarchy.py",
+        "render_devices.py",
+        "test_scene_authoring.py",
+        "test_scene_authoring_blender.py",
+        "test_scene_authoring_ui_macos.py"
       ]
     },
     {
@@ -167,13 +195,16 @@
     {
       "id": "scene.topology_rig_simulation",
       "status": "partial",
-      "scope": "Bounded vertex moves, face extrude/delete/subdivide and live Mirror/Bevel/Subdivision exist. Edge tools, UV authoring, sculpting, hierarchy/constraints, rigs, deformation and simulation remain missing.",
+      "scope": "Bounded vertex move/face extrude/delete/subdivide, editable UVs, object hierarchy and actual Mirror/Bevel/Subdivision/Solidify/Array/Decimate/Smooth/Simple Deform stacks. Edge tools, texture painting/shader graphs, camera/light parenting, constraints, rigs, shape keys, sculpting, geometry nodes and simulation remain missing.",
       "evidence": [
         "scene_modeling.py",
         "modeling_blender.py",
         "test_scene_modeling.py",
         "test_scene_modeling_blender.py",
-        "test_mesh_modeling_ui_macos.py"
+        "test_mesh_modeling_ui_macos.py",
+        "scene_hierarchy.py",
+        "test_scene_authoring.py",
+        "test_scene_authoring_blender.py"
       ]
     },
     {
@@ -212,23 +243,34 @@
     },
     {
       "id": "ai.comfyui",
-      "status": "adapter_implemented_engine_unavailable",
-      "scope": "API workflow/input/model preflight validates installed socket types, output indices, ranges and an actual reachable video-saving route. Scoped prompt lifecycle and actual output admission are implemented; configured endpoint was unavailable at the recorded inspection. No successful neural generation claimed.",
+      "status": "adapter_implemented_validation_pending",
+      "scope": "Configured API workflow/preflight, scoped prompts and verified output admission; actual pinned ComfyUI 0.42.1 install verified 10,634,173,896 bytes across source, 71 wheels and three models, then owned MPS startup passed 11 core nodes. Wan 1.3B produced 192x128, nine H.264 frames at 16 fps, four steps, seed 42 in 44.410 seconds; 14 independent and 14 native checks passed in 1.393 seconds, including all nine actual source pictures. Remaining validation applies to the default 480x272/17-frame/20-step workflow, quality, longer takes and sustained operation; that default attempt was cancelled about 21 seconds into ordinary app termination, cause unknown. One small core text-to-video proof does not implement general ComfyUI/model-authoring or commercial-provider parity.",
       "evidence": [
         "adapters.py",
         "generation_readiness.py",
         "test_adapters.py",
-        "test_generation_readiness.py"
+        "test_generation_readiness.py",
+        "managed_generation.py",
+        "generation-runtime-lock.json",
+        "web/managed-generation-ui.js",
+        "test_managed_generation.py",
+        "test_generation_ui_macos.py",
+        "macos/verify_generated_take.py",
+        "test_generated_take_ui_macos.py"
       ]
     },
     {
       "id": "audio.mix",
       "status": "partial",
-      "scope": "Decoded waveforms, track/clip gain, balance, fades, retime/reverse and stereo export. No full DAW, buses, plugins or general channel layouts.",
+      "scope": "Decoded waveforms, track/clip gain, balance, fades, constant retime/reverse and stereo export. Explicit source stream and any valid pair of source channels map to L/R; mapped waveforms/export use those channels. Native live audio remains unaccepted: an earlier 32,768-sample capture passed, but the latest second-MOV-stream capture was silent; the defect and gain/pan/restart acceptance remain unresolved. Reverse interactive audio is muted. No full DAW, buses/plugins or general output layouts.",
       "evidence": [
         "waveform.py",
         "engine.py",
-        "test_timeline_audio.py"
+        "test_timeline_audio.py",
+        "editorial.py",
+        "web/editorial-ui.js",
+        "test_editorial.py",
+        "test_editorial_ui_macos.py"
       ]
     },
     {
@@ -280,11 +322,12 @@
     {
       "id": "color.cube_lut",
       "status": "implemented_bounded",
-      "scope": "Project-owned SHA-256 Cube 1D/3D tables, explicit domains, linear/trilinear/tetrahedral interpolation; same rendered frame/export graph. No combined shaper tables.",
+      "scope": "Project-owned SHA-256 Cube 1D/3D tables and combined 1D-shaper + 3D files. Single-table per-channel domains; combined stage-specific scalar input ranges. Linear shaper precedes selected nearest/trilinear/tetrahedral 3D stage in actual FFmpeg processing. 65,536 1D rows, 65-cube 3D size, 24 MiB per file; ambiguous shared combined domains reject.",
       "evidence": [
         "color_pipeline.py",
         "web/color-pipeline-ui.js",
-        "test_color_pipeline_ui_macos.py"
+        "test_color_pipeline_ui_macos.py",
+        "test_roto_ui_macos.py"
       ]
     },
     {
@@ -383,7 +426,7 @@
     {
       "id": "color.hdr_merge",
       "status": "implemented_bounded",
-      "scope": "Known-response radiance merge of 2\u201316 aligned static-scene stills with explicit shutter times; float EXR and separate display output. No alignment, ghost removal, response-curve fitting, panorama stitching or colour-hdri runtime.",
+      "scope": "Known-response radiance merge of 2–16 aligned static-scene stills with explicit shutter times; float EXR and separate display output. No alignment, ghost removal, response-curve fitting, panorama stitching or colour-hdri runtime.",
       "evidence": [
         "imaging.py",
         "image_worker.py",
@@ -401,7 +444,7 @@
     {
       "id": "production.single_native_app",
       "status": "implemented_bounded",
-      "scope": "One native application with CINEMATICUM authoring controls and owned local service; verified archive/rollback during replacement. FFmpeg/Blender and the optional stable imaging runtime are separate installed dependencies.",
+      "scope": "One native application with CINEMATICUM authoring controls and owned local service; verified archive/rollback during replacement. A 0.9 candidate is installed, but three of its 53 runtime files differ from current audio JavaScript under review. Original production checkout has no Studio, draft PR remains at 0.8, and no 0.9 publication is recorded. FFmpeg/Blender and optional imaging/generation runtimes are separate installed dependencies; no signed/notarized self-contained distribution.",
       "evidence": [
         "install_macos.py",
         "macos/StudioIcon.swift",
@@ -435,7 +478,7 @@
     {
       "id": "optics.calibrated_warp",
       "status": "implemented_bounded",
-      "scope": "Static five-term Brown footage undistort/redistort with normalized intrinsics, compatible scene-camera copy, premultiplied bilinear RGBA and transparent borders. Whole-image contraction bound q\u22640.45; at most two nodes; nonidentity canvas \u22642,073,600 pixels. No fisheye, lens database or automatic calibration.",
+      "scope": "Static five-term Brown footage undistort/redistort with normalized intrinsics, compatible scene-camera copy, premultiplied bilinear RGBA and transparent borders. Whole-image contraction bound q≤0.45; at most two nodes; nonidentity canvas ≤2,073,600 pixels. No fisheye, lens database or automatic calibration.",
       "evidence": [
         "compositor.py",
         "lens_assets.py",
@@ -448,7 +491,7 @@
     {
       "id": "scene.mesh_topology",
       "status": "implemented_bounded",
-      "scope": "Own vertex/face selection and move, face extrusion, connected subdivision and face deletion. Canonical authored cage hashes separate original import provenance; 10,000 vertices/faces, 512 selected elements and one undo per evaluated edit. Geometry edits currently clear imported UVs.",
+      "scope": "Own vertex/face selection and move, face extrusion, connected subdivision and face deletion. Authored cage hashes separate original import provenance; 10,000 vertices/faces, 60,000 corners, 512 selected elements, one undo per evaluated edit. Vertex moves retain UV seams; topology-changing edits invalidate UVs and require reprojection.",
       "evidence": [
         "scene_modeling.py",
         "scene.py",
@@ -461,14 +504,17 @@
     {
       "id": "scene.live_modifiers",
       "status": "implemented_bounded",
-      "scope": "Four ordered actual Blender Mirror/Bevel/Subdivision modifiers with parameters, enable/reorder/remove/refresh/apply. Viewport uses actual evaluated mesh; retained .blend preserves cage/stack and independently rejects stale or forged evaluation before rendering.",
+      "scope": "Up to eight ordered actual Blender Mirror/Bevel/Subdivision/Solidify/Array/Decimate/Smooth/Simple Deform modifiers; parameters, enable/reorder/remove/refresh/apply. Array 1–64, subdivision 1–3, expansion/geometry budgets validated. Actual evaluated viewport geometry and retained live .blend cage/stack independently rechecked before rendering.",
       "evidence": [
         "scene_modeling.py",
         "modeling_blender.py",
         "scene.py",
         "web/scene-editor.js",
         "test_scene_modeling_blender.py",
-        "test_mesh_modeling_ui_macos.py"
+        "test_mesh_modeling_ui_macos.py",
+        "test_scene_authoring.py",
+        "test_scene_authoring_blender.py",
+        "test_scene_authoring_ui_macos.py"
       ]
     },
     {
@@ -584,6 +630,120 @@
         "web/app.js",
         "test_media_orientation.py",
         "test_media_lifecycle.py"
+      ]
+    },
+    {
+      "id": "editor.sequences",
+      "status": "implemented_bounded",
+      "scope": "64 sequences share project canvas, exact rate and media. Active/inactive editing, duplicate/rename/switch/delete, live nested picture/sound with per-instance trims and transforms. Eight nesting levels, 256 clips/128 plates per sequence, 4,096 stored clips and 1,024 expanded instances including nested nodes/text; cycles and referenced-sequence deletion reject.",
+      "evidence": [
+        "editorial.py",
+        "engine.py",
+        "web/editorial-ui.js",
+        "web/sequence-playback.js",
+        "test_editorial.py",
+        "test_sequence_playback.py",
+        "test_editorial_ui_macos.py"
+      ]
+    },
+    {
+      "id": "editor.multicam",
+      "status": "implemented_bounded",
+      "scope": "Manual common-event source-frame sync for 2–16 distinct videos per group, up to 64 groups, cut-at-playhead angle changes with camera-following audio. Group duration ends at shortest remaining angle. Switch before clip retime/tracking/compositing; no automatic waveform/timecode sync, simultaneous angle monitor or audio-lock mode.",
+      "evidence": [
+        "editorial.py",
+        "web/editorial-ui.js",
+        "test_editorial.py",
+        "test_editorial_ui_macos.py"
+      ]
+    },
+    {
+      "id": "editor.captions",
+      "status": "implemented_bounded",
+      "scope": "Plain Unicode SRT/WebVTT import/edit/export with absolute endpoints rounded once to exact project frames; optional rendered text-plate burn-in. 4,096 cues, 4,000 chars/cue, 2 MiB import; burn-in shares 128-title budget. Styled/timed markup, WebVTT regions/styles/position settings are rejected.",
+      "evidence": [
+        "editorial.py",
+        "engine.py",
+        "web/editorial-ui.js",
+        "test_editorial.py",
+        "test_editorial_ui_macos.py"
+      ]
+    },
+    {
+      "id": "editor.drop_frame_timecode",
+      "status": "implemented_bounded",
+      "scope": "Selectable NDF/DF labels; drop-frame numbering only at exact 30000/1001 and 60000/1001. Changes displayed frame labels, not picture clock or audio placement.",
+      "evidence": [
+        "timebase.py",
+        "editorial.py",
+        "web/editorial-ui.js",
+        "test_timebase.py",
+        "test_editorial_ui_macos.py"
+      ]
+    },
+    {
+      "id": "editor.preview_proxies",
+      "status": "implemented_bounded",
+      "scope": "Owned H.264/AAC preview derivatives at long edges 640/960/1280/1920 without upscale; verified decoded picture count and relative timestamps within 2 microseconds, SHA-bound receipt and 1,300,000-frame analysis bound. Native preview switches actual decoder URL; original-based export is unchanged. Cancellable owned job; no general offline/online conform or decoded GPU cache.",
+      "evidence": [
+        "media_management.py",
+        "web/media-management-ui.js",
+        "server.py",
+        "test_media_management.py",
+        "test_media_management_ui_macos.py"
+      ]
+    },
+    {
+      "id": "editor.exact_original_relink",
+      "status": "implemented_bounded",
+      "scope": "Selected original bytes restore an admitted asset only after recorded SHA-256 and size match. Existing identity/edits retained; damaged original backed up, wrong content rejected. Native acceptance tests missing-source repair and independently decoded original exports. Different takes must be imported as new assets.",
+      "evidence": [
+        "media_management.py",
+        "web/media-management-ui.js",
+        "server.py",
+        "test_media_management.py",
+        "test_media_management_ui_macos.py"
+      ]
+    },
+    {
+      "id": "scene.object_hierarchy",
+      "status": "implemented_bounded",
+      "scope": "Object-only acyclic parent links, at most 24 total levels, exact affine inheritance including nonuniform scale and local pose keys in viewport and real .blend. Reparenting keeps local values; world moves convert through parent inverse. Parent with children cannot be deleted. No camera/light parenting, constraints or automatic keep-world transform.",
+      "evidence": [
+        "scene_hierarchy.py",
+        "scene.py",
+        "web/scene-editor.js",
+        "test_scene_authoring.py",
+        "test_scene_authoring_blender.py",
+        "test_scene_authoring_ui_macos.py"
+      ]
+    },
+    {
+      "id": "scene.uv_authoring",
+      "status": "implemented_bounded",
+      "scope": "Own box/planar/per-face projection, actual Blender smart unwrap, selected-face seam separation, connected-island grid packing and UV point drag/numeric/rotate/mirror/scale. 512 selected UVs; quad/n-gon corners and seams survive real Blender replay. Grid packing preserves individual aspect but does not optimize packing/texel density; no texture paint or image shader authoring.",
+      "evidence": [
+        "scene_modeling.py",
+        "modeling_blender.py",
+        "web/scene-editor.js",
+        "test_scene_authoring.py",
+        "test_scene_authoring_blender.py",
+        "test_scene_authoring_ui_macos.py"
+      ]
+    },
+    {
+      "id": "scene.compute_devices",
+      "status": "implemented_bounded",
+      "scope": "CPU (default), Metal, CUDA, OptiX, HIP and oneAPI selection; actual executing Blender must enumerate a matching available device or fail without silent CPU fallback. Receipt records requested/actual devices; .blend stores GPU flag/recipe, not portable machine preferences. After an earlier short harness timeout, a normal owned Metal job rendered one 192x128 frame at four samples without denoising in 82.430497 seconds; independent verification passed 18/18 checks in 6.694 seconds on decoded pixels, retained scene and device receipt. Other GPU backends and production-scale throughput remain unverified.",
+      "evidence": [
+        "render_devices.py",
+        "scene.py",
+        "web/scene-editor.js",
+        "test_scene_authoring.py",
+        "test_scene_authoring_blender.py",
+        "test_scene_authoring_ui_macos.py",
+        "macos/verify_metal_result.py",
+        "macos/verify_metal_blend.py"
       ]
     }
   ],

@@ -101,3 +101,8 @@
 
 /* Recovery stays beside Save; snapshots never replace the current edit silently. */
 .recovery-state{font-size:10px;color:var(--muted,#999);max-width:115px}.recovery-entry{display:flex;gap:10px;align-items:center;padding:12px 0;border-bottom:1px solid #333}.recovery-entry>div{flex:1;min-width:0}.recovery-entry small{display:block;color:#999;margin-top:6px}#recovery-dialog{width:min(700px,90vw)}#recovery-dialog [data-entries]{max-height:60vh;overflow:auto}
+
+/* Keep the editorial controls reachable at native laptop widths. */
+.timeline-toolbar{height:auto;min-height:43px;flex-wrap:wrap;row-gap:6px;padding-top:7px;padding-bottom:7px}.timeline-tools{flex-wrap:wrap;row-gap:5px;min-width:0}.timeline-options{margin-left:auto}.media-management-dialog{width:min(640px,90vw)}.media-management-dialog progress{width:100%;margin-top:16px}
+
+.export-processing {display:grid;gap:10px;padding:16px 0;border-bottom:1px solid var(--line,#30343d);margin-bottom:12px}.export-processing select {width:100%;padding:8px}.export-processing .check {display:flex;align-items:center;gap:8px}.export-processing p {margin:0}

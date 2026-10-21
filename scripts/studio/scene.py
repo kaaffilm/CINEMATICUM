@@ -25,6 +25,8 @@ import zipfile
 from adapters import AdapterError, _BLENDER_TIMEOUT, _cancelled, _run_owned, _sha256, find_blender
 from spatial_import import validate_mesh, validate_scene_geometry
 from scene_modeling import blender_modeling_source, validate_modeling, validate_modeling_budget
+from scene_hierarchy import validate_hierarchy, world_matrix_at
+from render_devices import RENDER_DEVICES, configure_cycles_device
 from timebase import parse_rate
 
 
@@ -57,7 +59,7 @@ POSE_FIELDS = {
 }
 RENDER_DEFAULTS = {"max_bounces": 12, "diffuse_bounces": 4, "glossy_bounces": 4,
                    "transmission_bounces": 12, "transparent_max_bounces": 8,
-                   "use_denoising": True, "seed": 0}
+                   "use_denoising": True, "seed": 0, "device": "CPU"}
 MATERIAL_DEFAULTS = {"color": "#d8a85f", "roughness": .45, "metallic": 0.,
                      "transmission": 0., "ior": 1.5, "emission_color": "#ffffff",
                      "emission_strength": 0.}
@@ -213,6 +215,11 @@ def validate_scene(scene, width=None, height=None):
     render = _object(src.setdefault("render", {}), "Render settings", RENDER_DEFAULTS)
     for prop, default in RENDER_DEFAULTS.items():
         value = render.get(prop, default)
+        if prop == 'device':
+            if not isinstance(value, str) or value not in RENDER_DEVICES:
+                raise ValueError('Render device must be CPU, METAL, CUDA, OPTIX, HIP, or ONEAPI.')
+            render[prop] = value
+            continue
         render[prop] = (_boolean(value, "Denoising") if prop == "use_denoising"
                         else _number(value, "Render " + prop, 0, 2_147_483_647 if prop == "seed" else 64, True))
     output = _object(src.setdefault("output", {}), "Scene output", OUTPUT_DEFAULTS)
@@ -269,7 +276,7 @@ def validate_scene(scene, width=None, height=None):
         src.setdefault(key, [])
     identifiers = set()
     for obj in src["objects"]:
-        _object(obj, "Scene object", {"id", "name", "type", "position", "rotation", "scale", "material", "keyframes", "mesh", "modeling"})
+        _object(obj, "Scene object", {"id", "name", "type", "position", "rotation", "scale", "material", "keyframes", "mesh", "modeling", "parent_id"})
         ident = _id(obj.get("id"), "Object ID")
         if ident in identifiers:
             raise ValueError("Scene IDs must be unique.")
@@ -294,6 +301,7 @@ def validate_scene(scene, width=None, height=None):
         mat["emission_color"] = _color(mat.get("emission_color", "#ffffff"), "Emission color")
         mat["emission_strength"] = _number(mat.get("emission_strength", 0), "Emission strength", 0, 1000)
         _keyframes(obj, "object", src["frame_end"])
+    validate_hierarchy(src['objects'])
     validate_scene_geometry(src["objects"])
     validate_modeling_budget(src["objects"])
     for light in src["lights"]:
@@ -444,12 +452,18 @@ def pose_at(obj, frame, kind="object"):
     return {prop: copy.deepcopy(keys[-1][prop]) for prop in props}
 
 
+def object_matrix_at(scene, object_id, frame):
+    """Complete world transform, including animated nonuniform ancestors."""
+    return world_matrix_at(scene['objects'], object_id, frame, pose_at)
+
+
 def _build_script(spec, blend_path, frames_dir, fps, frame_start, frame_end):
     """Paths are supplied by the renderer, never accepted from the recipe."""
     rate = parse_rate(fps, maximum=60)
     payload = json.dumps(spec, ensure_ascii=True, allow_nan=False, sort_keys=True)
     return '''import bpy, json, math
 from mathutils import Vector, Matrix, Quaternion
+%s
 %s
 %s
 SPEC = json.loads(%r)
@@ -465,10 +479,11 @@ scene = bpy.context.scene
 scene.unit_settings.system = 'METRIC'
 scene.unit_settings.scale_length = 1
 scene.render.engine = 'CYCLES'
-scene.cycles.device = 'CPU'
+DEVICE_RECEIPT = configure_cycles_device(bpy, scene, SPEC['render']['device'])
 scene.cycles.samples = SPEC['samples']
 for key, value in SPEC['render'].items():
-    setattr(scene.cycles, key, value)
+    if key != 'device': setattr(scene.cycles, key, value)
+scene['cinematicum_render_device'] = json.dumps(DEVICE_RECEIPT, sort_keys=True)
 scene.render.resolution_x = SPEC['width']
 scene.render.resolution_y = SPEC['height']
 scene.render.resolution_percentage = 100
@@ -681,6 +696,7 @@ for item in SPEC['lights']:
         if light_target: interpolate_action(light_target, light_poses)
     lights.append((light, light_target, light_poses, size_path, size_factor))
 objects = []
+authored_objects = {}
 for item in SPEC['objects']:
     primitive = item['type']
     if primitive == 'cube': bpy.ops.mesh.primitive_cube_add(size=2)
@@ -716,6 +732,7 @@ for item in SPEC['objects']:
         obj = bpy.context.object
     obj.name = item['name']
     obj['cinematicum_id'] = item['id']
+    authored_objects[item['id']] = obj
     obj.rotation_mode = 'XYZ'
     obj.location = item['position']
     obj.rotation_euler = [math.radians(v) for v in item['rotation']]
@@ -749,6 +766,12 @@ for item in SPEC['objects']:
             for path in ('location','rotation_euler','scale'): obj.keyframe_insert(data_path=path, frame=frame)
         interpolate_action(obj, poses)
     objects.append((obj, poses))
+for item in SPEC['objects']:
+    if item.get('parent_id'):
+        obj = authored_objects[item['id']]
+        obj.parent = authored_objects[item['parent_id']]
+        obj.matrix_parent_inverse = Matrix.Identity(4)
+        obj['cinematicum_parent_id'] = item['parent_id']
 scene.frame_set(START)
 def set_output_format(kind):
     settings = scene.render.image_settings
@@ -811,7 +834,9 @@ if SPEC['output']['linear_exr']:
                    'color_space': scene.render.image_settings.linear_colorspace_settings.name,
                    'sample_type': 'float32', 'alpha': 'premultiplied',
                    'transparent_world': scene.render.film_transparent}, handle)
-''' % (blender_modeling_source(), _camera_math_source(), payload, str(blend_path), str(frames_dir), rate.blender_fps, rate.blender_fps_base, frame_start, frame_end)
+with open(FRAMES + '/render-device.json', 'w') as handle:
+    json.dump(DEVICE_RECEIPT, handle)
+''' % (blender_modeling_source(), _camera_math_source(), inspect.getsource(configure_cycles_device), payload, str(blend_path), str(frames_dir), rate.blender_fps, rate.blender_fps_base, frame_start, frame_end)
 
 
 def inspect_exr_header(path):
@@ -998,6 +1023,15 @@ def render_scene(scene, output_dir, fps=24, frame_start=1, frame_end=None,
                    work / "blender.log", cancel_event, _BLENDER_TIMEOUT, tick)
         if not source.is_file() or not source.stat().st_size:
             raise AdapterError("Blender did not save the authored scene.")
+        device_file = frames / 'render-device.json'
+        if not device_file.is_file() or device_file.stat().st_size > 64 * 1024:
+            raise AdapterError('Blender did not report its actual render device.')
+        device_receipt = json.loads(device_file.read_text(encoding='utf-8'))
+        if (not isinstance(device_receipt, dict) or device_receipt.get('actual') != spec['render']['device']
+                or device_receipt.get('requested') != spec['render']['device']
+                or not isinstance(device_receipt.get('devices'), list)
+                or spec['render']['device'] != 'CPU' and not device_receipt['devices']):
+            raise AdapterError('The actual render device differs from the requested device.')
         for frame in range(start, end + 1):
             file = frames / ("frame_%06d.png" % frame)
             if not file.is_file() or not file.stat().st_size:
@@ -1032,7 +1066,8 @@ def render_scene(scene, output_dir, fps=24, frame_start=1, frame_end=None,
             masters.unlink(missing_ok=True)
             raise
     result = {"path": str(movie), "scene_path": str(blend), "provenance": {
-        "backend": "blender-authored-scene", "renderer": "Cycles CPU", "scene_version": 1,
+        "backend": "blender-authored-scene", "renderer": "Cycles " + device_receipt['actual'], "scene_version": 1,
+        "render_device": device_receipt,
         "recipe_sha256": hashlib.sha256(json.dumps(spec, sort_keys=True, separators=(",", ":")).encode()).hexdigest(),
         "output_sha256": _sha256(movie), "scene_sha256": _sha256(blend), "frame_start": start,
         "frame_end": end, "frame_end_inclusive": True, "fps": rate.fps, "frame_rate": rate.as_dict(), "autoexec_enabled": False,

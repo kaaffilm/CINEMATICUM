@@ -19,15 +19,17 @@ from engine import _executable, _graph, RenderCancelled, validate_project
 
 
 def preview_identity(project, frame):
-    signature = {"pipeline": 10, "project": project, "frame": frame}
+    signature = {"pipeline": 12, "project": project, "frame": frame}
     return hashlib.sha256(json.dumps(signature, sort_keys=True, separators=(",", ":"),
                                     allow_nan=False).encode()).hexdigest()
 
 
 def render_frame(project, project_dir, frame, output, cancel_event=None, timeout=45):
     p = validate_project(project, project_dir)
+    high = p.get("settings", {}).get("image_precision", "standard8") == "high16"
     duration = max([c["start"] + c["duration"] for c in p["clips"]] +
-                   [t["start"] + t["duration"] for t in p["titles"]] + [0])
+                   [t["start"] + t["duration"] for t in p["titles"]] +
+                   [c["start"] + c["duration"] for c in p.get("captions", [])] + [p.get("sequence_duration", 0)])
     if type(frame) is not int or not 0 <= frame < duration:
         raise ValueError("Preview frame must be inside the timeline.")
     if cancel_event is not None and cancel_event.is_set():
@@ -44,7 +46,7 @@ def render_frame(project, project_dir, frame, output, cancel_event=None, timeout
     with tempfile.TemporaryDirectory(prefix="cinematicum-frame-", dir=output.parent) as scratch:
         scratch = Path(scratch)
         inputs, graph, _ = _graph(picture, project_dir, scratch, cancel_event=cancel_event)
-        graph += ";\n[aout]anullsink;\n[vout]trim=start_frame=%d:end_frame=%d,setpts=PTS-STARTPTS,format=rgb24[frameout]" % (frame, frame + 1)
+        graph += ";\n[aout]anullsink;\n[vout]trim=start_frame=%d:end_frame=%d,setpts=PTS-STARTPTS,format=%s[frameout]" % (frame, frame + 1, "rgba64be" if high else "rgb24")
         script = scratch / "graph.txt"
         script.write_text(graph)
         temporary = scratch / "frame.png"
@@ -88,4 +90,5 @@ def render_frame(project, project_dir, frame, output, cancel_event=None, timeout
         os.replace(temporary, output)
     return {"frame": frame, "width": p["width"], "height": p["height"],
             "sha256": hashlib.sha256(output.read_bytes()).hexdigest(),
+            "processing_bits": 16 if high else 8, "pixel_format": "rgba64be" if high else "rgb24",
             "pipeline": "timeline-export-graph"}

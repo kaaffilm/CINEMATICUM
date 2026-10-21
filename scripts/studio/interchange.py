@@ -24,11 +24,13 @@ import threading
 
 if __package__:
     from .compositor import MAX_NODES
+    from .editorial import sequence_duration
     from .engine import _media_path, validate_project, track_state
     from .scene import validate_scene
     from .timebase import parse_rate, project_rate
 else:
     from compositor import MAX_NODES
+    from editorial import sequence_duration
     from engine import _media_path, validate_project, track_state
     from scene import validate_scene
     from timebase import parse_rate, project_rate
@@ -158,6 +160,23 @@ def _asset_reference_slots(project):
     Import calls this before destination validation, while the references still
     carry source-project IDs, so malformed structures must fail here explicitly.
     """
+    stored = project.get("sequences", [])
+    if not isinstance(stored, list) or len(stored) >= 64:
+        raise ValueError("Invalid CINEMATICUM sequence library in OTIO authoring metadata.")
+    for sequence in stored:
+        if not isinstance(sequence, dict) or "sequences" in sequence:
+            raise ValueError("Invalid CINEMATICUM stored sequence.")
+        yield from _asset_reference_slots(sequence)
+    groups = project.get("multicam_groups", [])
+    if not isinstance(groups, list) or len(groups) > 64:
+        raise ValueError("Invalid multicamera group inventory.")
+    for group in groups:
+        if not isinstance(group, dict) or not isinstance(group.get("angles"), list) or len(group["angles"]) > 16:
+            raise ValueError("Invalid multicamera source angles.")
+        for angle in group["angles"]:
+            if not isinstance(angle, dict):
+                raise ValueError("Invalid multicamera source angle.")
+            yield angle
     for key, limit in (("clips", 256), ("titles", 128)):
         items = project.get(key, [])
         if not isinstance(items, list) or len(items) > limit:
@@ -165,7 +184,7 @@ def _asset_reference_slots(project):
         for item in items:
             if not isinstance(item, dict):
                 raise ValueError("Invalid CINEMATICUM media reference in OTIO authoring metadata.")
-            if key == "clips" or item.get("asset_id") is not None:
+            if (key == "clips" and item.get("sequence_id") is None) or item.get("asset_id") is not None:
                 yield item
             graph = item.get("compositor") if key == "clips" else None
             if graph is None:
@@ -194,6 +213,12 @@ def _asset_identities(value):
 def export_otio(project, project_dir):
     """Return {document, warnings}; media remains in the existing project."""
     p = _validated_project(project, project_dir)
+    if any(clip.get("sequence_id") for clip in p["clips"]):
+        if __package__:
+            from .sequence_interchange import export_nested
+        else:
+            from sequence_interchange import export_nested
+        return export_nested(p, project_dir)
     rate = project_rate(p)
     assets = {asset["id"]: asset for asset in p["assets"]}
     used = {reference["asset_id"] for reference in _asset_reference_slots(p)}
@@ -212,6 +237,7 @@ def export_otio(project, project_dir):
     if any(c["speed"] != 1 or c["reverse"] for c in p["clips"]):
         raise ValueError("OTIO cut export does not support speed changes or reverse. Render those shots first or export the CINEMATICUM project.")
     tracks = []
+    full_duration = sequence_duration(p)
 
     def make_track(track_id, clips, companion=False):
         settings = next((t for t in p["tracks"] if t["id"] == track_id), {})
@@ -236,6 +262,8 @@ def export_otio(project, project_dir):
             item["metadata"] = {"cinematicum": {"clip_id": clip["id"], "role": "embedded_audio" if companion else "native"}}
             track["children"].append(item)
             cursor = clip["start"] + clip["duration"]
+        if cursor < full_duration:
+            track["children"].append(_item("Gap.1", source_range=_range(0, full_duration - cursor, rate)))
         return track
 
     ids = sorted({c["track"] for c in p["clips"]} | {t["id"] for t in p["tracks"]}, key=lambda i: (i < 0, i if i >= 0 else -i))
@@ -246,6 +274,8 @@ def export_otio(project, project_dir):
             audio_clips = [c for c in clips if assets[c["asset_id"]]["has_audio"]]
             if audio_clips:
                 tracks.append(make_track(track_id, audio_clips, companion=True))
+    if not tracks and full_duration:
+        tracks.append(make_track(0, []))
     if sum(t["kind"] == "Video" for t in tracks) > 1:
         warnings.append("Video track stacking is retained, but blend/compositing behavior in other editors may differ.")
     document = {"OTIO_SCHEMA": "Timeline.1", "name": p["name"], "metadata": {},
@@ -337,6 +367,12 @@ def import_otio(document, project, project_dir, asset_map=None):
 def _import_otio(document, project, project_dir, asset_map):
     doc = _json_copy(document)
     _object(doc, {"Timeline.1"}, "top-level OTIO object")
+    if __package__:
+        from .sequence_interchange import has_nested, import_nested
+    else:
+        from sequence_interchange import has_nested, import_nested
+    if has_nested(doc) or _metadata(doc).get("nested_sequences") == 1:
+        return import_nested(doc, project, project_dir, asset_map)
     base = _validated_project(project, project_dir)
     assets = {a["id"]: a for a in base["assets"]}
     mapping = {} if asset_map is None else asset_map
@@ -458,8 +494,6 @@ def _import_otio(document, project, project_dir, asset_map):
                                  "_private": private_clip, "_track_private": private_track, "_kind": kind})
             cursor += duration
         public_duration = max(public_duration, cursor)
-    if public_duration > max([c["start"] + c["duration"] for c in public_clips] + [0]):
-        raise ValueError("Trailing/all-gap timeline duration is not represented by CINEMATICUM clips; trim the final gap before importing.")
     # Exact unedited self-roundtrip: use private authoring data only after every
     # public reference was resolved and the public document was validated above.
     if own and own.get("public_sha256") == _public_digest(doc):
@@ -472,6 +506,8 @@ def _import_otio(document, project, project_dir, asset_map):
         saved_clips = candidate.get("clips")
         if not isinstance(saved_clips, list) or len(saved_clips) != len(native):
             raise ValueError("CINEMATICUM metadata does not match the public OTIO cut list.")
+        if sequence_duration(candidate) != public_duration:
+            raise ValueError("Private CINEMATICUM timing: sequence duration conflicts with public OTIO timing.")
         identities = _asset_identities(own.get("asset_sha256"))
         references = list(_asset_reference_slots(candidate))
         for reference in references:
@@ -538,9 +574,14 @@ def _import_otio(document, project, project_dir, asset_map):
         if len(public_clips) > 256 or video_index > 16 or audio_index > 16:
             raise ValueError("This timeline exceeds CINEMATICUM's 256-clip or 16 video/16 audio track limits.")
         candidate = copy.deepcopy(base)
+        if base.get("sequences") and project_rate(base) != rate:
+            raise ValueError("Other sequences use this project clock. Import a differently formatted OTIO into a new project.")
         candidate.update(name=str(doc.get("name") or "Imported OTIO")[:200], fps=rate.fps, frame_rate=rate.as_dict(),
                          clips=[{k: v for k, v in c.items() if not k.startswith("_")} for c in public_clips],
-                         tracks=track_settings, titles=[])
+                         tracks=track_settings, titles=[], captions=[], sequence_duration=public_duration)
+        candidate.pop("caption_style", None)
+        if rate.fraction not in (Fraction(30000,1001), Fraction(60000,1001)):
+            candidate.setdefault("settings", {}).pop("timecode_mode", None)
         if own:
             warnings.append("The public OTIO was edited externally; stale CINEMATICUM effects/titles/mixer metadata was not applied. Review the imported cuts before replacing the timeline.")
         if video_index > 1:

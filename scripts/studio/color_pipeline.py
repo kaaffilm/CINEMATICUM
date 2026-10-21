@@ -62,9 +62,22 @@ class CubeLUT:
     domain_max: tuple
     values: tuple
     title: str = "Untitled LUT"
+    shaper: object = None
 
     def text(self, unit_domain=False):
         """Deterministic canonical identity; comments and source formatting vanish."""
+        if self.shaper is not None:
+            if self.dimension != 3 or self.shaper.dimension != 1 or self.shaper.shaper is not None:
+                raise ValueError("Combined Cube requires one 1D shaper followed by one 3D table")
+            if any(len(set(values)) != 1 for values in (self.domain_min,self.domain_max,self.shaper.domain_min,self.shaper.domain_max)):
+                raise ValueError("Combined Cube input ranges must be identical across RGB channels")
+            low1,high1=(0,1) if unit_domain else (self.shaper.domain_min[0],self.shaper.domain_max[0])
+            low3,high3=(0,1) if unit_domain else (self.domain_min[0],self.domain_max[0])
+            lines=['TITLE "%s"'%self.title,"LUT_1D_SIZE %d"%self.shaper.size,
+                   "LUT_1D_INPUT_RANGE %s %s"%(_fmt(low1),_fmt(high1)),"LUT_3D_SIZE %d"%self.size,
+                   "LUT_3D_INPUT_RANGE %s %s"%(_fmt(low3),_fmt(high3))]
+            lines.extend(" ".join(map(_fmt,row)) for row in self.shaper.values+self.values)
+            return "\n".join(lines)+"\n"
         low = (0.0, 0.0, 0.0) if unit_domain else self.domain_min
         high = (1.0, 1.0, 1.0) if unit_domain else self.domain_max
         lines = ['TITLE "%s"' % self.title, "LUT_%dD_SIZE %d" % (self.dimension, self.size),
@@ -78,25 +91,31 @@ class CubeLUT:
         return hashlib.sha256(self.text().encode("utf-8")).hexdigest()
 
     def descriptor(self):
-        return {"sha256": self.sha256, "title": self.title, "dimension": self.dimension,
+        result = {"sha256": self.sha256, "title": self.title, "dimension": self.dimension,
                 "size": self.size, "domain_min": list(self.domain_min),
                 "domain_max": list(self.domain_max), "rows": len(self.values)}
+        if self.shaper is not None:
+            result.update(shaper_size=self.shaper.size,shaper_domain_min=list(self.shaper.domain_min),
+                          shaper_domain_max=list(self.shaper.domain_max),shaper_interpolation="linear",
+                          rows=len(self.values)+len(self.shaper.values))
+        return result
 
 
 def parse_cube(text):
-    """Strict Iridas .cube subset: one 3-channel 1D OR one 3D table.
+    """Strict Cube tables, including a sequential 1D shaper and 3D table.
 
     Red changes fastest in 3D rows. Arbitrary per-channel finite domains are
     supported. Endpoint clamping is explicit; output values may be outside 0–1.
-    Combined Resolve shapers, range directives, includes and unknown headers
-    are rejected rather than silently changing their meaning.
+    Resolve-style INPUT_RANGE directives bind to their own stage. DOMAIN_MIN/
+    MAX remain supported for a single stage; mixing these two conventions or
+    using ambiguous shared DOMAIN values with two stages is rejected.
     """
     if not isinstance(text, str) or len(text.encode("utf-8")) > MAX_CUBE_BYTES:
         raise ValueError("Cube text must be UTF-8 text of at most 24 MiB")
     if "\x00" in text:
         raise ValueError("Cube text contains a NUL character")
     text = text.lstrip("\ufeff")
-    title, dimension, size = "Untitled LUT", None, None
+    title, sizes, ranges = "Untitled LUT", {}, {}
     low, high, rows, headers = (0.0, 0.0, 0.0), (1.0, 1.0, 1.0), [], set()
     for line_number, raw in enumerate(text.splitlines(), 1):
         if len(raw) > 4096:
@@ -119,13 +138,11 @@ def parse_cube(text):
             continue
         tokens = line.split()
         key = tokens[0]
-        if key in {"LUT_1D_SIZE", "LUT_3D_SIZE", "DOMAIN_MIN", "DOMAIN_MAX"}:
+        if key in {"LUT_1D_SIZE", "LUT_3D_SIZE", "LUT_1D_INPUT_RANGE", "LUT_3D_INPUT_RANGE", "DOMAIN_MIN", "DOMAIN_MAX"}:
             if rows or key in headers:
                 raise ValueError("Cube %s must occur once, before table data" % key)
             headers.add(key)
-            if key.startswith("LUT_"):
-                if dimension is not None:
-                    raise ValueError("Combined 1D+3D shaper LUTs are not supported; import separate tables")
+            if key.endswith("_SIZE"):
                 dimension = 1 if key == "LUT_1D_SIZE" else 3
                 limit = MAX_1D_SIZE if dimension == 1 else MAX_3D_SIZE
                 if len(tokens) != 2 or not re.fullmatch(r"\d+", tokens[1]):
@@ -133,22 +150,44 @@ def parse_cube(text):
                 size = int(tokens[1])
                 if not 2 <= size <= limit:
                     raise ValueError("Cube %dD size must be between 2 and %d" % (dimension, limit))
+                sizes[dimension]=size
+            elif key.endswith("_INPUT_RANGE"):
+                dimension=1 if key=="LUT_1D_INPUT_RANGE" else 3
+                if len(tokens)!=3 or any(not _FLOAT.fullmatch(v) for v in tokens[1:]):
+                    raise ValueError("Cube INPUT_RANGE requires two finite decimal values")
+                a,b=(_finite(float(v),"Cube input range") for v in tokens[1:])
+                if b-a<1e-9:raise ValueError("Cube input range maximum must exceed its minimum")
+                ranges[dimension]=(a,b)
             elif key == "DOMAIN_MIN":
                 low = _triple(tokens[1:], line_number)
             else:
                 high = _triple(tokens[1:], line_number)
             continue
-        if dimension is None:
+        if not sizes:
             raise ValueError("Declare LUT_1D_SIZE or LUT_3D_SIZE before table rows")
         row = _triple(tokens, line_number)
         rows.append(row)
-        if len(rows) > size ** dimension:
+        if len(rows) > sum(size**dimension for dimension,size in sizes.items()):
             raise ValueError("Cube has more rows than its declared size")
-    if dimension is None or len(rows) != size ** dimension:
+    if not sizes or len(rows) != sum(size**dimension for dimension,size in sizes.items()):
         raise ValueError("Cube table row count must exactly equal its declared size")
     if any(b - a < 1e-9 for a, b in zip(low, high)):
         raise ValueError("Every Cube DOMAIN_MAX must exceed DOMAIN_MIN by at least 1e-9")
-    return CubeLUT(dimension, size, low, high, tuple(rows), title)
+    if set(ranges)-set(sizes):
+        raise ValueError("Cube input range refers to a missing table")
+    shared = bool(headers & {"DOMAIN_MIN","DOMAIN_MAX"})
+    if shared and (len(sizes)>1 or ranges):
+        raise ValueError("Cube DOMAIN and stage-specific input ranges are ambiguous together")
+    def domain(dimension):
+        if dimension in ranges:
+            a,b=ranges[dimension];return (a,a,a),(b,b,b)
+        return low,high
+    if len(sizes)==1:
+        dimension=next(iter(sizes));lo,hi=domain(dimension)
+        return CubeLUT(dimension,sizes[dimension],lo,hi,tuple(rows),title)
+    lo1,hi1=domain(1);lo3,hi3=domain(3)
+    shaper=CubeLUT(1,sizes[1],lo1,hi1,tuple(rows[:sizes[1]]),title)
+    return CubeLUT(3,sizes[3],lo3,hi3,tuple(rows[sizes[1]:]),title,shaper)
 
 
 def sample_lut(lut, rgb, interpolation=None):
@@ -161,6 +200,8 @@ def sample_lut(lut, rgb, interpolation=None):
     allowed = ("linear", "nearest") if lut.dimension == 1 else ("nearest", "trilinear", "tetrahedral")
     if interpolation not in allowed:
         raise ValueError("Interpolation is unsupported for this LUT dimension")
+    if lut.shaper is not None:
+        rgb=sample_lut(lut.shaper,rgb,"linear")
     points = [min(1.0, max(0.0, (_finite(c) - a) / (b - a))) * (lut.size - 1)
               for c, a, b in zip(rgb, lut.domain_min, lut.domain_max)]
     indices = [int(math.floor(x)) for x in points]
@@ -468,7 +509,8 @@ def _filter_path(path):
     return "".join("\\" + c if c in "\\'[],;" else c for c in first)
 
 
-def compile_pipeline(value, project_dir, temp_dir, prefix="color", *, input_unorm16=False):
+def compile_pipeline(value, project_dir, temp_dir, prefix="color", *, input_unorm16=False,
+                     precision="standard8"):
     """Return trusted FFmpeg filters; the parent owns subsequent SDR conversion.
 
     GEQ uses planar float RGBA and explicitly copies alpha. Its output retains
@@ -482,9 +524,18 @@ def compile_pipeline(value, project_dir, temp_dir, prefix="color", *, input_unor
     component once instead of executing the general GEQ expression at every
     full-resolution pixel. Each result is rounded to its nearest UNORM16 code;
     alpha is copied exactly. All other transforms keep the float path.
+
+    The opt-in high16 movie path evaluates transfer/gamut math in GEQ's double
+    precision expression evaluator and quantizes to 16-bit SDR at this stage.
+    Native LUT kernels receive planar16 directly. This avoids libswscale's
+    lossy RGB16/float format round trip on some builds. Negative/out-of-range
+    values are explicitly clamped in high16; it is not an HDR/ACES pipeline.
     """
     if not isinstance(input_unorm16, bool):
         raise ValueError("Integer input capability must be a trusted boolean")
+    if not isinstance(precision, str) or precision not in {"standard8", "high16"}:
+        raise ValueError("Colour precision must be standard8 or high16")
+    high = precision == "high16"
     p = validate_pipeline(value, project_dir)
     if p is None or not p["enabled"]:
         return []
@@ -500,27 +551,39 @@ def compile_pipeline(value, project_dir, temp_dir, prefix="color", *, input_unor
                       "pow((ld(0)+0.055)/1.055,2.4)));floor(65535*if(lt(ld(1),0.018),"
                       "4.5*ld(1),1.099*pow(ld(1),0.45)-0.099)+0.5)")
         return ["format=rgba64le", "lutrgb=" + ":".join(c + "='" + expression + "'" for c in "rgb") + ":a='val'"]
-    filters = ["format=gbrapf32le"]
+    filters = ["format=gbrap16le" if high else "format=gbrapf32le"]
     if conversion:
         matrix = input_matrix(p)
-        declarations = ";".join("st(%d,%s)" % (i, _decode_expression("%s(X,Y)" % c, p["input_transfer"])) for i, c in enumerate("rgb"))
+        declarations = ";".join("st(%d,%s)" % (i, _decode_expression("%s(X,Y)" % c + ("/65535" if high else ""), p["input_transfer"])) for i, c in enumerate("rgb"))
         expressions = []
         for row in matrix:
             product = "+".join("(%s)*ld(%d)" % (_fmt(coefficient), i) for i, coefficient in enumerate(row))
-            expressions.append(declarations + ";st(3," + product + ");if(lt(ld(3),0.018),4.5*ld(3),1.099*pow(ld(3),0.45)-0.099)")
+            encoded = "if(lt(ld(3),0.018),4.5*ld(3),1.099*pow(ld(3),0.45)-0.099)"
+            if high:
+                encoded = "floor(65535*clip(" + encoded + ",0,1)+0.5)"
+            expressions.append(declarations + ";st(3," + product + ");" + encoded)
         filters.append(_geq(expressions))
     if p["lut"] is not None:
         lut = load_lut(project_dir, p["lut"]["sha256"])
-        if lut.domain_min != (0, 0, 0) or lut.domain_max != (1, 1, 1):
-            filters.append(_geq(["clip((%s(X,Y)-(%s))/(%s),0,1)" % (c, _fmt(a), _fmt(b - a))
-                                 for c, a, b in zip("rgb", lut.domain_min, lut.domain_max)]))
         directory = Path(temp_dir).resolve(strict=True)
-        # The contents come from a hash-validated parser, never a user pathname.
-        path = directory / (prefix + "-" + lut.sha256 + ".cube")
-        if path.is_symlink():
-            raise ValueError("Temporary LUT path must not be a symbolic link")
-        path.write_text(lut.text(unit_domain=True), encoding="utf-8")
-        filters.append("lut%dd=file=%s:interp=%s" % (lut.dimension, _filter_path(path), p["lut"]["interpolation"]))
+        stages=[(lut,p["lut"]["interpolation"])]
+        if lut.shaper is not None:
+            table=CubeLUT(lut.dimension,lut.size,lut.domain_min,lut.domain_max,lut.values,lut.title)
+            stages=[(lut.shaper,"linear"),(table,p["lut"]["interpolation"])]
+        for ordinal,(table,interpolation) in enumerate(stages):
+            if table.domain_min != (0,0,0) or table.domain_max != (1,1,1):
+                scale = "65535*" if high else ""
+                divisor = "/65535" if high else ""
+                filters.append(_geq([scale + "clip((%s(X,Y)%s-(%s))/(%s),0,1)"%(c,divisor,_fmt(a),_fmt(b-a))
+                                     for c,a,b in zip("rgb",table.domain_min,table.domain_max)]))
+            # One hash-owned table per stage avoids a decoder silently ignoring
+            # a combined file's shaper. Each stage's own input domain is used.
+            path=directory/(prefix+"-"+lut.sha256+"-"+str(ordinal)+".cube")
+            if path.is_symlink():raise ValueError("Temporary LUT path must not be a symbolic link")
+            path.write_text(table.text(unit_domain=True),encoding="utf-8")
+            filters.append("lut%dd=file=%s:interp=%s"%(table.dimension,_filter_path(path),interpolation))
+            if high:
+                filters.append("format=gbrap16le")
     return filters
 
 
@@ -528,6 +591,7 @@ def capabilities():
     return {"version": 1, "output": "Rec.709 SDR", "input_transfers": list(TRANSFERS),
             "input_primaries": list(PRIMARIES), "cube_1d_max": MAX_1D_SIZE,
             "cube_3d_max": MAX_3D_SIZE, "max_cube_bytes": MAX_CUBE_BYTES,
+            "cube_combined_shaper": True,
             "bradford_adaptation": True, "raw_development": False,
             "hdr_mastering": False, "aces_display_transform": False,
             "ocio_runtime": False}

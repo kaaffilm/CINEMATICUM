@@ -173,3 +173,54 @@ def project_rate(project, *, maximum=60):
             if not same:
                 raise ValueError("Project fps conflicts with its exact frame_rate. Supply matching values.")
     return rate
+
+
+def format_timecode(frames, rate=24, *, drop_frame=False):
+    """SMPTE-style nominal frame labels with exact 29.97/59.94 drop counting."""
+    rate = parse_rate(rate)
+    if type(frames) is not int or frames < 0:
+        raise ValueError("Timecode position must be a nonnegative integer frame.")
+    nominal = round(rate.fps)
+    label = frames
+    if drop_frame:
+        if rate.fraction not in (Fraction(30000, 1001), Fraction(60000, 1001)):
+            raise ValueError("Drop-frame timecode is supported at 30000/1001 or 60000/1001 only.")
+        drop = 2 if nominal == 30 else 4
+        ten = nominal * 600 - drop * 9
+        minute = nominal * 60 - drop
+        blocks, remainder = divmod(frames, ten)
+        label += drop * 9 * blocks
+        if remainder >= drop:
+            label += drop * ((remainder - drop) // minute)
+    seconds, frame = divmod(label, nominal)
+    minutes, second = divmod(seconds, 60)
+    hour, minute = divmod(minutes, 60)
+    return f"{hour:02}:{minute:02}:{second:02}{';' if drop_frame else ':'}{frame:02}"
+
+
+def parse_timecode(value, rate=24, *, drop_frame=None):
+    """Reject the frame labels skipped by drop-frame counting."""
+    import re
+    rate = parse_rate(rate)
+    if not isinstance(value, str):
+        raise ValueError("Timecode must be text.")
+    match = re.fullmatch(r"(\d{2,4}):([0-5]\d):([0-5]\d)([:;])(\d{2})", value)
+    if not match:
+        raise ValueError("Timecode must use HH:MM:SS:FF or HH:MM:SS;FF.")
+    hour, minute, second, separator, frame = match.groups()
+    hour, minute, second, frame = map(int, (hour, minute, second, frame))
+    inferred = separator == ';'
+    if drop_frame is not None and bool(drop_frame) != inferred:
+        raise ValueError("Timecode separator does not match the selected display mode.")
+    nominal = round(rate.fps)
+    if frame >= nominal:
+        raise ValueError("Timecode frame number exceeds the nominal frame rate.")
+    label = ((hour * 60 + minute) * 60 + second) * nominal + frame
+    if inferred:
+        format_timecode(0, rate, drop_frame=True)
+        drop = 2 if nominal == 30 else 4
+        if minute % 10 and second == 0 and frame < drop:
+            raise ValueError("This frame label is omitted by drop-frame timecode.")
+        minutes = hour * 60 + minute
+        label -= drop * (minutes - minutes // 10)
+    return label

@@ -55,3 +55,8 @@
 .scene-modifier input[type=checkbox]{width:14px;height:14px;max-width:none;accent-color:#e1b16c}
 .scene-model-busy .scene-viewport{cursor:progress}
 .scene-edit-mode .scene-view-label{color:#e2bc78}
+.scene-uv-panel { margin-top: 14px; border: 1px solid #344454; border-radius: 5px; padding: 10px; }
+.scene-uv-panel legend { padding: 0 5px; color: #b8cedd; font-size: 11px; font-weight: 650; }
+.scene-uv-canvas { display: block; width: 100%; height: auto; aspect-ratio: 16 / 15; margin: 8px 0; border: 1px solid #35495b; border-radius: 3px; touch-action: none; cursor: crosshair; }
+.scene-uv-canvas:focus { outline: 2px solid #c89650; outline-offset: 1px; }
+.scene-uv-panel .scene-model-actions { flex-wrap: wrap; }

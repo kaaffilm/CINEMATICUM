@@ -1,4 +1,4 @@
-# CINEMATICUM Studio 0.8
+# CINEMATICUM Studio 0.9
 
 A working local audiovisual editor. Media are imported into an owned project,
 edited on a frame-based timeline, previewed, and exported through real render
@@ -10,24 +10,26 @@ issuance effect.
 
 ## This upgrade
 
-Studio 0.8 adds recoverable unsaved edits, previous saved versions, portable
-project archives, and an integrated production shot-plan workflow. Authored 3D
-scenes can retain scene-linear float32 RGBA EXR sequences and depth, normal,
-motion-vector, diffuse-color and emission passes alongside their review movie
-and editable Blender source. Continuous camera aiming and deformed mesh UV
-seams are preserved. OTIO self-roundtrips identify and rebind nested compositor
-and title media by bytes; still-image admission and imaging agree on all eight
-EXIF orientations. Generation preflight checks installed socket types and
-reachable video output, and deleted clips release their playback resources.
+The 0.9 source adds live nested sequences, manual multicamera editing, captions,
+source-channel mapping, drop-frame display, verified preview proxies and
+exact-original relinking. Compositing adds cubic Bézier roto with point feather,
+bounded SVG boundary import/export and combined 1D-shaper/3D Cube LUTs. 3D adds
+object hierarchy, editable UVs and real smart unwrap, five additional modifier
+types, and validated Cycles compute-device selection.
 
-These operations use CINEMATICUM's own controls and project data. The release
-retains calibrated fSpy/COLMAP camera import, physical camera/material controls,
-Cycles rendering, exact rational clocks, animated compositing, measured point
-tracking, OBJ/MTL import, Cube LUTs and bounded OpenTimelineIO interchange.
-Read the [source comparison and capability audit](CAPABILITY_AUDIT.md) for the
-reference-system comparison, and [the capability ledger](capabilities.json) for
-the current implemented scope and remaining professional gaps. Execution
-evidence for this upgrade is recorded in [verification 0.8](VERIFICATION_0_8.md).
+These operations use CINEMATICUM's own controls and shared project history.
+Existing recovery/version history, portable archives, production shot assembly,
+scene-linear EXR masters, calibrated cameras, physical materials, exact clocks,
+measured tracking and OCIO/RAW/bracket still processing remain available.
+Read the [source comparison and capability audit](CAPABILITY_AUDIT.md),
+[capability ledger](capabilities.json), and
+[current unfinished-work register](UNFINISHED_0_9.md) for implemented bounds and
+remaining professional gaps. [Verification 0.9](VERIFICATION_0_9.md) records
+executed acceptance and deployment separately. A 0.9 candidate is installed;
+three of its 53 runtime files differ from the latest audio JavaScript under
+review. A fresh native second-MOV-stream test returned silence, so that audio
+path is not accepted. The original production checkout still has no Studio,
+the existing draft PR is at 0.8, and this 0.9 work is not a published release.
 
 ## Recover edits and move projects
 
@@ -172,8 +174,10 @@ New projects support 24, 25, 30, 48, 50 and 60 fps, plus exact 24000/1001,
 30000/1001 and 60000/1001 rates. The API accepts reduced rational rates from
 1 to 60 fps. `frame_rate` is authoritative; numeric `fps` is derived for UI
 arithmetic. Render timestamps and 48 kHz audio placement use the rational clock
-and absolute sample boundaries. NTSC-family timecode is displayed as nominal
-**non-drop-frame** timecode, explicitly labeled NDF; it is not wall-clock time.
+and absolute sample boundaries. **Sequences → Timecode display** selects NDF or
+DF. Drop-frame labels are supported for exact 30000/1001 and 60000/1001 projects;
+other rates reject DF. This changes labels, not frame rate, picture content or
+audio timing. NDF remains the default.
 
 The clip inspector exposes 0.25×–4× speed, reverse of the selected source range,
 clip gain, stereo balance and audio fades. Source in points may be fractional
@@ -199,6 +203,10 @@ maximum and RMS samples, cached by source identity. The Audio workspace has
 track names, gain, mute, solo and lock. Export processes pitch-preserving tempo,
 reversed audio, sample-based fades, stereo balance and animated volume. Reverse
 audio and multichannel downmix should be reviewed with rendered playback.
+Current native audio acceptance remains open: the second audio stream of a MOV
+has intermittently produced silence. An earlier capture of 32,768 samples
+passed, but a fresh current run returned zeros; the fix is still under review.
+Successful waveform/export checks do not establish reliable live playback.
 
 Clip position, scale, rotation, opacity and volume can be keyframed, with linear,
 hold, ease-in, ease-out and smooth ease-in/out interpolation. Each property uses
@@ -213,6 +221,77 @@ the selection, and Cmd/Ctrl-Z and Cmd/Ctrl-S undo and save. Titles use actual
 transparent PNG plates generated from the editor canvas, so the Mac does not
 need FFmpeg's optional `drawtext` filter.
 
+## Sequences, cameras, captions and source audio
+
+**Sequences** opens the shared sequence library. Name an edit and choose **New
+empty** or **Duplicate active**. **Open** switches the active edit without losing
+the previous sequence. **Nest at playhead** places another sequence on picture
+track V1 with its sound; changes to that child remain live in the parent. Nested
+clips retain ordinary trims, retiming, transforms and mixing through the render
+path. Save commits the complete library. Referenced sequences cannot be deleted,
+and circular dependencies are rejected.
+
+All sequences share the project's canvas size, exact frame rate and media
+inventory. Limits are 64 sequences, eight nesting levels, 256 clips and 128 text
+plates per sequence, 4,096 stored clips across the project, and 1,024 expanded
+clip/text/sequence instances for each rendered dependency tree. These limits
+apply to repeated instances as well as distinct sources. Use **Render preview**
+for the complete processed nested picture and sound.
+
+**Multicam** creates a group from 2–16 distinct imported videos. Enter the source
+offset containing the same event in each angle, measured in project-rate frames,
+then choose **Create cut at playhead**. The available cut ends with the shortest
+remaining angle. Select its timeline clip, put the playhead at the cut, and choose an angle button. The new
+segment preserves synchronization and follows that camera's audio; authored
+gain, balance and fade envelopes remain. This is manual event/frame
+synchronization. Automatic audio/timecode sync and a simultaneous multicamera
+monitor are not implemented. Angle switching must precede retiming, tracking or
+node compositing of that multicamera clip. A project holds up to 64 groups.
+
+**Captions** imports plain UTF-8 SRT or WebVTT, adds a cue at the playhead, and
+edits start/end frames and text. **Apply caption edit** applies the complete cue
+edit once through undo. **Burn captions into picture** generates actual text
+plates; **Export SRT** or **Export WebVTT** downloads the sidecar. Imports round
+absolute cue endpoints once to the project clock. Up to 4,096 cues are retained;
+burn-in shares the 128-title limit with other titles. Styled/timed markup, WebVTT
+positioning, STYLE and REGION blocks are rejected. Import files are limited to
+2 MiB and cue text to 4,000 characters.
+
+Select a timeline clip and open **Source audio** to choose one of its actual
+audio streams and the zero-based source channels feeding stereo left and right.
+Selecting one channel twice creates dual mono. **Apply channel mapping** changes
+the rendered mix; **Reset to source default** removes that override. Timeline
+waveforms honor the stream/channel mapping. Native source playback is undergoing
+acceptance: a second MOV stream intermittently returns silence, including the
+latest fresh test. Use rendered playback to inspect the exported mapping while
+that defect remains open. This supplies explicit two-channel routing; general
+surround output and a bus/plugin workstation remain unimplemented.
+
+## Preview proxies and original-media repair
+
+Open **Media & proxies**, choose a video and a **Preview long edge** of 640, 960,
+1,280 or 1,920, then **Create proxy**. Proxies do not upscale a source. Each
+H.264/AAC derivative is checked against the original decoded picture count and
+relative timestamps before admission; source and proxy hashes bind its receipt.
+The timestamp tolerance is two microseconds, with a 1,300,000-frame analysis
+bound. **Cancel proxy job** stops the owned process and removes its partial
+output.
+
+Enable **Use available preview proxies** and Save to retain the preview choice.
+Verified proxies drive interactive source decoding, while export and processing
+continue to resolve original media. Proxies are lower-resolution lossy viewing
+copies and do not promise identical pixels to their originals. They do not
+supply a decoded GPU playback cache or arbitrary offline/online conform.
+
+**Relink exact original…** restores a missing or damaged imported asset only when
+the selected file matches its recorded SHA-256 and size. The asset identity and
+existing edits remain intact. Different bytes are rejected; import a new take as
+a new asset. A damaged existing original is retained in the project's repair
+backup before replacement. **Refresh** rereads original/proxy availability.
+Native acceptance verifies actual proxy decoder URLs, wrong-file rejection,
+exact restoration and identical decoded original-based exports before and after
+these operations.
+
 ## Input color and LUTs
 
 Select a picture clip, open **Color**, then **Input transform, white balance & LUT**.
@@ -222,19 +301,24 @@ chromaticities. Bradford adaptation and RGB/XYZ matrices run in a float RGBA sta
 The stage encodes Rec.709 before the clip compositor and creative grading.
 
 Import a selected `.cube` file to keep it with the project. The importer accepts
-one three-channel 1D table (up to 65,536 rows) or one 3D table (up to 65³), with
-finite per-channel input domains. Nearest/linear 1D and nearest/trilinear/
-tetrahedral 3D interpolation are available. Tables are canonicalized and addressed
-by SHA-256; missing or changed bytes stop validation. The selected LUT runs after
+a three-channel 1D table (up to 65,536 rows), a 3D table (up to 65³), or a combined
+1D shaper followed by a 3D table. Single tables support finite per-channel
+domains. Combined tables use separate `LUT_1D_INPUT_RANGE` and
+`LUT_3D_INPUT_RANGE` directives; ambiguous shared `DOMAIN_MIN/MAX` declarations
+are rejected. The shaper uses linear interpolation, then the 3D stage uses the
+selected nearest, trilinear or tetrahedral mode. Independent 1D tables also
+support nearest interpolation. Files are limited to 24 MiB. Tables are
+canonicalized and addressed by SHA-256; missing or changed bytes stop validation. The selected LUT runs after
 the input conversion, before the compositor. Apply creates one undo entry and
 does not autosave. LUT storage persists independently of undo.
 
 Paused frames and export share this processing. Interactive source playback
 remains approximate; use **Render preview** to judge moving processed footage.
 This is an explicit input-to-SDR stage, not a complete OCIO/ACES display pipeline.
-The downstream compositor/delivery remains SDR; RAW development, HDR mastering,
-general OCIO configs, combined shaper+3D Cube files and automatic camera
-color-space detection are not implemented.
+The downstream compositor/delivery remains SDR. RAW still development and OCIO
+views are separate Develop operations; RAW-movie editing, HDR mastering,
+whole-timeline OCIO management and automatic camera color-space detection remain
+unimplemented.
 
 ## Calibrated cameras and physical rendering
 
@@ -245,8 +329,9 @@ camera animation is replaced; objects and lights remain. No path or photograph
 named in an imported document is opened. Camera import keeps orientation/roll,
 principal-point offsets and `fx/fy`; source and project aspect ratios must agree.
 COLMAP import supports PINHOLE and SIMPLE_PINHOLE only. Distorted camera models
-reject with an explicit error; numerical Brown-model utilities are not a footage
-undistortion feature. The import does not run a reconstruction or calibration solve.
+reject with an explicit error. Camera import does not undistort footage; the
+separate Calibrated lens node applies supplied Brown calibration to image pixels.
+The import does not run a reconstruction or calibration solve.
 
 The camera inspector exposes sensor height and focal length, with vertical FOV
 as the authoritative saved projection. Lens edits derive FOV; contradictory API
@@ -267,7 +352,7 @@ engineering requirements.
 ## Node compositing
 
 Select a picture clip and open **Composite**. Add and connect grade, blur,
-sharpen, chroma-key, RGB curves, rectangle/ellipse/polygon mask, and merge nodes. Connections,
+sharpen, chroma-key, RGB curves, rectangle/ellipse/polygon/Bézier mask, and merge nodes. Connections,
 parameters, node positions, and the chosen output are saved with the clip.
 The **Masked correction** action creates an editable branch: the original
 picture is merged with a graded, masked version of itself. Masks support
@@ -297,7 +382,9 @@ Grade, blur, chroma similarity/blend, merge opacity and mask placement/shape
 parameters have independent keyframe channels. Use the diamond beside a property
 to key it at the playhead. Once keyed, editing that property writes its own key;
 other channels keep their existing timing. Keys support linear, hold, ease-in,
-ease-out and ease-in/out, with frame navigation and deletion. Polygon path
+ease-out, ease-in/out and **Cubic · custom tangents**, with frame navigation and
+deletion. Cubic incoming/outgoing progress slopes are bounded to 0–3 for monotone
+interpolation; arbitrary overshooting time curves are not supported. Polygon path
 animation preserves vertex count/order; each completed vertex drag is one undo
 entry. Topology changes are disabled while the path is animated. Sharpen amount,
 curve control points and chroma color remain static in this release.
@@ -308,6 +395,42 @@ A resource limit bounds canvas pixels multiplied by active graph nodes to
 268,435,456. Scalar animation has up to 128 keys per channel, polygon paths up to
 64; a graph has at most 1,024 keys and 8,192 animated coordinate values.
 Disconnected nodes remain editable but are not rendered.
+
+### Cubic Bézier roto and point feather
+
+Add a **Shape mask** node, then choose **Bezier roto** in its shape selector.
+Drag an anchor or its incoming/outgoing handle; Shift-drag a handle mirrors the
+opposite handle. Numeric anchor/handle fields, **Smooth handles**, **Corner**,
+**Split next segment** and **Remove anchor** edit the retained cubic path.
+**Point feather scale** multiplies the global **Inward feather** at each anchor.
+The path diamond keys anchors, handles and feather together. All path keys keep
+consistent anchor count and order; splitting/removing an anchor updates every
+key. Splitting uses exact De Casteljau subdivision of the cubic. A completed
+gesture creates one undo entry; Escape cancels a drag.
+
+Paths contain 2–32 anchors and at most 64 path keys. The graph's shared 1,024-key
+and 8,192-value budgets still apply. NumPy in the optional imaging runtime
+rasterizes actual 16-bit coverage with 2×2 sampling and adaptive cubic flattening
+at a 0.125-pixel tolerance. Paused frames and export use the same prepared matte;
+animated masks retain the clip's trim/split frame domain. Worker output is
+content-verified and bounded to 4 GiB; preparation is cancellable. Longer or
+larger shots can exceed the processing bound.
+
+**Import SVG · replace** accepts one supported closed path and replaces that
+shape and its animation in one undoable edit. **Export SVG boundary** writes its
+cubic boundary; CINEMATICUM metadata also retains transforms and point feather.
+An ordinary SVG reader sees the boundary, not CINEMATICUM's feather matte.
+SVG imports are limited to 256 KiB and one closed M/L/H/V/C/S/Q/T/Z path;
+arcs, groups, SVG transforms and external resources are unsupported. This bounded
+exchange does not supply a general SVG/Lottie document, roto-layer hierarchy or
+paint system.
+
+Grade, curves, blur, sharpen, chroma-key and calibrated-lens nodes expose an
+optional **Effect mask · alpha** input. Connect the alpha output of a mask branch
+and optionally invert it to restrict that effect. Validation includes mask edges
+when checking graph cycles; rendered interpolation retains associated color and
+alpha. **Save graph** and **Import graph** exchange bounded graph JSON using the
+current project's media IDs; they do not package or remap external media.
 
 ### Calibrated footage lens processing
 
@@ -412,10 +535,19 @@ when no verified content hash matches, then **Review timeline**. The preview
 reports the candidate's tracks, clips, rate and warnings. **Replace timeline**
 applies it with one undo checkpoint; saving remains separate. The importer never
 opens external paths/URLs from a document. A changed source edit invalidates
-stale private metadata. Nested stacks, transitions, timewarps, reverse, same-track
-overlaps and unsupported final gaps are rejected instead of silently flattened.
-AAF, Premiere XML, Resolve projects and general OTIO plugin schemas are not
-supported. The request/document size limit is 8 MiB.
+stale private metadata. Bounded nested `Stack`/`Track` exchange preserves cuts,
+trimmed nested source ranges, companion picture/audio roles and explicit/trailing
+or all-gap durations. Public-only imports create editable sequences; existing
+destination sequences remain. An unchanged CINEMATICUM roundtrip also restores
+all active/inactive sequence authoring only after byte-identity and regenerated
+public-timing/structure checks.
+
+Nested cut exchange uses the shared project clock and sequence bounds. Export
+rejects retime/reverse, same-track overlaps and transitions. Trimmed OTIO Tracks
+or a trimmed top-level Stack, disabled nested sequences/clips and general plugin
+schemas require explicit conversion. Effects, captions and mixer gains remain
+private metadata rather than portable OTIO effects. AAF, Premiere XML and Resolve
+project translation are unsupported. The request/document size limit is 8 MiB.
 
 
 ## Create and render 3D scenes
@@ -430,8 +562,19 @@ camera and light keys with interpolation controls. Camera position/target/FOV
 and light position/target/power/size can all be animated.
 Scene recipes are stored in the same project and participate in undo and save.
 
-**Render scene** builds the authored scene in Blender using Cycles CPU,
-renders actual frames, and admits the encoded movie into the media bin.
+**Render scene** builds the authored scene in Blender using Cycles, renders
+actual frames, and admits the encoded movie into the media bin. CPU remains the
+default. **Light paths & sampling → Compute device** selects CPU, Metal, CUDA,
+OptiX, HIP or oneAPI. The executing Blender instance enumerates devices and
+requires the chosen backend; unavailable GPUs fail explicitly without a silent
+CPU fallback. Recipe and receipt retain requested/actual device information.
+After an earlier short harness timed out, a normal owned Metal job completed
+in 82.430497 seconds. Independent verification passed 18 checks in 6.694 seconds,
+covering decoded pixels, the retained `.blend`, the actual Metal device receipt
+and absence of CPU fallback. The tested scene was one 192 × 128 frame with four
+samples and no denoising; this does not establish large-scene throughput or
+other GPU backends. Device preferences are machine/session specific even when
+the retained `.blend` stores the GPU flag and recipe.
 The completed job also offers the editable `.blend` source. Add the movie to
 the timeline to edit and composite it with footage, sound, and titles.
 Enable **Linear EXR** in the scene output controls to retain float32 RGBA beauty
@@ -453,6 +596,21 @@ New cameras use transported aiming to prevent an abrupt roll at a world-axis
 pole. Older scenes retain their saved world-up framing until changed explicitly.
 Camera/target and aimed-light paths are checked over the complete eased interval,
 including subframes; undefined coincident aiming is rejected before rendering.
+
+### Object hierarchy
+
+Select an object and use **Parent · local transform** to choose another object
+or **World · no parent**. The outliner displays the hierarchy. Position, rotation,
+scale and pose keys are local to the parent; changing the parent preserves local
+values and changes the inherited world pose. Parent animation, rotation and
+nonuniform scale compose through the actual affine matrix in the viewport and
+retained Blender scene. World-space move handles/nudges convert back to the
+child's local coordinates.
+
+Cycles, missing parents and hierarchies deeper than 24 levels are rejected.
+Reparent or remove children before deleting their parent. Camera/light parenting,
+constraints, armatures and automatic world-pose-preserving reparenting are not
+implemented. Previously unparented scenes retain their existing transform behavior.
 
 ### Import real mesh geometry
 
@@ -486,8 +644,9 @@ subdivision shares edge midpoints with neighboring faces; deletion removes
 selected faces and unused vertices. Delete/Backspace in Edit mesh acts on face
 selection instead of removing the object.
 
-The ordered modifier stack exposes **Mirror**, **Bevel** and **Subdivision**
-(Catmull–Clark or Simple). Add, adjust, reorder, enable, remove or apply modifiers
+The ordered modifier stack exposes **Mirror**, **Bevel**, **Subdivision**
+(Catmull–Clark or Simple), **Solidify**, **Array**, **Decimate**, **Smooth** and
+**Simple Deform** (Twist, Bend, Taper or Stretch). Add, adjust, reorder, enable, remove or apply modifiers
 inside CINEMATICUM. The installed Blender engine evaluates the actual geometry
 before a candidate enters shared undo history. The shaded viewport displays that
 evaluated mesh; the retained `.blend` contains the original cage and live
@@ -497,14 +656,34 @@ after an intentional engine update. Applying the stack reevaluates before baking
 undo restores both the cage and stack.
 
 Edited geometry receives a new canonical hash. Original import identity stays
-separate in provenance and source files are unchanged. Geometry edits regenerate
-normals and currently clear imported UV corners with an explicit message.
-Selections are bounded to 512 elements; cages to 10,000 vertices, 10,000 faces
-and 60,000 corners; stacks to four modifiers and subdivision to three levels.
-Cages and evaluations together share a 5 MiB scene geometry budget. Evaluation
-uses one owned Blender worker at a time, with a 45-second limit per evaluation.
-Parenting, edge tools, sculpting, UV authoring, rigs, shape keys, geometry nodes
-and simulation remain missing.
+separate in provenance and source files are unchanged. Vertex-position changes
+retain UV corners and seams; topology-changing extrusion, subdivision and
+deletion clear them and require reprojection. Selections are bounded to 512
+elements; cages to 10,000 vertices, 10,000 faces and 60,000 corners; stacks to
+eight modifiers and subdivision to three levels. Array count is 1–64; complexity
+admission includes Array/Solidify expansion. Cages and evaluations together share
+a 5 MiB scene geometry budget. Evaluation uses one owned Blender worker at a
+time, with a 45-second limit per evaluation. Edge tools, sculpting, rigs, shape
+keys, geometry nodes and simulation remain missing.
+
+### Edit UV coordinates
+
+After **Edit mesh**, the **UV coordinates** controls project the whole cage or
+selected faces using Box atlas, planar XY/XZ/YZ or individual-face mapping.
+**Smart unwrap** executes Blender's real smart projection on the whole cage. **Separate selected
+faces** creates independent UV links at the selection boundary. **Pack islands**
+places connected islands in separate grid cells with margin while preserving
+each island's aspect ratio; it does not optimize arbitrary packing or equalize
+texel density.
+
+Click or Shift-click UV points, drag them, or select an exact UV index. **UVs of
+selected faces** and **Select all UVs** support bounded selections of up to 512
+points. Edit the U/V center, **Rotate 90°**, **Mirror U**, or scale the selection
+by 0.5×/2×. Arrow keys move 0.01 UV units, or 0.1 with Shift. Escape cancels a
+pointer drag. Accepted operations pass through the same evaluated modeling job
+and shared undo as mesh edits. Seams and quad/n-gon UV corners survive the actual
+Blender cage and retained source. Texture painting, texture-image assignment
+and a material shader graph remain separate missing authoring systems.
 
 ### Existing Blender scenes
 
@@ -529,6 +708,50 @@ Pack external resources in the source `.blend` before importing it: only the
 selected scene file is copied, not a directory of linked assets.
 
 ## Local AI video generation
+
+### Managed engine inside Studio
+
+Open **Generate → Local generation setup**, choose **Install local engine**, then
+**Start engine**. Choose shot settings and click **Use these settings in this
+project**. Back in Generate, enter the prompt, negative prompt and seed, then
+choose **Generate media**. The completed actual video enters the same media bin
+and can be added to the timeline. Setup and startup are owned, cancellable app
+jobs; closing their dialog leaves the job running and reopening it restores
+its controls. Quitting the application stops its owned generation process.
+
+The managed runtime is pinned ComfyUI 0.42.1 with 71 dependency wheels and three
+Wan 1.3B model files. A real installation verified all 10,634,173,896 downloaded
+bytes, then started the owned MPS process and passed an 11-node core workflow
+preflight. Files live below `~/Library/Application Support/CINEMATICUM/Generation`,
+separate from the application bundle and any prior ComfyUI installation.
+[The runtime lock](generation-runtime-lock.json) records source, model and
+dependency identities. Setup requires Apple Silicon, macOS 14+ and a compatible
+Python 3.13; it checks free space before downloading and preserves resumable
+partials. The core managed workflow uses no custom nodes or paid/API services.
+
+The default shot settings are 480 × 272, 17 frames, 20 sampling steps, guidance 6
+and 16 fps. Custom dimensions use multiples of 16 within 192–832 × 128–480;
+length is 9–81 frames in steps of four, and sampling steps are 4–50. These are
+accepted parameter bounds, not a performance or quality guarantee on every Mac.
+
+Actual execution is verified for **192 × 128, nine frames at 16 fps, four steps,
+seed 42**, completed in **44.410 seconds**. Independent media verification and
+native playback each passed **14/14 checks**; their combined acceptance took
+1.393 seconds. All nine decoded source frames matched the native canvas, real
+byte-range requests served the admitted movie, and Add/Play/Save preserved its
+provenance. The test used a copy in an isolated ENGINE TEST project, with no
+export or generated-media substitute and no change to the original snapshot.
+This verifies the small take's execution and editing path, not production
+quality or feature parity with the requested AI products.
+
+The normal default 480 × 272/17-frame/20-step attempt was cancelled about
+21 seconds after starting when the application terminated normally through
+AppKit. The cause of that termination remains unknown. Default-size execution,
+quality, longer takes and sustained operation remain unverified. Consult
+[verification 0.9](VERIFICATION_0_9.md) and
+[the unfinished-work register](UNFINISHED_0_9.md) for the current acceptance state.
+
+### Separately configured workflows
 
 Start your existing ComfyUI installation, then use **Check engines** in Studio.
 The endpoint defaults to `http://127.0.0.1:8188`. Configure a different endpoint
@@ -622,11 +845,21 @@ foreign browser origins and invalid Host headers. Supported routes:
 | `GET/PUT /api/projects/{id}` | Open or save with revision conflict checking |
 | `POST /api/projects/{id}/import?name=...` | Stream a media file into this project |
 | `GET /api/projects/{id}/media/{asset_id}` | Play imported media; byte ranges supported |
+| `GET /api/projects/{id}/media-inventory` | Inspect original and verified proxy inventory |
+| `POST /api/projects/{id}/media-proxy` | Queue a frame-clock-verified preview derivative |
+| `GET /api/projects/{id}/media-proxy/{asset_id}?long_edge=...` | Play a verified proxy; byte ranges supported |
+| `POST /api/projects/{id}/media-relink?asset_id=...` | Restore selected bytes matching the exact original identity |
+| `POST /api/projects/{id}/editorial` | Return an unsaved sequence/caption/multicam/audio/timecode edit or caption export |
 | `POST /api/projects/{id}/render` | Snapshot and queue preview/H.264/ProRes export |
 | `POST /api/projects/{id}/frame-preview` | Render one unsaved timeline frame through the export graph |
 | `GET /api/projects/{id}/previews/{hash}.png` | Read a cached actual rendered frame |
 | `GET /api/projects/{id}/waveform/{asset_id}?bins=512` | Decode source min/max/RMS waveform data |
 | `POST /api/projects/{id}/workflow` | Validate and save API workflow JSON |
+| `GET /api/generation-runtime` | Inspect the owned managed runtime without installing or starting it |
+| `POST /api/projects/{id}/generation-setup` | Queue verified managed runtime/model installation |
+| `POST /api/projects/{id}/generation-start` | Queue owned engine startup and core-workflow preflight |
+| `POST /api/projects/{id}/generation-stop` | Stop only the engine owned by this Studio session |
+| `POST /api/projects/{id}/generation-workflow` | Save the selected managed shot settings as the project's API workflow |
 | `GET /api/projects/{id}/generation-readiness` | Inspect workflow and installed node/model compatibility |
 | `POST /api/projects/{id}/generate` | Queue configured ComfyUI generation |
 | `POST /api/projects/{id}/scene` | Render an authored scene and preserve editable Blender source |
@@ -664,8 +897,9 @@ foreign browser origins and invalid Host headers. Supported routes:
 The project stores integer timeline frames with exclusive clip ends and an exact
 rational frame rate from 1 to 60. The timeline rendering workspace is SDR; PQ/HLG material is
 refused until an explicit conversion is available. Practical limits are 512
-assets, 256 clips, 128 titles, six hours, and a maximum canvas area of
-33.5 million pixels. Timeline controls expose up to 16 video and 16 audio tracks.
+assets, 256 clips and 128 titles per sequence, six hours per sequence, and a
+maximum canvas area of 33.5 million pixels. The sequence library has the separate
+nesting, expanded-instance and total-clip bounds documented above. Timeline controls expose up to 16 video and 16 audio tracks.
 Authoring stills have a 45-second processing limit and a 64-image cache. They
 are evaluated from the timeline start, so long timelines may need an encoded
 preview. Scope values are display-referred SDR RGB, not reference HDR scopes.
@@ -673,11 +907,12 @@ preview. Scope values are display-referred SDR RGB, not reference HDR scopes.
 The optional still-image worker provides actual OCIO/ACES transforms and float
 EXR masters; authored Cycles scenes can also export float EXR sequences and
 passes. Those features do not extend float processing across the movie
-timeline. This implementation still lacks HDR finishing, multicam,
-optical-flow retiming, planar/affine tracking, neural segmentation, Bezier roto
-with feather points, unrestricted mesh/UV/rig editing, plugin-host
-compatibility, general AAF/XML/nested OTIO interchange, a full audio workstation, collaborative
-editing, or a production-grade realtime playback cache. Source
+timeline. This implementation still lacks HDR finishing, RAW-movie editing,
+automatic multicamera synchronization, optical-flow retiming, planar/affine
+tracking, neural segmentation, roto hierarchy/paint, unrestricted mesh/rig and
+texture editing, plugin hosting, general AAF/XML/native-project interchange,
+a full audio workstation, collaborative editing and a production-grade decoded
+GPU playback cache. Nested OTIO exchange is bounded to the documented cut subset. Source
 formats that a browser cannot decode can still render through FFmpeg; use an
 encoded preview to review them. ProRes is an export format and may require an
 external player on some browsers.
@@ -699,6 +934,9 @@ node --check scripts/studio/web/scene-editor.js
 node --check scripts/studio/web/tracking-ui.js
 node --check scripts/studio/web/interchange-ui.js
 node --check scripts/studio/web/imaging-ui.js
+node --check scripts/studio/web/editorial-ui.js
+node --check scripts/studio/web/media-management-ui.js
+node --check scripts/studio/web/sequence-playback.js
 make qc-stack
 ```
 
@@ -734,6 +972,25 @@ and compositor file-output controls. API tests cover output admission, upload,
 save/reopen, revision conflicts, byte-range playback, actual export, and
 path/origin/token boundaries. Synthetic
 test pictures, tones, and test scenes are test fixtures only, never a film.
+
+The 0.9 acceptance record includes 19 native 3D backend checks, eight native
+scene-control stages, four editorial-control stages, 26 roto checks and four
+media/proxy-control stages. The media stages independently decode every exported
+fixture frame and stereo PCM sample before/after proxy use and exact relinking.
+The earlier short Metal harness timed out; the later normal app render completed
+in 82.430497 seconds and passed 18 independent checks. Managed setup/start and
+the small actual Wan take described above are verified, including 14 independent
+media and 14 native playback checks. The default-size generation attempt remains
+unverified after application termination. Native audio is still unaccepted
+because the latest second-MOV-stream capture was silent.
+
+The frozen current-source Python run passed 515 tests in 153.974 seconds with
+zero failures and zero skips, including real RAW and official OTIO integration.
+That aggregate does not override the separate native audio failure.
+See [verification 0.9](VERIFICATION_0_9.md) for exact commands and results, and
+[the unfinished-work register](UNFINISHED_0_9.md) for the remaining fix,
+reverification and deployment work. The installed candidate and unpublished
+source are different states, as described at the start of this guide.
 
 Studio writes projects and exports into its own workspace. It does not alter
 the pinned GODCUT, the existing film verification commands, or

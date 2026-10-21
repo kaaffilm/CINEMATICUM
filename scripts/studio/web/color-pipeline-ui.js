@@ -68,12 +68,12 @@
       for(const mode of lut?.dimension===1?['linear','nearest']:['tetrahedral','trilinear','nearest'])option(select,mode,mode[0].toUpperCase()+mode.slice(1));
       select.value=[...select.options].some(o=>o.value===old)?old:(lut?.dimension===1?'linear':'tetrahedral');
       select.disabled=busy||!lut;$('[data-color-remove]').disabled=busy||!$('[data-color-lut]').value;
-      $('[data-color-lut-detail]').textContent=lut?`${lut.title}\n${lut.dimension}D · ${lut.size}${lut.dimension===3?'³':''} · ${lut.rows.toLocaleString()} rows\nDomain: [${lut.domain_min.join(', ')}] → [${lut.domain_max.join(', ')}]\nProject LUT: ${lut.sha256.slice(0,12)}`:($('[data-color-lut]').value?'This LUT is missing from the current project. Import the same file or remove the reference.':'No creative LUT selected.');
+      $('[data-color-lut-detail]').textContent=lut?`${lut.title}\n${lut.shaper_size?'1D shaper '+lut.shaper_size+' → ':''}${lut.dimension}D · ${lut.size}${lut.dimension===3?'³':''} · ${lut.rows.toLocaleString()} rows\n${lut.shaper_size?'Shaper domain: ['+lut.shaper_domain_min.join(', ')+'] → ['+lut.shaper_domain_max.join(', ')+'] · linear\n':''}Domain: [${lut.domain_min.join(', ')}] → [${lut.domain_max.join(', ')}]\nProject LUT: ${lut.sha256.slice(0,12)}`:($('[data-color-lut]').value?'This LUT is missing from the current project. Import the same file or remove the reference.':'No creative LUT selected.');
       $('[data-color-apply]').disabled=busy||Boolean($('[data-color-lut]').value&&!lut);
     }
     function fillLUTs(){
       const select=$('[data-color-lut]'),selected=candidate.lut?.sha256||'';
-      select.replaceChildren();option(select,'','None');for(const lut of luts)option(select,lut.sha256,`${lut.title} · ${lut.dimension}D ${lut.size}${lut.dimension===3?'³':''}`);
+      select.replaceChildren();option(select,'','None');for(const lut of luts)option(select,lut.sha256,`${lut.title} · ${lut.shaper_size?'1D + ':''}${lut.dimension}D ${lut.size}${lut.dimension===3?'³':''}`);
       if(selected&&!luts.some(lut=>lut.sha256===selected))option(select,selected,'Missing project LUT · '+selected.slice(0,12));
       select.value=selected;updateLUT();if(candidate.lut?.sha256===selected&&candidate.lut.interpolation)$('[data-color-interpolation]').value=candidate.lut.interpolation;
     }
