@@ -18,21 +18,58 @@
   const identity = () => [1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1];
   function matrixProduct(a,b) {const out=new Array(16).fill(0);for(let c=0;c<4;c++)for(let r=0;r<4;r++)for(let k=0;k<4;k++)out[c*4+r]+=a[k*4+r]*b[c*4+k];return out;}
   function cameraBasis(eye,target,roll=0) {const z=norm(sub(eye,target));let up=[0,0,1];if(Math.abs(dot(z,up))>.999)up=[0,1,0];const right=norm(cross(up,z)),baseUp=cross(z,right),c=Math.cos(roll*deg),s=Math.sin(roll*deg);return {right:add(mul(right,c),mul(baseUp,s)),up:add(mul(baseUp,c),mul(right,-s)),forward:mul(z,-1),backward:z};}
-  function lookAt(eye,target,roll=0) {const {right:x,up:y,backward:z}=cameraBasis(eye,target,roll);return [x[0],y[0],z[0],0,x[1],y[1],z[1],0,x[2],y[2],z[2],0,-dot(x,eye),-dot(y,eye),-dot(z,eye),1];}
+  function lookAt(eye,target,roll=0,basis=null) {const {right:x,up:y,backward:z}=basis||cameraBasis(eye,target,roll);return [x[0],y[0],z[0],0,x[1],y[1],z[1],0,x[2],y[2],z[2],0,-dot(x,eye),-dot(y,eye),-dot(z,eye),1];}
   function perspective(fov,aspect,near=.05,far=5000,shiftX=0,shiftY=0,focalRatio=1) {const f=1/Math.tan(fov*deg/2),nf=1/(near-far);return [f/aspect*focalRatio,0,0,0,0,f,0,0,-2*shiftX,-2*shiftY,(far+near)*nf,-1,0,0,2*far*near*nf,0];}
-  function cameraProjection(camera,width,height) {return matrixProduct(perspective(camera.fov,width/height,.05,5000,camera.shift_x||0,camera.shift_y||0,camera.focal_ratio??1),lookAt(camera.position,camera.target,camera.roll||0));}
+  function cameraProjection(camera,width,height) {return matrixProduct(perspective(camera.fov,width/height,.05,5000,camera.shift_x||0,camera.shift_y||0,camera.focal_ratio??1),lookAt(camera.position,camera.target,camera.roll||0,camera.basis));}
   function rotation(v) {const [x,y,z]=v.map(a=>a*deg),cx=Math.cos(x),sx=Math.sin(x),cy=Math.cos(y),sy=Math.sin(y),cz=Math.cos(z),sz=Math.sin(z);return [cz*cy,sz*cy,-sy,0,cz*sy*sx-sz*cx,sz*sy*sx+cz*cx,cy*sx,0,cz*sy*cx+sz*sx,sz*sy*cx-cz*sx,cy*cx,0,0,0,0,1];}
   function modelMatrix(pose) {const out=rotation(pose.rotation);for(let i=0;i<3;i++)for(let j=0;j<3;j++)out[i*4+j]*=pose.scale[i];for(let i=0;i<3;i++)out[12+i]=pose.position[i];return out;}
   function normalMatrix(pose) {const r=rotation(pose.rotation);return [r[0]/pose.scale[0],r[1]/pose.scale[0],r[2]/pose.scale[0],r[4]/pose.scale[1],r[5]/pose.scale[1],r[6]/pose.scale[1],r[8]/pose.scale[2],r[9]/pose.scale[2],r[10]/pose.scale[2]];}
   function transform(m,v,w=1) {return [0,1,2,3].map(r=>m[r]*v[0]+m[4+r]*v[1]+m[8+r]*v[2]+m[12+r]*w);}
-  const CAMERA_DEFAULTS={position:[7,-9,6],target:[0,0,1],fov:45,sensor_height_mm:24,roll:0,shift_x:0,shift_y:0,focal_ratio:1,dof_enabled:false,focus_distance:10,f_stop:5.6,aperture_blades:0,aperture_rotation:0,aperture_ratio:1};
+  const CAMERA_DEFAULTS={position:[7,-9,6],target:[0,0,1],fov:45,orientation_mode:'transport',sensor_height_mm:24,roll:0,shift_x:0,shift_y:0,focal_ratio:1,dof_enabled:false,focus_distance:10,f_stop:5.6,aperture_blades:0,aperture_rotation:0,aperture_ratio:1};
   const RENDER_DEFAULTS={max_bounces:12,diffuse_bounces:4,glossy_bounces:4,transmission_bounces:12,transparent_max_bounces:8,use_denoising:true,seed:0};
   const MATERIAL_DEFAULTS={color:'#d8a85f',roughness:.45,metallic:0,transmission:0,ior:1.5,emission_color:'#ffffff',emission_strength:0};
   const focalLength=(camera,pose=camera)=>camera.sensor_height_mm/(2*Math.tan(pose.fov*deg/2));
-  function defaultScene(options={}) {return {version:1,width:options.width||1280,height:options.height||720,frame_end:options.frame_end||96,samples:32,render:copy(RENDER_DEFAULTS),world:{color:'#263142',strength:.35},camera:copy(CAMERA_DEFAULTS),objects:[],lights:[{id:'key',name:'Key light',type:'area',position:[3,-4,7],target:[0,0,0],color:'#fff0dd',power:1100,size:5},{id:'fill',name:'Fill light',type:'area',position:[-4,1,4],target:[0,0,0],color:'#b8d7ff',power:650,size:4}]};}
+  function defaultScene(options={}) {return {version:1,width:options.width||1280,height:options.height||720,frame_end:options.frame_end||96,samples:32,render:copy(RENDER_DEFAULTS),world:{color:'#263142',strength:.35,transparent:false},output:{linear_exr:false,passes:[]},camera:copy(CAMERA_DEFAULTS),objects:[],lights:[{id:'key',name:'Key light',type:'area',position:[3,-4,7],target:[0,0,0],color:'#fff0dd',power:1100,size:5},{id:'fill',name:'Fill light',type:'area',position:[-4,1,4],target:[0,0,0],color:'#b8d7ff',power:650,size:4}]};}
   const POSE_FIELDS = {object:['position','rotation','scale'],camera:['position','target','fov','roll','shift_x','shift_y','focus_distance','f_stop'],light:['position','target','power','size']};
   const INTERPOLATIONS = {linear:'Linear',constant:'Hold',ease_in:'Ease in',ease_out:'Ease out',ease_in_out:'Ease in / out'};
   function easing(t,mode='linear') {if(mode==='constant')return 0;if(mode==='ease_in')return t*t;if(mode==='ease_out')return t*(2-t);if(mode==='ease_in_out')return t*t*(3-2*t);return t;}
+  function aimPoses(item) {
+    const base={frame:1,interpolation:'linear',position:item.position,target:item.target,roll:item.roll||0},keys=new Map([[1,base]]);
+    for(const key of item.keyframes||[])keys.set(key.frame,{...base,...key});
+    return [...keys.values()].sort((a,b)=>a.frame-b.frame);
+  }
+  function transportBasis(basis,backward) {
+    let axis=cross(basis.backward,backward),s=Math.hypot(...axis),c=clamp(dot(basis.backward,backward),-1,1),right=basis.right;
+    if(s>1e-12){axis=mul(axis,1/s);const tangent=cross(axis,right),along=dot(axis,right);right=right.map((v,i)=>v*c+tangent[i]*s+axis[i]*along*(1-c));}
+    else if(c<0)throw Error('The interpolated aim path crosses its target. Use Hold for an intentional cut.');
+    right=norm(sub(right,mul(backward,dot(right,backward))));
+    return {right,up:cross(backward,right),forward:mul(backward,-1),backward};
+  }
+  function cameraBasisAt(item,frame) {
+    const poses=aimPoses(item);let pose=poses[0],basis=cameraBasis(pose.position,pose.target);
+    for(let i=1;i<poses.length;i++){
+      const left=poses[i-1],right=poses[i];if(frame<=left.frame)break;
+      const held=left.interpolation==='constant';
+      if(frame<right.frame){const t=easing((frame-left.frame)/(right.frame-left.frame),left.interpolation);pose={position:left.position.map((v,i)=>v+(right.position[i]-v)*t),target:left.target.map((v,i)=>v+(right.target[i]-v)*t),roll:left.roll+(right.roll-left.roll)*t};}else pose=right;
+      if(held){if(frame>=right.frame)basis=cameraBasis(right.position,right.target);}
+      else basis=transportBasis(basis,norm(sub(pose.position,pose.target)));
+      if(frame<right.frame)break;
+    }
+    if((item.orientation_mode||'world_up')==='world_up')return cameraBasis(pose.position,pose.target,pose.roll);
+    const c=Math.cos(pose.roll*deg),s=Math.sin(pose.roll*deg);
+    return {...basis,right:add(mul(basis.right,c),mul(basis.up,s)),up:add(mul(basis.up,c),mul(basis.right,-s))};
+  }
+  function validateAimPaths(scene) {
+    for(const [item,label] of [[scene.camera,'Camera'],...scene.lights.filter(l=>l.type!=='point').map(l=>[l,'Directional light '+l.name])]){
+      const poses=aimPoses(item);
+      if([item,...poses].some(p=>dot(sub(p.position,p.target),sub(p.position,p.target))<.0001))throw Error(label+' position must stay at least 0.01 m from its target.');
+      for(let i=1;i<poses.length;i++){
+        const left=poses[i-1],right=poses[i];if(left.interpolation==='constant')continue;
+        const a=sub(left.position,left.target),d=sub(sub(right.position,right.target),a),length=dot(d,d),t=length?clamp(-dot(a,d)/length,0,1):0,closest=add(a,mul(d,t));
+        if(dot(closest,closest)<.0001)throw Error(`${label} aim path approaches its target within 0.01 m between frames ${left.frame} and ${right.frame}. Offset the path or use Hold for an intentional cut.`);
+      }
+    }
+  }
   function poseAt(item,frame,kind='object') {
     const props=POSE_FIELDS[kind],base=Object.fromEntries(props.map(p=>[p,item[p]??(kind==='camera'?CAMERA_DEFAULTS[p]:undefined)])),keys=new Map([[1,{frame:1,interpolation:'linear',...base}]]);
     for(const key of item.keyframes||[])keys.set(key.frame,{...base,...key});
@@ -107,11 +144,13 @@
     let playing=false,animation=0,disposed=false,gesture=null,orbitDrag=null,renderBusy=false,viewCamera=false;
     let tool='move',snap=false,autoKey=false,selectedKey=null,suppressClick=0,importBusy=false,revision=0;
     let editMode=false,elementMode='vertex',meshSelection=[],modelBusy=false;
+    let renderStart=1,renderEnd=null;
     let opts={width:bridge.width,height:bridge.height,fps:bridge.fps||24,renderAvailable:!!bridge.renderAvailable};
     let orbit={target:[0,0,1],azimuth:-.9,elevation:.48,distance:13};
     const clean=()=>{
       scene.objects??=[];scene.lights??=[];scene.frame_end??=96;scene.samples??=32;
-      scene.camera={...copy(CAMERA_DEFAULTS),...scene.camera};scene.render={...RENDER_DEFAULTS,...scene.render};
+      scene.camera={...copy(CAMERA_DEFAULTS),orientation_mode:'world_up',...scene.camera};scene.render={...RENDER_DEFAULTS,...scene.render};
+      scene.world={transparent:false,...scene.world};scene.output={linear_exr:false,passes:[],...scene.output};
       for(const item of scene.objects)item.material={...MATERIAL_DEFAULTS,...item.material};
       if(opts.width)scene.width=opts.width;if(opts.height)scene.height=opts.height;
       for(const item of [...scene.objects,scene.camera,...scene.lights])item.keyframes??=[];
@@ -137,16 +176,22 @@
     const removers=[],listen=(el,event,fn,options)=>{el.addEventListener(event,fn,options);return ()=>el.removeEventListener(event,fn,options);};
     const capture=pointerId=>{try{root.setPointerCapture?.(pointerId);}catch(_){};};
     const report=(text,error=false)=>{message.textContent=text;message.classList.toggle('error',error);message.hidden=!text;};
-    const getItem=(type,id)=>type==='object'?scene.objects.find(o=>o.id===id):type==='light'?scene.lights.find(o=>o.id===id):type==='world'?scene.world:type==='render'?scene.render:scene.camera;
+    const getItem=(type,id)=>type==='object'?scene.objects.find(o=>o.id===id):type==='light'?scene.lights.find(o=>o.id===id):type==='world'?scene.world:type==='render'?scene.render:type==='output'?scene.output:scene.camera;
     const selectedItem=()=>getItem(selected.type,selected.id);
     const animated=()=>['object','camera','light'].includes(selected.type);
-    const cameraPose=()=>({...poseAt(scene.camera,frame,'camera'),focal_ratio:scene.camera.focal_ratio});
+    const cameraPose=()=>{
+      const pose={...poseAt(scene.camera,frame,'camera'),focal_ratio:scene.camera.focal_ratio};
+      // A pointer drag can transiently pass through an undefined direction.
+      // Keep drawing until release; publish() rejects that path atomically.
+      try{pose.basis=cameraBasisAt(scene.camera,frame);}catch(_){const previous=gesture?.before?.camera||CAMERA_DEFAULTS;pose.basis=cameraBasis(previous.position,previous.target,previous.roll||0);}
+      return pose;
+    };
     const eye=()=>viewCamera?cameraPose().position:add(orbit.target,[Math.cos(orbit.azimuth)*Math.cos(orbit.elevation)*orbit.distance,Math.sin(orbit.azimuth)*Math.cos(orbit.elevation)*orbit.distance,Math.sin(orbit.elevation)*orbit.distance]);
     const target=()=>viewCamera?cameraPose().target:orbit.target;
     const tracks=()=>[...scene.objects.map(item=>({type:'object',id:item.id,name:item.name,item})),{type:'camera',id:'camera',name:'Render camera',item:scene.camera},...scene.lights.map(item=>({type:'light',id:item.id,name:item.name,item}))];
     function publish(before) {
       clean();
-      try {if(bridge.onChange?.(copy(scene))===false){if(before)scene=before;report('Finish the current project operation before editing.',true);refresh();return false;}}
+      try {validateAimPaths(scene);if(bridge.onChange?.(copy(scene))===false){if(before)scene=before;report('Finish the current project operation before editing.',true);refresh();return false;}}
       catch(error){if(before)scene=before;report(error.message||'Scene change could not be saved.',true);refresh();return false;}
       revision++;refresh();return true;
     }
@@ -176,7 +221,7 @@
     const vector=(label,path,values,step=.1,min=-1000,max=1000)=>`<fieldset><legend>${label}</legend><div class="scene-vector">${['X','Y','Z'].map((name,i)=>number(name,path+'.'+i,values[i],step,min,max)).join('')}</div></fieldset>`;
     function renderOutliner() {
       const previous=outliner.querySelector('.scene-object-list')?.scrollTop||0;
-      outliner.innerHTML=`<h3>Scene <span>${scene.objects.length} objects</span></h3><div class="scene-object-list">${tracks().map(t=>`<button class="${selected.type===t.type&&selected.id===t.id?'selected':''}" data-scene-select="${t.type}" data-id="${esc(t.id)}"><span>${t.type==='camera'?'▱':t.type==='light'?'☀':'◇'}</span>${esc(t.name)}<small>${t.item.keyframes.length?'◆ '+t.item.keyframes.length:t.type}</small></button>`).join('')}<button class="${selected.type==='world'?'selected':''}" data-scene-select="world"><span>◉</span>World</button><button class="${selected.type==='render'?'selected':''}" data-scene-select="render"><span>◈</span>Light paths & sampling</button></div>`;
+      outliner.innerHTML=`<h3>Scene <span>${scene.objects.length} objects</span></h3><div class="scene-object-list">${tracks().map(t=>`<button class="${selected.type===t.type&&selected.id===t.id?'selected':''}" data-scene-select="${t.type}" data-id="${esc(t.id)}"><span>${t.type==='camera'?'▱':t.type==='light'?'☀':'◇'}</span>${esc(t.name)}<small>${t.item.keyframes.length?'◆ '+t.item.keyframes.length:t.type}</small></button>`).join('')}<button class="${selected.type==='world'?'selected':''}" data-scene-select="world"><span>◉</span>World</button><button class="${selected.type==='render'?'selected':''}" data-scene-select="render"><span>◈</span>Light paths & sampling</button><button class="${selected.type==='output'?'selected':''}" data-scene-select="output"><span>↗</span>Render outputs</button></div>`;
       outliner.querySelector('.scene-object-list').scrollTop=previous;
     }
     function meshVertices(item=selectedItem()) {
@@ -201,13 +246,17 @@
         <label>Base color<input data-scene-property="material.color" type="color" value="${esc(item.material.color)}"></label>${number('Roughness','material.roughness',item.material.roughness,.05,0,1)}${number('Metallic','material.metallic',item.material.metallic,.05,0,1)}${number('Transmission','material.transmission',item.material.transmission,.05,0,1)}${number('Index of refraction','material.ior',item.material.ior,.01,1,4)}
         <label>Emission color<input data-scene-property="material.emission_color" type="color" value="${esc(item.material.emission_color)}"></label>${number('Emission strength','material.emission_strength',item.material.emission_strength,.1,0,1000)}<p class="scene-explanation">Glass refraction and light emitted onto other objects are calculated when rendering. Closed geometry gives glass its thickness.</p></fieldset>`;
       else if(selected.type==='camera')html=`<h3>Render camera</h3>${vector('Position · m','position',pose.position)}${vector('Look at · m','target',pose.target)}${number('Roll · degrees','roll',pose.roll,.1,-3600,3600)}
+        <label>Orientation motion<select data-scene-property="orientation_mode"><option value="transport" ${item.orientation_mode==='transport'?'selected':''}>Continuous transport</option><option value="world_up" ${item.orientation_mode==='world_up'?'selected':''}>World up · legacy</option></select></label><p class="scene-explanation">Continuous transport carries the initial camera frame through poles without a roll jump. Hold starts a new orientation at the cut. Legacy world up preserves older framing and may flip near vertical directions.</p>
         <fieldset><legend>Lens & sensor</legend>${number('Focal length · mm','__focal_length_mm',focalLength(item,pose),.1,1,1000)}${number('Vertical field · °','fov',pose.fov,.1,10,100)}${number('Sensor height · mm','sensor_height_mm',item.sensor_height_mm,.1,1,100)}<p class="scene-explanation">Active gate ${(item.sensor_height_mm*scene.width/scene.height/pose.focal_ratio).toFixed(2)} × ${item.sensor_height_mm.toFixed(2)} mm. Focal length and vertical field describe the same lens; changing either updates the other.</p></fieldset>
         <fieldset><legend>Depth of field</legend>${checkbox('Enable depth of field','dof_enabled',item.dof_enabled)}${number('Focus distance · m','focus_distance',pose.focus_distance,.01,.01,10000)}<button data-scene-action="focus-aim">Focus at look-at point</button>${number('Aperture · f-stop','f_stop',pose.f_stop,.1,.1,128)}
         <label>Aperture blades<select data-scene-property="aperture_blades" data-scene-numeric>${[0,...Array.from({length:14},(_,i)=>i+3)].map(n=>`<option value="${n}" ${n===item.aperture_blades?'selected':''}>${n||'Circular'}</option>`).join('')}</select></label>${number('Blade rotation · °','aperture_rotation',item.aperture_rotation,1,-180,180)}${number('Aperture ratio','aperture_ratio',item.aperture_ratio,.05,.1,10)}<p class="scene-explanation">Keyframe focus and f-stop for focus pulls. Depth of field appears in the rendered image. F-stop controls blur without changing exposure.</p></fieldset>
         <fieldset><legend>Calibrated framing</legend>${number('Principal shift X','shift_x',pose.shift_x,.001,-2,2)}${number('Principal shift Y','shift_y',pose.shift_y,.001,-2,2)}${number('Focal ratio fx / fy','focal_ratio',item.focal_ratio,.001,.1,10)}<p class="scene-explanation">Shifts are fractions of output width and height. Focal ratio is static for the shot. Camera view uses the same roll, principal point and focal ratio as the render.</p></fieldset>`;
       else if(selected.type==='light')html=`<div class="scene-inspector-heading"><h3>Light</h3><button data-scene-action="delete">Delete</button></div><label>Name<input data-scene-property="name" value="${esc(item.name)}" maxlength="120"></label><label>Type<select data-scene-property="type">${['area','point','sun'].map(t=>`<option ${item.type===t?'selected':''} value="${t}">${t}</option>`).join('')}</select></label>${vector('Position','position',pose.position)}${item.type!=='point'?vector('Look at','target',pose.target):''}<label>Color<input type="color" data-scene-property="color" value="${esc(item.color)}"></label>${number(item.type==='sun'?'Strength':'Power · watts','power',pose.power,item.type==='sun'?.1:25,0,10000)}${number(item.type==='sun'?'Angular size · degrees':'Size · scene units','size',pose.size,.1,.01,100)}`;
       else if(selected.type==='render')html=`<h3>Light paths & sampling</h3><p class="scene-explanation">These settings control the saved Cycles render. Each ray type is also limited by the total bounce count.</p>${number('Total bounces','max_bounces',item.max_bounces,1,0,64)}${number('Diffuse bounces','diffuse_bounces',item.diffuse_bounces,1,0,64)}${number('Glossy bounces','glossy_bounces',item.glossy_bounces,1,0,64)}${number('Transmission bounces','transmission_bounces',item.transmission_bounces,1,0,64)}${number('Transparent bounces','transparent_max_bounces',item.transparent_max_bounces,1,0,64)}${checkbox('Denoise render','use_denoising',item.use_denoising)}${number('Sampling seed','seed',item.seed,1,0,2147483647)}<p class="scene-explanation">Samples are set in the render bar. More samples reduce noise; additional bounces support deeper reflection and transmission paths.</p>`;
-      else html=`<h3>World</h3><label>Environment color<input type="color" data-scene-property="color" value="${esc(item.color)}"></label>${number('Environment strength','strength',item.strength,.05,0,5)}`;
+      else if(selected.type==='output'){
+        const passes={depth:'Depth · camera distance',normal:'Normal · world XYZ',vector:'Motion vectors',diffuse_color:'Diffuse color',emission:'Emission'},channels=4+(item.passes.length?4+item.passes.reduce((n,p)=>n+({depth:1,normal:3,vector:4,diffuse_color:3,emission:3}[p]||0),0):0),frames=(renderEnd??scene.frame_end)-renderStart+1,estimate=frames*scene.width*scene.height*(channels*8+8)/(1024**3);
+        html=`<h3>Render outputs</h3><div class="scene-vector"><label>First frame<input data-scene-render-range="start" type="number" min="1" max="${scene.frame_end}" step="1" value="${renderStart}"></label><label>Last frame<input data-scene-render-range="end" type="number" min="${renderStart}" max="${scene.frame_end}" step="1" value="${renderEnd??scene.frame_end}"></label></div><p class="scene-explanation">${frames} frames · ${(frames/opts.fps).toFixed(2)} seconds. Rendering a range keeps the full authored animation.</p>${checkbox('Keep scene-linear EXR masters','linear_exr',item.linear_exr)}<p class="scene-explanation">32-bit float RGBA frames preserve bright values and alpha. The download includes hashes, scene data and exact frame timing. The media bin receives an opaque display movie for editing.</p><fieldset><legend>Multilayer render passes</legend>${Object.entries(passes).map(([key,label])=>`<label class="scene-check">${label}<input data-scene-render-pass="${key}" type="checkbox" ${item.passes.includes(key)?'checked':''} ${item.linear_exr?'':'disabled'}></label>`).join('')}</fieldset><p class="scene-explanation">${item.linear_exr?`Allow about ${estimate.toFixed(2)} GiB of temporary disk space plus headroom; compression depends on the image. `:''}Enable Transparent background under World to preserve the scene silhouette in the EXR alpha. Normal and vector passes retain numerical data.</p>`;
+      }else html=`<h3>World</h3><label>Environment color<input type="color" data-scene-property="color" value="${esc(item.color)}"></label>${number('Environment strength','strength',item.strength,.05,0,5)}${checkbox('Transparent background','transparent',item.transparent)}<p class="scene-explanation">World lighting stays active. EXR masters preserve transparent pixels; the display movie composites them over black. Enable masters in Render outputs.</p>`;
       if(selected.type==='object'&&item.type==='mesh')html+=`<div class="scene-mesh-info"><h4>${item.modeling?'Authored control geometry':'Imported geometry'}</h4><p>${item.mesh.vertices.length.toLocaleString()} vertices · ${item.mesh.triangles.length.toLocaleString()} triangles</p><p>${item.mesh.uvs?.length?'UV coordinates retained':'No UV coordinates'} · ${item.mesh.normals?.length?'Corner normals retained':'Normals rebuilt from geometry'}</p>${item.mesh.source?`<p title="${esc(item.mesh.source.sha256)}">${esc(item.mesh.source.name)}</p>`:''}</div>`;
       if(animated())html+=`<div class="scene-keyframes"><h4>Motion <span>${item.keyframes.length} keys</span></h4><p>${item.keyframes.length?'Pose edits update a key at frame '+frame+'.':'Enable Auto key or add a pose key to begin animation.'} Drag diamonds in the motion tracks to retime. Hold keeps the preceding pose until the next key.</p></div>`;
       const selection=selected.type+':'+selected.id,scroll=inspector.dataset.selection===selection?inspector.scrollTop:0;
@@ -233,6 +282,7 @@
       }).join('')}`;updateFrameUI();renderKeyTools();
     }
     function refresh() {
+      renderStart=clamp(renderStart,1,scene.frame_end);if(renderEnd!==null)renderEnd=clamp(renderEnd,renderStart,scene.frame_end);
       if(disposed)return;clean();frame=clamp(frame,1,scene.frame_end);if(!selectedItem())selected={type:'camera',id:'camera'};
       if(selected.type!=='object'||!selectedItem()?.modeling){editMode=false;meshSelection=[];}else meshSelection=meshSelection.filter(i=>i>=0&&i<(elementMode==='vertex'?selectedItem().mesh.vertices.length:selectedItem().modeling.faces.length));
       if(selectedKey){const item=getItem(selectedKey.type,selectedKey.id);if(!item||(selectedKey.frame!==1&&!item.keyframes.some(k=>k.frame===selectedKey.frame)))selectedKey=null;}
@@ -288,14 +338,14 @@
       const r=canvas.getBoundingClientRect();let width=r.width,height=r.height;
       if(viewCamera){const aspect=scene.width/scene.height;if(width/height>aspect)width=height*aspect;else height=width/aspect;}
       const e=eye(),look=target(),c=viewCamera?cameraPose():{position:e,target:look,fov:45,roll:0,shift_x:0,shift_y:0,focal_ratio:1};
-      const {forward,right,up}=cameraBasis(e,look,c.roll);
+      const {forward,right,up}=c.basis||cameraBasis(e,look,c.roll);
       return {width,height,ox:(r.width-width)/2,oy:(r.height-height)/2,eye:e,target:look,fov:c.fov,shiftX:c.shift_x,shiftY:c.shift_y,focalRatio:c.focal_ratio,forward,right,up,vp:cameraProjection(c,width,height)};
     }
     function project(point,view) {const p=transform(view.vp,point);if(p[3]<=.05)return null;return {x:view.ox+(p[0]/p[3]+1)*view.width/2,y:view.oy+(1-p[1]/p[3])*view.height/2,z:p[3]};}
     function ray(x,y,view) {const tx=(2*(x-view.ox)/view.width-1-2*view.shiftX)*Math.tan(view.fov*deg/2)*view.width/view.height/view.focalRatio,ty=(1-2*(y-view.oy)/view.height-2*view.shiftY)*Math.tan(view.fov*deg/2);return {origin:view.eye,direction:norm(add(view.forward,add(mul(view.right,tx),mul(view.up,ty))))};}
     function axisParameter(pointer,origin,axis) {const b=dot(axis,pointer.direction),w=sub(origin,pointer.origin),den=1-b*b;return Math.abs(den)<.015?null:(b*dot(pointer.direction,w)-dot(axis,w))/den;}
     function planePoint(pointer,origin,normal) {const den=dot(pointer.direction,normal);if(Math.abs(den)<.025)return null;return add(pointer.origin,mul(pointer.direction,dot(sub(origin,pointer.origin),normal)/den));}
-    function cameraGuide() {const c=cameraPose(),{forward,right,up}=cameraBasis(c.position,c.target,c.roll),center=add(c.position,mul(forward,1.3)),h=1.3*Math.tan(c.fov*deg/2),w=h*scene.width/scene.height/c.focal_ratio,corners=[[-1,-1],[1,-1],[1,1],[-1,1]].map(([x,y])=>add(add(center,mul(right,w*(x-2*c.shift_x))),mul(up,h*(y-2*c.shift_y)))),points=[];for(let i=0;i<4;i++)points.push(...c.position,...corners[i],...corners[i],...corners[(i+1)%4]);lines(points,[.37,.56,.72]);}
+    function cameraGuide() {const c=cameraPose(),{forward,right,up}=c.basis,center=add(c.position,mul(forward,1.3)),h=1.3*Math.tan(c.fov*deg/2),w=h*scene.width/scene.height/c.focal_ratio,corners=[[-1,-1],[1,-1],[1,1],[-1,1]].map(([x,y])=>add(add(center,mul(right,w*(x-2*c.shift_x))),mul(up,h*(y-2*c.shift_y)))),points=[];for(let i=0;i<4;i++)points.push(...c.position,...corners[i],...corners[i],...corners[(i+1)%4]);lines(points,[.37,.56,.72]);}
     function drawGizmo(view) {
       for(const button of root.querySelectorAll('[data-scene-axis]'))button.hidden=true;gizmo=null;
       const item=selectedItem();if(!animated()||!item||playing||modelBusy||(viewCamera&&selected.type==='camera'))return;
@@ -426,13 +476,15 @@
     }
     function propertyChanged(event) {
       if(modelingPropertyChanged(event)||modelBusy)return;
+      if(event.target.hasAttribute('data-scene-render-range')){stop();const value=Math.round(Number(event.target.value));if(Number.isFinite(value)){if(event.target.dataset.sceneRenderRange==='start')renderStart=clamp(value,1,renderEnd??scene.frame_end);else renderEnd=clamp(value,renderStart,scene.frame_end);}refresh();return;}
+      if(event.target.hasAttribute('data-scene-render-pass')){if(!scene.output.linear_exr)return;const key=event.target.dataset.sceneRenderPass;commit(()=>{scene.output.passes=event.target.checked?[...new Set([...scene.output.passes,key])]:scene.output.passes.filter(p=>p!==key);});return;}
       const input=event.target.closest('[data-scene-property]');if(!input)return;stop();const item=selectedItem();if(!item)return;
       let value=input.type==='checkbox'?input.checked:input.type==='number'||input.hasAttribute('data-scene-numeric')?Number(input.value):input.value;if(input.type==='number'){if(!Number.isFinite(value)){refresh();return;}value=clamp(value,Number(input.min),Number(input.max));if(Number(input.step)===1)value=Math.round(value);}
       if(input.dataset.sceneProperty==='name'&&!value.trim()){refresh();return;}
       if(selected.type==='camera'&&input.dataset.sceneProperty==='__focal_length_mm'){
         commit(()=>{const pose=poseAt(item,frame,'camera'),fov=2*Math.atan(item.sensor_height_mm/(2*value))/deg;if(fov<10||fov>100)throw Error('This focal length gives a field of view outside the supported 10–100° range. Adjust the sensor height or choose another focal length.');pose.fov=fov;writePose(item,'camera',pose);});return;
       }
-      commit(()=>{const path=input.dataset.sceneProperty.split('.'),isPose=animated()&&POSE_FIELDS[selected.type].includes(path[0]);let destination=isPose?poseAt(item,frame,selected.type):item;const pose=destination;for(let i=0;i<path.length-1;i++)destination=destination[path[i]];destination[path.at(-1)]=value;if(isPose)writePose(item,selected.type,pose);if(selected.type==='camera'&&path[0]==='sensor_height_mm'&&[item,...item.keyframes].some(key=>focalLength(item,key)<1))throw Error('This sensor makes an authored focal length less than 1 mm. Enlarge the sensor or narrow the field of view.');});
+      commit(()=>{const path=input.dataset.sceneProperty.split('.'),isPose=animated()&&POSE_FIELDS[selected.type].includes(path[0]);let destination=isPose?poseAt(item,frame,selected.type):item;const pose=destination;for(let i=0;i<path.length-1;i++)destination=destination[path[i]];destination[path.at(-1)]=value;if(selected.type==='output'&&path[0]==='linear_exr'&&!value)scene.output.passes=[];if(isPose)writePose(item,selected.type,pose);if(selected.type==='camera'&&path[0]==='sensor_height_mm'&&[item,...item.keyframes].some(key=>focalLength(item,key)<1))throw Error('This sensor makes an authored focal length less than 1 mm. Enlarge the sensor or narrow the field of view.');});
     }
     async function importGeometry(event) {
       event.preventDefault();if(importBusy||disposed||typeof bridge.onImportMesh!=='function')return;
@@ -494,7 +546,7 @@
       if(command==='keyframe'){if(!animated())return;commit(()=>{ensureKey(selectedItem(),selected.type);selectedKey={...selected,frame};});return;}
       if(command==='delete-key'){if(!selectedKey)return;commit(()=>{const item=getItem(selectedKey.type,selectedKey.id);item.keyframes=item.keyframes.filter(k=>k.frame!==selectedKey.frame);selectedKey=null;});return;}
       if(command==='previous-key'||command==='next-key'){if(!animated())return;const keys=[1,...selectedItem().keyframes.map(k=>k.frame)].sort((a,b)=>a-b),next=command==='previous-key'?[...keys].reverse().find(k=>k<frame):keys.find(k=>k>frame);if(next!==undefined){stop();setFrame(next);}return;}
-      if(command==='render'){if(!opts.renderAvailable||!scene.objects.length||renderBusy||importBusy)return;renderBusy=true;stop();refresh();try{await bridge.onRender?.({scene:copy(scene),frame_start:1,frame_end:scene.frame_end});report('');}catch(error){report(error.message||'Scene render could not start.',true);}finally{renderBusy=false;refresh();}}
+      if(command==='render'){if(!opts.renderAvailable||!scene.objects.length||renderBusy||importBusy)return;renderBusy=true;stop();refresh();try{validateAimPaths(scene);await bridge.onRender?.({scene:copy(scene),frame_start:renderStart,frame_end:renderEnd??scene.frame_end});report('');}catch(error){report(error.message||'Scene render could not start.',true);}finally{renderBusy=false;refresh();}}
     }
     removers.push(listen(root,'click',action),listen(inspector,'change',propertyChanged));
     removers.push(listen(root.querySelector('.scene-import-form'),'submit',importGeometry),listen(root.querySelector('[data-scene-import-cancel]'),'click',()=>{if(!importBusy)importDialog.close();}),listen(importDialog,'cancel',event=>{if(importBusy)event.preventDefault();}));
@@ -544,5 +596,5 @@
       destroy(){disposed=true;stop();resizeObserver?.disconnect();for(const remove of removers)remove();if(gl){for(const mesh of Object.values(meshes)){gl.deleteBuffer(mesh.p);gl.deleteBuffer(mesh.n);}gl.deleteBuffer(lineBuffer);gl.deleteBuffer(normalBuffer);gl.deleteProgram(program);}host.replaceChildren();}
     };
   }
-  window.CinematicumSceneEditor={mount,defaultScene,poseAt,easing,meshGeometry,geometryBounds,intersectGeometry,cameraBasis,cameraProjection,focalLength};
+  window.CinematicumSceneEditor={mount,defaultScene,poseAt,easing,meshGeometry,geometryBounds,intersectGeometry,cameraBasis,cameraBasisAt,validateAimPaths,cameraProjection,focalLength};
 })();

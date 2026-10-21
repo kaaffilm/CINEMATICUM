@@ -22,6 +22,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 from imaging import (ARTIFACT_NAMES, DEFAULT_CONFIG, DEFAULT_DISPLAY, MAX_PIXELS,
                      MAX_RAW_BYTES, MAX_SENSOR_PIXELS, _hash_file, _identity,
                      _json_bytes, _owned, validate_imaging_recipe)
+from media_orientation import still_display_info
 
 
 def _modules(require_raw=False):
@@ -177,10 +178,14 @@ def decode_image(path, ffmpeg, ffprobe, np):
         raise ValueError("Imaging output is limited to 33.5 million pixels and 16,384 pixels per dimension.")
     if info.get("codec_name") not in {"png", "mjpeg", "webp", "tiff", "bmp", "exr"}:
         raise ValueError("Imaging accepts decoded PNG, JPEG, WebP, TIFF, BMP or EXR stills.")
+    # FFmpeg rotates/reflections EXIF at frame decode time. Container width and
+    # height are coded dimensions and would reshape portrait pixels wrongly.
+    info = {**info, **still_display_info(path, ffprobe, info, MAX_PIXELS)}
+    width, height = info["width"], info["height"]
     float_input = any(token in info.get("pix_fmt", "") for token in ("f32", "f16"))
     output_format = "gbrapf32le" if float_input else "rgba64le"
     data = _checked_command([ffmpeg, "-v", "error", "-nostdin", "-threads", "2", "-protocol_whitelist", "file,pipe",
-                             "-noautorotate", "-i", str(path), "-frames:v", "1", "-threads", "2",
+                             "-i", str(path), "-frames:v", "1", "-threads", "2",
                              "-f", "rawvideo", "-pix_fmt", output_format, "pipe:1"])
     if len(data) != width * height * (16 if float_input else 8):
         raise ValueError("The image decoder returned incomplete float pixels.")

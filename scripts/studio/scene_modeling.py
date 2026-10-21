@@ -381,9 +381,41 @@ def prepare_operation(obj, operation):
                     points.append([sum(points[v][axis] for v in face) / len(face) for axis in range(3)])
                     refined.extend([[v, edges[j], center, edges[j - 1]] for j, v in enumerate(face)])
             faces = refined
-        if obj['mesh']['uvs'] or obj['mesh']['normals']:
+        previous = obj['mesh']
+        rebuilt = _cage_mesh(points, faces)
+        if kind == 'move_vertices':
+            # Moving control points does not edit UVs. Imported cages are
+            # triangles, so independent corners and seams retain exact indices.
+            # For a polygon cage, retriangulation may change diagonals: remap
+            # by face-local corners instead of welding coincident UV seams.
+            if previous['uvs']:
+                rebuilt['uvs'] = copy.deepcopy(previous['uvs'])
+                rebuilt['uv_indices'] = []
+                offset = 0
+                for face in faces:
+                    count = len(face) - 2
+                    corners = {}
+                    for triangle, indices in zip(previous['triangles'][offset:offset + count],
+                                                 previous['uv_indices'][offset:offset + count]):
+                        for vertex, uv in zip(triangle, indices):
+                            if vertex in corners and corners[vertex] != uv and (
+                                    corners[vertex] < 0 or uv < 0 or previous['uvs'][corners[vertex]] != previous['uvs'][uv]):
+                                raise ValueError('This polygon has conflicting UVs at one control corner. Triangulate it before moving vertices.')
+                            corners[vertex] = uv
+                    rebuilt['uv_indices'].extend([[corners[vertex] for vertex in triangle]
+                                                   for triangle in rebuilt['triangles'][offset:offset + count]])
+                    offset += count
+            if previous['normals']:
+                if (not any(delta) or len(selected) == len(points)) and rebuilt['triangles'] == previous['triangles']:
+                    rebuilt['normals'] = copy.deepcopy(previous['normals'])
+                    rebuilt['normal_indices'] = copy.deepcopy(previous['normal_indices'])
+                else:
+                    warnings.append('Vertex deformation preserves UV corners and rebuilds surface normals from the changed geometry.')
+            rebuilt.pop('sha256', None)
+            rebuilt = validate_mesh(rebuilt)
+        elif previous['uvs'] or previous['normals']:
             warnings.append('Topology edits rebuild surface normals and clear imported UV corners. Original source hashes remain in the mesh origin.')
-        obj['mesh'] = _cage_mesh(points, faces)
+        obj['mesh'] = rebuilt
         modeling['faces'] = faces
     modeling.pop('evaluation', None)
     validate_modeling(obj, require_evaluation=False)

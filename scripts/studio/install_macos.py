@@ -40,8 +40,8 @@ def bundle_info():
         "CFBundleDisplayName": "CINEMATICUM Studio",
         "CFBundleExecutable": EXECUTABLE_NAME,
         "CFBundlePackageType": "APPL",
-        "CFBundleShortVersionString": "0.7.0",
-        "CFBundleVersion": "7",
+        "CFBundleShortVersionString": "0.8.0",
+        "CFBundleVersion": "8",
         "CFBundleIconFile": "StudioIcon.icns",
         "LSApplicationCategoryType": "public.app-category.video",
         "LSMinimumSystemVersion": "12.0",
@@ -81,7 +81,7 @@ def existing_bundle_identity(path):
 
 def copy_runtime(destination, source=STUDIO_SOURCE):
     destination.mkdir(parents=True)
-    for name in ("server.py", "engine.py", "adapters.py", "compositor.py", "scene.py", "generation_readiness.py", "frame_preview.py", "waveform.py", "timebase.py", "tracking.py", "spatial_import.py", "interchange.py", "camera_io.py", "color_pipeline.py", "scene_modeling.py", "modeling_blender.py", "imaging.py", "image_worker.py", "lens_assets.py"):
+    for name in ("server.py", "engine.py", "adapters.py", "compositor.py", "scene.py", "generation_readiness.py", "frame_preview.py", "waveform.py", "timebase.py", "tracking.py", "spatial_import.py", "interchange.py", "camera_io.py", "color_pipeline.py", "scene_modeling.py", "modeling_blender.py", "imaging.py", "image_worker.py", "lens_assets.py", "media_orientation.py", "recovery.py", "production.py", "project_archive.py"):
         path = source / name
         if path.is_symlink() or not path.is_file():
             raise ValueError("Required runtime source is missing or is a symlink: %s" % path)

@@ -16,7 +16,16 @@ for primitive and imported OBJ mesh scenes, materials, lighting, cameras, and po
 `.blend` sources. Configured local ComfyUI workflows can also produce media after
 node and model compatibility checks.
 
-Studio 0.7 adds independent media inputs in the node compositor, calibrated
+Studio 0.8 adds recovery checkpoints and saved-version history, portable project
+archive/restore, and production shot-plan binding and exact-frame assembly.
+Authored 3D scenes export scene-linear float32 RGBA EXR sequences and actual
+depth/normal/vector/diffuse/emission passes, alongside the review movie and
+editable scene. It also repairs nested-media OTIO preservation, EXIF orientation,
+camera aiming, mesh UV continuity, generation schema checks and decoder cleanup.
+The [0.8 verification record](scripts/studio/VERIFICATION_0_8.md) separates
+executed tests from remaining professional feature gaps.
+
+The previous upgrade added independent media inputs in the node compositor, calibrated
 Brown lens distortion and undistortion, slip/slide/roll edits, and direct mesh
 vertex/face editing with live Mirror, Bevel and Catmull–Clark modifiers. The Develop
 workspace executes OpenColorIO views, LibRaw camera development and aligned bracket

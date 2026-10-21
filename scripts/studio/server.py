@@ -42,8 +42,9 @@ from tracking import tracking_frame, track_clip, stabilization_motion, validate_
 from spatial_import import import_obj
 from camera_io import import_camera
 from color_pipeline import import_cube, list_luts
+import recovery
 
-VERSION = "0.7.0"
+VERSION = "0.8.0"
 MAX_UPLOAD = 8 * 1024 * 1024 * 1024
 MAX_JSON = 8 * 1024 * 1024
 IDENTIFIER = re.compile(r"^[a-f0-9]{32}$")
@@ -64,6 +65,11 @@ def atomic_json(path, value):
         os.fsync(f.fileno())
     try:
         os.replace(str(tmp), str(path))
+        directory_fd = os.open(str(path.parent), os.O_RDONLY | getattr(os, "O_DIRECTORY", 0))
+        try:
+            os.fsync(directory_fd)
+        finally:
+            os.close(directory_fd)
     finally:
         tmp.unlink(missing_ok=True)
 
@@ -120,10 +126,20 @@ class Store:
             # process-wide lock, never merely the in-process threading.RLock.
             (self.root / "projects").mkdir(exist_ok=True)
             (self.root / "jobs").mkdir(exist_ok=True)
+            # These names are reserved for streamed restore inputs, never
+            # admitted media. Once the exclusive workspace lock is held no
+            # previous process can still be uploading or restoring them.
+            for project_dir in (self.root / "projects").iterdir():
+                if not IDENTIFIER.fullmatch(project_dir.name) or project_dir.is_symlink() or not project_dir.is_dir():
+                    continue
+                for abandoned in project_dir.glob("archive-upload-*.zip"):
+                    if re.fullmatch(r"archive-upload-[a-f0-9]{32}\.zip", abandoned.name) and not abandoned.is_symlink() and abandoned.is_file():
+                        abandoned.unlink()
             self.token = secrets.token_urlsafe(32)
             self.comfy_url = comfy_url.rstrip("/")
             self.jobs = {}
             self.events = {}
+            self.futures = {}
             self.pool = ThreadPoolExecutor(max_workers=1, thread_name_prefix="cinematicum-render")
             self.preview_pool = ThreadPoolExecutor(max_workers=1, thread_name_prefix="cinematicum-frame")
             self._cap_cache = None
@@ -236,6 +252,12 @@ class Store:
         with self.lock:
             directory = self.project_dir(project_id)
             p = copy.deepcopy(project)
+            receipt = p.pop("_recovery", None)
+            if receipt is not None:
+                if not isinstance(receipt, dict):
+                    raise ValueError("Invalid recovery acknowledgement.")
+                recovery.identity(receipt.get("editor_id"))
+                recovery.sequence(receipt.get("sequence"))
             p["id"] = project_id
             p["version"] = 1
             p["name"] = str(p.get("name", "Untitled film"))[:160]
@@ -254,8 +276,51 @@ class Store:
                 p["settings"]["scene"] = validate_scene(p["settings"]["scene"], width=p["width"], height=p["height"])
             p["revision"] = current.get("revision", 0) + 1
             p["updated_at"] = time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
+            recovery.preserve_saved(directory, current, atomic_json)
             atomic_json(directory / "project.json", p)
+            try:
+                recovery.acknowledge(directory, receipt, current.get("revision", 0))
+            except (OSError, ValueError, KeyError):
+                # The committed edit is durable. Retain an unreadable draft for
+                # review instead of claiming that a successful save failed.
+                pass
             return p
+
+    def checkpoint(self, project_id, payload):
+        if not isinstance(payload, dict) or not isinstance(payload.get("project"), dict):
+            raise ValueError("A recovery checkpoint requires a project snapshot.")
+        with self.lock:
+            current = self.get(project_id)
+            p = copy.deepcopy(payload["project"])
+            if p.get("id") != project_id or p.get("revision") != current["revision"]:
+                raise ConflictError("The saved project changed. Reopen it before checkpointing this draft.")
+            p.pop("_recovery", None)
+            p["assets"] = current["assets"]
+            directory = self.project_dir(project_id)
+            p = validate_project(p, directory)
+            if not isinstance(p.get("settings", {}), dict):
+                raise ValueError("Project settings must be an object")
+            if p.get("settings", {}).get("scene") is not None:
+                p["settings"]["scene"] = validate_scene(p["settings"]["scene"], width=p["width"], height=p["height"])
+            return recovery.put(directory, payload.get("editor_id"), payload.get("sequence"), p, atomic_json)
+
+    def recovery(self, project_id, payload=None):
+        with self.lock:
+            current, directory = self.get(project_id), self.project_dir(project_id)
+            if payload is None:
+                return recovery.listing(directory, current)
+            if not isinstance(payload, dict):
+                raise ValueError("Recovery selection must be an object.")
+            if payload.get("action") == "discard":
+                recovery.discard(directory, payload.get("key"), payload.get("sequence"))
+                return {"discarded": True}
+            if payload.get("action") != "restore":
+                raise ValueError("Unknown recovery action.")
+            p, record = recovery.candidate(directory, current, payload.get("kind"), payload.get("key"), payload.get("sequence"))
+            p = validate_project(p, directory)
+            if p.get("settings", {}).get("scene") is not None:
+                p["settings"]["scene"] = validate_scene(p["settings"]["scene"], width=p["width"], height=p["height"])
+            return {"project": p, "base_revision": record["base_revision"], "saved_revision": current["revision"], "committed": False}
 
     def asset(self, project_id, asset_id):
         p = self.get(project_id)
@@ -351,7 +416,7 @@ class Store:
             return
         atomic_json(self.root / "jobs" / (job["id"] + ".json"), job)
 
-    def submit(self, project_id, kind, fn, snapshot=None):
+    def submit(self, project_id, kind, fn, snapshot=None, cleanup=None):
         with self.lock:
             self._require_open()
             active = sum(j["state"] in {"queued", "running"} for j in self.jobs.values())
@@ -367,13 +432,12 @@ class Store:
                 atomic_json(self.root / "jobs" / (job_id + ".snapshot"), snapshot)
 
         def execute():
-            if event.is_set():
-                with self.lock:
+            with self.lock:
+                if event.is_set():
                     job.update(state="cancelled", error="Job cancelled before starting", finished_at=time.time())
                     self.events.pop(job_id, None)
                     self._write_job(job)
-                return
-            with self.lock:
+                    return
                 job["state"] = "running"
                 self._write_job(job)
             last_write = [0.0]
@@ -406,7 +470,22 @@ class Store:
                     job["finished_at"] = time.time()
                     self._write_job(job)
                     self.events.pop(job_id, None)
-        (self.preview_pool if kind in EPHEMERAL_JOBS else self.pool).submit(execute)
+        def completed(_future):
+            try:
+                if cleanup is not None:
+                    cleanup()
+            finally:
+                with self.lock:
+                    self.futures.pop(job_id, None)
+
+        with self.lock:
+            future = (self.preview_pool if kind in EPHEMERAL_JOBS else self.pool).submit(execute)
+            self.futures[job_id] = future
+            # A cancelled queued Future never invokes execute(). It still owns
+            # an uploaded input, so cancellation and shutdown release it here.
+            future.add_done_callback(completed)
+            if event.is_set():
+                future.cancel()
         return copy.deepcopy(job)
 
     def job(self, job_id):
@@ -426,6 +505,9 @@ class Store:
                     job.update(state="cancelled", error="Job cancelled before starting", finished_at=time.time())
                     self.events.pop(job_id, None)
                     self._write_job(job)
+                    future = self.futures.get(job_id)
+                    if future is not None:
+                        future.cancel()
             return copy.deepcopy(job)
 
     def render(self, project_id, payload):
@@ -510,6 +592,36 @@ class Store:
         project["id"] = project_id
         project["assets"] = current["assets"]
         return validate_project(project, self.project_dir(project_id))
+
+    def archive_export(self, project_id, payload):
+        from project_archive import export_archive
+        snapshot = self.analysis_snapshot(project_id, payload)
+        directory = self.project_dir(project_id)
+
+        def work(job_id, progress, event):
+            output = directory / "exports" / (job_id + ".cinematicum.zip")
+            report = export_archive(snapshot, directory, output, cancel_event=event, progress=progress)
+            result = {key: report[key] for key in ("filename", "sha256", "size", "files", "total_bytes", "warnings", "issuance_effect")}
+            result.update(url=f"/api/projects/{project_id}/exports/{output.name}", project_revision=snapshot.get("revision"))
+            atomic_json(directory / "exports" / (job_id + ".json"), {"result": result, "issuance_effect": "NONE"})
+            return result
+        return self.submit(project_id, "archive-export", work, snapshot)
+
+    def archive_restore(self, project_id, incoming):
+        from project_archive import import_archive
+        self.get(project_id)
+        incoming = Path(incoming)
+        directory = self.project_dir(project_id)
+        if incoming.parent != directory or incoming.is_symlink() or not re.fullmatch(r"archive-upload-[a-f0-9]{32}\.zip", incoming.name):
+            raise ValueError("Archive restore requires a project-owned upload.")
+
+        def work(job_id, progress, event):
+            restored = import_archive(incoming, self.root / "projects", cancel_event=event, progress=progress)
+            return {"project_id": restored["id"], "name": restored["name"], **restored["archive_restore"]}
+
+        # Both worker completion and cancellation before execution release the
+        # upload. The request handler removes it if submission itself fails.
+        return self.submit(project_id, "archive-restore", work, cleanup=lambda: incoming.unlink(missing_ok=True))
 
     def model_mesh(self, project_id, payload):
         """Evaluate a candidate; only the editor's undoable apply changes a scene."""
@@ -636,7 +748,7 @@ class Store:
             raise ValueError("A prompt of 1–32000 characters is required")
         if isinstance(seed, bool) or not isinstance(seed, int) or not 0 <= seed < 2**53:
             raise ValueError("Seed must be an integer from 0 to 9007199254740991")
-        readiness = workflow_readiness(self.comfy_url, workflow)
+        readiness = workflow_readiness(self.comfy_url, workflow, prompt=prompt, negative=negative, seed=seed)
         if not readiness["ready"]:
             raise ValueError("Generation preflight failed: " + " ".join(readiness["errors"][:5]))
 
@@ -674,6 +786,7 @@ class Store:
 
         def work(job_id, progress, event):
             source = directory / "exports" / (job_id + ".blend")
+            masters = directory / "exports" / (job_id + ".zip")
             manifest = directory / "exports" / (job_id + ".json")
             source_published = False
             try:
@@ -685,18 +798,32 @@ class Store:
                     generated_source = Path(result["scene_path"])
                     if not generated_source.is_file() or generated_source.stat().st_size == 0:
                         raise RuntimeError("Scene renderer did not preserve its Blender source")
+                    masters_report = {}
+                    if result.get("masters_path"):
+                        generated_masters = Path(result["masters_path"])
+                        if (generated_masters.is_symlink() or not generated_masters.is_file()
+                                or not generated_masters.resolve().is_relative_to(Path(scratch).resolve())
+                                or digest_file(generated_masters) != result.get("masters_sha256")):
+                            raise RuntimeError("Scene-linear masters failed output identity validation")
+                        os.replace(str(generated_masters), str(masters))
+                        masters_report = {"masters_url": f"/api/projects/{project_id}/exports/{masters.name}",
+                                          "masters_filename": masters.name, "masters_sha256": result["masters_sha256"],
+                                          "masters_manifest": result["masters_manifest"]}
+                    if event.is_set():
+                        raise RuntimeError("Scene render cancelled")
                     os.replace(str(generated_source), str(source))
                     asset = self.admit(project_id, result["path"], recipe.get("name", "Scene") + " render.mp4", result.get("provenance"))
                     source_published = True
                     report = {"asset": asset, "url": f"/api/projects/{project_id}/media/{asset['id']}",
                               "scene_url": f"/api/projects/{project_id}/exports/{source.name}",
                               "scene_filename": source.name, "scene_sha256": digest_file(source),
-                              "project_revision": project["revision"]}
+                              "project_revision": project["revision"], **masters_report}
                     atomic_json(manifest, {"result": report, "snapshot": snapshot, "issuance_effect": "NONE"})
                     return report
             finally:
                 if not source_published:
                     source.unlink(missing_ok=True)
+                    masters.unlink(missing_ok=True)
                     manifest.unlink(missing_ok=True)
         return self.submit(project_id, "scene", work, snapshot)
 
@@ -939,7 +1066,7 @@ class Handler(BaseHTTPRequestHandler):
     def dispatch_get(self):
         parsed = urlparse(self.path)
         parts = unquote(parsed.path).strip("/").split("/")
-        if parsed.path in {"/", "/index.html", "/app.js", "/style.css", "/editing.js", "/viewer-tools.js", "/compositor-ui.js", "/scene-editor.js", "/scene-editor.css", "/tracking-ui.js", "/interchange-ui.js", "/camera-io-ui.js", "/color-pipeline-ui.js", "/imaging-ui.js"}:
+        if parsed.path in {"/", "/index.html", "/app.js", "/style.css", "/editing.js", "/viewer-tools.js", "/compositor-ui.js", "/scene-editor.js", "/scene-editor.css", "/tracking-ui.js", "/interchange-ui.js", "/camera-io-ui.js", "/color-pipeline-ui.js", "/imaging-ui.js", "/recovery-ui.js", "/production-ui.js", "/archive-ui.js"}:
             return self.file(WEB / ("index.html" if parsed.path == "/" else parsed.path[1:]))
         if parts == ["api", "bootstrap"]:
             projects = self.store.projects()
@@ -959,6 +1086,8 @@ class Handler(BaseHTTPRequestHandler):
             project_id = parts[2]
             if len(parts) == 3:
                 return self.json(200, self.store.get(project_id))
+            if len(parts) == 4 and parts[3] == "recovery":
+                return self.json(200, self.store.recovery(project_id))
             if len(parts) == 4 and parts[3] == "generation-readiness":
                 return self.json(200, self.store.generation_readiness(project_id))
             if len(parts) == 4 and parts[3] == "color-luts":
@@ -991,9 +1120,9 @@ class Handler(BaseHTTPRequestHandler):
                     raise ValueError("Invalid frame preview filename")
                 return self.file(self.store.project_dir(project_id) / "previews" / parts[4])
             if len(parts) == 5 and parts[3] == "exports":
-                if not re.fullmatch(r"[a-f0-9]{32}\.(mp4|mov|json|blend|otio)", parts[4]):
+                if not re.fullmatch(r"[a-f0-9]{32}(\.(mp4|mov|json|blend|otio|zip|cinematicum\.zip)|-shot-plan\.json)", parts[4]):
                     raise ValueError("Invalid export filename")
-                return self.file(self.store.project_dir(project_id) / "exports" / parts[4], download=parts[4].endswith((".blend", ".otio")) or "download" in parse_qs(parsed.query))
+                return self.file(self.store.project_dir(project_id) / "exports" / parts[4], download=parts[4].endswith((".blend", ".otio", ".zip", "-shot-plan.json")) or "download" in parse_qs(parsed.query))
             if len(parts) == 5 and parts[3] == "analysis":
                 if not re.fullmatch(r"[a-f0-9]{32}\.(png|json)", parts[4]):
                     raise ValueError("Invalid analysis filename")
@@ -1023,6 +1152,52 @@ class Handler(BaseHTTPRequestHandler):
             if self.command != "POST" or len(parts) != 4:
                 raise FileNotFoundError("Route does not exist")
             action = parts[3]
+            if action == "checkpoint":
+                return self.json(200, self.store.checkpoint(project_id, self.body()))
+            if action == "recovery":
+                return self.json(200, self.store.recovery(project_id, self.body()))
+            if action in {"production-review", "production-plan", "production-conform", "production-export"}:
+                from production import review_plan, prepare_plan, conform_plan, export_plan
+                payload = self.body()
+                project = self.store.analysis_snapshot(project_id, payload)
+                if action == "production-export":
+                    result = export_plan(project)
+                    output = directory / "exports" / (uuid.uuid4().hex + "-shot-plan.json")
+                    atomic_json(output, result["document"])
+                    result.update(url=f"/api/projects/{project_id}/exports/{output.name}?download=1",
+                                  filename=output.name, sha256=digest_file(output))
+                    return self.json(200, result)
+                operation = {"production-review": review_plan, "production-plan": prepare_plan,
+                             "production-conform": conform_plan}[action]
+                options = {"replace_format": payload.get("replace_format", False)} if action == "production-conform" else {}
+                return self.json(200, operation(payload.get("document"), project, directory,
+                                               payload.get("bindings"), **options))
+            if action == "archive-export":
+                return self.json(202, self.store.archive_export(project_id, self.body()))
+            if action == "archive-restore":
+                from project_archive import MAX_BYTES
+                if self.headers.get_content_type() != "application/octet-stream":
+                    raise ValueError("Expected a selected archive file as application/octet-stream")
+                length = self.length(MAX_BYTES)
+                incoming = directory / ("archive-upload-" + uuid.uuid4().hex + ".zip")
+                submitted = False
+                try:
+                    with incoming.open("xb") as target:
+                        remaining = length
+                        while remaining:
+                            block = self.rfile.read(min(1024 * 1024, remaining))
+                            if not block:
+                                raise ValueError("Project archive upload was interrupted")
+                            target.write(block)
+                            remaining -= len(block)
+                        target.flush()
+                        os.fsync(target.fileno())
+                    job = self.store.archive_restore(project_id, incoming)
+                    submitted = True
+                    return self.json(202, job)
+                finally:
+                    if not submitted:
+                        incoming.unlink(missing_ok=True)
             if action == "imaging-raw-import":
                 from imaging import import_raw_source
                 length = self.length(min(MAX_UPLOAD, 512 * 1024 * 1024))

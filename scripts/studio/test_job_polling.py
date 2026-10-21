@@ -13,7 +13,7 @@ class JobPollingTests(unittest.TestCase):
 const fs=require('fs'),vm=require('vm'),assert=require('assert');
 const path=JSON.parse(fs.readFileSync(0,'utf8')).path,source=fs.readFileSync(path,'utf8');
 const controls=new Map(),state={project:{id:'project',name:'ENGINE TEST'}};
-const $=key=>{if(!controls.has(key))controls.set(key,{});return controls.get(key);};
+const $=key=>{if(!controls.has(key))controls.set(key,{dataset:{}});return controls.get(key);};
 let pending=[],finished=[];
 const context={state,$,finite:(v,d=0)=>Number.isFinite(Number(v))?Number(v):d,toast:()=>{},
 setTimeout:fn=>fn(),api:()=>new Promise((resolve,reject)=>pending.push({resolve,reject})),
@@ -21,7 +21,9 @@ finishJob:async job=>finished.push(job.id)};
 vm.createContext(context);
 vm.runInContext(source.slice(source.indexOf('async function trackJob('),source.indexOf('\nasync function finishJob(')),context);
 (async()=>{
+ $('#open-restored-project').dataset.projectId='previous-restored-project';
  const first=context.trackJob({id:'old',state:'running'},'old','render');
+ assert.strictEqual($('#open-restored-project').hidden,true);assert.strictEqual($('#open-restored-project').dataset.projectId,undefined);
  const second=context.trackJob({id:'new',state:'running'},'new','render');
  pending.shift().resolve({id:'old',state:'completed',result:{wrong:true}});
  assert.strictEqual(await first,null);assert.strictEqual(state.job.id,'new');assert.deepStrictEqual(finished,[]);

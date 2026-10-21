@@ -1,4 +1,4 @@
-# CINEMATICUM Studio 0.7
+# CINEMATICUM Studio 0.8
 
 A working local audiovisual editor. Media are imported into an owned project,
 edited on a frame-based timeline, previewed, and exported through real render
@@ -10,20 +10,68 @@ issuance effect.
 
 ## This upgrade
 
-Studio 0.7 adds independent project-media sources inside a composition, calibrated
-Brown lens distortion/undistortion, editable mesh vertices and faces, live
-Mirror/Bevel/Subdivision modifiers, and slip/slide/roll timeline edits. Image
-development adds actual OpenColorIO processing, camera RAW development and
-exposure-bracket merging, with separate scene-linear float EXR masters and
-display-rendered stills. Interrupted job polling can be retried without losing
-the identity of the submitted job.
+Studio 0.8 adds recoverable unsaved edits, previous saved versions, portable
+project archives, and an integrated production shot-plan workflow. Authored 3D
+scenes can retain scene-linear float32 RGBA EXR sequences and depth, normal,
+motion-vector, diffuse-color and emission passes alongside their review movie
+and editable Blender source. Continuous camera aiming and deformed mesh UV
+seams are preserved. OTIO self-roundtrips identify and rebind nested compositor
+and title media by bytes; still-image admission and imaging agree on all eight
+EXIF orientations. Generation preflight checks installed socket types and
+reachable video output, and deleted clips release their playback resources.
 
 These operations use CINEMATICUM's own controls and project data. The release
 retains calibrated fSpy/COLMAP camera import, physical camera/material controls,
 Cycles rendering, exact rational clocks, animated compositing, measured point
 tracking, OBJ/MTL import, Cube LUTs and bounded OpenTimelineIO interchange.
 Read the [source comparison and capability audit](CAPABILITY_AUDIT.md) for the
-implemented scope, source evidence, tests and remaining professional gaps.
+reference-system comparison, and [the capability ledger](capabilities.json) for
+the current implemented scope and remaining professional gaps. Execution
+evidence for this upgrade is recorded in [verification 0.8](VERIFICATION_0_8.md).
+
+## Recover edits and move projects
+
+Unsaved changes are checkpointed after 750 ms of inactivity, or within three
+seconds during continuous editing. This protects the current edit without
+changing the committed project. The header reports recovery status separately
+from Save. **History** lists recoverable drafts and up to 20 previous saved
+versions. Recovery is explicit, creates one undo entry, and still requires Save
+to commit. The current media inventory is retained when recovering an older
+edit. Drafts from different editor instances remain separate; an older response
+cannot acknowledge or overwrite a newer checkpoint. Checkpoints are not a
+promise of zero loss between the last successful request and a process crash.
+
+**Archive** saves a dirty edit and creates a downloadable `.cinematicum.zip`
+package containing the editable project, admitted media, project LUTs, saved
+workflow, original RAW inputs, referenced imaging masters/recipes, and authored
+scene sources and EXR packages. Copying and hashing use bounded streams, and
+the archive is limited to 64 GiB and 10,000 members. ZIP64 members are stored
+without additional compression; already-compressed media retain their exact
+bytes. Restore verifies paths, member types, sizes, hashes and dependency
+closure before publishing a new project identity. **Open restored project**
+opens that separate project when validation succeeds. Cancelled/failed uploads
+are removed; external engines, plugins and model weights are prerequisites,
+and opaque imported `.blend` files may still need externally linked resources.
+Restoring a package never executes its workflow or opens Blender automatically.
+
+## Assemble a production shot plan
+
+Open **Production** from the timeline toolbar and select a shot-list JSON.
+The repository's `production/THE_LAST_RENDER/shots/shotlist.json` format is
+supported. Review the ordered requirements, choose actual imported video for
+each shot, set a source In frame, and preview that source range. Matching is
+checked against source identity and available duration; choosing a differently
+named take requires explicit acknowledgement. A plan can be saved while media
+are missing. The app reports each missing or short source and keeps assembly
+blocked until all required shots are valid.
+
+**Assemble cut** creates one undoable candidate at the plan's exact rational
+frame rate. Incompatible canvas/rate replacement requires an explicit choice;
+locked timeline tracks reject replacement. Times off the frame grid are
+rejected instead of rounded. The saved plan and selected take ranges remain
+editable with the project. **Export shot requirements** downloads a persistent
+JSON attachment; it does not include media. Use Archive to move the complete
+editable project. No plan, render, archive or restore changes film issuance.
 
 ## Open it
 
@@ -386,6 +434,14 @@ Scene recipes are stored in the same project and participate in undo and save.
 renders actual frames, and admits the encoded movie into the media bin.
 The completed job also offers the editable `.blend` source. Add the movie to
 the timeline to edit and composite it with footage, sound, and titles.
+Enable **Linear EXR** in the scene output controls to retain float32 RGBA beauty
+frames. Optional passes are depth, normal, motion vectors, diffuse color and
+emission. The job's **Linear EXR + passes** attachment contains the requested
+inclusive frame range, scene recipe, exact rational clock, channel inventory
+and per-file hashes. A transparent world preserves premultiplied alpha in EXR;
+the H.264 movie is an opaque display derivative. The output is linear Rec.709
+and uses lossless ZIP compression. These masters do not make the SDR timeline
+an HDR compositing or mastering pipeline.
 WebGL lighting is an interactive approximation; Blender produces the rendered
 materials, shadows, and lighting. Supported authored scenes contain up to
 96 objects, 16 lights, 128 pose keys per object, and 7,200 frames.
@@ -393,6 +449,10 @@ Transforms use Z-up coordinates and XYZ Euler rotation. Linear, hold, quadratic
 ease-in/out and cubic smooth ease-in/out have matching viewport and render
 evaluation. Saved Blender actions retain these curves; camera lens conversion
 is baked at integer render frames.
+New cameras use transported aiming to prevent an abrupt roll at a world-axis
+pole. Older scenes retain their saved world-up framing until changed explicitly.
+Camera/target and aimed-light paths are checked over the complete eased interval,
+including subframes; undefined coincident aiming is rejected before rendering.
 
 ### Import real mesh geometry
 
@@ -588,6 +648,14 @@ foreign browser origins and invalid Host headers. Supported routes:
 | `POST /api/projects/{id}/interchange-export` | Write a bounded OTIO cut document |
 | `POST /api/projects/{id}/interchange-import` | Return an unsaved validated timeline candidate |
 | `POST /api/projects/{id}/automate` | Apply an atomic editing recipe |
+| `POST /api/projects/{id}/checkpoint` | Preserve a revision-bound unsaved editor draft |
+| `GET/POST /api/projects/{id}/recovery` | List, explicitly recover or discard a draft/version |
+| `POST /api/projects/{id}/production-review` | Validate ordered shot requirements and selected sources |
+| `POST /api/projects/{id}/production-plan` | Return an unsaved project candidate retaining the plan |
+| `POST /api/projects/{id}/production-conform` | Return an unsaved exact-frame cut candidate |
+| `POST /api/projects/{id}/production-export` | Write a persistent shot-requirements JSON attachment |
+| `POST /api/projects/{id}/archive-export` | Queue a verified portable project archive |
+| `POST /api/projects/{id}/archive-restore` | Stream a selected archive and restore a separate project |
 | `GET /api/jobs/{id}` | Read progress, errors, and verified output |
 | `POST /api/jobs/{id}/cancel` | Cancel the owned local job |
 
@@ -603,7 +671,8 @@ are evaluated from the timeline start, so long timelines may need an encoded
 preview. Scope values are display-referred SDR RGB, not reference HDR scopes.
 
 The optional still-image worker provides actual OCIO/ACES transforms and float
-EXR masters; those features do not extend float processing across the movie
+EXR masters; authored Cycles scenes can also export float EXR sequences and
+passes. Those features do not extend float processing across the movie
 timeline. This implementation still lacks HDR finishing, multicam,
 optical-flow retiming, planar/affine tracking, neural segmentation, Bezier roto
 with feather points, unrestricted mesh/UV/rig editing, plugin-host

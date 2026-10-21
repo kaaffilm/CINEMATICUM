@@ -10,14 +10,17 @@ from __future__ import annotations
 
 import copy
 import hashlib
+import inspect
 import json
 import math
 import os
 from pathlib import Path
 import re
 import shutil
+import struct
 import tempfile
 import uuid
+import zipfile
 
 from adapters import AdapterError, _BLENDER_TIMEOUT, _cancelled, _run_owned, _sha256, find_blender
 from spatial_import import validate_mesh, validate_scene_geometry
@@ -31,6 +34,16 @@ MAX_OBJECTS = 96
 MAX_LIGHTS = 16
 MAX_FRAMES = 7200
 INTERPOLATIONS = frozenset({"linear", "constant", "ease_in", "ease_out", "ease_in_out"})
+ORIENTATION_MODES = frozenset({"world_up", "transport"})
+PASS_CHANNELS = {"depth": ("Depth", ("Z",)), "normal": ("Normal", ("X", "Y", "Z")),
+                 "vector": ("Vector", ("X", "Y", "Z", "W")),
+                 "diffuse_color": ("DiffCol", ("R", "G", "B")),
+                 "emission": ("Emit", ("R", "G", "B"))}
+# Blender versions use both compact and full render-pass names. Preserve the
+# actual channels in the files/manifest; these are validation aliases only.
+PASS_PREFIX_ALIASES = {"diffuse_color": ("DiffCol", "Diffuse Color"),
+                       "emission": ("Emit", "Emission")}
+OUTPUT_DEFAULTS = {"linear_exr": False, "passes": []}
 POSE_FIELDS = {
     "object": {"position": ([-0., 0., 1.], -1000, 1000), "rotation": ([0., 0., 0.], -3600, 3600),
                "scale": ([1., 1., 1.], .01, 100)},
@@ -133,12 +146,46 @@ def _keyframes(item, kind, frame_end):
     item["keyframes"] = sorted(keys, key=lambda key: key["frame"])
 
 
+def _aim_poses(item):
+    """Complete aim poses, including the implicit frame-one base pose."""
+    base = {"frame": 1, "interpolation": "linear", "position": item["position"],
+            "target": item["target"], "roll": item.get("roll", 0.)}
+    poses = {1: base}
+    for key in item.get("keyframes", []):
+        poses[key["frame"]] = {**base, **key}
+    return [poses[frame] for frame in sorted(poses)]
+
+
+def _validate_aim_path(item, label):
+    """Check the entire continuous aim path, not just keys or integer frames.
+
+    Position and target share one monotone easing factor within a segment, so
+    their difference traces a straight line. Its closest approach to the origin
+    can be checked analytically, including subframes. A hold is a deliberate cut.
+    """
+    for left, right in zip(_aim_poses(item), _aim_poses(item)[1:]):
+        if left.get("interpolation", "linear") == "constant":
+            continue
+        a = [p - t for p, t in zip(left["position"], left["target"])]
+        b = [p - t for p, t in zip(right["position"], right["target"])]
+        delta = [y - x for x, y in zip(a, b)]
+        length2 = sum(v * v for v in delta)
+        t = max(0., min(1., -sum(x * y for x, y in zip(a, delta)) / length2)) if length2 else 0.
+        distance2 = sum((x + t * y) ** 2 for x, y in zip(a, delta))
+        if distance2 < .0001:
+            raise ValueError("%s aim path approaches its target within 0.01 m between frames %d and %d. "
+                             "Offset the path or use Hold for an intentional cut; an aim direction is undefined at the target."
+                             % (label, left["frame"], right["frame"]))
+
+
 def default_scene(width=1280, height=720):
     """A camera and lighting setup; nothing is passed off as user-made footage."""
     return {"version": 1, "width": width, "height": height, "frame_end": 96, "samples": 32,
             "render": copy.deepcopy(RENDER_DEFAULTS),
-            "world": {"color": "#263142", "strength": 0.35},
+            "world": {"color": "#263142", "strength": 0.35, "transparent": False},
+            "output": copy.deepcopy(OUTPUT_DEFAULTS),
             "camera": {"position": [7, -9, 6], "target": [0, 0, 1], "fov": 45,
+                       "orientation_mode": "transport",
                        "sensor_height_mm": 24., "roll": 0., "shift_x": 0., "shift_y": 0.,
                        "focal_ratio": 1., "dof_enabled": False, "focus_distance": 10., "f_stop": 5.6,
                        "aperture_blades": 0, "aperture_rotation": 0., "aperture_ratio": 1.},
@@ -154,7 +201,7 @@ def default_scene(width=1280, height=720):
 def validate_scene(scene, width=None, height=None):
     """Normalize a bounded recipe, rejecting unsupported behavior before launch."""
     src = copy.deepcopy(_object(scene, "Scene", {
-        "version", "width", "height", "frame_end", "samples", "render", "world", "camera", "objects", "lights"}))
+        "version", "width", "height", "frame_end", "samples", "render", "world", "camera", "objects", "lights", "output"}))
     if src.get("version") != 1 or isinstance(src.get("version"), bool):
         raise ValueError("Unsupported 3D scene recipe version.")
     src["width"] = _number(src.get("width", 1280) if width is None else width, "Scene width", 16, 8192, True)
@@ -168,12 +215,28 @@ def validate_scene(scene, width=None, height=None):
         value = render.get(prop, default)
         render[prop] = (_boolean(value, "Denoising") if prop == "use_denoising"
                         else _number(value, "Render " + prop, 0, 2_147_483_647 if prop == "seed" else 64, True))
-    world = _object(src.setdefault("world", {}), "World", {"color", "strength"})
+    output = _object(src.setdefault("output", {}), "Scene output", OUTPUT_DEFAULTS)
+    output["linear_exr"] = _boolean(output.get("linear_exr", False), "Scene-linear EXR output")
+    passes = output.setdefault("passes", [])
+    if (not isinstance(passes, list) or len(passes) > len(PASS_CHANNELS)
+            or any(not isinstance(p, str) or p not in PASS_CHANNELS for p in passes)
+            or len(set(passes)) != len(passes)):
+        raise ValueError("Choose distinct depth, normal, vector, diffuse_color or emission render passes.")
+    output["passes"] = [p for p in PASS_CHANNELS if p in passes]
+    if passes and not output["linear_exr"]:
+        raise ValueError("Enable scene-linear EXR output before selecting render passes.")
+    world = _object(src.setdefault("world", {}), "World", {"color", "strength", "transparent"})
     world["color"] = _color(world.get("color", "#263142"), "World color")
     world["strength"] = _number(world.get("strength", .35), "World strength", 0, 5)
+    world["transparent"] = _boolean(world.get("transparent", False), "Transparent world")
     camera = _object(src.setdefault("camera", {}), "Camera", {
         *POSE_FIELDS["camera"], "keyframes", "sensor_height_mm", "focal_length_mm", "focal_ratio", "dof_enabled",
-        "aperture_blades", "aperture_rotation", "aperture_ratio"})
+        "aperture_blades", "aperture_rotation", "aperture_ratio", "orientation_mode"})
+    # Preserve framing of saved pre-0.8 recipes. New scenes/imports explicitly
+    # choose transport; old authored roll remains reproducible until changed.
+    mode = camera.setdefault("orientation_mode", "world_up")
+    if not isinstance(mode, str) or mode not in ORIENTATION_MODES:
+        raise ValueError("Camera orientation must be transport or world_up.")
     camera["sensor_height_mm"] = _number(camera.get("sensor_height_mm", 24), "Sensor height (mm)", 1, 100)
     camera["focal_ratio"] = _number(camera.get("focal_ratio", 1), "Focal ratio fx / fy", .1, 10)
     has_focal = "focal_length_mm" in camera
@@ -197,6 +260,7 @@ def validate_scene(scene, width=None, height=None):
     if sum((a - b) ** 2 for a, b in zip(camera["position"], camera["target"])) < .0001:
         raise ValueError("Camera position and target must differ.")
     _keyframes(camera, "camera", src["frame_end"])
+    _validate_aim_path(camera, "Camera")
     if any(focal_length_mm(camera, pose["fov"]) < 1 for pose in [camera, *camera["keyframes"]]):
         raise ValueError("Camera focal length must be at least 1 mm at every keyframe; enlarge the sensor or narrow the field of view.")
     for key, limit in (("objects", MAX_OBJECTS), ("lights", MAX_LIGHTS)):
@@ -249,6 +313,8 @@ def validate_scene(scene, width=None, height=None):
         if light["type"] != "point" and sum((a - b) ** 2 for a, b in zip(light["position"], light["target"])) < .0001:
             raise ValueError("Directional light position and target must differ.")
         _keyframes(light, "light", src["frame_end"])
+        if light["type"] != "point":
+            _validate_aim_path(light, "Directional light " + light["name"])
     return src
 
 
@@ -263,6 +329,101 @@ def easing(t, mode="linear"):
     if mode == "ease_in_out":
         return t * t * (3 - 2 * t)
     return t
+
+
+def _dot3(a, b):
+    return sum(x * y for x, y in zip(a, b))
+
+
+def _cross3(a, b):
+    return [a[1] * b[2] - a[2] * b[1], a[2] * b[0] - a[0] * b[2], a[0] * b[1] - a[1] * b[0]]
+
+
+def _unit3(value):
+    size = math.hypot(*value)
+    if size < 1e-12:
+        raise ValueError("An aim direction is undefined at its target.")
+    return [v / size for v in value]
+
+
+def camera_basis(eye, target, roll=0.):
+    """Legacy static framing, also the calibrated anchor for transported motion.
+
+    The legacy pole convention is intentionally applied only once when seeding
+    transported motion; changing it would rotate existing solved cameras.
+    """
+    backward = _unit3([a - b for a, b in zip(eye, target)])
+    reference = [0., 1., 0.] if abs(backward[2]) > .999 else [0., 0., 1.]
+    right = _unit3(_cross3(reference, backward))
+    up = _cross3(backward, right)
+    c, s = math.cos(math.radians(roll)), math.sin(math.radians(roll))
+    return {"right": [x * c + y * s for x, y in zip(right, up)],
+            "up": [y * c - x * s for x, y in zip(right, up)],
+            "forward": [-v for v in backward], "backward": backward}
+
+
+def _transport_basis(basis, backward):
+    """Rotate the basis along the shortest direction arc without adding roll."""
+    axis = _cross3(basis["backward"], backward)
+    sine = math.hypot(*axis)
+    cosine = max(-1., min(1., _dot3(basis["backward"], backward)))
+    right = basis["right"]
+    if sine > 1e-12:
+        axis = [v / sine for v in axis]
+        tangent = _cross3(axis, right)
+        along = _dot3(axis, right)
+        right = [v * cosine + t * sine + a * along * (1 - cosine)
+                 for v, t, a in zip(right, tangent, axis)]
+    elif cosine < 0:
+        raise ValueError("The interpolated aim path crosses its target. Use Hold for an intentional cut.")
+    # Remove floating point drift; transport never depends on playback order.
+    projection = _dot3(right, backward)
+    right = _unit3([r - projection * z for r, z in zip(right, backward)])
+    return {"right": right, "up": _cross3(backward, right),
+            "forward": [-v for v in backward], "backward": backward}
+
+
+def camera_basis_at(item, frame):
+    """Deterministic camera orientation at a random-access frame or subframe.
+
+    All eased position/target segments describe great-circle direction arcs.
+    Transport the unrolled basis through those arcs, then apply the authored
+    roll. A Hold boundary starts a new calibrated anchor, making cuts explicit.
+    """
+    poses = _aim_poses(item)
+    base = poses[0]
+    basis = camera_basis(base["position"], base["target"])
+    pose = base
+    for left, right in zip(poses, poses[1:]):
+        if frame <= left["frame"]:
+            break
+        held = left.get("interpolation", "linear") == "constant"
+        if frame < right["frame"]:
+            t = easing((frame - left["frame"]) / (right["frame"] - left["frame"]), left.get("interpolation", "linear"))
+            pose = {prop: [a + (b - a) * t for a, b in zip(left[prop], right[prop])]
+                    for prop in ("position", "target")}
+            pose["roll"] = left["roll"] + (right["roll"] - left["roll"]) * t
+        else:
+            pose = right
+        if held:
+            if frame >= right["frame"]:
+                basis = camera_basis(right["position"], right["target"])
+        else:
+            backward = _unit3([p - t for p, t in zip(pose["position"], pose["target"])])
+            basis = _transport_basis(basis, backward)
+        if frame < right["frame"]:
+            break
+    if item.get("orientation_mode", "world_up") == "world_up":
+        return camera_basis(pose["position"], pose["target"], pose["roll"])
+    c, s = math.cos(math.radians(pose["roll"])), math.sin(math.radians(pose["roll"]))
+    return {**basis, "right": [x * c + y * s for x, y in zip(basis["right"], basis["up"])],
+            "up": [y * c - x * s for x, y in zip(basis["right"], basis["up"])]}
+
+
+def _camera_math_source():
+    """Embed these exact pure functions into retained Blender scenes."""
+    return "\n\n".join(inspect.getsource(function) for function in (
+        _aim_poses, easing, _dot3, _cross3, _unit3, camera_basis, _transport_basis, camera_basis_at))
 
 
 def pose_at(obj, frame, kind="object"):
@@ -290,6 +451,7 @@ def _build_script(spec, blend_path, frames_dir, fps, frame_start, frame_end):
     return '''import bpy, json, math
 from mathutils import Vector, Matrix, Quaternion
 %s
+%s
 SPEC = json.loads(%r)
 BLEND_PATH = %r
 FRAMES = %r
@@ -315,10 +477,16 @@ scene.render.fps_base = FPS_BASE
 scene.render.image_settings.file_format = 'PNG'
 scene.render.image_settings.color_mode = 'RGBA'
 scene.render.image_settings.color_depth = '16'
-scene.render.film_transparent = False
+scene.render.film_transparent = SPEC['world']['transparent']
+for pass_name, property_name in {'depth':'use_pass_z', 'normal':'use_pass_normal',
+                                'vector':'use_pass_vector', 'diffuse_color':'use_pass_diffuse_color',
+                                'emission':'use_pass_emit'}.items():
+    setattr(scene.view_layers[0], property_name, pass_name in SPEC['output']['passes'])
 scene.render.use_file_extension = True
-scene.frame_start = START
-scene.frame_end = END
+# The .blend remains the complete authored source; START/END only select the
+# delivery loop below. Neighboring keys also remain available to motion passes.
+scene.frame_start = 1
+scene.frame_end = SPEC['frame_end']
 scene.frame_step = 1
 scene.view_settings.view_transform = 'Standard'
 scene.view_settings.exposure = 0
@@ -333,19 +501,14 @@ def aim(obj, target):
     if direction.length_squared < .0001:
         raise RuntimeError('An animated camera or directional light reached its target.')
     obj.rotation_euler = direction.to_track_quat('-Z', 'Y').to_euler()
-def aim_camera(obj, target, roll):
-    forward = Vector(target) - obj.location
-    if forward.length_squared < .0001:
-        raise RuntimeError('An animated camera reached its target.')
-    forward.normalize()
-    up = Vector((0, 0, 1))
-    if abs(forward.dot(up)) > .999:
-        up = Vector((0, 1, 0))
-    right = forward.cross(up).normalized()
-    up = right.cross(forward).normalized()
-    basis = Matrix((right, up, -forward)).transposed()
+def aim_camera(obj, frame):
+    axes = camera_basis_at(SPEC['camera'], frame)
+    basis = Matrix((axes['right'], axes['up'], axes['backward'])).transposed()
     obj.rotation_mode = 'QUATERNION'
-    obj.rotation_quaternion = basis.to_quaternion() @ Quaternion((0, 0, 1), math.radians(roll))
+    rotation = basis.to_quaternion()
+    if obj.rotation_quaternion.dot(rotation) < 0:
+        rotation.negate()
+    obj.rotation_quaternion = rotation
 def action_curves(obj):
     animation = obj.animation_data
     action = animation.action
@@ -442,10 +605,10 @@ camera.location = SPEC['camera']['position']
 scene.camera = camera
 camera_poses = recipe_poses(SPEC['camera'], ('position','target','fov','roll','shift_x','shift_y','focus_distance','f_stop'))
 camera_target = tracking_target(camera, 'Camera aim', SPEC['camera']['target'], constrain=False)
-def apply_camera(pose):
+def apply_camera(pose, frame):
     camera.location = pose['position']
     camera_target.location = pose['target']
-    aim_camera(camera, pose['target'], pose['roll'])
+    aim_camera(camera, frame)
     camera_data.lens = camera_data.sensor_height / (2 * math.tan(math.radians(pose['fov'])/2))
     # VERTICAL sensor fit: Blender's x shift is normalized by effective sensor
     # height. CINEMATICUM principal shifts are normalized by output width/height.
@@ -458,7 +621,7 @@ def apply_camera(pose):
     scene.render.pixel_aspect_y = max(1, focal_ratio)
     camera_data.dof.focus_distance = pose['focus_distance']
     camera_data.dof.aperture_fstop = pose['f_stop']
-apply_camera(SPEC['camera'])
+apply_camera(pose_at(camera_poses, 1), 1)
 if SPEC['camera'].get('keyframes'):
     for frame,pose in camera_poses:
         camera.location = pose['position']
@@ -472,7 +635,7 @@ if SPEC['camera'].get('keyframes'):
     # Translation keeps its original eased curves; only quaternion channels
     # are linearized on the camera object after this bake.
     for frame in range(1, SPEC['frame_end']+1):
-        apply_camera(pose_at(camera_poses, frame))
+        apply_camera(pose_at(camera_poses, frame), frame)
         camera.keyframe_insert(data_path='rotation_quaternion', frame=frame)
         for path in ('lens', 'shift_x', 'shift_y', 'dof.focus_distance', 'dof.aperture_fstop'):
             camera_data.keyframe_insert(data_path=path, frame=frame)
@@ -587,6 +750,27 @@ for item in SPEC['objects']:
         interpolate_action(obj, poses)
     objects.append((obj, poses))
 scene.frame_set(START)
+def set_output_format(kind):
+    settings = scene.render.image_settings
+    # Blender 5 separated image/multilayer/video media types from the codec.
+    # Select the media type first: the accepted file-format enum depends on it.
+    if hasattr(settings, 'media_type'):
+        settings.media_type = 'MULTI_LAYER_IMAGE' if kind == 'OPEN_EXR_MULTILAYER' else 'IMAGE'
+    settings.file_format = kind
+    settings.color_mode = 'RGBA'
+    settings.color_depth = '16' if kind == 'PNG' else '32'
+    settings.color_management = 'FOLLOW_SCENE' if kind == 'PNG' else 'OVERRIDE'
+    if kind != 'PNG':
+        settings.exr_codec = 'ZIP'
+        # Keep one scanline part for readers that do not support Blender 5's
+        # default multipart storage. All requested float passes are retained.
+        if hasattr(settings, 'use_exr_interleave'):
+            settings.use_exr_interleave = True
+        try: settings.linear_colorspace_settings.name = 'Linear Rec.709'
+        except (TypeError, ValueError):
+            raise RuntimeError('This Blender color configuration lacks Linear Rec.709 required for EXR masters.')
+if SPEC['output']['linear_exr']:
+    set_output_format('OPEN_EXR_MULTILAYER' if SPEC['output']['passes'] else 'OPEN_EXR')
 scene.render.filepath = '//renders/frame_######'
 text = bpy.data.texts.new('CINEMATICUM Scene Recipe.json')
 text.write(json.dumps(SPEC, ensure_ascii=False, indent=2))
@@ -599,7 +783,7 @@ for frame in range(START, END+1):
         obj.rotation_euler = [math.radians(v) for v in pose['rotation']]
         obj.scale = pose['scale']
     camera_pose = pose_at(camera_poses, frame)
-    apply_camera(camera_pose)
+    apply_camera(camera_pose, frame)
     for light,light_target,poses,size_path,size_factor in lights:
         pose = pose_at(poses, frame)
         light.location = pose['position']
@@ -608,9 +792,161 @@ for frame in range(START, END+1):
         if light_target:
             light_target.location = pose['target']
             aim(light, pose['target'])
+    set_output_format('PNG')
     scene.render.filepath = FRAMES + '/frame_%%06d.png' %% frame
     bpy.ops.render.render(write_still=True)
-''' % (blender_modeling_source(), payload, str(blend_path), str(frames_dir), rate.blender_fps, rate.blender_fps_base, frame_start, frame_end)
+    if SPEC['output']['linear_exr']:
+        # Render Result still contains the scene-linear buffers. Saving an EXR
+        # bypasses the PNG display transform; never reconstruct floats from PNG.
+        result = bpy.data.images.get('Render Result')
+        if result is None: raise RuntimeError('Blender did not retain its scene-linear render buffers.')
+        set_output_format('OPEN_EXR')
+        result.save_render(filepath=FRAMES + '/beauty_%%06d.exr' %% frame, scene=scene)
+        if SPEC['output']['passes']:
+            set_output_format('OPEN_EXR_MULTILAYER')
+            result.save_render(filepath=FRAMES + '/passes_%%06d.exr' %% frame, scene=scene)
+if SPEC['output']['linear_exr']:
+    with open(FRAMES + '/render-info.json', 'w') as handle:
+        json.dump({'engine': 'Blender Cycles', 'engine_version': bpy.app.version_string,
+                   'color_space': scene.render.image_settings.linear_colorspace_settings.name,
+                   'sample_type': 'float32', 'alpha': 'premultiplied',
+                   'transparent_world': scene.render.film_transparent}, handle)
+''' % (blender_modeling_source(), _camera_math_source(), payload, str(blend_path), str(frames_dir), rate.blender_fps, rate.blender_fps_base, frame_start, frame_end)
+
+
+def inspect_exr_header(path):
+    """Read bounded ordinary scanline EXR metadata without optional libraries.
+
+    This proves dimensions/channel storage, not pixel semantics. Native render
+    acceptance separately reads actual float samples with an EXR decoder.
+    """
+    limit = 4 * 1024 * 1024
+    with Path(path).open('rb') as handle:
+        def read(count):
+            if handle.tell() + count > limit:
+                raise AdapterError('The rendered EXR header exceeds the metadata limit.')
+            value = handle.read(count)
+            if len(value) != count:
+                raise AdapterError('Blender produced a truncated EXR header.')
+            return value
+
+        def cstring():
+            value = bytearray()
+            while True:
+                char = read(1)
+                if char == b'\0':
+                    break
+                value.extend(char)
+                if len(value) > 1024:
+                    raise AdapterError('The rendered EXR header has an invalid attribute name.')
+            return bytes(value).decode('utf-8', errors='strict')
+
+        if read(4) != b'\x76\x2f\x31\x01':
+            raise AdapterError('Blender did not produce an OpenEXR master.')
+        version = struct.unpack('<I', read(4))[0]
+        if version & 0xff != 2 or version & 0x1a00:
+            raise AdapterError('The scene master must be an ordinary scanline EXR, not tiled, deep or multipart data.')
+        attributes = {}
+        while True:
+            name = cstring()
+            if not name:
+                break
+            kind = cstring()
+            size = struct.unpack('<I', read(4))[0]
+            if name in attributes:
+                raise AdapterError('The rendered EXR repeats a header attribute.')
+            attributes[name] = (kind, read(size))
+    if attributes.get('dataWindow', ('',))[0] != 'box2i' or len(attributes['dataWindow'][1]) != 16:
+        raise AdapterError('The rendered EXR has no valid pixel window.')
+    x0, y0, x1, y1 = struct.unpack('<iiii', attributes['dataWindow'][1])
+    if attributes.get('channels', ('',))[0] != 'chlist':
+        raise AdapterError('The rendered EXR has no channel list.')
+    if attributes.get('compression') != ('compression', b'\x03'):
+        raise AdapterError('The scene master must use lossless ZIP compression.')
+    data, offset, channels = attributes['channels'][1], 0, {}
+    while offset < len(data) and data[offset]:
+        end = data.find(b'\0', offset)
+        if end < 0 or end + 17 > len(data):
+            raise AdapterError('The rendered EXR has a malformed channel list.')
+        name = data[offset:end].decode('utf-8', errors='strict')
+        pixel_type, linear, xs, ys = struct.unpack('<iB3xii', data[end+1:end+17])
+        if name in channels or pixel_type != 2 or xs != 1 or ys != 1:
+            raise AdapterError('Every scene-master channel must contain full-resolution 32-bit floats.')
+        channels[name] = {'sample_type': 'float32', 'linear_hint': bool(linear)}
+        offset = end + 17
+    if not channels or data[offset:] != b'\0' or x1 < x0 or y1 < y0:
+        raise AdapterError('The rendered EXR channel list or dimensions are invalid.')
+    return {'width': x1 - x0 + 1, 'height': y1 - y0 + 1, 'channels': channels}
+
+
+def _package_scene_masters(spec, frames, destination, rate, start, end, cancel_event=None):
+    """Publish no archive until every requested frame and pass is present."""
+    info_path = frames/'render-info.json'
+    if not info_path.is_file() or info_path.stat().st_size > 16384:
+        raise AdapterError('Blender did not preserve scene-master rendering metadata.')
+    info = json.loads(info_path.read_text(encoding='utf-8'))
+    if (not isinstance(info, dict) or info.get('color_space') != 'Linear Rec.709'
+            or info.get('sample_type') != 'float32' or info.get('alpha') != 'premultiplied'
+            or not isinstance(info.get('engine_version'), str)
+            or info.get('transparent_world') is not spec['world']['transparent']):
+        raise AdapterError('The scene-master color, sample or alpha metadata did not match the render contract.')
+    manifest = {'format': 'cinematicum-scene-masters', 'version': 1, 'renderer': info,
+                'width': spec['width'], 'height': spec['height'], 'frame_rate': rate.as_dict(),
+                'frame_start': start, 'frame_end': end, 'frame_end_inclusive': True,
+                'frame_count': end - start + 1, 'passes': spec['output']['passes'],
+                'beauty_channels': ['R', 'G', 'B', 'A'], 'compression': 'ZIP',
+                'display_movie': 'Opaque H.264 display derivative; EXR files are the scene-linear masters.',
+                'recipe_sha256': hashlib.sha256(json.dumps(spec, sort_keys=True, separators=(',', ':')).encode()).hexdigest(),
+                'files': []}
+    names = []
+    try:
+        with zipfile.ZipFile(destination, 'x', allowZip64=True) as archive:
+            for frame in range(start, end + 1):
+                for role in ('beauty', 'passes') if spec['output']['passes'] else ('beauty',):
+                    _cancelled(cancel_event)
+                    source = frames / ('%s_%06d.exr' % (role, frame))
+                    if not source.is_file() or source.is_symlink() or not source.stat().st_size:
+                        raise AdapterError('Blender did not produce %s EXR frame %d.' % (role, frame))
+                    header = inspect_exr_header(source)
+                    if (header['width'], header['height']) != (spec['width'], spec['height']):
+                        raise AdapterError('The scene-master dimensions differ from the saved scene.')
+                    channels = set(header['channels'])
+                    if role == 'beauty' and not {'R', 'G', 'B', 'A'} <= channels:
+                        raise AdapterError('The scene-linear beauty master must preserve all RGBA channels.')
+                    if role == 'passes':
+                        for render_pass in spec['output']['passes']:
+                            prefix, components = PASS_CHANNELS[render_pass]
+                            prefixes = PASS_PREFIX_ALIASES.get(render_pass, (prefix,))
+                            if not any(all(any(c == candidate+'.'+component or c.endswith('.'+candidate+'.'+component)
+                                               for c in channels) for component in components) for candidate in prefixes):
+                                raise AdapterError('The actual multilayer EXR is missing the requested %s pass.' % render_pass)
+                    name = '%s/%s_%06d.exr' % (role, role, frame)
+                    digest, size = hashlib.sha256(), 0
+                    # EXR already uses lossless ZIP compression. Stream the
+                    # container without a second expensive compression pass.
+                    with source.open('rb') as incoming, archive.open(name, 'w', force_zip64=True) as outgoing:
+                        while True:
+                            _cancelled(cancel_event)
+                            block = incoming.read(1024 * 1024)
+                            if not block:
+                                break
+                            digest.update(block)
+                            outgoing.write(block)
+                            size += len(block)
+                    names.append(name)
+                    manifest['files'].append({'path': name, 'frame': frame, 'role': role, 'bytes': size,
+                                              'sha256': digest.hexdigest(), 'channels': sorted(channels)})
+            _cancelled(cancel_event)
+            archive.writestr('manifest.json', json.dumps(manifest, sort_keys=True, indent=2), compress_type=zipfile.ZIP_DEFLATED)
+            archive.writestr('scene.json', json.dumps(spec, sort_keys=True, indent=2), compress_type=zipfile.ZIP_DEFLATED)
+        with zipfile.ZipFile(destination) as archive:
+            if set(archive.namelist()) != set(names) | {'manifest.json', 'scene.json'}:
+                raise AdapterError('The scene-master archive is incomplete.')
+        _cancelled(cancel_event)
+    except BaseException:
+        Path(destination).unlink(missing_ok=True)
+        raise
+    return manifest
 
 
 def render_scene(scene, output_dir, fps=24, frame_start=1, frame_end=None,
@@ -630,7 +966,18 @@ def render_scene(scene, output_dir, fps=24, frame_start=1, frame_end=None,
     target.mkdir(parents=True, exist_ok=True)
     ident = uuid.uuid4().hex
     movie, blend = target / ("scene-" + ident + ".mp4"), target / ("scene-" + ident + ".blend")
+    masters = target / ("scene-" + ident + "-masters.zip")
+    masters_manifest = None
     total = end - start + 1
+    if spec['output']['linear_exr']:
+        # Keep headroom for the render buffers, PNG display sequence and the
+        # final archive simultaneously. Compressed sizes are data-dependent.
+        channels = 4 + (4 + sum(len(PASS_CHANNELS[p][1]) for p in spec['output']['passes'])
+                         if spec['output']['passes'] else 0)
+        reserve = total * spec['width'] * spec['height'] * (channels * 8 + 8) + 64 * 1024 * 1024
+        if shutil.disk_usage(target).free < reserve:
+            raise AdapterError('Scene-linear masters need approximately %.2f GiB of free working space for this frame range. '
+                               'Choose a shorter range or a project volume with more space.' % (reserve / 1024 ** 3))
     progress(0)
     with tempfile.TemporaryDirectory(prefix=".scene-", dir=str(target)) as temporary:
         work = Path(temporary)
@@ -657,27 +1004,41 @@ def render_scene(scene, output_dir, fps=24, frame_start=1, frame_end=None,
                 raise AdapterError("Blender did not produce scene frame %d." % frame)
         _cancelled(cancel_event)
         encoded = work / "encoded.mp4"
-        _run_owned([ffmpeg, "-hide_banner", "-nostdin", "-v", "error", "-n", "-framerate", rate.ffmpeg,
-                    "-start_number", str(start), "-i", str(frames / "frame_%06d.png"), "-frames:v", str(total),
-                    "-vf", "setsar=1", "-c:v", "libx264", "-preset", "medium", "-crf", "18", "-pix_fmt", "yuv420p",
-                    "-movflags", "+faststart", str(encoded)], work / "encode.log", cancel_event, _BLENDER_TIMEOUT)
+        encode = [ffmpeg, "-hide_banner", "-nostdin", "-v", "error", "-n", "-framerate", rate.ffmpeg,
+                  "-start_number", str(start), "-i", str(frames / "frame_%06d.png")]
+        if spec['world']['transparent']:
+            encode.extend(['-f', 'lavfi', '-i', 'color=c=black:s=%dx%d:r=%s' % (spec['width'], spec['height'], rate.ffmpeg),
+                           '-filter_complex', '[1:v][0:v]overlay=shortest=1:format=auto,setsar=1[out]', '-map', '[out]'])
+        else:
+            encode.extend(['-vf', 'setsar=1'])
+        encode.extend(["-frames:v", str(total), "-c:v", "libx264", "-preset", "medium", "-crf", "18", "-pix_fmt", "yuv420p",
+                       "-movflags", "+faststart", str(encoded)])
+        _run_owned(encode, work / "encode.log", cancel_event, _BLENDER_TIMEOUT)
         if not encoded.is_file() or not encoded.stat().st_size:
             raise AdapterError("The authored scene did not produce a nonempty encoded movie.")
         _cancelled(cancel_event)
+        archive = work / 'masters.zip'
+        if spec['output']['linear_exr']:
+            masters_manifest = _package_scene_masters(spec, frames, archive, rate, start, end, cancel_event)
         # The caller probes/adopts this movie before exposing it as timeline media.
-        os.replace(str(source), str(blend))
         try:
+            os.replace(str(source), str(blend))
             os.replace(str(encoded), str(movie))
+            if masters_manifest is not None:
+                os.replace(str(archive), str(masters))
         except BaseException:
             blend.unlink(missing_ok=True)
+            movie.unlink(missing_ok=True)
+            masters.unlink(missing_ok=True)
             raise
-    progress(1)
-    return {"path": str(movie), "scene_path": str(blend), "provenance": {
+    result = {"path": str(movie), "scene_path": str(blend), "provenance": {
         "backend": "blender-authored-scene", "renderer": "Cycles CPU", "scene_version": 1,
         "recipe_sha256": hashlib.sha256(json.dumps(spec, sort_keys=True, separators=(",", ":")).encode()).hexdigest(),
         "output_sha256": _sha256(movie), "scene_sha256": _sha256(blend), "frame_start": start,
         "frame_end": end, "frame_end_inclusive": True, "fps": rate.fps, "frame_rate": rate.as_dict(), "autoexec_enabled": False,
         "objects": len(spec["objects"]), "lights": len(spec["lights"]), "viewport_is_approximate": True,
+        "transparent_world": spec['world']['transparent'],
+        "movie_has_alpha": False,
         "mesh_objects": sum(item["type"] == "mesh" for item in spec["objects"]),
         "mesh_vertices": sum(len(item["mesh"]["vertices"]) for item in spec["objects"] if item["type"] == "mesh"),
         "mesh_triangles": sum(len(item["mesh"]["triangles"]) for item in spec["objects"] if item["type"] == "mesh"),
@@ -689,3 +1050,11 @@ def render_scene(scene, output_dir, fps=24, frame_start=1, frame_end=None,
                                       for item in spec["objects"] if item.get("modeling", {}).get("origin", {}).get("source")}),
         "mesh_source_sha256": sorted({item["mesh"]["source"]["sha256"] for item in spec["objects"]
                                       if item["type"] == "mesh" and item["mesh"].get("source")})}}
+    if masters_manifest is not None:
+        masters_digest = _sha256(masters)
+        result.update(masters_path=str(masters), masters_sha256=masters_digest, masters_manifest=masters_manifest)
+        result['provenance'].update(scene_linear_masters=True, masters_sha256=masters_digest,
+                                    master_color_space='Linear Rec.709', master_sample_type='float32',
+                                    master_alpha='premultiplied', render_passes=spec['output']['passes'])
+    progress(1)
+    return result

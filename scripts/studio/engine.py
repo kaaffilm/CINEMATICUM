@@ -30,12 +30,14 @@ if __package__:
     from .timebase import parse_rate, project_rate
     from .tracking import validate_motion
     from .color_pipeline import validate_pipeline, compile_pipeline
+    from .media_orientation import still_display_info
 else:
     from compositor import compile_graph, validate_graph, media_sources, validate_media_sources, lens_nodes, LENS_MAP_NAMES
     from lens_assets import prepare_lens_maps
     from timebase import parse_rate, project_rate
     from tracking import validate_motion
     from color_pipeline import validate_pipeline, compile_pipeline
+    from media_orientation import still_display_info
 
 
 VIDEO_EXTENSIONS = {".mp4", ".mov", ".mkv", ".webm", ".m4v", ".avi", ".mpg", ".mpeg", ".mxf"}
@@ -188,7 +190,12 @@ def probe_media(path):
     for item in video.get("side_data_list", []):
         if "rotation" in item:
             rotation = float(item["rotation"])
-    if abs(round(rotation)) % 180 == 90:
+    orientation = None
+    if image:
+        orientation = still_display_info(path, _executable("ffprobe"), video)
+        if orientation["orientation_transposed"]:
+            width, height = height, width
+    elif abs(round(rotation)) % 180 == 90:
         width, height = height, width
     if videos and (width < 1 or height < 1 or width * height > 100_000_000):
         raise ValueError("Unsupported source image dimensions.")
@@ -210,6 +217,9 @@ def probe_media(path):
         "audio_duration": audio_duration,
         "size": path.stat().st_size,
     }
+    if orientation is not None:
+        metadata.update({key: orientation[key] for key in
+                         ("coded_width", "coded_height", "exif_orientation", "orientation_applied")})
     with _PROBE_LOCK:
         _PROBE_CACHE[cache_key] = metadata
         while len(_PROBE_CACHE) > 512:

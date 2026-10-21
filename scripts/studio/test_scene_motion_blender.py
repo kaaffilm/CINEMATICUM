@@ -16,7 +16,7 @@ import tempfile
 
 from adapters import find_blender
 from engine import probe_media
-from scene import default_scene, pose_at, render_scene, validate_scene
+from scene import camera_basis_at, default_scene, pose_at, render_scene, validate_scene
 
 
 def fixture():
@@ -83,6 +83,7 @@ for frame in (1, 3, 5, 7, 9):
     actual_right=camera.matrix_world.to_3x3().col[0]
     ratio=scene.render.pixel_aspect_y/scene.render.pixel_aspect_x
     samples.append({'frame':frame,
+        'camera_basis':{'right':list(camera.matrix_world.to_3x3().col[0]), 'up':list(camera.matrix_world.to_3x3().col[1]), 'backward':list(camera.matrix_world.to_3x3().col[2])},
         'object':{'position':list(cube.location), 'rotation':[math.degrees(v) for v in cube.rotation_euler], 'scale':list(cube.scale)},
         'camera':{'position':list(camera.location), 'target':list(target.location), 'fov':math.degrees(2*math.atan(camera.data.sensor_height/(2*camera.data.lens))),
                   'roll':math.degrees(math.atan2(actual_right.dot(up),actual_right.dot(right))),
@@ -102,8 +103,12 @@ with open(%r, 'w') as handle:
         checks["saved_scene_has_five_evaluated_samples"] = len(replay["samples"]) == 5
         for kind, item in (("object", spec["objects"][0]), ("camera", spec["camera"]), ("light", spec["lights"][0])):
             checks[kind + "_saved_animation_matches_recipe"] = all(
-                all(close(sample[kind][prop], value) for prop, value in pose_at(item, sample["frame"], kind).items())
+                all(close(sample[kind][prop], value) for prop, value in pose_at(item, sample["frame"], kind).items()
+                    if kind != 'camera' or prop != 'roll')
                 for sample in replay["samples"])
+        checks['saved_camera_orientation_matches_transport_and_roll'] = all(
+            all(close(sample['camera_basis'][axis], camera_basis_at(spec['camera'], sample['frame'])[axis])
+                for axis in ('right', 'up', 'backward')) for sample in replay['samples'])
         result["saved_scene_replay"] = str(replay_path)
         result["passed"] = all(checks.values())
         if not result["passed"]:

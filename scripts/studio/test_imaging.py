@@ -255,6 +255,35 @@ class ImagingRuntimeTests(unittest.TestCase):
         self.assertEqual(result["receipt"]["source_details"]["unrecovered_pixels"], 0)
         self.assertEqual(result["receipt"]["source_details"]["radiance_units"], "relative linear Rec.709 signal per second")
 
+    def test_exif_orientation_is_shared_by_real_ocio_and_hdr_jobs(self):
+        from test_media_orientation import exif_jpegs, codec
+        ffmpeg = shutil.which("ffmpeg")
+        paths, width, height = exif_jpegs(self.root / "media", ffmpeg)
+        tagged = self.admit(paths[6], "portrait-exif")
+        normal_path, dark_path = self.root / "media/portrait-normal.png", self.root / "media/portrait-dark.png"
+        for path, filters in ((normal_path, []), (dark_path, ["-vf", "lutrgb=r=val*0.5:g=val*0.5:b=val*0.5"])):
+            codec([ffmpeg, "-v", "error", "-nostdin", "-threads", "1", "-i", str(paths[6]), *filters,
+                   "-frames:v", "1", "-pix_fmt", "rgba64be", "-threads", "1", str(path)])
+        normal, dark = self.admit(normal_path, "portrait-normal"), self.admit(dark_path, "portrait-dark")
+        first = self.render(self.recipe(tagged), "oriented-ocio")
+        second = self.render(self.recipe(normal), "normalized-ocio")
+        self.assertEqual((first["receipt"]["width"], first["receipt"]["height"]), (height, width))
+        self.assertEqual(first["receipt"]["source_details"]["exif_orientation"], 6)
+        comparison = "import OpenEXR as E,numpy as n,json,sys;a=E.File(sys.argv[1]).channels()['RGBA'].pixels;b=E.File(sys.argv[2]).channels()['RGBA'].pixels;print(json.dumps({'a_shape':list(a.shape),'b_shape':list(b.shape),'difference':float(n.max(n.abs(a-b)))}))"
+        checked = self.runtime(comparison, first["exr_path"], second["exr_path"])
+        self.assertEqual(checked["difference"], 0)
+        self.assertEqual(checked["a_shape"], [width, height, 4])
+        # Same displayed bracket, once encoded with EXIF and once normalized.
+        # A rotated JPEG must merge in the same coordinate system as PNGs.
+        hdr_results = []
+        for index, source in enumerate((tagged, normal)):
+            hdr_results.append(self.render({"version": 1, "operation": "hdr_merge", "input_transfer": "linear",
+                "brackets": [{"asset_id": source["id"], "exposure_time": 1.0},
+                             {"asset_id": dark["id"], "exposure_time": .5}]}, "hdr-orientation-%d" % index))
+        checked = self.runtime(comparison, hdr_results[0]["exr_path"], hdr_results[1]["exr_path"])
+        self.assertEqual(checked["difference"], 0)
+        self.assertEqual(checked["a_shape"], [width, height, 4])
+
     def test_hdr_reports_unrecoverable_highlights_instead_of_inventing_detail(self):
         first, second = self.asset((1, .4, 0)), self.asset((1, .7, 0))
         result = self.render({"version": 1, "operation": "hdr_merge", "input_transfer": "linear", "brackets": [

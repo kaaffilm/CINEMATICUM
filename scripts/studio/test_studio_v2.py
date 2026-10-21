@@ -339,12 +339,14 @@ class StudioV2Tests(unittest.TestCase):
         workflow = {
             "1": {"class_type": "FixturePrompt", "inputs": {"text": POSITIVE_MARKER}},
             "2": {"class_type": "FixtureModel", "inputs": {"model_name": "missing-test-model.safetensors"}},
-            "3": {"class_type": "FixtureSaveVideo", "inputs": {"prompt": ["1", 0], "model": ["2", 0]}},
+            "3": {"class_type": "FixtureGenerate", "inputs": {"prompt": ["1", 0], "model": ["2", 0]}},
+            "4": {"class_type": "SaveVideo", "inputs": {"video": ["3", 0], "format": "mp4"}},
         }
         schemas = {
             "FixturePrompt": {"input": {"required": {"text": ["STRING"]}}, "output": ["TEXT"]},
             "FixtureModel": {"input": {"required": {"model_name": [["installed-test-model.safetensors"]]}}, "output": ["MODEL"]},
-            "FixtureSaveVideo": {"input": {"required": {"prompt": ["TEXT"], "model": ["MODEL"]}}, "output_node": True, "output": []},
+            "FixtureGenerate": {"input": {"required": {"prompt": ["TEXT"], "model": ["MODEL"]}}, "output": ["VIDEO"]},
+            "SaveVideo": {"input": {"required": {"video": ["VIDEO"], "format": [["mp4", "webm"]]}}, "output_node": True, "output": []},
         }
         status, _, response = self.request("POST", f"/api/projects/{self.p['id']}/workflow", workflow)
         self.assertEqual(201, status, response)
@@ -358,7 +360,7 @@ class StudioV2Tests(unittest.TestCase):
             self.assertEqual(200, status, report)
             self.assertTrue(report["available"])
             self.assertFalse(report["ready"])
-            self.assertEqual(3, report["checked_nodes"])
+            self.assertEqual(4, report["checked_nodes"])
             self.assertEqual(1, len(report["errors"]))
             self.assertIn("Model unavailable", report["reason"])
             status, _, response = self.request("POST", f"/api/projects/{self.p['id']}/generate",

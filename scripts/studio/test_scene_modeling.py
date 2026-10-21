@@ -124,10 +124,47 @@ class ModelingTopologyTests(unittest.TestCase):
         self.assertEqual(origin['mesh_sha256'], obj['mesh']['sha256'])
         changed, warnings = modeling.prepare_operation(editable, {'type': 'move_vertices', 'indices': [1], 'delta': [.25, 0, 0]})
         self.assertEqual(changed['modeling']['origin'], origin)
-        self.assertEqual(changed['mesh']['uvs'], [])
+        self.assertEqual(changed['mesh']['uvs'], obj['mesh']['uvs'])
+        self.assertEqual(changed['mesh']['uv_indices'], obj['mesh']['uv_indices'])
         self.assertEqual(changed['mesh']['normals'], [])
         self.assertTrue(any('UV' in warning for warning in warnings))
         self.assertNotEqual(changed['mesh']['sha256'], obj['mesh']['sha256'])
+
+    def test_deformation_retains_uv_seams_missing_corners_and_provenance(self):
+        original = import_obj({'name': 'seam.obj', 'obj':
+            'v 0 0 0\nv 1 0 0\nv 1 1 0\nv 0 1 0\n'
+            'vt 0 0\nvt 1 0\nvt 1 1\nvt .25 .25\nvt .75 .75\n'
+            'f 1/1 2/2 3/3\nf 1/4 3/5 4\n'})['objects'][0]
+        editable, _ = modeling.prepare_operation(original, {'type': 'convert'})
+        before = copy.deepcopy(editable)
+        moved, warnings = modeling.prepare_operation(editable, {'type': 'move_vertices', 'indices': [0], 'delta': [0, 0, .5]})
+        self.assertEqual(editable, before)
+        self.assertEqual(moved['mesh']['uvs'], before['mesh']['uvs'])
+        self.assertEqual(moved['mesh']['uv_indices'], [[0, 1, 2], [3, 4, -1]])
+        self.assertEqual(moved['mesh']['triangles'], before['mesh']['triangles'])
+        self.assertEqual(moved['mesh']['normals'], [])
+        self.assertEqual(moved['mesh']['normal_indices'], [])
+        self.assertEqual(moved['modeling']['origin'], before['modeling']['origin'])
+        self.assertNotEqual(moved['mesh']['sha256'], before['mesh']['sha256'])
+        self.assertTrue(any('preserves UV' in warning for warning in warnings))
+
+    def test_rigid_translation_preserves_custom_normals_and_uvs(self):
+        original = import_obj({'name': 'normal.obj', 'obj':
+            'v 0 0 0\nv 1 0 0\nv 0 1 0\nvt 0 0\nvt 1 0\nvt 0 1\n'
+            'vn 0 0 1\nf 1/1/1 2/2/1 3/3/1\n'})['objects'][0]
+        editable, _ = modeling.prepare_operation(original, {'type': 'convert'})
+        moved, warnings = modeling.prepare_operation(editable, {'type': 'move_vertices', 'indices': [0, 1, 2], 'delta': [.1, .2, .3]})
+        for prop in ('normals', 'normal_indices', 'uvs', 'uv_indices'):
+            self.assertEqual(moved['mesh'][prop], editable['mesh'][prop])
+        self.assertEqual(warnings, [])
+
+    def test_topology_operation_still_reports_destructive_uv_boundary(self):
+        original = import_obj({'name': 'uv.obj', 'obj':
+            'v 0 0 0\nv 1 0 0\nv 0 1 0\nvt 0 0\nvt 1 0\nvt 0 1\nf 1/1 2/2 3/3\n'})['objects'][0]
+        editable, _ = modeling.prepare_operation(original, {'type': 'convert'})
+        subdivided, warnings = modeling.prepare_operation(editable, {'type': 'subdivide_faces', 'faces': [0]})
+        self.assertEqual(subdivided['mesh']['uvs'], [])
+        self.assertTrue(any('clear imported UV corners' in warning for warning in warnings))
 
     def test_concave_polygon_projection_is_ear_clipped_without_outside_fan(self):
         points = [[0, 0, 0], [2, 0, 0], [2, 2, 0], [1, .5, 0], [0, 2, 0]]

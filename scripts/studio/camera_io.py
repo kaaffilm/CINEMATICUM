@@ -184,7 +184,7 @@ def _camera(position, right, up, backward, width, height, fx, fy, cx, cy, scale,
     shift_x = _number(cx / width - .5, "Imported horizontal principal offset", -2, 2)
     shift_y = _number(.5 - cy / height, "Imported vertical principal offset", -2, 2)
     ratio = _number(fx / fy, "Imported focal ratio", .25, 4)
-    return {"position": position, "target": target, "fov": fov, "roll": roll,
+    return {"position": position, "target": target, "fov": fov, "roll": roll, "orientation_mode": "transport",
             "shift_x": shift_x, "shift_y": shift_y, "focal_ratio": ratio, "keyframes": []}
 
 

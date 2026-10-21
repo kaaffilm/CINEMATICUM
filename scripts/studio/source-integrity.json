@@ -1,6 +1,6 @@
 {
   "format": 1,
-  "version": "0.7.0",
+  "version": "0.8.0",
   "files": [
     {
       "path": ".github/workflows/studio-verification.yml",
@@ -9,8 +9,8 @@
     },
     {
       "path": "README.md",
-      "size": 11707,
-      "sha256": "7e484dcab381615f02f6d106bffd35044406f2b6bf40f2f91ae8240c57efc5bf"
+      "size": 12325,
+      "sha256": "f84154900f5ead0f800b5448ecb1259effb5b108df628f3f3384a3a3f8a65bc3"
     },
     {
       "path": "scripts/studio/CAPABILITY_AUDIT.md",
@@ -19,8 +19,13 @@
     },
     {
       "path": "scripts/studio/README.md",
-      "size": 40079,
-      "sha256": "3dea2d64956643a7a6b0b6c4b059a935f927da0ace0e1f6f719f544410d67ef8"
+      "size": 45019,
+      "sha256": "471dcdcfc65a94a338ddff9aca52a91b7b628d3cea0c3da1f6aa6afc9caaeccb"
+    },
+    {
+      "path": "scripts/studio/VERIFICATION_0_8.md",
+      "size": 9282,
+      "sha256": "700e016b2b2ec83973c78ff4e3a959c3df8be9250e06f797c863e190f0efe5f6"
     },
     {
       "path": "scripts/studio/__init__.py",
@@ -34,13 +39,13 @@
     },
     {
       "path": "scripts/studio/camera_io.py",
-      "size": 23748,
-      "sha256": "af5f37d2ca093dbabdb63693b66a42ccc9ee01a45917c186a2f3731286da435c"
+      "size": 23781,
+      "sha256": "cf70c41b57d8e9785680cb7390a44cdf6272774cba6f767cab119b44bdde60ca"
     },
     {
       "path": "scripts/studio/capabilities.json",
-      "size": 20219,
-      "sha256": "5a2cd30db439a4e484da9b6d0d335bb43c11b40ef77b2a8c079c0039623c11b7"
+      "size": 23955,
+      "sha256": "846eefa077be6ecfba36dff17ea08e7e1de6c3907e424118463a414194e50c18"
     },
     {
       "path": "scripts/studio/color_pipeline.py",
@@ -54,8 +59,8 @@
     },
     {
       "path": "scripts/studio/engine.py",
-      "size": 58075,
-      "sha256": "02978983d2f521172ceaf08eb1a8f09a98df8a8ea1c0264ae8730c612a967d49"
+      "size": 58583,
+      "sha256": "91e53851fca1ac7bbf4c82c14dd6259da3ee356f4bd8b6ebcd791732c57fa0b6"
     },
     {
       "path": "scripts/studio/frame_preview.py",
@@ -64,13 +69,13 @@
     },
     {
       "path": "scripts/studio/generation_readiness.py",
-      "size": 6107,
-      "sha256": "8244a7f4a32fa9b2f1e5491f17e97d521f5170ea669f42cbdea949a34d2d39f5"
+      "size": 15257,
+      "sha256": "afa317958cd1271a0b4f3b4191fc91dcf5af3db93273a6df7927bb0ed1ec61fe"
     },
     {
       "path": "scripts/studio/image_worker.py",
-      "size": 30272,
-      "sha256": "77c4e00e6c451ac58f220bd42eec64286054c3609c25c645e884209372553cfa"
+      "size": 30586,
+      "sha256": "d90a704768d7ce46205ca9de1f7840a8a70b0809c864c3760f7d5b0a6ee1c748"
     },
     {
       "path": "scripts/studio/imaging-macos-arm64-py313.lock.json",
@@ -89,18 +94,23 @@
     },
     {
       "path": "scripts/studio/install_macos.py",
-      "size": 16887,
-      "sha256": "7d3423175d8fb3036770256f9117e012b3faca1f5589476c5091a6624a7c8f59"
+      "size": 16965,
+      "sha256": "dc71d73affefba87cfa72d59d25444c5cd4d7f61644efaa62d875b7c37f84204"
     },
     {
       "path": "scripts/studio/interchange.py",
-      "size": 28471,
-      "sha256": "cd8e704fc3a4a91760ec5155a6217e92f67282ebde453f1617d0a1bf3321268d"
+      "size": 32283,
+      "sha256": "efab5a593e62804bddb057dd8fddc643fd7118f7ac964b1db8ca754815f23de2"
     },
     {
       "path": "scripts/studio/lens_assets.py",
       "size": 5358,
       "sha256": "db97f3bb0772d52ca6914c9b845d5aacee7271a9ec9179f9679ed972bb0f9b2b"
+    },
+    {
+      "path": "scripts/studio/macos/ArchiveSmoke.js",
+      "size": 7419,
+      "sha256": "e2797a5222bec04638dcef7eb71bec9f05741b342493690655d57197799a93ea"
     },
     {
       "path": "scripts/studio/macos/CameraImportSmoke.js",
@@ -158,6 +168,21 @@
       "sha256": "9c23ac17ca41913bc21ec2aea81f26235d205e86ba43b46b52fb677f84d70e62"
     },
     {
+      "path": "scripts/studio/macos/ProductionSmoke.js",
+      "size": 8818,
+      "sha256": "4ddd181525c3ca718cae1d47a20597e1af632ced7429776b1bd779fdb7004111"
+    },
+    {
+      "path": "scripts/studio/macos/RecoverySmoke.js",
+      "size": 3548,
+      "sha256": "b1d150003199c5c695bae36ecde18850846e1b6370dc01cb6a1ec5df30605377"
+    },
+    {
+      "path": "scripts/studio/macos/SceneMastersSmoke.js",
+      "size": 4251,
+      "sha256": "c19da7cb9c91d1174bb4a1ef27f129131c62e9d74cef6d9dac5eb4273380bac6"
+    },
+    {
       "path": "scripts/studio/macos/SceneSmoke.js",
       "size": 12237,
       "sha256": "5b588b0566ad8e386356a04f8379c2adf17d2b5371462f38a3f3e6ac25c8e0f4"
@@ -188,9 +213,29 @@
       "sha256": "050cf9d479ba859e63975fa94adee7a93d1afaaf22173db40971577008765e39"
     },
     {
+      "path": "scripts/studio/media_orientation.py",
+      "size": 5318,
+      "sha256": "f7e27ccee72830ca716fea86b365c7f3a513ad137a7c05e78c480b9520c5f27d"
+    },
+    {
       "path": "scripts/studio/modeling_blender.py",
       "size": 6958,
       "sha256": "c384c3aa605eb578956c518ee0c120c921f1b0672451e03579c06d11da164528"
+    },
+    {
+      "path": "scripts/studio/production.py",
+      "size": 19595,
+      "sha256": "f47379e8de247e2c12afd17849a6389daf48f6e607a807ed484340e34daa6653"
+    },
+    {
+      "path": "scripts/studio/project_archive.py",
+      "size": 38232,
+      "sha256": "eaaedc17c51a50dd3bedc38c7962b6919a3a14aaf3f385f4c8b3ac028d2bcd36"
+    },
+    {
+      "path": "scripts/studio/recovery.py",
+      "size": 7190,
+      "sha256": "26ee61d76ad3dd4c502033004c9294cb7bd8872f43c40caede174ce5f85e8db5"
     },
     {
       "path": "scripts/studio/research/ai-motion.md",
@@ -234,18 +279,18 @@
     },
     {
       "path": "scripts/studio/scene.py",
-      "size": 37587,
-      "sha256": "5d4a433c3e5a81047e6005f332930bb5a2909ca7e6ed877722229467857ee722"
+      "size": 58713,
+      "sha256": "542235e18a81fe9075f867a22ff4d27130bc79308025c385aa7446a50c973770"
     },
     {
       "path": "scripts/studio/scene_modeling.py",
-      "size": 24007,
-      "sha256": "17bb65f6468b7f1dbddb1a6b7c2d94561217c824eb0a5f0667866f1fd179522c"
+      "size": 26145,
+      "sha256": "0f4e6cbf88e73c4244da974b03ef498b4f8929c78ba9c48b722cb01c9d358f0c"
     },
     {
       "path": "scripts/studio/server.py",
-      "size": 63121,
-      "sha256": "4147dea5d4d570989677d2330a8aa5c47a9c26a3f05ec1eb71751095eaa94071"
+      "size": 74117,
+      "sha256": "fccc800aa6af8b9cfefdc657bfbc5ab8ef59b298c8900120bfcd570974efc9a5"
     },
     {
       "path": "scripts/studio/spatial_import.py",
@@ -258,9 +303,24 @@
       "sha256": "71a72e4c7505ef728caf022bcee9f4c67a74b75838b418a1c33b39edd223a22f"
     },
     {
+      "path": "scripts/studio/test_archive_http.py",
+      "size": 16822,
+      "sha256": "86e2270b0f9875fc2ffe0f9cee7d208ed198642e4026b60ca3bb24a6f2c66534"
+    },
+    {
       "path": "scripts/studio/test_camera_import_ui_macos.py",
       "size": 7861,
       "sha256": "4f5b57e6f433ce1e3de8edb7e9c9c94e37778e655c9965c2da983ccfd9859200"
+    },
+    {
+      "path": "scripts/studio/test_camera_integrity.py",
+      "size": 10266,
+      "sha256": "8fbb6e7c362068aaf7dfac231a14abcbb9e1dac26ab0ab715f8eb2fc943a3ad4"
+    },
+    {
+      "path": "scripts/studio/test_camera_integrity_blender.py",
+      "size": 6926,
+      "sha256": "1dff1b919016ea15dd8fa3f085ae1ae0b48f71f494c3d326c034c53d7c1d631c"
     },
     {
       "path": "scripts/studio/test_camera_io.py",
@@ -309,13 +369,13 @@
     },
     {
       "path": "scripts/studio/test_generation_readiness.py",
-      "size": 5005,
-      "sha256": "6bc75d355d86f7775c987563627a15367ab2aebb34e930990937f019582f07f7"
+      "size": 11464,
+      "sha256": "46ac6a0ba7318aefc1e47c99c62352ed23a85e09435db3f78175a08caa672921"
     },
     {
       "path": "scripts/studio/test_imaging.py",
-      "size": 21998,
-      "sha256": "5ced153a9be77553e7b343909032986df3006eb70eaea563dbd4f544c576387f"
+      "size": 24354,
+      "sha256": "6690aa919acebb020d570c3d91bae16c87facc760bd4ec920c9b582b386e56bd"
     },
     {
       "path": "scripts/studio/test_imaging_ui_macos.py",
@@ -334,8 +394,8 @@
     },
     {
       "path": "scripts/studio/test_interchange.py",
-      "size": 16907,
-      "sha256": "163deeccbb8f2f80ea9dc671e79180b3b51ded1f10d50284b759f3575c96f3e0"
+      "size": 26670,
+      "sha256": "a36a49451bfeed243c2b2acf68111565ec69d0b5489fadb89f26ae66749b0bb3"
     },
     {
       "path": "scripts/studio/test_interchange_ui_macos.py",
@@ -344,8 +404,8 @@
     },
     {
       "path": "scripts/studio/test_job_polling.py",
-      "size": 4352,
-      "sha256": "9a3445c040be384c3cf82d9dbeff7b2657e6bd54971d4d0f493a65f94eb38879"
+      "size": 4576,
+      "sha256": "d48f89eb2d87f734264341027902967eaf423f809d518a8a424420fbcaf0d225"
     },
     {
       "path": "scripts/studio/test_lens_compositor.py",
@@ -356,6 +416,16 @@
       "path": "scripts/studio/test_lens_ui_macos.py",
       "size": 14782,
       "sha256": "90e563547ba670c58eadbfdcf2b21d163adc60ab56c6fcefc46eccb3d003511e"
+    },
+    {
+      "path": "scripts/studio/test_media_lifecycle.py",
+      "size": 4030,
+      "sha256": "17bf2f8d25b0046250300fd9e109e83ada4ba8ecfca42dec8fcf09600e3fc87a"
+    },
+    {
+      "path": "scripts/studio/test_media_orientation.py",
+      "size": 9227,
+      "sha256": "f6d5c142b47d4619877f8307322caff746b88c7ec7c6c8e42895e2c539775017"
     },
     {
       "path": "scripts/studio/test_mesh_import_ui_macos.py",
@@ -393,14 +463,64 @@
       "sha256": "3cc3504161fb64445b03e61d2f63add50d2edce45d30b487900750b6bc327e2b"
     },
     {
+      "path": "scripts/studio/test_production.py",
+      "size": 14668,
+      "sha256": "3ba5032251c63635d70344b3de503574839b222db510d24cc84326ad391794cd"
+    },
+    {
+      "path": "scripts/studio/test_production_ui_macos.py",
+      "size": 12787,
+      "sha256": "26af3c927730256b67039d1e4dc0a2351e2fa993f9583d281335791d8297b1e3"
+    },
+    {
+      "path": "scripts/studio/test_project_archive.py",
+      "size": 27215,
+      "sha256": "7dd9ee829339ad1953c7f53755b6244701a70c05c0359fcc396b1a76b1588df4"
+    },
+    {
+      "path": "scripts/studio/test_project_archive_ui_macos.py",
+      "size": 14090,
+      "sha256": "a668648704e8568b983c6d94e70d1b5e3fa2f0f92ea4dd8eb69fcd5e4169ce28"
+    },
+    {
+      "path": "scripts/studio/test_recovery.py",
+      "size": 9881,
+      "sha256": "4ad3ec3a64e9dfc0690ce8913fbbbe8cf0aa3408989095a32fad03874a378df2"
+    },
+    {
+      "path": "scripts/studio/test_recovery_ui.py",
+      "size": 4303,
+      "sha256": "623501652d8e207dd79e9ae09cfd995713aac5bf80e7bedb099ec6bb58dde876"
+    },
+    {
+      "path": "scripts/studio/test_recovery_ui_macos.py",
+      "size": 5132,
+      "sha256": "bb9ec803aba270d6341e9dfe45c0e0f10aa8d8eb7a06be85aeccb40559e8752c"
+    },
+    {
       "path": "scripts/studio/test_scene.py",
       "size": 23889,
       "sha256": "7bca5a7cc93889d7fd4b1200619468d89eb7e24e7a4513d9c75f502bee4f6711"
     },
     {
+      "path": "scripts/studio/test_scene_masters.py",
+      "size": 10529,
+      "sha256": "171361fd9f13c8d7fe6a80564decd0b611d2626372a236b49c5b6635add9e8f4"
+    },
+    {
+      "path": "scripts/studio/test_scene_masters_blender.py",
+      "size": 8850,
+      "sha256": "b7aa97570ba893bb2550ea48a7bdba1a332736665412073168877b42e758bb23"
+    },
+    {
+      "path": "scripts/studio/test_scene_masters_ui_macos.py",
+      "size": 5623,
+      "sha256": "6719170a27cfc515cb89f945272ed76804e5aad91a698802ca9e4eef77d38183"
+    },
+    {
       "path": "scripts/studio/test_scene_modeling.py",
-      "size": 14036,
-      "sha256": "c254993da487a92d65ba88a8002dfb0d635fcec1382889ad51df5ebe0c272d89"
+      "size": 16560,
+      "sha256": "e3d49ba5de2a2fac24c61bc78a7cf426e1acbac1c9aeca7d9df782ad346866fb"
     },
     {
       "path": "scripts/studio/test_scene_modeling_blender.py",
@@ -409,8 +529,8 @@
     },
     {
       "path": "scripts/studio/test_scene_motion_blender.py",
-      "size": 6791,
-      "sha256": "7888c275adef4fe40f515a90d3ae3d1224ab173682b85fbcb9d06eafc1040dc4"
+      "size": 7319,
+      "sha256": "1ebf632e4ed52603a382b2fd734cf4ee1d296121fbbc9a26d9324dc9a6979fa4"
     },
     {
       "path": "scripts/studio/test_scene_ui_macos.py",
@@ -434,8 +554,8 @@
     },
     {
       "path": "scripts/studio/test_studio_v2.py",
-      "size": 21394,
-      "sha256": "2befc8b271b80389c7fdab2f813542264a95aab5d0add3e168e46398932fa946"
+      "size": 21608,
+      "sha256": "37324ef3b619cd2db512155a5ab75962a056607677873d096f488bea0bbe3208"
     },
     {
       "path": "scripts/studio/test_timebase.py",
@@ -494,8 +614,13 @@
     },
     {
       "path": "scripts/studio/web/app.js",
-      "size": 99806,
-      "sha256": "514c2747c0e5c4ba8ba3960e9f820a14ebabadcf7224930f767e7db4131a5e28"
+      "size": 106892,
+      "sha256": "328c7da58f10f0f37d5409677c28cc0a6f80b95ed416fda216cacdf502adb68e"
+    },
+    {
+      "path": "scripts/studio/web/archive-ui.js",
+      "size": 9491,
+      "sha256": "d928645674325e620f92720afcde875d9e0f422f45e647483cb5eaa319e011b3"
     },
     {
       "path": "scripts/studio/web/camera-io-ui.js",
@@ -524,13 +649,23 @@
     },
     {
       "path": "scripts/studio/web/index.html",
-      "size": 14331,
-      "sha256": "baecb5e58ee28d917491002c1de34b44e5ac57d80314aa0167dfa6678059f2b2"
+      "size": 15065,
+      "sha256": "28a18f82d1c047a4f764dd5d21bb8d8a7c6fc7dfc0bcc39cfa1bf17a942fd943"
     },
     {
       "path": "scripts/studio/web/interchange-ui.js",
       "size": 20373,
       "sha256": "a61b3c6abe7d73b659dc4a153a6c868bcfaa8b4e924cad915b3518da580ac3ec"
+    },
+    {
+      "path": "scripts/studio/web/production-ui.js",
+      "size": 24964,
+      "sha256": "f2a6c31942df20d76d75b918adc9374dec4e48454a45c1517e185b2a57335ba5"
+    },
+    {
+      "path": "scripts/studio/web/recovery-ui.js",
+      "size": 6458,
+      "sha256": "e146ee9ce5f7ca16ca0c55a32b36491f9769e61fdc263d1ede4699bcbda9d0ab"
     },
     {
       "path": "scripts/studio/web/scene-editor.css",
@@ -539,13 +674,13 @@
     },
     {
       "path": "scripts/studio/web/scene-editor.js",
-      "size": 87901,
-      "sha256": "52a11a01bf7cf7777bc861609d7fc3e34b9ab8583c860723ca0d5dec0913e750"
+      "size": 95191,
+      "sha256": "cbb9edf5165ada9fe051bc4834de9a4e1d6f353f397af8a340754ad25902399a"
     },
     {
       "path": "scripts/studio/web/style.css",
-      "size": 31268,
-      "sha256": "99e548badc2c64f8600a0b89128c8f38832c6e9f0b8f36f5e8912a9c711c6a01"
+      "size": 31729,
+      "sha256": "52cedc562515c3a0d4dc294ac7d1520a225495e5c4584bbfdcb2958bcc020419"
     },
     {
       "path": "scripts/studio/web/tracking-ui.js",

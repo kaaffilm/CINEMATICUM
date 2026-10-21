@@ -3,6 +3,7 @@
 Test media and all rendered outputs are ENGINE TEST SIGNALS ONLY.
 """
 import copy
+import hashlib
 import json
 from pathlib import Path
 import shutil
@@ -32,6 +33,11 @@ class InterchangeTests(unittest.TestCase):
         cls.ffmpeg(["-f", "lavfi", "-i", "testsrc2=s=96x64:r=24:d=4", "-f", "lavfi", "-i", "sine=f=880:r=48000:d=4",
                     "-c:v", "ffv1", "-c:a", "pcm_s16le", str(cls.root / "media/ENGINE_TEST_picture.mkv")])
         cls.ffmpeg(["-f", "lavfi", "-i", "sine=f=440:r=48000:d=4", "-c:a", "pcm_s16le", str(cls.root / "media/ENGINE_TEST_sound.wav")])
+        for name, color in (("plate", "blue"), ("parked", "lime")):
+            cls.ffmpeg(["-f", "lavfi", "-i", f"color=c={color}:s=96x64:r=24:d=1", "-an", "-c:v", "ffv1",
+                        str(cls.root / f"media/ENGINE_TEST_{name}.mkv")])
+        cls.ffmpeg(["-i", str(cls.root / "media/ENGINE_TEST_plate.mkv"), "-frames:v", "1", "-threads", "1",
+                    str(cls.root / "media/ENGINE_TEST_title.png")])
 
     @classmethod
     def tearDownClass(cls):
@@ -132,6 +138,143 @@ class InterchangeTests(unittest.TestCase):
             outputs.append((self.ffmpeg(["-i", str(path), "-map", "0:v:0", "-pix_fmt", "rgb24", "-threads", "1", "-f", "rawvideo", "pipe:1"]),
                             self.ffmpeg(["-i", str(path), "-map", "0:a:0", "-f", "s16le", "pipe:1"])))
         self.assertEqual(outputs[0], outputs[1])
+
+    def composite_project(self):
+        """A plate reached through a mask/merge and a dormant editable source."""
+        project = self.project()
+        project.update(fps=24, frame_rate={"numerator": 24, "denominator": 1})
+        project["assets"].extend({"id": name, "path": f"media/ENGINE_TEST_{name}.mkv"}
+                                 for name in ("plate", "parked"))
+        graph = {"version": 1, "nodes": [
+            {"id": "source", "type": "source", "inputs": [], "params": {}},
+            {"id": "plate", "type": "media_source", "inputs": [], "params": {"asset_id": "plate", "duration": 8}},
+            {"id": "masked", "type": "mask", "inputs": ["plate"],
+             "params": {"shape": "rectangle", "x": .75, "y": .5, "width": .5, "height": 1}},
+            {"id": "merge", "type": "merge", "inputs": ["source", "masked"], "params": {}},
+            {"id": "parked", "type": "media_source", "inputs": [], "params": {"asset_id": "parked", "duration": 8}},
+        ], "output": "merge"}
+        project["clips"] = [
+            {"id": "composite", "asset_id": "picture", "track": 0, "start": 0, "in": 0, "duration": 8,
+             "compositor": graph},
+            {"id": "audio", "asset_id": "sound", "track": -1, "start": 0, "in": 0, "duration": 8,
+             "volume": .5}]
+        return validate_project(project, self.root)
+
+    def test_cross_project_compositor_dependencies_preserve_rgb_pcm_and_dormant_nodes(self):
+        source = self.composite_project()
+        document = export_otio(source, self.root)["document"]
+        identities = document["metadata"]["cinematicum"]["asset_sha256"]
+        self.assertEqual(set(identities), {"picture", "sound", "plate", "parked"})
+        for asset in source["assets"]:
+            self.assertEqual(identities[asset["id"]], hashlib.sha256((self.root / asset["path"]).read_bytes()).hexdigest())
+        # Copy bytes into a distinct project directory: neither file paths nor
+        # asset IDs survive. Interchange must match content, then remap every
+        # nested reference, including the disconnected node retained for edits.
+        with tempfile.TemporaryDirectory(prefix="cinematicum-ENGINE-TEST-OTIO-destination-") as directory:
+            destination_dir = Path(directory)
+            (destination_dir / "media").mkdir()
+            destination = copy.deepcopy(source)
+            destination.update(id="different_project", clips=[], titles=[])
+            for index, asset in enumerate(destination["assets"]):
+                source_path = self.root / asset["path"]
+                asset["id"] = "fresh_" + asset["id"]
+                asset["path"] = f"media/copied_{index}{source_path.suffix}"
+                shutil.copyfile(source_path, destination_dir / asset["path"])
+            before = copy.deepcopy(destination)
+            document_before = copy.deepcopy(document)
+            result = import_otio(document, destination, destination_dir)
+            restored = result["project"]
+            self.assertEqual(restored["clips"][0]["asset_id"], "fresh_picture")
+            nodes = {node["id"]: node for node in restored["clips"][0]["compositor"]["nodes"]}
+            self.assertEqual(nodes["plate"]["params"]["asset_id"], "fresh_plate")
+            self.assertEqual(nodes["parked"]["params"]["asset_id"], "fresh_parked")
+            self.assertEqual(destination, before)
+            self.assertEqual(document, document_before)
+            self.assertFalse((destination_dir / "project.json").exists())
+            outputs = []
+            for name, project, project_dir in (("source_composite", source, self.root),
+                                               ("destination_composite", restored, destination_dir)):
+                path = project_dir / ("ENGINE_TEST_" + name + ".mov")
+                render_project(project, project_dir, path, "prores")
+                outputs.append((self.ffmpeg(["-i", str(path), "-map", "0:v:0", "-pix_fmt", "rgb24", "-threads", "1", "-f", "rawvideo", "pipe:1"]),
+                                self.ffmpeg(["-i", str(path), "-map", "0:a:0", "-f", "s16le", "pipe:1"])))
+            self.assertEqual(len(outputs[0][0]), 8 * 96 * 64 * 3)
+            self.assertEqual(outputs[0], outputs[1], "Cross-project dependencies must preserve decoded pixels and audio samples")
+
+    def test_reused_graph_source_id_cannot_substitute_unrelated_media(self):
+        source = self.composite_project()
+        document = export_otio(source, self.root)["document"]
+        destination = copy.deepcopy(source)
+        destination.update(id="collision_project", clips=[])
+        asset = next(a for a in destination["assets"] if a["id"] == "plate")
+        asset["path"] = "media/ENGINE_TEST_parked.mkv"
+        before = copy.deepcopy(destination)
+        with self.assertRaisesRegex(ValueError, "Unresolved OTIO media"):
+            import_otio(document, destination, self.root)
+        self.assertEqual(destination, before)
+        # A collision is not fatal when the correct bytes were imported with a
+        # fresh ID: hash matching must choose those bytes instead of the old ID.
+        destination["assets"].append({"id": "correct_plate", "path": "media/ENGINE_TEST_plate.mkv"})
+        result = import_otio(document, destination, self.root)["project"]
+        plate = next(n for n in result["clips"][0]["compositor"]["nodes"] if n["id"] == "plate")
+        self.assertEqual(plate["params"]["asset_id"], "correct_plate")
+
+    def test_private_raster_titles_are_remapped_but_unused_assets_are_not_dependencies(self):
+        source = self.composite_project()
+        source["assets"].extend([
+            {"id": "raster", "path": "media/ENGINE_TEST_title.png"},
+            {"id": "unused", "path": "media/ENGINE_TEST_parked.mkv"}])
+        source["titles"] = [{"id": "title", "text": "ENGINE TEST raster", "start": 0, "duration": 8,
+                             "asset_id": "raster"}]
+        source = validate_project(source, self.root)
+        document = export_otio(source, self.root)["document"]
+        self.assertNotIn("unused", document["metadata"]["cinematicum"]["asset_sha256"])
+        self.assertIn("raster", document["metadata"]["cinematicum"]["asset_sha256"])
+        destination = copy.deepcopy(source)
+        destination.update(id="title_destination", clips=[], titles=[])
+        destination["assets"] = [asset for asset in destination["assets"] if asset["id"] != "unused"]
+        for asset in destination["assets"]:
+            asset["id"] = "fresh_" + asset["id"]
+        restored = import_otio(document, destination, self.root)["project"]
+        self.assertEqual(restored["titles"][0]["asset_id"], "fresh_raster")
+        missing = copy.deepcopy(destination)
+        missing["assets"] = [asset for asset in missing["assets"] if asset["id"] != "fresh_raster"]
+        with self.assertRaisesRegex(ValueError, "Unresolved OTIO media"):
+            import_otio(document, missing, self.root)
+
+    def test_private_dependencies_require_complete_valid_identities_even_for_legacy_same_ids(self):
+        source = self.composite_project()
+        document = export_otio(source, self.root)["document"]
+        # 0.7's incomplete export omitted graph-only media. Same IDs cannot be
+        # used as evidence of unchanged bytes, including in the source project.
+        for missing in ("plate", "parked", "picture"):
+            legacy = copy.deepcopy(document)
+            del legacy["metadata"]["cinematicum"]["asset_sha256"][missing]
+            with self.subTest(missing=missing), self.assertRaisesRegex(ValueError, "complete media dependencies"):
+                import_otio(legacy, source, self.root)
+        for table in (None, [], {"plate": "invalid"}, {"bad/path": "0" * 64}):
+            malformed = copy.deepcopy(document)
+            malformed["metadata"]["cinematicum"]["asset_sha256"] = table
+            with self.subTest(table=table), self.assertRaisesRegex(ValueError, "asset_sha256"):
+                import_otio(malformed, source, self.root)
+
+    def test_explicit_different_bytes_cannot_restore_private_authoring(self):
+        source = self.composite_project()
+        document = export_otio(source, self.root)["document"]
+        plate_digest = document["metadata"]["cinematicum"]["asset_sha256"]["plate"]
+        for relink in ({"sha256:" + plate_digest: "parked"},
+                       {"media/ENGINE_TEST_picture.mkv": "plate"}):
+            with self.subTest(relink=relink), self.assertRaisesRegex(ValueError, "media identity mismatch"):
+                import_otio(document, source, self.root, relink)
+        # Externally edited cuts may still explicitly relink to different media;
+        # the public-cut path warns and does not restore the private composite.
+        external = copy.deepcopy(document)
+        external["tracks"]["children"] = [track for track in external["tracks"]["children"]
+                                           if track["metadata"]["cinematicum"]["role"] != "embedded_audio"]
+        self.first_clip(external)["source_range"]["start_time"]["value"] = 1
+        result = import_otio(external, source, self.root, {"media/ENGINE_TEST_picture.mkv": "plate"})
+        self.assertTrue(any("different media content" in warning for warning in result["warnings"]))
+        self.assertNotIn("compositor", result["project"]["clips"][0])
 
     def test_external_cuts_resolve_only_explicit_existing_asset_mappings(self):
         p = self.project()

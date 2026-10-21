@@ -23,10 +23,12 @@ from collections import OrderedDict
 import threading
 
 if __package__:
+    from .compositor import MAX_NODES
     from .engine import _media_path, validate_project, track_state
     from .scene import validate_scene
     from .timebase import parse_rate, project_rate
 else:
+    from compositor import MAX_NODES
     from engine import _media_path, validate_project, track_state
     from scene import validate_scene
     from timebase import parse_rate, project_rate
@@ -146,12 +148,55 @@ def _validated_project(project, project_dir):
     return normalized
 
 
+def _asset_reference_slots(project):
+    """Yield all editable media-reference objects, including dormant graph nodes.
+
+    A compositor's media_source is a dependency even if it is disconnected from
+    the current output: dropping its identity would corrupt a later graph edit.
+    Enumerate only the supported schema slots, never arbitrary asset_id-looking
+    metadata (which may describe historical provenance rather than dependencies).
+    Import calls this before destination validation, while the references still
+    carry source-project IDs, so malformed structures must fail here explicitly.
+    """
+    for key, limit in (("clips", 256), ("titles", 128)):
+        items = project.get(key, [])
+        if not isinstance(items, list) or len(items) > limit:
+            raise ValueError("Invalid CINEMATICUM " + key + " in OTIO authoring metadata.")
+        for item in items:
+            if not isinstance(item, dict):
+                raise ValueError("Invalid CINEMATICUM media reference in OTIO authoring metadata.")
+            if key == "clips" or item.get("asset_id") is not None:
+                yield item
+            graph = item.get("compositor") if key == "clips" else None
+            if graph is None:
+                continue
+            if not isinstance(graph, dict) or not isinstance(graph.get("nodes"), list) or len(graph["nodes"]) > MAX_NODES:
+                raise ValueError("Invalid CINEMATICUM compositor in OTIO authoring metadata.")
+            for node in graph["nodes"]:
+                if not isinstance(node, dict):
+                    raise ValueError("Invalid CINEMATICUM compositor node in OTIO authoring metadata.")
+                if node.get("type") == "media_source":
+                    if not isinstance(node.get("params"), dict):
+                        raise ValueError("Invalid CINEMATICUM compositor media source in OTIO authoring metadata.")
+                    yield node["params"]
+
+
+def _asset_identities(value):
+    """Validate the private identity table before resolving any private media."""
+    if (not isinstance(value, dict) or len(value) > 512
+            or any(not isinstance(ident, str) or not re.fullmatch(r"[A-Za-z0-9_-]{1,128}", ident)
+                   or not isinstance(digest, str) or not re.fullmatch(r"[0-9a-f]{64}", digest)
+                   for ident, digest in value.items())):
+        raise ValueError("CINEMATICUM OTIO asset_sha256 must map source asset IDs to valid SHA-256 identities.")
+    return value
+
+
 def export_otio(project, project_dir):
     """Return {document, warnings}; media remains in the existing project."""
     p = _validated_project(project, project_dir)
     rate = project_rate(p)
     assets = {asset["id"]: asset for asset in p["assets"]}
-    used = {clip["asset_id"] for clip in p["clips"]} | {title["asset_id"] for title in p["titles"] if title.get("asset_id")}
+    used = {reference["asset_id"] for reference in _asset_reference_slots(p)}
     identities = {ident: _sha256(_media_path(project_dir, assets[ident]["path"])) for ident in sorted(used)}
     warnings = ["OTIO exchanges cuts, gaps and references. Relink the project-relative media paths in other editors; media is not embedded."]
     if p["titles"]:
@@ -427,6 +472,24 @@ def _import_otio(document, project, project_dir, asset_map):
         saved_clips = candidate.get("clips")
         if not isinstance(saved_clips, list) or len(saved_clips) != len(native):
             raise ValueError("CINEMATICUM metadata does not match the public OTIO cut list.")
+        identities = _asset_identities(own.get("asset_sha256"))
+        references = list(_asset_reference_slots(candidate))
+        for reference in references:
+            source_id = reference.get("asset_id")
+            if not isinstance(source_id, str) or source_id not in identities:
+                # Older exports omitted graph-only dependencies. Even in the
+                # original project, a matching ID cannot establish that the
+                # media bytes are still the same. Re-export with a full table.
+                raise ValueError("A private CINEMATICUM media reference has no verified SHA-256 identity. "
+                                 "Re-export the OTIO from its source project with complete media dependencies.")
+
+        def verify_private_media(source_id, destination_id):
+            if destination_id not in hashes:
+                hashes[destination_id] = _sha256(_media_path(project_dir, assets[destination_id]["path"]))
+            if hashes[destination_id] != identities[source_id]:
+                raise ValueError("Private CINEMATICUM media identity mismatch for " + source_id
+                                 + ". Restoring authoring data requires byte-identical imported media.")
+
         public_by_id = {}
         for clip in native:
             ident = clip["_private"].get("clip_id")
@@ -441,8 +504,8 @@ def _import_otio(document, project, project_dir, asset_map):
                 raise ValueError("Private CINEMATICUM timing conflicts with public OTIO timing.")
             if saved.get("track") != public["_track_private"].get("track_id") or (saved["track"] < 0) != (public["_kind"] == "Audio"):
                 raise ValueError("Private CINEMATICUM track identity conflicts with the public OTIO track.")
-            asset_remap[saved["asset_id"]] = public["asset_id"]
-            saved["asset_id"] = public["asset_id"]
+            verify_private_media(saved["asset_id"], public["asset_id"])
+            asset_remap.setdefault(saved["asset_id"], public["asset_id"])
         companions = {}
         for clip in public_clips:
             if clip["_private"].get("role") != "embedded_audio":
@@ -457,17 +520,18 @@ def _import_otio(document, project, project_dir, asset_map):
         for ident, clip in public_by_id.items():
             if clip["_kind"] == "Video" and assets[clip["asset_id"]]["has_audio"] and ident not in companions:
                 raise ValueError("A CINEMATICUM picture clip is missing its linked source-audio track.")
-        for source_id, digest in own.get("asset_sha256", {}).items():
+        for source_id, digest in identities.items():
             if source_id in asset_remap:
                 continue
             dummy = {"OTIO_SCHEMA": "ExternalReference.1", "target_url": "sha256:" + str(digest),
                      "metadata": {"cinematicum": {"asset_id": source_id, "sha256": digest}}}
             asset_remap[source_id] = asset_for(dummy)
-        for title in candidate.get("titles", []):
-            if title.get("asset_id") is not None:
-                if title["asset_id"] not in asset_remap:
-                    raise ValueError("A private raster title has no verified imported media identity.")
-                title["asset_id"] = asset_remap[title["asset_id"]]
+            verify_private_media(source_id, asset_remap[source_id])
+        # Remap all references only after the complete dependency set has been
+        # resolved and content-verified. Source IDs never fall through to an
+        # unrelated destination asset with the same ID.
+        for reference in references:
+            reference["asset_id"] = asset_remap[reference["asset_id"]]
         candidate["frame_rate"], candidate["fps"] = rate.as_dict(), rate.fps
         warnings.append("CINEMATICUM authoring metadata restored, including effects and mixer state. No project has been saved.")
     else:
