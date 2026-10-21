@@ -37,6 +37,11 @@ class _ComfyHandler(BaseHTTPRequestHandler):
             self.send_payload({"system": {"python_version": "test"}, "devices": []})
         elif route == "/history/prompt-test":
             self.send_payload(self.server.history)
+        elif route == "/api/jobs/prompt-test":
+            payload = self.server.job_detail
+            if payload is None:
+                payload = {"id": "prompt-test", "status": self.server.jobs.get("prompt-test", "pending")}
+            self.send_payload(payload, self.server.job_detail_status)
         elif route == "/view":
             if self.server.download_redirect:
                 self.send_payload(b"", 302, {"Location": "/forbidden"})
@@ -48,9 +53,26 @@ class _ComfyHandler(BaseHTTPRequestHandler):
     def do_POST(self):
         self.server.calls.append(("POST", self.path))
         body = self.rfile.read(int(self.headers.get("Content-Length", 0)))
-        self.server.submissions.append(json.loads(body))
+        payload = json.loads(body)
+        self.server.submissions.append(payload)
         if self.path == "/prompt":
             self.send_payload(self.server.accepted, self.server.submit_status)
+        elif self.path == "/api/jobs/prompt-test/cancel":
+            if (self.server.cancel_status == 200 and self.server.cancel_response.get("cancelled") is True
+                    and self.server.cancel_result_status is not None):
+                self.server.jobs["prompt-test"] = self.server.cancel_result_status
+            self.send_payload(self.server.cancel_response, self.server.cancel_status)
+        elif self.path == "/queue":
+            # The legacy operation removes pending IDs only. It must never
+            # affect the running job or another client's queued job.
+            if set(payload) != {"delete"} or not isinstance(payload["delete"], list):
+                self.send_payload({"error": "unexpected queue mutation"}, 400)
+                return
+            if self.server.queue_status == 200:
+                for job_id in payload["delete"]:
+                    if self.server.jobs.get(job_id) == "pending":
+                        del self.server.jobs[job_id]
+            self.send_payload({}, self.server.queue_status)
         else:
             self.send_payload({"error": "unexpected mutation"}, 500)
 
@@ -66,6 +88,13 @@ class ComfyAdapterTests(unittest.TestCase):
         self.server.video = b"TEST-ONLY-PROTOCOL-FIXTURE-NOT-VALID-MEDIA"
         self.server.download_status = 200
         self.server.download_redirect = False
+        self.server.jobs = {"prompt-test": "in_progress", "other-pending": "pending"}
+        self.server.cancel_status = 200
+        self.server.cancel_response = {"cancelled": True}
+        self.server.cancel_result_status = "cancelled"
+        self.server.job_detail = None
+        self.server.job_detail_status = 200
+        self.server.queue_status = 200
         self.server.history = {"prompt-test": {
             "status": {"completed": True, "status_str": "success", "messages": []},
             "outputs": {"9": {"gifs": [{"filename": "clip.mp4", "type": "output", "subfolder": "shots"}]}},
@@ -161,7 +190,7 @@ class ComfyAdapterTests(unittest.TestCase):
             self.generate()
         self.assertEqual(list(Path(self.temp.name).iterdir()), [])
 
-    def test_cancel_after_submission_never_interrupts_shared_server(self):
+    def cancel_after_accept(self):
         self.server.history = {}
         event = threading.Event()
 
@@ -172,7 +201,109 @@ class ComfyAdapterTests(unittest.TestCase):
         with self.assertRaises(adapters.AdapterCancelled) as raised:
             self.generate(progress=on_progress, cancel_event=event)
         self.assertEqual(raised.exception.prompt_id, "prompt-test")
-        self.assertEqual([path for method, path in self.server.calls if method == "POST"], ["/prompt"])
+        return raised.exception
+
+    def test_cancel_own_running_job_verifies_its_state_and_preserves_other_job(self):
+        result = self.cancel_after_accept()
+        self.assertEqual(self.server.jobs, {"prompt-test": "cancelled", "other-pending": "pending"})
+        self.assertEqual(result.cancellation, {"method": "job", "dispatch_accepted": True,
+            "remote_cancelled": True, "remote_status": "cancelled", "queue_delete_accepted": False})
+        self.assertIn("server confirms", str(result))
+        self.assertEqual([path for method, path in self.server.calls if method == "POST"],
+                         ["/prompt", "/api/jobs/prompt-test/cancel"])
+        self.assertEqual(self.server.submissions[-1], {})
+
+    def test_cancel_dispatch_is_not_misreported_as_confirmed_completion(self):
+        self.server.cancel_result_status = "cancelling"
+        result = self.cancel_after_accept()
+        self.assertTrue(result.cancellation["dispatch_accepted"])
+        self.assertFalse(result.cancellation["remote_cancelled"])
+        self.assertEqual(result.cancellation["remote_status"], "cancelling")
+        self.assertIn("not yet confirmed", str(result))
+        self.assertEqual(self.server.jobs["other-pending"], "pending")
+
+    def test_cancel_terminal_noop_is_not_misreported_as_cancellation(self):
+        self.server.cancel_response = {"cancelled": False}
+        self.server.jobs["prompt-test"] = "completed"
+        result = self.cancel_after_accept()
+        self.assertFalse(result.cancellation["dispatch_accepted"])
+        self.assertFalse(result.cancellation["remote_cancelled"])
+        self.assertEqual(result.cancellation["remote_status"], "completed")
+        self.assertIn("dispatched no new cancellation", str(result))
+
+    def test_legacy_cancel_deletes_only_owned_pending_id_and_does_not_interrupt(self):
+        for status in (404, 405):
+            with self.subTest(status=status):
+                self.server.calls.clear()
+                self.server.submissions.clear()
+                self.server.cancel_status = status
+                self.server.jobs = {"prompt-test": "pending", "other-running": "in_progress",
+                                    "other-pending": "pending"}
+                result = self.cancel_after_accept()
+                self.assertEqual(self.server.jobs, {"other-running": "in_progress", "other-pending": "pending"})
+                self.assertEqual([path for method, path in self.server.calls if method == "POST"],
+                                 ["/prompt", "/api/jobs/prompt-test/cancel", "/queue"])
+                self.assertEqual(self.server.submissions[-1], {"delete": ["prompt-test"]})
+                self.assertTrue(result.cancellation["queue_delete_accepted"])
+                self.assertFalse(result.cancellation["dispatch_accepted"])
+                self.assertFalse(result.cancellation["remote_cancelled"])
+                self.assertEqual(result.cancellation["method"], "queue")
+                self.assertIn("not verified", str(result))
+
+    def test_legacy_running_job_may_continue_and_is_reported_truthfully(self):
+        self.server.cancel_status = 404
+        result = self.cancel_after_accept()
+        self.assertEqual(self.server.jobs["prompt-test"], "in_progress")
+        self.assertTrue(result.cancellation["queue_delete_accepted"])
+        self.assertFalse(result.cancellation["remote_cancelled"])
+        self.assertIn("running prompt may continue", str(result))
+
+    def test_cancel_ambiguous_server_failure_never_falls_back_or_retries(self):
+        self.server.cancel_status = 500
+        result = self.cancel_after_accept()
+        self.assertEqual(self.server.jobs["prompt-test"], "in_progress")
+        self.assertFalse(result.cancellation["remote_cancelled"])
+        self.assertIn("HTTP 500", result.cancellation["error"])
+        self.assertEqual([path for method, path in self.server.calls if method == "POST"],
+                         ["/prompt", "/api/jobs/prompt-test/cancel"])
+
+    def test_cancel_verification_of_another_job_is_refused(self):
+        self.server.job_detail = {"id": "other-pending", "status": "cancelled"}
+        result = self.cancel_after_accept()
+        self.assertTrue(result.cancellation["dispatch_accepted"])
+        self.assertFalse(result.cancellation["remote_cancelled"])
+        self.assertIn("invalid cancellation verification", result.cancellation["verification_error"])
+
+    def test_disappeared_pending_job_is_not_claimed_terminal_cancelled(self):
+        self.server.job_detail_status = 404
+        result = self.cancel_after_accept()
+        self.assertTrue(result.cancellation["dispatch_accepted"])
+        self.assertFalse(result.cancellation["remote_cancelled"])
+        self.assertIn("HTTP 404", result.cancellation["verification_error"])
+
+    def test_malformed_cancel_reply_never_triggers_global_or_legacy_mutation(self):
+        self.server.cancel_response = {"cancelled": "true"}
+        result = self.cancel_after_accept()
+        self.assertFalse(result.cancellation["dispatch_accepted"])
+        self.assertFalse(result.cancellation["remote_cancelled"])
+        self.assertIn("invalid scoped", result.cancellation["error"])
+        self.assertEqual([path for method, path in self.server.calls if method == "POST"],
+                         ["/prompt", "/api/jobs/prompt-test/cancel"])
+
+    def test_pre_cancel_has_no_network_side_effects(self):
+        event = threading.Event()
+        event.set()
+        with self.assertRaises(adapters.AdapterCancelled) as raised:
+            self.generate(cancel_event=event)
+        self.assertIsNone(raised.exception.prompt_id)
+        self.assertIsNone(raised.exception.cancellation)
+        self.assertEqual(self.server.calls, [])
+
+    def test_invalid_accepted_job_id_cannot_change_cancel_route(self):
+        self.server.accepted["prompt_id"] = "../other-running"
+        with self.assertRaisesRegex(adapters.AdapterError, "invalid prompt ID"):
+            self.generate()
+        self.assertEqual(self.server.calls, [("POST", "/prompt")])
 
     def test_download_redirect_is_not_followed(self):
         self.server.download_redirect = True

@@ -20,6 +20,8 @@ import tempfile
 import uuid
 
 from adapters import AdapterError, _BLENDER_TIMEOUT, _cancelled, _run_owned, _sha256, find_blender
+from spatial_import import validate_mesh, validate_scene_geometry
+from timebase import parse_rate
 
 
 _IDENTIFIER = re.compile(r"[A-Za-z0-9_-]{1,80}\Z")
@@ -39,7 +41,13 @@ POSE_FIELDS = {
 
 
 def _number(value, label, low, high, integer=False):
-    if isinstance(value, bool) or not isinstance(value, (int, float)) or not math.isfinite(value):
+    if isinstance(value, bool) or not isinstance(value, (int, float)):
+        raise ValueError("%s must be a finite number." % label)
+    try:
+        finite = math.isfinite(value)
+    except OverflowError:
+        finite = False
+    if not finite:
         raise ValueError("%s must be a finite number." % label)
     if value < low or value > high or integer and int(value) != value:
         raise ValueError("%s must be %sbetween %s and %s." % (label, "an integer " if integer else "", low, high))
@@ -144,14 +152,18 @@ def validate_scene(scene, width=None, height=None):
         src.setdefault(key, [])
     identifiers = set()
     for obj in src["objects"]:
-        _object(obj, "Scene object", {"id", "name", "type", "position", "rotation", "scale", "material", "keyframes"})
+        _object(obj, "Scene object", {"id", "name", "type", "position", "rotation", "scale", "material", "keyframes", "mesh"})
         ident = _id(obj.get("id"), "Object ID")
         if ident in identifiers:
             raise ValueError("Scene IDs must be unique.")
         identifiers.add(ident)
         obj["name"] = _name(obj.get("name", "Object"), "Object")
-        if obj.get("type") not in {"cube", "sphere", "plane", "cylinder"}:
-            raise ValueError("Choose a cube, sphere, plane, or cylinder primitive.")
+        if not isinstance(obj.get("type"), str) or obj["type"] not in {"cube", "sphere", "plane", "cylinder", "mesh"}:
+            raise ValueError("Choose a supported primitive or import polygon mesh geometry.")
+        if obj["type"] == "mesh":
+            obj["mesh"] = validate_mesh(obj.get("mesh"))
+        elif "mesh" in obj:
+            raise ValueError("Only mesh objects may contain imported geometry.")
         for prop, default, low, high in (("position", [0, 0, 1], -1000, 1000),
                                          ("rotation", [0, 0, 0], -3600, 3600), ("scale", [1, 1, 1], .01, 100)):
             obj[prop] = _vector(obj.get(prop, default), "Object " + prop, low, high)
@@ -160,6 +172,7 @@ def validate_scene(scene, width=None, height=None):
         mat["roughness"] = _number(mat.get("roughness", .45), "Roughness", 0, 1)
         mat["metallic"] = _number(mat.get("metallic", 0), "Metallic", 0, 1)
         _keyframes(obj, "object", src["frame_end"])
+    validate_scene_geometry(src["objects"])
     for light in src["lights"]:
         _object(light, "Light", {"id", "name", "type", "position", "target", "color", "power", "size", "keyframes"})
         ident = _id(light.get("id"), "Light ID")
@@ -213,6 +226,7 @@ def pose_at(obj, frame, kind="object"):
 
 def _build_script(spec, blend_path, frames_dir, fps, frame_start, frame_end):
     """Paths are supplied by the renderer, never accepted from the recipe."""
+    rate = parse_rate(fps, maximum=60)
     payload = json.dumps(spec, ensure_ascii=True, allow_nan=False, sort_keys=True)
     return '''import bpy, json, math
 from mathutils import Vector
@@ -220,6 +234,7 @@ SPEC = json.loads(%r)
 BLEND_PATH = %r
 FRAMES = %r
 FPS = %r
+FPS_BASE = %r
 START = %r
 END = %r
 bpy.ops.object.select_all(action='SELECT')
@@ -233,7 +248,7 @@ scene.render.resolution_x = SPEC['width']
 scene.render.resolution_y = SPEC['height']
 scene.render.resolution_percentage = 100
 scene.render.fps = FPS
-scene.render.fps_base = 1
+scene.render.fps_base = FPS_BASE
 scene.render.image_settings.file_format = 'PNG'
 scene.render.image_settings.color_mode = 'RGBA'
 scene.render.image_settings.color_depth = '16'
@@ -406,7 +421,29 @@ for item in SPEC['objects']:
     elif primitive == 'sphere': bpy.ops.mesh.primitive_uv_sphere_add(segments=32, ring_count=16, radius=1)
     elif primitive == 'plane': bpy.ops.mesh.primitive_plane_add(size=2)
     elif primitive == 'cylinder': bpy.ops.mesh.primitive_cylinder_add(vertices=32, radius=1, depth=2)
-    obj = bpy.context.object
+    if primitive == 'mesh':
+        geometry = item['mesh']
+        mesh_data = bpy.data.meshes.new(item['name'] + ' Geometry')
+        mesh_data.from_pydata(geometry['vertices'], [], geometry['triangles'])
+        mesh_data.update()
+        if len(mesh_data.vertices) != len(geometry['vertices']) or len(mesh_data.polygons) != len(geometry['triangles']):
+            raise RuntimeError('Blender did not preserve the imported mesh topology.')
+        if geometry['uvs']:
+            uv_layer = mesh_data.uv_layers.new(name='UVMap')
+            for polygon,indices in zip(mesh_data.polygons, geometry['uv_indices']):
+                for loop_index,uv_index in zip(polygon.loop_indices, indices):
+                    uv_layer.data[loop_index].uv = geometry['uvs'][uv_index] if uv_index >= 0 else (0, 0)
+        if geometry['normals']:
+            for polygon in mesh_data.polygons: polygon.use_smooth = True
+            mesh_data.normals_split_custom_set([geometry['normals'][index] for face in geometry['normal_indices'] for index in face])
+        obj = bpy.data.objects.new(item['name'], mesh_data)
+        scene.collection.objects.link(obj)
+        obj['cinematicum_geometry_sha256'] = geometry['sha256']
+        if geometry.get('source'):
+            obj['cinematicum_source_sha256'] = geometry['source']['sha256']
+            obj['cinematicum_source_name'] = geometry['source']['name']
+    else:
+        obj = bpy.context.object
     obj.name = item['name']
     obj['cinematicum_id'] = item['id']
     obj.rotation_mode = 'XYZ'
@@ -460,7 +497,7 @@ for frame in range(START, END+1):
             aim(light, pose['target'])
     scene.render.filepath = FRAMES + '/frame_%%06d.png' %% frame
     bpy.ops.render.render(write_still=True)
-''' % (payload, str(blend_path), str(frames_dir), fps, frame_start, frame_end)
+''' % (payload, str(blend_path), str(frames_dir), rate.blender_fps, rate.blender_fps_base, frame_start, frame_end)
 
 
 def render_scene(scene, output_dir, fps=24, frame_start=1, frame_end=None,
@@ -470,7 +507,7 @@ def render_scene(scene, output_dir, fps=24, frame_start=1, frame_end=None,
     spec = validate_scene(scene)
     if not spec["objects"]:
         raise ValueError("Add at least one object before rendering the 3D scene.")
-    fps = _number(fps, "Scene frame rate", 1, 60, True)
+    rate = parse_rate(fps, maximum=60)
     start = _number(frame_start, "Start frame", 1, spec["frame_end"], True)
     end = _number(spec["frame_end"] if frame_end is None else frame_end, "End frame", start, spec["frame_end"], True)
     binary, ffmpeg = find_blender(), shutil.which("ffmpeg")
@@ -488,7 +525,7 @@ def render_scene(scene, output_dir, fps=24, frame_start=1, frame_end=None,
         frames.mkdir()
         source = work / "authored.blend"
         script = work / "build_scene.py"
-        script.write_text(_build_script(spec, source, frames, fps, start, end), encoding="utf-8")
+        script.write_text(_build_script(spec, source, frames, rate, start, end), encoding="utf-8")
         previous = [-1]
 
         def tick():
@@ -507,7 +544,7 @@ def render_scene(scene, output_dir, fps=24, frame_start=1, frame_end=None,
                 raise AdapterError("Blender did not produce scene frame %d." % frame)
         _cancelled(cancel_event)
         encoded = work / "encoded.mp4"
-        _run_owned([ffmpeg, "-hide_banner", "-nostdin", "-v", "error", "-n", "-framerate", str(fps),
+        _run_owned([ffmpeg, "-hide_banner", "-nostdin", "-v", "error", "-n", "-framerate", rate.ffmpeg,
                     "-start_number", str(start), "-i", str(frames / "frame_%06d.png"), "-frames:v", str(total),
                     "-c:v", "libx264", "-preset", "medium", "-crf", "18", "-pix_fmt", "yuv420p",
                     "-movflags", "+faststart", str(encoded)], work / "encode.log", cancel_event, _BLENDER_TIMEOUT)
@@ -526,5 +563,11 @@ def render_scene(scene, output_dir, fps=24, frame_start=1, frame_end=None,
         "backend": "blender-authored-scene", "renderer": "Cycles CPU", "scene_version": 1,
         "recipe_sha256": hashlib.sha256(json.dumps(spec, sort_keys=True, separators=(",", ":")).encode()).hexdigest(),
         "output_sha256": _sha256(movie), "scene_sha256": _sha256(blend), "frame_start": start,
-        "frame_end": end, "frame_end_inclusive": True, "fps": fps, "autoexec_enabled": False,
-        "objects": len(spec["objects"]), "lights": len(spec["lights"]), "viewport_is_approximate": True}}
+        "frame_end": end, "frame_end_inclusive": True, "fps": rate.fps, "frame_rate": rate.as_dict(), "autoexec_enabled": False,
+        "objects": len(spec["objects"]), "lights": len(spec["lights"]), "viewport_is_approximate": True,
+        "mesh_objects": sum(item["type"] == "mesh" for item in spec["objects"]),
+        "mesh_vertices": sum(len(item["mesh"]["vertices"]) for item in spec["objects"] if item["type"] == "mesh"),
+        "mesh_triangles": sum(len(item["mesh"]["triangles"]) for item in spec["objects"] if item["type"] == "mesh"),
+        "mesh_geometry_sha256": [item["mesh"]["sha256"] for item in spec["objects"] if item["type"] == "mesh"],
+        "mesh_source_sha256": sorted({item["mesh"]["source"]["sha256"] for item in spec["objects"]
+                                      if item["type"] == "mesh" and item["mesh"].get("source")})}}

@@ -121,6 +121,7 @@ class StudioV2Tests(unittest.TestCase):
                 edited["settings"]["scene"]["objects"][0]["position"][0] = 9
                 edited["settings"]["scene"]["frame_end"] = 48
                 edited["fps"] = 30
+                edited["frame_rate"] = {"numerator": 30, "denominator": 1}
                 status, _, changed = self.request("PUT", f"/api/projects/{saved['id']}", edited)
                 self.assertEqual(200, status, changed)
                 release.set()
@@ -132,9 +133,10 @@ class StudioV2Tests(unittest.TestCase):
         self.assertEqual("completed", completed["state"], completed)
         self.assertEqual(scene_before, captured["scene"])
         self.assertEqual(scene_before, captured["scene_after_edit"])
-        self.assertEqual((1, 24, 24), (captured["frame_start"], captured["frame_end"], captured["fps"]))
+        self.assertEqual((1, 24), (captured["frame_start"], captured["frame_end"]))
+        self.assertEqual({"numerator": 24, "denominator": 1}, captured["fps"].as_dict())
         snapshot = {"scene": scene_before, "frame_start": 1, "frame_end": 24,
-                    "fps": 24, "project_revision": saved["revision"]}
+                    "fps": 24, "frame_rate": {"numerator": 24, "denominator": 1}, "project_revision": saved["revision"]}
         snapshot_path = self.store.root / "jobs" / (submitted["id"] + ".snapshot")
         self.assertEqual(snapshot, json.loads(snapshot_path.read_text()))
 

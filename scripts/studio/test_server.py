@@ -182,6 +182,65 @@ class ServerTests(unittest.TestCase):
         status, _, _ = self.request("POST", route, {"project": p, "frame": 24})
         self.assertEqual(400, status)
 
+    def test_rational_creation_and_data_only_mesh_import(self):
+        status, _, project = self.request("POST", "/api/projects", {"name": "Rational", "width": 160, "height": 90, "frame_rate": {"numerator": 24000, "denominator": 1001}})
+        self.assertEqual(201, status, project)
+        self.assertEqual({"numerator": 24000, "denominator": 1001}, project["frame_rate"])
+        self.assertAlmostEqual(24000/1001, project["fps"])
+        route = f"/api/projects/{project['id']}/scene/import-obj"
+        body = {"name": "ENGINE_TEST_triangle.obj", "obj": "v 0 0 0\nv 1 0 0\nv 0 1 0\nf 1 2 3\n"}
+        status, _, _ = self.request("POST", route, body, token=False)
+        self.assertEqual(403, status)
+        status, _, parsed = self.request("POST", route, body)
+        self.assertEqual(200, status, parsed)
+        self.assertEqual("mesh", parsed["objects"][0]["type"])
+        self.assertEqual(project, self.store.get(project["id"]))
+        status, _, _ = self.request("POST", "/api/projects", {"fps": 24, "frame_rate": {"numerator": 30000, "denominator": 1001}})
+        self.assertEqual(400, status)
+
+    def test_tracking_http_measures_snapshot_and_plans_without_saving(self):
+        from test_tracking import TrackingTests
+        TrackingTests.setUpClass()
+        try:
+            source = Path(self.tmp.name) / "ENGINE_TEST_tracking.mkv"
+            shutil.copy2(TrackingTests.root / "media/moving.mkv", source)
+            asset = self.store.admit(self.p["id"], source, source.name)
+            project = self.add_clip(asset)
+            base = f"/api/projects/{project['id']}"
+            body = {"project": project, "clip_id": "clip1", "settings": {"frame_start": 0, "frame_count": 12, "x": 36/128, "y": 38/96, "radius": 8, "threshold": .1}}
+            status, _, _ = self.request("POST", base+"/tracking", body, token=False)
+            self.assertEqual(403, status)
+            def complete(action):
+                status, _, job = self.request("POST", base+action, body)
+                self.assertEqual(202, status, job)
+                deadline = time.monotonic()+10
+                while time.monotonic()<deadline:
+                    _, _, result = self.request("GET", "/api/jobs/"+job["id"])
+                    if result["state"] not in {"queued", "running"}:
+                        break
+                    time.sleep(.03)
+                self.assertEqual("completed", result["state"], result)
+                return result
+            seed = complete("/tracking-frame")
+            status, _, png = self.request("GET", seed["result"]["url"])
+            self.assertEqual((200, b"\x89PNG\r\n\x1a\n"), (status, png[:8]))
+            self.assertFalse((self.store.root/"jobs"/(seed["id"]+".json")).exists())
+            measured = complete("/tracking")
+            track = measured["result"]["track"]
+            self.assertTrue(all(point["visible"] for point in track["samples"]))
+            status, _, planned = self.request("POST", base+"/tracking-motion", {"project": project, "clip_id": "clip1", "track": track})
+            self.assertEqual(200, status, planned)
+            self.assertEqual("stabilize", planned["motion"]["mode"])
+            self.assertEqual([], self.store.get(project["id"])["clips"])
+            wrong = copy.deepcopy(track); wrong["source"]["sha256"] = "0"*64
+            status, _, _ = self.request("POST", base+"/tracking-validate", {"project": project, "clip_id": "clip1", "track": wrong})
+            self.assertEqual(400, status)
+            status, _, receipt = self.request("GET", measured["result"]["url"])
+            self.assertEqual(200, status)
+            self.assertEqual(track, receipt)
+        finally:
+            TrackingTests.tearDownClass()
+
     def test_waveform_uses_admitted_audio_and_bounded_sample_bins(self):
         source = Path(self.tmp.name) / "ENGINE_TEST_wave.wav"
         subprocess.run([shutil.which("ffmpeg"), "-v", "error", "-nostdin", "-y", "-f", "lavfi", "-i",
@@ -219,6 +278,22 @@ class ServerTests(unittest.TestCase):
         self.assertEqual(200, status)
         self.assertEqual(self.store.token, body["token"])
         self.assertEqual(False, body["capabilities"]["comfyui"]["available"])
+
+    def test_source_trim_cannot_silently_reuse_measured_motion(self):
+        asset = self.upload()
+        project = self.add_clip(asset)
+        project["clips"][0]["tracking"] = {"version": 1, "mode": "stabilize", "keys": [
+            {"frame": 0, "x": 0, "y": 0}, {"frame": 23, "x": .1, "y": 0}]}
+        project = self.store.save(project["id"], project)
+        route = f"/api/projects/{project['id']}/automate"
+        for trim in ({"in": 1, "duration": 20}, {"in": .5}):
+            status, _, result = self.request("POST", route, {"project": project, "operations": [
+                {"action": "grade", "values": {"saturation": 0}}, {"action": "trim", **trim}]})
+            self.assertEqual(400, status, result)
+            self.assertEqual(project, self.store.get(project["id"]))
+        status, _, shortened = self.request("POST", route, {"project": project, "operations": [{"action": "trim", "duration": 20}]})
+        self.assertEqual(200, status, shortened)
+        self.assertEqual(project["clips"][0]["tracking"], shortened["clips"][0]["tracking"])
 
 
 class WorkspaceLockTests(unittest.TestCase):

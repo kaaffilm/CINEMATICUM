@@ -10,7 +10,7 @@
     }
     needsFrame(state) {
       return state.project&&!state.playing&&!state.rendered&&state.mode!=='3d'&&state.mode!=='generate'&&
-        (state.mode==='color'||state.mode==='composite'||state.project.clips.some(c=>c.compositor||c.reverse));
+        (state.mode==='color'||state.mode==='composite'||state.project.clips.some(c=>c.compositor||c.reverse||c.tracking));
     }
     invalidate() {
       clearTimeout(this.timer);const serial=++this.serial;

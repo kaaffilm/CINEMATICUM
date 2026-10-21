@@ -37,12 +37,16 @@ from generation_readiness import workflow_readiness
 from scene import validate_scene, render_scene
 from frame_preview import render_frame, preview_identity
 from waveform import extract_waveform
+from timebase import project_rate
+from tracking import tracking_frame, track_clip, stabilization_motion, validate_track_for_clip
+from spatial_import import import_obj
 
-VERSION = "0.4.0"
+VERSION = "0.5.0"
 MAX_UPLOAD = 8 * 1024 * 1024 * 1024
 MAX_JSON = 8 * 1024 * 1024
 IDENTIFIER = re.compile(r"^[a-f0-9]{32}$")
 MEDIA_SUFFIXES = MEDIA_EXTENSIONS | {".blend"}
+EPHEMERAL_JOBS = {"frame-preview", "tracking-frame"}
 WEB = Path(__file__).resolve().parent / "web"
 REPOSITORY = Path(__file__).resolve().parents[2]
 
@@ -189,7 +193,7 @@ class Store:
                 continue
             try:
                 p = read_json(path)
-                result.append({k: p.get(k) for k in ("id", "name", "fps", "width", "height", "updated_at")})
+                result.append({k: p.get(k) for k in ("id", "name", "fps", "frame_rate", "width", "height", "updated_at")})
             except (ValueError, OSError):
                 continue
         return sorted(result, key=lambda p: p.get("updated_at") or "", reverse=True)
@@ -205,6 +209,10 @@ class Store:
             (directory / "media").mkdir()
             (directory / "exports").mkdir()
             project = {"version": 1, "id": project_id, "name": str(payload.get("name", "Untitled film"))[:160].strip() or "Untitled film", "fps": payload.get("fps", 24), "width": payload.get("width", 1280), "height": payload.get("height", 720), "assets": [], "clips": [], "titles": [], "settings": {}, "revision": 0}
+            if "frame_rate" in payload:
+                project["frame_rate"] = copy.deepcopy(payload["frame_rate"])
+                if "fps" not in payload:
+                    project.pop("fps")
             try:
                 validate_project(project, directory)
                 atomic_json(directory / "assets.json", [])
@@ -313,13 +321,14 @@ class Store:
         result = {"version": VERSION, "ffmpeg": bool(ffmpeg and ffprobe), "blender": bool(find_blender()), "comfyui": check_comfyui(self.comfy_url), "titles": "overlay" in filters, "raster_titles": "overlay" in filters, "drawtext": "drawtext" in filters, "h264": "libx264" in encoders, "prores": "prores_ks" in encoders, "workspace": str(self.root), "color_space": "SDR Rec.709", "commercial_providers": "No paid provider is configured in this build."}
         result["scene_authoring"] = result["blender"] and result["ffmpeg"]
         result["node_compositor"] = all(name in filters for name in ("geq", "overlay", "split", "gblur"))
+        result["point_tracking"] = "find_rect" in filters
         self._cap_cache, self._cap_time = copy.deepcopy(result), time.monotonic()
         return result
 
     def _write_job(self, job):
         # Authoring stills are a reproducible cache. Scrubbing must not create
         # thousands of durable render receipts or hide actual export history.
-        if job.get("kind") == "frame-preview":
+        if job.get("kind") in EPHEMERAL_JOBS:
             return
         atomic_json(self.root / "jobs" / (job["id"] + ".json"), job)
 
@@ -369,12 +378,16 @@ class Store:
             except Exception as exc:
                 with self.lock:
                     job.update(state="cancelled" if event.is_set() else "failed", error=str(exc)[-6000:])
+                    if isinstance(exc, AdapterError) and getattr(exc, "prompt_id", None):
+                        job["prompt_id"] = exc.prompt_id
+                    if isinstance(getattr(exc, "cancellation", None), dict):
+                        job["remote_cancellation"] = copy.deepcopy(exc.cancellation)
             finally:
                 with self.lock:
                     job["finished_at"] = time.time()
                     self._write_job(job)
                     self.events.pop(job_id, None)
-        (self.preview_pool if kind == "frame-preview" else self.pool).submit(execute)
+        (self.preview_pool if kind in EPHEMERAL_JOBS else self.pool).submit(execute)
         return copy.deepcopy(job)
 
     def job(self, job_id):
@@ -467,6 +480,72 @@ class Store:
             return result
         return self.submit(project_id, "frame-preview", work)
 
+    def analysis_snapshot(self, project_id, payload):
+        """Validate the unsaved edit against this project's imported inventory."""
+        if not isinstance(payload, dict):
+            raise ValueError("Expected an analysis request object")
+        current = self.get(project_id)
+        project = copy.deepcopy(payload.get("project", current))
+        if not isinstance(project, dict):
+            raise ValueError("Project must be an object")
+        project["id"] = project_id
+        project["assets"] = current["assets"]
+        return validate_project(project, self.project_dir(project_id))
+
+    def tracking(self, project_id, payload, seed_only=False):
+        project = self.analysis_snapshot(project_id, payload)
+        directory = self.project_dir(project_id)
+        clip_id = payload.get("clip_id")
+        request = copy.deepcopy(payload.get("settings", {}))
+        if not isinstance(request, dict):
+            raise ValueError("Tracking settings must be an object")
+        if seed_only:
+            with self.lock:
+                old_jobs = sorted((job for job in self.jobs.values() if job.get("kind") == "tracking-frame"
+                                   and job.get("state") not in {"queued", "running"}),
+                                  key=lambda job: job["created_at"], reverse=True)
+                for old in old_jobs[32:]:
+                    self.jobs.pop(old["id"], None)
+
+        def work(job_id, progress, event):
+            output = directory / "analysis" / (job_id + (".png" if seed_only else ".json"))
+            if seed_only:
+                result = tracking_frame(project, directory, clip_id, request, output, cancel_event=event)
+                cached = sorted(output.parent.glob("*.png"), key=lambda path: path.stat().st_mtime, reverse=True)
+                for old in cached[32:]:
+                    if re.fullmatch(r"[a-f0-9]{32}\.png", old.name) and not old.is_symlink():
+                        old.unlink(missing_ok=True)
+            else:
+                measured = track_clip(project, directory, clip_id, request, progress=progress, cancel_event=event)
+                if event.is_set():
+                    raise RuntimeError("Tracking cancelled")
+                atomic_json(output, measured)
+                result = {"track": measured, "sha256": digest_file(output)}
+            result.update(url=f"/api/projects/{project_id}/analysis/{output.name}", filename=output.name)
+            return result
+        return self.submit(project_id, "tracking-frame" if seed_only else "tracking", work,
+                           None if seed_only else {"project": project, "clip_id": clip_id, "settings": request})
+
+    def tracking_plan(self, project_id, payload, motion=False):
+        project = self.analysis_snapshot(project_id, payload)
+        directory = self.project_dir(project_id)
+        clip_id, measured = payload.get("clip_id"), payload.get("track")
+        if motion:
+            return {"motion": stabilization_motion(project, directory, clip_id, measured)}
+        return {"track": validate_track_for_clip(project, directory, clip_id, measured)}
+
+    def interchange(self, project_id, payload, importing=False):
+        from interchange import export_otio, import_otio
+        project = self.analysis_snapshot(project_id, payload)
+        directory = self.project_dir(project_id)
+        if importing:
+            return import_otio(payload.get("document"), project, directory, payload.get("asset_map"))
+        result = export_otio(project, directory)
+        output = directory / "exports" / (uuid.uuid4().hex + ".otio")
+        atomic_json(output, result["document"])
+        return {"url": f"/api/projects/{project_id}/exports/{output.name}", "filename": output.name,
+                "warnings": result.get("warnings", []), "sha256": digest_file(output)}
+
     def waveform(self, project_id, asset_id, bins):
         asset, path = self.asset(project_id, asset_id)
         if not asset.get("has_audio"):
@@ -526,7 +605,7 @@ class Store:
             raise ValueError("Blender is required to render a scene")
         directory = self.project_dir(project_id)
         snapshot = {"scene": recipe, "frame_start": start, "frame_end": end,
-                    "fps": project["fps"], "project_revision": project["revision"]}
+                    "fps": project["fps"], "frame_rate": project_rate(project).as_dict(), "project_revision": project["revision"]}
 
         def work(job_id, progress, event):
             source = directory / "exports" / (job_id + ".blend")
@@ -534,7 +613,7 @@ class Store:
             source_published = False
             try:
                 with tempfile.TemporaryDirectory(prefix="scene-", dir=str(directory)) as scratch:
-                    result = render_scene(recipe, Path(scratch), fps=project["fps"],
+                    result = render_scene(recipe, Path(scratch), fps=project_rate(project),
                                           frame_start=start, frame_end=end, progress=progress, cancel_event=event)
                     if event.is_set():
                         raise RuntimeError("Scene render cancelled")
@@ -571,7 +650,7 @@ class Store:
 
         def work(job_id, progress, event):
             with tempfile.TemporaryDirectory(prefix="blender-", dir=str(directory)) as scratch:
-                result = render_blender(path, Path(scratch), start, end, fps=p["fps"], progress=progress, cancel_event=event)
+                result = render_blender(path, Path(scratch), start, end, fps=project_rate(p), progress=progress, cancel_event=event)
                 if event.is_set():
                     raise RuntimeError("Blender render cancelled")
                 asset = self.admit(project_id, result["path"], Path(scene["name"]).stem + " render.mp4", result.get("provenance"))
@@ -614,6 +693,11 @@ class Store:
                     position += clip["duration"]
             elif action == "trim":
                 for clip in clips:
+                    changes_source = ("in" in op and op["in"] != clip.get("in", 0)) or (
+                        clip.get("reverse", False) and "duration" in op and op["duration"] != clip["duration"])
+                    derived_mask = any(node.get("tracking_source") for node in clip.get("compositor", {}).get("nodes", []))
+                    if changes_source and (clip.get("tracking") or derived_mask):
+                        raise ValueError("Remove measured stabilization and tracked mask motion before changing the source range with automation")
                     clip.setdefault("animation_start", 0)
                     clip.setdefault("animation_duration", clip["duration"])
                     clip.setdefault("animation_offset", 0)
@@ -790,12 +874,12 @@ class Handler(BaseHTTPRequestHandler):
     def dispatch_get(self):
         parsed = urlparse(self.path)
         parts = unquote(parsed.path).strip("/").split("/")
-        if parsed.path in {"/", "/index.html", "/app.js", "/style.css", "/editing.js", "/viewer-tools.js", "/compositor-ui.js", "/scene-editor.js", "/scene-editor.css"}:
+        if parsed.path in {"/", "/index.html", "/app.js", "/style.css", "/editing.js", "/viewer-tools.js", "/compositor-ui.js", "/scene-editor.js", "/scene-editor.css", "/tracking-ui.js", "/interchange-ui.js"}:
             return self.file(WEB / ("index.html" if parsed.path == "/" else parsed.path[1:]))
         if parts == ["api", "bootstrap"]:
             projects = self.store.projects()
             p = self.store.get(projects[0]["id"]) if projects else self.store.new_project({"name": "Untitled film"})
-            durable_jobs = [job for job in self.store.jobs.values() if job.get("kind") != "frame-preview"]
+            durable_jobs = [job for job in self.store.jobs.values() if job.get("kind") not in EPHEMERAL_JOBS]
             return self.json(200, {"token": self.store.token, "project": p, "projects": self.store.projects(), "capabilities": self.store.capabilities(), "jobs": sorted(durable_jobs, key=lambda j: j["created_at"], reverse=True)[:30]})
         if parts == ["api", "capabilities"]:
             return self.json(200, self.store.capabilities(fresh=True))
@@ -822,9 +906,13 @@ class Handler(BaseHTTPRequestHandler):
                     raise ValueError("Invalid frame preview filename")
                 return self.file(self.store.project_dir(project_id) / "previews" / parts[4])
             if len(parts) == 5 and parts[3] == "exports":
-                if not re.fullmatch(r"[a-f0-9]{32}\.(mp4|mov|json|blend)", parts[4]):
+                if not re.fullmatch(r"[a-f0-9]{32}\.(mp4|mov|json|blend|otio)", parts[4]):
                     raise ValueError("Invalid export filename")
-                return self.file(self.store.project_dir(project_id) / "exports" / parts[4], download=parts[4].endswith(".blend") or "download" in parse_qs(parsed.query))
+                return self.file(self.store.project_dir(project_id) / "exports" / parts[4], download=parts[4].endswith((".blend", ".otio")) or "download" in parse_qs(parsed.query))
+            if len(parts) == 5 and parts[3] == "analysis":
+                if not re.fullmatch(r"[a-f0-9]{32}\.(png|json)", parts[4]):
+                    raise ValueError("Invalid analysis filename")
+                return self.file(self.store.project_dir(project_id) / "analysis" / parts[4], download="download" in parse_qs(parsed.query))
         raise FileNotFoundError("Route does not exist")
 
     def dispatch_write(self):
@@ -840,6 +928,8 @@ class Handler(BaseHTTPRequestHandler):
             directory = self.store.project_dir(project_id)
             if self.command == "PUT" and len(parts) == 3:
                 return self.json(200, self.store.save(project_id, self.body()))
+            if self.command == "POST" and len(parts) == 5 and parts[3:] == ["scene", "import-obj"]:
+                return self.json(200, import_obj(self.body()))
             if self.command != "POST" or len(parts) != 4:
                 raise FileNotFoundError("Route does not exist")
             action = parts[3]
@@ -882,6 +972,12 @@ class Handler(BaseHTTPRequestHandler):
                 return self.json(202, self.store.scene_render(project_id, payload))
             if action == "frame-preview":
                 return self.json(202, self.store.frame_preview(project_id, payload))
+            if action in {"tracking-frame", "tracking"}:
+                return self.json(202, self.store.tracking(project_id, payload, seed_only=action == "tracking-frame"))
+            if action in {"tracking-motion", "tracking-validate"}:
+                return self.json(200, self.store.tracking_plan(project_id, payload, motion=action == "tracking-motion"))
+            if action in {"interchange-export", "interchange-import"}:
+                return self.json(200, self.store.interchange(project_id, payload, importing=action == "interchange-import"))
             if action == "automate":
                 return self.json(200, self.store.automate(project_id, payload))
         raise FileNotFoundError("Route does not exist")

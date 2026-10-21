@@ -21,6 +21,8 @@ jobs:
           python-version: '3.11'
       - name: Install media engine
         run: sudo apt-get update -qq && sudo apt-get install -y ffmpeg
+      - name: Install independent interchange reader for verification
+        run: python -m pip install opentimelineio==0.18.1
       - name: Verify real media, adapters, and project API
         run: python3 -m unittest discover -s scripts/studio -p 'test_*.py' -v
       - name: Check editor JavaScript
@@ -30,3 +32,5 @@ jobs:
           node --check scripts/studio/web/viewer-tools.js
           node --check scripts/studio/web/compositor-ui.js
           node --check scripts/studio/web/scene-editor.js
+          node --check scripts/studio/web/tracking-ui.js
+          node --check scripts/studio/web/interchange-ui.js

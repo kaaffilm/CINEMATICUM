@@ -1,0 +1,243 @@
+{
+  "version": 1,
+  "build": "0.5.0",
+  "reviewed_on": "2026-10-21",
+  "parity_complete": false,
+  "evidence_note": "Paths identify implementation/acceptance. Actual executions are recorded separately. Adapter availability is not model-execution proof.",
+  "capabilities": [
+    {
+      "id": "editor.rational_clock",
+      "status": "implemented",
+      "scope": "Reduced rational rates1\u201360; exact media timestamps and absolute48kHz sample grid.",
+      "evidence": [
+        "timebase.py",
+        "engine.py",
+        "test_timebase.py"
+      ]
+    },
+    {
+      "id": "editor.timeline",
+      "status": "partial",
+      "scope": "Own multitrack editing, trim/split/ripple delete, speed/reverse, track controls. No nested/multicam/proxy model.",
+      "evidence": [
+        "engine.py",
+        "web/app.js",
+        "test_timeline_audio.py"
+      ]
+    },
+    {
+      "id": "editor.otio",
+      "status": "partial",
+      "scope": "Cut/gap AV exchange with actual SHA or explicit relink; strict unsupported-semantics rejection and private self-roundtrip.",
+      "evidence": [
+        "interchange.py",
+        "test_interchange.py",
+        "test_interchange_ui_macos.py"
+      ]
+    },
+    {
+      "id": "composite.graph",
+      "status": "partial",
+      "scope": "One source per clip; branch/merge and bounded real image-processing nodes.",
+      "evidence": [
+        "compositor.py",
+        "test_compositor.py"
+      ]
+    },
+    {
+      "id": "composite.animation",
+      "status": "implemented_bounded",
+      "scope": "Independent channels with5 interpolation modes; polygon topology retained, scalar128/path64 keys.",
+      "evidence": [
+        "compositor.py",
+        "web/compositor-ui.js",
+        "test_compositor_animation_ui_macos.py"
+      ]
+    },
+    {
+      "id": "composite.roto_bezier",
+      "status": "missing",
+      "scope": "No Bezier/feather-point hierarchy, roto paint or general effect-mask ports.",
+      "evidence": []
+    },
+    {
+      "id": "composite.deep",
+      "status": "missing",
+      "scope": "No deep, multiview, arbitrary-channel EXR graph.",
+      "evidence": []
+    },
+    {
+      "id": "tracking.translation",
+      "status": "implemented_bounded",
+      "scope": "Actual FFmpeg correlation;384px analysis edge,480frames, explicit missing matches.",
+      "evidence": [
+        "tracking.py",
+        "test_tracking.py",
+        "test_tracking_ui_macos.py"
+      ]
+    },
+    {
+      "id": "tracking.stabilization",
+      "status": "implemented_bounded",
+      "scope": "Independent additive translation;128 simplified keys; no automatic crop.",
+      "evidence": [
+        "tracking.py",
+        "engine.py",
+        "test_tracking.py"
+      ]
+    },
+    {
+      "id": "tracking.mask_follow",
+      "status": "implemented_bounded",
+      "scope": "New ellipse with animated measured center, preserving authored channels. Not segmentation.",
+      "evidence": [
+        "web/app.js",
+        "compositor.py",
+        "test_tracking_ui_macos.py"
+      ]
+    },
+    {
+      "id": "tracking.planar",
+      "status": "missing",
+      "scope": "No affine/projective solve, re-identification or lens/rolling-shutter estimation.",
+      "evidence": []
+    },
+    {
+      "id": "color.sdr",
+      "status": "partial",
+      "scope": "Display-referred Rec709 grades, RGB curves and rendered-image scopes.",
+      "evidence": [
+        "engine.py",
+        "compositor.py",
+        "web/viewer-tools.js"
+      ]
+    },
+    {
+      "id": "color.scene_linear_hdr",
+      "status": "missing",
+      "scope": "No OCIO/ACES, HDR finish, RAW controls or calibrated monitoring.",
+      "evidence": []
+    },
+    {
+      "id": "motion.vector_document",
+      "status": "missing",
+      "scope": "No general vector document/Bezier drawing, Lottie/SVG interchange or full text animators.",
+      "evidence": []
+    },
+    {
+      "id": "scene.authoring",
+      "status": "partial",
+      "scope": "Own WebGL primitive/mesh editing of transforms/materials/camera/lights/keys; headless Cycles and retainedblend.",
+      "evidence": [
+        "scene.py",
+        "web/scene-editor.js",
+        "test_scene_motion_blender.py"
+      ]
+    },
+    {
+      "id": "scene.obj_mesh",
+      "status": "implemented_bounded",
+      "scope": "Indexed OBJ/selectedMTL with UV/normals/material partitions; real viewport and Blender data.",
+      "evidence": [
+        "spatial_import.py",
+        "test_spatial_import.py",
+        "test_spatial_blender.py",
+        "test_mesh_import_ui_macos.py"
+      ]
+    },
+    {
+      "id": "scene.topology_rig_simulation",
+      "status": "missing",
+      "scope": "No topology/UV/rig/sculpt/modifier/simulation authoring or general texture/material graph.",
+      "evidence": []
+    },
+    {
+      "id": "reconstruction.colmap",
+      "status": "missing",
+      "scope": "Source/conventions studied; no SfM/MVS or solved-model import executed.",
+      "evidence": []
+    },
+    {
+      "id": "reconstruction.alicevision_meshroom",
+      "status": "missing",
+      "scope": "Source architecture reviewed; no solver/graph worker or photogrammetry acceptance.",
+      "evidence": []
+    },
+    {
+      "id": "ai.sam2",
+      "status": "missing",
+      "scope": "Predictor source reviewed; no actual segmentation worker/checkpoint execution.",
+      "evidence": []
+    },
+    {
+      "id": "ai.tapir_tapnext",
+      "status": "missing",
+      "scope": "Coordinates/state source reviewed; no actual learned tracking worker.",
+      "evidence": []
+    },
+    {
+      "id": "ai.cameractrl",
+      "status": "missing",
+      "scope": "Camera/ray/pose source reviewed; no inference or general faithful camera-conditioning export.",
+      "evidence": []
+    },
+    {
+      "id": "ai.comfyui",
+      "status": "adapter_implemented_engine_unavailable",
+      "scope": "API workflow/input/model preflight, scoped prompt lifecycle and actual output admission; checkedMac endpoint absent.",
+      "evidence": [
+        "adapters.py",
+        "generation_readiness.py",
+        "test_adapters.py"
+      ]
+    },
+    {
+      "id": "audio.mix",
+      "status": "partial",
+      "scope": "Decoded waveforms, track/clipgain, balance, fades, retime/reverse and stereo export. No full DAW/buses/plugins.",
+      "evidence": [
+        "waveform.py",
+        "engine.py",
+        "test_timeline_audio.py"
+      ]
+    },
+    {
+      "id": "automation.typed_jobs",
+      "status": "partial",
+      "scope": "Typed edit recipes, snapshot jobs, own process cancellation and receipts. No arbitrary scripting/expression/pluginhost.",
+      "evidence": [
+        "server.py",
+        "adapters.py",
+        "test_server.py"
+      ]
+    },
+    {
+      "id": "delivery.formats",
+      "status": "partial",
+      "scope": "H264MP4 and ProResMOV, actual render snapshot/source identity. No universal broadcast/cinema delivery suite.",
+      "evidence": [
+        "engine.py",
+        "test_engine.py",
+        "test_timebase.py"
+      ]
+    },
+    {
+      "id": "production.realtime_collaboration",
+      "status": "missing",
+      "scope": "No full decoded/GPU realtime cache, collaborative database or signed/notarized bundled runtime.",
+      "evidence": []
+    },
+    {
+      "id": "ai.commercial_providers",
+      "status": "missing",
+      "scope": "No authenticated Runway/Krea/OpenArt/Magnific/Artlist/Firefly/Flow/Luma/Kling/Pika/FLORA/Weave integration.",
+      "evidence": []
+    }
+  ],
+  "research": [
+    "research/editorial.md",
+    "research/compositing-motion.md",
+    "research/spatial.md",
+    "research/ai-motion.md"
+  ]
+}

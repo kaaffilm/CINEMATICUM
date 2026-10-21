@@ -13,6 +13,7 @@ import json
 import math
 import os
 from pathlib import Path, PurePosixPath
+import re
 import shutil
 import signal
 import subprocess
@@ -23,6 +24,11 @@ import urllib.parse
 import urllib.request
 import uuid
 
+if __package__:
+    from .timebase import parse_rate
+else:
+    from timebase import parse_rate
+
 
 POSITIVE_MARKER = "CINEMATICUM_POSITIVE_PROMPT"
 NEGATIVE_MARKER = "CINEMATICUM_NEGATIVE_PROMPT"
@@ -30,6 +36,7 @@ SEED_MARKER = "CINEMATICUM_SEED"
 MAX_DOWNLOAD_BYTES = 2 * 1024 * 1024 * 1024
 _MAX_JSON_BYTES = 8 * 1024 * 1024
 _HTTP_TIMEOUT = 15
+_CANCEL_HTTP_TIMEOUT = 3
 _POLL_INTERVAL = 0.75
 _COMFY_TIMEOUT = 1800
 _BLENDER_TIMEOUT = 7200
@@ -39,13 +46,16 @@ _VIDEO_EXTENSIONS = {".mp4", ".webm", ".mov"}
 class AdapterError(RuntimeError):
     """Engine refusal/failure, optionally retaining the accepted remote job ID."""
 
-    def __init__(self, message, prompt_id=None):
+    def __init__(self, message, prompt_id=None, http_status=None):
         super().__init__(message)
         self.prompt_id = prompt_id
+        self.http_status = http_status
 
 
 class AdapterCancelled(AdapterError):
-    pass
+    def __init__(self, message, prompt_id=None, cancellation=None):
+        super().__init__(message, prompt_id=prompt_id)
+        self.cancellation = cancellation
 
 
 class _NoRedirect(urllib.request.HTTPRedirectHandler):
@@ -102,7 +112,8 @@ def _json_request(base, route, payload=None, timeout=_HTTP_TIMEOUT):
                 detail = error[:500]
         except (ValueError, AttributeError, OSError):
             pass
-        raise AdapterError("ComfyUI HTTP %s%s" % (exc.code, ": " + detail if detail else "")) from exc
+        raise AdapterError("ComfyUI HTTP %s%s" % (exc.code, ": " + detail if detail else ""),
+                           http_status=exc.code) from exc
     except (urllib.error.URLError, TimeoutError, OSError, http.client.HTTPException) as exc:
         raise AdapterError("ComfyUI connection failed: %s" % str(exc)[:500]) from exc
     except (ValueError, UnicodeError) as exc:
@@ -199,6 +210,68 @@ def _cancelled(event, prompt_id=None):
         raise AdapterCancelled(message, prompt_id=prompt_id)
 
 
+def _cancel_own_prompt(base, prompt_id):
+    """Cancel only an ID accepted by this invocation, never a global interrupt.
+
+    The jobs API's ``cancelled`` flag acknowledges dispatch, not completion.
+    A separate matching job response must confirm a terminal cancelled state.
+    Older local servers can only receive the safe pending-queue deletion.
+    Cancellation errors do not prevent the caller from stopping local waiting.
+    """
+    report = {"method": "job", "dispatch_accepted": False,
+              "remote_cancelled": False, "remote_status": None,
+              "queue_delete_accepted": False}
+    route = "/api/jobs/" + urllib.parse.quote(prompt_id, safe="")
+    try:
+        response = _json_request(base, route + "/cancel", {}, timeout=_CANCEL_HTTP_TIMEOUT)
+    except AdapterError as exc:
+        if exc.http_status not in (404, 405):
+            report["error"] = str(exc)
+            return report
+        report["method"] = "queue"
+        try:
+            # No clear flag, global interrupt, or retry after ambiguous errors.
+            _json_request(base, "/queue", {"delete": [prompt_id]}, timeout=_CANCEL_HTTP_TIMEOUT)
+            report["queue_delete_accepted"] = True
+        except AdapterError as queue_error:
+            report["error"] = str(queue_error)
+        return report
+    if not isinstance(response.get("cancelled"), bool):
+        report["error"] = "ComfyUI returned an invalid scoped cancellation response."
+        return report
+    report["dispatch_accepted"] = response["cancelled"]
+    try:
+        job = _json_request(base, route, timeout=_CANCEL_HTTP_TIMEOUT)
+        status = job.get("status")
+        if (job.get("id") != prompt_id or status not in
+                ("pending", "in_progress", "cancelling", "completed", "failed", "cancelled")):
+            raise AdapterError("ComfyUI returned an invalid cancellation verification response.")
+        report["remote_status"] = status
+        report["remote_cancelled"] = status == "cancelled"
+    except AdapterError as exc:
+        # A queued job may disappear from a local server instead of acquiring a
+        # history record. Absence is not proof of its terminal execution state.
+        report["verification_error"] = str(exc)
+    return report
+
+
+def _cancellation_message(prompt_id, report):
+    beginning = "Stopped waiting for ComfyUI prompt %s. " % prompt_id
+    if report["remote_cancelled"]:
+        return beginning + "The server confirms this prompt is cancelled."
+    if report["method"] == "queue" and report["queue_delete_accepted"]:
+        return beginning + ("The server accepted deletion of only this prompt from its pending queue. "
+                            "A running prompt may continue; remote cancellation is not verified.")
+    if report["dispatch_accepted"]:
+        return beginning + ("Cancellation was dispatched only for this prompt; "
+                            "the server has not yet confirmed cancellation.")
+    if report["remote_status"] is not None:
+        return beginning + ("The scoped endpoint dispatched no new cancellation. Server status: %s."
+                            % report["remote_status"])
+    return beginning + ("Remote cancellation could not be verified; this prompt may still run. "
+                        "No global interrupt was sent.")
+
+
 def _video_candidates(outputs):
     candidates = []
 
@@ -286,7 +359,8 @@ def generate_comfyui(url, workflow, prompt, negative, seed, output_dir,
                      progress=lambda value: None, cancel_event=None):
     """Submit exactly once; wait for verified job completion and download a video.
 
-    Cancellation is local: it never interrupts another user's shared-server job.
+    Cancellation targets only this invocation's accepted job ID. Older servers
+    receive only targeted pending-queue deletion; running work may continue.
     An ambiguous submission error is not retried. The caller probes the returned
     media before admitting it into its project.
     """
@@ -305,7 +379,7 @@ def generate_comfyui(url, workflow, prompt, negative, seed, output_dir,
     prompt_id = accepted.get("prompt_id")
     if accepted.get("error") or accepted.get("node_errors") or not isinstance(prompt_id, str) or not prompt_id:
         raise AdapterError("ComfyUI rejected the workflow: %s" % str(accepted.get("error", accepted.get("node_errors", "missing prompt_id")))[:800])
-    if len(prompt_id) > 256:
+    if not re.fullmatch(r"[A-Za-z0-9_-]{1,256}", prompt_id):
         raise AdapterError("ComfyUI returned an invalid prompt ID.")
     progress(0.1)
     try:
@@ -346,6 +420,10 @@ def generate_comfyui(url, workflow, prompt, negative, seed, output_dir,
             else:
                 time.sleep(_POLL_INTERVAL)
         raise AdapterError("Timed out waiting for ComfyUI prompt %s; it may still be running. It was not resubmitted." % prompt_id, prompt_id)
+    except AdapterCancelled as exc:
+        report = _cancel_own_prompt(base, prompt_id)
+        raise AdapterCancelled(_cancellation_message(prompt_id, report), prompt_id=prompt_id,
+                               cancellation=report) from exc
     except AdapterError as exc:
         if exc.prompt_id is None:
             exc.prompt_id = prompt_id
@@ -434,8 +512,10 @@ def render_blender(scene_path, output_dir, frame_start, frame_end, fps=24,
             or not isinstance(frame_start, int) or not isinstance(frame_end, int)
             or not 0 <= frame_start <= frame_end <= 1000000):
         raise AdapterError("Blender frame bounds must be integers with 0 <= start <= end <= 1,000,000.")
-    if isinstance(fps, bool) or not isinstance(fps, (int, float)) or not math.isfinite(fps) or not 1 <= fps <= 240:
-        raise AdapterError("Blender delivery frame rate must be between 1 and 240.")
+    try:
+        rate = parse_rate(fps, maximum=240)
+    except ValueError as exc:
+        raise AdapterError("Blender delivery frame rate is invalid: " + str(exc)) from exc
     directory = Path(output_dir).resolve()
     directory.mkdir(parents=True, exist_ok=True)
     scene_hash = _sha256(scene)
@@ -489,7 +569,7 @@ def render_blender(scene_path, output_dir, frame_start, frame_end, fps=24,
             "                    slot.name = 'slot_%04d' % slot_index\n"
             "scene = bpy.context.scene\n"
             + "scene.frame_start = %r\nscene.frame_end = %r\nscene.frame_step = 1\n" % (frame_start, frame_end)
-            + "scene.render.fps = %r\nscene.render.fps_base = %r\n" % (round(fps), round(fps) / fps)
+            + "scene.render.fps = %r\nscene.render.fps_base = %r\n" % (rate.blender_fps, rate.blender_fps_base)
             + "scene.render.image_settings.file_format = 'PNG'\n"
             "scene.render.image_settings.color_mode = 'RGBA'\n"
             "scene.render.image_settings.color_depth = '16'\n"
@@ -519,7 +599,7 @@ def render_blender(scene_path, output_dir, frame_start, frame_end, fps=24,
         progress(0.86)
         encoded = work / "encoded.mp4"
         _run_owned([ffmpeg, "-hide_banner", "-nostdin", "-v", "error", "-n",
-                    "-framerate", str(fps), "-start_number", str(frame_start),
+                    "-framerate", rate.ffmpeg, "-start_number", str(frame_start),
                     "-i", str(frames / "frame_%06d.png"), "-frames:v", str(total),
                     "-vf", "pad=ceil(iw/2)*2:ceil(ih/2)*2", "-c:v", "libx264",
                     "-preset", "medium", "-crf", "18", "-pix_fmt", "yuv420p",
@@ -532,5 +612,5 @@ def render_blender(scene_path, output_dir, frame_start, frame_end, fps=24,
     progress(1.0)
     return {"path": str(final), "provenance": {"backend": "blender", "scene_sha256": scene_hash,
             "frame_start": frame_start, "frame_end": frame_end, "frame_end_inclusive": True,
-            "fps": fps, "output_sha256": _sha256(final), "autoexec_enabled": False,
+            "fps": rate.fps, "frame_rate": rate.as_dict(), "output_sha256": _sha256(final), "autoexec_enabled": False,
             "compositor_file_outputs_muted": True}}

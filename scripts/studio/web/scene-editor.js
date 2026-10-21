@@ -53,13 +53,52 @@
     }else if(type==='cylinder')for(let j=0;j<32;j++){const a=j*2*Math.PI/32,b=(j+1)*2*Math.PI/32,pa=[Math.cos(a),Math.sin(a)],pb=[Math.cos(b),Math.sin(b)],n=norm([pa[0]+pb[0],pa[1]+pb[1],0]);quad([...pa,-1],[...pb,-1],[...pb,1],[...pa,1],n);triangle([0,0,1],[...pa,1],[...pb,1],[0,0,1]);triangle([0,0,-1],[...pb,-1],[...pa,-1],[0,0,-1]);}
     return {vertices:new Float32Array(vertices),normals:new Float32Array(normals)};
   }
+  function meshGeometry(mesh) {
+    const vertices=new Float32Array(mesh.triangles.length*9),normals=new Float32Array(vertices.length);
+    mesh.triangles.forEach((indices,face)=>{
+      const points=indices.map(index=>mesh.vertices[index]),flat=norm(cross(sub(points[1],points[0]),sub(points[2],points[0])));
+      points.forEach((point,corner)=>{const offset=face*9+corner*3;vertices.set(point,offset);normals.set(mesh.normals?.length?mesh.normals[mesh.normal_indices[face][corner]]:flat,offset);});
+    });
+    return {vertices,normals};
+  }
+  function geometryBounds(vertices) {
+    const min=[Infinity,Infinity,Infinity],max=[-Infinity,-Infinity,-Infinity];
+    for(let i=0;i<vertices.length;i++) {const axis=i%3;min[axis]=Math.min(min[axis],vertices[i]);max[axis]=Math.max(max[axis],vertices[i]);}
+    return {min,max,center:min.map((v,i)=>(v+max[i])/2),radius:Math.hypot(...sub(max,min))/2};
+  }
+  function intersectGeometry(data,pose,pointer) {
+    // Inverse affine transform preserves the original world-ray parameter.
+    // Do not normalize the scaled local ray: nonuniform scaling would then
+    // make hit distances incomparable across objects.
+    const r=rotation(pose.rotation),inverse=v=>[0,1,2].map(i=>(r[i*4]*v[0]+r[i*4+1]*v[1]+r[i*4+2]*v[2])/pose.scale[i]);
+    const origin=inverse(sub(pointer.origin,pose.position)),direction=inverse(pointer.direction),bounds=data.bounds||geometryBounds(data.vertices);
+    let near=0,far=Infinity;
+    for(let i=0;i<3;i++){
+      if(Math.abs(direction[i])<1e-14){if(origin[i]<bounds.min[i]||origin[i]>bounds.max[i])return null;continue;}
+      let a=(bounds.min[i]-origin[i])/direction[i],b=(bounds.max[i]-origin[i])/direction[i];if(a>b)[a,b]=[b,a];near=Math.max(near,a);far=Math.min(far,b);if(near>far)return null;
+    }
+    let best=null;const v=data.vertices;
+    for(let i=0;i<v.length;i+=9){const a=[v[i],v[i+1],v[i+2]],b=[v[i+3],v[i+4],v[i+5]],c=[v[i+6],v[i+7],v[i+8]],edge1=sub(b,a),edge2=sub(c,a),p=cross(direction,edge2),det=dot(edge1,p);if(Math.abs(det)<1e-14)continue;
+      const inverseDet=1/det,tvec=sub(origin,a),u=dot(tvec,p)*inverseDet;if(u<0||u>1)continue;const q=cross(tvec,edge1),w=dot(direction,q)*inverseDet;if(w<0||u+w>1)continue;const distance=dot(edge2,q)*inverseDet;if(distance>.05&&(best===null||distance<best))best=distance;
+    }return best;
+  }
+  function checkGeometryBudget(objects) {
+    const meshes=objects.filter(item=>item.type==='mesh').map(item=>item.mesh);
+    const vertices=meshes.reduce((n,m)=>n+m.vertices.length,0),triangles=meshes.reduce((n,m)=>n+m.triangles.length,0);
+    // Python stores integral geometry coordinates as floats (for example 1.0).
+    // Reserve their extra bytes so an import/duplicate cannot make a project
+    // unsaveable simply because JavaScript serializes them more compactly.
+    const numericCoordinates=meshes.reduce((n,m)=>n+m.vertices.length*3+(m.normals?.length||0)*3+(m.uvs?.length||0)*2,0);
+    const bytes=JSON.stringify(meshes).replace(/[^\x00-\x7f]/g,c=>'\\u'+c.charCodeAt(0).toString(16).padStart(4,'0')).length+numericCoordinates*3;
+    if(objects.length>96||vertices>100000||triangles>200000||bytes>5*1024*1024)throw Error('This would exceed the scene geometry budget. Reduce the imported mesh or remove another mesh first.');
+  }
   const vertexShader=`attribute vec3 aPosition;attribute vec3 aNormal;uniform mat4 uModel,uViewProjection;uniform mat3 uNormal;varying vec3 vPosition,vNormal;void main(){vec4 p=uModel*vec4(aPosition,1.);vPosition=p.xyz;vNormal=uNormal*aNormal;gl_Position=uViewProjection*p;}`;
   const fragmentShader=`precision mediump float;varying vec3 vPosition,vNormal;uniform vec3 uColor,uEye,uWorld;uniform float uRoughness,uMetallic,uUnlit;uniform int uLightCount;uniform vec3 uLightPosition[16],uLightColor[16],uLightParameters[16];void main(){if(uUnlit>.5){gl_FragColor=vec4(uColor,1.);return;}vec3 n=normalize(vNormal);if(!gl_FrontFacing)n=-n;vec3 view=normalize(uEye-vPosition);vec3 result=uColor*(uWorld+.035);for(int i=0;i<16;i++){if(i>=uLightCount)break;vec3 delta=uLightPosition[i]-vPosition;float distance2=max(1.,dot(delta,delta));vec3 l=normalize(delta);float energy=uLightParameters[i].x/(30.*distance2);if(uLightParameters[i].y>.5){l=normalize(uLightPosition[i]);energy=uLightParameters[i].x;}float diffuse=max(dot(n,l),0.);vec3 halfVector=normalize(l+view);float spec=pow(max(dot(n,halfVector),0.),mix(120.,3.,uRoughness))*(.15+uMetallic*.8);result+=(uColor*diffuse*(1.-uMetallic*.6)+mix(vec3(.5),uColor,uMetallic)*spec)*uLightColor[i]*energy;}result=result/(vec3(1.)+result*.3);gl_FragColor=vec4(pow(max(result,vec3(0.)),vec3(1./2.2)),1.);}`;
 
   function mount(host,bridge={}) {
     let scene=copy(bridge.scene||defaultScene(bridge)),selected={type:'camera',id:'camera'},frame=1;
     let playing=false,animation=0,disposed=false,gesture=null,orbitDrag=null,renderBusy=false,viewCamera=false;
-    let tool='move',snap=false,autoKey=false,selectedKey=null,suppressClick=0;
+    let tool='move',snap=false,autoKey=false,selectedKey=null,suppressClick=0,importBusy=false,revision=0;
     let opts={width:bridge.width,height:bridge.height,fps:bridge.fps||24,renderAvailable:!!bridge.renderAvailable};
     let orbit={target:[0,0,1],azimuth:-.9,elevation:.48,distance:13};
     const clean=()=>{
@@ -68,7 +107,7 @@
       for(const item of [...scene.objects,scene.camera,...scene.lights])item.keyframes??=[];
     };clean();
     host.innerHTML=`<section class="scene-editor" aria-label="3D scene and motion authoring">
-      <div class="scene-tools"><div class="scene-add"><span>Add</span>${['cube','sphere','plane','cylinder'].map(t=>`<button data-scene-add="${t}">${t[0].toUpperCase()+t.slice(1)}</button>`).join('')}<button data-scene-action="add-light">Light +</button></div>
+      <div class="scene-tools"><div class="scene-add"><span>Add</span>${['cube','sphere','plane','cylinder'].map(t=>`<button data-scene-add="${t}">${t[0].toUpperCase()+t.slice(1)}</button>`).join('')}<button data-scene-action="add-light">Light +</button><button data-scene-action="import-obj">Import OBJ…</button></div>
       <div class="scene-transform-tools" aria-label="Transform tool"><button data-scene-tool="move" title="Move · W">Move</button><button data-scene-tool="rotate" title="Rotate · E">Rotate</button><button data-scene-tool="scale" title="Scale · R">Scale</button><label title="Move 0.25 units · rotate 15 degrees · scale 0.1"><input class="scene-snap" type="checkbox">Snap</label></div>
       <div class="scene-view-buttons"><button data-scene-action="fit">Frame selection</button><button data-scene-action="camera">Camera view</button><button data-scene-action="use-camera">Set camera from view</button></div></div>
       <div class="scene-main"><div class="scene-viewport"><canvas tabindex="0" aria-label="3D viewport. Drag axis handles to transform. Drag empty space to orbit; Shift-drag to pan."></canvas>
@@ -78,10 +117,12 @@
       <aside class="scene-properties"><div class="scene-outliner"></div><div class="scene-inspector"></div></aside></div>
       <div class="scene-motion"><div class="scene-motion-toolbar"><strong>Motion</strong><button data-scene-action="previous-key" title="Previous key">‹◆</button><button data-scene-action="next-key" title="Next key">◆›</button><button data-scene-action="keyframe">◇ Keyframe pose</button><label><input class="scene-auto-key" type="checkbox">Auto key</label><span class="scene-key-label">Select a key</span><label>To next key <select class="scene-key-interpolation" disabled>${Object.entries(INTERPOLATIONS).map(([key,label])=>`<option value="${key}">${label}</option>`).join('')}</select></label><button data-scene-action="delete-key" title="Delete selected key">Delete key</button><svg class="scene-easing-curve" viewBox="0 0 84 28" aria-label="Selected interpolation curve"><path/></svg></div><div class="scene-dope-sheet" aria-label="Scene animation dope sheet"></div></div>
       <div class="scene-footer"><button data-scene-action="play" aria-label="Play scene animation">▶</button><label>Frame <input class="scene-current-frame" type="number" min="1" value="1" step="1"></label><input class="scene-frame-slider" aria-label="Scene frame" type="range" min="1" value="1"><label>End <input class="scene-end-frame" type="number" min="1" max="7200" step="1"></label><label class="scene-samples">Samples <select><option value="4">4 · Draft</option><option value="16">16 · Preview</option><option value="32">32 · Standard</option><option value="64">64 · Fine</option><option value="128">128 · Final</option><option value="256">256 · Final+</option></select></label><button class="scene-render primary" data-scene-action="render">Render scene ↗</button></div>
-      <div class="scene-footnote">Z-up · XYZ rotations · The scene and motion are saved with your film · Viewport lighting is approximate; render uses Cycles</div></section>`;
+      <div class="scene-footnote">Z-up · XYZ rotations · The scene and motion are saved with your film · Viewport lighting is approximate; render uses Cycles</div>
+      <dialog class="scene-import-dialog" aria-labelledby="scene-import-title"><form class="scene-import-form"><h3 id="scene-import-title">Import a polygon mesh</h3><p>Choose one OBJ and optional matching MTL files. Mesh parts retain their solid materials and UV coordinates. Texture images are not imported.</p><label>Geometry and materials<input data-scene-import-file type="file" accept=".obj,.mtl" multiple required></label><div class="scene-import-files" aria-live="polite">OBJ up to 5 MiB · MTL files together up to 1 MiB</div><div class="scene-import-options"><label>Source up axis<select data-scene-import-axis><option value="Z">Z up</option><option value="Y">Y up</option></select></label><label>Import scale<input data-scene-import-scale type="number" value="1" min="0.000001" max="10000" step="any" required></label></div><p class="scene-import-status" role="status"></p><div class="scene-import-actions"><button type="button" data-scene-import-cancel>Cancel</button><button type="submit" class="primary" data-scene-import-submit>Import mesh</button></div></form></dialog></section>`;
     const root=host.querySelector('.scene-editor'),canvas=root.querySelector('canvas'),viewport=root.querySelector('.scene-viewport');
     const inspector=root.querySelector('.scene-inspector'),outliner=root.querySelector('.scene-outliner'),message=root.querySelector('.scene-message'),dope=root.querySelector('.scene-dope-sheet');
     let gl,program,locations={},meshes={},lineBuffer,normalBuffer,resizeObserver,gizmo=null;
+    const importDialog=root.querySelector('.scene-import-dialog'),importStatus=root.querySelector('.scene-import-status');
     const removers=[],listen=(el,event,fn,options)=>{el.addEventListener(event,fn,options);return ()=>el.removeEventListener(event,fn,options);};
     const capture=pointerId=>{try{root.setPointerCapture?.(pointerId);}catch(_){};};
     const report=(text,error=false)=>{message.textContent=text;message.classList.toggle('error',error);message.hidden=!text;};
@@ -95,7 +136,7 @@
     function publish(before) {
       try {if(bridge.onChange?.(copy(scene))===false){if(before)scene=before;report('Finish the current project operation before editing.',true);refresh();return false;}}
       catch(error){if(before)scene=before;report(error.message||'Scene change could not be saved.',true);refresh();return false;}
-      refresh();return true;
+      revision++;refresh();return true;
     }
     function commit(change) {const before=copy(scene);try{change();report('');return publish(before);}catch(error){scene=before;report(error.message,true);refresh();return false;}}
     function ensureKey(item,kind,at=frame) {
@@ -125,6 +166,7 @@
       else if(selected.type==='camera')html=`<h3>Render camera</h3>${vector('Position','position',pose.position)}${vector('Look at','target',pose.target)}${number('Vertical field of view','fov',pose.fov,1,10,100)}<p class="scene-explanation">Keyframe the position, aim and lens to create camera moves. Camera view follows the animated shot.</p>`;
       else if(selected.type==='light')html=`<div class="scene-inspector-heading"><h3>Light</h3><button data-scene-action="delete">Delete</button></div><label>Name<input data-scene-property="name" value="${esc(item.name)}" maxlength="120"></label><label>Type<select data-scene-property="type">${['area','point','sun'].map(t=>`<option ${item.type===t?'selected':''} value="${t}">${t}</option>`).join('')}</select></label>${vector('Position','position',pose.position)}${item.type!=='point'?vector('Look at','target',pose.target):''}<label>Color<input type="color" data-scene-property="color" value="${esc(item.color)}"></label>${number(item.type==='sun'?'Strength':'Power · watts','power',pose.power,item.type==='sun'?.1:25,0,10000)}${number(item.type==='sun'?'Angular size · degrees':'Size · scene units','size',pose.size,.1,.01,100)}`;
       else html=`<h3>World</h3><label>Environment color<input type="color" data-scene-property="color" value="${esc(item.color)}"></label>${number('Environment strength','strength',item.strength,.05,0,5)}`;
+      if(selected.type==='object'&&item.type==='mesh')html+=`<div class="scene-mesh-info"><h4>Imported geometry</h4><p>${item.mesh.vertices.length.toLocaleString()} vertices · ${item.mesh.triangles.length.toLocaleString()} triangles</p><p>${item.mesh.uvs?.length?'UV coordinates retained':'No UV coordinates'} · ${item.mesh.normals?.length?'Corner normals retained':'Face normals'}</p>${item.mesh.source?`<p title="${esc(item.mesh.source.sha256)}">${esc(item.mesh.source.name)}</p>`:''}</div>`;
       if(animated())html+=`<div class="scene-keyframes"><h4>Motion <span>${item.keyframes.length} keys</span></h4><p>${item.keyframes.length?'Pose edits update a key at frame '+frame+'.':'Enable Auto key or add a pose key to begin animation.'} Drag diamonds in the motion tracks to retime. Hold keeps the preceding pose until the next key.</p></div>`;
       inspector.innerHTML=html;
     }
@@ -151,13 +193,14 @@
       if(selectedKey){const item=getItem(selectedKey.type,selectedKey.id);if(!item||(selectedKey.frame!==1&&!item.keyframes.some(k=>k.frame===selectedKey.frame)))selectedKey=null;}
       renderOutliner();renderInspector();renderDopeSheet();
       root.querySelector('.scene-current-frame').max=scene.frame_end;root.querySelector('.scene-frame-slider').max=scene.frame_end;root.querySelector('.scene-end-frame').value=scene.frame_end;root.querySelector('.scene-samples select').value=String(scene.samples);
-      root.querySelector('.scene-render').disabled=renderBusy||!opts.renderAvailable||!scene.objects.length;
+      root.querySelector('.scene-render').disabled=renderBusy||importBusy||!opts.renderAvailable||!scene.objects.length;
+      root.querySelector('[data-scene-action="import-obj"]').disabled=importBusy||typeof bridge.onImportMesh!=='function';
       root.querySelector('.scene-render').title=opts.renderAvailable?'Render this authored scene into your media bin':'The Blender render engine is unavailable. Check engines to configure it.';
       root.querySelector('[data-scene-action="keyframe"]').disabled=!animated();root.querySelector('.scene-empty').hidden=!!scene.objects.length;
       root.querySelector('.scene-view-label').innerHTML=(viewCamera?'RENDER CAMERA':'PERSPECTIVE')+' <span>3D scene · '+(viewCamera?'Animated framing':'World axes')+'</span>';
       root.querySelector('[data-scene-action="camera"]').classList.toggle('active',viewCamera);
       for(const button of root.querySelectorAll('[data-scene-tool]')){button.classList.toggle('active',button.dataset.sceneTool===tool);button.disabled=!animated()||(selected.type!=='object'&&button.dataset.sceneTool!=='move');}
-      draw();
+      pruneMeshes();draw();
     }
     function initGL() {
       gl=canvas.getContext('webgl',{antialias:true,alpha:false,preserveDrawingBuffer:true});if(!gl){report('WebGL is unavailable. Scene controls and rendering remain available.',true);return;}
@@ -165,9 +208,16 @@
       program=gl.createProgram();const vs=shader(gl.VERTEX_SHADER,vertexShader),fs=shader(gl.FRAGMENT_SHADER,fragmentShader);gl.attachShader(program,vs);gl.attachShader(program,fs);gl.linkProgram(program);gl.deleteShader(vs);gl.deleteShader(fs);if(!gl.getProgramParameter(program,gl.LINK_STATUS))throw Error(gl.getProgramInfoLog(program));
       for(const name of ['aPosition','aNormal'])locations[name]=gl.getAttribLocation(program,name);
       for(const name of ['uModel','uViewProjection','uNormal','uColor','uEye','uWorld','uRoughness','uMetallic','uUnlit','uLightCount','uLightPosition[0]','uLightColor[0]','uLightParameters[0]'])locations[name]=gl.getUniformLocation(program,name);
-      for(const type of ['cube','sphere','plane','cylinder']){const data=geometry(type),p=gl.createBuffer(),n=gl.createBuffer();gl.bindBuffer(gl.ARRAY_BUFFER,p);gl.bufferData(gl.ARRAY_BUFFER,data.vertices,gl.STATIC_DRAW);gl.bindBuffer(gl.ARRAY_BUFFER,n);gl.bufferData(gl.ARRAY_BUFFER,data.normals,gl.STATIC_DRAW);meshes[type]={p,n,count:data.vertices.length/3};}
+      for(const type of ['cube','sphere','plane','cylinder'])meshes[type]=uploadGeometry(geometry(type));
       lineBuffer=gl.createBuffer();normalBuffer=gl.createBuffer();gl.enable(gl.DEPTH_TEST);gl.disable(gl.CULL_FACE);
     }
+    function uploadGeometry(data) {const p=gl.createBuffer(),n=gl.createBuffer();gl.bindBuffer(gl.ARRAY_BUFFER,p);gl.bufferData(gl.ARRAY_BUFFER,data.vertices,gl.STATIC_DRAW);gl.bindBuffer(gl.ARRAY_BUFFER,n);gl.bufferData(gl.ARRAY_BUFFER,data.normals,gl.STATIC_DRAW);return {...data,bounds:geometryBounds(data.vertices),p,n,count:data.vertices.length/3};}
+    function objectGeometry(obj) {const key=obj.type==='mesh'?'mesh:'+obj.mesh.sha256:obj.type;if(!meshes[key]&&gl)meshes[key]=uploadGeometry(meshGeometry(obj.mesh));return meshes[key];}
+    function pruneMeshes() {if(!gl)return;const used=new Set(scene.objects.filter(obj=>obj.type==='mesh').map(obj=>'mesh:'+obj.mesh.sha256));for(const key of Object.keys(meshes))if(key.startsWith('mesh:')&&!used.has(key)){gl.deleteBuffer(meshes[key].p);gl.deleteBuffer(meshes[key].n);delete meshes[key];}}
+    function frameSelection() {const item=selectedItem();viewCamera=false;if(selected.type==='object'){
+      const pose=poseAt(item,frame),data=objectGeometry(item)||{bounds:item.type==='mesh'?geometryBounds(meshGeometry(item.mesh).vertices):geometryBounds(geometry(item.type).vertices)},bounds=data.bounds;
+      orbit.target=transform(modelMatrix(pose),bounds.center).slice(0,3);orbit.distance=clamp(bounds.radius*Math.max(...pose.scale)/Math.sin(22.5*deg)*1.2,.2,2000);
+    }else {orbit.target=animated()?poseAt(item,frame,selected.type).position:[0,0,1];orbit.distance=13;}}
     function bind(mesh) {gl.bindBuffer(gl.ARRAY_BUFFER,mesh.p);gl.enableVertexAttribArray(locations.aPosition);gl.vertexAttribPointer(locations.aPosition,3,gl.FLOAT,false,0,0);gl.bindBuffer(gl.ARRAY_BUFFER,mesh.n);gl.enableVertexAttribArray(locations.aNormal);gl.vertexAttribPointer(locations.aNormal,3,gl.FLOAT,false,0,0);}
     function lines(points,rgb,model=identity()) {if(!points.length)return;gl.bindBuffer(gl.ARRAY_BUFFER,lineBuffer);gl.bufferData(gl.ARRAY_BUFFER,new Float32Array(points),gl.DYNAMIC_DRAW);gl.bindBuffer(gl.ARRAY_BUFFER,normalBuffer);gl.bufferData(gl.ARRAY_BUFFER,new Float32Array(points.length),gl.DYNAMIC_DRAW);bind({p:lineBuffer,n:normalBuffer});gl.uniformMatrix4fv(locations.uModel,false,model);gl.uniformMatrix3fv(locations.uNormal,false,[1,0,0,0,1,0,0,0,1]);gl.uniform3fv(locations.uColor,rgb);gl.uniform1f(locations.uUnlit,1);gl.drawArrays(gl.LINES,0,points.length/3);}
     function viewInfo() {
@@ -213,13 +263,13 @@
       for(const light of scene.lights.slice(0,16)){const pose=poseAt(light,frame,'light');positions.push(...(light.type==='sun'?norm(sub(pose.position,pose.target)):pose.position));colors.push(...color(light.color));parameters.push(pose.power,light.type==='sun'?1:0,pose.size);}
       while(positions.length<48){positions.push(0,0,0);colors.push(0,0,0);parameters.push(0,0,0);}gl.uniform1i(locations.uLightCount,Math.min(16,scene.lights.length));gl.uniform3fv(locations['uLightPosition[0]'],positions);gl.uniform3fv(locations['uLightColor[0]'],colors);gl.uniform3fv(locations['uLightParameters[0]'],parameters);
       if(!viewCamera){const grid=[];for(let i=-10;i<=10;i++)grid.push(i,-10,0,i,10,0,-10,i,0,10,i,0);lines(grid,[.16,.19,.23]);lines([-10,0,.003,10,0,.003],[.45,.18,.18]);lines([0,-10,.003,0,10,.003],[.18,.4,.27]);cameraGuide();}
-      for(const obj of scene.objects){const pose=poseAt(obj,frame),mesh=meshes[obj.type];if(!mesh)continue;bind(mesh);gl.uniformMatrix4fv(locations.uModel,false,modelMatrix(pose));gl.uniformMatrix3fv(locations.uNormal,false,normalMatrix(pose));gl.uniform3fv(locations.uColor,color(obj.material.color));gl.uniform1f(locations.uRoughness,obj.material.roughness);gl.uniform1f(locations.uMetallic,obj.material.metallic);gl.uniform1f(locations.uUnlit,0);gl.drawArrays(gl.TRIANGLES,0,mesh.count);}
+      for(const obj of scene.objects){const pose=poseAt(obj,frame),mesh=objectGeometry(obj);if(!mesh)continue;bind(mesh);gl.uniformMatrix4fv(locations.uModel,false,modelMatrix(pose));gl.uniformMatrix3fv(locations.uNormal,false,normalMatrix(pose));gl.uniform3fv(locations.uColor,color(obj.material.color));gl.uniform1f(locations.uRoughness,obj.material.roughness);gl.uniform1f(locations.uMetallic,obj.material.metallic);gl.uniform1f(locations.uUnlit,0);gl.drawArrays(gl.TRIANGLES,0,mesh.count);}
       if(!viewCamera)for(const light of scene.lights){const p=poseAt(light,frame,'light').position,r=.17;lines([p[0]-r,p[1],p[2],p[0]+r,p[1],p[2],p[0],p[1]-r,p[2],p[0],p[1]+r,p[2],p[0],p[1],p[2]-r,p[0],p[1],p[2]+r],[.9,.77,.42]);}
       drawGizmo(view);gl.disable(gl.SCISSOR_TEST);
     }
     function pick(x,y) {
-      const view=viewInfo();if(x<view.ox||y<view.oy||x>view.ox+view.width||y>view.oy+view.height)return;let best=null;
-      for(const t of tracks()){if(viewCamera&&t.type!=='object')continue;const pose=poseAt(t.item,frame,t.type),p=project(pose.position,view);if(!p)continue;const radius=t.type==='object'?Math.max(15,Math.max(...pose.scale)*view.height/p.z):14,dist=Math.hypot(x-p.x,y-p.y);if(dist<radius&&(!best||p.z<best.z))best={track:t,z:p.z};}
+      const view=viewInfo();if(x<view.ox||y<view.oy||x>view.ox+view.width||y>view.oy+view.height)return;let best=null;const pointer=ray(x,y,view);
+      for(const t of tracks()){if(viewCamera&&t.type!=='object')continue;const pose=poseAt(t.item,frame,t.type);let distance=null;if(t.type==='object') {const data=objectGeometry(t.item);if(data)distance=intersectGeometry(data,pose,pointer);}else {const p=project(pose.position,view);if(p&&Math.hypot(x-p.x,y-p.y)<14)distance=Math.hypot(...sub(pose.position,pointer.origin));}if(distance!==null&&(!best||distance<best.z))best={track:t,z:distance};}
       if(best)select(best.track.type,best.track.id);
     }
     function hitGizmo(x,y) {
@@ -276,7 +326,30 @@
       if(input.dataset.sceneProperty==='name'&&!value.trim()){refresh();return;}
       commit(()=>{const path=input.dataset.sceneProperty.split('.'),isPose=animated()&&POSE_FIELDS[selected.type].includes(path[0]);let destination=isPose?poseAt(item,frame,selected.type):item;const pose=destination;for(let i=0;i<path.length-1;i++)destination=destination[path[i]];destination[path.at(-1)]=value;if(isPose)writePose(item,selected.type,pose);});
     }
+    async function importGeometry(event) {
+      event.preventDefault();if(importBusy||disposed||typeof bridge.onImportMesh!=='function')return;
+      const startRevision=revision,files=[...root.querySelector('[data-scene-import-file]').files],axis=root.querySelector('[data-scene-import-axis]').value,scale=Number(root.querySelector('[data-scene-import-scale]').value);
+      importBusy=true;importStatus.textContent='Reading geometry…';for(const control of importDialog.querySelectorAll('button,input,select'))control.disabled=true;refresh();
+      try {
+        const objs=files.filter(file=>/\.obj$/i.test(file.name)),mtls=files.filter(file=>/\.mtl$/i.test(file.name));
+        if(objs.length!==1||objs.length+mtls.length!==files.length)throw Error('Choose exactly one OBJ and optional MTL files.');
+        if(objs[0].size>5*1024*1024||mtls.length>8||mtls.reduce((n,f)=>n+f.size,0)>1024*1024)throw Error('OBJ limit: 5 MiB. At most eight MTL files totaling 1 MiB.');
+        if(!Number.isFinite(scale)||scale<.000001||scale>10000)throw Error('Import scale must be between 0.000001 and 10000.');
+        const decoder=new TextDecoder('utf-8',{fatal:true,ignoreBOM:true}),read=async file=>decoder.decode(await file.arrayBuffer()),materials=Object.create(null);
+        const obj=await read(objs[0]);for(const file of mtls){if(Object.hasOwn(materials,file.name))throw Error('The selected MTL file names must be unique.');materials[file.name]=await read(file);}
+        importStatus.textContent='Validating faces, materials and normals…';
+        const result=await bridge.onImportMesh({name:objs[0].name,obj,materials,up_axis:axis,scale});
+        if(disposed)return;if(revision!==startRevision)throw Error('The scene changed while importing. Import again to add the mesh to its current state.');
+        if(!Array.isArray(result?.objects)||!result.objects.length)throw Error('No validated polygon geometry was returned.');
+        const success=commit(()=>{const ids=new Set([...scene.objects,...scene.lights].map(item=>item.id));for(const item of result.objects){if(ids.has(item.id))item.id=uid();ids.add(item.id);}const combined=[...scene.objects,...result.objects];checkGeometryBudget(combined);scene.objects=combined;selected={type:'object',id:result.objects[0].id};selectedKey=null;});
+        if(!success)throw Error(message.textContent||'The imported mesh could not be added to this project.');
+        frameSelection();refresh();importDialog.close();
+        report(`Imported ${result.objects.length} mesh part${result.objects.length===1?'':'s'} · ${Number(result.statistics?.triangles||0).toLocaleString()} triangles.${result.warnings?.length?' '+result.warnings.join(' '):''}`);
+      }catch(error){if(!disposed)importStatus.textContent=error.message||'The mesh could not be imported.';}
+      finally {importBusy=false;if(!disposed){for(const control of importDialog.querySelectorAll('button,input,select'))control.disabled=false;refresh();}}
+    }
     async function action(event) {
+      if(event.target.closest('.scene-import-dialog'))return;
       if(performance.now()<suppressClick)return;const addButton=event.target.closest('[data-scene-add]');if(addButton){addPrimitive(addButton.dataset.sceneAdd);return;}
       const selectButton=event.target.closest('[data-scene-select]');if(selectButton){select(selectButton.dataset.sceneSelect,selectButton.dataset.id);return;}
       const toolButton=event.target.closest('[data-scene-tool]');if(toolButton){tool=toolButton.dataset.sceneTool;refresh();return;}
@@ -285,22 +358,26 @@
       if(command==='play'){play();return;}
       if(command==='camera'){viewCamera=!viewCamera;refresh();return;}
       if(command==='use-camera'){const position=eye(),aim=[...target()],fov=viewCamera?cameraPose().fov:45;commit(()=>{writePose(scene.camera,'camera',{position,target:aim,fov});viewCamera=true;selected={type:'camera',id:'camera'};selectedKey=null;tool='move';});return;}
-      if(command==='fit'){const item=selectedItem();viewCamera=false;orbit.target=animated()?poseAt(item,frame,selected.type).position:[0,0,1];orbit.distance=selected.type==='object'?Math.max(4,Math.max(...poseAt(item,frame).scale)*6):13;refresh();return;}
+      if(command==='import-obj'){if(importBusy||typeof bridge.onImportMesh!=='function')return;stop();importStatus.textContent='';importDialog.showModal();return;}
+      if(command==='fit'){frameSelection();refresh();return;}
       if(command==='delete'){if(!['object','light'].includes(selected.type))return;commit(()=>{if(selected.type==='object')scene.objects=scene.objects.filter(o=>o.id!==selected.id);else scene.lights=scene.lights.filter(o=>o.id!==selected.id);selected={type:'camera',id:'camera'};selectedKey=null;tool='move';});return;}
-      if(command==='duplicate'){if(selected.type!=='object')return;commit(()=>{if(scene.objects.length>=96)throw Error('A scene supports at most 96 objects.');const item=copy(selectedItem());item.id=uid();item.name=(item.name+' copy').slice(0,120);item.position[0]=clamp(item.position[0]+2,-1000,1000);for(const key of item.keyframes)key.position[0]=clamp(key.position[0]+2,-1000,1000);scene.objects.push(item);selected={type:'object',id:item.id};selectedKey=null;});return;}
+      if(command==='duplicate'){if(selected.type!=='object')return;commit(()=>{if(scene.objects.length>=96)throw Error('A scene supports at most 96 objects.');const item=copy(selectedItem());item.id=uid();item.name=(item.name+' copy').slice(0,120);item.position[0]=clamp(item.position[0]+2,-1000,1000);for(const key of item.keyframes)key.position[0]=clamp(key.position[0]+2,-1000,1000);checkGeometryBudget([...scene.objects,item]);scene.objects.push(item);selected={type:'object',id:item.id};selectedKey=null;});return;}
       if(command==='add-light'){commit(()=>{if(scene.lights.length>=16)throw Error('A scene supports at most 16 lights.');const light={id:uid(),name:'Light '+(scene.lights.length+1),type:'area',position:[3,-4,7],target:[0,0,0],color:'#ffffff',power:1000,size:4,keyframes:[]};scene.lights.push(light);selected={type:'light',id:light.id};selectedKey=null;tool='move';});return;}
       if(command==='keyframe'){if(!animated())return;commit(()=>{ensureKey(selectedItem(),selected.type);selectedKey={...selected,frame};});return;}
       if(command==='delete-key'){if(!selectedKey)return;commit(()=>{const item=getItem(selectedKey.type,selectedKey.id);item.keyframes=item.keyframes.filter(k=>k.frame!==selectedKey.frame);selectedKey=null;});return;}
       if(command==='previous-key'||command==='next-key'){if(!animated())return;const keys=[1,...selectedItem().keyframes.map(k=>k.frame)].sort((a,b)=>a-b),next=command==='previous-key'?[...keys].reverse().find(k=>k<frame):keys.find(k=>k>frame);if(next!==undefined){stop();setFrame(next);}return;}
-      if(command==='render'){if(!opts.renderAvailable||!scene.objects.length||renderBusy)return;renderBusy=true;stop();refresh();try{await bridge.onRender?.({scene:copy(scene),frame_start:1,frame_end:scene.frame_end});report('');}catch(error){report(error.message||'Scene render could not start.',true);}finally{renderBusy=false;refresh();}}
+      if(command==='render'){if(!opts.renderAvailable||!scene.objects.length||renderBusy||importBusy)return;renderBusy=true;stop();refresh();try{await bridge.onRender?.({scene:copy(scene),frame_start:1,frame_end:scene.frame_end});report('');}catch(error){report(error.message||'Scene render could not start.',true);}finally{renderBusy=false;refresh();}}
     }
     removers.push(listen(root,'click',action),listen(inspector,'change',propertyChanged));
+    removers.push(listen(root.querySelector('.scene-import-form'),'submit',importGeometry),listen(root.querySelector('[data-scene-import-cancel]'),'click',()=>{if(!importBusy)importDialog.close();}),listen(importDialog,'cancel',event=>{if(importBusy)event.preventDefault();}));
+    removers.push(listen(root.querySelector('[data-scene-import-file]'),'change',event=>{root.querySelector('.scene-import-files').textContent=[...event.target.files].map(file=>`${file.name} · ${(file.size/1024).toFixed(1)} KiB`).join('\n')||'OBJ up to 5 MiB · MTL files together up to 1 MiB';}));
     removers.push(listen(root.querySelector('.scene-key-interpolation'),'change',event=>{if(!selectedKey)return;commit(()=>{ensureKey(getItem(selectedKey.type,selectedKey.id),selectedKey.type,selectedKey.frame).interpolation=event.target.value;});}));
     removers.push(listen(root.querySelector('.scene-snap'),'change',event=>{snap=event.target.checked;}),listen(root.querySelector('.scene-auto-key'),'change',event=>{autoKey=event.target.checked;}));
     removers.push(listen(root.querySelector('.scene-current-frame'),'change',event=>{stop();setFrame(event.target.value);}),listen(root.querySelector('.scene-frame-slider'),'input',event=>{stop();setFrame(event.target.value);}));
     removers.push(listen(root.querySelector('.scene-end-frame'),'change',event=>{const end=clamp(Math.round(Number(event.target.value)||1),1,7200),last=Math.max(1,...tracks().flatMap(t=>t.item.keyframes.map(k=>k.frame)));if(end<last){report('Remove keys after frame '+end+' before shortening the scene.',true);refresh();return;}commit(()=>{scene.frame_end=end;frame=Math.min(frame,end);});}),listen(root.querySelector('.scene-samples select'),'change',event=>commit(()=>{scene.samples=Number(event.target.value);}))); 
     removers.push(listen(root,'keydown',event=>{
       if(event.key==='Escape'&&gesture){event.preventDefault();event.stopPropagation();finishGesture(false);return;}
+      if(event.target.closest('.scene-import-dialog')){event.stopPropagation();return;}
       if(event.target.closest('input,select,textarea'))return;
       const handle=event.target.closest('[data-scene-axis]');
       if(handle&&['ArrowLeft','ArrowRight','ArrowUp','ArrowDown'].includes(event.key)){event.preventDefault();event.stopPropagation();const index='xyz'.indexOf(handle.dataset.sceneAxis),direction=['ArrowLeft','ArrowDown'].includes(event.key)?-1:1;commit(()=>{const item=selectedItem(),pose=poseAt(item,frame,selected.type),property=tool==='move'?'position':tool==='rotate'?'rotation':'scale',step=tool==='rotate'?15:tool==='scale'?.1:.25,indices=index<0?[0,1,2]:[index];for(const i of indices)pose[property][i]=clamp(pose[property][i]+step*direction,tool==='scale'?.01:tool==='rotate'?-3600:-1000,tool==='scale'?100:tool==='rotate'?3600:1000);writePose(item,selected.type,pose);});return;}
@@ -328,10 +405,10 @@
     if(globalThis.ResizeObserver){resizeObserver=new ResizeObserver(draw);resizeObserver.observe(viewport);}else removers.push(listen(window,'resize',draw));
     refresh();
     return {
-      setScene(next,options={}){if(gesture)finishGesture(false);stop();opts={...opts,...options};scene=copy(next||defaultScene(opts));refresh();},
+      setScene(next,options={}){if(gesture)finishGesture(false);stop();opts={...opts,...options};scene=copy(next||defaultScene(opts));revision++;refresh();},
       setRenderAvailable(value){opts.renderAvailable=!!value;refresh();},
       destroy(){disposed=true;stop();resizeObserver?.disconnect();for(const remove of removers)remove();if(gl){for(const mesh of Object.values(meshes)){gl.deleteBuffer(mesh.p);gl.deleteBuffer(mesh.n);}gl.deleteBuffer(lineBuffer);gl.deleteBuffer(normalBuffer);gl.deleteProgram(program);}host.replaceChildren();}
     };
   }
-  window.CinematicumSceneEditor={mount,defaultScene,poseAt,easing};
+  window.CinematicumSceneEditor={mount,defaultScene,poseAt,easing,meshGeometry,geometryBounds,intersectGeometry};
 })();

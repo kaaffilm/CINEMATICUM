@@ -1,4 +1,4 @@
-# CINEMATICUM Studio 0.4
+# CINEMATICUM Studio 0.5
 
 A working local audiovisual editor. Media are imported into an owned project,
 edited on a frame-based timeline, previewed, and exported through real render
@@ -7,6 +7,14 @@ sharing one saved project and undo history. FFmpeg and Blender run as headless
 processing engines; no external editor interface is embedded or launched.
 No missing shot is replaced with filler. Exporting media has no film
 issuance effect.
+
+## This upgrade
+
+Studio 0.5 adds exact rational project clocks, independent compositor parameter
+and polygon-path animation, measured point tracking with reversible stabilization
+and tracked masks, OBJ/MTL mesh authoring, and bounded OpenTimelineIO interchange.
+Read the [source comparison and capability audit](CAPABILITY_AUDIT.md) for the
+implemented scope, source evidence, tests and remaining professional gaps.
 
 ## Open it
 
@@ -79,6 +87,13 @@ updates do not replace that folder. On Linux the default is
 
 ### Timing, animation and sound
 
+New projects support 24, 25, 30, 48, 50 and 60 fps, plus exact 24000/1001,
+30000/1001 and 60000/1001 rates. The API accepts reduced rational rates from
+1 to 60 fps. `frame_rate` is authoritative; numeric `fps` is derived for UI
+arithmetic. Render timestamps and 48 kHz audio placement use the rational clock
+and absolute sample boundaries. NTSC-family timecode is displayed as nominal
+**non-drop-frame** timecode, explicitly labeled NDF; it is not wall-clock time.
+
 The clip inspector exposes 0.25×–4× speed, reverse of the selected source range,
 clip gain, stereo balance and audio fades. Source in points may be fractional
 project frames; timeline starts and durations remain integer frames. Speed
@@ -127,9 +142,68 @@ The paused current-frame renderer evaluates the connected output automatically.
 During interactive playback, use Render preview to review the complete node
 processing in the encoded movie.
 
+Grade, blur, chroma similarity/blend, merge opacity and mask placement/shape
+parameters have independent keyframe channels. Use the diamond beside a property
+to key it at the playhead. Once keyed, editing that property writes its own key;
+other channels keep their existing timing. Keys support linear, hold, ease-in,
+ease-out and ease-in/out, with frame navigation and deletion. Polygon path
+animation preserves vertex count/order; each completed vertex drag is one undo
+entry. Topology changes are disabled while the path is animated. Sharpen amount,
+curve control points and chroma color remain static in this release.
+
 Graphs allow up to 32 nodes, one source, and no missing connections or cycles.
 A resource limit bounds canvas pixels multiplied by active graph nodes to
-268,435,456. Disconnected nodes remain editable but are not rendered.
+268,435,456. Scalar animation has up to 128 keys per channel, polygon paths up to
+64; a graph has at most 1,024 keys and 8,192 animated coordinate values.
+Disconnected nodes remain editable but are not rendered.
+
+## Track motion and apply it
+
+Select a picture video clip and click **Track motion** in the Inspector. Load
+its actual starting frame, click a distinctive textured feature, choose a range
+up to 480 clip frames, then **Measure motion**. The visible path contains measured
+matches, with explicit gaps for missing detections. Radius is measured in the
+analysis image; its maximum edge is 384 pixels. Template matching can lose or
+misidentify repeated textures, scale changes, rotation and occlusion.
+
+**Stabilize clip** adds an independent displacement channel relative to the
+reference point. Manual transforms and sound automation are preserved. It holds
+the first/last displacement outside the tracked range and does not auto-crop
+exposed borders. **Remove stabilization** removes only that channel. **Create
+tracked mask** adds a new animated ellipse to the compositor; this follows a
+point and does not identify an object. Each application is one undoable edit.
+
+The tracker rejects a low-contrast/ambiguous seed, missing samples during
+application, or a trajectory requiring over 128 keys at half-source-pixel
+simplification precision. That precision bounds simplification, not the accuracy
+of template matching. Download the actual measurement JSON or import compatible
+point tracks; source hash, frame rate, source range, speed, reverse and clip
+identity must match. Trims/splits preserve applied motion, and retiming rescales
+its keys along with compositor and pose animation. Changing source-in or reverse
+clears derived stabilization and tracked-mask motion in the same undoable edit;
+ordinary authored mask animation is preserved. Track the changed content again.
+This is a classical FFmpeg
+correlation tracker, not SAM 2, TAPIR/TAPNext, planar tracking or a camera solver.
+
+## Exchange cut timelines
+
+Click **Interchange** in the timeline toolbar. Export creates an actual `.otio`
+JSON file containing picture/audio tracks, cuts, gaps, references and rational
+timing. Media is referenced, not embedded. Embedded video audio is represented
+on companion audio tracks. Color, masks, tracking, titles, mixer state and other
+CINEMATICUM authoring data remain private namespaced metadata; other editors
+receive unprocessed cuts. Warnings identify these differences.
+
+Import a `.otio` file, explicitly map its references to existing imported media
+when no verified content hash matches, then **Review timeline**. The preview
+reports the candidate's tracks, clips, rate and warnings. **Replace timeline**
+applies it with one undo checkpoint; saving remains separate. The importer never
+opens external paths/URLs from a document. A changed source edit invalidates
+stale private metadata. Nested stacks, transitions, timewarps, reverse, same-track
+overlaps and unsupported final gaps are rejected instead of silently flattened.
+AAF, Premiere XML, Resolve projects and general OTIO plugin schemas are not
+supported. The request/document size limit is 8 MiB.
+
 
 ## Create and render 3D scenes
 
@@ -149,11 +223,31 @@ The completed job also offers the editable `.blend` source. Add the movie to
 the timeline to edit and composite it with footage, sound, and titles.
 WebGL lighting is an interactive approximation; Blender produces the rendered
 materials, shadows, and lighting. Supported authored scenes contain up to
-96 primitive objects, 16 lights, 128 pose keys per object, and 7,200 frames.
+96 objects, 16 lights, 128 pose keys per object, and 7,200 frames.
 Transforms use Z-up coordinates and XYZ Euler rotation. Linear, hold, quadratic
 ease-in/out and cubic smooth ease-in/out have matching viewport and render
 evaluation. Saved Blender actions retain these curves; camera lens conversion
 is baked at integer render frames.
+
+### Import real mesh geometry
+
+**Import OBJ** in the 3D workspace accepts one selected OBJ plus up to eight MTL
+files. Choose Y-up or Z-up and an explicit scale. The parser preserves indexed
+triangle geometry, negative-index references, UV corners, custom/smoothed
+normals, groups and solid material assignment; concave simple polygons are
+triangulated. Material partitions become separately editable objects.
+
+The viewport displays and ray-selects the actual mesh, and the same geometry
+is constructed in the headless Blender render and retained `.blend`. Move,
+rotate, scale, duplicate, material controls and animation use the shared scene
+history. Importing all mesh parts creates one undo entry. Source bytes and
+canonical geometry are hashed for provenance.
+
+Limits: 5 MiB OBJ, 1 MiB total selected MTL, 50,000 source vertices, 100,000
+triangles, 96 material parts and 5 MiB canonical geometry per scene. Unsupported
+texture maps/transparency are reported; referenced files are never opened.
+UVs are preserved, but texture image/material graph authoring is not implemented.
+Invalid, degenerate, self-intersecting or nonplanar faces are rejected.
 
 ### Existing Blender scenes
 
@@ -170,7 +264,7 @@ those secondary outputs; it is not an operating-system sandbox for untrusted
 Blender files. Render cancellation stops only the child process group owned by
 that job.
 
-The primitive scene editor does not include Blender's mesh editing, rigging,
+The scene editor does not include Blender's vertex/edge/face editing, rigging,
 sculpting, or simulation interface.
 Pack external resources in the source `.blend` before importing it: only the
 selected scene file is copied, not a directory of linked assets.
@@ -219,9 +313,11 @@ UI graph and is deliberately rejected instead of reported as ready.
 
 Accepted jobs are submitted once, tracked by their actual prompt ID, downloaded
 from the configured server, inspected by FFprobe, and admitted as media. No
-success is inferred from a queue receipt. Local cancellation stops waiting;
-the shared ComfyUI job may continue. Studio does not call ComfyUI's global
-interrupt endpoint and therefore does not stop somebody else's job.
+success is inferred from a queue receipt. Cancellation targets only the accepted
+prompt ID through the server's per-job endpoint. On older servers that return
+404 or 405, Studio requests removal of that exact queued prompt; an already
+running job may continue. The receipt distinguishes a cancellation request from
+confirmed remote cancellation. Studio never calls the global interrupt endpoint.
 Waiting is bounded to 30 minutes and each video download to 2 GiB.
 
 Commercial model providers are **not connected in this build**. Runway, Krea,
@@ -236,7 +332,9 @@ The editor has concrete bulk actions: monochrome grading, muting clip audio,
 and arranging a track without gaps. The underlying local API supports atomic
 typed recipes with `grade`, `volume`, `sequence`, and absolute source-in/output-duration
 `trim` actions. Locked tracks reject automation atomically; volume recipes also
-update animated volume keys. It has no
+update animated volume keys. Source-changing trim recipes reject clips with
+measured stabilization or tracked masks until that derived motion is removed.
+It has no
 shell, `eval`, arbitrary code execution, or claim of a natural-language agent.
 
 A saved project can be rendered from a script without opening the editor:
@@ -266,14 +364,22 @@ foreign browser origins and invalid Host headers. Supported routes:
 | `POST /api/projects/{id}/generate` | Queue configured ComfyUI generation |
 | `POST /api/projects/{id}/scene` | Render an authored scene and preserve editable Blender source |
 | `POST /api/projects/{id}/blender` | Render an imported scene |
+| `POST /api/projects/{id}/scene/import-obj` | Parse supplied OBJ/MTL into canonical mesh parts without saving |
+| `POST /api/projects/{id}/tracking-frame` | Decode the actual conformed seed image |
+| `POST /api/projects/{id}/tracking` | Measure point motion and retain its JSON receipt |
+| `POST /api/projects/{id}/tracking-validate` | Validate imported point samples against the current source |
+| `POST /api/projects/{id}/tracking-motion` | Plan independent stabilization without saving |
+| `GET /api/projects/{id}/analysis/{job}.png` or `.json` | Read measured analysis output |
+| `POST /api/projects/{id}/interchange-export` | Write a bounded OTIO cut document |
+| `POST /api/projects/{id}/interchange-import` | Return an unsaved validated timeline candidate |
 | `POST /api/projects/{id}/automate` | Apply an atomic editing recipe |
 | `GET /api/jobs/{id}` | Read progress, errors, and verified output |
 | `POST /api/jobs/{id}/cancel` | Cancel the owned local job |
 
 ## Current boundaries
 
-The project stores integer timeline frames with exclusive clip ends and an integer
-frame rate from 1 to 60. The rendering workspace is SDR; PQ/HLG material is
+The project stores integer timeline frames with exclusive clip ends and an exact
+rational frame rate from 1 to 60. The rendering workspace is SDR; PQ/HLG material is
 refused until an explicit conversion is available. Practical limits are 512
 assets, 256 clips, 128 titles, six hours, and a maximum canvas area of
 33.5 million pixels. Timeline controls expose up to 16 video and 16 audio tracks.
@@ -282,9 +388,9 @@ are evaluated from the timeline start, so long timelines may need an encoded
 preview. Scope values are display-referred SDR RGB, not reference HDR scopes.
 
 This implementation does not yet provide ACES/OCIO color management,
-HDR finishing, fractional project rates, multicam, optical-flow retiming,
-tracking/roto, arbitrary mesh editing, plugin-host compatibility,
-AAF/XML/OTIO project interchange, a full audio workstation, collaborative
+HDR finishing, multicam, optical-flow retiming, planar/affine tracking, neural
+segmentation, Bezier roto with feather points, arbitrary mesh editing, plugin-host
+compatibility, general AAF/XML/nested OTIO interchange, a full audio workstation, collaborative
 editing, or a production-grade realtime playback cache. Source
 formats that a browser cannot decode can still render through FFmpeg; use an
 encoded preview to review them. ProRes is an export format and may require an
@@ -304,12 +410,19 @@ node --check scripts/studio/web/editing.js
 node --check scripts/studio/web/viewer-tools.js
 node --check scripts/studio/web/compositor-ui.js
 node --check scripts/studio/web/scene-editor.js
+node --check scripts/studio/web/tracking-ui.js
+node --check scripts/studio/web/interchange-ui.js
 make qc-stack
 ```
 
 Tests decode exported frames and audio to check timing, gaps, grading,
 transparency, chroma key, motion, title fades, audio gain, and ProRes output.
-Node tests decode branching, output rewiring, rotated/polygon masks, feathering,
+Rational-clock tests inspect every encoded packet timestamp, decoded frame and
+48 kHz cut boundary, including reverse and fractional source trims. OTIO tests
+include an independent official reader/writer (test-only dependency) and decoded
+picture/PCM roundtrips. Tracking tests measure actual motion and re-measure a
+stabilized render. Mesh tests inspect real geometry and reopen its Blender source.
+Node tests decode branching, output rewiring, animated/rotated/polygon masks, feathering,
 master/RGB curves, blend modes, merge alpha, and filtered edges. Timeline tests
 measure rendered frames and decoded PCM for retime, reverse, source boundaries,
 rotation, easing, fades, stereo balance, track state and waveform statistics.

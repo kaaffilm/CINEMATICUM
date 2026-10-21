@@ -5,16 +5,19 @@
 Open the actual media editor with `make studio`. On macOS, `make studio-install-macos`
 builds a native **CINEMATICUM Studio.app** window using the installed Xcode tools.
 The application imports your media, edits a frame-based multitrack timeline with
-retiming and reverse, previews composition, grades footage with RGB curves and
+exact rational rates, retiming and reverse, previews composition, grades footage with RGB curves and
 scopes, mixes audio with real waveforms, animates transforms and titles, and exports
 H.264 or ProRes through FFmpeg. Its node compositor processes actual exported frames and
-paused authoring frames, with editable polygon masks and alpha-correct blend modes.
+paused authoring frames, with independently animated polygon masks and alpha-correct blend modes.
+Measured source tracking drives reversible stabilization and tracked masks. Bounded
+OpenTimelineIO exchange preserves cuts, gaps, media identity and private authoring data.
 The in-app 3D workspace has direct transform handles and a draggable dope sheet
-for primitive scenes, materials, lighting, cameras, and pose animation; Blender renders those scenes into timeline media and editable
+for primitive and imported OBJ mesh scenes, materials, lighting, cameras, and pose animation; Blender renders those scenes into timeline media and editable
 `.blend` sources. Configured local ComfyUI workflows can also produce media after
 node and model compatibility checks.
 
-Start with [the Studio guide](scripts/studio/README.md). Run `make studio-doctor`
+Start with [the Studio guide](scripts/studio/README.md) and
+[the source comparison and capability audit](scripts/studio/CAPABILITY_AUDIT.md). Run `make studio-doctor`
 to inspect the actual installed engines, or `make studio-test` for the media and
 application tests. Production footage is supplied by the user; missing media are
 never replaced with a procedural film. Studio exports do not change Case 001's

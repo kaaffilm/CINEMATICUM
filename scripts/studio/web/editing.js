@@ -23,6 +23,43 @@
     return points.at(-1).value;
   }
   function pose(clip,frame){return Object.fromEntries(properties.map(key=>[key,curve(clip,key,frame)]));}
+  function measuredValue(keys,key,frame) {
+    if(!keys?.length)return 0;
+    if(frame<=keys[0].frame)return keys[0][key];
+    for(let i=1;i<keys.length;i++){const a=keys[i-1],b=keys[i];if(frame<b.frame){const u=(frame-a.frame)/(b.frame-a.frame);return a[key]+(b[key]-a[key])*u;}}
+    return keys.at(-1)[key];
+  }
+  function trackingOffset(clip,frame,project,asset,value=pose(clip,frame)) {
+    if(!clip.tracking?.keys?.length)return {x:0,y:0};
+    const at=frame+(clip.animation_offset??0),fit=Math.min(project.width/asset.width,project.height/asset.height);
+    const width=Math.max(2,Math.trunc(asset.width*fit*value.scale/2)*2),height=Math.max(2,Math.trunc(asset.height*fit*value.scale/2)*2);
+    const dx=measuredValue(clip.tracking.keys,'x',at)*width,dy=measuredValue(clip.tracking.keys,'y',at)*height,angle=value.rotation*Math.PI/180;
+    return {x:(dx*Math.cos(angle)-dy*Math.sin(angle))/project.width,y:(dx*Math.sin(angle)+dy*Math.cos(angle))/project.height};
+  }
+  function ensureAnimationDomain(clip) {
+    const offset=clip.animation_offset??0;
+    clip.animation_start=Math.min(clip.animation_start??0,offset);
+    clip.animation_duration=Math.max(clip.animation_duration??clip.duration,offset+clip.duration);
+    return clip;
+  }
+  function preserveAnimation(clip,original,offset=0) {
+    clip.animation_start=original.animation_start??0;
+    clip.animation_duration=original.animation_duration??original.duration;
+    clip.animation_offset=(original.animation_offset??0)+offset;
+    clip.keyframes=JSON.parse(JSON.stringify(original.keyframes||[]));
+    // Extending the editable domain does not create keys or move curves.
+    // Audio fades retain their own original domain so their endpoint stays put.
+    ensureAnimationDomain(clip);
+    if(clip.audio){clip.audio.fade_duration=original.audio?.fade_duration??original.duration;clip.audio.fade_offset=(original.audio?.fade_offset??0)+offset;}
+    return clip;
+  }
+  function retimeExtraChannels(clip,ratio) {
+    const rescale=keys=>[...new Map(keys.map(k=>{const next={...k,frame:Math.round(k.frame*ratio)};return [next.frame,next];})).values()].sort((a,b)=>a.frame-b.frame);
+    const frames=[];
+    if(clip.tracking){clip.tracking.keys=rescale(clip.tracking.keys);frames.push(...clip.tracking.keys.map(k=>k.frame));}
+    for(const node of clip.compositor?.nodes||[])for(const name of Object.keys(node.animation||{})){node.animation[name]=rescale(node.animation[name]);frames.push(...node.animation[name].map(k=>k.frame));}
+    if(frames.length){clip.animation_start=Math.min(clip.animation_start??0,...frames);clip.animation_duration=Math.max(clip.animation_duration??clip.duration,...frames.map(f=>f+1));}
+  }
   function track(project,id) {
     return {id,name:id<0?'Audio '+Math.abs(id):'Video '+(id+1),mute:false,solo:false,locked:false,gain:1,...(project.tracks||[]).find(t=>t.id===id)};
   }
@@ -67,5 +104,5 @@
     }
     return 'M'+upper.join(' L')+' L'+lower.reverse().join(' L')+' Z';
   }
-  window.CinematicumEditing={clamp,properties,defaults,easings,curve,pose,track,tracks,active,sourceFrame,audioGain,trim,envelopePath};
+  window.CinematicumEditing={clamp,properties,defaults,easings,curve,pose,measuredValue,trackingOffset,ensureAnimationDomain,preserveAnimation,retimeExtraChannels,track,tracks,active,sourceFrame,audioGain,trim,envelopePath};
 })();
