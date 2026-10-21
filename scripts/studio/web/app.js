@@ -9,7 +9,7 @@ const finite = (v, fallback = 0) => Number.isFinite(Number(v)) ? Number(v) : fal
 const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
 const state = {token:'',project:null,projects:[],capabilities:{},selected:null,selectedAsset:null,mode:'edit',frame:0,zoom:48,playing:false,dirty:false,revision:0,history:[],future:[],media:new Map(),job:null,workflowPath:'',rendered:false,lastRenderUrl:'',savePromise:null,drag:null,projectOps:0,navigating:false,editBusy:false};
 let toastTimer, animation, playbackOrigin, playbackFrame, audioContext;
-let compositorEditor=null, trackingEditor=null, interchangeEditor=null, colorPipelineEditor=null, cameraImporter=null, sceneEditor=null, sceneProjectId='', generationReadiness=null, readinessRequest=0;
+let compositorEditor=null, trackingEditor=null, interchangeEditor=null, colorPipelineEditor=null, imagingEditor=null, cameraImporter=null, sceneEditor=null, sceneProjectId='', generationReadiness=null, readinessRequest=0;
 const editing=window.CinematicumEditing;
 const TRACK_WIDTH=128;
 let frameViewer=null;
@@ -21,7 +21,7 @@ async function api(path, {method='GET',body,raw=false}={}) {
   const headers={};if(method!=='GET'){headers['X-Cinematicum-Token']=state.token;headers['Content-Type']=raw?'application/octet-stream':'application/json';}
   const r=await fetch(path,{method,headers,body:body===undefined?undefined:(raw?body:JSON.stringify(body)),cache:'no-store'});
   const data=await r.json().catch(()=>({error:`Server returned ${r.status}`}));
-  if(!r.ok)throw Error(typeof data.error==='string'?data.error:(data.message||JSON.stringify(data.error||data))); return data;
+  if(!r.ok)throw Object.assign(Error(typeof data.error==='string'?data.error:(data.message||JSON.stringify(data.error||data))),{status:r.status}); return data;
 }
 const projectUrl = () => `/api/projects/${encodeURIComponent(state.project.id)}`;
 const projectPath = id => `/api/projects/${encodeURIComponent(id)}`;
@@ -102,8 +102,15 @@ function renderMedia() {
   $('#asset-count').textContent=all.length;
   $('#media-bin').innerHTML=list.length?list.map(a=>`<div class="media-item ${state.selectedAsset===a.id?'selected':''}" data-asset="${esc(a.id)}" draggable="true" tabindex="0" aria-label="${esc(a.name)}; double-click to add to timeline"><div class="media-thumbnail">${['video','image'].includes(a.kind)?`<img loading="lazy" src="${thumbnailUrl(a)}" alt="">`:`<span class="file-icon">${a.kind==='scene'?'◇':'♫'}</span>`}<span class="media-badge">${a.kind==='image'?'STILL':a.kind==='scene'?'3D':secondsLabel(a.duration||0)}</span></div><div class="media-name" title="${esc(a.name)}">${esc(a.name)}</div><button class="media-add" data-add="${esc(a.id)}" title="${a.kind==='scene'?'Select for 3D rendering':'Add to timeline'}" aria-label="Add ${esc(a.name)}">＋</button></div>`).join(''):`<div class="media-empty"><strong>${all.length?'No matching files':'A place for your material.'}</strong>${all.length?'Try a different search.':'Drop video, audio, images,<br>or Blender scenes here.'}</div>`;
 }
-function defaultClip(a,start=durationFrames(),track=a.kind==='audio'?-1:0) {return {id:uid(),asset_id:a.id,track,start:Math.round(start),in:0,duration:Math.max(1,a.kind==='image'?Math.round(state.project.fps*5):Math.floor((a.duration||5)*state.project.fps)),volume:1,speed:1,reverse:false,audio:{fade_in:0,fade_out:0,pan:0},opacity:1,x:0,y:0,scale:1,rotation:0,grade:{exposure:0,contrast:1,saturation:1,temperature:0},effects:{blur:0,sharpen:0,vignette:false,chroma_key:''},keyframes:[]};}
-function addAsset(id,start,track) {const a=assetById(id);if(!a)return;const destination=track??(a.kind==='audio'?-1:0);if(editing.track(state.project,destination).locked){toast('Unlock the destination track before adding media.');return;}if(a.kind==='scene'){state.selectedAsset=id;setMode('3d');openBlendDialog();return;}const c=defaultClip(a,start??durationFrames(),destination);mutate(()=>{state.project.clips.push(c);state.selected={type:'clip',id:c.id};state.frame=c.start;},{inspector:true});switchPreview(false);}
+function defaultClip(a,start=durationFrames(),track=a.kind==='audio'?-1:0) {
+  const clip={id:uid(),asset_id:a.id,track,start:Math.round(start),in:0,duration:Math.max(1,a.kind==='image'?Math.round(state.project.fps*5):Math.floor((a.duration||5)*state.project.fps)),volume:1,speed:1,reverse:false,audio:{fade_in:0,fade_out:0,pan:0},opacity:1,x:0,y:0,scale:1,rotation:0,grade:{exposure:0,contrast:1,saturation:1,temperature:0},effects:{blur:0,sharpen:0,vignette:false,chroma_key:''},keyframes:[]};
+  // Develop's display image has already passed through its OCIO view. Decode
+  // only its sRGB transfer for the timeline's Rec.709 output; do not run the
+  // scene view or tone mapping again.
+  if(a.provenance?.type==='cinematicum-imaging'&&a.provenance?.version===1&&a.provenance?.display_encoding==='sRGB')clip.color_pipeline={version:1,enabled:true,input_transfer:'srgb',input_primaries:'rec709'};
+  return clip;
+}
+function addAsset(id,start,track) {const a=assetById(id);if(!a)return;if(a.path?.toLowerCase().endsWith('.exr')){state.selectedAsset=id;openImaging('ocio');return;}const destination=track??(a.kind==='audio'?-1:0);if(editing.track(state.project,destination).locked){toast('Unlock the destination track before adding media.');return;}if(a.kind==='scene'){state.selectedAsset=id;setMode('3d');openBlendDialog();return;}const c=defaultClip(a,start??durationFrames(),destination);mutate(()=>{state.project.clips.push(c);state.selected={type:'clip',id:c.id};state.frame=c.start;},{inspector:true});switchPreview(false);}
 function select(type,id) {state.selected={type,id};state.selectedAsset=null;renderTimeline();renderInspector();updateTransport();}
 function addTitle() {const title={id:uid(),text:'Your title',start:state.frame,duration:Math.round(state.project.fps*3),x:0,y:.32,size:Math.round(state.project.height*.065),color:'#ffffff',fade:Math.round(state.project.fps*.25)};mutate(()=>{state.project.titles.push(title);state.selected={type:'title',id:title.id};},{inspector:true});switchPreview(false);}
 function deleteSelected() {if(!selectedItem()||selectionLocked())return;mutate(()=>{const key=state.selected.type==='title'?'titles':'clips';state.project[key]=state.project[key].filter(c=>c.id!==state.selected.id);state.selected=null;},{inspector:true});}
@@ -135,8 +142,49 @@ function splitSelected() {
   },{inspector:true});
 }
 
+let trimEditContext=null;
+function clearSourceMeasurements(clip,original,local=0) {
+  let cleared=Boolean(clip.tracking);delete clip.tracking;
+  for(const node of clip.compositor?.nodes||[])if(node.tracking_source){
+    const previous=original.compositor?.nodes.find(n=>n.id===node.id),params=window.CinematicumCompositor.paramsAt(previous||node,local+(original.animation_offset??0));
+    node.params.x=params.x;node.params.y=params.y;
+    if(node.animation){delete node.animation.x;delete node.animation.y;if(!Object.keys(node.animation).length)delete node.animation;}
+    delete node.tracking_source;cleared=true;
+  }
+  return cleared;
+}
+function trimEditPlan() {
+  if(!trimEditContext||state.project.id!==trimEditContext.projectId||state.revision!==trimEditContext.revision)throw Error('The project changed. Close and reopen the trim controls.');
+  return editing.trimEdit(state.project,trimEditContext.clipId,$('#trim-edit-kind').value,Number($('#trim-edit-delta').value));
+}
+function updateTrimEdit() {
+  try{
+    const result=trimEditPlan(),help={slip:'Advance the source along its playback direction. Position, duration, and authored animation stay fixed.',slide:'Move the selected shot and trim both neighbors. The shot’s source and the total sequence duration stay fixed.',roll:'Move the cut after the selected clip. Both source handles and the total sequence duration are respected.'};
+    $('#trim-edit-summary').textContent=help[result.kind]+` Applied offset: ${result.delta>0?'+':''}${result.delta} frames.`+(result.limited?' Limited by available source handles or a one-frame neighbor.':'')+' '+result.clips.map(c=>`${assetById(c.asset_id)?.name||'Clip'}: ${c.start}–${c.start+c.duration}`).join(' · ');
+    $('#apply-trim-edit').disabled=!result.delta;
+  }catch(error){$('#trim-edit-summary').textContent=error.message;$('#apply-trim-edit').disabled=true;}
+}
+function openTrimEdit() {
+  const clip=selectedItem();if(!clip||state.selected.type!=='clip'||selectionLocked()||projectOperationBlocked())return;
+  stop();trimEditContext={projectId:state.project.id,revision:state.revision,clipId:clip.id};
+  $('#trim-edit-delta').value=1;updateTrimEdit();$('#trim-edit-dialog').showModal();
+}
+function applyTrimEdit(event) {
+  event.preventDefault();
+  try{
+    const result=trimEditPlan();if(!result.delta)return;
+    const original=state.project.clips.find(c=>c.id===trimEditContext.clipId),local=clamp(state.frame-original.start,0,original.duration-1);
+    let cleared=false;
+    if(result.kind==='slip')cleared=clearSourceMeasurements(result.clips[0],original,local);
+    const replacements=new Map(result.clips.map(c=>[c.id,c]));
+    mutate(()=>{state.project.clips=state.project.clips.map(c=>replacements.get(c.id)||c);if(result.kind==='slide'&&state.frame>=original.start&&state.frame<original.start+original.duration)state.frame+=result.delta;},{inspector:true});
+    $('#trim-edit-dialog').close();trimEditContext=null;
+    toast(`${result.kind[0].toUpperCase()+result.kind.slice(1)} applied · ${result.delta>0?'+':''}${result.delta} frames.`+(cleared?' Source tracking was cleared; measure the new range again.':''));
+  }catch(error){toast(error.message,true);updateTrimEdit();}
+}
+
 function setFrame(frame) {state.frame=clamp(Math.round(frame),0,Math.max(0,durationFrames()-1));if(state.playing){playbackFrame=state.frame;playbackOrigin=performance.now();}updateTransport();drawPreview();frameViewer?.invalidate();if(!state.playing&&!state.drag&&state.selected)renderInspector();}
-function updateTransport() {const selected=selectedItem();if(state.mode==='composite'&&selected&&state.selected.type==='clip')compositorEditor?.setFrame(clamp(state.frame-selected.start,0,selected.duration-1)+(selected.animation_offset??0));$('#timecode').textContent=fmt(state.frame);$('#duration').textContent=fmt(durationFrames());$('#timeline-stats').textContent=`${state.project?.clips.length||0} clips · ${state.project?.titles.length||0} titles`;const c=selectedItem();$('#split-button').disabled=!c;$('#duplicate-button').disabled=!c;$('#delete-button').disabled=!c;$('#undo-button').disabled=!state.history.length;$('#redo-button').disabled=!state.future.length;$('#play-button').disabled=!durationFrames();const playhead=$('.timeline-playhead');if(playhead)playhead.style.left=`${TRACK_WIDTH+state.frame/state.project.fps*state.zoom}px`;$('#empty-viewer').hidden=Boolean(state.project?.clips.length||state.project?.titles.length||state.rendered);}
+function updateTransport() {const selected=selectedItem();if(state.mode==='composite'&&selected&&state.selected.type==='clip')compositorEditor?.setFrame(clamp(state.frame-selected.start,0,selected.duration-1)+(selected.animation_offset??0));$('#timecode').textContent=fmt(state.frame);$('#duration').textContent=fmt(durationFrames());$('#timeline-stats').textContent=`${state.project?.clips.length||0} clips · ${state.project?.titles.length||0} titles`;const c=selectedItem();$('#split-button').disabled=!c;$('#trim-edit-button').disabled=!c||state.selected?.type!=='clip';$('#duplicate-button').disabled=!c;$('#delete-button').disabled=!c;$('#undo-button').disabled=!state.history.length;$('#redo-button').disabled=!state.future.length;$('#play-button').disabled=!durationFrames();const playhead=$('.timeline-playhead');if(playhead)playhead.style.left=`${TRACK_WIDTH+state.frame/state.project.fps*state.zoom}px`;$('#empty-viewer').hidden=Boolean(state.project?.clips.length||state.project?.titles.length||state.rendered);}
 function setMode(mode) {if(projectOperationBlocked())return;state.mode=mode;$$('.mode').forEach(b=>b.classList.toggle('active',b.dataset.mode===mode));if(mode==='3d'){stop();$('#render-video').pause();}renderInspector();updatePreviewNote();frameViewer?.invalidate();$('#color-scopes').hidden=mode!=='color';}
 function updatePreviewNote() {
   $('#preview-note').textContent=state.rendered?'Rendered timeline · saved render snapshot':state.project?.clips.some(c=>c.reverse)?'Reverse audio plays in rendered preview · paused picture uses the export graph':(state.mode==='color'||state.mode==='composite')?'Current-frame rendering uses the export graph':'Interactive picture and sound · render for final effects';
@@ -145,13 +193,14 @@ function syncWorkspaces() {
   const isScene=state.mode==='3d',isComposite=state.mode==='composite';
   $('#app').dataset.workspace=state.mode;$('.viewer-panel').hidden=isScene;$('.inspector-panel').hidden=isScene;$('#scene-workspace').hidden=!isScene;$('#compositor-workspace').hidden=!isComposite;
   if(isComposite&&window.CinematicumCompositor){
-    compositorEditor??=window.CinematicumCompositor.mount($('#compositor-workspace'),{toast,renderAvailable:()=>Boolean(state.capabilities.ffmpeg?.available??state.capabilities.ffmpeg),onImport:()=>$('#media-input').click(),onRender:()=>startRender('preview'),onSeek:domain=>{const item=selectedItem();if(!item||state.selected?.type!=='clip')return false;stop();switchPreview(false);setFrame(clamp(item.start+domain-(item.animation_offset??0),item.start,item.start+item.duration-1));return state.frame-item.start+(item.animation_offset??0);},onChange:(graph,key)=>{if(projectOperationBlocked())return false;const item=selectedItem();if(!item||state.selected.type!=='clip'||key!==state.project.id+':'+item.id||selectionLocked())return false;mutate(()=>{item.compositor=graph;},{timeline:false});return true;}});
+    const mediaRecord=a=>a?{id:a.id,name:a.name,kind:a.kind,duration:a.duration,width:a.width,height:a.height,color_transfer:a.color_transfer,path:a.path,imaging_source:a.imaging_source,thumbnailUrl:thumbnailUrl(a)}:null;
+    compositorEditor??=window.CinematicumCompositor.mount($('#compositor-workspace'),{toast,renderAvailable:()=>Boolean(state.capabilities.ffmpeg?.available??state.capabilities.ffmpeg),listMedia:()=>state.project.assets.filter(a=>['video','image'].includes(a.kind)&&!a.name.startsWith('__title_')).map(mediaRecord),getMedia:id=>mediaRecord(assetById(id)),getSceneCamera:()=>({camera:state.project.settings.scene?.camera,width:state.project.width,height:state.project.height}),onImport:()=>$('#media-input').click(),onRender:()=>startRender('preview'),onSeek:domain=>{const item=selectedItem();if(!item||state.selected?.type!=='clip')return false;stop();switchPreview(false);setFrame(clamp(item.start+domain-(item.animation_offset??0),item.start,item.start+item.duration-1));return state.frame-item.start+(item.animation_offset??0);},onChange:(graph,key)=>{if(projectOperationBlocked())return false;const item=selectedItem();if(!item||state.selected.type!=='clip'||key!==state.project.id+':'+item.id||selectionLocked())return false;mutate(()=>{item.compositor=graph;},{timeline:false});return true;}});
     const item=selectedItem(),asset=item?.asset_id?assetById(item.asset_id):null,valid=state.selected?.type==='clip'&&item.track>=0&&['video','image'].includes(asset?.kind);
-    compositorEditor.setContext(valid?{key:state.project.id+':'+item.id,graph:item.compositor,sourceLabel:asset.name,sourceThumb:thumbnailUrl(asset),frame:clamp(state.frame-item.start,0,item.duration-1)+(item.animation_offset??0),animationStart:item.animation_start??0,animationDuration:item.animation_duration??item.duration}:{key:''});
+    compositorEditor.setContext(valid?{key:state.project.id+':'+item.id,graph:item.compositor,sourceLabel:asset.name,sourceThumb:thumbnailUrl(asset),sourceAssetId:asset.id,graphWidth:Math.max(2,Math.trunc(asset.width*Math.min(state.project.width/asset.width,state.project.height/asset.height)/2)*2),graphHeight:Math.max(2,Math.trunc(asset.height*Math.min(state.project.width/asset.width,state.project.height/asset.height)/2)*2),fps:state.project.fps,clipDuration:item.duration,clipOffset:item.animation_offset??0,frame:clamp(state.frame-item.start,0,item.duration-1)+(item.animation_offset??0),animationStart:item.animation_start??0,animationDuration:item.animation_duration??item.duration}:{key:''});
   }
   if(isScene&&window.CinematicumSceneEditor){
     const project=state.project,options={width:project.width,height:project.height,fps:project.fps,renderAvailable:Boolean(state.capabilities.blender?.available??state.capabilities.blender)},scene=project.settings.scene||window.CinematicumSceneEditor.defaultScene({width:project.width,height:project.height,frame_end:Math.round(project.fps*4)});
-    if(!sceneEditor||sceneProjectId!==project.id){sceneEditor?.destroy();sceneProjectId=project.id;const capturedId=project.id;sceneEditor=window.CinematicumSceneEditor.mount($('#scene-module'),{...options,scene,onChange:next=>{if(state.project.id!==capturedId||projectOperationBlocked())return false;mutate(()=>{state.project.settings.scene=clone(next);},{timeline:false});return true;},onImportMesh:payload=>{if(state.project.id!==capturedId||projectOperationBlocked())throw Error('The project changed before mesh import.');return api(projectPath(capturedId)+'/scene/import-obj',{method:'POST',body:payload});},onImportCamera:()=>{if(state.project.id!==capturedId)throw Error('The project changed before camera import.');openCameraImport();},onRender:payload=>{if(state.project.id!==capturedId)throw Error('The project changed before scene submission.');return startSceneRender(payload);}});}
+    if(!sceneEditor||sceneProjectId!==project.id){sceneEditor?.destroy();sceneProjectId=project.id;const capturedId=project.id;sceneEditor=window.CinematicumSceneEditor.mount($('#scene-module'),{...options,scene,onChange:next=>{if(state.project.id!==capturedId||projectOperationBlocked())return false;mutate(()=>{state.project.settings.scene=clone(next);},{timeline:false});return true;},onImportMesh:payload=>{if(state.project.id!==capturedId||projectOperationBlocked())throw Error('The project changed before mesh import.');return api(projectPath(capturedId)+'/scene/import-obj',{method:'POST',body:payload});},onModelMesh:payload=>startModelMesh(payload,capturedId),onImportCamera:()=>{if(state.project.id!==capturedId)throw Error('The project changed before camera import.');openCameraImport();},onRender:payload=>{if(state.project.id!==capturedId)throw Error('The project changed before scene submission.');return startSceneRender(payload);}});}
     else sceneEditor.setScene(scene,options);
   }
 }
@@ -193,6 +242,36 @@ function openColorPipeline() {
     },notify:toast
   });
   colorPipelineEditor.open();
+}
+function openImaging(operation) {
+  if(projectOperationBlocked()||!window.CinematicumImaging)return;
+  stop();
+  imagingEditor??=window.CinematicumImaging.mount(document.body,{
+    request:api,getProject:()=>state.project,getContext:()=>({projectId:state.project.id,revision:state.revision}),notify:toast,
+    onComplete:async(result,context)=>{
+      if(state.project.id!==context.projectId)return;
+      const fresh=await api(projectPath(context.projectId));
+      if(state.project.id!==context.projectId)return;
+      const known=new Set(state.project.assets.map(a=>a.id));
+      for(const asset of fresh.assets||[])if(!known.has(asset.id)){state.project.assets.push(asset);known.add(asset.id);}
+      if(result.asset?.id)state.selectedAsset=result.asset.id;
+      renderMedia();toast('Processed image is in Media. Double-click it to add it to the timeline.');
+    }
+  });
+  const asset=assetById(state.selectedAsset)||assetById(selectedItem()?.asset_id);
+  imagingEditor.open({operation,assetId:asset?.kind==='image'?asset.id:undefined});
+}
+async function startModelMesh(payload,expectedProjectId) {
+  if(projectOperationBlocked()||state.project.id!==expectedProjectId)throw Error('The project changed before mesh evaluation.');
+  if(state.job&&['queued','running'].includes(state.job.state))throw Error('Wait for the current job or cancel it first.');
+  const revision=state.revision,projectId=beginProjectOperation();
+  try{
+    const initial=await api(projectPath(projectId)+'/scene/model-mesh',{method:'POST',body:payload});
+    const job=await trackJob(initial,'Evaluating mesh','scene-modeling',projectId);
+    if(job?.state!=='completed')throw Error(job?.error||'Mesh evaluation did not complete.');
+    if(state.project.id!==projectId||state.revision!==revision)throw Error('The project changed during mesh evaluation. Repeat the edit on the current scene.');
+    return job.result;
+  }finally{endProjectOperation();}
 }
 async function startSceneRender({scene,frame_start,frame_end}) {
   if(projectOperationBlocked())throw Error('Wait for the current project operation to finish.');
@@ -276,8 +355,7 @@ function writeField(path,value,{checkpointFirst=true}={}) {
     const a=assetById(c.asset_id);
     if(path==='duration'&&a){const trimmed=editing.trim(previous,'right',previous.start+c.duration,['video','audio'].includes(a.kind)?a.duration*state.project.fps:Infinity,a.kind==='image');c.in=trimmed.in;c.duration=trimmed.duration;}
     if(['in','reverse'].includes(path)&&value!==previous[path]){
-      let cleared=Boolean(c.tracking);delete c.tracking;
-      for(const node of c.compositor?.nodes||[])if(node.tracking_source){const original=previous.compositor?.nodes.find(n=>n.id===node.id),params=window.CinematicumCompositor.paramsAt(original||node,local+(previous.animation_offset??0));node.params.x=params.x;node.params.y=params.y;if(node.animation){delete node.animation.x;delete node.animation.y;if(!Object.keys(node.animation).length)delete node.animation;}delete node.tracking_source;cleared=true;}
+      const cleared=clearSourceMeasurements(c,previous,local);
       if(cleared)toast('Source timing changed. Measured motion was cleared; track this range again. Undo restores it.');
     }
     if(a?.kind==='image')c.in=0;
@@ -396,12 +474,59 @@ async function startBlender() {
   const scene_path=$('#blender-scene').value,frame_start=Number($('#blender-start').value),frame_end=Number($('#blender-end').value);if(!scene_path||!Number.isInteger(frame_start)||!Number.isInteger(frame_end)||frame_end<frame_start){toast('Choose a scene and a valid inclusive frame range.',true);return;}
   const projectId=beginProjectOperation();$('#blend-dialog').close();try{await saveProject(false);const job=await api(`${projectPath(projectId)}/blender`,{method:'POST',body:{scene_path,frame_start,frame_end}});trackJob(job,'Rendering Blender scene','blender',projectId);}catch(e){toast(e.message,true,9000);}finally{endProjectOperation();}
 }
-async function trackJob(initial,label,kind,originProjectId=state.project.id) {const job=initial.job||initial;state.job={...job,kind,label,projectId:job.project_id||originProjectId};$('#job-bar').hidden=false;$('#job-label').textContent=label;$('#job-detail').textContent='Queued';$('#job-indicator').className='job-indicator running';$('#job-progress').hidden=false;$('#job-progress').value=0;$('#cancel-job').hidden=false;$('#download-job').hidden=true;$('#download-scene').hidden=true;$('#view-job').hidden=true;$('#close-job').hidden=true;const id=job.id||job.job_id;if(!id){toast('Server returned no job identifier.',true);return;}state.job.id=id;
-  let errors=0;while(state.job?.id===id){try{const current=await api(`/api/jobs/${encodeURIComponent(id)}`);errors=0;Object.assign(state.job,current.job||current);const s=String(state.job.state||state.job.status||'queued').toLowerCase(),progress=finite(state.job.progress,0);$('#job-progress').value=progress<=1?progress*100:progress;$('#job-detail').textContent=state.job.message||`${s==='queued'?'Queued':Math.round($('#job-progress').value)+'%'} · ${state.job.projectId===state.project.id?state.project.name:'Project render'}`;
-    if(['completed','complete','succeeded','success','done'].includes(s)){await finishJob(state.job);break;}if(['failed','error','cancelled','canceled','interrupted'].includes(s)){$('#job-label').textContent=s.startsWith('cancel')?'Job cancelled':'Job failed';$('#job-detail').textContent=state.job.error||state.job.message||'No output was admitted.';$('#job-indicator').className='job-indicator error';$('#cancel-job').hidden=true;$('#close-job').hidden=false;$('#job-progress').hidden=true;if(!s.startsWith('cancel'))toast(String(state.job.error||'Render failed. Check the configured engine and source media.'),true,12000);break;}
-  }catch(e){errors++;$('#job-detail').textContent='Connection interrupted · retrying';if(errors>=12){$('#job-label').textContent='Job connection interrupted';$('#job-detail').textContent=e.message;$('#job-indicator').className='job-indicator error';$('#cancel-job').hidden=true;$('#close-job').hidden=false;toast('Unable to read the job result. The render may still be running.',true);break;}}
-  await new Promise(r=>setTimeout(r,800));}}
+async function trackJob(initial,label,kind,originProjectId=state.project.id) {
+  const raw=initial.job||initial,id=raw.id||raw.job_id;
+  if(!id){toast('Server returned no job identifier.',true);return null;}
+  const owned={...raw,id,kind,label,projectId:raw.project_id||originProjectId,pollingPaused:false};
+  state.job=owned;$('#job-bar').hidden=false;$('#job-label').textContent=label;$('#job-detail').textContent='Queued';
+  $('#job-indicator').className='job-indicator running';$('#job-progress').hidden=false;$('#job-progress').value=0;
+  $('#cancel-job').hidden=false;$('#cancel-job').disabled=false;$('#retry-job').hidden=true;$('#download-job').hidden=true;$('#download-scene').hidden=true;$('#view-job').hidden=true;$('#close-job').hidden=true;
+  let errors=0;
+  while(state.job===owned){
+    try{
+      const response=await api(`/api/jobs/${encodeURIComponent(id)}`);
+      // A response for a previous owner must never replace a newer job or UI.
+      if(state.job!==owned)return null;
+      errors=0;Object.assign(owned,response.job||response);
+      const status=String(owned.state||owned.status||'queued').toLowerCase(),progress=finite(owned.progress,0);
+      $('#job-progress').value=progress<=1?progress*100:progress;
+      $('#job-detail').textContent=owned.message||`${status==='queued'?'Queued':Math.round($('#job-progress').value)+'%'} · ${owned.projectId===state.project.id?state.project.name:'Project render'}`;
+      if(['completed','complete','succeeded','success','done'].includes(status)){await finishJob(owned);return owned;}
+      if(['failed','error','cancelled','canceled','interrupted'].includes(status)){
+        $('#job-label').textContent=status.startsWith('cancel')?'Job cancelled':'Job failed';$('#job-detail').textContent=owned.error||owned.message||'No output was admitted.';
+        $('#job-indicator').className='job-indicator error';$('#cancel-job').hidden=true;$('#close-job').hidden=false;$('#job-progress').hidden=true;
+        if(!status.startsWith('cancel'))toast(String(owned.error||'The job failed. Check its source media and configured engine.'),true,12000);
+        return owned;
+      }
+    }catch(error){
+      if(state.job!==owned)return null;
+      errors++;$('#job-detail').textContent='Connection interrupted · retrying';
+      if(error.status===404){owned.state='interrupted';owned.error='This job is no longer present in the workspace. Review saved outputs and start it again.';$('#job-label').textContent='Job interrupted';$('#job-detail').textContent=owned.error;$('#cancel-job').hidden=true;$('#close-job').hidden=false;return owned;}
+      if(errors>=12){
+        owned.pollingPaused=true;$('#job-label').textContent='Job connection interrupted';$('#job-detail').textContent='The owned job may still be running. Retry its status or request cancellation.';
+        $('#job-indicator').className='job-indicator error';$('#cancel-job').hidden=false;$('#retry-job').hidden=false;$('#close-job').hidden=false;
+        toast('Unable to read the job result. Retry status or cancel this job before starting another.',true);return owned;
+      }
+    }
+    await new Promise(resolve=>setTimeout(resolve,400));
+  }
+  return null;
+}
+async function cancelOwnedJob() {
+  const owned=state.job;if(!owned)return;
+  $('#cancel-job').disabled=true;
+  try{
+    const response=await api(`/api/jobs/${encodeURIComponent(owned.id)}/cancel`,{method:'POST',body:{}});
+    if(state.job!==owned)return;
+    Object.assign(owned,response.job||response);$('#job-detail').textContent='Cancellation requested';
+    // A paused poller has already returned. Resume that same job so its final
+    // cancellation state releases the busy guard without a second user action.
+    if(owned.pollingPaused)await trackJob(owned,owned.label,owned.kind,owned.projectId);
+  }catch(error){if(state.job===owned)toast(error.message,true);}
+  finally{if(state.job?.id===owned.id)$('#cancel-job').disabled=false;}
+}
 async function finishJob(job) {const r=job.result||{},url=r.url||r.download_url,prores=job.kind==='render'&&(r.profile==='prores'||/\.mov(?:$|[?#])/i.test(url||''));$('#job-label').textContent=job.kind==='render'?(prores?'ProRes export complete':'Render complete'):'Media ready';$('#job-detail').textContent=prores?'Download MOV · use Render preview for playback':r.width?`${r.width} × ${r.height} · ${Number(r.duration||r.duration_seconds||0).toFixed(2)}s`:'Finished and saved locally';$('#job-progress').value=100;$('#job-indicator').className='job-indicator';$('#cancel-job').hidden=true;$('#close-job').hidden=false;
+  if(job.kind==='scene-modeling'){$('#job-label').textContent='Mesh evaluated';$('#job-detail').textContent='Geometry ready for the current scene';return;}
   if(r.scene_url){$('#download-scene').href=r.scene_url+(r.scene_url.includes('?')?'&':'?')+'download=1';$('#download-scene').download=r.scene_filename||'';$('#download-scene').hidden=false;}
   if(url){$('#download-job').href=url+(url.includes('?')?'&':'?')+'download=1';$('#download-job').hidden=false;$('#download-job').download=r.filename||'';if(job.kind==='render'&&!prores&&job.projectId===state.project.id){state.lastRenderUrl=url;$('#rendered-preview').disabled=false;$('#view-job').hidden=false;switchPreview(true);}}
   if(job.kind!=='render'&&job.projectId===state.project.id){try{const projectId=job.projectId,fresh=normalizeProject(await api(projectPath(projectId)));if(state.project.id!==projectId)return;const ids=new Set(state.project.assets.map(a=>a.id));for(const a of fresh.assets)if(!ids.has(a.id))state.project.assets.push(a);renderMedia();renderInspector();toast('Generated media is in the bin. Double-click it to add it to the timeline.');}catch(e){toast(`Media completed, but refresh failed: ${e.message}`,true);}}}
@@ -517,9 +642,16 @@ function openInterchange() {
   }});
   interchangeEditor.open();
 }
+$('#develop-image').addEventListener('click',()=>openImaging());
+$('#trim-edit-button').addEventListener('click',openTrimEdit);
+$('#close-trim-edit').addEventListener('click',()=>{$('#trim-edit-dialog').close();trimEditContext=null;});
+$('#trim-edit-kind').addEventListener('change',updateTrimEdit);
+$('#trim-edit-delta').addEventListener('input',updateTrimEdit);
+$('#trim-edit-form').addEventListener('submit',applyTrimEdit);
 $('#interchange-button').addEventListener('click',openInterchange);
 $('#export-button').addEventListener('click',()=>{$('#export-summary').textContent=`${state.project.width} × ${state.project.height} · ${rateLabel()} · ${fmt(durationFrames())}`;$('#export-dialog').showModal();});$('#close-export').addEventListener('click',()=>$('#export-dialog').close());$$('[data-export]').forEach(b=>b.addEventListener('click',()=>startRender(b.dataset.export)));
-$('#cancel-job').addEventListener('click',async()=>{if(!state.job)return;try{await api(`/api/jobs/${encodeURIComponent(state.job.id)}/cancel`,{method:'POST',body:{}});$('#job-detail').textContent='Cancellation requested';$('#cancel-job').disabled=true;setTimeout(()=>{$('#cancel-job').disabled=false;},1500);}catch(e){toast(e.message,true);}});$('#close-job').addEventListener('click',()=>{$('#job-bar').hidden=true;});$('#view-job').addEventListener('click',()=>switchPreview(true));
+$('#retry-job').addEventListener('click',()=>{const job=state.job;if(job?.pollingPaused)trackJob(job,job.label,job.kind,job.projectId);});
+$('#cancel-job').addEventListener('click',cancelOwnedJob);$('#close-job').addEventListener('click',()=>{$('#job-bar').hidden=true;});$('#view-job').addEventListener('click',()=>switchPreview(true));
 $('#new-project').addEventListener('click',()=>{if(state.projectOps){toast('Wait for the current project operation to finish.');return;}$('#project-dialog').showModal();});$('#cancel-project').addEventListener('click',()=>$('#project-dialog').close());
 $('#project-form').addEventListener('submit',async e=>{e.preventDefault();if(state.projectOps){toast('Wait for the current project operation to finish.');return;}const properties={name:$('#new-name').value.trim()||'Untitled film',width:Number($('#new-width').value),height:Number($('#new-height').value),frame_rate:{numerator:Number($('#new-fps').value.split('/')[0]),denominator:Number($('#new-fps').value.split('/')[1]||1)}};state.navigating=true;beginProjectOperation();try{if(state.dirty)await saveProject(false);const p=await api('/api/projects',{method:'POST',body:properties});state.projects=await api('/api/projects');if(!Array.isArray(state.projects))state.projects=state.projects.projects||[];adoptProject(p);$('#project-dialog').close();toast('Project created.');}catch(e){toast(e.message,true);}finally{state.navigating=false;endProjectOperation();}});
 $('#project-select').addEventListener('change',async e=>{const id=e.target.value;if(state.projectOps){e.target.value=state.project.id;toast('Wait for the current project operation to finish.');return;}state.navigating=true;beginProjectOperation();try{if(state.dirty)await saveProject(false);adoptProject(await api(projectPath(id)));}catch(e){toast(e.message,true);$('#project-select').value=state.project.id;}finally{state.navigating=false;endProjectOperation();}});

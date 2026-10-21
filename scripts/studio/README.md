@@ -1,4 +1,4 @@
-# CINEMATICUM Studio 0.6
+# CINEMATICUM Studio 0.7
 
 A working local audiovisual editor. Media are imported into an owned project,
 edited on a frame-based timeline, previewed, and exported through real render
@@ -10,12 +10,18 @@ issuance effect.
 
 ## This upgrade
 
-Studio 0.6 adds calibrated fSpy/COLMAP camera import; camera roll, principal-point
-offset and unequal focal scales; physical sensor/lens, focus/aperture controls;
-transmission, IOR and emissive materials; bounded Cycles ray settings; and an
-actual floating-point input color stage with project-owned 1D/3D Cube LUTs.
-It retains exact rational clocks, compositor/path animation, measured tracking,
-OBJ/MTL geometry and bounded OpenTimelineIO interchange from 0.5.
+Studio 0.7 adds independent project-media sources inside a composition, calibrated
+Brown lens distortion/undistortion, editable mesh vertices and faces, live
+Mirror/Bevel/Subdivision modifiers, and slip/slide/roll timeline edits. Image
+development adds actual OpenColorIO processing, camera RAW development and
+exposure-bracket merging, with separate scene-linear float EXR masters and
+display-rendered stills. Interrupted job polling can be retried without losing
+the identity of the submitted job.
+
+These operations use CINEMATICUM's own controls and project data. The release
+retains calibrated fSpy/COLMAP camera import, physical camera/material controls,
+Cycles rendering, exact rational clocks, animated compositing, measured point
+tracking, OBJ/MTL import, Cube LUTs and bounded OpenTimelineIO interchange.
 Read the [source comparison and capability audit](CAPABILITY_AUDIT.md) for the
 implemented scope, source evidence, tests and remaining professional gaps.
 
@@ -23,8 +29,10 @@ implemented scope, source evidence, tests and remaining professional gaps.
 
 Requirements: Python 3.9+, FFmpeg with FFprobe, and either the native macOS app
 or a current browser. H.264 export needs FFmpeg's `libx264` encoder; ProRes
-needs `prores_ks`. Blender and ComfyUI are optional engines. There are no pip or
-npm runtime dependencies. Run these commands from the repository root.
+needs `prores_ks`. Blender and ComfyUI are optional engines. The core editor and
+server use Python's standard library and require no npm packages. The optional
+imaging worker runs in a separate managed Python environment with NumPy,
+OpenColorIO, rawpy/LibRaw and OpenEXR. Run these commands from the repository root.
 
 ```bash
 make studio
@@ -71,6 +79,23 @@ The native app now has its own icon. Projects default to `~/Movies/CINEMATICUM`;
 updates do not replace that folder. On Linux the default is
 `$XDG_DATA_HOME/cinematicum`, or `~/.local/share/cinematicum` when unset.
 
+### Optional imaging runtime
+
+On Apple Silicon, install the pinned Python 3.13 imaging environment separately:
+
+```bash
+python3 scripts/studio/install_imaging.py --python /opt/homebrew/bin/python3.13
+```
+
+The managed interpreter lives at
+`~/Library/Application Support/CINEMATICUM/Imaging/py313-v1/bin/python` and
+survives replacement of the application bundle. Its pinned packages are
+NumPy 2.3.5, OpenColorIO 2.6.0, rawpy 0.27.1 and OpenEXR 3.4.15. The core app
+checks the worker before offering image development. An explicitly configured
+`CINEMATICUM_IMAGING_PYTHON` can select a compatible isolated interpreter on
+another installation. The app installer does not silently install these
+packages. Ordinary timeline editing and exports do not require this environment.
+
 ## Work with real media
 
 1. Import video, audio, still images, or a Blender scene using the file picker or
@@ -108,6 +133,18 @@ project frames; timeline starts and durations remain integer frames. Speed
 changes preserve the selected source range to frame precision. Trim handles
 and split account for speed and reverse. Ripple delete closes a gap on the
 selected track. Track locking prevents direct clip editing.
+
+Select a clip and click **Trim** for source slip, shot slide or outgoing-cut roll.
+Offsets are integer timeline frames; the preview reports the actual permitted
+offset before application. A slip changes the selected source range while its
+timeline position, length and authored animation stay fixed. A slide moves the
+selected shot and trims its touching neighbors, retaining the shot's source and
+the sequence endpoints. A roll moves the selected clip's outgoing cut and
+adjusts the next touching clip. Speed, reverse, available source handles and a
+one-frame minimum for neighboring clips bound each operation. These tools reject
+ambiguous/missing adjacency and locked tracks. One application is one shared
+undo entry. Slipping source content clears derived stabilization and tracked-mask
+motion in that same edit; ordinary authored channels remain.
 
 Source audio waveforms come from decoded 48 kHz stereo PCM with real minimum,
 maximum and RMS samples, cached by source identity. The Audio workspace has
@@ -176,7 +213,8 @@ bounce limits, denoising and seed. The saved `.blend` retains those settings.
 The own WebGL viewport matches camera geometry and offers approximate material
 feedback. Use the actual Cycles render for depth of field, refraction and light
 transport. Spectral/differentiable rendering, lens-prescription optimization and
-full material/node/geometry authoring remain separate engineering requirements.
+full shader graphs and unrestricted geometry authoring remain separate
+engineering requirements.
 
 ## Node compositing
 
@@ -192,10 +230,17 @@ add and difference, with source-over alpha and ordered background/foreground
 inputs. Each completed curve or polygon gesture creates one undo entry; Escape
 cancels it.
 
-The graph processes that clip's trimmed source before ordinary clip
-transforms, grading, effects, and placement on the timeline. Higher timeline
-layers combine different footage sources. The graph currently branches and
-recombines one clip; it is not a separate multi-source shot composition.
+The graph processes the clip's trimmed source before ordinary clip transforms,
+grading, effects, and placement on the timeline. Add **Project media** nodes to
+bring other imported videos or stills into the same composition. Each node has
+its own source in-point, duration, signed start offset and transparent/hold
+behavior outside that range. These values use project-rate frames in the clip's
+preserved animation domain, so trims and splits retain the source relationship.
+Each source is fitted into the graph canvas with transparent margins. Different
+nodes may reference the same asset with different ranges. Connections and ordered
+Merge inputs combine their actual pictures; a media node can also be the graph
+output. Their audio remains on the timeline. Clip retiming affects the primary
+clip source, while additional media nodes retain their explicit ranges.
 The paused current-frame renderer evaluates the connected output automatically.
 During interactive playback, use Render preview to review the complete node
 processing in the encoded movie.
@@ -209,11 +254,73 @@ animation preserves vertex count/order; each completed vertex drag is one undo
 entry. Topology changes are disabled while the path is animated. Sharpen amount,
 curve control points and chroma color remain static in this release.
 
-Graphs allow up to 32 nodes, one source, and no missing connections or cycles.
+Graphs allow up to 32 nodes, exactly one primary clip-source node, and up to eight
+additional project-media nodes, with no missing connections or cycles.
 A resource limit bounds canvas pixels multiplied by active graph nodes to
 268,435,456. Scalar animation has up to 128 keys per channel, polygon paths up to
 64; a graph has at most 1,024 keys and 8,192 animated coordinate values.
 Disconnected nodes remain editable but are not rendered.
+
+### Calibrated footage lens processing
+
+Add a **Calibrated lens** node to undistort captured footage or reproduce a known
+distortion. It accepts the five-term Brown model (`k1`, `k2`, `k3`, `p1`, `p2`)
+and normalized focal lengths/principal point (`fx`, `fy`, `cx`, `cy`). Compatible
+base intrinsics can be copied from the authored 3D camera; the distortion
+coefficients must still be supplied explicitly. Calibration is static.
+
+Both paused-frame rendering and export evaluate actual bilinear RGBA remapping.
+Out-of-image samples become transparent. A conservative whole-image Jacobian
+bound rejects folding or excessively strong models before preparing maps. A
+graph accepts two lens nodes and nonidentity lens processing up to 2,073,600
+pixels, such as 1920 × 1080. A zero-coefficient lens passes the image through
+without resampling, including larger canvases. Map preparation is an owned,
+cancellable worker with a 90-second limit; the optional imaging runtime
+accelerates the same calculation. Lensfun profile lookup, fisheye/rational/
+anamorphic models, automatic calibration and animated lens parameters remain
+unimplemented.
+
+## Develop still images
+
+Open **Develop images** to use the actual optional imaging worker. **OCIO color
+transform** evaluates a selected builtin configuration, explicit source color
+space, exposure and display view through OpenColorIO. The default builtin
+configuration includes ACES transforms; output previews are bounded to its
+`sRGB - Display` path. External arbitrary configs and file transforms are not
+accepted.
+
+**Develop camera RAW** preserves the original sensor file under its SHA-256
+identity and uses rawpy/LibRaw for unpacking and development. Controls include
+AHD/LINEAR/VNG/PPG/DCB demosaic, as-shot/daylight/automatic/custom white balance,
+highlight clipping/blending/reconstruction and half-size output. The selected
+algorithm must be supported by the actual file and runtime. LibRaw produces
+linear 16-bit RGB; subsequent color transforms and the retained master use float
+precision.
+
+**Merge exposure brackets** combines 2–16 already aligned photographs of a static
+scene using explicit shutter times and a declared sRGB, Rec.709 or linear
+response. Captures must share aperture and ISO. This is radiance merging for a
+known response; image alignment, ghost removal and response-curve estimation
+remain unimplemented.
+
+Every successful job retains `linear.exr`, `display.png` and `receipt.json`.
+The ZIP-compressed float32 RGBA EXR preserves negative and above-one scene
+values with explicit alpha semantics. The separate 16-bit sRGB display PNG is
+admitted into the normal media bin for editing. The receipt binds the actual
+sources, recipe, config/runtime versions and output hashes. The original sensor
+file and completed outputs are immutable; changing development settings creates
+a new result.
+
+Imported EXR stills require a single RGB/RGBA part and an explicit source color
+space when its metadata is insufficient. Develop them before adding their
+display result to the SDR timeline. Deep/multipart/arbitrary-channel EXR,
+floating-point movie compositing, HDR mastering and a RAW timeline are not
+provided by this still-image path.
+
+Limits are 512 MiB per RAW source, 128 RAW sources per project, 67,108,864 sensor
+pixels before unpacking, 33,554,432 output pixels and 16,384 pixels per image
+dimension. Imaging jobs have a five-minute limit and stop their own worker on
+cancellation.
 
 ## Track motion and apply it
 
@@ -307,6 +414,38 @@ texture maps/transparency are reported; referenced files are never opened.
 UVs are preserved, but texture image/material graph authoring is not implemented.
 Invalid, degenerate, self-intersecting or nonplanar faces are rejected.
 
+### Edit mesh topology and live modifiers
+
+Select a primitive or imported mesh and enter **Edit mesh**. Conversion creates
+an editable control cage while retaining the object's identity, transforms,
+material and animation. Vertex and face modes support canvas selection,
+Shift-click selection, exact element indices, local coordinate editing and move
+handles. A drag previews the cage and commits one evaluated operation on release;
+Escape cancels the gesture. Face extrusion creates a cap and side walls;
+subdivision shares edge midpoints with neighboring faces; deletion removes
+selected faces and unused vertices. Delete/Backspace in Edit mesh acts on face
+selection instead of removing the object.
+
+The ordered modifier stack exposes **Mirror**, **Bevel** and **Subdivision**
+(Catmull–Clark or Simple). Add, adjust, reorder, enable, remove or apply modifiers
+inside CINEMATICUM. The installed Blender engine evaluates the actual geometry
+before a candidate enters shared undo history. The shaded viewport displays that
+evaluated mesh; the retained `.blend` contains the original cage and live
+modifiers. Rendering reevaluates the cage and verifies engine version, geometry,
+normals and UVs against the saved evaluation. Refresh recomputes an evaluation
+after an intentional engine update. Applying the stack reevaluates before baking;
+undo restores both the cage and stack.
+
+Edited geometry receives a new canonical hash. Original import identity stays
+separate in provenance and source files are unchanged. Geometry edits regenerate
+normals and currently clear imported UV corners with an explicit message.
+Selections are bounded to 512 elements; cages to 10,000 vertices, 10,000 faces
+and 60,000 corners; stacks to four modifiers and subdivision to three levels.
+Cages and evaluations together share a 5 MiB scene geometry budget. Evaluation
+uses one owned Blender worker at a time, with a 45-second limit per evaluation.
+Parenting, edge tools, sculpting, UV authoring, rigs, shape keys, geometry nodes
+and simulation remain missing.
+
 ### Existing Blender scenes
 
 Import an existing `.blend` file, select it in the 3D panel, and choose an
@@ -322,8 +461,10 @@ those secondary outputs; it is not an operating-system sandbox for untrusted
 Blender files. Render cancellation stops only the child process group owned by
 that job.
 
-The scene editor does not include Blender's vertex/edge/face editing, rigging,
-sculpting, or simulation interface.
+Imported `.blend` scenes are rendered as supplied; their complete scene data is
+not converted into CINEMATICUM's bounded authoring model. The mesh tools above
+operate the scene authored in CINEMATICUM. Rigging, sculpting and simulation
+interfaces remain unimplemented.
 Pack external resources in the source `.blend` before importing it: only the
 selected scene file is copied, not a directory of linked assets.
 
@@ -395,6 +536,14 @@ measured stabilization or tracked masks until that derived motion is removed.
 It has no
 shell, `eval`, arbitrary code execution, or claim of a natural-language agent.
 
+Jobs retain their submitted identity during polling. After repeated connection
+failures, **Retry status** resumes the same owned job and **Cancel** remains
+available. A response from an earlier polling owner cannot overwrite a newer
+job's status. Mesh evaluation returns a candidate; project revision and object
+identity are checked before one undoable application. Failed, cancelled or stale
+evaluations do not change authored geometry. Retrying status does not silently
+apply an abandoned modeling result to a changed scene.
+
 A saved project can be rendered from a script without opening the editor:
 
 ```bash
@@ -423,6 +572,14 @@ foreign browser origins and invalid Host headers. Supported routes:
 | `POST /api/projects/{id}/scene` | Render an authored scene and preserve editable Blender source |
 | `POST /api/projects/{id}/blender` | Render an imported scene |
 | `POST /api/projects/{id}/scene/import-obj` | Parse supplied OBJ/MTL into canonical mesh parts without saving |
+| `POST /api/projects/{id}/scene/import-camera` | Parse a selected fSpy/COLMAP solved camera without saving |
+| `POST /api/projects/{id}/scene/model-mesh` | Queue an owned topology/modifier evaluation and return a candidate |
+| `GET /api/imaging-capabilities` | Inspect the optional installed imaging runtime |
+| `GET /api/projects/{id}/imaging-catalog` | List actual builtin OCIO config spaces and display views |
+| `GET /api/projects/{id}/imaging-sources` | List preserved original RAW sources |
+| `POST /api/projects/{id}/imaging-raw-import?name=...` | Preserve and inspect a selected original RAW file |
+| `POST /api/projects/{id}/imaging-render` | Queue actual OCIO/RAW/bracket processing and admit its display image |
+| `GET /api/projects/{id}/imaging/outputs/{job}/{filename}` | Download the float master, display image or receipt |
 | `POST /api/projects/{id}/tracking-frame` | Decode the actual conformed seed image |
 | `POST /api/projects/{id}/tracking` | Measure point motion and retain its JSON receipt |
 | `POST /api/projects/{id}/tracking-validate` | Validate imported point samples against the current source |
@@ -437,7 +594,7 @@ foreign browser origins and invalid Host headers. Supported routes:
 ## Current boundaries
 
 The project stores integer timeline frames with exclusive clip ends and an exact
-rational frame rate from 1 to 60. The rendering workspace is SDR; PQ/HLG material is
+rational frame rate from 1 to 60. The timeline rendering workspace is SDR; PQ/HLG material is
 refused until an explicit conversion is available. Practical limits are 512
 assets, 256 clips, 128 titles, six hours, and a maximum canvas area of
 33.5 million pixels. Timeline controls expose up to 16 video and 16 audio tracks.
@@ -445,9 +602,11 @@ Authoring stills have a 45-second processing limit and a 64-image cache. They
 are evaluated from the timeline start, so long timelines may need an encoded
 preview. Scope values are display-referred SDR RGB, not reference HDR scopes.
 
-This implementation does not yet provide ACES/OCIO color management,
-HDR finishing, multicam, optical-flow retiming, planar/affine tracking, neural
-segmentation, Bezier roto with feather points, arbitrary mesh editing, plugin-host
+The optional still-image worker provides actual OCIO/ACES transforms and float
+EXR masters; those features do not extend float processing across the movie
+timeline. This implementation still lacks HDR finishing, multicam,
+optical-flow retiming, planar/affine tracking, neural segmentation, Bezier roto
+with feather points, unrestricted mesh/UV/rig editing, plugin-host
 compatibility, general AAF/XML/nested OTIO interchange, a full audio workstation, collaborative
 editing, or a production-grade realtime playback cache. Source
 formats that a browser cannot decode can still render through FFmpeg; use an
@@ -470,6 +629,7 @@ node --check scripts/studio/web/compositor-ui.js
 node --check scripts/studio/web/scene-editor.js
 node --check scripts/studio/web/tracking-ui.js
 node --check scripts/studio/web/interchange-ui.js
+node --check scripts/studio/web/imaging-ui.js
 make qc-stack
 ```
 
@@ -487,6 +647,19 @@ rotation, easing, fades, stereo balance, track state and waveform statistics.
 Scene tests compare JavaScript, Python and Blender animation evaluation. Native
 WKWebView acceptance scripts exercise the actual controls and save/export paths;
 `test_scene_motion_blender.py` also reopens and evaluates the retained .blend.
+`test_multi_source_compositor.py` decodes independent source ranges, hold/gaps,
+trim/split domains and source audio isolation. `test_lens_compositor.py` checks
+calibration math and actual remapped pixels against an independent inverse.
+`test_trim_edits.py` verifies slip/slide/roll timing and source frames;
+`test_trim_ui_macos.py` drives real native edits, one-step undo/redo and exports
+whose decoded frame identifiers and moving markers are checked independently.
+`test_scene_modeling_blender.py` reopens the retained base cage/live stack,
+compares evaluated geometry and rendered pixels, and rejects a forged viewport
+cache. `test_imaging.py` executes the optional real runtime; its RAW acceptance
+requires an actual camera fixture. Native imaging acceptance separates OCIO,
+RAW and bracket operations. Test availability is not a passing run: execution
+results are recorded separately in versioned verification reports; harness
+coverage alone is not a claim that a native run passed.
 Adapter tests cover protocol failures, explicit prompt binding, cancellation,
 and compositor file-output controls. API tests cover output admission, upload,
 save/reopen, revision conflicts, byte-range playback, actual export, and

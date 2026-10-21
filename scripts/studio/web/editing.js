@@ -93,6 +93,53 @@
     const duration=clamp(Math.round(requested-clip.start),1,Math.max(1,Math.floor(available+1e-8)));
     return {start:clip.start,duration,in:still?0:sourceIn+(clip.reverse?(clip.duration-duration)*speed:0),offset:0};
   }
+  function trimEdit(project,clipId,kind,requested) {
+    if(!['slip','slide','roll'].includes(kind))throw Error('Choose Slip, Slide, or Roll.');
+    if(!Number.isInteger(requested))throw Error('The edit offset must be a whole number of timeline frames.');
+    const clip=project.clips.find(c=>c.id===clipId);
+    if(!clip)throw Error('Select a timeline clip.');
+    if(track(project,clip.track).locked)throw Error('Unlock the selected track before trimming.');
+    const peers=project.clips.filter(c=>c.track===clip.track),copy=v=>JSON.parse(JSON.stringify(v));
+    const source=c=>{
+      const a=project.assets.find(a=>a.id===c.asset_id);
+      if(!a||!['video','audio','image'].includes(a.kind))throw Error('The clip has no usable source media.');
+      return {still:a.kind==='image',max:a.kind==='image'?Infinity:a.duration*project.fps};
+    };
+    const limits=(c,edge)=>{
+      const a=source(c),far=21600*project.fps;
+      if(edge==='left')return [trim(c,edge,c.start-far,a.max,a.still).start-c.start,c.duration-1];
+      return [1-c.duration,trim(c,edge,c.start+far,a.max,a.still).duration-c.duration];
+    };
+    const apply=(c,edge,delta)=>{
+      const a=source(c),next=copy(c),r=trim(c,edge,(edge==='left'?c.start:c.start+c.duration)+delta,a.max,a.still);
+      Object.assign(next,{start:r.start,in:r.in,duration:r.duration});
+      preserveAnimation(next,c,r.offset);return next;
+    };
+    let delta,clips;
+    if(kind==='slip') {
+      const a=source(clip),speed=clip.speed??1;
+      if(a.still)throw Error('A still image has no source frames to slip.');
+      let low=Math.ceil(-(clip.in??0)/speed-1e-8),high=Math.floor((a.max-(clip.in??0)-clip.duration*speed)/speed+1e-8);
+      if(clip.reverse)[low,high]=[-high,-low];
+      delta=clamp(requested,low,high);
+      const next=copy(clip);next.in=(clip.in??0)+delta*speed*(clip.reverse?-1:1);
+      if(Math.abs(next.in)<1e-8)next.in=0;
+      clips=[next];
+    } else {
+      const right=peers.filter(c=>c.id!==clip.id&&c.start===clip.start+clip.duration);
+      const left=kind==='slide'?peers.filter(c=>c.id!==clip.id&&c.start+c.duration===clip.start):[];
+      if(right.length!==1||(kind==='slide'&&left.length!==1))throw Error(kind==='slide'?'Slide needs one touching clip on each side.':'Roll needs one touching clip after the selected clip.');
+      const group=kind==='slide'?[left[0],clip,right[0]]:[clip,right[0]],ids=new Set(group.map(c=>c.id));
+      if(peers.some(c=>!ids.has(c.id)&&c.start<group.at(-1).start+group.at(-1).duration&&c.start+c.duration>group[0].start))throw Error('Trim an unoverlapped group of adjacent clips.');
+      const leading=kind==='slide'?left[0]:clip,boundsA=limits(leading,'right'),boundsB=limits(right[0],'left');
+      const low=Math.max(boundsA[0],boundsB[0]),high=Math.min(boundsA[1],boundsB[1]);
+      if(low>high)throw Error('These clips have no shared trim handles.');
+      delta=clamp(requested,low,high);
+      clips=[apply(leading,'right',delta),apply(right[0],'left',delta)];
+      if(kind==='slide'){const moved=copy(clip);moved.start+=delta;clips.splice(1,0,moved);}
+    }
+    return {kind,requested,delta,limited:delta!==requested,clips};
+  }
   function envelopePath(wave,clip,project,channel=0) {
     const peaks=wave?.peaks?.[channel];if(!peaks?.max?.length)return '';
     const samples=128,upper=[],lower=[],bins=wave.bins,sourceFrames=wave.duration*project.fps;
@@ -104,5 +151,5 @@
     }
     return 'M'+upper.join(' L')+' L'+lower.reverse().join(' L')+' Z';
   }
-  window.CinematicumEditing={clamp,properties,defaults,easings,curve,pose,measuredValue,trackingOffset,ensureAnimationDomain,preserveAnimation,retimeExtraChannels,track,tracks,active,sourceFrame,audioGain,trim,envelopePath};
+  window.CinematicumEditing={clamp,properties,defaults,easings,curve,pose,measuredValue,trackingOffset,ensureAnimationDomain,preserveAnimation,retimeExtraChannels,track,tracks,active,sourceFrame,audioGain,trim,trimEdit,envelopePath};
 })();

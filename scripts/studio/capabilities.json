@@ -1,14 +1,14 @@
 {
   "version": 1,
-  "build": "0.6.0",
+  "build": "0.7.0",
   "reviewed_on": "2026-10-21",
   "parity_complete": false,
-  "evidence_note": "Paths identify implementation/acceptance. Actual executions are recorded separately. Adapter availability is not model-execution proof.",
+  "evidence_note": "Paths identify implementation and acceptance harnesses. Actual executions and their environments are recorded in versioned verification reports. Optional-engine availability is distinct from successful operation/model execution. Core editor/server use the Python standard library; imaging uses a separate pinned runtime.",
   "capabilities": [
     {
       "id": "editor.rational_clock",
       "status": "implemented",
-      "scope": "Reduced rational rates1–60; exact media timestamps and absolute48kHz sample grid.",
+      "scope": "Reduced rational rates 1\u201360; exact media timestamps and absolute 48 kHz sample grid.",
       "evidence": [
         "timebase.py",
         "engine.py",
@@ -18,11 +18,14 @@
     {
       "id": "editor.timeline",
       "status": "partial",
-      "scope": "Own multitrack editing, trim/split/ripple delete, speed/reverse, track controls. No nested/multicam/proxy model.",
+      "scope": "Own multitrack editing, trim/split/ripple delete, slip/slide/outgoing-cut roll, speed/reverse and track controls. No nested sequences, multicam, proxy workflow or optical-flow retiming.",
       "evidence": [
         "engine.py",
+        "web/editing.js",
         "web/app.js",
-        "test_timeline_audio.py"
+        "test_timeline_audio.py",
+        "test_trim_edits.py",
+        "test_trim_ui_macos.py"
       ]
     },
     {
@@ -38,16 +41,20 @@
     {
       "id": "composite.graph",
       "status": "partial",
-      "scope": "One source per clip; branch/merge and bounded real image-processing nodes.",
+      "scope": "One primary clip source plus up to eight independent project video/image sources in a 32-node graph; explicit ranges, signed offsets, transparent/hold behavior and actual ordered merges. No nested/deep/general plugin graph.",
       "evidence": [
         "compositor.py",
-        "test_compositor.py"
+        "engine.py",
+        "web/compositor-ui.js",
+        "test_compositor.py",
+        "test_multi_source_compositor.py",
+        "test_multi_source_ui_macos.py"
       ]
     },
     {
       "id": "composite.animation",
       "status": "implemented_bounded",
-      "scope": "Independent channels with5 interpolation modes; polygon topology retained, scalar128/path64 keys.",
+      "scope": "Independent channels with five interpolation modes; polygon topology retained, 128 scalar keys or 64 path keys per channel.",
       "evidence": [
         "compositor.py",
         "web/compositor-ui.js",
@@ -69,7 +76,7 @@
     {
       "id": "tracking.translation",
       "status": "implemented_bounded",
-      "scope": "Actual FFmpeg correlation;384px analysis edge,480frames, explicit missing matches.",
+      "scope": "Actual FFmpeg correlation; 384-pixel analysis edge, 480 frames and explicit missing matches.",
       "evidence": [
         "tracking.py",
         "test_tracking.py",
@@ -79,7 +86,7 @@
     {
       "id": "tracking.stabilization",
       "status": "implemented_bounded",
-      "scope": "Independent additive translation;128 simplified keys; no automatic crop.",
+      "scope": "Independent additive translation with up to 128 simplified keys; no automatic crop.",
       "evidence": [
         "tracking.py",
         "engine.py",
@@ -105,7 +112,7 @@
     {
       "id": "color.sdr",
       "status": "partial",
-      "scope": "Display-referred Rec709 grades, RGB curves and rendered-image scopes.",
+      "scope": "Display-referred Rec.709 timeline grades, RGB curves and scopes measured from actual rendered display RGB. Optional OCIO still-image development remains separate from this SDR movie graph.",
       "evidence": [
         "engine.py",
         "compositor.py",
@@ -114,9 +121,15 @@
     },
     {
       "id": "color.scene_linear_hdr",
-      "status": "missing",
-      "scope": "Float input conversion exists, but downstream compositor/delivery stays SDR. No full OCIO/ACES display pipeline, HDR finish, RAW controls or calibrated monitoring.",
-      "evidence": []
+      "status": "partial",
+      "scope": "Float input conversion and separate OCIO/RAW/bracket still processing preserve scene-linear EXR masters. Movie compositing/delivery remains SDR; no whole-timeline OCIO/ACES management, HDR mastering or calibrated output monitoring.",
+      "evidence": [
+        "color_pipeline.py",
+        "imaging.py",
+        "image_worker.py",
+        "test_color_pipeline.py",
+        "test_imaging.py"
+      ]
     },
     {
       "id": "motion.vector_document",
@@ -127,17 +140,20 @@
     {
       "id": "scene.authoring",
       "status": "partial",
-      "scope": "Own WebGL primitive/mesh editing of transforms/materials/camera/lights/keys; headless Cycles and retainedblend.",
+      "scope": "Own WebGL primitive/mesh scene controls, bounded vertex/face edits and live modifiers, materials/camera/lights/keys, actual headless Cycles and retained .blend.",
       "evidence": [
         "scene.py",
+        "scene_modeling.py",
+        "modeling_blender.py",
         "web/scene-editor.js",
-        "test_scene_motion_blender.py"
+        "test_scene_motion_blender.py",
+        "test_scene_modeling_blender.py"
       ]
     },
     {
       "id": "scene.obj_mesh",
       "status": "implemented_bounded",
-      "scope": "Indexed OBJ/selectedMTL with UV/normals/material partitions; real viewport and Blender data.",
+      "scope": "Indexed OBJ/selected MTL import with UVs, normals and material partitions; actual viewport and retained Blender geometry.",
       "evidence": [
         "spatial_import.py",
         "test_spatial_import.py",
@@ -147,9 +163,15 @@
     },
     {
       "id": "scene.topology_rig_simulation",
-      "status": "missing",
-      "scope": "No topology/UV/rig/sculpt/modifier/simulation authoring or general texture/material graph.",
-      "evidence": []
+      "status": "partial",
+      "scope": "Bounded vertex moves, face extrude/delete/subdivide and live Mirror/Bevel/Subdivision exist. Edge tools, UV authoring, sculpting, hierarchy/constraints, rigs, deformation and simulation remain missing.",
+      "evidence": [
+        "scene_modeling.py",
+        "modeling_blender.py",
+        "test_scene_modeling.py",
+        "test_scene_modeling_blender.py",
+        "test_mesh_modeling_ui_macos.py"
+      ]
     },
     {
       "id": "reconstruction.colmap",
@@ -188,7 +210,7 @@
     {
       "id": "ai.comfyui",
       "status": "adapter_implemented_engine_unavailable",
-      "scope": "API workflow/input/model preflight, scoped prompt lifecycle and actual output admission; checkedMac endpoint absent.",
+      "scope": "API workflow/input/model preflight, scoped prompt lifecycle and actual output admission; configured endpoint absent in the recorded Mac inspection. No successful neural generation claimed.",
       "evidence": [
         "adapters.py",
         "generation_readiness.py",
@@ -198,7 +220,7 @@
     {
       "id": "audio.mix",
       "status": "partial",
-      "scope": "Decoded waveforms, track/clipgain, balance, fades, retime/reverse and stereo export. No full DAW/buses/plugins.",
+      "scope": "Decoded waveforms, track/clip gain, balance, fades, retime/reverse and stereo export. No full DAW, buses, plugins or general channel layouts.",
       "evidence": [
         "waveform.py",
         "engine.py",
@@ -208,21 +230,25 @@
     {
       "id": "automation.typed_jobs",
       "status": "partial",
-      "scope": "Typed edit recipes, snapshot jobs, own process cancellation and receipts. No arbitrary scripting/expression/pluginhost.",
+      "scope": "Typed recipes, snapshot jobs, owned-process cancellation, receipts and polling recovery. No arbitrary scripting, expression or plugin host.",
       "evidence": [
         "server.py",
         "adapters.py",
-        "test_server.py"
+        "web/app.js",
+        "test_server.py",
+        "test_job_polling.py"
       ]
     },
     {
       "id": "delivery.formats",
       "status": "partial",
-      "scope": "H264MP4 and ProResMOV, actual render snapshot/source identity. No universal broadcast/cinema delivery suite.",
+      "scope": "H.264 MP4 and ProRes MOV with actual render snapshot/source identity. Separate imaging jobs retain float EXR and display PNG. No universal broadcast/cinema/HDR delivery suite.",
       "evidence": [
         "engine.py",
+        "imaging.py",
         "test_engine.py",
-        "test_timebase.py"
+        "test_timebase.py",
+        "test_imaging.py"
       ]
     },
     {
@@ -312,10 +338,12 @@
     {
       "id": "optics.brown_math",
       "status": "implemented_bounded",
-      "scope": "Validated Brown forward and bounded Newton inverse numerical functions. This does not implement calibrated footage remapping or Lensfun profile application.",
+      "scope": "Validated Brown forward and bounded numerical inverse functions; the separate calibrated-lens node now applies a stricter five-term model to actual footage pixels. No Lensfun profile conversion.",
       "evidence": [
         "camera_io.py",
-        "test_camera_io.py"
+        "compositor.py",
+        "test_camera_io.py",
+        "test_lens_compositor.py"
       ]
     },
     {
@@ -338,15 +366,27 @@
     },
     {
       "id": "color.raw_development",
-      "status": "missing",
-      "scope": "No LibRaw unpack/demosaic, per-camera metadata controls or RAW-to-scene-linear asset pipeline.",
-      "evidence": []
+      "status": "implemented_bounded",
+      "scope": "Actual rawpy/LibRaw unpack and demosaic for preserved SHA-addressed camera RAW stills; white balance, highlight and half-size controls, float linear EXR and separate OCIO display image. No RAW movie timeline.",
+      "evidence": [
+        "imaging.py",
+        "image_worker.py",
+        "web/imaging-ui.js",
+        "test_imaging.py",
+        "test_imaging_ui_macos.py"
+      ]
     },
     {
       "id": "color.hdr_merge",
-      "status": "missing",
-      "scope": "No radiometric calibration, exposure-bracket merge, HDRI panorama/light-probe extraction or colour-hdri worker.",
-      "evidence": []
+      "status": "implemented_bounded",
+      "scope": "Known-response radiance merge of 2\u201316 aligned static-scene stills with explicit shutter times; float EXR and separate display output. No alignment, ghost removal, response-curve fitting, panorama stitching or colour-hdri runtime.",
+      "evidence": [
+        "imaging.py",
+        "image_worker.py",
+        "web/imaging-ui.js",
+        "test_imaging.py",
+        "test_imaging_ui_macos.py"
+      ]
     },
     {
       "id": "lighting.diffusionlight",
@@ -357,11 +397,119 @@
     {
       "id": "production.single_native_app",
       "status": "implemented_bounded",
-      "scope": "Native icon and one launchable bundle; prior own bundles archived with per-file hash/mode verification and rollback. Runtime dependencies remain installed externally.",
+      "scope": "One native application with CINEMATICUM authoring controls and owned local service; verified archive/rollback during replacement. FFmpeg/Blender and the optional stable imaging runtime are separate installed dependencies.",
       "evidence": [
         "install_macos.py",
         "macos/StudioIcon.swift",
         "test_install_macos.py"
+      ]
+    },
+    {
+      "id": "editor.slip_slide_roll",
+      "status": "implemented_bounded",
+      "scope": "Own Trim dialog previews and applies integer-frame source slip, touching-shot slide and outgoing-cut roll with speed/reverse/source-handle limits, locked-track rejection and one shared undo.",
+      "evidence": [
+        "web/editing.js",
+        "web/app.js",
+        "test_trim_edits.py",
+        "test_trim_ui_macos.py",
+        "macos/TrimSmoke.js"
+      ]
+    },
+    {
+      "id": "composite.media_sources",
+      "status": "implemented_bounded",
+      "scope": "Up to eight independent owned project-media nodes with source in, duration, signed animation offset and transparent/hold endpoints. Preserved trim/split domain, paused/export parity and no implicit source audio mix.",
+      "evidence": [
+        "compositor.py",
+        "engine.py",
+        "web/compositor-ui.js",
+        "test_multi_source_compositor.py",
+        "test_multi_source_ui_macos.py"
+      ]
+    },
+    {
+      "id": "optics.calibrated_warp",
+      "status": "implemented_bounded",
+      "scope": "Static five-term Brown footage undistort/redistort with normalized intrinsics, compatible scene-camera copy, premultiplied bilinear RGBA and transparent borders. Whole-image contraction bound q\u22640.45; at most two nodes; nonidentity canvas \u22642,073,600 pixels. No fisheye, lens database or automatic calibration.",
+      "evidence": [
+        "compositor.py",
+        "lens_assets.py",
+        "web/compositor-ui.js",
+        "test_lens_compositor.py",
+        "test_lens_ui_macos.py",
+        "macos/LensSmoke.js"
+      ]
+    },
+    {
+      "id": "scene.mesh_topology",
+      "status": "implemented_bounded",
+      "scope": "Own vertex/face selection and move, face extrusion, connected subdivision and face deletion. Canonical authored cage hashes separate original import provenance; 10,000 vertices/faces, 512 selected elements and one undo per evaluated edit. Geometry edits currently clear imported UVs.",
+      "evidence": [
+        "scene_modeling.py",
+        "scene.py",
+        "web/scene-editor.js",
+        "test_scene_modeling.py",
+        "test_scene_modeling_blender.py",
+        "test_mesh_modeling_ui_macos.py"
+      ]
+    },
+    {
+      "id": "scene.live_modifiers",
+      "status": "implemented_bounded",
+      "scope": "Four ordered actual Blender Mirror/Bevel/Subdivision modifiers with parameters, enable/reorder/remove/refresh/apply. Viewport uses actual evaluated mesh; retained .blend preserves cage/stack and independently rejects stale or forged evaluation before rendering.",
+      "evidence": [
+        "scene_modeling.py",
+        "modeling_blender.py",
+        "scene.py",
+        "web/scene-editor.js",
+        "test_scene_modeling_blender.py",
+        "test_mesh_modeling_ui_macos.py"
+      ]
+    },
+    {
+      "id": "color.ocio_still",
+      "status": "implemented_bounded",
+      "scope": "Actual OpenColorIO builtin-config CPU source-to-scene-linear and display/view transforms with explicit input space and exposure. ACES-capable builtin configs; current display output fixed to sRGB. No arbitrary external config or movie-wide color management.",
+      "evidence": [
+        "imaging.py",
+        "image_worker.py",
+        "web/imaging-ui.js",
+        "test_imaging.py",
+        "test_imaging_ui_macos.py"
+      ]
+    },
+    {
+      "id": "color.exr_still",
+      "status": "implemented_bounded",
+      "scope": "Single-part RGB/RGBA still input and float32 ZIP EXR output retain negative/superwhite values and explicit premultiplied alpha; output receipt binds config, runtime, source and artifact identity. Separate display PNG enters SDR editing. No deep/multipart/arbitrary-channel movie graph.",
+      "evidence": [
+        "imaging.py",
+        "image_worker.py",
+        "test_imaging.py"
+      ]
+    },
+    {
+      "id": "automation.job_recovery",
+      "status": "implemented_bounded",
+      "scope": "Owned polling identity rejects late responses for earlier jobs; interrupted polling exposes Retry status and Cancel. Mesh candidates require current project/revision/object identity before one undoable apply. Recovery does not silently apply abandoned candidates.",
+      "evidence": [
+        "server.py",
+        "web/app.js",
+        "web/scene-editor.js",
+        "test_job_polling.py",
+        "test_server.py"
+      ]
+    },
+    {
+      "id": "production.optional_imaging_runtime",
+      "status": "implemented_bounded",
+      "scope": "Core standard-library server invokes a separate isolated worker. Stable Mac interpreter at ~/Library/Application Support/CINEMATICUM/Imaging/py313-v1/bin/python; NumPy 2.3.5, OpenColorIO 2.6.0, rawpy 0.27.1 and OpenEXR 3.4.15. Runtime and actual engine outputs are checked separately.",
+      "evidence": [
+        "imaging.py",
+        "image_worker.py",
+        "test_imaging.py",
+        "install_imaging.py"
       ]
     }
   ],
@@ -372,7 +520,8 @@
     "research/ai-motion.md",
     "research/camera-optics.md",
     "research/color-science.md",
-    "research/physical-rendering.md"
+    "research/physical-rendering.md",
+    "research/mesh-modeling.md"
   ],
   "reviewed_reference_systems": 33
 }

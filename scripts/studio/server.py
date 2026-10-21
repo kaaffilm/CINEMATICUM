@@ -43,7 +43,7 @@ from spatial_import import import_obj
 from camera_io import import_camera
 from color_pipeline import import_cube, list_luts
 
-VERSION = "0.6.0"
+VERSION = "0.7.0"
 MAX_UPLOAD = 8 * 1024 * 1024 * 1024
 MAX_JSON = 8 * 1024 * 1024
 IDENTIFIER = re.compile(r"^[a-f0-9]{32}$")
@@ -284,6 +284,12 @@ class Store:
             meta = {"kind": "scene", "duration": 0, "width": 0, "height": 0, "has_audio": False}
         else:
             meta = probe_media(incoming)
+            if suffix == ".exr":
+                from imaging import probe_exr_source
+                header = probe_exr_source(directory, incoming)
+                if (header["width"], header["height"]) != (meta["width"], meta["height"]):
+                    raise ValueError("EXR image dimensions disagree between header readers.")
+                meta["imaging_source"] = header
         asset_id = uuid.uuid4().hex
         target = directory / "media" / (asset_id + suffix)
         asset = {"id": asset_id, "name": safe_name(name), "path": "media/" + target.name, "sha256": digest_file(incoming), "size": incoming.stat().st_size, **meta}
@@ -292,8 +298,14 @@ class Store:
         with self.lock:
             self._require_open()
             assets = read_json(directory / "assets.json", [])
-            # Duplicate imports, including unchanged title plates, reuse immutable media.
-            duplicate = next((a for a in assets if a.get("sha256") == asset["sha256"] and a.get("kind") == asset["kind"]), None)
+            # A developed display image belongs to its exact linear master and
+            # receipt, even when another image happens to contain equal pixels.
+            # Ordinary duplicate imports and unchanged title plates still reuse
+            # their immutable media.
+            development = isinstance(provenance, dict) and provenance.get("type") == "cinematicum-imaging"
+            duplicate = next((a for a in assets if a.get("sha256") == asset["sha256"]
+                              and a.get("kind") == asset["kind"]
+                              and (not development or a.get("provenance") == provenance)), None)
             if duplicate is not None:
                 incoming.unlink(missing_ok=True)
                 return duplicate
@@ -326,6 +338,9 @@ class Store:
         result["point_tracking"] = "find_rect" in filters
         result["color_pipeline"] = all(name in filters for name in ("geq", "lut1d", "lut3d"))
         result["camera_import"] = True
+        from imaging import imaging_capabilities
+        result["imaging"] = imaging_capabilities()
+        result["mesh_modeling"] = result["blender"]
         self._cap_cache, self._cap_time = copy.deepcopy(result), time.monotonic()
         return result
 
@@ -495,6 +510,52 @@ class Store:
         project["id"] = project_id
         project["assets"] = current["assets"]
         return validate_project(project, self.project_dir(project_id))
+
+    def model_mesh(self, project_id, payload):
+        """Evaluate a candidate; only the editor's undoable apply changes a scene."""
+        from scene_modeling import model_mesh
+        self.get(project_id)
+        if not isinstance(payload, dict) or set(payload) != {"object", "operation"}:
+            raise ValueError("Mesh editing needs one object and one operation.")
+        request = copy.deepcopy(payload)
+
+        def work(job_id, progress, event):
+            progress(.05)
+            result = model_mesh(request, cancel_event=event)
+            if event.is_set():
+                raise RuntimeError("Mesh edit cancelled")
+            progress(1)
+            return result
+        return self.submit(project_id, "scene-modeling", work)
+
+    def imaging_render(self, project_id, payload):
+        """Process owned source pixels, retaining linear and display artifacts."""
+        from imaging import run_imaging
+        if not isinstance(payload, dict) or set(payload) != {"recipe"}:
+            raise ValueError("Image processing requires one recipe.")
+        project, recipe = self.get(project_id), copy.deepcopy(payload["recipe"])
+        directory = self.project_dir(project_id)
+
+        def work(job_id, progress, event):
+            output = directory / "imaging" / "outputs" / job_id
+            result = run_imaging(project, directory, recipe, output,
+                                 progress=progress, cancel_event=event)
+            if event.is_set():
+                raise RuntimeError("Image processing cancelled")
+            # The artifact set remains immutable. Asset admission owns a copy
+            # and never moves display.png out of its EXR/receipt collection.
+            with tempfile.TemporaryDirectory(prefix="imaging-admit-", dir=str(directory)) as temp:
+                display = Path(temp) / "display.png"
+                shutil.copyfile(result["path"], display)
+                asset = self.admit(project_id, display,
+                                   "Image " + str(recipe.get("operation", "processed")) + " " + job_id[:8] + ".png",
+                                   result.get("provenance"))
+            base = f"/api/projects/{project_id}/imaging/outputs/{job_id}"
+            result.update(asset=asset, url=f"/api/projects/{project_id}/media/{asset['id']}",
+                          exr_url=base + "/linear.exr", receipt_url=base + "/receipt.json",
+                          display_url=base + "/display.png")
+            return result
+        return self.submit(project_id, "imaging", work, {"recipe": recipe})
 
     def tracking(self, project_id, payload, seed_only=False):
         project = self.analysis_snapshot(project_id, payload)
@@ -878,7 +939,7 @@ class Handler(BaseHTTPRequestHandler):
     def dispatch_get(self):
         parsed = urlparse(self.path)
         parts = unquote(parsed.path).strip("/").split("/")
-        if parsed.path in {"/", "/index.html", "/app.js", "/style.css", "/editing.js", "/viewer-tools.js", "/compositor-ui.js", "/scene-editor.js", "/scene-editor.css", "/tracking-ui.js", "/interchange-ui.js", "/camera-io-ui.js", "/color-pipeline-ui.js"}:
+        if parsed.path in {"/", "/index.html", "/app.js", "/style.css", "/editing.js", "/viewer-tools.js", "/compositor-ui.js", "/scene-editor.js", "/scene-editor.css", "/tracking-ui.js", "/interchange-ui.js", "/camera-io-ui.js", "/color-pipeline-ui.js", "/imaging-ui.js"}:
             return self.file(WEB / ("index.html" if parsed.path == "/" else parsed.path[1:]))
         if parts == ["api", "bootstrap"]:
             projects = self.store.projects()
@@ -887,6 +948,9 @@ class Handler(BaseHTTPRequestHandler):
             return self.json(200, {"token": self.store.token, "project": p, "projects": self.store.projects(), "capabilities": self.store.capabilities(), "jobs": sorted(durable_jobs, key=lambda j: j["created_at"], reverse=True)[:30]})
         if parts == ["api", "capabilities"]:
             return self.json(200, self.store.capabilities(fresh=True))
+        if parts == ["api", "imaging-capabilities"]:
+            from imaging import imaging_capabilities
+            return self.json(200, imaging_capabilities())
         if parts == ["api", "projects"]:
             return self.json(200, self.store.projects())
         if len(parts) == 3 and parts[:2] == ["api", "jobs"]:
@@ -899,6 +963,21 @@ class Handler(BaseHTTPRequestHandler):
                 return self.json(200, self.store.generation_readiness(project_id))
             if len(parts) == 4 and parts[3] == "color-luts":
                 return self.json(200, {"luts": list_luts(self.store.project_dir(project_id))})
+            if len(parts) == 4 and parts[3] == "imaging-catalog":
+                from imaging import imaging_catalog
+                self.store.get(project_id)
+                return self.json(200, imaging_catalog(parse_qs(parsed.query).get("config", [None])[0]))
+            if len(parts) == 4 and parts[3] == "imaging-sources":
+                from imaging import list_raw_sources
+                return self.json(200, {"sources": list_raw_sources(self.store.project_dir(project_id))})
+            if len(parts) == 7 and parts[3:5] == ["imaging", "outputs"]:
+                if not IDENTIFIER.fullmatch(parts[5]) or parts[6] not in {"linear.exr", "display.png", "receipt.json"}:
+                    raise ValueError("Invalid image processing artifact")
+                root = self.store.project_dir(project_id) / "imaging" / "outputs"
+                path = root / parts[5] / parts[6]
+                if root.resolve() != self.store.project_dir(project_id).resolve() / "imaging" / "outputs" or path.resolve().parent != (root.resolve() / parts[5]) or path.parent.is_symlink():
+                    raise ValueError("Image artifact is outside its owned output")
+                return self.file(path, download=parts[6] != "display.png" or "download" in parse_qs(parsed.query))
             if len(parts) == 5 and parts[3] == "media":
                 asset, path = self.store.asset(project_id, parts[4])
                 return self.file(path, download=asset["kind"] == "scene")
@@ -939,9 +1018,29 @@ class Handler(BaseHTTPRequestHandler):
             if self.command == "POST" and len(parts) == 5 and parts[3:] == ["scene", "import-camera"]:
                 project = self.store.get(project_id)
                 return self.json(200, import_camera(self.body(), width=project["width"], height=project["height"]))
+            if self.command == "POST" and len(parts) == 5 and parts[3:] == ["scene", "model-mesh"]:
+                return self.json(202, self.store.model_mesh(project_id, self.body()))
             if self.command != "POST" or len(parts) != 4:
                 raise FileNotFoundError("Route does not exist")
             action = parts[3]
+            if action == "imaging-raw-import":
+                from imaging import import_raw_source
+                length = self.length(min(MAX_UPLOAD, 512 * 1024 * 1024))
+                name = safe_name(query.get("name", ["camera.dng"])[0])
+                with tempfile.TemporaryDirectory(prefix="raw-upload-", dir=str(directory)) as temp:
+                    incoming = Path(temp) / name
+                    with incoming.open("xb") as f:
+                        remaining = length
+                        while remaining:
+                            chunk = self.rfile.read(min(1024 * 1024, remaining))
+                            if not chunk:
+                                raise ValueError("RAW upload was interrupted")
+                            f.write(chunk)
+                            remaining -= len(chunk)
+                    with self.store.lock:
+                        self.store._require_open()
+                        result = import_raw_source(directory, incoming, name)
+                return self.json(201, result)
             if action == "import":
                 length = self.length(MAX_UPLOAD)
                 name = safe_name(query.get("name", ["media.mp4"])[0])
@@ -986,6 +1085,8 @@ class Handler(BaseHTTPRequestHandler):
                 return self.json(202, self.store.blender(project_id, payload))
             if action == "scene":
                 return self.json(202, self.store.scene_render(project_id, payload))
+            if action == "imaging-render":
+                return self.json(202, self.store.imaging_render(project_id, payload))
             if action == "frame-preview":
                 return self.json(202, self.store.frame_preview(project_id, payload))
             if action in {"tracking-frame", "tracking"}:

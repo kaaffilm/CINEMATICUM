@@ -25,12 +25,14 @@ import time
 import uuid
 
 if __package__:
-    from .compositor import compile_graph, validate_graph
+    from .compositor import compile_graph, validate_graph, media_sources, validate_media_sources, lens_nodes, LENS_MAP_NAMES
+    from .lens_assets import prepare_lens_maps
     from .timebase import parse_rate, project_rate
     from .tracking import validate_motion
     from .color_pipeline import validate_pipeline, compile_pipeline
 else:
-    from compositor import compile_graph, validate_graph
+    from compositor import compile_graph, validate_graph, media_sources, validate_media_sources, lens_nodes, LENS_MAP_NAMES
+    from lens_assets import prepare_lens_maps
     from timebase import parse_rate, project_rate
     from tracking import validate_motion
     from color_pipeline import validate_pipeline, compile_pipeline
@@ -38,7 +40,7 @@ else:
 
 VIDEO_EXTENSIONS = {".mp4", ".mov", ".mkv", ".webm", ".m4v", ".avi", ".mpg", ".mpeg", ".mxf"}
 AUDIO_EXTENSIONS = {".wav", ".mp3", ".aac", ".m4a", ".flac", ".ogg", ".aif", ".aiff", ".opus"}
-IMAGE_EXTENSIONS = {".png", ".jpg", ".jpeg", ".webp", ".tif", ".tiff", ".bmp"}
+IMAGE_EXTENSIONS = {".png", ".jpg", ".jpeg", ".webp", ".tif", ".tiff", ".bmp", ".exr"}
 MEDIA_EXTENSIONS = VIDEO_EXTENSIONS | AUDIO_EXTENSIONS | IMAGE_EXTENSIONS
 MAX_TIMELINE_SECONDS = 6 * 60 * 60
 INTERPOLATIONS = {"linear", "constant", "ease_in", "ease_out", "ease_in_out"}
@@ -377,6 +379,9 @@ def validate_project(project, project_dir):
             c["compositor"] = validate_graph(c["compositor"], fitted_width, fitted_height,
                                              animation_duration=c["animation_duration"],
                                              animation_start=c["animation_start"])
+            validate_media_sources(c["compositor"], assets, fps)
+        if Path(a["path"]).suffix.lower() == ".exr":
+            raise ValueError("Develop this EXR through OCIO before adding its display image to the timeline. The float original stays preserved.")
         if c.get("color_pipeline") is not None:
             if c["track"] < 0 or a["kind"] == "audio":
                 raise ValueError("Color pipelines belong to picture clips on video tracks.")
@@ -545,7 +550,7 @@ def _quote_filter_path(path):
     return str(path).replace("\\", "\\\\").replace(":", "\\:").replace("'", "'\\''")
 
 
-def _graph(project, project_dir, temp_dir):
+def _graph(project, project_dir, temp_dir, cancel_event=None):
     rate = project_rate(project)
     fps, width, height = rate.fps, project["width"], project["height"]
     frames = max([c["start"] + c["duration"] for c in project["clips"]] +
@@ -557,16 +562,25 @@ def _graph(project, project_dir, temp_dir):
     filters = [f"color=c=black:s={width}x{height}:r={rate.ffmpeg},trim=end_frame={frames},format=rgba[canvas0]"]
     filters += [f"anullsrc=r=48000:cl=stereo,atrim=end_sample={rate.samples_for_frames(frames)}[silence]"]
     inputs, audio, canvas = [], ["[silence]"], "canvas0"
+    input_count = 0
+    prepared_lenses = {}
+
+    def add_input(asset):
+        nonlocal input_count
+        source = _media_path(project_dir, asset["path"])
+        number = input_count
+        input_count += 1
+        inputs.extend(["-threads", "2", "-protocol_whitelist", "file,pipe"])
+        if asset["kind"] == "image":
+            inputs.extend(["-loop", "1", "-framerate", rate.ffmpeg])
+        inputs.extend(["-i", str(source)])
+        return number
     ordered = sorted(((i, clip) for i, clip in enumerate(project["clips"])
                       if track_state(project, clip["track"])[0]),
                      key=lambda item: (item[1]["track"], item[0]))
     for index, (_, clip) in enumerate(ordered):
         asset = assets[clip["asset_id"]]
-        source = _media_path(project_dir, asset["path"])
-        inputs += ["-threads", "2", "-protocol_whitelist", "file,pipe"]
-        if asset["kind"] == "image":
-            inputs += ["-loop", "1", "-framerate", rate.ffmpeg]
-        inputs += ["-i", str(source)]
+        input_index = add_input(asset)
         start, length, source_in = clip["start"] / fps, clip["duration"] / fps, clip["in"] / fps
         if clip["track"] >= 0:
             fit = min(width / asset["width"], height / asset["height"])
@@ -580,7 +594,7 @@ def _graph(project, project_dir, temp_dir):
                 timing += compile_pipeline(clip["color_pipeline"], project_dir, temp_dir,
                                            prefix="color%d" % index)
             chain = timing + [f"scale=w='max(2,trunc({_decimal(base_w)}*({scale})/2)*2)':h='max(2,trunc({_decimal(base_h)}*({scale})/2)*2)':eval=frame:flags=lanczos", "setsar=1"]
-            stream = f"{index}:{asset['video_stream_index']}"
+            stream = f"{input_index}:{asset['video_stream_index']}"
             if clip.get("compositor") is not None:
                 # Normalize once before the node DAG. All branches share the
                 # same geometry/timing, then the existing clip controls apply.
@@ -589,10 +603,67 @@ def _graph(project, project_dir, temp_dir):
                 filters.append(f"[{stream}]" + ",".join(timing) + ","
                                f"scale={fitted_width}:{fitted_height}:flags=lanczos,"
                                f"setsar=1,format=rgba[{input_label}]")
+                external_labels = {}
+                for ordinal, node in enumerate(media_sources(clip["compositor"])):
+                    external_asset = assets[node["params"]["asset_id"]]
+                    external_index = add_input(external_asset)
+                    label = f"compositor{index}media{ordinal}"
+                    external_labels[node["id"]] = label
+                    external_color = []
+                    provenance = external_asset.get("provenance")
+                    if (isinstance(provenance, dict) and provenance.get("type") == "cinematicum-imaging"
+                            and provenance.get("version") == 1 and provenance.get("display_encoding") == "sRGB"):
+                        # The display view is already baked into Develop's PNG.
+                        # Match a new direct clip's transfer conversion without
+                        # applying another OCIO view or scene tone mapping.
+                        external_color = compile_pipeline(
+                            {"version": 1, "enabled": True, "input_transfer": "srgb", "input_primaries": "rec709"},
+                            project_dir, temp_dir, prefix=f"externalcolor{index}_{ordinal}")
+                    # Each node has an independent project-rate source clock.
+                    # Preserve zero-origin frame numbers before the DAG trims
+                    # its selected range and applies domain offsets/padding.
+                    filters.append(f"[{external_index}:{external_asset['video_stream_index']}]"
+                                   "setpts=PTS-STARTPTS,"
+                                   f"settb=expr={rate.conform_time_base},"
+                                   f"fps=fps={rate.ffmpeg}:start_time=0:round=near:eof_action=pass,"
+                                   + (",".join(external_color) + "," if external_color else "") +
+                                   f"scale={fitted_width}:{fitted_height}:force_original_aspect_ratio=decrease:flags=lanczos,"
+                                   f"format=rgba,pad={fitted_width}:{fitted_height}:(ow-iw)/2:(oh-ih)/2:color=black@0,"
+                                   f"setsar=1[{label}]")
+                lens_labels = {}
+                for ordinal, node in enumerate(lens_nodes(clip["compositor"])):
+                    signature = json.dumps([fitted_width, fitted_height, node["params"]],
+                                           sort_keys=True, separators=(",", ":"), allow_nan=False)
+                    if signature not in prepared_lenses:
+                        try:
+                            prepared_lenses[signature] = prepare_lens_maps(
+                                node["params"], fitted_width, fitted_height, temp_dir,
+                                cancel_event=cancel_event)
+                        except RuntimeError:
+                            if cancel_event is not None and cancel_event.is_set():
+                                raise RenderCancelled("Lens preparation cancelled")
+                            raise
+                    labels = {}
+                    for name in LENS_MAP_NAMES:
+                        map_index = input_count
+                        input_count += 1
+                        # Decode each static map once, then repeat its frame in
+                        # the graph. Image-input looping would decode six large
+                        # PNGs on every picture frame.
+                        inputs.extend(["-threads", "1", "-protocol_whitelist", "file,pipe",
+                                       "-framerate", rate.ffmpeg, "-i",
+                                       str(prepared_lenses[signature]["paths"][name])])
+                        label = f"compositor{index}lens{ordinal}{name}"
+                        labels[name] = label
+                        filters.append(f"[{map_index}:v:0]loop=loop={clip['duration'] - 1}:size=1:start=0,"
+                                       f"settb=expr={rate.time_base},setpts=N[{label}]")
+                    lens_labels[node["id"]] = labels
                 clauses, stream = compile_graph(clip["compositor"], input_label, f"compositor{index}",
                                                 fps=rate.fps, frame_offset=clip["animation_offset"],
                                                 animation_duration=clip["animation_duration"],
-                                                animation_start=clip["animation_start"])
+                                                animation_start=clip["animation_start"],
+                                                frame_count=clip["duration"], external_labels=external_labels,
+                                                lens_labels=lens_labels)
                 filters.extend(clauses)
                 chain = [f"scale=w='max(2,trunc({_decimal(base_w)}*({scale})/2)*2)':"
                          f"h='max(2,trunc({_decimal(base_h)}*({scale})/2)*2)':eval=frame:flags=lanczos", "setsar=1"]
@@ -703,7 +774,7 @@ def _graph(project, project_dir, temp_dir):
                 right = min(1, 1 + audio_settings["pan"])
                 chain.append(f"pan=stereo|c0={_decimal(left)}*c0|c1={_decimal(right)}*c1")
             chain.append(f"adelay={delay}S:all=1")
-            filters += [f"[{index}:{asset['audio_stream_index']}]" + ",".join(chain) + f"[audio{index}]"]
+            filters += [f"[{input_index}:{asset['audio_stream_index']}]" + ",".join(chain) + f"[audio{index}]"]
             audio.append(f"[audio{index}]")
     for index, title in enumerate(project["titles"]):
         start, end, fade = title["start"] / fps, (title["start"] + title["duration"]) / fps, title["fade"] / fps
@@ -712,9 +783,7 @@ def _graph(project, project_dir, temp_dir):
             # Its full-canvas PNG already contains the requested position/style.
             # Timing and opacity fades stay frame-based in this compositor.
             raster = assets[title["asset_id"]]
-            source = _media_path(project_dir, raster["path"])
-            input_index = len(ordered) + sum(1 for t in project["titles"][:index] if t.get("asset_id") is not None)
-            inputs += ["-threads", "2", "-protocol_whitelist", "file,pipe", "-loop", "1", "-framerate", rate.ffmpeg, "-i", str(source)]
+            input_index = add_input(raster)
             chain = [f"trim=end_frame={title['duration']}", "setpts=PTS-STARTPTS", "format=rgba", "setsar=1"]
             if fade:
                 chain += [f"fade=t=in:st=0:d={_decimal(fade)}:alpha=1",
@@ -770,7 +839,7 @@ def render_project(project, project_dir, output_path, profile="h264", progress=N
     started = time.monotonic()
     try:
         with tempfile.TemporaryDirectory(prefix="cinematicum-render-") as temp_dir:
-            inputs, graph, frames = _graph(p, project_dir, temp_dir)
+            inputs, graph, frames = _graph(p, project_dir, temp_dir, cancel_event=cancel_event)
             rate = project_rate(p)
             duration = float(rate.seconds_for_frames(frames))
             graph_path = Path(temp_dir) / "filter.txt"

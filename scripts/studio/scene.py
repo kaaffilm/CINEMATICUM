@@ -21,6 +21,7 @@ import uuid
 
 from adapters import AdapterError, _BLENDER_TIMEOUT, _cancelled, _run_owned, _sha256, find_blender
 from spatial_import import validate_mesh, validate_scene_geometry
+from scene_modeling import blender_modeling_source, validate_modeling, validate_modeling_budget
 from timebase import parse_rate
 
 
@@ -204,7 +205,7 @@ def validate_scene(scene, width=None, height=None):
         src.setdefault(key, [])
     identifiers = set()
     for obj in src["objects"]:
-        _object(obj, "Scene object", {"id", "name", "type", "position", "rotation", "scale", "material", "keyframes", "mesh"})
+        _object(obj, "Scene object", {"id", "name", "type", "position", "rotation", "scale", "material", "keyframes", "mesh", "modeling"})
         ident = _id(obj.get("id"), "Object ID")
         if ident in identifiers:
             raise ValueError("Scene IDs must be unique.")
@@ -216,6 +217,7 @@ def validate_scene(scene, width=None, height=None):
             obj["mesh"] = validate_mesh(obj.get("mesh"))
         elif "mesh" in obj:
             raise ValueError("Only mesh objects may contain imported geometry.")
+        validate_modeling(obj)
         for prop, default, low, high in (("position", [0, 0, 1], -1000, 1000),
                                          ("rotation", [0, 0, 0], -3600, 3600), ("scale", [1, 1, 1], .01, 100)):
             obj[prop] = _vector(obj.get(prop, default), "Object " + prop, low, high)
@@ -229,6 +231,7 @@ def validate_scene(scene, width=None, height=None):
         mat["emission_strength"] = _number(mat.get("emission_strength", 0), "Emission strength", 0, 1000)
         _keyframes(obj, "object", src["frame_end"])
     validate_scene_geometry(src["objects"])
+    validate_modeling_budget(src["objects"])
     for light in src["lights"]:
         _object(light, "Light", {"id", "name", "type", "position", "target", "color", "power", "size", "keyframes"})
         ident = _id(light.get("id"), "Light ID")
@@ -286,6 +289,7 @@ def _build_script(spec, blend_path, frames_dir, fps, frame_start, frame_end):
     payload = json.dumps(spec, ensure_ascii=True, allow_nan=False, sort_keys=True)
     return '''import bpy, json, math
 from mathutils import Vector, Matrix, Quaternion
+%s
 SPEC = json.loads(%r)
 BLEND_PATH = %r
 FRAMES = %r
@@ -522,21 +526,25 @@ for item in SPEC['objects']:
     elif primitive == 'cylinder': bpy.ops.mesh.primitive_cylinder_add(vertices=32, radius=1, depth=2)
     if primitive == 'mesh':
         geometry = item['mesh']
-        mesh_data = bpy.data.meshes.new(item['name'] + ' Geometry')
-        mesh_data.from_pydata(geometry['vertices'], [], geometry['triangles'])
-        mesh_data.update()
-        if len(mesh_data.vertices) != len(geometry['vertices']) or len(mesh_data.polygons) != len(geometry['triangles']):
-            raise RuntimeError('Blender did not preserve the imported mesh topology.')
-        if geometry['uvs']:
-            uv_layer = mesh_data.uv_layers.new(name='UVMap')
-            for polygon,indices in zip(mesh_data.polygons, geometry['uv_indices']):
-                for loop_index,uv_index in zip(polygon.loop_indices, indices):
-                    uv_layer.data[loop_index].uv = geometry['uvs'][uv_index] if uv_index >= 0 else (0, 0)
-        if geometry['normals']:
-            for polygon in mesh_data.polygons: polygon.use_smooth = True
-            mesh_data.normals_split_custom_set([geometry['normals'][index] for face in geometry['normal_indices'] for index in face])
-        obj = bpy.data.objects.new(item['name'], mesh_data)
-        scene.collection.objects.link(obj)
+        if item.get('modeling'):
+            obj = cinematicum_model_object(item, scene.collection)
+            cinematicum_verify_model(obj, item)
+        else:
+            mesh_data = bpy.data.meshes.new(item['name'] + ' Geometry')
+            mesh_data.from_pydata(geometry['vertices'], [], geometry['triangles'])
+            mesh_data.update()
+            if len(mesh_data.vertices) != len(geometry['vertices']) or len(mesh_data.polygons) != len(geometry['triangles']):
+                raise RuntimeError('Blender did not preserve the imported mesh topology.')
+            if geometry['uvs']:
+                uv_layer = mesh_data.uv_layers.new(name='UVMap')
+                for polygon,indices in zip(mesh_data.polygons, geometry['uv_indices']):
+                    for loop_index,uv_index in zip(polygon.loop_indices, indices):
+                        uv_layer.data[loop_index].uv = geometry['uvs'][uv_index] if uv_index >= 0 else (0, 0)
+            if geometry['normals']:
+                for polygon in mesh_data.polygons: polygon.use_smooth = True
+                mesh_data.normals_split_custom_set([geometry['normals'][index] for face in geometry['normal_indices'] for index in face])
+            obj = bpy.data.objects.new(item['name'], mesh_data)
+            scene.collection.objects.link(obj)
         obj['cinematicum_geometry_sha256'] = geometry['sha256']
         if geometry.get('source'):
             obj['cinematicum_source_sha256'] = geometry['source']['sha256']
@@ -602,7 +610,7 @@ for frame in range(START, END+1):
             aim(light, pose['target'])
     scene.render.filepath = FRAMES + '/frame_%%06d.png' %% frame
     bpy.ops.render.render(write_still=True)
-''' % (payload, str(blend_path), str(frames_dir), rate.blender_fps, rate.blender_fps_base, frame_start, frame_end)
+''' % (blender_modeling_source(), payload, str(blend_path), str(frames_dir), rate.blender_fps, rate.blender_fps_base, frame_start, frame_end)
 
 
 def render_scene(scene, output_dir, fps=24, frame_start=1, frame_end=None,
@@ -674,5 +682,10 @@ def render_scene(scene, output_dir, fps=24, frame_start=1, frame_end=None,
         "mesh_vertices": sum(len(item["mesh"]["vertices"]) for item in spec["objects"] if item["type"] == "mesh"),
         "mesh_triangles": sum(len(item["mesh"]["triangles"]) for item in spec["objects"] if item["type"] == "mesh"),
         "mesh_geometry_sha256": [item["mesh"]["sha256"] for item in spec["objects"] if item["type"] == "mesh"],
+        "modeled_objects": sum(bool(item.get("modeling")) for item in spec["objects"]),
+        "evaluated_geometry_sha256": [item["modeling"]["evaluation"]["mesh"]["sha256"]
+                                      for item in spec["objects"] if item.get("modeling")],
+        "modeling_original_source_sha256": sorted({item["modeling"]["origin"]["source"]["sha256"]
+                                      for item in spec["objects"] if item.get("modeling", {}).get("origin", {}).get("source")}),
         "mesh_source_sha256": sorted({item["mesh"]["source"]["sha256"] for item in spec["objects"]
                                       if item["type"] == "mesh" and item["mesh"].get("source")})}}

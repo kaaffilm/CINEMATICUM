@@ -1,4 +1,4 @@
-# Editorial systems: source evidence and implemented clock correction
+# Editorial systems: source evidence, clocks, interchange and trim modes
 
 Research date: 2026-10-21. Scope: Shotcut, Kdenlive, Cinelerra-GG, Premiere and DaVinci Resolve. Public documentation was read through web retrieval; the Shotcut, Kdenlive, MLT and OpenTimelineIO source landmarks below were retrieved through the connected GitHub plugin. Proprietary application source was not available or inspected. This is a focused engineering comparison, not a claim to have reproduced those products.
 
@@ -75,10 +75,40 @@ Imports resolve references only to already-imported local assets using actual SH
 
 `test_interchange.py` verifies the wire format with the official [OpenTimelineIO 0.18.1 package](https://pypi.org/project/OpenTimelineIO/0.18.1/), source-timecode/sample-clock conversion, explicit relinking boundaries, stale-metadata rejection and identical decoded picture/PCM after a full self-roundtrip. The package is a scratch test dependency; production does not install a plugin discovery system or require a compiled Python extension. This is cut-timeline OTIO interoperability, not full AAF, multicam, nested-sequence or effect translation.
 
+## Implemented slip, slide and outgoing-cut roll
+
+The 0.7 increment adds actual operations to `web/editing.js` and a shared-history
+Trim dialog in `web/app.js`. The dialog previews the permitted integer-frame
+offset before applying it. The operation planner returns replacement clip data;
+the UI applies that candidate in one existing project-history transaction.
+
+| Operation | What changes | Preserved relationships |
+|---|---|---|
+| Slip source | The selected clip's source in-point advances along its playback direction, accounting for speed and reverse. | Timeline start, duration and authored animation remain fixed. Derived stabilization/tracked-mask measurements are cleared because they no longer describe the selected content. |
+| Slide shot | The selected clip moves; the touching previous and next clips are trimmed to accommodate it. | Selected source range, duration and animation remain fixed; the sequence's outer endpoints remain fixed. Neighbor animation and fade domains retain their original coordinates. |
+| Roll outgoing cut | The selected clip's end and the next touching clip's start move together. | The outer endpoints and continuous source relationship are retained; both clips preserve their animation/fade domains. |
+
+Available media handles and a one-frame minimum clip duration bound the accepted
+offset. Missing or ambiguous adjacency, locked tracks and unsupported source
+relationships reject before editing. Zero offset creates no history. This
+implements the declared touching-clip operations; it does not add multicam,
+nested sequences or a general sync-group trim system.
+
+`test_trim_edits.py` checks timing invariants, fractional source clocks,
+speed/reverse, handle limits, locked-track rejection and actual decoded exported
+frames. `test_trim_ui_macos.py` and `macos/TrimSmoke.js` independently seed three
+touching eight-frame clips at source in-points 8/24/40 and 24 fps. Native stages
+exercise slip +3, slide +2 and roll −2 through DOM controls, verify exactly one
+undo/redo, save and export. An independent oracle reads binary frame-index
+patches and a moving rectangle from every output frame; its expected sequence
+does not call the trim implementation. A separate stage checks both source
+handle limits, zero no-op and locked-track behavior. Native execution reports,
+rather than the presence of these harnesses, establish pass/fail.
+
 ## Remaining editorial boundaries
 
-- CINEMATICUM still needs a distinct nested-sequence/multicam model, sync-group and source-channel mapping, rolling/slip/slide operations and a managed offline/proxy conform workflow. Those cannot be obtained by adding service names to a toolbar.
-- Current rendering is explicitly SDR Rec.709; this clock work does not add a scene-linear/HDR color pipeline, field-based processing or calibrated external monitoring.
+- CINEMATICUM still needs a distinct nested-sequence/multicam model, sync-group and source-channel mapping, broader contextual trimming and a managed offline/proxy conform workflow. The bounded slip/slide/outgoing-cut roll operations above do not supply those systems.
+- Movie timeline rendering remains SDR Rec.709. The separate OCIO/RAW/HDR still-image worker preserves float EXR masters but does not add a whole-timeline scene-linear/HDR pipeline, field-based processing or calibrated external monitoring.
 - Source-rate conform is nearest-frame selection. Tempo processing is FFmpeg `atempo`; there is no claim of optical-flow retiming or proprietary speech/music processing parity.
 - Interchange must declare what it can carry. CMX3600, AAF, OTIO and application-native projects have different semantics. None should be presented as a complete conversion without a tested feature mapping and explicit losses.
 - Publicly documented product behavior and inspected open-source structures guide independent implementation. No upstream application is embedded or launched by these changes.

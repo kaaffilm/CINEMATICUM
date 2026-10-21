@@ -16,11 +16,19 @@ for primitive and imported OBJ mesh scenes, materials, lighting, cameras, and po
 `.blend` sources. Configured local ComfyUI workflows can also produce media after
 node and model compatibility checks.
 
-Studio 0.6 adds fSpy/COLMAP solved-camera import, off-axis camera projection,
-physical lens/aperture controls, transmissive/emissive materials and Cycles ray
-settings. Its input color stage performs explicit float transfer/gamut/white
-conversion and applies project-owned 1D/3D Cube LUTs through the same preview and
-export graph. Native updates retain verified ZIP backups and one launchable app.
+Studio 0.7 adds independent media inputs in the node compositor, calibrated
+Brown lens distortion and undistortion, slip/slide/roll edits, and direct mesh
+vertex/face editing with live Mirror, Bevel and Catmull–Clark modifiers. The Develop
+workspace executes OpenColorIO views, LibRaw camera development and aligned bracket
+merging, preserving scene-linear float OpenEXR alongside the display image used in
+the timeline. It uses an optional pinned imaging runtime on Apple Silicon macOS.
+
+The existing fSpy/COLMAP solved-camera import, off-axis projection, physical lens
+and aperture controls, transmissive/emissive materials and Cycles settings remain
+part of the same workspace. Timeline input color performs explicit transfer,
+gamut and white conversion plus project-owned 1D/3D Cube LUTs. Native updates
+retain verified ZIP backups and one launchable app. Each implemented tool's limits
+and the substantial remaining professional feature gaps are recorded in the audit.
 
 Start with [the Studio guide](scripts/studio/README.md) and
 [the source comparison and capability audit](scripts/studio/CAPABILITY_AUDIT.md). Run `make studio-doctor`

@@ -19,7 +19,7 @@ from engine import _executable, _graph, RenderCancelled, validate_project
 
 
 def preview_identity(project, frame):
-    signature = {"pipeline": 8, "project": project, "frame": frame}
+    signature = {"pipeline": 9, "project": project, "frame": frame}
     return hashlib.sha256(json.dumps(signature, sort_keys=True, separators=(",", ":"),
                                     allow_nan=False).encode()).hexdigest()
 
@@ -43,7 +43,7 @@ def render_frame(project, project_dir, frame, output, cancel_event=None, timeout
             key.pop("volume", None)
     with tempfile.TemporaryDirectory(prefix="cinematicum-frame-", dir=output.parent) as scratch:
         scratch = Path(scratch)
-        inputs, graph, _ = _graph(picture, project_dir, scratch)
+        inputs, graph, _ = _graph(picture, project_dir, scratch, cancel_event=cancel_event)
         graph += ";\n[aout]anullsink;\n[vout]trim=start_frame=%d:end_frame=%d,setpts=PTS-STARTPTS,format=rgb24[frameout]" % (frame, frame + 1)
         script = scratch / "graph.txt"
         script.write_text(graph)

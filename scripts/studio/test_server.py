@@ -3,6 +3,7 @@ from __future__ import annotations
 import copy
 import http.client
 import json
+import os
 from pathlib import Path
 import shutil
 import subprocess
@@ -124,6 +125,102 @@ class ServerTests(unittest.TestCase):
         payload['cameras_text'] = '1 OPENCV 160 90 100 110 85 40 .1 .2 .3 .4\n'
         status, _, error = self.request('POST', path + '/scene/import-camera', payload)
         self.assertEqual(400, status, error)
+
+    def test_mesh_candidate_job_owns_cancellation_and_never_autosaves(self):
+        path = f"/api/projects/{self.p['id']}/scene/model-mesh"
+        project_path = self.store.project_dir(self.p["id"]) / "project.json"
+        before = project_path.read_bytes()
+        started = threading.Event()
+        def evaluate(payload, cancel_event=None):
+            self.assertIsNotNone(cancel_event)
+            started.set()
+            if not cancel_event.wait(3):
+                raise AssertionError("The Store did not deliver cancellation to its worker")
+            raise RuntimeError("Mesh edit cancelled")
+        payload = {"object": {"id": "owned"}, "operation": {"type": "convert"}}
+        self.assertEqual(403, self.request("POST", path, payload, token=False)[0])
+        self.assertEqual(400, self.request("POST", path, {**payload, "script": "arbitrary"})[0])
+        with patch("scene_modeling.model_mesh", evaluate):
+            status, _, job = self.request("POST", path, payload)
+            self.assertEqual(202, status, job)
+            self.assertEqual(job["kind"], "scene-modeling")
+            self.assertTrue(started.wait(1))
+            status, _, _ = self.request("POST", f"/api/jobs/{job['id']}/cancel", {})
+            self.assertEqual(200, status)
+            deadline = time.monotonic() + 2
+            while time.monotonic() < deadline:
+                current = self.store.job(job["id"])
+                if current["state"] not in {"queued", "running"}:
+                    break
+                time.sleep(.02)
+            self.assertEqual(current["state"], "cancelled")
+        self.assertEqual(before, project_path.read_bytes())
+
+    def test_actual_imaging_http_preserves_master_and_admits_display_copy(self):
+        import imaging
+        from test_imaging import png16
+        if not imaging.find_imaging_python():
+            self.skipTest("An isolated imaging runtime is required for actual OCIO/EXR output")
+        path = f"/api/projects/{self.p['id']}"
+        fixture = Path(self.tmp.name) / "ENGINE_TEST_linear.png"
+        png16(fixture, (.18, .09, .36))
+        status, _, asset = self.request("POST", path + "/import?name=ENGINE_TEST_linear.png", fixture.read_bytes(), {"Content-Type": "application/octet-stream"})
+        self.assertEqual(status, 201, asset)
+        original = self.store.get(self.p["id"])
+        status, _, catalog = self.request("GET", path + "/imaging-catalog")
+        self.assertEqual(status, 200, catalog)
+        recipe = {"version": 1, "operation": "ocio", "asset_id": asset["id"], "input_space": "ACEScg", "exposure": 1}
+        self.assertEqual(403, self.request("POST", path + "/imaging-render", {"recipe": recipe}, token=False)[0])
+        status, _, job = self.request("POST", path + "/imaging-render", {"recipe": recipe})
+        self.assertEqual(status, 202, job)
+        deadline = time.monotonic() + 12
+        while time.monotonic() < deadline:
+            current = self.store.job(job["id"])
+            if current["state"] not in {"queued", "running"}:
+                break
+            time.sleep(.05)
+        self.assertEqual(current["state"], "completed", current)
+        result = current["result"]
+        for url in (result["url"], result["display_url"], result["exr_url"], result["receipt_url"]):
+            status, _, data = self.request("GET", url)
+            self.assertEqual(status, 200, (url, data))
+        _, _, receipt = self.request("GET", result["receipt_url"])
+        self.assertEqual(receipt["recipe"]["operation"], "ocio")
+        directory = self.store.project_dir(self.p["id"])
+        display = directory / "imaging" / "outputs" / job["id"] / "display.png"
+        self.assertEqual(display.read_bytes(), (directory / result["asset"]["path"]).read_bytes())
+        fresh = self.store.get(self.p["id"])
+        self.assertEqual(fresh["revision"], original["revision"])
+        self.assertEqual(fresh["clips"], original["clips"])
+        self.assertEqual(len(fresh["assets"]), 2)
+        self.assertEqual(self.request("GET", path + "/imaging/outputs/" + job["id"] + "/project.json")[0], 400)
+        # Repeating an identical development may produce identical PNG bytes,
+        # but its new asset must retain the matching master/receipt identity.
+        status, _, repeated = self.request("POST", path + "/imaging-render", {"recipe": recipe})
+        self.assertEqual(status, 202, repeated)
+        deadline = time.monotonic() + 12
+        while time.monotonic() < deadline:
+            repeated = self.store.job(repeated["id"])
+            if repeated["state"] not in {"queued", "running"}:
+                break
+            time.sleep(.05)
+        self.assertEqual(repeated["state"], "completed", repeated)
+        repeat_asset = repeated["result"]["asset"]
+        self.assertEqual(repeat_asset["sha256"], result["asset"]["sha256"])
+        self.assertNotEqual(repeat_asset["id"], result["asset"]["id"])
+        self.assertEqual(repeat_asset["provenance"]["output_id"], repeated["id"])
+        self.assertEqual(self.store.get(self.p["id"])["clips"], original["clips"])
+        # The float original is reusable, but cannot silently enter the SDR
+        # timeline through the generic FFmpeg decoder.
+        exr = (directory / "imaging" / "outputs" / job["id"] / "linear.exr").read_bytes()
+        status, _, master = self.request("POST", path + "/import?name=ENGINE_TEST_master.exr", exr, {"Content-Type": "application/octet-stream"})
+        self.assertEqual(status, 201, master)
+        self.assertEqual(master["imaging_source"]["color_space"], "ACEScg")
+        edit = self.store.get(self.p["id"])
+        edit["clips"] = [{"id": "float", "asset_id": master["id"], "start": 0, "in": 0, "duration": 12, "track": 0}]
+        status, _, error = self.request("PUT", path, edit)
+        self.assertEqual(status, 400, error)
+        self.assertIn("Develop this EXR", error["error"])
 
     def test_import_ranges_metadata_and_no_path_read(self):
         asset = self.upload()

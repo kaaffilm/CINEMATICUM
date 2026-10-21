@@ -1,6 +1,8 @@
 """Typed, render-backed per-clip node graphs for CINEMATICUM Studio.
 
 A graph receives one trimmed, project-rate, fit-sized RGBA picture stream.
+Additional project-media sources receive their own conformed RGBA streams;
+this module selects their frame ranges without ever opening paths.
 Its output is then processed by the clip's ordinary transforms, grade, effects,
 and timeline placement. Edges are image streams; merge inputs are ordered as
 background and foreground. There are no user-provided FFmpeg expressions,
@@ -8,12 +10,25 @@ filenames, commands, or executable nodes.
 """
 from __future__ import annotations
 
+from array import array
 from collections import Counter
+import hashlib
+import json
 import math
+from pathlib import Path
 import re
+import struct
+import sys
+import zlib
 
 
 MAX_NODES = 32
+MAX_MEDIA_SOURCES = 8
+MAX_LENS_NODES = 2
+MAX_LENS_PIXELS = 2_073_600
+LENS_MAP_NAMES = ("x0", "x1", "y0", "y1", "wx", "wy")
+LENS_CONTRACTION_LIMIT = .45
+LENS_COEFFICIENTS = ("k1", "k2", "k3", "p1", "p2")
 MAX_WORKING_PIXELS = 268_435_456
 MAX_CURVE_POINTS = 12
 MAX_POLYGON_POINTS = 24
@@ -26,10 +41,15 @@ INTERPOLATIONS = {"linear", "constant", "ease_in", "ease_out", "ease_in_out"}
 CURVE_CHANNELS = ("master", "red", "green", "blue")
 BLEND_MODES = {"normal", "multiply", "screen", "add", "difference"}
 DEFAULT_POLYGON = [[.1, .85], [.5, .1], [.9, .85]]
-INPUT_COUNTS = {"source": 0, "grade": 1, "curves": 1, "blur": 1, "sharpen": 1,
-                "chroma_key": 1, "mask": 1, "merge": 2}
+INPUT_COUNTS = {"source": 0, "media_source": 0, "grade": 1, "curves": 1, "blur": 1, "sharpen": 1,
+                "chroma_key": 1, "mask": 1, "merge": 2, "lens_distortion": 1}
 PARAMETERS = {
     "source": {},
+    "media_source": {},
+    "lens_distortion": {"fx": (1, .1, 20), "fy": (1, .1, 20),
+                        "cx": (.5, -2, 3), "cy": (.5, -2, 3),
+                        "k1": (0, -1, 1), "k2": (0, -1, 1), "k3": (0, -1, 1),
+                        "p1": (0, -.2, .2), "p2": (0, -.2, .2)},
     "curves": {},
     "grade": {"exposure": (0, -3, 3), "contrast": (1, 0, 3),
               "saturation": (1, 0, 3), "temperature": (0, -1, 1)},
@@ -44,6 +64,7 @@ ANIMATABLE = {kind: set(values) for kind, values in PARAMETERS.items()}
 # unsharp does not expose a runtime amount command. Do not advertise a channel
 # that the export engine cannot evaluate. RGB tone curves are static mappings.
 ANIMATABLE["sharpen"] = set()
+ANIMATABLE["lens_distortion"] = set()
 ANIMATABLE["mask"].add("points")
 
 
@@ -86,6 +107,78 @@ def _polygon(value):
            for a, b in zip(result, result[1:] + result[:1])):
         raise ValueError("Compositor polygon vertices must not overlap their neighbors.")
     return result
+
+
+def lens_domain(params):
+    """Full-canvas conservative contraction certificate for five-term Brown.
+
+    Intrinsics are normalized by their image axis. The radial Jacobian's
+    eigenvalue perturbations are bounded by 3|k1|R²+5|k2|R⁴+7|k3|R⁶;
+    tangential terms add at most 8R(|p1|+|p2|) in spectral norm.
+    q<1 makes the forward map strongly monotone on this convex rectangle and
+    projected inverse iteration a contraction. No grid sampling is used to
+    claim that unsampled image regions cannot fold.
+    """
+    x0,x1 = -params["cx"]/params["fx"], (1-params["cx"])/params["fx"]
+    y0,y1 = -params["cy"]/params["fy"], (1-params["cy"])/params["fy"]
+    radius = math.hypot(max(abs(x0),abs(x1)), max(abs(y0),abs(y1)))
+    r2 = radius*radius
+    q = (3*abs(params["k1"])*r2 + 5*abs(params["k2"])*r2*r2 +
+         7*abs(params["k3"])*r2*r2*r2 + 8*radius*(abs(params["p1"])+abs(params["p2"])))
+    if q > LENS_CONTRACTION_LIMIT + 1e-12:
+        raise ValueError("Calibrated lens coefficients exceed the full-image invertibility limit for these intrinsics. "
+                         "Use a milder calibration or a narrower field; folding/fisheye models are not supported.")
+    # Successive iterates are at most 2R apart. q^n convergence and a 1e-10
+    # normalized-coordinate threshold bound residual pixel error independently
+    # of arbitrary iteration success. Identity is emitted as an exact no-op.
+    tolerance = 1e-10 * (1-q)
+    iterations = 0 if q == 0 else max(1, math.ceil(math.log(tolerance/max(2*radius,1e-30))/math.log(q))+2)
+    if iterations > 48:
+        raise ValueError("Calibrated lens inverse exceeds its bounded iteration budget.")
+    return {"x0":x0,"x1":x1,"y0":y0,"y1":y1,"q":q,"iterations":iterations,"tolerance":tolerance}
+
+
+def lens_sample_point(params, x, y, width, height):
+    """Reference backward sample (pixel centers at integer x/y), or None.
+
+    Undistort samples the distorted input with the forward Brown mapping.
+    Distort samples an ideal input through the certified inverse. Sampling
+    coordinates beyond the actual input image have explicit zero coverage.
+    """
+    return _lens_sampler(params, width, height)(x, y)
+
+
+def _lens_sampler(params, width, height):
+    """Prepare a dependency-free reference sampler with one certificate."""
+    domain = lens_domain(params)
+    def delta(a,b):
+        r2=a*a+b*b;radial=r2*(params["k1"]+r2*(params["k2"]+r2*params["k3"]))
+        return (a*radial+2*params["p1"]*a*b+params["p2"]*(r2+2*a*a),
+                b*radial+params["p1"]*(r2+2*b*b)+2*params["p2"]*a*b)
+    def sample(x, y):
+        xd,yd=(x/width-params["cx"])/params["fx"],(y/height-params["cy"])/params["fy"]
+        if params["direction"]=="undistort":
+            dx,dy=delta(xd,yd);a,b=xd+dx,yd+dy
+        else:
+            a,b=xd,yd
+            for _ in range(domain["iterations"]):
+                dx,dy=delta(a,b)
+                aa=max(domain["x0"],min(xd-dx,domain["x1"]))
+                bb=max(domain["y0"],min(yd-dy,domain["y1"]))
+                distance=math.hypot(aa-a,bb-b);a,b=aa,bb
+                if distance<=domain["tolerance"]:break
+            dx,dy=delta(a,b)
+            if math.hypot(a+dx-xd,b+dy-yd)>2e-9:
+                # A projected fixed point with residual lies on the boundary
+                # and represents a ray outside the mapped source rectangle.
+                if domain["x0"]+1e-8<a<domain["x1"]-1e-8 and domain["y0"]+1e-8<b<domain["y1"]-1e-8:
+                    raise ValueError("Calibrated lens inverse failed its certified residual check.")
+                return None
+        u,v=(a*params["fx"]+params["cx"])*width,(b*params["fy"]+params["cy"])*height
+        if -1e-7<=u<=width-1+1e-7 and -1e-7<=v<=height-1+1e-7:
+            return max(0,min(u,width-1)),max(0,min(v,height-1))
+        return None
+    return sample
 
 
 def _animation(raw, kind, params, start, duration):
@@ -215,12 +308,32 @@ def validate_graph(graph, width=None, height=None, *, animation_duration=None, a
             raise ValueError(f"Compositor {kind} requires {INPUT_COUNTS[kind]} image input(s).")
         inputs = [_identifier(value) for value in inputs]
         params = raw.get("params", {})
-        extra = ({"color"} if kind == "chroma_key" else {"shape", "invert", "points"} if kind == "mask"
+        extra = ({"direction"} if kind == "lens_distortion"
+                 else {"asset_id", "source_in", "duration", "offset", "outside"} if kind == "media_source"
+                 else {"color"} if kind == "chroma_key" else {"shape", "invert", "points"} if kind == "mask"
                  else {"mode"} if kind == "merge" else set(CURVE_CHANNELS) if kind == "curves" else set())
         if not isinstance(params, dict) or set(params) - set(PARAMETERS[kind]) - extra:
             raise ValueError(f"Unsupported parameter for compositor {kind}.")
         clean = {key: _number(params.get(key, default), f"{kind}.{key}", low, high)
                  for key, (default, low, high) in PARAMETERS[kind].items()}
+        if kind == "lens_distortion":
+            direction=params.get("direction","undistort")
+            if not isinstance(direction,str) or direction not in {"undistort","distort"}:
+                raise ValueError("Calibrated lens direction must be undistort or distort.")
+            clean["direction"]=direction
+            lens_domain(clean)
+        if kind == "media_source":
+            clean = {"asset_id": _identifier(params.get("asset_id")),
+                     "source_in": _frame(params.get("source_in", 0), "media source in", 0, MAX_ANIMATION_FRAME - 1),
+                     "duration": _frame(params.get("duration"), "media source duration", 1, MAX_ANIMATION_FRAME),
+                     "offset": _frame(params.get("offset", 0), "media source offset", -MAX_ANIMATION_FRAME, MAX_ANIMATION_FRAME),
+                     "outside": params.get("outside", "transparent")}
+            if not isinstance(clean["outside"], str) or clean["outside"] not in {"transparent", "hold"}:
+                raise ValueError("Compositor media source outside policy must be transparent or hold.")
+            if clean["source_in"] + clean["duration"] > MAX_ANIMATION_FRAME:
+                raise ValueError("Compositor media source range exceeds its frame limit.")
+            if clean["offset"] + clean["duration"] > MAX_ANIMATION_FRAME:
+                raise ValueError("Compositor media source placement exceeds its frame limit.")
         if kind == "chroma_key":
             color = params.get("color", "#00ff00")
             if not isinstance(color, str) or not re.fullmatch(r"#[0-9A-Fa-f]{6}", color):
@@ -274,6 +387,10 @@ def validate_graph(graph, width=None, height=None, *, animation_duration=None, a
         by_id[ident] = node
     if sum(node["type"] == "source" for node in normalized) != 1:
         raise ValueError("Compositor requires exactly one clip source node.")
+    if sum(node["type"] == "media_source" for node in normalized) > MAX_MEDIA_SOURCES:
+        raise ValueError(f"Compositor supports at most {MAX_MEDIA_SOURCES} additional media sources.")
+    if sum(node["type"] == "lens_distortion" for node in normalized) > MAX_LENS_NODES:
+        raise ValueError(f"Compositor supports at most {MAX_LENS_NODES} calibrated lens nodes.")
     for node in normalized:
         if any(ident not in by_id for ident in node["inputs"]):
             raise ValueError("Compositor connection refers to a missing node.")
@@ -282,15 +399,251 @@ def validate_graph(graph, width=None, height=None, *, animation_duration=None, a
         raise ValueError("Compositor output refers to a missing node.")
     _walk(by_id, by_id)  # Invalid disconnected nodes must not hide cycles.
     active = _walk(by_id, [output])
+    if width is not None and height is not None and width*height>MAX_LENS_PIXELS and any(
+            by_id[key]["type"]=="lens_distortion" and any(by_id[key]["params"][name] for name in LENS_COEFFICIENTS)
+            for key in active):
+        raise ValueError("Calibrated lens processing supports at most 2,073,600 pixels per graph canvas (1920 × 1080).")
     working_images = sum(5 if by_id[key]["type"] == "merge" and by_id[key]["params"]["mode"] != "normal"
+                         else 22 if by_id[key]["type"]=="lens_distortion"
                          else 2 if by_id[key]["type"] == "curves" else 1 for key in active)
     if width is not None and height is not None and width * height * working_images > MAX_WORKING_PIXELS:
         raise ValueError("Compositor exceeds its working-image budget. Reduce graph complexity or project resolution.")
     return {"version": 1, "nodes": normalized, "output": output}
 
 
+def media_sources(graph, *, active_only=True):
+    """Return detached, canonical source nodes in deterministic graph order.
+
+    A project validates the actual animation domain before using this helper;
+    the broad bounds here preserve existing negative-domain animation keys.
+    Each node needs its own external stream even when asset IDs coincide.
+    """
+    graph = validate_graph(graph, animation_start=-MAX_ANIMATION_FRAME)
+    nodes = {node["id"]: node for node in graph["nodes"]}
+    active = set(_walk(nodes, [graph["output"]])) if active_only else set(nodes)
+    return [node for node in graph["nodes"] if node["type"] == "media_source" and node["id"] in active]
+
+
+def lens_nodes(graph, *, active_only=True):
+    """Return canonical non-identity calibrations needing static sample maps.
+
+    Identity lenses remain editable graph nodes but require no resampling,
+    extra inputs or external dependencies. Disconnected lenses are still
+    schema/certificate validated and never prepared unless requested here.
+    """
+    graph = validate_graph(graph, animation_start=-MAX_ANIMATION_FRAME)
+    nodes = {node["id"]: node for node in graph["nodes"]}
+    active = set(_walk(nodes, [graph["output"]])) if active_only else set(nodes)
+    return [node for node in graph["nodes"] if node["type"] == "lens_distortion"
+            and node["id"] in active and any(node["params"][name] for name in LENS_COEFFICIENTS)]
+
+
+def validate_media_sources(graph, assets, fps):
+    """Validate every media reference against the project's probed asset map.
+
+    This does not trust graph-provided paths or source metadata: those fields
+    are not in the node schema. The engine retains file ownership/probing.
+    Images are held from frame zero. Videos select project-rate frame counts
+    with only the engine's half-frame metadata rounding tolerance.
+    """
+    fps = _number(fps, "media source frame rate", 1, 60)
+    if not isinstance(assets, dict):
+        raise ValueError("Compositor media validation requires the project asset map.")
+    sources = media_sources(graph, active_only=False)
+    for node in sources:
+        p = node["params"]
+        asset = assets.get(p["asset_id"])
+        if not isinstance(asset, dict):
+            raise ValueError(f"Compositor media source {node['id']} refers to missing project media.")
+        if asset.get("kind") not in {"video", "image"}:
+            raise ValueError("Compositor media sources require a video or still image asset.")
+        if str(asset.get("path", "")).lower().endswith(".exr") or asset.get("codec") == "exr":
+            raise ValueError("Compositor linear EXR masters require an explicit Develop conversion before use.")
+        if asset.get("color_transfer") in {"smpte2084", "arib-std-b67"}:
+            raise ValueError("Compositor HDR PQ/HLG media needs an explicit SDR conversion before use.")
+        if asset["kind"] == "image":
+            if p["source_in"]:
+                raise ValueError("Compositor still images have no source in point.")
+        else:
+            seconds = _number(asset.get("duration"), "source media duration", .000001, 1e9)
+            if p["source_in"] + p["duration"] > seconds * fps + .5 + 1e-8:
+                raise ValueError(f"Compositor media source {node['id']} extends beyond its source media. Shorten its range.")
+    return sources
+
+
+def media_frame_at(node, frame):
+    """Reference sampling rule in the preserved animation frame domain.
+
+    None means transparent. Hold clamps to the selected range, not to the
+    complete asset. This pure function also documents trim/split semantics.
+    """
+    p = node["params"]
+    relative = frame - p["offset"]
+    if p["outside"] == "transparent" and not 0 <= relative < p["duration"]:
+        return None
+    return p["source_in"] + max(0, min(relative, p["duration"] - 1))
+
+
 def _decimal(value):
     return format(float(value), ".10g")
+
+
+def lens_map_request(params, width, height):
+    """Canonical data-only worker request, with no filesystem references."""
+    width = _frame(width, "lens image width", 2, 8192)
+    height = _frame(height, "lens image height", 2, 8192)
+    if width * height > MAX_LENS_PIXELS:
+        raise ValueError("Calibrated lens maps support at most 2,073,600 pixels (1920 × 1080).")
+    graph = {"version": 1, "nodes": [
+        {"id": "source", "type": "source", "inputs": [], "params": {}},
+        {"id": "lens", "type": "lens_distortion", "inputs": ["source"], "params": params}],
+        "output": "lens"}
+    clean = validate_graph(graph, width, height)["nodes"][1]["params"]
+    return {"version": 1, "width": width, "height": height, "params": clean}
+
+
+class _LensPNG:
+    """Small streaming PNG writer: 16-bit grayscale or four equal RGBA planes.
+
+    These are numeric maps, not display pictures. No color profile/gamma,
+    metadata or arbitrary chunks are emitted. Deflate is dependency-free.
+    """
+    def __init__(self, path, width, height, channels):
+        self.path, self.channels = path, channels
+        self.file = path.open("xb")
+        self.digest, self.size = hashlib.sha256(), 0
+        self.compressor = zlib.compressobj(1)
+        self._write(b"\x89PNG\r\n\x1a\n")
+        self._chunk(b"IHDR", struct.pack(">IIBBBBB", width, height, 16, 0 if channels == 1 else 6, 0, 0, 0))
+
+    def _write(self, data):
+        self.file.write(data); self.digest.update(data); self.size += len(data)
+
+    def _chunk(self, kind, data):
+        self._write(struct.pack(">I", len(data)) + kind + data + struct.pack(">I", zlib.crc32(kind + data) & 0xffffffff))
+
+    def rows(self, raw):
+        compressed = self.compressor.compress(raw)
+        if compressed: self._chunk(b"IDAT", compressed)
+
+    def finish(self):
+        self._chunk(b"IDAT", self.compressor.flush())
+        self._chunk(b"IEND", b"")
+        self.file.close()
+        return {"file": self.path.name, "sha256": self.digest.hexdigest(), "bytes": self.size,
+                "channels": self.channels, "bit_depth": 16}
+
+
+def _lens_rows_python(params, width, height):
+    sample = _lens_sampler(params, width, height)
+    for y in range(height):
+        rows = {name: array("H") for name in LENS_MAP_NAMES}
+        for x in range(width):
+            point = sample(x, y)
+            if point is None:
+                for name in LENS_MAP_NAMES[:4]: rows[name].append(65535)
+                rows["wx"].extend((0,) * 4); rows["wy"].extend((0,) * 4)
+            else:
+                u, v = point; x0, y0 = math.floor(u), math.floor(v)
+                rows["x0"].append(x0); rows["x1"].append(min(x0 + 1, width - 1))
+                rows["y0"].append(y0); rows["y1"].append(min(y0 + 1, height - 1))
+                rows["wx"].extend((round((u - x0) * 65535),) * 4)
+                rows["wy"].extend((round((v - y0) * 65535),) * 4)
+        if sys.byteorder != "big":
+            for row in rows.values(): row.byteswap()
+        yield {name: b"\0" + row.tobytes() for name, row in rows.items()}
+
+
+def _lens_rows_numpy(params, width, height, np):
+    """Strip-vectorized accelerator, imported only by the isolated worker.
+
+    Float64 preserves the reference residual and pixel-center convention.
+    Strips bound memory independently of image height. The scalar fallback
+    above and this accelerator are compared against a separate Newton oracle.
+    """
+    p, d = params, lens_domain(params)
+    xs = (np.arange(width, dtype=np.float64)[None, :] / width - p["cx"]) / p["fx"]
+    def delta(a, b):
+        r2 = a*a + b*b; radial = r2*(p["k1"] + r2*(p["k2"] + r2*p["k3"]))
+        return (a*radial + 2*p["p1"]*a*b + p["p2"]*(r2 + 2*a*a),
+                b*radial + p["p1"]*(r2 + 2*b*b) + 2*p["p2"]*a*b)
+    for first in range(0, height, 32):
+        rows = min(32, height - first)
+        ys = (np.arange(first, first + rows, dtype=np.float64)[:, None] / height - p["cy"]) / p["fy"]
+        xd, yd = np.broadcast_arrays(xs, ys)
+        if p["direction"] == "undistort":
+            dx, dy = delta(xd, yd); a, b = xd + dx, yd + dy
+            valid = np.ones((rows, width), dtype=bool)
+        else:
+            a, b = xd.copy(), yd.copy()
+            for _ in range(d["iterations"]):
+                dx, dy = delta(a, b)
+                aa, bb = np.clip(xd - dx, d["x0"], d["x1"]), np.clip(yd - dy, d["y0"], d["y1"])
+                distance = float(np.max(np.hypot(aa - a, bb - b))); a, b = aa, bb
+                if distance <= d["tolerance"]: break
+            dx, dy = delta(a, b)
+            valid = np.hypot(a + dx - xd, b + dy - yd) <= 2e-9
+            interior = (a > d["x0"] + 1e-8) & (a < d["x1"] - 1e-8) & (b > d["y0"] + 1e-8) & (b < d["y1"] - 1e-8)
+            if np.any(~valid & interior):
+                raise ValueError("Calibrated lens inverse failed its certified residual check.")
+        u, v = (a*p["fx"] + p["cx"])*width, (b*p["fy"] + p["cy"])*height
+        valid &= (u >= -1e-7) & (u <= width-1+1e-7) & (v >= -1e-7) & (v <= height-1+1e-7)
+        u, v = np.clip(u, 0, width-1), np.clip(v, 0, height-1)
+        x0, y0 = np.floor(u).astype(np.uint16), np.floor(v).astype(np.uint16)
+        arrays = {"x0": x0, "x1": np.minimum(x0+1, width-1), "y0": y0, "y1": np.minimum(y0+1, height-1),
+                  "wx": np.rint((u-x0)*65535).astype(np.uint16), "wy": np.rint((v-y0)*65535).astype(np.uint16)}
+        result = {}
+        for name, values in arrays.items():
+            if name in {"wx", "wy"}:
+                values = np.repeat(np.where(valid, values, 0)[:, :, None], 4, axis=2)
+            else:
+                values = np.where(valid, values, 65535)
+            raw = values.astype(">u2").tobytes()
+            stride = len(raw) // rows
+            result[name] = b"".join(b"\0" + raw[i*stride:(i+1)*stride] for i in range(rows))
+        yield result
+
+
+def write_lens_maps(request, output_dir, *, backend="python"):
+    """Worker entry: validated calibration -> six fixed, exclusive PNG files.
+
+    The engine creates and owns output_dir; it is never taken from project
+    data. Production invokes this in a cancellable subprocess. Importing the
+    compositor itself requires only the Python standard library.
+    """
+    if (not isinstance(request, dict) or set(request) != {"version", "params", "width", "height"}
+            or type(request["version"]) is not int or request["version"] != 1):
+        raise ValueError("Lens map request requires version 1, numeric params, width and height only.")
+    clean = lens_map_request(request["params"], request["width"], request["height"])
+    if backend not in {"python", "numpy", "auto"}:
+        raise ValueError("Unsupported lens map worker backend.")
+    np = None
+    if backend != "python":
+        try:
+            import numpy as np
+        except ImportError:
+            if backend == "numpy": raise ValueError("The accelerated lens worker requires NumPy.")
+    backend = "numpy" if np is not None else "python"
+    directory = Path(output_dir)
+    if not directory.is_absolute() or directory.is_symlink() or not directory.is_dir() or any(directory.iterdir()):
+        raise ValueError("Lens output directory must be an existing, empty, owned directory.")
+    width, height, params = clean["width"], clean["height"], clean["params"]
+    writers = {}
+    try:
+        for name in LENS_MAP_NAMES:
+            writers[name] = _LensPNG(directory / (name + ".png"), width, height, 4 if name in {"wx", "wy"} else 1)
+        batches = _lens_rows_numpy(params, width, height, np) if np is not None else _lens_rows_python(params, width, height)
+        for batch in batches:
+            for name, raw in batch.items(): writers[name].rows(raw)
+        maps = {name: writer.finish() for name, writer in writers.items()}
+    except BaseException:
+        for writer in writers.values():
+            writer.file.close()
+            writer.path.unlink(missing_ok=True)
+        raise
+    digest = hashlib.sha256(json.dumps(clean, sort_keys=True, separators=(",", ":"), allow_nan=False).encode()).hexdigest()
+    return {"version": 1, "width": width, "height": height, "backend": backend,
+            "request_sha256": digest, "maps": maps}
 
 
 def _channel_expression(node, name, variable, coordinate=None):
@@ -406,23 +759,64 @@ def _mask_alpha_expression(params):
 
 
 def compile_graph(graph, input_label, prefix, *, fps=24, frame_offset=0,
-                  animation_duration=None, animation_start=0):
+                  animation_duration=None, animation_start=0,
+                  frame_count=None, external_labels=None, lens_labels=None):
     """Return filter clauses and a single-use output label for a normalized graph.
 
     Explicit split nodes are emitted wherever an image feeds multiple ports,
     including a merge wired twice to the same node. Only reachable nodes run.
-    The engine supplies input_label and prefix; payload IDs never enter FFmpeg.
+    The engine supplies input_label, prefix and external_labels; payload IDs
+    never enter FFmpeg. Every external stream starts at source frame zero,
+    uses project rate, square pixels, straight RGBA and the primary input's
+    dimensions. The engine fits/pads source geometry and owns all file I/O.
+    A media source emits exactly frame_count frames starting at frame_offset
+    of the independent animation domain, including transparent/held gaps.
+    Nonzero lens nodes require six already-decoded static map streams from the
+    owned map worker, repeated by the engine for exactly frame_count frames.
+    Coordinate maps are gray16 and weights carry the same 16-bit weight in
+    RGBA. Neither graph parameters nor node IDs can supply executable input.
     """
-    if not re.fullmatch(r"[A-Za-z][A-Za-z0-9_]*", prefix) or not re.fullmatch(r"[A-Za-z][A-Za-z0-9_]*", input_label):
+    valid_label = lambda value: isinstance(value, str) and re.fullmatch(r"[A-Za-z][A-Za-z0-9_]*", value)
+    if not valid_label(prefix) or not valid_label(input_label):
         raise ValueError("Invalid internal compositor stream label.")
     graph = validate_graph(graph, animation_duration=animation_duration, animation_start=animation_start)
     frame_offset = _frame(frame_offset, "animation offset", -MAX_ANIMATION_FRAME, MAX_ANIMATION_FRAME)
     _number(fps, "frame rate", 1, 60)
     nodes = {node["id"]: node for node in graph["nodes"]}
     order = _walk(nodes, [graph["output"]])
+    required = {ident for ident in order if nodes[ident]["type"] == "media_source"}
+    external_labels = {} if external_labels is None else external_labels
+    if not isinstance(external_labels, dict) or set(external_labels) != required:
+        raise ValueError("Compositor external labels must match its reachable media source nodes.")
+    if (any(not valid_label(value) for value in external_labels.values())
+            or len(set(external_labels.values())) != len(external_labels)
+            or input_label in external_labels.values()
+            or any(value.startswith(prefix + "n") for value in external_labels.values())):
+        raise ValueError("Compositor external stream labels must be valid, distinct internal inputs.")
+    required_lenses = {ident for ident in order if nodes[ident]["type"] == "lens_distortion"
+                       and any(nodes[ident]["params"][name] for name in LENS_COEFFICIENTS)}
+    lens_labels = {} if lens_labels is None else lens_labels
+    if (not isinstance(lens_labels, dict) or set(lens_labels) != required_lenses
+            or any(not isinstance(labels, dict) or set(labels) != set(LENS_MAP_NAMES)
+                   for labels in lens_labels.values())):
+        raise ValueError("Compositor lens map labels must match its reachable nonzero calibrations and six map planes.")
+    map_labels = [value for labels in lens_labels.values() for value in labels.values()]
+    if (any(not valid_label(value) for value in map_labels)
+            or len(set(map_labels)) != len(map_labels)
+            or set(map_labels) & ({input_label} | set(external_labels.values()))
+            or any(value.startswith(prefix + "n") for value in map_labels)):
+        raise ValueError("Compositor lens maps require valid, distinct internal input labels.")
+    if required or required_lenses:
+        frame_count = _frame(frame_count, "output frame count", 1, MAX_ANIMATION_FRAME)
+        if frame_offset + frame_count > MAX_ANIMATION_FRAME:
+            raise ValueError("Compositor output exceeds its frame domain limit.")
     uses = Counter(source for ident in order for source in nodes[ident]["inputs"])
     uses[graph["output"]] += 1
     filters, available = [], {}
+    if not any(nodes[ident]["type"] == "source" for ident in order):
+        # The engine prepares the clip stream independently of graph topology.
+        # An external-only output must still consume that unused source label.
+        filters.append(f"[{input_label}]nullsink")
 
     def command_chain(node, commands):
         # sendcmd's expression counter is one-based on the first input frame;
@@ -456,6 +850,40 @@ def compile_graph(graph, input_label, prefix, *, fps=24, frame_offset=0,
         output = prefix + "n" + str(index)
         if kind == "source":
             output = input_label
+        elif kind == "media_source":
+            relative = frame_offset - params["offset"]
+            lead, tail = max(0, -relative), max(0, relative + frame_count - params["duration"])
+            window = max(0, relative)
+            mode = "clone" if params["outside"] == "hold" else "add"
+            # Frame counts, rather than duration seconds, preserve NTSC and
+            # negative-domain boundaries. Reset PTS after both selections.
+            chain = [f"trim=start_frame={params['source_in']}:end_frame={params['source_in'] + params['duration']}",
+                     "setpts=PTS-STARTPTS"]
+            if lead or tail:
+                chain.append(f"tpad=start={lead}:stop={tail}:start_mode={mode}:stop_mode={mode}:color=black@0")
+            chain += [f"trim=start_frame={window}:end_frame={window + frame_count}", "setpts=PTS-STARTPTS", "format=rgba"]
+            filters.append(f"[{external_labels[ident]}]" + ",".join(chain) + f"[{output}]")
+        elif kind == "lens_distortion":
+            if not any(params[name] for name in LENS_COEFFICIENTS):
+                filters.append(f"[{incoming[0]}]null[{output}]")
+            else:
+                # Four nearest remaps select the exact bilinear corners. Two
+                # horizontal and one vertical weighted merge preserve 1/65535
+                # fractional weights, rather than rounding ray coordinates to
+                # integer pixels. Alpha follows the same premultiplied path.
+                filters.append(f"[{incoming[0]}]format=gbrap16le,premultiply=inplace=1,split=4"
+                               + "".join(f"[{output}s{corner}]" for corner in ("00", "10", "01", "11")))
+                for name in LENS_MAP_NAMES[:4]:
+                    filters.append(f"[{lens_labels[ident][name]}]format=gray16le,split=2[{output}{name}a][{output}{name}b]")
+                filters.append(f"[{lens_labels[ident]['wx']}]format=gbrap16le,split=2[{output}wxa][{output}wxb]")
+                filters.append(f"[{lens_labels[ident]['wy']}]format=gbrap16le[{output}wyy]")
+                for corner, xmap, ymap in (("00", "x0a", "y0a"), ("10", "x1a", "y0b"),
+                                           ("01", "x0b", "y1a"), ("11", "x1b", "y1b")):
+                    filters.append(f"[{output}s{corner}][{output}{xmap}][{output}{ymap}]remap=fill=black@0[{output}c{corner}]")
+                filters.append(f"[{output}c00][{output}c10][{output}wxa]maskedmerge[{output}top]")
+                filters.append(f"[{output}c01][{output}c11][{output}wxb]maskedmerge[{output}bottom]")
+                filters.append(f"[{output}top][{output}bottom][{output}wyy]maskedmerge,"
+                               f"unpremultiply=inplace=1,format=rgba[{output}]")
         elif kind == "grade":
             animated = node.get("animation", {})
             exposure, eq, balance = "exposure@" + output, "eq@" + output, "colorbalance@" + output
@@ -555,3 +983,32 @@ def compile_graph(graph, input_label, prefix, *, fps=24, frame_offset=0,
         else:
             available[ident] = [output]
     return filters, available[graph["output"]].pop(0)
+
+
+def _lens_worker_main():
+    """Finite, isolated map worker; the host supplies the output directory."""
+    import argparse
+    parser = argparse.ArgumentParser(description="CINEMATICUM calibrated lens map worker")
+    parser.add_argument("--lens-maps", required=True, metavar="OWNED_EMPTY_DIRECTORY")
+    parser.add_argument("--backend", choices=("auto", "python", "numpy"), default="auto")
+    args = parser.parse_args()
+    def pairs(items):
+        result = {}
+        for key, value in items:
+            if key in result: raise ValueError("Lens map JSON has a duplicate field.")
+            result[key] = value
+        return result
+    try:
+        raw = sys.stdin.buffer.read(16_385)
+        if len(raw) > 16_384: raise ValueError("Lens map request exceeds 16 KiB.")
+        request = json.loads(raw.decode("utf-8"), object_pairs_hook=pairs)
+        result = write_lens_maps(request, args.lens_maps, backend=args.backend)
+        print(json.dumps(result, sort_keys=True, separators=(",", ":"), allow_nan=False))
+        return 0
+    except (ValueError, OSError, RuntimeError) as exc:
+        print("Lens map worker: " + str(exc)[:1500], file=sys.stderr)
+        return 2
+
+
+if __name__ == "__main__":
+    raise SystemExit(_lens_worker_main())

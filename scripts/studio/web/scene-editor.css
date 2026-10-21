@@ -33,3 +33,25 @@
 .scene-footer .primary{position:sticky;right:0;z-index:2;box-shadow:-7px 0 8px #1b2027}
 .scene-footer>label>input[type=number]{width:60px}
 .scene-footnote{min-width:0}
+/* Authored topology and the evaluated modifier stack share the scene history. */
+.scene-model-tools{display:flex;align-items:center;gap:4px}
+.scene-model-tools button{font-size:11px;padding:4px 8px}
+.scene-model-tools [hidden]{display:none}
+.scene-modeling-panel .scene-model-statistics{font-size:10px;color:#b4c7da;margin:2px 0 9px;line-height:1.6}
+.scene-model-actions{display:flex;flex-wrap:wrap;gap:4px;margin:7px 0}
+.scene-model-actions button{font-size:10px;padding:3px 6px;min-height:26px}
+.scene-component-selection{display:flex;gap:6px;align-items:center;flex-wrap:wrap;margin:5px 0 10px}
+.scene-component-selection>label{display:flex;align-items:center;gap:6px;color:#aebdce;font-size:10px}
+.scene-component-selection>label>input{width:65px}
+.scene-component-selection>button{font-size:10px;min-height:25px;padding:3px 6px}
+.scene-component-selection>span{color:#e1bd82;font-size:10px}
+.scene-modifier{border:1px solid #394858;border-radius:6px;padding:8px;margin:8px 0;background:#141b23}
+.scene-modifier-heading{display:flex;align-items:center;justify-content:space-between;gap:5px;margin-bottom:8px}
+.scene-modifier-heading>label{display:flex;align-items:center;gap:5px;color:#d1deeb;font-size:11px}
+.scene-modifier-heading>div{display:flex;gap:3px}
+.scene-modifier-heading button{min-height:22px;padding:1px 5px;font-size:11px}
+.scene-modifier>label{display:flex;align-items:center;justify-content:space-between;gap:6px;margin:7px 0;font-size:10px;color:#a8b8cb}
+.scene-modifier>label>input:not([type=checkbox]),.scene-modifier>label>select{width:105px;max-width:58%;font-size:10px}
+.scene-modifier input[type=checkbox]{width:14px;height:14px;max-width:none;accent-color:#e1b16c}
+.scene-model-busy .scene-viewport{cursor:progress}
+.scene-edit-mode .scene-view-label{color:#e2bc78}
