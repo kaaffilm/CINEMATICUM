@@ -68,22 +68,24 @@ Canonical launch exposed isolated workers creating bytecode inside the app.
 Five launches in four modules now explicitly suppress it with `-B`; the frozen
 corrected source passed **544 tests with zero failures, errors or skips** and
 all 189 operative files stayed unchanged. The 48 unchanged JavaScript files
-retain their successful syntax checks. Published base `4530c54` passed CI.
-This evidence freeze records no CI result for the worker correction and
-follow-up records; see the exact published commit and
-[PR #162 checks](https://github.com/kaaffilm/CINEMATICUM/pull/162/checks) for
-subsequent results.
+retain their successful syntax checks. The corrected runtime is published at
+`81827cf92d159b9619d51000da61ea3c8a6b6ce7`; all 23 exact-head workflows passed. Later documentation-commit CI remains
+separate from this frozen result and live
+[PR #162 checks](https://github.com/kaaffilm/CINEMATICUM/pull/162/checks).
 
-Install-03's returned verifier output reported **PASSED in 16.515 seconds**,
-including the corrected 62-file runtime, 67-file bundle, 70-file prior archive
-and preservation of all 57 protected workspace files. The public record is an
-observation of returned fields; its full raw receipt was not collected.
-Canonical launch-02 started but its result is unobserved. Production chooser
-Save is verified; the corrected Cancel helper has not run. Final installed-source
-reconciliation has not executed. A later MIDIA access-context change denied the
-prior session, and fresh-session creation hit the 64-session limit; these
-remaining Mac gates are blocked. Earlier failures remain in the verification
-record, and no full-completion or signed-distribution claim is made.
+Install-03 passed in 16.515 seconds, and its full private receipt has now been
+collected and hash-verified. The corrected 62-file runtime, 67-file bundle,
+70-file prior archive and all 57 protected workspace files were verified.
+Canonical launch-02 passed **16/16**, preserving the entire bundle through real
+launch/engine/ordinary quit. Final reconciliation passed **9/9** against the
+published `81827cf` runtime. Production chooser acceptance passed **22/22**
+through actual Save and the public NSSavePanel Cancel action, with exact media
+bytes and no cancelled destination or partial download. This does not certify
+physical Cancel-button/Escape input, arbitrary chooser navigation or replacement
+of existing files. Current-session access is restored; earlier failed attempts
+remain retained. Full system parity and signed distribution remain unfinished. This Studio work
+does not establish current THE LAST RENDER film completion or issuance; retained
+historical compiler/replay records keep their separate scope.
 
 Start with [the Studio guide](scripts/studio/README.md),
 [the source comparison and capability audit](scripts/studio/CAPABILITY_AUDIT.md),

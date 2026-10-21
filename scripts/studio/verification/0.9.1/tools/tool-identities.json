@@ -54,21 +54,42 @@
       ]
     },
     "production-native-04": {
-      "scope": "NATIVE_UNEXECUTED download helper04: unchanged production class with isolated startup; default Movies/job-UUID Save via real button or public Return events, Cancel via real button or documented NSSavePanel.cancel action; all independent byte/receipt/decode/pixel/cancel/preservation checks retained. Python syntax and source emission reviewed locally only; no native compile, native execution, keyboard cancellation, full chooser visual, or installed-app UI acceptance claimed.",
+      "scope": "NATIVE_PASSED download helper04: unchanged production StudioAppDelegate class with isolated startup; actual default Movies/job-UUID Save via public AppKit Return events, cancellation via the documented public NSSavePanel.cancel action, real WKDownload and independently verified exact bytes, receipt, decode, pixels, cancellation cleanup and completed-master preservation. Actual native compilation and execution passed 22 independent and 9 native checks. Physical input, keyboard/Escape cancellation, full remote chooser visuals, arbitrary navigation/renaming/existing-file replacement and installed-app editing/export UI are outside acceptance.",
       "paths": [
         "production-native-04/ProductionNativeAcceptance.swift",
         "production-native-04/build.py",
         "production-native-04/run_download.py"
       ],
-      "native_status": "NATIVE_UNEXECUTED",
-      "native_compiled": false,
-      "native_executed": false,
+      "native_status": "NATIVE_PASSED",
+      "native_compiled": true,
+      "native_executed": true,
       "local_review": {
         "python_syntax": true,
         "unchanged_production_class_emission": true,
         "interaction_scope_checks": 4
       },
-      "public_cancel_action_reference": "https://developer.apple.com/documentation/appkit/nssavepanel/cancel(_:)"
+      "public_cancel_action_reference": "https://developer.apple.com/documentation/appkit/nssavepanel/cancel(_:)",
+      "native_build_report": {
+        "path": "scripts/studio/verification/0.9.1/production-native-04/build.json",
+        "sha256": "1f9b0b02363e1ffe556b919a27ae8cf128ad74fd697702cc8db797c1f91b692e",
+        "bytes": 1807
+      },
+      "native_execution_report": {
+        "path": "scripts/studio/verification/0.9.1/production-native-04/production-download-report.json",
+        "sha256": "eef28f07bb8311f2f4770e11cd4e549c5d8b04c1bf73e0c76ae8046de9c1712e",
+        "bytes": 36199
+      },
+      "independent_checks_passed": 22,
+      "independent_checks_total": 22,
+      "native_checks_passed": 9,
+      "native_checks_total": 9,
+      "save_interaction": "NSApplication.sendEvent Return",
+      "cancel_interaction": "documented public NSSavePanel.cancel action",
+      "physical_keyboard_or_mouse_input_certified": false,
+      "cancel_keyboard_route_certified": false,
+      "full_native_chooser_visual_capture_certified": false,
+      "installed_app_ui_certified": false,
+      "historical_initial_status_reference": "tool-identities-before-native-04.json"
     },
     "production-quit-01": {
       "scope": "Historical original quit helper: unchanged production quit/alert/cancel methods, isolated actual server launch and child-exit forwarding, 96-frame workload; excludes production launcher and installed-app UI.",
@@ -200,22 +221,91 @@
       "path": "production-native-04/ProductionNativeAcceptance.swift",
       "sha256": "44ab3c17cb6c2d9237804e9e295251ade0cd3fe51c627674ebf05984640dfcb7",
       "bytes": 31447,
-      "scope": "NATIVE_UNEXECUTED download helper04: unchanged production class with isolated startup; default Movies/job-UUID Save via real button or public Return events, Cancel via real button or documented NSSavePanel.cancel action; all independent byte/receipt/decode/pixel/cancel/preservation checks retained. Python syntax and source emission reviewed locally only; no native compile, native execution, keyboard cancellation, full chooser visual, or installed-app UI acceptance claimed.",
-      "native_status": "NATIVE_UNEXECUTED"
+      "scope": "NATIVE_PASSED download helper04: unchanged production StudioAppDelegate class with isolated startup; actual default Movies/job-UUID Save via public AppKit Return events, cancellation via the documented public NSSavePanel.cancel action, real WKDownload and independently verified exact bytes, receipt, decode, pixels, cancellation cleanup and completed-master preservation. Actual native compilation and execution passed 22 independent and 9 native checks. Physical input, keyboard/Escape cancellation, full remote chooser visuals, arbitrary navigation/renaming/existing-file replacement and installed-app editing/export UI are outside acceptance.",
+      "native_status": "NATIVE_PASSED",
+      "native_compiled": true,
+      "native_executed": true,
+      "native_build_report": {
+        "path": "scripts/studio/verification/0.9.1/production-native-04/build.json",
+        "sha256": "1f9b0b02363e1ffe556b919a27ae8cf128ad74fd697702cc8db797c1f91b692e",
+        "bytes": 1807
+      },
+      "native_execution_report": {
+        "path": "scripts/studio/verification/0.9.1/production-native-04/production-download-report.json",
+        "sha256": "eef28f07bb8311f2f4770e11cd4e549c5d8b04c1bf73e0c76ae8046de9c1712e",
+        "bytes": 36199
+      },
+      "independent_checks_passed": 22,
+      "independent_checks_total": 22,
+      "native_checks_passed": 9,
+      "native_checks_total": 9,
+      "save_interaction": "NSApplication.sendEvent Return",
+      "cancel_interaction": "documented public NSSavePanel.cancel action",
+      "physical_keyboard_or_mouse_input_certified": false,
+      "cancel_keyboard_route_certified": false,
+      "full_native_chooser_visual_capture_certified": false,
+      "installed_app_ui_certified": false,
+      "historical_initial_status_reference": "tool-identities-before-native-04.json"
     },
     {
       "path": "production-native-04/build.py",
       "sha256": "cb35730549b005398d689caf271c4731cc18ecf60f8049fceb25113afd349836",
       "bytes": 4076,
-      "scope": "NATIVE_UNEXECUTED download helper04: unchanged production class with isolated startup; default Movies/job-UUID Save via real button or public Return events, Cancel via real button or documented NSSavePanel.cancel action; all independent byte/receipt/decode/pixel/cancel/preservation checks retained. Python syntax and source emission reviewed locally only; no native compile, native execution, keyboard cancellation, full chooser visual, or installed-app UI acceptance claimed.",
-      "native_status": "NATIVE_UNEXECUTED"
+      "scope": "NATIVE_PASSED download helper04: unchanged production StudioAppDelegate class with isolated startup; actual default Movies/job-UUID Save via public AppKit Return events, cancellation via the documented public NSSavePanel.cancel action, real WKDownload and independently verified exact bytes, receipt, decode, pixels, cancellation cleanup and completed-master preservation. Actual native compilation and execution passed 22 independent and 9 native checks. Physical input, keyboard/Escape cancellation, full remote chooser visuals, arbitrary navigation/renaming/existing-file replacement and installed-app editing/export UI are outside acceptance.",
+      "native_status": "NATIVE_PASSED",
+      "native_compiled": true,
+      "native_executed": true,
+      "native_build_report": {
+        "path": "scripts/studio/verification/0.9.1/production-native-04/build.json",
+        "sha256": "1f9b0b02363e1ffe556b919a27ae8cf128ad74fd697702cc8db797c1f91b692e",
+        "bytes": 1807
+      },
+      "native_execution_report": {
+        "path": "scripts/studio/verification/0.9.1/production-native-04/production-download-report.json",
+        "sha256": "eef28f07bb8311f2f4770e11cd4e549c5d8b04c1bf73e0c76ae8046de9c1712e",
+        "bytes": 36199
+      },
+      "independent_checks_passed": 22,
+      "independent_checks_total": 22,
+      "native_checks_passed": 9,
+      "native_checks_total": 9,
+      "save_interaction": "NSApplication.sendEvent Return",
+      "cancel_interaction": "documented public NSSavePanel.cancel action",
+      "physical_keyboard_or_mouse_input_certified": false,
+      "cancel_keyboard_route_certified": false,
+      "full_native_chooser_visual_capture_certified": false,
+      "installed_app_ui_certified": false,
+      "historical_initial_status_reference": "tool-identities-before-native-04.json"
     },
     {
       "path": "production-native-04/run_download.py",
       "sha256": "90dc8daa73442fb7aa5069b38e3222a1e013690053b099173661338b69a14e0b",
       "bytes": 16261,
-      "scope": "NATIVE_UNEXECUTED download helper04: unchanged production class with isolated startup; default Movies/job-UUID Save via real button or public Return events, Cancel via real button or documented NSSavePanel.cancel action; all independent byte/receipt/decode/pixel/cancel/preservation checks retained. Python syntax and source emission reviewed locally only; no native compile, native execution, keyboard cancellation, full chooser visual, or installed-app UI acceptance claimed.",
-      "native_status": "NATIVE_UNEXECUTED"
+      "scope": "NATIVE_PASSED download helper04: unchanged production StudioAppDelegate class with isolated startup; actual default Movies/job-UUID Save via public AppKit Return events, cancellation via the documented public NSSavePanel.cancel action, real WKDownload and independently verified exact bytes, receipt, decode, pixels, cancellation cleanup and completed-master preservation. Actual native compilation and execution passed 22 independent and 9 native checks. Physical input, keyboard/Escape cancellation, full remote chooser visuals, arbitrary navigation/renaming/existing-file replacement and installed-app editing/export UI are outside acceptance.",
+      "native_status": "NATIVE_PASSED",
+      "native_compiled": true,
+      "native_executed": true,
+      "native_build_report": {
+        "path": "scripts/studio/verification/0.9.1/production-native-04/build.json",
+        "sha256": "1f9b0b02363e1ffe556b919a27ae8cf128ad74fd697702cc8db797c1f91b692e",
+        "bytes": 1807
+      },
+      "native_execution_report": {
+        "path": "scripts/studio/verification/0.9.1/production-native-04/production-download-report.json",
+        "sha256": "eef28f07bb8311f2f4770e11cd4e549c5d8b04c1bf73e0c76ae8046de9c1712e",
+        "bytes": 36199
+      },
+      "independent_checks_passed": 22,
+      "independent_checks_total": 22,
+      "native_checks_passed": 9,
+      "native_checks_total": 9,
+      "save_interaction": "NSApplication.sendEvent Return",
+      "cancel_interaction": "documented public NSSavePanel.cancel action",
+      "physical_keyboard_or_mouse_input_certified": false,
+      "cancel_keyboard_route_certified": false,
+      "full_native_chooser_visual_capture_certified": false,
+      "installed_app_ui_certified": false,
+      "historical_initial_status_reference": "tool-identities-before-native-04.json"
     },
     {
       "path": "production-quit-01/ProductionQuitAcceptance.swift",
@@ -338,6 +428,12 @@
       "scope": "Quit attempt05: real active-job Keep Working and Cancel Jobs and Quit with 48-frame workload; exact durable and explicit ephemeral terminal settlement checks; isolated launch/child-exit forwarding, excludes production launcher and installed-app UI."
     },
     {
+      "path": "tool-identities-before-native-04.json",
+      "sha256": "fdc23c4ac38d0918dad201317e54ab8556d3145461139ab46be9224e150884b6",
+      "bytes": 22924,
+      "scope": "Exact prior tool index frozen before actual native download04 compilation/execution. Its NATIVE_UNEXECUTED fields record that historical freeze only; current execution identity and passing bounded result are in tool-identities.json and the separate unchanged native receipts."
+    },
+    {
       "path": "tool-identities-before-versioning.json",
       "sha256": "fe76af62d012c1752d8c0629b9d72dd7af63010c7b2108ba76d7e1ea6f8fb495",
       "bytes": 1738,
@@ -348,6 +444,14 @@
       "sha256": "47de0993575e0646d7c507ebf387ea85db766b41d6c56fe597a7cb0b9047121e",
       "bytes": 26790,
       "scope": "Independent pre-install snapshot and after-install byte/mode/archive/project/owner verification; no product installer import or launch; exact pinned verifier reused by reconciliation."
+    }
+  ],
+  "historical_indexes": [
+    {
+      "path": "tool-identities-before-native-04.json",
+      "sha256": "fdc23c4ac38d0918dad201317e54ab8556d3145461139ab46be9224e150884b6",
+      "bytes": 22924,
+      "scope": "Exact prior tool index frozen before actual native download04 compilation/execution. Its NATIVE_UNEXECUTED fields record that historical freeze only; current execution identity and passing bounded result are in tool-identities.json and the separate unchanged native receipts."
     }
   ]
 }

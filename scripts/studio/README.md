@@ -154,20 +154,20 @@ owned media jobs. The app still requires installed Python, FFmpeg, and any
 optional engines; the installer does not bundle them or create a signed,
 notarized distribution.
 
-Install-03's observed verifier output reported PASSED in 16.515 seconds after
-explicit `-B` corrected isolated-worker bytecode writes inside the app. It
-verified the frozen 189-file source, 62 runtime files, 67 bundle files and all
-57 protected workspace files. The full raw install-03 receipt remains on the
-Mac and was not collected. The original 59-file app archive and later 70-file
-bundle archive are preserved. Canonical launch-02 started but its result is
-uncollected; final installed-source reconciliation has not executed.
+Install-03 passed in 16.515 seconds; its full private receipt is now collected
+and hash-verified. It verified the frozen 189-file source, 62 runtime files,
+67 bundle files and all 57 protected workspace files. Both the original 59-file
+app archive and later 70-file archive are preserved. Canonical launch-02 passed
+16/16 in 5.361 seconds, and final source reconciliation passed 9/9 against
+published `81827cf92d159b9619d51000da61ea3c8a6b6ce7`.
 
-Actual production quit acceptance passed 21/21 independent and 10/10 native
-checks with completed-export preservation and real job cancellation. Chooser
-Save is verified, but the revised Cancel helper is unexecuted. These isolated
-production-class gates do not certify installed-app editing/export. Mac access
-is currently blocked by a changed session context and a fresh-session limit.
-See [the current verification record](VERIFICATION_0_9_1.md) for exact boundaries.
+Production quit passed 21/21 independent and 10/10 native checks. The production
+chooser separately passed 22/22 independent checks for actual Save and public
+NSSavePanel Cancel action, exact downloaded bytes and cleanup. This scoped test
+does not certify physical Cancel-button/Escape input, arbitrary chooser
+navigation, renamed destinations or existing-file replacement. Current-session
+access is restored; historical failures remain in
+[the verification record](VERIFICATION_0_9_1.md).
 
 Quit Studio before rebuilding. Replacement is allowed only for a bundle with
 Studio's own identifier. The installer creates and reads back a ZIP archive,
@@ -1086,15 +1086,15 @@ After the isolated-worker bytecode fix, the current frozen Linux run passed
 elapsed time is 169.194 seconds; wrapper elapsed is 169.301 seconds. All 189
 operative files stayed unchanged, actual optional workers and genuine RAW ran,
 and the 48 unchanged JavaScript files retain their successful syntax checks.
-Base `4530c54` Studio CI passed 543 tests and 209 manifest files. This evidence
-freeze records no CI result for the worker correction and follow-up records;
-see the exact published commit and
-[PR #162 checks](https://github.com/kaaffilm/CINEMATICUM/pull/162/checks) for
-subsequent results. Actual bounded
-33-frame inference/playback, production quit and corrected planar acceptance
-are passed. Install-03 was observed passed; full receipt collection, the
-canonical launch-02 result, native chooser cancellation and final source
-reconciliation remain blocked by the current MIDIA access/session errors.
+Historical `4530c54` Studio CI passed 543 tests and 209 manifest files. The
+current runtime is published at `81827cf92d159b9619d51000da61ea3c8a6b6ce7`;
+its 23 exact-head workflows all passed, while later documentation CI and live [PR #162 checks](https://github.com/kaaffilm/CINEMATICUM/pull/162/checks)
+remain separate evidence. Bounded 33-frame inference/playback, production quit,
+corrected planar, collected installation verification, canonical launch and
+source reconciliation passed. Production chooser Save/public-action Cancel
+passed at the stated scope. These passes do not complete the missing systems,
+professional workflows or signed distribution. Current THE LAST RENDER film
+completion/issuance is not established by this Studio work.
 See [Verification 0.9.1](VERIFICATION_0_9_1.md) for current source and native
 receipt identities, and
 [the unfinished-work register](UNFINISHED_0_9.md) for remaining implementation

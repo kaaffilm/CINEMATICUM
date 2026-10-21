@@ -3,10 +3,10 @@
   "build": "0.9.1",
   "reviewed_on": "2026-10-21",
   "parity_complete": false,
-  "evidence_note": "0.9.1 implementation and acceptance are separate. Current worker-corrected source passed 544 strict tests with zero failures/errors/skips/expected failures; all 189 operative files stayed unchanged, actual optional workers and genuine RAW ran. Native source audio, high16, normal 17-frame and bounded 33-frame generation/playback passed; corrected planar passed 10/10 and production quit passed 21/21 independent plus 10/10 native. Install-03 verifier output was observed PASSED for 62 runtime/67 bundle files and all 57 protected files; its full raw receipt was not collected. Canonical launch-02 started but its outcome is uncollected. Native Save is verified; the corrected Cancel helper is unexecuted. Final installed-source reconciliation has not executed. Current MIDIA session access is blocked after a context change and fresh-session limit. Historical 4530 CI does not certify the four-module runtime fix. This evidence freeze records no follow-up CI result; consult the exact subsequent commit and PR #162 checks. Full parity, production quality, HDR mastering and signed distribution remain unimplemented or unverified.",
+  "evidence_note": "Current 0.9.1 runtime published at 81827cf passed 544 strict tests with zero failures/errors/skips/expected failures and all 189 operative files unchanged, using actual optional workers and genuine RAW. Native audio, high16, normal 17-frame and one bounded 33-frame generation/playback case, planar 10/10 and production quit 21/21 independent plus 10/10 native passed. Install-03 full private receipt is collected/hash-verified; all five gates passed for 62 runtime files, 67 bundle files and all 57 protected files. Canonical launch-02 passed 16/16; final reconciliation passed 9/9 against exact 81827cf. Production chooser-04 passed 22/22 independent plus 9/9 native via AppKit Return Save and public NSSavePanel.cancel; physical input, full remote chooser pixels/navigation and existing-file replacement are outside scope. Current-session access is restored; historical failures remain unchanged. All 23 workflows passed for exact 81827cf; later documentation-commit/live PR-head CI is separate. Full parity, production quality, HDR mastering and signed distribution remain unimplemented or unverified. Current THE LAST RENDER film completion/issuance is not established by this Studio work.",
   "release_acceptance": {
-    "status": "incomplete_external_access_block",
-    "scope": "Based on published 4530c54 with four exact-fixture harness corrections and five explicit -B worker launch arguments across imaging.py, planar_tracking.py, lens_assets.py and roto_assets.py. The first canonical launch found three bytecode files added inside the bundle; failing evidence is retained. The corrected runtime passed the 544-test frozen suite and was installed by observed successful install-03. Full raw installation receipt and canonical launch-02 outcome were not collected after CROSS_CHAT_SESSION_ACCESS_DENIED; fresh current-conversation session creation returned ACTIVE_SESSION_LIMIT (64). Download-04 is reviewed but unexecuted, and final source reconciliation has not executed. Earlier grant restoration was followed by this new access block.",
+    "status": "bounded_release_gates_passed",
+    "scope": "Published corrected runtime 81827cf includes exact-fixture harness corrections and five explicit -B launch arguments across four Python modules. Actual 544-test freeze, installed-source mapping, canonical launch, scoped production chooser/quit acceptance and all 23 exact-head CI workflows passed. Prior bundle mutation, chooser failures and access interruptions remain historical. Collected installation and reconciliation bind all 62 runtime files and the unchanged 67-file bundle to published source. These gates do not certify full parity, arbitrary chooser behavior, installed-app editing/export, production quality or current THE LAST RENDER completion/issuance. A later status/evidence commit retains its own CI identity.",
     "frozen_regression": {
       "status": "passed",
       "environment": "Isolated local Linux with pinned actual optional workers and genuine Kodak RAW; native macOS acceptance and GitHub CI are separate.",
@@ -55,16 +55,25 @@
     },
     "github_ci": {
       "status": "passed",
-      "commit": "4530c54faf969b0a42f2eb7e73f67c295443d275",
+      "commit": "81827cf92d159b9619d51000da61ea3c8a6b6ce7",
       "successful_workflow_runs": 23,
-      "studio_workflow_run": 39661961306,
-      "studio_job": 119437028259,
-      "tests": 543,
-      "test_seconds": 172.641,
-      "skipped": 0,
-      "source_manifest_files_verified": 209,
-      "followup_status": "No worker-correction or harness/evidence/documentation follow-up CI result is included in this evidence freeze; consult the exact subsequent commit and https://github.com/kaaffilm/CINEMATICUM/pull/162/checks for later results.",
-      "scope": "Historical published base only; not the worker-corrected follow-up."
+      "pull_request_runs": 13,
+      "push_runs": 10,
+      "failed_running_queued_or_cancelled_runs": 0,
+      "studio_workflow_run": 39686306795,
+      "studio_job": 119521127572,
+      "studio_push_jobs": [
+        {
+          "run": 39686300384,
+          "job": 119521105124
+        },
+        {
+          "run": 39686285911,
+          "job": 119521055726
+        }
+      ],
+      "scope": "Exact published runtime freeze; later status/evidence commit and live PR-head CI remain separate.",
+      "live_pr_checks": "https://github.com/kaaffilm/CINEMATICUM/pull/162/checks"
     },
     "harness_corrected_regression": {
       "status": "passed",
@@ -84,7 +93,8 @@
       "source_inventory_sha256": "5ba0151588b6dbba0b10175503c4768f57da691c1feaa8357afc1fd02f3ab1f2",
       "unchanged_source_check": "verification/0.9.1/final-frozen-operative-check.json"
     },
-    "current_mac_block": {
+    "published_runtime_commit": "81827cf92d159b9619d51000da61ea3c8a6b6ce7",
+    "historical_mac_access_block": {
       "existing_session_error": "CROSS_CHAT_SESSION_ACCESS_DENIED",
       "fresh_session_error": "ACTIVE_SESSION_LIMIT",
       "active_session_limit": 64,
@@ -92,7 +102,17 @@
       "download04": "UNEXECUTED",
       "final_source_reconciliation": "NOT_EXECUTED"
     },
-    "installation_observation": {
+    "current_mac_access": {
+      "status": "restored_and_executed",
+      "operations_completed": [
+        "full_install03_receipt_collection",
+        "canonical_launch02_verification",
+        "final_published_source_reconciliation",
+        "production_download04_compile_and_run"
+      ],
+      "approval_pending": false
+    },
+    "historical_installation_observation": {
       "status": "observed_passed",
       "report": "verification/0.9.1/installation-03-observation.json",
       "report_sha256": "de8ef8a29ccaf4126604ace9c9d05c7b16ca314dcf4deb119130fdca0510c9c0",
@@ -102,6 +122,62 @@
       "bundle_files": 67,
       "protected_files": 57,
       "canonical_launch_certified": false
+    },
+    "installation_acceptance": {
+      "status": "passed",
+      "report": "verification/0.9.1/installation-03-collected-summary.json",
+      "full_raw_receipt_copied": true,
+      "full_raw_after_bytes": 54245,
+      "full_raw_after_sha256": "08a3d73a39706c46b9c63785f15403fd1abd9a8ea39cb2b11713c519cb10d852",
+      "elapsed_seconds": 16.515,
+      "independent_gates_passed": 5,
+      "runtime_files": 62,
+      "bundle_files": 67,
+      "protected_files": 57,
+      "canonical_launch_passed_checks": 16,
+      "canonical_launch_total_checks": 16,
+      "canonical_launch_report": "verification/0.9.1/installed-launch-02/installed-launch-report.json",
+      "canonical_launch_report_sha256": "fd3fdc614e94c4cd88246baaea638905ec34cf9d3fbae9189265959efc1fe28c",
+      "canonical_launch_elapsed_seconds": 5.361,
+      "report_sha256": "e983c77c1f52aabbbf0e433d1389a91da734166eade9f24912c1967330aa1dcf"
+    },
+    "final_source_reconciliation": {
+      "status": "passed",
+      "report": "verification/0.9.1/final-reconciliation-81827-01.json",
+      "report_sha256": "0c6d76e03bfca1bedbb4a4320eff6127398f7d9036d6cad8f6c5a45f9975ab06",
+      "source_commit": "81827cf92d159b9619d51000da61ea3c8a6b6ce7",
+      "checks_passed": 9,
+      "checks_total": 9,
+      "scope": "Final published source, every installed runtime file, native-source mapping and unchanged complete bundle; read-only reconciliation, no replacement installation"
+    },
+    "native_chooser": {
+      "status": "passed_bounded",
+      "report": "verification/0.9.1/production-native-04/production-download-report.json",
+      "report_sha256": "eef28f07bb8311f2f4770e11cd4e549c5d8b04c1bf73e0c76ae8046de9c1712e",
+      "independent_checks_passed": 22,
+      "independent_checks_total": 22,
+      "native_checks_passed": 9,
+      "native_checks_total": 9,
+      "elapsed_seconds": 9.47,
+      "save_interaction": "NSApplication.sendEvent Return",
+      "cancel_interaction": "public NSSavePanel.cancel action",
+      "physical_input_certified": false,
+      "full_native_chooser_visual_capture_certified": false,
+      "arbitrary_navigation_renamed_destination_or_existing_file_replacement_certified": false,
+      "installed_app_ui_certified": false
+    },
+    "historical_github_ci": {
+      "status": "passed",
+      "commit": "4530c54faf969b0a42f2eb7e73f67c295443d275",
+      "successful_workflow_runs": 23,
+      "studio_workflow_run": 39661961306,
+      "studio_job": 119437028259,
+      "tests": 543,
+      "test_seconds": 172.641,
+      "skipped": 0,
+      "source_manifest_files_verified": 209,
+      "followup_status": "No worker-correction or harness/evidence/documentation follow-up CI result is included in this evidence freeze; consult the exact subsequent commit and https://github.com/kaaffilm/CINEMATICUM/pull/162/checks for later results.",
+      "scope": "Historical published base only; not the worker-corrected follow-up."
     }
   },
   "unfinished_work": "UNFINISHED_0_9.md",
@@ -239,7 +315,7 @@
         "verification/0.9.1/bundle-fixed-planar/result.json",
         "verification/0.9.1/worker-bytecode-fix/manifest.json"
       ],
-      "acceptance": "Bundle-fixed-planar passed 10/10 in 10.282 seconds after explicit -B worker-launch correction: seven actual native stages, real OpenCV 4.11.0/NumPy 2.3.5 measurement, apply/undo/redo/timing invalidation/remap/save/reopen/paused-frame/ProRes export. Movie remains 268,926 bytes, both pin centers [80.5,64.0]. Earlier 10/10 runs and concurrent-inference timeout remain historical. Install-03 was observed passed; full receipt/canonical launch outcome are uncollected and final source reconciliation has not executed. Wider production throughput is unverified."
+      "acceptance": "Bundle-fixed-planar passed 10/10 in 10.282 seconds after explicit -B worker-launch correction: seven actual native stages, real OpenCV 4.11.0/NumPy 2.3.5 measurement, apply/undo/redo/timing invalidation/remap/save/reopen/paused-frame/ProRes export. Movie remains 268,926 bytes, both pin centers [80.5,64.0]. Earlier 10/10 runs and concurrent-inference timeout remain historical. Install-03 full receipt is collected; canonical launch passed 16/16 and final published-source reconciliation passed 9/9. Wider production throughput is unverified."
     },
     {
       "id": "color.sdr",
@@ -371,7 +447,7 @@
         "macos/GenerationInferenceSmoke.js",
         "test_generated_take_timing.py"
       ],
-      "acceptance": "Normal 480x272/17-frame/20-step workflow accepted within this bounded case: two real inference outputs each passed 14/14 media checks and both final-native-01 playback runs passed 14/14 (2.236s and 2.149s), including every timeline frame. Final-extended-01 also passed actual 33-frame inference and native playback; generation elapsed 928.394 seconds and the whole extended batch elapsed 937.624 seconds. The exact inference/media/playback reports passed 11/11, 14/14 and 14/14 respectively; playback elapsed 4.208 seconds and all original source bytes/provenance stayed unchanged. This closes one bounded longer case; production-quality and sustained-operation claims remain unsupported."
+      "acceptance": "Normal 480x 272/17-frame/20-step workflow accepted within this bounded case: two real inference outputs each passed 14/14 media checks and both final-native-01 playback runs passed 14/14 (2.236s and 2.149s), including every timeline frame. Final-extended-01 also passed actual 33-frame inference and native playback; generation elapsed 928.394 seconds and the whole extended batch elapsed 937.624 seconds. The exact inference/media/playback reports passed 11/11, 14/14 and 14/14 respectively; playback elapsed 4.208 seconds and all original source bytes/provenance stayed unchanged. This closes one bounded longer case; production-quality and sustained-operation claims remain unsupported."
     },
     {
       "id": "audio.mix",
@@ -567,13 +643,13 @@
     {
       "id": "production.single_native_app",
       "status": "implemented_bounded",
-      "scope": "Own native macOS application and local service; installer archives the previous bundle, supports rollback, preserves external projects and embeds copied-runtime/native-source identities. Canonical launch-01 found three cached Python files added inside the bundle; five isolated launches in four modules now explicitly pass -B. Install-03 observed successful independent verification and installed that correction. Actual unchanged production quit methods/alerts passed separately. Corrected canonical launch-02 outcome is uncollected; final installed-source reconciliation has not executed. FFmpeg/Blender and optional runtimes remain external; signed/notarized distribution is not implemented.",
+      "scope": "Own native app and local service; installer archives previous bundles, supports rollback, preserves external projects and embeds runtime/native identities. Five explicit -B worker launches fix canonical-launch bytecode mutation. Install03 independent verification, canonical launch02 and final published-source reconciliation have passed. Production quit and scoped chooser Save/public-action Cancel passed separately with unchanged production methods. External FFmpeg/Blender/optional runtimes and absent signing/notarization still limit distribution.",
       "evidence": [
         "install_macos.py",
         "macos/StudioIcon.swift",
         "test_install_macos.py"
       ],
-      "acceptance": "Install-03 verifier output observed PASSED in 16.515 seconds: all five gates, 189 frozen operative hashes, 62 runtime files, 67 bundle files, 70 archived prior files and all 57 protected files/2,858,327,758 bytes. Full raw receipt remains on the Mac and was not collected; the public JSON is an observation of returned fields. Original 59-file backup remains preserved. Quit-05 passed 21/21 independent plus 10/10 native checks, separate from installed-app UI. Canonical launch-02 started but result is uncollected. Current MIDIA context denial/session limit blocks collection and final reconciliation; chooser cancellation remains unaccepted after failed attempt03, and reviewed helper04 is unexecuted."
+      "acceptance": "Install03 passed all 5 gates in 16.515 seconds; full 54,245-byte private after-receipt is collected/hash-verified. It verifies 189 operative hashes, 62 runtime files, 67 bundle files, 70 archived prior files and all 57 protected files / 2,858,327,758 bytes; original 59-file archive remains preserved. Canonical launch02 passed 16/16 in 5.361 seconds and final reconciliation 9/9 binds published 81827cf to unchanged runtime/bundle/native mappings. Production quit passed 21/21 independent + 10/10 native; chooser04 passed 22/22 independent + 9/9 native using AppKit Return Save/public NSSavePanel.cancel. Physical input/full chooser pixels/arbitrary paths/existing-file replacement and installed-app editing/export remain outside those scopes."
     },
     {
       "id": "editor.slip_slide_roll",
@@ -870,7 +946,7 @@
       "id": "color.high16_sdr_movie",
       "status": "implemented_bounded",
       "scope": "Opt-in 16-bit unsigned normalized RGBA processing across the movie graph, alpha-aware transforms/source-over, 16-bit paused-frame PNG and lossless FFV1 gbrap16le master with alpha. Canvas limit 8,388,608 pixels and transformed working-image limit 16,777,216 pixels; narrower graph/warp limits still apply. Precision and transparent-background settings persist with the project. Decoded numeric regression checks distinguish 1,024 source values and exercise fractional alpha, hidden color and transformed composition. This remains clamped display-referred SDR: no scene-linear float movie graph, whole-timeline OCIO/ACES, HDR mastering or calibrated high-bit-depth display.",
-      "acceptance": "Final-extended-01 passed 21/21 in 2.153 seconds after exact-fixture selection corrected its earlier bootstrap failure. Saved precision, transformed alpha, processed frames, export controls and actual 63,252-byte WKDownload passed. Production download-03 subsequently verified real default-destination NSSavePanel Save, exact bytes, independent decode and alpha; aggregate remained failed because synthetic Escape did not cancel. Reviewed SDK Cancel helper download-04 is unexecuted. HDR, calibrated display, unrestricted chooser navigation/existing-file replacement and production scale remain unaccepted.",
+      "acceptance": "Final-extended-01 passed 21/21 in 2.153 seconds after exact-fixture selection corrected its earlier bootstrap failure. Saved precision, transformed alpha, processed frames, export controls and actual 63,252-byte WKDownload passed. Production download-03 subsequently verified real default-destination NSSavePanel Save, exact bytes, independent decode and alpha; aggregate remained failed because synthetic Escape did not cancel. Actual download04 subsequently passed 22/22 independent + 9/9 native in 9.470 seconds through AppKit Return Save and public NSSavePanel.cancel, preserving the completed master and leaving no cancelled destination/partial. Physical input and full remote chooser visual/navigation coverage remain uncertified. HDR, calibrated display, unrestricted chooser navigation/existing-file replacement and production scale remain unaccepted.",
       "evidence": [
         "engine.py",
         "compositor.py",
@@ -888,7 +964,7 @@
       "id": "audio.source_sample_playback",
       "status": "implemented_bounded",
       "scope": "Owned FFmpeg derivatives preserve the chosen original container stream and selected channel pair as 48 kHz stereo float PCM. A source-sample scheduler reads bounded chunks into AudioBuffers and applies live clip/track mix without browser container decoding or a pre-rendered timeline mix. Pitch-preserving source-tempo derivatives support forward retimes, with source identity/range validation, restart epochs and resource release. Scheduling horizon is three seconds with a 128 MiB in-memory PCM bound; disk derivative cache is bounded to 16 GiB and each standard-WAV derivative to its 32-bit size limit. Reverse transport uses rendered playback.",
-      "acceptance": "Final-native-01 routing 11/11 plus overlap/nested/retimed 12/12 each passed with zero underruns. Routing captured selected-source and gain/pan/restart phases; each sequence scenario ran three repetitions. Native-03 remains earlier evidence. Broad codec/device/long-session performance is unverified; install-03 was observed passed, while corrected canonical launch and final installed-source reconciliation remain uncollected/unexecuted.",
+      "acceptance": "Final-native-01 routing 11/11 plus overlap/nested/retimed 12/12 each passed with zero underruns. Routing captured selected-source and gain/pan/restart phases; each sequence scenario ran three repetitions. Native-03 remains earlier evidence. Broad codec/device/long-session performance is unverified; install03 full receipt, canonical launch 16/16 and final published-source reconciliation 9/9 are now passed.",
       "evidence": [
         "audio_source.py",
         "server.py",

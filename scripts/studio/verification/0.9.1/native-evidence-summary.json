@@ -1,6 +1,6 @@
 {
   "format": "cinematicum-native-observation-summary-v1",
-  "scope": "Normalized current and historical observations at the 2026-10-21 evidence freeze, before follow-up publication/CI. Later CI results belong to their exact commit and PR #162 checks. Raw native reports remain unchanged; install-02 has a derived public summary, while install-03 has only selected actual tool-return fields and no collected full raw receipt. Current worker-corrected source is frozen separately from published base 4530. Canonical launch-02 is unobserved, download-04 is unexecuted, and final installed-source reconciliation has not executed because current-conversation MIDIA access is blocked.",
+  "scope": "Current and historical native evidence, with original reports unchanged. Install-03 full private after-receipt is collected/hash-verified and publicly summarized without private filenames. Canonical launch-02 passed 16/16; final reconciliation passed 9/9 against exact 81827cf; chooser-04 passed 22 independent and 9 native checks at the public-action scope. Earlier uncollected, failed and access-blocked observations remain historical. All 23 exact-81827cf CI workflows passed; later status/evidence-commit CI is separate. This Studio work does not establish full parity or current THE LAST RENDER completion/issuance.",
   "workspace": "/Users/midiakiasat/.midia-ai/gateway-live/workspaces/auto-d5f5e80a10b691457cec8d25044150b5",
   "source_base_commit": "a6454d3514b3afa9ba29f594ab6bb3b79065d1a2",
   "audio": {
@@ -150,13 +150,12 @@
     }
   },
   "installation": {
-    "status": "observed_passed",
+    "status": "passed_collected_receipt",
     "replacement_executed": true,
     "independent_verifier_observed_passed": true,
-    "full_raw_receipt_copied": false,
-    "report": "installation-03-observation.json",
-    "report_sha256": "de8ef8a29ccaf4126604ace9c9d05c7b16ca314dcf4deb119130fdca0510c9c0",
-    "scope": "Selected fields returned by the independently verified Mac installation03 before the MIDIA connection context changed. Full before/after inventories remain on the Mac; this record is an observation, not a copy of the full raw receipt.",
+    "full_raw_receipt_copied": true,
+    "report": "installation-03-collected-summary.json",
+    "scope": "Public privacy-minimized summary of collected and hash-verified full private installation-after receipt; historical observation.json remains unchanged.",
     "elapsed_seconds": 16.515,
     "steps": [
       {
@@ -220,23 +219,27 @@
     },
     "original_59_file_prior_app_archive_preserved": true,
     "raw_after_sha256": "08a3d73a39706c46b9c63785f15403fd1abd9a8ea39cb2b11713c519cb10d852",
-    "native_launch_certified": false,
     "canonical_app_readiness": {
-      "status": "LAUNCHED_RESULT_UNCOLLECTED",
-      "supervisor_pid": 8525,
-      "report_path": "/Users/midiakiasat/Library/Application Support/CINEMATICUM/Verification/0.9.1-bundle-fixed-20261021-03/installed-launch02/installed-launch-report.json",
-      "passed": null
+      "status": "passed",
+      "report": "installed-launch-02/installed-launch-report.json",
+      "report_sha256": "fd3fdc614e94c4cd88246baaea638905ec34cf9d3fbae9189265959efc1fe28c",
+      "checks_passed": 16,
+      "checks_total": 16,
+      "elapsed_seconds": 5.361,
+      "scope": "Canonical LaunchServices app, actual bundled-engine readiness, ordinary quit and whole-bundle preservation; not installed editing/export UI.",
+      "preexisting_protected_files_compared": 55,
+      "operational_metadata_files_excluded": 2,
+      "new_allowed_derivatives": 2,
+      "missing_changed_or_unexpected_added_files": 0
     },
     "native_quit_guard": "Passed production-class isolated acceptance: 21 independent and 10 native checks; not installed-app UI.",
-    "native_save_panel": "Default-destination Save verified in attempt03; synthetic Escape cancellation failed; corrected SDK Cancel helper04 unexecuted.",
-    "final_source_reconciliation": "NOT_EXECUTED",
-    "collection_block": {
-      "existing_session_error": "CROSS_CHAT_SESSION_ACCESS_DENIED",
-      "fresh_session_error": "ACTIVE_SESSION_LIMIT",
-      "fresh_session_created": false,
-      "context_bypass_attempted": false,
-      "other_sessions_closed": false
-    }
+    "native_save_panel": "Chooser04 passed 22/22 independent+9/9 native via AppKit Return Save and public NSSavePanel.cancel; physical input/navigation/full chooser pixels/existing-file replacement excluded.",
+    "final_source_reconciliation": "PASSED 9/9 against 81827cf92d159b9619d51000da61ea3c8a6b6ce7",
+    "full_raw_after_bytes": 54245,
+    "historical_observation": "installation-03-observation.json",
+    "report_sha256": "e983c77c1f52aabbbf0e433d1389a91da734166eade9f24912c1967330aa1dcf",
+    "native_launch_certified_by_installation_receipt": false,
+    "native_launch_certified_by_separate_canonical_report": true
   },
   "historical_observations": {
     "workspace": "/Users/midiakiasat/.midia-ai/gateway-live/workspaces/auto-7978fb133a30bc1735fce292ea179e23",
@@ -455,18 +458,143 @@
       "bundle_after_files": 70,
       "protected_files_preserved": 56,
       "cause": "Isolated -I workers ignored inherited bytecode settings and wrote imaging/media_orientation/projective_warp pyc files inside bundle."
+    },
+    "installation03_initial_observation": {
+      "status": "observed_passed",
+      "replacement_executed": true,
+      "independent_verifier_observed_passed": true,
+      "full_raw_receipt_copied": false,
+      "report": "installation-03-observation.json",
+      "report_sha256": "de8ef8a29ccaf4126604ace9c9d05c7b16ca314dcf4deb119130fdca0510c9c0",
+      "scope": "Selected fields returned by the independently verified Mac installation03 before the MIDIA connection context changed. Full before/after inventories remain on the Mac; this record is an observation, not a copy of the full raw receipt.",
+      "elapsed_seconds": 16.515,
+      "steps": [
+        {
+          "name": "snapshot-before",
+          "exit_code": 0
+        },
+        {
+          "name": "install",
+          "exit_code": 0
+        },
+        {
+          "name": "verify-after",
+          "exit_code": 0
+        }
+      ],
+      "gates": [
+        {
+          "name": "source",
+          "passed": true
+        },
+        {
+          "name": "installed",
+          "passed": true
+        },
+        {
+          "name": "receipt_and_backup",
+          "passed": true
+        },
+        {
+          "name": "projects",
+          "passed": true
+        },
+        {
+          "name": "original_checkout",
+          "passed": true
+        }
+      ],
+      "operative_source_files_verified": 189,
+      "runtime_files_verified": 62,
+      "bundle_files_verified": 67,
+      "bundle_inventory_sha256": "577a3550a6136bfe130434bf760ff0f21f1e24864facd5c11c52a07028afb6a9",
+      "source_code_identity_sha256": "76a4e33d0ed3398ef51b19625f51b0ad45a5c524989408137234f7964aa4db22",
+      "embedded_source_manifest": {
+        "mode": 384,
+        "sha256": "46e82f17bb855d6c2446aa6b3a820bd763fbb7659fc13c00b92afb14346ee922",
+        "size": 6090
+      },
+      "protected_workspace": {
+        "file_count": 57,
+        "total_bytes": 2858327758,
+        "inventory_sha256": "92b93d309c24e36e500c17fbdb99d9813d9ee3a5628dfe81f4a1faf0b74868ce"
+      },
+      "previous_bundle": {
+        "ditto_metadata": [],
+        "mode": 384,
+        "path": "/Users/midiakiasat/Applications/.CINEMATICUM-Backups.noindex/CINEMATICUM Studio-20261021T203503Z-56ab09c8.zip",
+        "sha256": "d1bd106e480d9f5e4dc9e2485e4eb48481e86636570e03e2d7a198021d42633f",
+        "size": 834259,
+        "verified_file_count": 70,
+        "verified_file_inventory_sha256": "a7381b6f10bdc8cf0b711c918c9241f5bbc05c434ea4a6b7f568cfc8911ef29d"
+      },
+      "original_59_file_prior_app_archive_preserved": true,
+      "raw_after_sha256": "08a3d73a39706c46b9c63785f15403fd1abd9a8ea39cb2b11713c519cb10d852",
+      "native_launch_certified": false,
+      "canonical_app_readiness": {
+        "status": "LAUNCHED_RESULT_UNCOLLECTED",
+        "supervisor_pid": 8525,
+        "report_path": "/Users/midiakiasat/Library/Application Support/CINEMATICUM/Verification/0.9.1-bundle-fixed-20261021-03/installed-launch02/installed-launch-report.json",
+        "passed": null
+      },
+      "native_quit_guard": "Passed production-class isolated acceptance: 21 independent and 10 native checks; not installed-app UI.",
+      "native_save_panel": "Default-destination Save verified in attempt03; synthetic Escape cancellation failed; corrected SDK Cancel helper04 unexecuted.",
+      "final_source_reconciliation": "NOT_EXECUTED",
+      "collection_block": {
+        "existing_session_error": "CROSS_CHAT_SESSION_ACCESS_DENIED",
+        "fresh_session_error": "ACTIVE_SESSION_LIMIT",
+        "fresh_session_created": false,
+        "context_bypass_attempted": false,
+        "other_sessions_closed": false
+      }
+    },
+    "authorization_later_context_block": {
+      "status": "blocked_after_context_change",
+      "historical_upgrade_interruption": "COMMANDER_AUTHORITY_EXPIRED_OR_CHANGED, subsequently resolved by successful successor execution",
+      "existing_session_error": "CROSS_CHAT_SESSION_ACCESS_DENIED",
+      "fresh_current_conversation_session_error": "ACTIVE_SESSION_LIMIT",
+      "limit": 64,
+      "fresh_session_created": false,
+      "other_sessions_closed": false,
+      "context_bypass_attempted": false,
+      "effect": "Full install03 receipt and canonical02 outcome uncollected; helper04 and final reconciliation unexecuted."
+    },
+    "production_native_download03": {
+      "report": "production-native-03/production-download-report.json",
+      "report_sha256": "70a860ca3662e9f20b343c7eb945dfb7cb7f97c7162e3f1438c2b38efff96675",
+      "passed": false,
+      "scope": "Unchanged production StudioAppDelegate class with isolated startup; real default Movies/job-UUID NSSavePanel Save and attempted cancellation through actual buttons or public AppKit keyboard events, and WKDownload; receipt-verified owned output relocated afterward for evidence; not an installed-bundle UI claim",
+      "independent_checks_passed": 20,
+      "independent_checks_total": 22,
+      "failed_checks": [
+        "actual_native_class_gate",
+        "cancel_has_no_destination"
+      ],
+      "elapsed_seconds": 10.211,
+      "saved_file_verified": true,
+      "saved_file": {
+        "bytes": 63252,
+        "path": "/Users/midiakiasat/Library/Application Support/CINEMATICUM/Verification/0.9.1-bundle-fixed-20261021-native/download03/native-downloads/df90f3797c194f9e8466e0de87dca120.mkv",
+        "sha256": "33e350dc3493366a6e8a902f68324d2626201851aac75d4d47bf9123cac19d7c"
+      },
+      "native_cancel_verified": false,
+      "failure": "Synthetic Escape did not cancel; destination recreated. Failed report retained.",
+      "owned_recovery_report": "production-native-03/owned-default-download-recovery.json",
+      "owned_recovery_sha256": "6076059642510bf52c4612c9d919faf8cf8853151f7fdc5128ca4369c4fcf4e7",
+      "installed_app_ui_certified": false,
+      "followup_helper04": "Reviewed and curated; NATIVE_UNEXECUTED"
     }
   },
   "authorization": {
-    "status": "blocked_after_context_change",
-    "historical_upgrade_interruption": "COMMANDER_AUTHORITY_EXPIRED_OR_CHANGED, subsequently resolved by successful successor execution",
-    "existing_session_error": "CROSS_CHAT_SESSION_ACCESS_DENIED",
-    "fresh_current_conversation_session_error": "ACTIVE_SESSION_LIMIT",
-    "limit": 64,
-    "fresh_session_created": false,
-    "other_sessions_closed": false,
-    "context_bypass_attempted": false,
-    "effect": "Full install03 receipt and canonical02 outcome uncollected; helper04 and final reconciliation unexecuted."
+    "status": "restored_and_executed",
+    "historical_errors": [
+      "COMMANDER_AUTHORITY_EXPIRED_OR_CHANGED",
+      "CROSS_CHAT_SESSION_ACCESS_DENIED",
+      "ACTIVE_SESSION_LIMIT"
+    ],
+    "resolution": "Current authorized session completed evidence recovery, final source reconciliation and real foreground download04 compile/run.",
+    "approval_pending": false,
+    "prior_failed_and_uncollected_observations_preserved": true
   },
   "final_native_batch": {
     "report": "final-native-01/status.json",
@@ -488,29 +616,47 @@
     "report_sha256": "a917706936b026e25be306918de06569e5eb78649c1cc3063827d3eb71ba5c54"
   },
   "production_native_download": {
-    "report": "production-native-03/production-download-report.json",
-    "report_sha256": "70a860ca3662e9f20b343c7eb945dfb7cb7f97c7162e3f1438c2b38efff96675",
-    "passed": false,
-    "scope": "Unchanged production StudioAppDelegate class with isolated startup; real default Movies/job-UUID NSSavePanel Save and attempted cancellation through actual buttons or public AppKit keyboard events, and WKDownload; receipt-verified owned output relocated afterward for evidence; not an installed-bundle UI claim",
-    "independent_checks_passed": 20,
+    "report": "production-native-04/production-download-report.json",
+    "report_sha256": "eef28f07bb8311f2f4770e11cd4e549c5d8b04c1bf73e0c76ae8046de9c1712e",
+    "build_report": "production-native-04/build.json",
+    "build_report_sha256": "1f9b0b02363e1ffe556b919a27ae8cf128ad74fd697702cc8db797c1f91b692e",
+    "passed": true,
+    "scope": "Unchanged production StudioAppDelegate class with isolated startup; real default Movies/job-UUID NSSavePanel Save through an actual button or public AppKit Return events, Cancel through an actual button or documented public NSSavePanel.cancel action, and WKDownload; receipt-verified owned output relocated afterward for evidence; not an installed-bundle UI claim",
+    "independent_checks_passed": 22,
     "independent_checks_total": 22,
-    "failed_checks": [
-      "actual_native_class_gate",
-      "cancel_has_no_destination"
-    ],
-    "elapsed_seconds": 10.211,
+    "native_checks_passed": 9,
+    "native_checks_total": 9,
+    "elapsed_seconds": 9.47,
     "saved_file_verified": true,
     "saved_file": {
       "bytes": 63252,
-      "path": "/Users/midiakiasat/Library/Application Support/CINEMATICUM/Verification/0.9.1-bundle-fixed-20261021-native/download03/native-downloads/df90f3797c194f9e8466e0de87dca120.mkv",
-      "sha256": "33e350dc3493366a6e8a902f68324d2626201851aac75d4d47bf9123cac19d7c"
+      "path": "/Users/midiakiasat/Library/Application Support/CINEMATICUM/Verification/0.9.1-bundle-fixed-20261021-03/download04-run01/native-downloads/e20bd2de7b4b46a3ab64ea0367053101.mkv",
+      "sha256": "920d7deaa27f7585f057252aa5c6bc7eee88444972bd49e2c497e36669b05a9f"
     },
-    "native_cancel_verified": false,
-    "failure": "Synthetic Escape did not cancel; destination recreated. Failed report retained.",
-    "owned_recovery_report": "production-native-03/owned-default-download-recovery.json",
-    "owned_recovery_sha256": "6076059642510bf52c4612c9d919faf8cf8853151f7fdc5128ca4369c4fcf4e7",
+    "native_cancel_verified": true,
+    "save_interaction": {
+      "key": "Return",
+      "key_code": 36,
+      "kind": "NSApplication.sendEvent",
+      "panel_was_key": true,
+      "window_number": 6001
+    },
+    "cancel_interaction": {
+      "documented_public_action": true,
+      "kind": "NSSavePanel.cancel",
+      "physical_button_or_keyboard_input": false,
+      "selector": "cancel:",
+      "sender": "actual NSSavePanel",
+      "window_number": 6006
+    },
+    "no_cancelled_destination_or_partial": true,
+    "completed_master_preserved": true,
     "installed_app_ui_certified": false,
-    "followup_helper04": "Reviewed and curated; NATIVE_UNEXECUTED"
+    "physical_keyboard_or_mouse_input_certified": false,
+    "cancel_keyboard_route_certified": false,
+    "full_native_chooser_visual_capture_certified": false,
+    "existing_destination_replacement_certified": false,
+    "arbitrary_chooser_navigation_or_renamed_destination_certified": false
   },
   "published_base_commit": "4530c54faf969b0a42f2eb7e73f67c295443d275",
   "operative_source_inventory": {
@@ -592,6 +738,44 @@
     "actual_before_failure_retained": true,
     "included_in_frozen_544_test_suite": true,
     "installed_by_observed_install03": true,
-    "canonical_launch02_result": "UNCOLLECTED"
+    "canonical_launch02_result": "PASSED 16/16; report recovered and unchanged whole bundle verified"
+  },
+  "published_runtime_commit": "81827cf92d159b9619d51000da61ea3c8a6b6ce7",
+  "final_source_reconciliation": {
+    "report": "final-reconciliation-81827-01.json",
+    "report_sha256": "0c6d76e03bfca1bedbb4a4320eff6127398f7d9036d6cad8f6c5a45f9975ab06",
+    "passed": true,
+    "checks_passed": 9,
+    "checks_total": 9,
+    "scope": "Final published source, every installed runtime file, native-source mapping and unchanged complete bundle; read-only reconciliation, no replacement installation",
+    "source_commit": "81827cf92d159b9619d51000da61ea3c8a6b6ce7",
+    "runtime_file_count": 62,
+    "bundle_file_count": 67,
+    "runtime_inventory_sha256": "49f226121b5df2f13a0eb39a642a113695231870a425120c7f372dfddc97149a",
+    "bundle_inventory_sha256": "577a3550a6136bfe130434bf760ff0f21f1e24864facd5c11c52a07028afb6a9",
+    "source_code_identity_sha256": "76a4e33d0ed3398ef51b19625f51b0ad45a5c524989408137234f7964aa4db22",
+    "signing_or_notarization_certified": false
+  },
+  "github_ci": {
+    "status": "passed",
+    "commit": "81827cf92d159b9619d51000da61ea3c8a6b6ce7",
+    "successful_workflow_runs": 23,
+    "pull_request_runs": 13,
+    "push_runs": 10,
+    "failed_running_queued_or_cancelled_runs": 0,
+    "studio_workflow_run": 39686306795,
+    "studio_job": 119521127572,
+    "studio_push_jobs": [
+      {
+        "run": 39686300384,
+        "job": 119521105124
+      },
+      {
+        "run": 39686285911,
+        "job": 119521055726
+      }
+    ],
+    "scope": "Exact published runtime freeze; later status/evidence commit and live PR-head CI remain separate.",
+    "live_pr_checks": "https://github.com/kaaffilm/CINEMATICUM/pull/162/checks"
   }
 }

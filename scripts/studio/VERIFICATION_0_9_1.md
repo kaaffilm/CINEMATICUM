@@ -8,21 +8,17 @@ The [capability ledger](capabilities.json) retains `parity_complete: false`.
 
 ## Source and release identity
 
-Published commit `4530c54faf969b0a42f2eb7e73f67c295443d275` is the
-base for the current candidate, continuing
-`a6454d3514b3afa9ba29f594ab6bb3b79065d1a2` in isolated MIDIA-AI worktrees.
-The owner's production checkout and its uncommitted changes are preserved.
-Four native acceptance harness files now select their exact fixture project.
-Subsequent canonical launch exposed bundle mutation by isolated Python workers;
-five launch sites in four runtime modules now explicitly pass `-B`. The frozen
-189-file inventory and 544-test run below include that production correction
-and its actual subprocess regression. The current runtime therefore differs
-from published `4530c54`; that commit's CI does not certify this follow-up.
-This evidence freeze records no follow-up publication/CI result; subsequent
-results belong to the exact published commit and
-[PR #162 checks](https://github.com/kaaffilm/CINEMATICUM/pull/162/checks).
-Canonical launch after replacement and final installed-source reconciliation
-remain separate gates.
+The corrected runtime is published at
+`81827cf92d159b9619d51000da61ea3c8a6b6ce7`, continuing the earlier
+`4530c54faf969b0a42f2eb7e73f67c295443d275` candidate and recovered source
+`a6454d3514b3afa9ba29f594ab6bb3b79065d1a2` in isolated worktrees. The owner's
+production checkout is preserved. Four native harnesses select exact fixtures;
+five isolated worker launch sites explicitly pass `-B` after canonical launch
+exposed bundle mutation. The frozen 189-file inventory and 544-test run include
+that production correction and its actual subprocess regression. Final installed
+source reconciliation passed 9/9 against `81827cf`. All 23 exact-head workflows passed; later
+documentation-commit CI remains separate. Live [PR #162 checks](https://github.com/kaaffilm/CINEMATICUM/pull/162/checks)
+and historical CI remain distinct from this frozen runtime identity.
 
 The deterministic [source manifest](source-integrity.json) covers the declared
 tracked runtime, tests, native code, web assets, dependency locks, documentation
@@ -41,12 +37,12 @@ hashing. See [the integrity contract](SOURCE_INTEGRITY.md).
 | Normal Wan inference | Two real serial takes passed 14/14 media checks and both final native playbacks passed 14/14 | 480 × 272, 17 frames, 20 steps, CFG 6, seeds 42/43; all 17 timeline frames survive Add/Play/Save |
 | Longer Wan case | Inference harness 11/11, independent media 14/14, native playback 14/14; generation 928.394 seconds | One actual 33-frame take at the same resolution/steps/fps/CFG; distinct nonblank pictures. Production quality and sustained operation remain unverified |
 | Complete regression | **544 tests passed; zero failures, errors, skips or expected failures** | All 189 operative files unchanged. Actual pinned optional workers and genuine RAW ran. Report elapsed 169.194 seconds; wrapper elapsed 169.301 seconds. The 48 unchanged JavaScript files retain their syntax-check result |
-| GitHub CI | Historical base `4530c54`: 23 successful workflow runs; Studio 543 tests and 209 manifest files | Historical published base only; this evidence freeze contains no follow-up CI result. Consult the exact subsequent commit and PR #162 checks |
-| Native installation | Install-03 verifier observed PASSED in 16.515 seconds; all five gates and 189 operative hashes passed | 62 runtime files, 67 bundle files, 70-file prior archive and all 57 protected files preserved. Public record is an observation of returned fields; full raw receipt was not collected |
+| GitHub CI | Exact corrected runtime `81827cf`: all 23/23 workflows passed (13 PR, 10 push) | Historical `4530c54` passed 23 workflows, 543 Studio tests and 209 manifest files. Live PR-head checks and later evidence commits retain separate identities |
+| Native installation | Install-03 PASSED in 16.515 seconds; full private receipt now collected/hash-verified, all five gates passed | 189 source hashes, 62 runtime files, 67 bundle files, 70-file prior archive and all 57 protected files preserved; public summary minimizes private filenames |
 | Production ordinary quit | Quit-05 passed 21/21 independent and 10/10 native checks in 67.203 seconds | Actual Keep Working and Cancel Jobs and Quit choices with two real FFmpeg jobs; completed 48-frame master retained, second job cancelled, durable and ephemeral jobs settled. Isolated startup, not installed-app UI acceptance |
-| Production chooser | Download-03 verified actual default-destination Save, hash, decode and alpha; aggregate failed because synthetic Escape did not cancel | Original failures are retained. Download-04's SDK Cancel helper is reviewed but **unexecuted**; production cancellation remains unaccepted |
-| Canonical installed launch | Launch-01 found bundle mutation; corrected launch-02 started but its result was **not collected** | The first actual launch/engine/ordinary quit preserved all protected files, but added three bytecode files. The corrected app's whole-bundle immutability remains unaccepted |
-| Final installed-source reconciliation | **Not executed** | Mac access changed: prior session denied cross-chat access, fresh session hit the 64-session limit. No new canonical or reconciliation pass is inferred |
+| Production chooser | Download-04 passed 22/22 independent checks in 9.470 seconds | Actual default-destination Save and public NSSavePanel Cancel action, verified FFV1/alpha/PCM and cleanup. Physical Cancel-button/Escape, arbitrary navigation and existing-file replacement are outside this scope |
+| Canonical installed launch | Launch-02 passed 16/16 in 5.361 seconds | Exact installed app through LaunchServices, real bundled engine/ordinary quit, protected files preserved and all 67 bundle files unchanged |
+| Final installed-source reconciliation | Passed 9/9 against published `81827cf92d159b9619d51000da61ea3c8a6b6ce7` | All 62 runtime byte/mode identities, native source, unchanged 67-file bundle, preserved archives and owner state; no replacement was needed |
 
 Native UI and backend assertion counts are separate from discoverable Python
 test counts. Tests with synthetic ENGINE TEST material establish those specified
@@ -99,7 +95,7 @@ or timeout limits. The raw-report SHA-256 is
 `9a20eaaff4c41dfd15aa820d4a39cc6cf5d526087ca052913947037112c2afea`.
 Its 63,252-byte master has SHA-256
 `c864ecf9c5f9962a35a57827e40580f16ef21bf4ac4544cee5491b5282c518d2`.
-The separate production chooser Save has since been verified; native cancellation remains unaccepted as detailed below.
+The separate production chooser Save has since been verified; bounded cancellation through the public NSSavePanel action has since passed, as detailed below.
 
 ### Planar state and rendering
 
@@ -246,14 +242,13 @@ A successor later acquired a reusable owner grant and successfully fetched
 verified source, ran native gates and installed the app. That first interruption
 was resolved without modifying governance settings or bypassing an access gate.
 
-After install-03 passed, a connection-context change caused the prior session
-to return `CROSS_CHAT_SESSION_ACCESS_DENIED`. Opening a proper fresh session for
-this conversation returned `ACTIVE_SESSION_LIMIT` at 64 sessions. No fresh
-session was created, no other session was closed and no alternate conversation
-context was used. **Mac evidence collection and final reconciliation are now
-blocked.** Canonical launch-02 had started, but its outcome is unobserved;
-download-04 has not run. Earlier successful executions do not authorize a claim
-that those remaining gates passed.
+After install-03 passed, a context change caused
+`CROSS_CHAT_SESSION_ACCESS_DENIED`; fresh-session creation then hit
+`ACTIVE_SESSION_LIMIT` (64). At that evidence freeze, the launch result and full
+installation receipt were uncollected. Those historical reports remain unchanged.
+Current-session access was subsequently restored. Full receipt collection,
+canonical-launch verification, final reconciliation and actual download-04
+compile/execution completed; no approval remains pending for those operations.
 
 ## Installation and canonical launch
 
@@ -290,8 +285,10 @@ files and installed the corrected 62-file runtime in a 67-file bundle. All 57
 protected files, totalling 2,858,327,758 bytes, were preserved. The 70-file prior
 bundle, including the observed caches, was archived separately from the original
 59-file backup. This public record contains selected fields actually returned
-by the verifier; **the full raw install-03 receipt was not collected** before
-access changed.
+by the verifier; the full raw receipt was uncollected at that historical freeze.
+The [collected installation summary](verification/0.9.1/installation-03-collected-summary.json)
+now records verified collection of the full 54,245-byte private after-receipt
+and all five passed gates. Protected filenames remain outside the public repo.
 
 The observation SHA-256 is
 `de8ef8a29ccaf4126604ace9c9d05c7b16ca314dcf4deb119130fdca0510c9c0`.
@@ -299,17 +296,25 @@ The reported raw after-receipt SHA-256 is
 `08a3d73a39706c46b9c63785f15403fd1abd9a8ea39cb2b11713c519cb10d852`;
 the installed bundle inventory is
 `577a3550a6136bfe130434bf760ff0f21f1e24864facd5c11c52a07028afb6a9`.
-Canonical launch-02 was started with supervisor PID 8525, but its result is
-**uncollected and not accepted**. Final published-source synchronization and
-independent installed-source reconciliation have **not executed**.
+The recovered [canonical launch-02 report](verification/0.9.1/installed-launch-02/installed-launch-report.json)
+passed 16/16 in 5.361 seconds, including unchanged bundle bytes/modes after real
+LaunchServices startup, bundled-engine readiness and ordinary quit. Its separate
+workspace comparison preserved 55 pre-existing files after excluding two
+operational metadata files and permitted two new cache derivatives; this differs
+from the installation snapshot of 57 files. Its SHA-256
+is `fd3fdc614e94c4cd88246baaea638905ec34cf9d3fbae9189265959efc1fe28c`.
+The [final reconciliation](verification/0.9.1/final-reconciliation-81827-01.json)
+passed 9/9 against published `81827cf92d159b9619d51000da61ea3c8a6b6ce7`,
+covering all 62 runtime files, native identity, the unchanged 67-file bundle,
+preserved archives and owner state. It performed no replacement.
 
 The installer copies 40 runtime modules/locks and 22 web files, plus its own
 generated `source-manifest.json`; repository `capabilities.json` and
 `source-integrity.json` are not bundled. The four production worker corrections
-required install-03. Remaining narrative/evidence edits do not themselves
-replace the missing canonical-launch and final-reconciliation evidence.
+required install-03. Subsequent status/evidence changes are outside bundled
+runtime; the independent final reconciliation verifies that alignment.
 
-## Native chooser: Save verified, cancellation still unaccepted
+## Native chooser: bounded Save and Cancel acceptance
 
 The unchanged production `StudioAppDelegate` was compiled with isolated startup;
 this is not an installed-bundle UI claim. Original
@@ -332,11 +337,17 @@ cancel and the destination was recreated. The
 [exact owned-file recovery](verification/0.9.1/production-native-03/owned-default-download-recovery.json)
 preserves that failure without leaving the synthetic output in Movies.
 
-Download-04 changes only the acceptance helper to use the explicit SDK Cancel
-action. It has been reviewed and curated but is **unexecuted**. Production
-NSSavePanel cancellation, arbitrary chooser navigation, renamed destinations and
-replacement of existing files are not certified. The earlier automated 21/21
-WKDownload gate and the verified Save are not substituted for those behaviors.
+[Download-04](verification/0.9.1/production-native-04/production-download-report.json)
+then actually compiled and ran with unchanged production code. It passed
+**22/22 independent and 9/9 native checks in 9.470 seconds** using AppKit
+`NSApplication.sendEvent` Return for Save and the public `NSSavePanel.cancel`
+action. Cancellation left no destination or partial download,
+released ownership and preserved the completed master; every picture frame,
+FFV1 alpha and PCM stream independently decoded. This verifies the public Cancel
+action rather than a physical Cancel-button click or synthetic Escape. Arbitrary
+remote chooser navigation/pixels, renamed destinations, existing-file replacement
+and installed-app editing/export remain outside this isolated production-class
+acceptance. Earlier failed reports are preserved unchanged.
 
 ## Reproducible regression contract
 
@@ -379,10 +390,13 @@ On exact commit `4530c54faf969b0a42f2eb7e73f67c295443d275`, all 23 observed
 GitHub workflow runs passed. The
 [Studio CI job](https://github.com/kaaffilm/CINEMATICUM/actions/runs/39661961306/job/119437028259)
 passed 543 tests in 172.641 seconds with zero skips and verified 209 manifest
-files. This evidence freeze contains no CI result for the worker correction
-and harness/documentation follow-up. Consult the exact published follow-up
-commit and [PR #162 checks](https://github.com/kaaffilm/CINEMATICUM/pull/162/checks)
-for subsequent results; success for the earlier head is not transferred to it.
+files. The corrected runtime is published at
+`81827cf92d159b9619d51000da61ea3c8a6b6ce7`; all 23 exact-head workflows passed (13 PR and 10 push), with no failed,
+running, queued or cancelled runs. The exact-head
+[Studio PR job](https://github.com/kaaffilm/CINEMATICUM/actions/runs/39686306795/job/119521127572)
+and both Studio push jobs passed their required steps. [PR #162 checks](https://github.com/kaaffilm/CINEMATICUM/pull/162/checks)
+may describe a later live head, so neither those results nor historical success
+are transferred to a different commit.
 
 The [native evidence summary](verification/0.9.1/native-evidence-summary.json)
 retains current and historical results, original report locations and available

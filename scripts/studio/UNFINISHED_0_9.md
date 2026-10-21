@@ -16,14 +16,14 @@ Reviewed 21 October 2026. This register distinguishes missing implementations, b
 
 | Gate | Current evidence | Work still required |
 | --- | --- | --- |
-| Live audio | Final-native-01 routing 11/11 and overlap, nested and retimed playback 12/12 each, with zero underruns. Routing captured two phases; each sequence scenario ran three repetitions. | Wider codecs/devices/long sessions remain unverified. Reverse live audio requires rendered playback. Final installed-source reconciliation has not executed. |
-| High16 SDR movies | Final-extended-01 passed 21/21 in 2.153 seconds. Download-03 additionally verified actual default-destination NSSavePanel Save, exact master bytes, decode and alpha. | Download-03's synthetic Escape did not cancel; aggregate remains failed. The corrected SDK Cancel helper is unexecuted. HDR/scene-linear movies, calibrated display and production scale remain separate work. |
-| Planar tracking | After the worker-launch fix, bundle-fixed-planar passed 10/10 in 10.282 seconds through seven native stages and actual measurement/render. Both pin centers remain (80.5, 64.0), movie 268,926 bytes. | Broader shots, re-identification, lens/rolling-shutter estimation and sustained/concurrent throughput remain open. Corrected canonical-launch outcome and final source reconciliation are uncollected/unexecuted. |
+| Live audio | Final-native-01 routing 11/11 and overlap, nested and retimed playback 12/12 each, with zero underruns. Routing captured two phases; each sequence scenario ran three repetitions. | Wider codecs/devices/long sessions remain unverified. Reverse live audio requires rendered playback. Installed-source reconciliation now passed 9/9. |
+| High16 SDR movies | Final-extended-01 passed 21/21; production download-04 passed 22/22 independent checks for actual default Save and public NSSavePanel Cancel action, exact master bytes, decode/alpha and cleanup. | Physical Cancel-button/Escape input, arbitrary chooser navigation, renamed/existing destinations are outside acceptance. HDR/scene-linear movies, calibrated display and production scale remain open. Failed attempt03 remains historical. |
+| Planar tracking | After the worker-launch fix, bundle-fixed-planar passed 10/10 in 10.282 seconds through seven native stages and actual measurement/render. Both pin centers remain (80.5, 64.0), movie 268,926 bytes. | Broader shots, re-identification, lens/rolling-shutter estimation and sustained/concurrent throughput remain open. Corrected canonical launch and final source reconciliation have passed. |
 | Normal local generation | Two real 480 × 272, 17-frame, 20-step Euler takes passed 14/14 media and 14/14 native playback each. One 33-frame case passed 11/11 inference-harness, 14/14 media and 14/14 playback checks. | Broader duration coverage, sustained operation and production quality remain unverified. Earlier termination, nearly-black output and first 13/14 playback remain historical failures. |
-| Whole-build regression | Current worker-corrected source passed 544 tests with zero failures, errors, skips or expected failures; report elapsed 169.194 seconds, wrapper 169.301. All 189 operative files stayed unchanged, actual optional workers and genuine RAW ran. | This evidence freeze records no follow-up CI result; consult the exact subsequent commit and PR #162 checks. Historical base `4530c54` passed 23 workflows, 543 Studio tests and 209 manifest checks; that result does not certify the new runtime fix. |
+| Whole-build regression | Current worker-corrected source passed 544 tests with zero failures, errors, skips or expected failures; report elapsed 169.194 seconds, wrapper 169.301. All 189 operative files stayed unchanged, actual optional workers and genuine RAW ran. | Corrected runtime is published at `81827cf`; all 23 exact-head workflows passed; later documentation/live PR-head checks remain separate. Historical base `4530c54` passed 23 workflows, 543 Studio tests and 209 manifest checks; that result does not certify the new runtime fix. |
 | Production ordinary quit | Quit-05 passed 21/21 independent and 10/10 native checks in 67.203 seconds. Real Keep Working completed a 48-frame high16 master; later cancellation stopped a second real render and preserved the first output and saved edits. | This tests unchanged production methods and actual alerts with isolated startup; it is separate from installed-app UI and does not explain the historical generation termination. |
-| Installed application | Install-03's returned output was observed PASSED in 16.515 seconds: all five independent gates, 189 source hashes, 62 runtime files, 67 bundle files, a 70-file previous bundle archive and all 57 protected files preserved. | Full raw install-03 receipt was not collected. Canonical launch-02 started but its result is unobserved. Final source/installed reconciliation has not executed. All are blocked by current MIDIA session access errors. |
-| Repository/release records | Latest code/test freeze and raw native evidence are retained. Install-02 and failed canonical launch-01 remain historical evidence; the original 59-file app archive is preserved. | This freeze precedes follow-up publication and the PR update. Subsequent publication and CI for the worker correction, harness/evidence/docs and manifest must bind to their exact commit and draft PR #162. |
+| Installed application | Install-03 passed all five gates in 16.515 seconds; full private receipt now collected/hash-verified. Canonical launch-02 passed 16/16 in 5.361 seconds; final published-source reconciliation passed 9/9 against `81827cf`, including all 62 runtime and 67 bundle files. Original and later prior-bundle archives and protected workspace are preserved. | Signed/notarized self-contained distribution and production-scale validation remain unfinished. These launch/integrity passes do not certify every editing workflow or establish current THE LAST RENDER completion/issuance. |
+| Repository/release records | Corrected runtime published as `81827cf92d159b9619d51000da61ea3c8a6b6ce7`; original failure reports and newly passed release receipts are retained. | Retain the 23/23 exact-head CI result separately from the live PR head, then publish this status/evidence update and manifest with their own identities. No full-system completion is implied. |
 
 The canonical app's first actual launch exposed a real preservation defect:
 isolated `-I` Python workers ignored inherited bytecode settings and created
@@ -31,14 +31,14 @@ three cached modules inside the bundle (67 files became 70). Five worker launch
 sites across imaging, planar, lens and roto modules now explicitly pass `-B`.
 The retained failing subprocess regression, corrected 8/8 focused checks,
 544-test freeze and new native planar/quit gates cover that correction.
-Install-03 installed it; corrected canonical-launch evidence remains uncollected.
+Install-03 installed it; canonical launch-02 subsequently passed 16/16 with the
+whole bundle unchanged, and final source reconciliation passed 9/9.
 
-The first MIDIA 0.7.2-to-0.8.0 grant interruption was resolved through successful
-successor execution. A later context change, after install-03 passed, now returns
-`CROSS_CHAT_SESSION_ACCESS_DENIED` for the prior session. Fresh-session creation
-for the current conversation returns `ACTIVE_SESSION_LIMIT` (64). No alternate
-context was used and no other session was closed. This new access block prevents
-remaining Mac execution/collection; it must not be represented as resolved.
+Earlier MIDIA grant/context interruptions and the 64-session limit delayed
+execution and receipt collection. Current-session access is restored; actual
+receipt collection, canonical-launch verification, native Save/public-action
+Cancel and final reconciliation are passed. Historical uncollected/failed
+records remain unchanged to preserve what was known at each freeze.
 
 ## 2. Major systems still absent
 
@@ -128,24 +128,21 @@ inventory SHA-256 is
 `30b514a409c8a0d86a047780b004942f6c65defbaf3ccb7e0da72f92085f7f3d`.
 The earlier 543-test reports remain attached to their previous snapshots.
 
-Published base `4530c54` passed 23 observed workflows, including 543 Studio
-tests in 172.641 seconds and 209 manifest files. Current source differs by the
-four worker modules and updated tests/harnesses. This evidence freeze records
-no follow-up publication/CI result; consult the exact subsequent commit and
-[PR #162 checks](https://github.com/kaaffilm/CINEMATICUM/pull/162/checks).
-Native audio/high16, both normal-take playbacks, bounded
-33-frame inference/playback, corrected planar and production quit passed at
-their recorded scopes. Install-03 was observed passed; its full raw receipt,
-canonical launch-02 result, native chooser cancellation and final reconciliation
-are blocked by current session access. Release alignment must:
-
-1. Preserve the frozen reviewed runtime, tests and dependency identities while updating the documentation and deterministic source manifest from actual bytes.
-2. Bind follow-up publication and CI to the exact new commit; historical `4530c54` results do not certify the runtime correction.
-3. Retain every failed and passed receipt. Collect the full install-03 receipt and canonical launch-02 result when current-conversation MIDIA access is restored; do not infer an outcome from process launch.
-4. Execute the reviewed native Cancel helper and independently reconcile final published runtime/native-source mappings with the installed app. The already observed install-03 includes the production worker fix; the final reconciliation has not run.
-5. Update [verification 0.9.1](VERIFICATION_0_9_1.md), capability/release records and [draft PR #162](https://github.com/kaaffilm/CINEMATICUM/pull/162) with each actual result. Publication, CI, observed installation, canonical launch and signed distribution remain separate states.
+Historical base `4530c54` passed 23 workflows, 543 Studio tests and 209
+manifest files. The corrected 544-test runtime is now published as
+`81827cf92d159b9619d51000da61ea3c8a6b6ce7`; all 23 exact-head workflows passed. Later documentation-commit CI remains
+separate from live [PR #162 checks](https://github.com/kaaffilm/CINEMATICUM/pull/162/checks).
+Native audio/high16, normal and bounded 33-frame generation/playback, planar,
+production quit and scoped chooser Save/Cancel passed. The full install-03
+receipt is collected, canonical launch passed 16/16 and final reconciliation
+passed 9/9. Remaining release-record work is to retain those exact identities,
+preserve the passed exact-head CI record and publish the status/evidence update with an updated
+manifest. All missing systems, broader professional workflows and signed
+self-contained distribution remain open; this Studio work does not establish current THE LAST RENDER completion/issuance.
 
 The original production checkout and the isolated development worktree have distinct state. Preserve the owner's modified files and existing projects; do not overwrite them merely to align a version. The separate issuance/compiler authority is also distinct from the Studio editor. Installing Studio does not generate missing production source takes or certify a finished film. The installer preserves external project storage and the optional runtimes, but it does not make external FFmpeg/Blender prerequisites self-contained or signed. The current signing-identity inspection found one Apple Development identity and no Developer ID Application identity; it does not establish a signed/notarized distribution. No named-provider credential was exported in the inspected MIDIA environment, which does not establish whether credentials exist in another keychain or account.
+
+At 2026-10-21 22:41 UTC, a [read-only owner-output inventory](verification/0.9.1/case001-owner-output-inventory.json) found the exact owner-checkout `source/films/THE_LAST_RENDER/shots`, `dist/films/THE_LAST_RENDER` and `production/THE_LAST_RENDER/qc` directories present but each containing zero regular files and zero bytes. This establishes no current source-shot, delivery or QC files in those three directories; it does not audit other locations or contradict retained historical compiler/replay releases. Current THE LAST RENDER completion and issuance are not established by this Studio work.
 
 ## 6. Hardware and scope of evidence
 
