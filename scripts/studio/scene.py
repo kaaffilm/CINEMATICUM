@@ -255,32 +255,33 @@ def aim(obj, target):
     if direction.length_squared < .0001:
         raise RuntimeError('An animated camera or directional light reached its target.')
     obj.rotation_euler = direction.to_track_quat('-Z', 'Y').to_euler()
-def linearize_action(obj):
-    action = obj.animation_data.action
+def action_curves(obj):
+    animation = obj.animation_data
+    action = animation.action
     curves = []
-    # Blender 4.4+ stores curves in channelbags on layered Actions. Each
-    # authored object owns a newly created Action, so all its bags are ours.
-    for layer in getattr(action, 'layers', ()):
-        for strip in layer.strips:
-            for bag in getattr(strip, 'channelbags', ()):
-                curves.extend(bag.fcurves)
-    if not curves:
+    layers = list(getattr(action, 'layers', ()))
+    # Blender 4.4+ can share one Action between an object and its data-block.
+    # Their channels belong to different slots: lens baking must never reset
+    # the camera object's eased location curves in another channelbag.
+    if layers:
+        handle = getattr(animation, 'action_slot_handle', None)
+        if handle is None:
+            handle = getattr(getattr(animation, 'action_slot', None), 'handle', None)
+        for layer in layers:
+            for strip in layer.strips:
+                for bag in getattr(strip, 'channelbags', ()):
+                    if handle is not None and bag.slot_handle == handle:
+                        curves.extend(bag.fcurves)
+    else:
         curves.extend(getattr(action, 'fcurves', ()))
     if not curves:
-        raise RuntimeError('Blender did not expose the authored animation curves.')
-    for curve in curves:
+        raise RuntimeError('Blender did not expose the authored animation curves for this data-block.')
+    return curves
+def linearize_action(obj):
+    for curve in action_curves(obj):
         curve.extrapolation = 'CONSTANT'
         for key in curve.keyframe_points:
             key.interpolation = 'LINEAR'
-def action_curves(obj):
-    action = obj.animation_data.action
-    curves = []
-    for layer in getattr(action, 'layers', ()):
-        for strip in layer.strips:
-            for bag in getattr(strip, 'channelbags', ()):
-                curves.extend(bag.fcurves)
-    if not curves: curves.extend(getattr(action, 'fcurves', ()))
-    return curves
 def interpolate_action(obj, poses):
     linearize_action(obj)
     modes = {frame:pose.get('interpolation', 'linear') for frame,pose in poses}

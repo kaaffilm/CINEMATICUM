@@ -104,21 +104,59 @@ class SceneRecipeTests(unittest.TestCase):
     def test_saved_animation_is_linear_for_legacy_and_layered_actions(self):
         script = scene._build_script(scene.validate_scene(recipe()), "/owned/scene.blend", "/owned/frames", 24, 1, 9)
         tree = ast.parse(script)
-        function = next(node for node in tree.body if isinstance(node, ast.FunctionDef) and node.name == "linearize_action")
+        functions = [node for node in tree.body if isinstance(node, ast.FunctionDef)
+                     and node.name in {"linearize_action", "action_curves"}]
         scope = {}
-        exec(compile(ast.Module(body=[function], type_ignores=[]), "scene-linearization", "exec"), scope)
+        exec(compile(ast.Module(body=functions, type_ignores=[]), "scene-linearization", "exec"), scope)
         for layered in (False, True):
             keys = [SimpleNamespace(interpolation="BEZIER") for _ in range(3)]
             curve = SimpleNamespace(keyframe_points=keys, extrapolation="LINEAR")
-            action = (SimpleNamespace(layers=[SimpleNamespace(strips=[SimpleNamespace(channelbags=[SimpleNamespace(fcurves=[curve])])])])
+            action = (SimpleNamespace(layers=[SimpleNamespace(strips=[SimpleNamespace(channelbags=[SimpleNamespace(slot_handle=17, fcurves=[curve])])])])
                       if layered else SimpleNamespace(fcurves=[curve]))
-            scope["linearize_action"](SimpleNamespace(animation_data=SimpleNamespace(action=action)))
+            scope["linearize_action"](SimpleNamespace(animation_data=SimpleNamespace(action=action, action_slot_handle=17)))
             self.assertEqual([key.interpolation for key in keys], ["LINEAR"] * 3)
             self.assertEqual(curve.extrapolation, "CONSTANT")
         with self.assertRaisesRegex(RuntimeError, "animation curves"):
             scope["linearize_action"](SimpleNamespace(animation_data=SimpleNamespace(action=SimpleNamespace(layers=[]))))
         self.assertLess(script.index("interpolate_action(obj, poses)\n    objects.append"), script.index("bpy.ops.wm.save_as_mainfile"))
         self.assertIn("scene.render.filepath = '//renders/frame_######'", script)
+
+    def test_baked_lens_does_not_linearize_camera_in_shared_layered_action(self):
+        script = scene._build_script(scene.validate_scene(recipe()), "/owned/scene.blend", "/owned/frames", 24, 1, 9)
+        functions = [node for node in ast.parse(script).body if isinstance(node, ast.FunctionDef)
+                     and node.name in {"linearize_action", "action_curves", "interpolate_action"}]
+        scope = {}
+        exec(compile(ast.Module(body=functions, type_ignores=[]), "scene-shared-action", "exec"), scope)
+        for lens_first in (False, True):
+            with self.subTest(lens_first=lens_first):
+                camera_points = [SimpleNamespace(co=[1., 7.], interpolation="LINEAR"),
+                                 SimpleNamespace(co=[9., 8.], interpolation="LINEAR")]
+                camera_curve = SimpleNamespace(keyframe_points=camera_points, extrapolation="LINEAR")
+                lens_points = [SimpleNamespace(co=[frame, 30. - frame], interpolation="BEZIER") for frame in range(1, 10)]
+                lens_curve = SimpleNamespace(keyframe_points=lens_points, extrapolation="LINEAR")
+                bags = [SimpleNamespace(slot_handle=11, fcurves=[camera_curve]),
+                        SimpleNamespace(slot_handle=22, fcurves=[lens_curve])]
+                if lens_first:
+                    bags.reverse()
+                # The legacy accessor may expose another slot; it must not be
+                # used as a fallback when the owner's layered slot is absent.
+                action = SimpleNamespace(layers=[SimpleNamespace(strips=[SimpleNamespace(channelbags=bags)])],
+                                         fcurves=[camera_curve])
+                camera = SimpleNamespace(animation_data=SimpleNamespace(action=action, action_slot_handle=11))
+                lens = SimpleNamespace(animation_data=SimpleNamespace(action=action, action_slot_handle=22))
+                scope["interpolate_action"](camera, [(1, {"interpolation": "ease_in"}), (9, {})])
+                scope["linearize_action"](lens)
+                self.assertEqual(camera_points[0].interpolation, "BEZIER")
+                self.assertTrue(all(point.interpolation == "LINEAR" for point in lens_points))
+                left, right = camera_points
+                t = .25
+                position = ((1-t)**3*left.co[1] + 3*(1-t)**2*t*left.handle_right[1]
+                            + 3*(1-t)*t*t*right.handle_left[1] + t**3*right.co[1])
+                self.assertAlmostEqual(position, 7.0625)
+                missing = SimpleNamespace(animation_data=SimpleNamespace(action=action, action_slot_handle=99))
+                with self.assertRaisesRegex(RuntimeError, "animation curves"):
+                    scope["linearize_action"](missing)
+                self.assertEqual(camera_points[0].interpolation, "BEZIER")
 
     def test_camera_light_keys_and_easing_share_exact_endpoint_semantics(self):
         value = recipe()
