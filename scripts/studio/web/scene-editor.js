@@ -17,19 +17,25 @@
   const color = hex => [1,3,5].map(i=>{const c=parseInt(hex.slice(i,i+2),16)/255;return c<=.04045?c/12.92:((c+.055)/1.055)**2.4;});
   const identity = () => [1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1];
   function matrixProduct(a,b) {const out=new Array(16).fill(0);for(let c=0;c<4;c++)for(let r=0;r<4;r++)for(let k=0;k<4;k++)out[c*4+r]+=a[k*4+r]*b[c*4+k];return out;}
-  function lookAt(eye,target) {const z=norm(sub(eye,target));let up=[0,0,1];if(Math.abs(dot(z,up))>.999)up=[0,1,0];const x=norm(cross(up,z)),y=cross(z,x);return [x[0],y[0],z[0],0,x[1],y[1],z[1],0,x[2],y[2],z[2],0,-dot(x,eye),-dot(y,eye),-dot(z,eye),1];}
-  function perspective(fov,aspect,near=.05,far=5000) {const f=1/Math.tan(fov*deg/2),nf=1/(near-far);return [f/aspect,0,0,0,0,f,0,0,0,0,(far+near)*nf,-1,0,0,2*far*near*nf,0];}
+  function cameraBasis(eye,target,roll=0) {const z=norm(sub(eye,target));let up=[0,0,1];if(Math.abs(dot(z,up))>.999)up=[0,1,0];const right=norm(cross(up,z)),baseUp=cross(z,right),c=Math.cos(roll*deg),s=Math.sin(roll*deg);return {right:add(mul(right,c),mul(baseUp,s)),up:add(mul(baseUp,c),mul(right,-s)),forward:mul(z,-1),backward:z};}
+  function lookAt(eye,target,roll=0) {const {right:x,up:y,backward:z}=cameraBasis(eye,target,roll);return [x[0],y[0],z[0],0,x[1],y[1],z[1],0,x[2],y[2],z[2],0,-dot(x,eye),-dot(y,eye),-dot(z,eye),1];}
+  function perspective(fov,aspect,near=.05,far=5000,shiftX=0,shiftY=0,focalRatio=1) {const f=1/Math.tan(fov*deg/2),nf=1/(near-far);return [f/aspect*focalRatio,0,0,0,0,f,0,0,-2*shiftX,-2*shiftY,(far+near)*nf,-1,0,0,2*far*near*nf,0];}
+  function cameraProjection(camera,width,height) {return matrixProduct(perspective(camera.fov,width/height,.05,5000,camera.shift_x||0,camera.shift_y||0,camera.focal_ratio??1),lookAt(camera.position,camera.target,camera.roll||0));}
   function rotation(v) {const [x,y,z]=v.map(a=>a*deg),cx=Math.cos(x),sx=Math.sin(x),cy=Math.cos(y),sy=Math.sin(y),cz=Math.cos(z),sz=Math.sin(z);return [cz*cy,sz*cy,-sy,0,cz*sy*sx-sz*cx,sz*sy*sx+cz*cx,cy*sx,0,cz*sy*cx+sz*sx,sz*sy*cx-cz*sx,cy*cx,0,0,0,0,1];}
   function modelMatrix(pose) {const out=rotation(pose.rotation);for(let i=0;i<3;i++)for(let j=0;j<3;j++)out[i*4+j]*=pose.scale[i];for(let i=0;i<3;i++)out[12+i]=pose.position[i];return out;}
   function normalMatrix(pose) {const r=rotation(pose.rotation);return [r[0]/pose.scale[0],r[1]/pose.scale[0],r[2]/pose.scale[0],r[4]/pose.scale[1],r[5]/pose.scale[1],r[6]/pose.scale[1],r[8]/pose.scale[2],r[9]/pose.scale[2],r[10]/pose.scale[2]];}
   function transform(m,v,w=1) {return [0,1,2,3].map(r=>m[r]*v[0]+m[4+r]*v[1]+m[8+r]*v[2]+m[12+r]*w);}
-  function defaultScene(options={}) {return {version:1,width:options.width||1280,height:options.height||720,frame_end:options.frame_end||96,samples:32,world:{color:'#263142',strength:.35},camera:{position:[7,-9,6],target:[0,0,1],fov:45},objects:[],lights:[{id:'key',name:'Key light',type:'area',position:[3,-4,7],target:[0,0,0],color:'#fff0dd',power:1100,size:5},{id:'fill',name:'Fill light',type:'area',position:[-4,1,4],target:[0,0,0],color:'#b8d7ff',power:650,size:4}]};}
-  const POSE_FIELDS = {object:['position','rotation','scale'],camera:['position','target','fov'],light:['position','target','power','size']};
+  const CAMERA_DEFAULTS={position:[7,-9,6],target:[0,0,1],fov:45,sensor_height_mm:24,roll:0,shift_x:0,shift_y:0,focal_ratio:1,dof_enabled:false,focus_distance:10,f_stop:5.6,aperture_blades:0,aperture_rotation:0,aperture_ratio:1};
+  const RENDER_DEFAULTS={max_bounces:12,diffuse_bounces:4,glossy_bounces:4,transmission_bounces:12,transparent_max_bounces:8,use_denoising:true,seed:0};
+  const MATERIAL_DEFAULTS={color:'#d8a85f',roughness:.45,metallic:0,transmission:0,ior:1.5,emission_color:'#ffffff',emission_strength:0};
+  const focalLength=(camera,pose=camera)=>camera.sensor_height_mm/(2*Math.tan(pose.fov*deg/2));
+  function defaultScene(options={}) {return {version:1,width:options.width||1280,height:options.height||720,frame_end:options.frame_end||96,samples:32,render:copy(RENDER_DEFAULTS),world:{color:'#263142',strength:.35},camera:copy(CAMERA_DEFAULTS),objects:[],lights:[{id:'key',name:'Key light',type:'area',position:[3,-4,7],target:[0,0,0],color:'#fff0dd',power:1100,size:5},{id:'fill',name:'Fill light',type:'area',position:[-4,1,4],target:[0,0,0],color:'#b8d7ff',power:650,size:4}]};}
+  const POSE_FIELDS = {object:['position','rotation','scale'],camera:['position','target','fov','roll','shift_x','shift_y','focus_distance','f_stop'],light:['position','target','power','size']};
   const INTERPOLATIONS = {linear:'Linear',constant:'Hold',ease_in:'Ease in',ease_out:'Ease out',ease_in_out:'Ease in / out'};
   function easing(t,mode='linear') {if(mode==='constant')return 0;if(mode==='ease_in')return t*t;if(mode==='ease_out')return t*(2-t);if(mode==='ease_in_out')return t*t*(3-2*t);return t;}
   function poseAt(item,frame,kind='object') {
-    const props=POSE_FIELDS[kind],keys=new Map([[1,{frame:1,interpolation:'linear',...Object.fromEntries(props.map(p=>[p,item[p]]))}]]);
-    for(const key of item.keyframes||[])keys.set(key.frame,key);
+    const props=POSE_FIELDS[kind],base=Object.fromEntries(props.map(p=>[p,item[p]??(kind==='camera'?CAMERA_DEFAULTS[p]:undefined)])),keys=new Map([[1,{frame:1,interpolation:'linear',...base}]]);
+    for(const key of item.keyframes||[])keys.set(key.frame,{...base,...key});
     const list=[...keys.values()].sort((a,b)=>a.frame-b.frame),values=key=>Object.fromEntries(props.map(p=>[p,copy(key[p])]));
     if(frame<=list[0].frame)return values(list[0]);
     for(let i=1;i<list.length;i++){
@@ -93,7 +99,7 @@
     if(objects.length>96||vertices>100000||triangles>200000||bytes>5*1024*1024)throw Error('This would exceed the scene geometry budget. Reduce the imported mesh or remove another mesh first.');
   }
   const vertexShader=`attribute vec3 aPosition;attribute vec3 aNormal;uniform mat4 uModel,uViewProjection;uniform mat3 uNormal;varying vec3 vPosition,vNormal;void main(){vec4 p=uModel*vec4(aPosition,1.);vPosition=p.xyz;vNormal=uNormal*aNormal;gl_Position=uViewProjection*p;}`;
-  const fragmentShader=`precision mediump float;varying vec3 vPosition,vNormal;uniform vec3 uColor,uEye,uWorld;uniform float uRoughness,uMetallic,uUnlit;uniform int uLightCount;uniform vec3 uLightPosition[16],uLightColor[16],uLightParameters[16];void main(){if(uUnlit>.5){gl_FragColor=vec4(uColor,1.);return;}vec3 n=normalize(vNormal);if(!gl_FrontFacing)n=-n;vec3 view=normalize(uEye-vPosition);vec3 result=uColor*(uWorld+.035);for(int i=0;i<16;i++){if(i>=uLightCount)break;vec3 delta=uLightPosition[i]-vPosition;float distance2=max(1.,dot(delta,delta));vec3 l=normalize(delta);float energy=uLightParameters[i].x/(30.*distance2);if(uLightParameters[i].y>.5){l=normalize(uLightPosition[i]);energy=uLightParameters[i].x;}float diffuse=max(dot(n,l),0.);vec3 halfVector=normalize(l+view);float spec=pow(max(dot(n,halfVector),0.),mix(120.,3.,uRoughness))*(.15+uMetallic*.8);result+=(uColor*diffuse*(1.-uMetallic*.6)+mix(vec3(.5),uColor,uMetallic)*spec)*uLightColor[i]*energy;}result=result/(vec3(1.)+result*.3);gl_FragColor=vec4(pow(max(result,vec3(0.)),vec3(1./2.2)),1.);}`;
+  const fragmentShader=`precision mediump float;varying vec3 vPosition,vNormal;uniform vec3 uColor,uEye,uWorld,uEmission;uniform float uRoughness,uMetallic,uTransmission,uIor,uUnlit;uniform int uLightCount;uniform vec3 uLightPosition[16],uLightColor[16],uLightParameters[16];void main(){if(uUnlit>.5){gl_FragColor=vec4(uColor,1.);return;}vec3 n=normalize(vNormal);if(!gl_FrontFacing)n=-n;vec3 view=normalize(uEye-vPosition);float f0=pow((uIor-1.)/(uIor+1.),2.);float fresnel=f0+(1.-f0)*pow(1.-max(dot(n,view),0.),5.);vec3 result=uEmission+uColor*(uWorld+.035)*(1.-uTransmission)+uWorld*uTransmission*fresnel;for(int i=0;i<16;i++){if(i>=uLightCount)break;vec3 delta=uLightPosition[i]-vPosition;float distance2=max(1.,dot(delta,delta));vec3 l=normalize(delta);float energy=uLightParameters[i].x/(30.*distance2);if(uLightParameters[i].y>.5){l=normalize(uLightPosition[i]);energy=uLightParameters[i].x;}float diffuse=max(dot(n,l),0.);vec3 halfVector=normalize(l+view);float spec=pow(max(dot(n,halfVector),0.),mix(120.,3.,uRoughness))*(mix(.15,fresnel,uTransmission)+uMetallic*.8);result+=(uColor*diffuse*(1.-uMetallic*.6)*(1.-uTransmission)+mix(vec3(.5),uColor,uMetallic)*spec)*uLightColor[i]*energy;}result=result/(vec3(1.)+result*.3);gl_FragColor=vec4(pow(max(result,vec3(0.)),vec3(1./2.2)),1.);}`;
 
   function mount(host,bridge={}) {
     let scene=copy(bridge.scene||defaultScene(bridge)),selected={type:'camera',id:'camera'},frame=1;
@@ -103,13 +109,15 @@
     let orbit={target:[0,0,1],azimuth:-.9,elevation:.48,distance:13};
     const clean=()=>{
       scene.objects??=[];scene.lights??=[];scene.frame_end??=96;scene.samples??=32;
+      scene.camera={...copy(CAMERA_DEFAULTS),...scene.camera};scene.render={...RENDER_DEFAULTS,...scene.render};
+      for(const item of scene.objects)item.material={...MATERIAL_DEFAULTS,...item.material};
       if(opts.width)scene.width=opts.width;if(opts.height)scene.height=opts.height;
       for(const item of [...scene.objects,scene.camera,...scene.lights])item.keyframes??=[];
     };clean();
     host.innerHTML=`<section class="scene-editor" aria-label="3D scene and motion authoring">
       <div class="scene-tools"><div class="scene-add"><span>Add</span>${['cube','sphere','plane','cylinder'].map(t=>`<button data-scene-add="${t}">${t[0].toUpperCase()+t.slice(1)}</button>`).join('')}<button data-scene-action="add-light">Light +</button><button data-scene-action="import-obj">Import OBJ…</button></div>
       <div class="scene-transform-tools" aria-label="Transform tool"><button data-scene-tool="move" title="Move · W">Move</button><button data-scene-tool="rotate" title="Rotate · E">Rotate</button><button data-scene-tool="scale" title="Scale · R">Scale</button><label title="Move 0.25 units · rotate 15 degrees · scale 0.1"><input class="scene-snap" type="checkbox">Snap</label></div>
-      <div class="scene-view-buttons"><button data-scene-action="fit">Frame selection</button><button data-scene-action="camera">Camera view</button><button data-scene-action="use-camera">Set camera from view</button></div></div>
+      <div class="scene-view-buttons"><button data-scene-action="fit">Frame selection</button><button data-scene-action="camera">Camera view</button><button data-scene-action="use-camera">Set camera from view</button><button data-scene-action="import-camera">Import camera…</button></div></div>
       <div class="scene-main"><div class="scene-viewport"><canvas tabindex="0" aria-label="3D viewport. Drag axis handles to transform. Drag empty space to orbit; Shift-drag to pan."></canvas>
       <div class="scene-gizmo-labels">${['x','y','z','free'].map(axis=>`<button data-scene-axis="${axis}" class="scene-axis scene-axis-${axis}" hidden aria-label="Transform ${axis==='free'?'in view plane':axis.toUpperCase()+' axis'}">${axis==='free'?'•':axis.toUpperCase()}</button>`).join('')}</div>
       <div class="scene-view-label"></div><div class="scene-hint">Drag handles to transform · Drag empty space to orbit · Shift-drag to pan · Scroll to zoom</div>
@@ -117,7 +125,7 @@
       <aside class="scene-properties"><div class="scene-outliner"></div><div class="scene-inspector"></div></aside></div>
       <div class="scene-motion"><div class="scene-motion-toolbar"><strong>Motion</strong><button data-scene-action="previous-key" title="Previous key">‹◆</button><button data-scene-action="next-key" title="Next key">◆›</button><button data-scene-action="keyframe">◇ Keyframe pose</button><label><input class="scene-auto-key" type="checkbox">Auto key</label><span class="scene-key-label">Select a key</span><label>To next key <select class="scene-key-interpolation" disabled>${Object.entries(INTERPOLATIONS).map(([key,label])=>`<option value="${key}">${label}</option>`).join('')}</select></label><button data-scene-action="delete-key" title="Delete selected key">Delete key</button><svg class="scene-easing-curve" viewBox="0 0 84 28" aria-label="Selected interpolation curve"><path/></svg></div><div class="scene-dope-sheet" aria-label="Scene animation dope sheet"></div></div>
       <div class="scene-footer"><button data-scene-action="play" aria-label="Play scene animation">▶</button><label>Frame <input class="scene-current-frame" type="number" min="1" value="1" step="1"></label><input class="scene-frame-slider" aria-label="Scene frame" type="range" min="1" value="1"><label>End <input class="scene-end-frame" type="number" min="1" max="7200" step="1"></label><label class="scene-samples">Samples <select><option value="4">4 · Draft</option><option value="16">16 · Preview</option><option value="32">32 · Standard</option><option value="64">64 · Fine</option><option value="128">128 · Final</option><option value="256">256 · Final+</option></select></label><button class="scene-render primary" data-scene-action="render">Render scene ↗</button></div>
-      <div class="scene-footnote">Z-up · XYZ rotations · The scene and motion are saved with your film · Viewport lighting is approximate; render uses Cycles</div>
+      <div class="scene-footnote">Z-up · 1 unit = 1 m · Viewport is shaded preview · Depth of field, refraction and indirect lighting use the rendered scene</div>
       <dialog class="scene-import-dialog" aria-labelledby="scene-import-title"><form class="scene-import-form"><h3 id="scene-import-title">Import a polygon mesh</h3><p>Choose one OBJ and optional matching MTL files. Mesh parts retain their solid materials and UV coordinates. Texture images are not imported.</p><label>Geometry and materials<input data-scene-import-file type="file" accept=".obj,.mtl" multiple required></label><div class="scene-import-files" aria-live="polite">OBJ up to 5 MiB · MTL files together up to 1 MiB</div><div class="scene-import-options"><label>Source up axis<select data-scene-import-axis><option value="Z">Z up</option><option value="Y">Y up</option></select></label><label>Import scale<input data-scene-import-scale type="number" value="1" min="0.000001" max="10000" step="any" required></label></div><p class="scene-import-status" role="status"></p><div class="scene-import-actions"><button type="button" data-scene-import-cancel>Cancel</button><button type="submit" class="primary" data-scene-import-submit>Import mesh</button></div></form></dialog></section>`;
     const root=host.querySelector('.scene-editor'),canvas=root.querySelector('canvas'),viewport=root.querySelector('.scene-viewport');
     const inspector=root.querySelector('.scene-inspector'),outliner=root.querySelector('.scene-outliner'),message=root.querySelector('.scene-message'),dope=root.querySelector('.scene-dope-sheet');
@@ -126,14 +134,15 @@
     const removers=[],listen=(el,event,fn,options)=>{el.addEventListener(event,fn,options);return ()=>el.removeEventListener(event,fn,options);};
     const capture=pointerId=>{try{root.setPointerCapture?.(pointerId);}catch(_){};};
     const report=(text,error=false)=>{message.textContent=text;message.classList.toggle('error',error);message.hidden=!text;};
-    const getItem=(type,id)=>type==='object'?scene.objects.find(o=>o.id===id):type==='light'?scene.lights.find(o=>o.id===id):type==='world'?scene.world:scene.camera;
+    const getItem=(type,id)=>type==='object'?scene.objects.find(o=>o.id===id):type==='light'?scene.lights.find(o=>o.id===id):type==='world'?scene.world:type==='render'?scene.render:scene.camera;
     const selectedItem=()=>getItem(selected.type,selected.id);
     const animated=()=>['object','camera','light'].includes(selected.type);
-    const cameraPose=()=>poseAt(scene.camera,frame,'camera');
+    const cameraPose=()=>({...poseAt(scene.camera,frame,'camera'),focal_ratio:scene.camera.focal_ratio});
     const eye=()=>viewCamera?cameraPose().position:add(orbit.target,[Math.cos(orbit.azimuth)*Math.cos(orbit.elevation)*orbit.distance,Math.sin(orbit.azimuth)*Math.cos(orbit.elevation)*orbit.distance,Math.sin(orbit.elevation)*orbit.distance]);
     const target=()=>viewCamera?cameraPose().target:orbit.target;
     const tracks=()=>[...scene.objects.map(item=>({type:'object',id:item.id,name:item.name,item})),{type:'camera',id:'camera',name:'Render camera',item:scene.camera},...scene.lights.map(item=>({type:'light',id:item.id,name:item.name,item}))];
     function publish(before) {
+      clean();
       try {if(bridge.onChange?.(copy(scene))===false){if(before)scene=before;report('Finish the current project operation before editing.',true);refresh();return false;}}
       catch(error){if(before)scene=before;report(error.message||'Scene change could not be saved.',true);refresh();return false;}
       revision++;refresh();return true;
@@ -144,7 +153,7 @@
       if(!key){if(item.keyframes.length>=128)throw Error('This item already has 128 keys. Remove a key before adding another.');key={frame:at,interpolation:'linear',...poseAt(item,at,kind)};item.keyframes.push(key);item.keyframes.sort((a,b)=>a.frame-b.frame);}
       return key;
     }
-    function writePose(item,kind,pose) {const destination=autoKey||item.keyframes.length?ensureKey(item,kind):item;for(const prop of POSE_FIELDS[kind])destination[prop]=copy(pose[prop]);}
+    function writePose(item,kind,pose) {if(kind==='camera'&&focalLength(item,pose)<1)throw Error('The focal length must be at least 1 mm. Enlarge the sensor or narrow the field of view.');const destination=autoKey||item.keyframes.length?ensureKey(item,kind):item;for(const prop of POSE_FIELDS[kind])destination[prop]=copy(pose[prop]);}
     function updateFrameUI() {root.querySelector('.scene-current-frame').value=frame;root.querySelector('.scene-frame-slider').value=frame;dope.style.setProperty('--scene-playhead',`${(frame-1)/Math.max(1,scene.frame_end-1)*100}%`);}
     function setFrame(value) {frame=clamp(Math.round(Number(value)||1),1,scene.frame_end);updateFrameUI();if(!playing)renderInspector();draw();}
     function stop() {playing=false;cancelAnimationFrame(animation);root.querySelector('[data-scene-action="play"]').textContent='▶';}
@@ -154,17 +163,26 @@
       if(scene.objects.length>=96){report('A scene supports at most 96 objects.',true);return;}
       commit(()=>{const item={id:uid(),name:type[0].toUpperCase()+type.slice(1)+' '+(scene.objects.length+1),type,position:[0,0,type==='plane'?0:1],rotation:[0,0,0],scale:type==='plane'?[5,5,1]:[1,1,1],material:{color:type==='plane'?'#727a88':'#d8a85f',roughness:.45,metallic:0},keyframes:[]};scene.objects.push(item);selected={type:'object',id:item.id};selectedKey=null;});
     }
-    const number=(label,path,value,step=.1,min=-1000,max=1000)=>`<label>${label}<input data-scene-property="${path}" type="number" value="${Number(value).toFixed(step<1?2:0)}" step="${step}" min="${min}" max="${max}"></label>`;
+    const number=(label,path,value,step=.1,min=-1000,max=1000)=>`<label>${label}<input data-scene-property="${path}" type="number" value="${Number(Number(value).toFixed(Math.max(0,Math.ceil(-Math.log10(step))+1)))}" step="${step}" min="${min}" max="${max}"></label>`;
+    const checkbox=(label,path,value)=>`<label class="scene-check">${label}<input data-scene-property="${path}" type="checkbox" ${value?'checked':''}></label>`;
     const vector=(label,path,values,step=.1,min=-1000,max=1000)=>`<fieldset><legend>${label}</legend><div class="scene-vector">${['X','Y','Z'].map((name,i)=>number(name,path+'.'+i,values[i],step,min,max)).join('')}</div></fieldset>`;
     function renderOutliner() {
-      outliner.innerHTML=`<h3>Scene <span>${scene.objects.length} objects</span></h3><div class="scene-object-list">${tracks().map(t=>`<button class="${selected.type===t.type&&selected.id===t.id?'selected':''}" data-scene-select="${t.type}" data-id="${esc(t.id)}"><span>${t.type==='camera'?'▱':t.type==='light'?'☀':'◇'}</span>${esc(t.name)}<small>${t.item.keyframes.length?'◆ '+t.item.keyframes.length:t.type}</small></button>`).join('')}<button class="${selected.type==='world'?'selected':''}" data-scene-select="world"><span>◉</span>World</button></div>`;
+      outliner.innerHTML=`<h3>Scene <span>${scene.objects.length} objects</span></h3><div class="scene-object-list">${tracks().map(t=>`<button class="${selected.type===t.type&&selected.id===t.id?'selected':''}" data-scene-select="${t.type}" data-id="${esc(t.id)}"><span>${t.type==='camera'?'▱':t.type==='light'?'☀':'◇'}</span>${esc(t.name)}<small>${t.item.keyframes.length?'◆ '+t.item.keyframes.length:t.type}</small></button>`).join('')}<button class="${selected.type==='world'?'selected':''}" data-scene-select="world"><span>◉</span>World</button><button class="${selected.type==='render'?'selected':''}" data-scene-select="render"><span>◈</span>Light paths & sampling</button></div>`;
     }
     function renderInspector() {
       const item=selectedItem();if(!item){selected={type:'camera',id:'camera'};return renderInspector();}
-      const pose=animated()?poseAt(item,frame,selected.type):null;let html='';
-      if(selected.type==='object')html=`<div class="scene-inspector-heading"><h3>Object</h3><div><button data-scene-action="duplicate">Duplicate</button><button data-scene-action="delete">Delete</button></div></div><label>Name<input data-scene-property="name" value="${esc(item.name)}" maxlength="120"></label>${vector('Position','position',pose.position)}${vector('Rotation · degrees','rotation',pose.rotation,1,-3600,3600)}${vector('Scale','scale',pose.scale,.1,.01,100)}<fieldset><legend>Material</legend><label>Base color<input data-scene-property="material.color" type="color" value="${esc(item.material.color)}"></label>${number('Roughness','material.roughness',item.material.roughness,.05,0,1)}${number('Metallic','material.metallic',item.material.metallic,.05,0,1)}</fieldset>`;
-      else if(selected.type==='camera')html=`<h3>Render camera</h3>${vector('Position','position',pose.position)}${vector('Look at','target',pose.target)}${number('Vertical field of view','fov',pose.fov,1,10,100)}<p class="scene-explanation">Keyframe the position, aim and lens to create camera moves. Camera view follows the animated shot.</p>`;
+      const pose=animated()?(selected.type==='camera'?cameraPose():poseAt(item,frame,selected.type)):null;let html='';
+      if(selected.type==='object')html=`<div class="scene-inspector-heading"><h3>Object</h3><div><button data-scene-action="duplicate">Duplicate</button><button data-scene-action="delete">Delete</button></div></div><label>Name<input data-scene-property="name" value="${esc(item.name)}" maxlength="120"></label>${vector('Position','position',pose.position)}${vector('Rotation · degrees','rotation',pose.rotation,1,-3600,3600)}${vector('Scale','scale',pose.scale,.1,.01,100)}
+        <fieldset><legend>Principled material</legend><div class="scene-material-presets">${['solid','metal','glass','emitter'].map(p=>`<button data-scene-material="${p}">${p[0].toUpperCase()+p.slice(1)}</button>`).join('')}</div>
+        <label>Base color<input data-scene-property="material.color" type="color" value="${esc(item.material.color)}"></label>${number('Roughness','material.roughness',item.material.roughness,.05,0,1)}${number('Metallic','material.metallic',item.material.metallic,.05,0,1)}${number('Transmission','material.transmission',item.material.transmission,.05,0,1)}${number('Index of refraction','material.ior',item.material.ior,.01,1,4)}
+        <label>Emission color<input data-scene-property="material.emission_color" type="color" value="${esc(item.material.emission_color)}"></label>${number('Emission strength','material.emission_strength',item.material.emission_strength,.1,0,1000)}<p class="scene-explanation">Glass refraction and light emitted onto other objects are calculated when rendering. Closed geometry gives glass its thickness.</p></fieldset>`;
+      else if(selected.type==='camera')html=`<h3>Render camera</h3>${vector('Position · m','position',pose.position)}${vector('Look at · m','target',pose.target)}${number('Roll · degrees','roll',pose.roll,.1,-3600,3600)}
+        <fieldset><legend>Lens & sensor</legend>${number('Focal length · mm','__focal_length_mm',focalLength(item,pose),.1,1,1000)}${number('Vertical field · °','fov',pose.fov,.1,10,100)}${number('Sensor height · mm','sensor_height_mm',item.sensor_height_mm,.1,1,100)}<p class="scene-explanation">Active gate ${(item.sensor_height_mm*scene.width/scene.height/pose.focal_ratio).toFixed(2)} × ${item.sensor_height_mm.toFixed(2)} mm. Focal length and vertical field describe the same lens; changing either updates the other.</p></fieldset>
+        <fieldset><legend>Depth of field</legend>${checkbox('Enable depth of field','dof_enabled',item.dof_enabled)}${number('Focus distance · m','focus_distance',pose.focus_distance,.01,.01,10000)}<button data-scene-action="focus-aim">Focus at look-at point</button>${number('Aperture · f-stop','f_stop',pose.f_stop,.1,.1,128)}
+        <label>Aperture blades<select data-scene-property="aperture_blades" data-scene-numeric>${[0,...Array.from({length:14},(_,i)=>i+3)].map(n=>`<option value="${n}" ${n===item.aperture_blades?'selected':''}>${n||'Circular'}</option>`).join('')}</select></label>${number('Blade rotation · °','aperture_rotation',item.aperture_rotation,1,-180,180)}${number('Aperture ratio','aperture_ratio',item.aperture_ratio,.05,.1,10)}<p class="scene-explanation">Keyframe focus and f-stop for focus pulls. Depth of field appears in the rendered image. F-stop controls blur without changing exposure.</p></fieldset>
+        <fieldset><legend>Calibrated framing</legend>${number('Principal shift X','shift_x',pose.shift_x,.001,-2,2)}${number('Principal shift Y','shift_y',pose.shift_y,.001,-2,2)}${number('Focal ratio fx / fy','focal_ratio',item.focal_ratio,.001,.1,10)}<p class="scene-explanation">Shifts are fractions of output width and height. Focal ratio is static for the shot. Camera view uses the same roll, principal point and focal ratio as the render.</p></fieldset>`;
       else if(selected.type==='light')html=`<div class="scene-inspector-heading"><h3>Light</h3><button data-scene-action="delete">Delete</button></div><label>Name<input data-scene-property="name" value="${esc(item.name)}" maxlength="120"></label><label>Type<select data-scene-property="type">${['area','point','sun'].map(t=>`<option ${item.type===t?'selected':''} value="${t}">${t}</option>`).join('')}</select></label>${vector('Position','position',pose.position)}${item.type!=='point'?vector('Look at','target',pose.target):''}<label>Color<input type="color" data-scene-property="color" value="${esc(item.color)}"></label>${number(item.type==='sun'?'Strength':'Power · watts','power',pose.power,item.type==='sun'?.1:25,0,10000)}${number(item.type==='sun'?'Angular size · degrees':'Size · scene units','size',pose.size,.1,.01,100)}`;
+      else if(selected.type==='render')html=`<h3>Light paths & sampling</h3><p class="scene-explanation">These settings control the saved Cycles render. Each ray type is also limited by the total bounce count.</p>${number('Total bounces','max_bounces',item.max_bounces,1,0,64)}${number('Diffuse bounces','diffuse_bounces',item.diffuse_bounces,1,0,64)}${number('Glossy bounces','glossy_bounces',item.glossy_bounces,1,0,64)}${number('Transmission bounces','transmission_bounces',item.transmission_bounces,1,0,64)}${number('Transparent bounces','transparent_max_bounces',item.transparent_max_bounces,1,0,64)}${checkbox('Denoise render','use_denoising',item.use_denoising)}${number('Sampling seed','seed',item.seed,1,0,2147483647)}<p class="scene-explanation">Samples are set in the render bar. More samples reduce noise; additional bounces support deeper reflection and transmission paths.</p>`;
       else html=`<h3>World</h3><label>Environment color<input type="color" data-scene-property="color" value="${esc(item.color)}"></label>${number('Environment strength','strength',item.strength,.05,0,5)}`;
       if(selected.type==='object'&&item.type==='mesh')html+=`<div class="scene-mesh-info"><h4>Imported geometry</h4><p>${item.mesh.vertices.length.toLocaleString()} vertices · ${item.mesh.triangles.length.toLocaleString()} triangles</p><p>${item.mesh.uvs?.length?'UV coordinates retained':'No UV coordinates'} · ${item.mesh.normals?.length?'Corner normals retained':'Face normals'}</p>${item.mesh.source?`<p title="${esc(item.mesh.source.sha256)}">${esc(item.mesh.source.name)}</p>`:''}</div>`;
       if(animated())html+=`<div class="scene-keyframes"><h4>Motion <span>${item.keyframes.length} keys</span></h4><p>${item.keyframes.length?'Pose edits update a key at frame '+frame+'.':'Enable Auto key or add a pose key to begin animation.'} Drag diamonds in the motion tracks to retime. Hold keeps the preceding pose until the next key.</p></div>`;
@@ -195,6 +213,7 @@
       root.querySelector('.scene-current-frame').max=scene.frame_end;root.querySelector('.scene-frame-slider').max=scene.frame_end;root.querySelector('.scene-end-frame').value=scene.frame_end;root.querySelector('.scene-samples select').value=String(scene.samples);
       root.querySelector('.scene-render').disabled=renderBusy||importBusy||!opts.renderAvailable||!scene.objects.length;
       root.querySelector('[data-scene-action="import-obj"]').disabled=importBusy||typeof bridge.onImportMesh!=='function';
+      root.querySelector('[data-scene-action="import-camera"]').disabled=typeof bridge.onImportCamera!=='function';
       root.querySelector('.scene-render').title=opts.renderAvailable?'Render this authored scene into your media bin':'The Blender render engine is unavailable. Check engines to configure it.';
       root.querySelector('[data-scene-action="keyframe"]').disabled=!animated();root.querySelector('.scene-empty').hidden=!!scene.objects.length;
       root.querySelector('.scene-view-label').innerHTML=(viewCamera?'RENDER CAMERA':'PERSPECTIVE')+' <span>3D scene · '+(viewCamera?'Animated framing':'World axes')+'</span>';
@@ -207,7 +226,7 @@
       function shader(type,source){const s=gl.createShader(type);gl.shaderSource(s,source);gl.compileShader(s);if(!gl.getShaderParameter(s,gl.COMPILE_STATUS))throw Error(gl.getShaderInfoLog(s));return s;}
       program=gl.createProgram();const vs=shader(gl.VERTEX_SHADER,vertexShader),fs=shader(gl.FRAGMENT_SHADER,fragmentShader);gl.attachShader(program,vs);gl.attachShader(program,fs);gl.linkProgram(program);gl.deleteShader(vs);gl.deleteShader(fs);if(!gl.getProgramParameter(program,gl.LINK_STATUS))throw Error(gl.getProgramInfoLog(program));
       for(const name of ['aPosition','aNormal'])locations[name]=gl.getAttribLocation(program,name);
-      for(const name of ['uModel','uViewProjection','uNormal','uColor','uEye','uWorld','uRoughness','uMetallic','uUnlit','uLightCount','uLightPosition[0]','uLightColor[0]','uLightParameters[0]'])locations[name]=gl.getUniformLocation(program,name);
+      for(const name of ['uModel','uViewProjection','uNormal','uColor','uEye','uWorld','uEmission','uRoughness','uMetallic','uTransmission','uIor','uUnlit','uLightCount','uLightPosition[0]','uLightColor[0]','uLightParameters[0]'])locations[name]=gl.getUniformLocation(program,name);
       for(const type of ['cube','sphere','plane','cylinder'])meshes[type]=uploadGeometry(geometry(type));
       lineBuffer=gl.createBuffer();normalBuffer=gl.createBuffer();gl.enable(gl.DEPTH_TEST);gl.disable(gl.CULL_FACE);
     }
@@ -223,15 +242,15 @@
     function viewInfo() {
       const r=canvas.getBoundingClientRect();let width=r.width,height=r.height;
       if(viewCamera){const aspect=scene.width/scene.height;if(width/height>aspect)width=height*aspect;else height=width/aspect;}
-      const e=eye(),look=target(),fov=viewCamera?cameraPose().fov:45,forward=norm(sub(look,e));let up=[0,0,1];if(Math.abs(dot(forward,up))>.999)up=[0,1,0];
-      const right=norm(cross(forward,up));up=norm(cross(right,forward));
-      return {width,height,ox:(r.width-width)/2,oy:(r.height-height)/2,eye:e,target:look,fov,forward,right,up,vp:matrixProduct(perspective(fov,width/height),lookAt(e,look))};
+      const e=eye(),look=target(),c=viewCamera?cameraPose():{position:e,target:look,fov:45,roll:0,shift_x:0,shift_y:0,focal_ratio:1};
+      const {forward,right,up}=cameraBasis(e,look,c.roll);
+      return {width,height,ox:(r.width-width)/2,oy:(r.height-height)/2,eye:e,target:look,fov:c.fov,shiftX:c.shift_x,shiftY:c.shift_y,focalRatio:c.focal_ratio,forward,right,up,vp:cameraProjection(c,width,height)};
     }
     function project(point,view) {const p=transform(view.vp,point);if(p[3]<=.05)return null;return {x:view.ox+(p[0]/p[3]+1)*view.width/2,y:view.oy+(1-p[1]/p[3])*view.height/2,z:p[3]};}
-    function ray(x,y,view) {const tx=(2*(x-view.ox)/view.width-1)*Math.tan(view.fov*deg/2)*view.width/view.height,ty=(1-2*(y-view.oy)/view.height)*Math.tan(view.fov*deg/2);return {origin:view.eye,direction:norm(add(view.forward,add(mul(view.right,tx),mul(view.up,ty))))};}
+    function ray(x,y,view) {const tx=(2*(x-view.ox)/view.width-1-2*view.shiftX)*Math.tan(view.fov*deg/2)*view.width/view.height/view.focalRatio,ty=(1-2*(y-view.oy)/view.height-2*view.shiftY)*Math.tan(view.fov*deg/2);return {origin:view.eye,direction:norm(add(view.forward,add(mul(view.right,tx),mul(view.up,ty))))};}
     function axisParameter(pointer,origin,axis) {const b=dot(axis,pointer.direction),w=sub(origin,pointer.origin),den=1-b*b;return Math.abs(den)<.015?null:(b*dot(pointer.direction,w)-dot(axis,w))/den;}
     function planePoint(pointer,origin,normal) {const den=dot(pointer.direction,normal);if(Math.abs(den)<.025)return null;return add(pointer.origin,mul(pointer.direction,dot(sub(origin,pointer.origin),normal)/den));}
-    function cameraGuide() {const c=cameraPose(),direction=norm(sub(c.target,c.position));let right=norm(cross(direction,[0,0,1]));if(Math.hypot(...right)<.01)right=[1,0,0];const up=norm(cross(right,direction)),center=add(c.position,mul(direction,1.3)),h=1.3*Math.tan(c.fov*deg/2),w=h*scene.width/scene.height,corners=[[-1,-1],[1,-1],[1,1],[-1,1]].map(([x,y])=>add(add(center,mul(right,w*x)),mul(up,h*y))),points=[];for(let i=0;i<4;i++)points.push(...c.position,...corners[i],...corners[i],...corners[(i+1)%4]);lines(points,[.37,.56,.72]);}
+    function cameraGuide() {const c=cameraPose(),{forward,right,up}=cameraBasis(c.position,c.target,c.roll),center=add(c.position,mul(forward,1.3)),h=1.3*Math.tan(c.fov*deg/2),w=h*scene.width/scene.height/c.focal_ratio,corners=[[-1,-1],[1,-1],[1,1],[-1,1]].map(([x,y])=>add(add(center,mul(right,w*(x-2*c.shift_x))),mul(up,h*(y-2*c.shift_y)))),points=[];for(let i=0;i<4;i++)points.push(...c.position,...corners[i],...corners[i],...corners[(i+1)%4]);lines(points,[.37,.56,.72]);}
     function drawGizmo(view) {
       for(const button of root.querySelectorAll('[data-scene-axis]'))button.hidden=true;gizmo=null;
       const item=selectedItem();if(!animated()||!item||playing||(viewCamera&&selected.type==='camera'))return;
@@ -263,7 +282,7 @@
       for(const light of scene.lights.slice(0,16)){const pose=poseAt(light,frame,'light');positions.push(...(light.type==='sun'?norm(sub(pose.position,pose.target)):pose.position));colors.push(...color(light.color));parameters.push(pose.power,light.type==='sun'?1:0,pose.size);}
       while(positions.length<48){positions.push(0,0,0);colors.push(0,0,0);parameters.push(0,0,0);}gl.uniform1i(locations.uLightCount,Math.min(16,scene.lights.length));gl.uniform3fv(locations['uLightPosition[0]'],positions);gl.uniform3fv(locations['uLightColor[0]'],colors);gl.uniform3fv(locations['uLightParameters[0]'],parameters);
       if(!viewCamera){const grid=[];for(let i=-10;i<=10;i++)grid.push(i,-10,0,i,10,0,-10,i,0,10,i,0);lines(grid,[.16,.19,.23]);lines([-10,0,.003,10,0,.003],[.45,.18,.18]);lines([0,-10,.003,0,10,.003],[.18,.4,.27]);cameraGuide();}
-      for(const obj of scene.objects){const pose=poseAt(obj,frame),mesh=objectGeometry(obj);if(!mesh)continue;bind(mesh);gl.uniformMatrix4fv(locations.uModel,false,modelMatrix(pose));gl.uniformMatrix3fv(locations.uNormal,false,normalMatrix(pose));gl.uniform3fv(locations.uColor,color(obj.material.color));gl.uniform1f(locations.uRoughness,obj.material.roughness);gl.uniform1f(locations.uMetallic,obj.material.metallic);gl.uniform1f(locations.uUnlit,0);gl.drawArrays(gl.TRIANGLES,0,mesh.count);}
+      for(const obj of scene.objects){const pose=poseAt(obj,frame),mesh=objectGeometry(obj);if(!mesh)continue;bind(mesh);gl.uniformMatrix4fv(locations.uModel,false,modelMatrix(pose));gl.uniformMatrix3fv(locations.uNormal,false,normalMatrix(pose));gl.uniform3fv(locations.uColor,color(obj.material.color));gl.uniform3fv(locations.uEmission,color(obj.material.emission_color).map(c=>c*obj.material.emission_strength));gl.uniform1f(locations.uRoughness,obj.material.roughness);gl.uniform1f(locations.uMetallic,obj.material.metallic);gl.uniform1f(locations.uTransmission,obj.material.transmission);gl.uniform1f(locations.uIor,obj.material.ior);gl.uniform1f(locations.uUnlit,0);gl.drawArrays(gl.TRIANGLES,0,mesh.count);}
       if(!viewCamera)for(const light of scene.lights){const p=poseAt(light,frame,'light').position,r=.17;lines([p[0]-r,p[1],p[2],p[0]+r,p[1],p[2],p[0],p[1]-r,p[2],p[0],p[1]+r,p[2],p[0],p[1],p[2]-r,p[0],p[1],p[2]+r],[.9,.77,.42]);}
       drawGizmo(view);gl.disable(gl.SCISSOR_TEST);
     }
@@ -322,9 +341,12 @@
     }
     function propertyChanged(event) {
       const input=event.target.closest('[data-scene-property]');if(!input)return;stop();const item=selectedItem();if(!item)return;
-      let value=input.type==='number'?Number(input.value):input.value;if(input.type==='number'){if(!Number.isFinite(value)){refresh();return;}value=clamp(value,Number(input.min),Number(input.max));}
+      let value=input.type==='checkbox'?input.checked:input.type==='number'||input.hasAttribute('data-scene-numeric')?Number(input.value):input.value;if(input.type==='number'){if(!Number.isFinite(value)){refresh();return;}value=clamp(value,Number(input.min),Number(input.max));if(Number(input.step)===1)value=Math.round(value);}
       if(input.dataset.sceneProperty==='name'&&!value.trim()){refresh();return;}
-      commit(()=>{const path=input.dataset.sceneProperty.split('.'),isPose=animated()&&POSE_FIELDS[selected.type].includes(path[0]);let destination=isPose?poseAt(item,frame,selected.type):item;const pose=destination;for(let i=0;i<path.length-1;i++)destination=destination[path[i]];destination[path.at(-1)]=value;if(isPose)writePose(item,selected.type,pose);});
+      if(selected.type==='camera'&&input.dataset.sceneProperty==='__focal_length_mm'){
+        commit(()=>{const pose=poseAt(item,frame,'camera'),fov=2*Math.atan(item.sensor_height_mm/(2*value))/deg;if(fov<10||fov>100)throw Error('This focal length gives a field of view outside the supported 10–100° range. Adjust the sensor height or choose another focal length.');pose.fov=fov;writePose(item,'camera',pose);});return;
+      }
+      commit(()=>{const path=input.dataset.sceneProperty.split('.'),isPose=animated()&&POSE_FIELDS[selected.type].includes(path[0]);let destination=isPose?poseAt(item,frame,selected.type):item;const pose=destination;for(let i=0;i<path.length-1;i++)destination=destination[path[i]];destination[path.at(-1)]=value;if(isPose)writePose(item,selected.type,pose);if(selected.type==='camera'&&path[0]==='sensor_height_mm'&&[item,...item.keyframes].some(key=>focalLength(item,key)<1))throw Error('This sensor makes an authored focal length less than 1 mm. Enlarge the sensor or narrow the field of view.');});
     }
     async function importGeometry(event) {
       event.preventDefault();if(importBusy||disposed||typeof bridge.onImportMesh!=='function')return;
@@ -351,13 +373,18 @@
     async function action(event) {
       if(event.target.closest('.scene-import-dialog'))return;
       if(performance.now()<suppressClick)return;const addButton=event.target.closest('[data-scene-add]');if(addButton){addPrimitive(addButton.dataset.sceneAdd);return;}
+      const materialButton=event.target.closest('[data-scene-material]');if(materialButton&&selected.type==='object'){
+        const preset=materialButton.dataset.sceneMaterial;commit(()=>{const item=selectedItem();item.material={...MATERIAL_DEFAULTS,color:item.material.color};if(preset==='metal')Object.assign(item.material,{metallic:1,roughness:.2});else if(preset==='glass')Object.assign(item.material,{color:'#f5faff',roughness:.05,transmission:1,ior:1.5});else if(preset==='emitter')Object.assign(item.material,{emission_color:item.material.color,emission_strength:5});});return;
+      }
       const selectButton=event.target.closest('[data-scene-select]');if(selectButton){select(selectButton.dataset.sceneSelect,selectButton.dataset.id);return;}
       const toolButton=event.target.closest('[data-scene-tool]');if(toolButton){tool=toolButton.dataset.sceneTool;refresh();return;}
       const keyButton=event.target.closest('[data-scene-key]');if(keyButton){const lane=keyButton.closest('.scene-key-lane');selected={type:lane.dataset.trackType,id:lane.dataset.trackId};selectedKey={...selected,frame:Number(keyButton.dataset.sceneKey)};stop();setFrame(selectedKey.frame);refresh();return;}
       const command=event.target.closest('[data-scene-action]')?.dataset.sceneAction;if(!command)return;
       if(command==='play'){play();return;}
       if(command==='camera'){viewCamera=!viewCamera;refresh();return;}
-      if(command==='use-camera'){const position=eye(),aim=[...target()],fov=viewCamera?cameraPose().fov:45;commit(()=>{writePose(scene.camera,'camera',{position,target:aim,fov});viewCamera=true;selected={type:'camera',id:'camera'};selectedKey=null;tool='move';});return;}
+      if(command==='use-camera'){const position=eye(),aim=[...target()],pose=cameraPose(),fov=viewCamera?pose.fov:45;commit(()=>{writePose(scene.camera,'camera',{...pose,position,target:aim,fov,...(viewCamera?{}:{roll:0,shift_x:0,shift_y:0})});if(!viewCamera)scene.camera.focal_ratio=1;viewCamera=true;selected={type:'camera',id:'camera'};selectedKey=null;tool='move';});return;}
+      if(command==='import-camera'){if(typeof bridge.onImportCamera!=='function')return;stop();try{await bridge.onImportCamera();}catch(error){report(error.message||'Camera import could not open.',true);}return;}
+      if(command==='focus-aim'){commit(()=>{const pose=cameraPose();pose.focus_distance=clamp(Math.hypot(...sub(pose.target,pose.position)),.01,10000);writePose(scene.camera,'camera',pose);});return;}
       if(command==='import-obj'){if(importBusy||typeof bridge.onImportMesh!=='function')return;stop();importStatus.textContent='';importDialog.showModal();return;}
       if(command==='fit'){frameSelection();refresh();return;}
       if(command==='delete'){if(!['object','light'].includes(selected.type))return;commit(()=>{if(selected.type==='object')scene.objects=scene.objects.filter(o=>o.id!==selected.id);else scene.lights=scene.lights.filter(o=>o.id!==selected.id);selected={type:'camera',id:'camera'};selectedKey=null;tool='move';});return;}
@@ -405,10 +432,13 @@
     if(globalThis.ResizeObserver){resizeObserver=new ResizeObserver(draw);resizeObserver.observe(viewport);}else removers.push(listen(window,'resize',draw));
     refresh();
     return {
+      getScene(){return copy(scene);},
+      showCamera(){if(gesture)finishGesture(false);stop();selected={type:'camera',id:'camera'};selectedKey=null;viewCamera=true;tool='move';refresh();},
+      replaceCamera(camera){stop();return commit(()=>{scene.camera={...copy(CAMERA_DEFAULTS),...copy(camera)};selected={type:'camera',id:'camera'};selectedKey=null;viewCamera=true;tool='move';});},
       setScene(next,options={}){if(gesture)finishGesture(false);stop();opts={...opts,...options};scene=copy(next||defaultScene(opts));revision++;refresh();},
       setRenderAvailable(value){opts.renderAvailable=!!value;refresh();},
       destroy(){disposed=true;stop();resizeObserver?.disconnect();for(const remove of removers)remove();if(gl){for(const mesh of Object.values(meshes)){gl.deleteBuffer(mesh.p);gl.deleteBuffer(mesh.n);}gl.deleteBuffer(lineBuffer);gl.deleteBuffer(normalBuffer);gl.deleteProgram(program);}host.replaceChildren();}
     };
   }
-  window.CinematicumSceneEditor={mount,defaultScene,poseAt,easing,meshGeometry,geometryBounds,intersectGeometry};
+  window.CinematicumSceneEditor={mount,defaultScene,poseAt,easing,meshGeometry,geometryBounds,intersectGeometry,cameraBasis,cameraProjection,focalLength};
 })();

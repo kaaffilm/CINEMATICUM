@@ -156,10 +156,12 @@ def export_otio(project, project_dir):
     warnings = ["OTIO exchanges cuts, gaps and references. Relink the project-relative media paths in other editors; media is not embedded."]
     if p["titles"]:
         warnings.append("Titles are retained only in CINEMATICUM metadata; other editors will not display them from this OTIO file.")
-    if any(c.get("compositor") or c.get("tracking") or c["keyframes"] or c["grade"] != {"exposure": 0, "contrast": 1, "saturation": 1, "temperature": 0}
+    if any(c.get("compositor") or c.get("tracking") or c.get("color_pipeline") or c["keyframes"] or c["grade"] != {"exposure": 0, "contrast": 1, "saturation": 1, "temperature": 0}
            or any(c[key] != value for key, value in (("x", 0), ("y", 0), ("scale", 1), ("rotation", 0), ("opacity", 1), ("volume", 1)))
            or any(c["effects"].values()) or c["audio"]["fade_in"] or c["audio"]["fade_out"] or c["audio"]["pan"] for c in p["clips"]):
         warnings.append("Transforms, effects, color, tracking, titles and audio automation remain private CINEMATICUM metadata; other editors receive the unprocessed cuts.")
+    if any(c.get("color_pipeline", {}).get("lut") for c in p["clips"] if isinstance(c.get("color_pipeline"), dict)):
+        warnings.append("LUT tables are project-owned files and are not embedded in OTIO. Import the same LUTs into a destination CINEMATICUM project before restoring private authoring data.")
     if any(t["gain"] != 1 or t["solo"] for t in p["tracks"]):
         warnings.append("Track gain and solo relationships remain private metadata; public track enable flags reflect the current mixer state.")
     if any(c["speed"] != 1 or c["reverse"] for c in p["clips"]):

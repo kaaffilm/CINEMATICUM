@@ -27,10 +27,6 @@ jobs:
         run: python3 -m unittest discover -s scripts/studio -p 'test_*.py' -v
       - name: Check editor JavaScript
         run: |
-          node --check scripts/studio/web/app.js
-          node --check scripts/studio/web/editing.js
-          node --check scripts/studio/web/viewer-tools.js
-          node --check scripts/studio/web/compositor-ui.js
-          node --check scripts/studio/web/scene-editor.js
-          node --check scripts/studio/web/tracking-ui.js
-          node --check scripts/studio/web/interchange-ui.js
+          for file in scripts/studio/web/*.js scripts/studio/macos/*.js; do
+            node --check "$file"
+          done

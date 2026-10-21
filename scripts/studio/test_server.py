@@ -79,6 +79,52 @@ class ServerTests(unittest.TestCase):
         self.assertEqual(201, status)
         self.assertEqual("good", data["name"])
 
+    def test_lut_import_is_project_owned_and_only_applied_by_saved_clip(self):
+        path = f"/api/projects/{self.p['id']}"
+        before = (self.store.project_dir(self.p['id']) / "project.json").read_bytes()
+        cube = 'TITLE "ENGINE TEST inverse"\nLUT_1D_SIZE 2\n1 1 1\n0 0 0\n'
+        status, _, _ = self.request("POST", path + "/color-lut-import", {"text": cube}, token=False)
+        self.assertEqual(403, status)
+        status, _, imported = self.request("POST", path + "/color-lut-import", {"text": cube})
+        self.assertEqual(201, status, imported)
+        self.assertEqual(64, len(imported['lut']['sha256']))
+        self.assertEqual(before, (self.store.project_dir(self.p['id']) / "project.json").read_bytes())
+        status, _, listing = self.request("GET", path + "/color-luts")
+        self.assertEqual(200, status)
+        self.assertEqual([imported['lut']], listing['luts'])
+        status, _, _ = self.request("POST", path + "/color-lut-import", {"path": "/etc/passwd"})
+        self.assertEqual(400, status)
+        asset = self.upload()
+        project = self.add_clip(asset)
+        project['clips'][0]['color_pipeline'] = {'version': 1, 'enabled': True,
+            'lut': {'sha256': imported['lut']['sha256'], 'interpolation': 'linear'}}
+        status, _, saved = self.request("PUT", path, project)
+        self.assertEqual(200, status, saved)
+        self.assertEqual(imported['lut']['sha256'], saved['clips'][0]['color_pipeline']['lut']['sha256'])
+        owned = self.store.project_dir(self.p['id']) / 'color/luts' / (imported['lut']['sha256'] + '.cube')
+        owned.write_text('tampered')
+        status, _, error = self.request("PUT", path, saved)
+        self.assertEqual(400, status, error)
+        self.assertEqual(saved['revision'], self.store.get(self.p['id'])['revision'])
+
+    def test_calibrated_camera_import_never_follows_image_names_or_autosaves(self):
+        path = f"/api/projects/{self.p['id']}"
+        before = (self.store.project_dir(self.p['id']) / "project.json").read_bytes()
+        payload = {'format': 'colmap', 'cameras_text': '1 PINHOLE 160 90 100 110 85 40\n',
+                   'images_text': '1 1 0 0 0 0 0 0 1 ../../not-a-local-file.jpg\n\n',
+                   'scale': 1, 'up_axis': 'Z'}
+        status, _, result = self.request('POST', path + '/scene/import-camera', payload)
+        self.assertEqual(200, status, result)
+        self.assertEqual(1, len(result['cameras']))
+        camera = result['cameras'][0]['camera']
+        self.assertAlmostEqual(100/110, camera['focal_ratio'])
+        self.assertAlmostEqual(85/160-.5, camera['shift_x'])
+        self.assertAlmostEqual(.5-40/90, camera['shift_y'])
+        self.assertEqual(before, (self.store.project_dir(self.p['id']) / 'project.json').read_bytes())
+        payload['cameras_text'] = '1 OPENCV 160 90 100 110 85 40 .1 .2 .3 .4\n'
+        status, _, error = self.request('POST', path + '/scene/import-camera', payload)
+        self.assertEqual(400, status, error)
+
     def test_import_ranges_metadata_and_no_path_read(self):
         asset = self.upload()
         self.assertEqual("video", asset["kind"])

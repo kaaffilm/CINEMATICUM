@@ -28,10 +28,12 @@ if __package__:
     from .compositor import compile_graph, validate_graph
     from .timebase import parse_rate, project_rate
     from .tracking import validate_motion
+    from .color_pipeline import validate_pipeline, compile_pipeline
 else:
     from compositor import compile_graph, validate_graph
     from timebase import parse_rate, project_rate
     from tracking import validate_motion
+    from color_pipeline import validate_pipeline, compile_pipeline
 
 
 VIDEO_EXTENSIONS = {".mp4", ".mov", ".mkv", ".webm", ".m4v", ".avi", ".mpg", ".mpeg", ".mxf"}
@@ -375,6 +377,10 @@ def validate_project(project, project_dir):
             c["compositor"] = validate_graph(c["compositor"], fitted_width, fitted_height,
                                              animation_duration=c["animation_duration"],
                                              animation_start=c["animation_start"])
+        if c.get("color_pipeline") is not None:
+            if c["track"] < 0 or a["kind"] == "audio":
+                raise ValueError("Color pipelines belong to picture clips on video tracks.")
+            c["color_pipeline"] = validate_pipeline(c["color_pipeline"], project_dir)
         if a["kind"] != "audio" and a.get("color_transfer") in {"smpte2084", "arib-std-b67"}:
             raise ValueError("HDR PQ/HLG media needs an explicit SDR conversion. This workspace renders SDR Rec.709.")
     title_ids = set()
@@ -568,6 +574,11 @@ def _graph(project, project_dir, temp_dir):
             largest_scale = max([clip["scale"]] + [key["scale"] for key in clip["keyframes"] if "scale" in key])
             scale = _curve(clip, "scale", rate)
             timing = _video_timing(clip, rate)
+            if clip.get("color_pipeline") is not None:
+                # Decode/white-balance/gamut conversion and creative LUTs feed
+                # both the compositor and the direct clip path identically.
+                timing += compile_pipeline(clip["color_pipeline"], project_dir, temp_dir,
+                                           prefix="color%d" % index)
             chain = timing + [f"scale=w='max(2,trunc({_decimal(base_w)}*({scale})/2)*2)':h='max(2,trunc({_decimal(base_h)}*({scale})/2)*2)':eval=frame:flags=lanczos", "setsar=1"]
             stream = f"{index}:{asset['video_stream_index']}"
             if clip.get("compositor") is not None:

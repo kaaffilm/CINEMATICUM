@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "build": "0.5.0",
+  "build": "0.6.0",
   "reviewed_on": "2026-10-21",
   "parity_complete": false,
   "evidence_note": "Paths identify implementation/acceptance. Actual executions are recorded separately. Adapter availability is not model-execution proof.",
@@ -8,7 +8,7 @@
     {
       "id": "editor.rational_clock",
       "status": "implemented",
-      "scope": "Reduced rational rates1\u201360; exact media timestamps and absolute48kHz sample grid.",
+      "scope": "Reduced rational rates1–60; exact media timestamps and absolute48kHz sample grid.",
       "evidence": [
         "timebase.py",
         "engine.py",
@@ -115,7 +115,7 @@
     {
       "id": "color.scene_linear_hdr",
       "status": "missing",
-      "scope": "No OCIO/ACES, HDR finish, RAW controls or calibrated monitoring.",
+      "scope": "Float input conversion exists, but downstream compositor/delivery stays SDR. No full OCIO/ACES display pipeline, HDR finish, RAW controls or calibrated monitoring.",
       "evidence": []
     },
     {
@@ -153,9 +153,13 @@
     },
     {
       "id": "reconstruction.colmap",
-      "status": "missing",
-      "scope": "Source/conventions studied; no SfM/MVS or solved-model import executed.",
-      "evidence": []
+      "status": "partial",
+      "scope": "Bounded PINHOLE/SIMPLE_PINHOLE solved-camera import with exact pose/intrinsics; no feature extraction, SfM, bundle adjustment or dense reconstruction.",
+      "evidence": [
+        "camera_io.py",
+        "test_camera_io.py",
+        "verify_camera_native.py"
+      ]
     },
     {
       "id": "reconstruction.alicevision_meshroom",
@@ -232,12 +236,143 @@
       "status": "missing",
       "scope": "No authenticated Runway/Krea/OpenArt/Magnific/Artlist/Firefly/Flow/Luma/Kling/Pika/FLORA/Weave integration.",
       "evidence": []
+    },
+    {
+      "id": "color.input_transform",
+      "status": "implemented_bounded",
+      "scope": "Explicit Rec.709/sRGB/linear/LogC3 EI800 decode, Rec.709/Rec.2020/ACEScg/AWG3 primaries and Bradford white adaptation in float RGBA; Rec.709 SDR output.",
+      "evidence": [
+        "color_pipeline.py",
+        "test_color_pipeline.py",
+        "test_frame_preview.py"
+      ]
+    },
+    {
+      "id": "color.cube_lut",
+      "status": "implemented_bounded",
+      "scope": "Project-owned SHA-256 Cube 1D/3D tables, explicit domains, linear/trilinear/tetrahedral interpolation; same rendered frame/export graph. No combined shaper tables.",
+      "evidence": [
+        "color_pipeline.py",
+        "web/color-pipeline-ui.js",
+        "test_color_pipeline_ui_macos.py"
+      ]
+    },
+    {
+      "id": "camera.fspy_import",
+      "status": "implemented_bounded",
+      "scope": "Data-only fSpy v1/JSON import; preserved calibrated roll, principal offsets and focal scales; explicit world axis/scale and one undoable camera replacement.",
+      "evidence": [
+        "camera_io.py",
+        "web/camera-io-ui.js",
+        "test_camera_io.py",
+        "verify_camera_native.py"
+      ]
+    },
+    {
+      "id": "camera.projection",
+      "status": "implemented_bounded",
+      "scope": "Own WebGL and retained Blender camera share vertical FOV, roll, off-axis principal offsets and fx/fy; project/source aspect must agree.",
+      "evidence": [
+        "scene.py",
+        "web/scene-editor.js",
+        "test_camera_io.py",
+        "verify_camera_native.py"
+      ]
+    },
+    {
+      "id": "camera.physical_lens",
+      "status": "implemented_bounded",
+      "scope": "Sensor height/focal length, focus distance, f-stop and aperture shape; bounded physical channels and actual Cycles DOF. No lens prescription design.",
+      "evidence": [
+        "scene.py",
+        "web/scene-editor.js",
+        "test_physical_scene_blender.py",
+        "test_physical_scene_ui_macos.py"
+      ]
+    },
+    {
+      "id": "scene.physical_materials",
+      "status": "implemented_bounded",
+      "scope": "Principled transmission, IOR and scene-linear emission, with base color/roughness/metallic. Bounded material controls; no full shader graph.",
+      "evidence": [
+        "scene.py",
+        "web/scene-editor.js",
+        "test_physical_scene_blender.py"
+      ]
+    },
+    {
+      "id": "scene.path_settings",
+      "status": "implemented_bounded",
+      "scope": "Actual Cycles max/diffuse/glossy/transmission/transparent bounce counts, denoising and seed in saved scene; no Mitsuba/pbrt renderer or inverse solver.",
+      "evidence": [
+        "scene.py",
+        "test_physical_scene_blender.py"
+      ]
+    },
+    {
+      "id": "optics.brown_math",
+      "status": "implemented_bounded",
+      "scope": "Validated Brown forward and bounded Newton inverse numerical functions. This does not implement calibrated footage remapping or Lensfun profile application.",
+      "evidence": [
+        "camera_io.py",
+        "test_camera_io.py"
+      ]
+    },
+    {
+      "id": "optics.lens_design",
+      "status": "missing",
+      "scope": "No Optiland/ray-optics optical prescription, sequential/nonsequential trace, glass catalogue, optimization, aberration/PSF/MTF toolchain.",
+      "evidence": []
+    },
+    {
+      "id": "render.spectral_differentiable",
+      "status": "missing",
+      "scope": "No Mitsuba spectral/polarized/differentiable backend, inverse optimization or pbrt scene transport.",
+      "evidence": []
+    },
+    {
+      "id": "scene.gaffer_graph",
+      "status": "missing",
+      "scope": "No general lazy scene graph, path/set/context model, asset variations or distributed Gaffer-style dispatch.",
+      "evidence": []
+    },
+    {
+      "id": "color.raw_development",
+      "status": "missing",
+      "scope": "No LibRaw unpack/demosaic, per-camera metadata controls or RAW-to-scene-linear asset pipeline.",
+      "evidence": []
+    },
+    {
+      "id": "color.hdr_merge",
+      "status": "missing",
+      "scope": "No radiometric calibration, exposure-bracket merge, HDRI panorama/light-probe extraction or colour-hdri worker.",
+      "evidence": []
+    },
+    {
+      "id": "lighting.diffusionlight",
+      "status": "missing",
+      "scope": "No DiffusionLight checkpoint/inference/HDR environment generation; reading source is not model integration.",
+      "evidence": []
+    },
+    {
+      "id": "production.single_native_app",
+      "status": "implemented_bounded",
+      "scope": "Native icon and one launchable bundle; prior own bundles archived with per-file hash/mode verification and rollback. Runtime dependencies remain installed externally.",
+      "evidence": [
+        "install_macos.py",
+        "macos/StudioIcon.swift",
+        "test_install_macos.py"
+      ]
     }
   ],
   "research": [
     "research/editorial.md",
     "research/compositing-motion.md",
     "research/spatial.md",
-    "research/ai-motion.md"
-  ]
+    "research/ai-motion.md",
+    "research/camera-optics.md",
+    "research/color-science.md",
+    "research/physical-rendering.md"
+  ],
+  "reviewed_reference_systems": 33
 }

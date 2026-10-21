@@ -64,6 +64,7 @@ def run(output):
         with tempfile.TemporaryDirectory(prefix="cinematicum-motion-TEST-") as temporary:
             script = Path(temporary) / "inspect_saved_scene.py"
             script.write_text("""import bpy, json, math
+from mathutils import Vector
 scene = bpy.context.scene
 cube = next(obj for obj in scene.objects if obj.get('cinematicum_id') == 'ENGINE_TEST_cube')
 camera = scene.camera
@@ -74,9 +75,20 @@ samples = []
 for frame in (1, 3, 5, 7, 9):
     scene.frame_set(frame)
     bpy.context.view_layer.update()
+    backward=(camera.location-target.location).normalized()
+    up=Vector((0,0,1))
+    if abs(backward.dot(up))>.999: up=Vector((0,1,0))
+    right=up.cross(backward).normalized()
+    up=backward.cross(right)
+    actual_right=camera.matrix_world.to_3x3().col[0]
+    ratio=scene.render.pixel_aspect_y/scene.render.pixel_aspect_x
     samples.append({'frame':frame,
         'object':{'position':list(cube.location), 'rotation':[math.degrees(v) for v in cube.rotation_euler], 'scale':list(cube.scale)},
-        'camera':{'position':list(camera.location), 'target':list(target.location), 'fov':math.degrees(2*math.atan(12/camera.data.lens))},
+        'camera':{'position':list(camera.location), 'target':list(target.location), 'fov':math.degrees(2*math.atan(camera.data.sensor_height/(2*camera.data.lens))),
+                  'roll':math.degrees(math.atan2(actual_right.dot(up),actual_right.dot(right))),
+                  'shift_x':-camera.data.shift_x*scene.render.resolution_y/scene.render.resolution_x*ratio,
+                  'shift_y':-camera.data.shift_y,'focal_ratio':ratio,
+                  'focus_distance':camera.data.dof.focus_distance,'f_stop':camera.data.dof.aperture_fstop},
         'light':{'position':list(light.location), 'target':list(light_target.location), 'power':light.data.energy, 'size':light.data.size}})
 with open(%r, 'w') as handle:
     json.dump({'samples':samples, 'recipe':json.loads(bpy.data.texts['CINEMATICUM Scene Recipe.json'].as_string())},handle)

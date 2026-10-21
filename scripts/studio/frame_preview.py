@@ -19,7 +19,7 @@ from engine import _executable, _graph, RenderCancelled, validate_project
 
 
 def preview_identity(project, frame):
-    signature = {"pipeline": 7, "project": project, "frame": frame}
+    signature = {"pipeline": 8, "project": project, "frame": frame}
     return hashlib.sha256(json.dumps(signature, sort_keys=True, separators=(",", ":"),
                                     allow_nan=False).encode()).hexdigest()
 

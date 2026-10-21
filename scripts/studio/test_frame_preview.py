@@ -12,6 +12,7 @@ import zlib
 
 from engine import RenderCancelled, probe_media, render_project
 from frame_preview import preview_identity, render_frame
+from color_pipeline import import_cube
 
 
 @unittest.skipUnless(shutil.which("ffmpeg") and shutil.which("ffprobe"), "FFmpeg is required")
@@ -76,6 +77,40 @@ class FramePreviewTests(unittest.TestCase):
         p["clips"][0]["compositor"]["nodes"][1]["params"]["saturation"] = .5
         self.assertNotEqual(first, preview_identity(p, 0))
         self.assertNotEqual(preview_identity(p, 0), preview_identity(p, 1))
+
+    def test_project_lut_changes_decoded_preview_and_movie_through_one_graph(self):
+        project = copy.deepcopy(self.project)
+        clip = project['clips'][0]
+        clip.pop('compositor')
+        clip['keyframes'] = []
+        clip['duration'] = 2
+        descriptor = import_cube('LUT_1D_SIZE 2\n1 1 1\n0 0 0\n', self.root)
+        clip['color_pipeline'] = {'version': 1, 'enabled': True,
+            'lut': {'sha256': descriptor['sha256'], 'interpolation': 'linear'}}
+        picture, movie = self.root / 'lut.png', self.root / 'lut.mov'
+        render_frame(project, self.root, 0, picture)
+        expected = (195, 155, 95)
+        actual = self.pixel(picture)
+        self.assertLess(max(abs(a-b) for a,b in zip(actual, expected)), 4)
+        render_project(project, self.root, movie, 'prores')
+        self.assertLess(max(abs(a-b) for a,b in zip(actual, self.pixel(movie))), 9)
+        clip['color_pipeline']['enabled'] = False
+        render_frame(project, self.root, 0, picture)
+        self.assertLess(max(abs(a-b) for a,b in zip(self.pixel(picture), (60,100,160))), 4)
+
+    def test_input_transform_feeds_compositor_and_never_runs_after_it(self):
+        project = copy.deepcopy(self.project)
+        clip = project['clips'][0]
+        clip['keyframes'] = []
+        clip['duration'] = 2
+        descriptor = import_cube('LUT_1D_SIZE 2\n0.1 0.6 0.9\n0.1 0.6 0.9\n', self.root)
+        clip['color_pipeline'] = {'version': 1, 'enabled': True,
+            'lut': {'sha256': descriptor['sha256'], 'interpolation': 'linear'}}
+        picture = self.root / 'lut-before-composite.png'
+        render_frame(project, self.root, 0, picture)
+        gray = self.pixel(picture)
+        self.assertLess(max(gray)-min(gray), 8, 'Compositor monochrome must process the LUT output')
+        self.assertGreater(min(gray), 70)
 
 
 @unittest.skipUnless(shutil.which("node"), "Node is required")

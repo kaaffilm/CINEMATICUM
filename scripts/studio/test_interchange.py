@@ -14,6 +14,7 @@ from unittest.mock import patch
 from engine import render_project, validate_project
 from interchange import export_otio, import_otio, _public_digest
 from scene import validate_scene
+from color_pipeline import import_cube
 
 try:
     import opentimelineio as otio
@@ -83,6 +84,25 @@ class InterchangeTests(unittest.TestCase):
         self.assertEqual(p, before)
         self.assertTrue(any("No project has been saved" in warning for warning in imported["warnings"]))
         self.assertFalse((self.root / "project.json").exists())
+
+    def test_private_color_roundtrip_requires_the_project_owned_lut(self):
+        project = self.project()
+        lut = import_cube('TITLE "ENGINE TEST interchange"\nLUT_1D_SIZE 2\n0 0 0\n1 1 1\n', self.root)
+        project['clips'][0]['color_pipeline'] = {'version': 1, 'enabled': True,
+            'lut': {'sha256': lut['sha256'], 'interpolation': 'linear'}}
+        project = validate_project(project, self.root)
+        exported = export_otio(project, self.root)
+        self.assertTrue(any('not embedded in OTIO' in warning for warning in exported['warnings']))
+        restored = import_otio(exported['document'], self.project(), self.root)
+        self.assertEqual(project['clips'][0]['color_pipeline'], restored['project']['clips'][0]['color_pipeline'])
+        path = self.root / 'color/luts' / (lut['sha256'] + '.cube')
+        original = path.read_bytes()
+        path.unlink()
+        try:
+            with self.assertRaises(ValueError):
+                import_otio(exported['document'], self.project(), self.root)
+        finally:
+            path.write_bytes(original)
 
     @unittest.skipUnless(otio, "Install official OpenTimelineIO to independently verify the wire format")
     def test_official_otio_reader_and_writer_preserve_the_exchange(self):

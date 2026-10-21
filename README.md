@@ -16,6 +16,12 @@ for primitive and imported OBJ mesh scenes, materials, lighting, cameras, and po
 `.blend` sources. Configured local ComfyUI workflows can also produce media after
 node and model compatibility checks.
 
+Studio 0.6 adds fSpy/COLMAP solved-camera import, off-axis camera projection,
+physical lens/aperture controls, transmissive/emissive materials and Cycles ray
+settings. Its input color stage performs explicit float transfer/gamut/white
+conversion and applies project-owned 1D/3D Cube LUTs through the same preview and
+export graph. Native updates retain verified ZIP backups and one launchable app.
+
 Start with [the Studio guide](scripts/studio/README.md) and
 [the source comparison and capability audit](scripts/studio/CAPABILITY_AUDIT.md). Run `make studio-doctor`
 to inspect the actual installed engines, or `make studio-test` for the media and

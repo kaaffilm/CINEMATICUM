@@ -1,4 +1,4 @@
-# CINEMATICUM 0.5 — engineering comparison and implementation audit
+# CINEMATICUM 0.6 — engineering comparison and implementation audit
 
 **Status: a substantive upgrade to CINEMATICUM's own editor; full parity with the listed applications remains unimplemented.** This audit records inspected source/interfaces, concrete changes, reproducible acceptance and unresolved requirements. It does not assign a misleading completion percentage or present an installed external program as an implemented CINEMATICUM feature.
 
@@ -6,9 +6,9 @@ The user requirement is one audiovisual authoring application with one project, 
 
 ## Research scope and evidence
 
-The source review follows data through project storage, timing, animation, graph evaluation, geometry, model inputs and job outputs. It is a focused source-level investigation of the listed subsystems, not a line-by-line audit of entire upstream repositories. Public proprietary interfaces were inspected; proprietary application source was not available. Cinelerra's accessible GitHub source is a dated historical mirror and is explicitly separated from its current manual.
+The comparison now covers 33 distinct reference systems from the technical list. The source review follows data through project storage, timing, animation, graph evaluation, geometry, model inputs and job outputs. It is a focused source-level investigation of the listed subsystems, not a line-by-line audit of entire upstream repositories. Public proprietary interfaces were inspected; proprietary application source was not available. Cinelerra's accessible GitHub source is a dated historical mirror and is explicitly separated from its current manual.
 
-| Reference system | Evidence and significant comparison | Implemented related capability in CINEMATICUM 0.5 | Material gaps |
+| Reference system | Evidence and significant comparison | Implemented related capability in CINEMATICUM 0.6 | Material gaps |
 | --- | --- | --- | --- |
 | Shotcut | MLT annotations, resource traversal and numerator/denominator metadata | Shared media/timeline model, track controls, real FFmpeg export, rational clock | Full MLT project/filter compatibility, broad transitions, proxy conform and hardware pipeline |
 | Kdenlive | Project/sequence tractors, profile clock, UI/render synchronization | Persistent own timeline, retime/reverse, clip/track state, exact cut/audio boundaries | Multiple/nested sequences, multicam, full trim modes, proxies, subtitles and plugin catalogue |
@@ -22,7 +22,7 @@ The source review follows data through project storage, timing, animation, graph
 | Friction | Pinned vector/path/animation source and public docs | Animated bounded polygon paths, easing and own editing gestures | Full vector scene graph, editable Bezier handles, procedural/path effects and vector exports |
 | Glaxnimate | Pinned document/animation source and public model docs | Independent shape-point animation with stable topology | Full vector drawing, gradients, shape operators, Lottie/SVG interchange and motion design |
 | Blender | Pinned OBJ parser/mesh/material construction; installed headless engine | Own primitive/mesh viewport, transforms, materials, object/camera/light animation, actual Cycles output and retained `.blend` | Vertex/edge/face editing, UV authoring/textures, rigs, sculpting, modifiers, simulations and general scene interchange |
-| COLMAP | Pinned model reader and incremental reconstruction pipeline | Source/camera conventions documented; imported mesh can be used after reconstruction elsewhere | No SfM, bundle adjustment, dense reconstruction or solved-camera import executed here |
+| COLMAP | Pinned model readers, pinhole/radial/OpenCV models and pose conventions | Data-only selected text-model camera import; roll, principal offsets and unequal focal lengths preserved | No feature extraction, SfM, bundle adjustment, dense reconstruction or distorted-model image remapping |
 | AliceVision | Pinned sparse/depth/meshing programs | Reconstruction stages and hardware/build boundaries mapped | No AliceVision worker, image matching, depth fusion, meshing or texturing pipeline |
 | Meshroom | Pinned graph/node execution and plugin architecture | Owned jobs and shared scene asset admission | No Meshroom graph compatibility or full photogrammetry workflow |
 | SAM 2 | Video predictor initialization/prompt-correction source | Explicit distinction between geometric masks and segmentation | No neural segmentation model, object memory, corrections propagation or temporal mask clip |
@@ -30,8 +30,21 @@ The source review follows data through project storage, timing, animation, graph
 | TAPNext | Recurrent forward/prediction-head source | Explicit frame/coordinate/visibility contract | No TAPNext inference state, checkpoint execution or learned tracker adapter |
 | ComfyUI | Prompt/node/model/history/cancellation source and official API | Imported API graphs, chosen input binding, installed-node/model preflight, one-ID job tracking, output probe/admission and scoped cancellation | Configured service/models absent on the checked Mac; no actual model-generation proof or paid-provider integration |
 | CameraCtrl | Camera-matrix/ray construction and pose injection source | Matrix/intrinsic/convention requirements documented | No CameraCtrl inference or faithful general camera-condition export |
+| Mitsuba 3 | Pinned sensor/integrator/BSDF architecture | Physical camera and material controls drive real Cycles rendering | No Mitsuba backend, spectral/polarized transport, differentiable rendering or inverse optimizer |
+| pbrt-v4 | Pinned camera/integrator/material source and public book | Lens/sensor/aperture and actual path-control settings | No pbrt scene parser/backend, spectral transport, realistic compound lens or participating-medium authoring |
+| Gaffer | Pinned node/plug/context, scene path/set and dispatch architecture | One saved project and owned render jobs | No lazy scene graph, procedural path/set processing, asset variants or distributed dispatch |
+| Optiland | Pinned optical prescription, ray tracing, analysis and optimization code | Explicit sensor, focal length, aperture and focus controls | No lens-design model, glass catalogue, optical optimization, aberration/PSF/MTF tools |
+| ray-optics | Pinned sequential/paraxial model and real-ray tracing source | Camera geometric parameters and validated projection math | No editable optical assembly, paraxial/aberration analysis or ray-fan/spot tools |
+| OpenCV | Pinned calibration, projection and distortion implementation | Source-model reprojection checks; bounded Brown distortion/inverse math | No general OpenCV worker, image calibration solve, optical-flow/vision suite or footage lens correction |
+| fSpy | Pinned v1 binary container and camera transform/intrinsic serialization | Own file picker imports actual fSpy v1/JSON solved cameras into the own 3D scene | No interactive vanishing-line solver or photograph calibration UI |
+| Lensfun | Pinned lens database/model/correction pipeline | Distortion model requirements documented; camera math isolated from picture processing | No lens profile lookup, distortion/TCA/vignetting correction or calibrated remap |
+| colour-science | Pinned transfer functions, primaries/matrices and adaptation code | Explicit float transfer/gamut conversion and Bradford white adaptation | No full spectral/colorimetry/appearance library or colour runtime integration |
+| OpenColorIO | Pinned config/processor/transform and Cube format behavior | Strict project-owned 1D/3D LUT stage with actual interpolation and input domains | No OCIO config/context processor, ACES display/view transforms, GPU shader cache or full color management |
+| LibRaw | Pinned decode/process pipeline | RAW requirements identified; existing decoded-media import remains | No RAW unpack, demosaic, camera metadata/white balance pipeline or RAW UI |
+| colour-hdri | Pinned radiometric calibration/merge/exposure processing | Input float color stage with explicit SDR boundary | No bracket calibration/merge, HDRI recovery or HDR environment workflow |
+| DiffusionLight | Pinned diffusion/probe/exposure workflow | Model/input/output boundaries documented | No actual weights, inference, synthesized probes or HDR environment generation |
 
-Detailed source files, hashes, APIs and reasoning are in [editorial](research/editorial.md), [compositing and motion](research/compositing-motion.md), [spatial systems](research/spatial.md), and [AI and measured motion](research/ai-motion.md). Those documents distinguish immutable commits from individual Git blob hashes and describe retrieval limitations. The machine-readable [capability ledger](capabilities.json) uses the same conservative states.
+Detailed source files, hashes, APIs and reasoning are in [editorial](research/editorial.md), [compositing and motion](research/compositing-motion.md), [spatial systems](research/spatial.md), and [AI and measured motion](research/ai-motion.md). New investigations are recorded in [camera and optics](research/camera-optics.md), [color science](research/color-science.md), and [physical rendering](research/physical-rendering.md). Those documents distinguish immutable commits from individual Git blob hashes and describe retrieval limitations. The machine-readable [capability ledger](capabilities.json) uses the same conservative states.
 
 ## Concrete changes in this build
 
@@ -73,12 +86,36 @@ Private authoring metadata can reconstruct an unchanged CINEMATICUM roundtrip. A
 
 ComfyUI cancellation addresses only the actual accepted prompt ID. Where the new atomic job-cancel route is absent, the fallback deletes only that queued ID. It never sends a global interrupt. A successful dispatch and a confirmed terminal cancellation are reported separately. A legacy running prompt can continue remotely after local waiting stops; the job receipt states that outcome. This protocol upgrade is tested against HTTP fixtures, and is not claimed as a successful neural-generation run.
 
+### 7. Calibrated camera interchange
+
+The fSpy reader validates its real binary header and JSON camera records. COLMAP import reads the explicitly selected camera/image text pair, verifies camera IDs/quaternions and preserves pinhole intrinsics. Both map into the own camera model with explicit world-axis conversion and translation scale. Roll, image principal point and `fx/fy` survive; incompatible aspect ratio, unsupported distortion and invalid geometry reject before application. Camera selection is reviewed and applied once through project undo; prior camera animation is explicitly replaced.
+
+The scene viewport and retained Blender camera use the same projection contract. Acceptance compares source equations to WebGL projected points and independently reopens the retained `.blend` to check actual Blender projection. This imports a solved camera; it does not perform COLMAP reconstruction or fSpy vanishing-line solving. Brown forward/inverse numerical utilities do not count as a usable footage-undistortion feature.
+
+### 8. Physical camera, material and transport controls
+
+The saved scene now carries sensor height, authoritative vertical FOV, derived focal length, roll/shifts/focal ratio, focus distance/f-stop and aperture shape. Pose channels preserve the lens parameters at each integer frame; incompatible redundant lens values reject. Cycles receives the actual DOF/aperture settings, Principled transmission/IOR/emission and bounded bounce/denoising/seed parameters. Emission color is converted from authored display RGB to scene-linear values.
+
+The own viewport supplies editable geometry and approximate material feedback. Native acceptance checks actual retained camera/material/integrator properties and compares rendered sharp/defocused pixels. This does not implement Mitsuba differentiation, pbrt spectral transport, optical prescription optimization or Gaffer's general scene graph.
+
+### 9. A real input color stage and owned LUTs
+
+A float RGBA stage decodes declared source transfer, applies primary conversion and Bradford white adaptation, then encodes Rec.709. Supported inputs are Rec.709/sRGB/linear/LogC3 EI800 with Rec.709/Rec.2020/ACEScg/ARRI Wide Gamut 3 primaries. A strict Cube reader supports independent per-channel domains, 1D and 3D tables, and the selected interpolation. The project stores canonical UTF-8 tables by actual SHA-256, with missing/tampered tables rejected at validation.
+
+Investigation exposed FFmpeg Cube-domain handling that was insufficient for nonzero minima. The compiler explicitly normalizes each channel and feeds a unit-domain table. Tests exercise nonzero/unequal domains, all tetrahedral regions, alpha, transfer reference values and literal filter paths. Integration tests decode the actual current-frame PNG and exported movie and verify that the stage feeds the compositor. The UI imports real files, applies through one undo entry, saves and reloads.
+
+Float values survive this stage; the downstream compositor and delivery remain SDR. ACEScg input conversion is not the ACES display rendering transform. General OCIO configs, RAW demosaic, HDR mastering and radiometric bracket merge remain missing.
+
+### 10. One installed native app
+
+The old installer retained sibling `.app` backups, so macOS discovered several CINEMATICUM entries. The new installer builds the app/icon first, independently verifies all archived file bytes and modes, then replaces the canonical bundle with a rollback path. Recognized old backup/rejected bundles become ZIP archives under a non-indexed folder. It preserves unrelated applications and symlinks. Archive verification, rollback failure handling and recovery are tested; existing project files are kept outside installation.
+
 ## Remaining work, ordered by required data model
 
 | Required level | Missing implementation | Evidence needed before it can be called complete |
 | --- | --- | --- |
 | Editing/conform | Sequences, nesting, multicam/sync, source channel maps, rolling/slip/slide, proxies and relink | Roundtrips across sequence boundaries, source/timecode identity, proxy/original frame equivalence and editorial operation acceptance |
-| Image pipeline | Scene-linear float processing, OCIO/ACES transforms, HDR, RAW, image sequences and EXR channels | Known color reference transforms, linear/alpha checks, high-dynamic-range values and export/monitoring validation |
+| Image pipeline | Extend the implemented float input stage through the full compositor; OCIO/ACES display transforms, HDR, RAW, image sequences and EXR channels | Known color reference transforms, linear/alpha checks, high-dynamic-range values and export/monitoring validation |
 | Compositing/VFX | Multi-source shot graph, Bezier roto/paint, planar/affine tracks, lens models, deep and arbitrary channels | Independent pixel/matte fixtures, coordinate and premultiplication checks, cache invalidation and bounded actual renders |
 | Motion design | Vector document model, curves/tangents, text shaping/animators, parenting, expressions, reusable compositions | Editable data roundtrips, shape topology invariants, deterministic animation and actual vector/raster export |
 | 3D | Mesh topology tools, UV/texture/material graphs, hierarchy/constraints, armatures, modifiers and simulation | Saved scene replay, topology/material/animation checks, simulation cache identity and actual rendered output |
@@ -93,4 +130,4 @@ These are engineering requirements, not hidden buttons or implied installed capa
 
 The Python suite checks decoded media and real local HTTP behavior. Native WK acceptance runs operate shipped controls in disposable projects, then inspect saved data and exported media independently. Blender replay opens the actual retained `.blend`; it is stronger evidence than inspecting a generated Python recipe alone. Synthetic fixtures are clearly named ENGINE TEST, never inserted into the user's film or authority objects.
 
-The checked Mac has FFmpeg and Blender, but the configured ComfyUI endpoint was unavailable. Native app updates preserve existing projects and the previous application bundle. Source publication stays on the existing draft PR; the owner checkout, source footage, current case and issuance records are not rewritten by these upgrades. Exact verification results are recorded separately after execution; a test file's presence alone is not a passing result.
+The checked Mac has FFmpeg and Blender, but the configured ComfyUI endpoint was unavailable. Native app updates preserve existing projects and archive previous own application bundles with file-hash and permission verification. Source publication stays on the existing draft PR; the owner checkout, source footage, current case and issuance records are not rewritten by these upgrades. Exact verification results are recorded separately after execution; a test file's presence alone is not a passing result.

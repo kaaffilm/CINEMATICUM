@@ -40,8 +40,10 @@ from waveform import extract_waveform
 from timebase import project_rate
 from tracking import tracking_frame, track_clip, stabilization_motion, validate_track_for_clip
 from spatial_import import import_obj
+from camera_io import import_camera
+from color_pipeline import import_cube, list_luts
 
-VERSION = "0.5.0"
+VERSION = "0.6.0"
 MAX_UPLOAD = 8 * 1024 * 1024 * 1024
 MAX_JSON = 8 * 1024 * 1024
 IDENTIFIER = re.compile(r"^[a-f0-9]{32}$")
@@ -322,6 +324,8 @@ class Store:
         result["scene_authoring"] = result["blender"] and result["ffmpeg"]
         result["node_compositor"] = all(name in filters for name in ("geq", "overlay", "split", "gblur"))
         result["point_tracking"] = "find_rect" in filters
+        result["color_pipeline"] = all(name in filters for name in ("geq", "lut1d", "lut3d"))
+        result["camera_import"] = True
         self._cap_cache, self._cap_time = copy.deepcopy(result), time.monotonic()
         return result
 
@@ -790,10 +794,10 @@ class Handler(BaseHTTPRequestHandler):
             raise ValueError("Request is empty or exceeds the size limit")
         return int(raw)
 
-    def body(self):
+    def body(self, limit=MAX_JSON):
         if self.headers.get_content_type() != "application/json":
             raise ValueError("Expected application/json")
-        length = self.length(MAX_JSON)
+        length = self.length(limit)
         data = self.rfile.read(length)
         if len(data) != length:
             raise ValueError("Incomplete request body")
@@ -874,7 +878,7 @@ class Handler(BaseHTTPRequestHandler):
     def dispatch_get(self):
         parsed = urlparse(self.path)
         parts = unquote(parsed.path).strip("/").split("/")
-        if parsed.path in {"/", "/index.html", "/app.js", "/style.css", "/editing.js", "/viewer-tools.js", "/compositor-ui.js", "/scene-editor.js", "/scene-editor.css", "/tracking-ui.js", "/interchange-ui.js"}:
+        if parsed.path in {"/", "/index.html", "/app.js", "/style.css", "/editing.js", "/viewer-tools.js", "/compositor-ui.js", "/scene-editor.js", "/scene-editor.css", "/tracking-ui.js", "/interchange-ui.js", "/camera-io-ui.js", "/color-pipeline-ui.js"}:
             return self.file(WEB / ("index.html" if parsed.path == "/" else parsed.path[1:]))
         if parts == ["api", "bootstrap"]:
             projects = self.store.projects()
@@ -893,6 +897,8 @@ class Handler(BaseHTTPRequestHandler):
                 return self.json(200, self.store.get(project_id))
             if len(parts) == 4 and parts[3] == "generation-readiness":
                 return self.json(200, self.store.generation_readiness(project_id))
+            if len(parts) == 4 and parts[3] == "color-luts":
+                return self.json(200, {"luts": list_luts(self.store.project_dir(project_id))})
             if len(parts) == 5 and parts[3] == "media":
                 asset, path = self.store.asset(project_id, parts[4])
                 return self.file(path, download=asset["kind"] == "scene")
@@ -930,6 +936,9 @@ class Handler(BaseHTTPRequestHandler):
                 return self.json(200, self.store.save(project_id, self.body()))
             if self.command == "POST" and len(parts) == 5 and parts[3:] == ["scene", "import-obj"]:
                 return self.json(200, import_obj(self.body()))
+            if self.command == "POST" and len(parts) == 5 and parts[3:] == ["scene", "import-camera"]:
+                project = self.store.get(project_id)
+                return self.json(200, import_camera(self.body(), width=project["width"], height=project["height"]))
             if self.command != "POST" or len(parts) != 4:
                 raise FileNotFoundError("Route does not exist")
             action = parts[3]
@@ -959,9 +968,16 @@ class Handler(BaseHTTPRequestHandler):
                     self.store._require_open()
                     atomic_json(directory / "workflow.json", workflow)
                 return self.json(201, {"workflow_path": "workflow.json"})
-            payload = self.body()
+            payload = self.body(32 * 1024 * 1024 if action == "color-lut-import" else MAX_JSON)
             if not isinstance(payload, dict):
                 raise ValueError("Expected a JSON object")
+            if action == "color-lut-import":
+                if set(payload) != {"text"}:
+                    raise ValueError("LUT import accepts selected .cube text only.")
+                with self.store.lock:
+                    self.store._require_open()
+                    lut = import_cube(payload["text"], directory)
+                return self.json(201, {"lut": lut})
             if action == "render":
                 return self.json(202, self.store.render(project_id, payload))
             if action == "generate":

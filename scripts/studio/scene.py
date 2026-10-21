@@ -34,10 +34,30 @@ POSE_FIELDS = {
     "object": {"position": ([-0., 0., 1.], -1000, 1000), "rotation": ([0., 0., 0.], -3600, 3600),
                "scale": ([1., 1., 1.], .01, 100)},
     "camera": {"position": ([7., -9., 6.], -1000, 1000), "target": ([0., 0., 1.], -1000, 1000),
-               "fov": (45., 10, 100)},
+               "fov": (45., 10, 100), "roll": (0., -3600, 3600),
+               "shift_x": (0., -2, 2), "shift_y": (0., -2, 2),
+               "focus_distance": (10., .01, 10000),
+               "f_stop": (5.6, .1, 128)},
     "light": {"position": ([3., -4., 7.], -1000, 1000), "target": ([0., 0., 0.], -1000, 1000),
               "power": (1000., 0, 10000), "size": (4., .01, 100)},
 }
+RENDER_DEFAULTS = {"max_bounces": 12, "diffuse_bounces": 4, "glossy_bounces": 4,
+                   "transmission_bounces": 12, "transparent_max_bounces": 8,
+                   "use_denoising": True, "seed": 0}
+MATERIAL_DEFAULTS = {"color": "#d8a85f", "roughness": .45, "metallic": 0.,
+                     "transmission": 0., "ior": 1.5, "emission_color": "#ffffff",
+                     "emission_strength": 0.}
+
+
+def focal_length_mm(camera, fov=None):
+    """Vertical FOV is authoritative; sensor size fixes physical lens/aperture scale."""
+    return camera.get("sensor_height_mm", 24.) / (2 * math.tan(math.radians(camera["fov"] if fov is None else fov) / 2))
+
+
+def _boolean(value, label):
+    if not isinstance(value, bool):
+        raise ValueError(label + " must be true or false.")
+    return value
 
 
 def _number(value, label, low, high, integer=False):
@@ -92,6 +112,8 @@ def _keyframes(item, kind, frame_end):
         raise ValueError("Each scene item supports at most 128 keyframes.")
     seen = set()
     for key in keys:
+        if kind == "camera" and isinstance(key, dict) and "focal_ratio" in key:
+            raise ValueError("Camera focal_ratio is static; change it on the camera, not in animation keys.")
         _object(key, kind.title() + " keyframe", {"frame", "interpolation", *fields})
         key["frame"] = _number(key.get("frame"), "Keyframe", 1, frame_end, True)
         if key["frame"] in seen:
@@ -113,8 +135,12 @@ def _keyframes(item, kind, frame_end):
 def default_scene(width=1280, height=720):
     """A camera and lighting setup; nothing is passed off as user-made footage."""
     return {"version": 1, "width": width, "height": height, "frame_end": 96, "samples": 32,
+            "render": copy.deepcopy(RENDER_DEFAULTS),
             "world": {"color": "#263142", "strength": 0.35},
-            "camera": {"position": [7, -9, 6], "target": [0, 0, 1], "fov": 45},
+            "camera": {"position": [7, -9, 6], "target": [0, 0, 1], "fov": 45,
+                       "sensor_height_mm": 24., "roll": 0., "shift_x": 0., "shift_y": 0.,
+                       "focal_ratio": 1., "dof_enabled": False, "focus_distance": 10., "f_stop": 5.6,
+                       "aperture_blades": 0, "aperture_rotation": 0., "aperture_ratio": 1.},
             "objects": [],
             "lights": [
                 {"id": "key", "name": "Key light", "type": "area", "position": [3, -4, 7],
@@ -127,7 +153,7 @@ def default_scene(width=1280, height=720):
 def validate_scene(scene, width=None, height=None):
     """Normalize a bounded recipe, rejecting unsupported behavior before launch."""
     src = copy.deepcopy(_object(scene, "Scene", {
-        "version", "width", "height", "frame_end", "samples", "world", "camera", "objects", "lights"}))
+        "version", "width", "height", "frame_end", "samples", "render", "world", "camera", "objects", "lights"}))
     if src.get("version") != 1 or isinstance(src.get("version"), bool):
         raise ValueError("Unsupported 3D scene recipe version.")
     src["width"] = _number(src.get("width", 1280) if width is None else width, "Scene width", 16, 8192, True)
@@ -136,16 +162,42 @@ def validate_scene(scene, width=None, height=None):
         raise ValueError("Scene dimensions must be even and at most 16.7 million pixels.")
     src["frame_end"] = _number(src.get("frame_end", 96), "Scene end frame", 1, MAX_FRAMES, True)
     src["samples"] = _number(src.get("samples", 32), "Render samples", 4, 256, True)
+    render = _object(src.setdefault("render", {}), "Render settings", RENDER_DEFAULTS)
+    for prop, default in RENDER_DEFAULTS.items():
+        value = render.get(prop, default)
+        render[prop] = (_boolean(value, "Denoising") if prop == "use_denoising"
+                        else _number(value, "Render " + prop, 0, 2_147_483_647 if prop == "seed" else 64, True))
     world = _object(src.setdefault("world", {}), "World", {"color", "strength"})
     world["color"] = _color(world.get("color", "#263142"), "World color")
     world["strength"] = _number(world.get("strength", .35), "World strength", 0, 5)
-    camera = _object(src.setdefault("camera", {}), "Camera", {"position", "target", "fov", "keyframes"})
-    camera["position"] = _vector(camera.get("position", [7, -9, 6]), "Camera position", -1000, 1000)
-    camera["target"] = _vector(camera.get("target", [0, 0, 1]), "Camera target", -1000, 1000)
-    camera["fov"] = _number(camera.get("fov", 45), "Vertical field of view", 10, 100)
+    camera = _object(src.setdefault("camera", {}), "Camera", {
+        *POSE_FIELDS["camera"], "keyframes", "sensor_height_mm", "focal_length_mm", "focal_ratio", "dof_enabled",
+        "aperture_blades", "aperture_rotation", "aperture_ratio"})
+    camera["sensor_height_mm"] = _number(camera.get("sensor_height_mm", 24), "Sensor height (mm)", 1, 100)
+    camera["focal_ratio"] = _number(camera.get("focal_ratio", 1), "Focal ratio fx / fy", .1, 10)
+    has_focal = "focal_length_mm" in camera
+    supplied_focal = camera.pop("focal_length_mm", None)
+    if has_focal:
+        supplied_focal = _number(supplied_focal, "Focal length (mm)", 1, 1000)
+        derived_fov = math.degrees(2 * math.atan(camera["sensor_height_mm"] / (2 * supplied_focal)))
+        if "fov" in camera and not math.isclose(_number(camera["fov"], "Vertical field of view", 10, 100), derived_fov, rel_tol=1e-7, abs_tol=1e-7):
+            raise ValueError("Camera focal_length_mm contradicts its vertical fov and sensor_height_mm.")
+        camera["fov"] = derived_fov
+    for prop, (default, low, high) in POSE_FIELDS["camera"].items():
+        value = camera.get(prop, default)
+        camera[prop] = (_vector(value, "Camera " + prop, low, high) if isinstance(default, list)
+                        else _number(value, "Camera " + prop, low, high))
+    camera["dof_enabled"] = _boolean(camera.get("dof_enabled", False), "Depth of field")
+    camera["aperture_blades"] = _number(camera.get("aperture_blades", 0), "Aperture blades", 0, 16, True)
+    if camera["aperture_blades"] in (1, 2):
+        raise ValueError("Aperture blades must be zero for a circle, or between 3 and 16.")
+    camera["aperture_rotation"] = _number(camera.get("aperture_rotation", 0), "Aperture rotation", -180, 180)
+    camera["aperture_ratio"] = _number(camera.get("aperture_ratio", 1), "Aperture ratio", .1, 10)
     if sum((a - b) ** 2 for a, b in zip(camera["position"], camera["target"])) < .0001:
         raise ValueError("Camera position and target must differ.")
     _keyframes(camera, "camera", src["frame_end"])
+    if any(focal_length_mm(camera, pose["fov"]) < 1 for pose in [camera, *camera["keyframes"]]):
+        raise ValueError("Camera focal length must be at least 1 mm at every keyframe; enlarge the sensor or narrow the field of view.")
     for key, limit in (("objects", MAX_OBJECTS), ("lights", MAX_LIGHTS)):
         if not isinstance(src.get(key, []), list) or len(src.get(key, [])) > limit:
             raise ValueError("Scene %s must be a list with at most %d items." % (key, limit))
@@ -167,10 +219,14 @@ def validate_scene(scene, width=None, height=None):
         for prop, default, low, high in (("position", [0, 0, 1], -1000, 1000),
                                          ("rotation", [0, 0, 0], -3600, 3600), ("scale", [1, 1, 1], .01, 100)):
             obj[prop] = _vector(obj.get(prop, default), "Object " + prop, low, high)
-        mat = _object(obj.setdefault("material", {}), "Material", {"color", "roughness", "metallic"})
+        mat = _object(obj.setdefault("material", {}), "Material", MATERIAL_DEFAULTS)
         mat["color"] = _color(mat.get("color", "#d8a85f"), "Material color")
         mat["roughness"] = _number(mat.get("roughness", .45), "Roughness", 0, 1)
         mat["metallic"] = _number(mat.get("metallic", 0), "Metallic", 0, 1)
+        mat["transmission"] = _number(mat.get("transmission", 0), "Transmission", 0, 1)
+        mat["ior"] = _number(mat.get("ior", 1.5), "Index of refraction", 1, 4)
+        mat["emission_color"] = _color(mat.get("emission_color", "#ffffff"), "Emission color")
+        mat["emission_strength"] = _number(mat.get("emission_strength", 0), "Emission strength", 0, 1000)
         _keyframes(obj, "object", src["frame_end"])
     validate_scene_geometry(src["objects"])
     for light in src["lights"]:
@@ -229,7 +285,7 @@ def _build_script(spec, blend_path, frames_dir, fps, frame_start, frame_end):
     rate = parse_rate(fps, maximum=60)
     payload = json.dumps(spec, ensure_ascii=True, allow_nan=False, sort_keys=True)
     return '''import bpy, json, math
-from mathutils import Vector
+from mathutils import Vector, Matrix, Quaternion
 SPEC = json.loads(%r)
 BLEND_PATH = %r
 FRAMES = %r
@@ -240,10 +296,13 @@ END = %r
 bpy.ops.object.select_all(action='SELECT')
 bpy.ops.object.delete(use_global=False)
 scene = bpy.context.scene
+scene.unit_settings.system = 'METRIC'
+scene.unit_settings.scale_length = 1
 scene.render.engine = 'CYCLES'
 scene.cycles.device = 'CPU'
 scene.cycles.samples = SPEC['samples']
-scene.cycles.use_denoising = True
+for key, value in SPEC['render'].items():
+    setattr(scene.cycles, key, value)
 scene.render.resolution_x = SPEC['width']
 scene.render.resolution_y = SPEC['height']
 scene.render.resolution_percentage = 100
@@ -270,6 +329,19 @@ def aim(obj, target):
     if direction.length_squared < .0001:
         raise RuntimeError('An animated camera or directional light reached its target.')
     obj.rotation_euler = direction.to_track_quat('-Z', 'Y').to_euler()
+def aim_camera(obj, target, roll):
+    forward = Vector(target) - obj.location
+    if forward.length_squared < .0001:
+        raise RuntimeError('An animated camera reached its target.')
+    forward.normalize()
+    up = Vector((0, 0, 1))
+    if abs(forward.dot(up)) > .999:
+        up = Vector((0, 1, 0))
+    right = forward.cross(up).normalized()
+    up = right.cross(forward).normalized()
+    basis = Matrix((right, up, -forward)).transposed()
+    obj.rotation_mode = 'QUATERNION'
+    obj.rotation_quaternion = basis.to_quaternion() @ Quaternion((0, 0, 1), math.radians(roll))
 def action_curves(obj):
     animation = obj.animation_data
     action = animation.action
@@ -334,16 +406,17 @@ def pose_at(poses, frame):
             return {p:([x+(y-x)*t for x,y in zip(value,b[p])] if isinstance(value,list)
                        else value+(b[p]-value)*t) for p,value in values(a).items()}
     return values(poses[-1][1])
-def tracking_target(obj, name, position):
+def tracking_target(obj, name, position, constrain=True):
     target = bpy.data.objects.new(name, None)
     scene.collection.objects.link(target)
     target.location = position
     target.empty_display_type = 'PLAIN_AXES'
     target.empty_display_size = .3
-    track = obj.constraints.new('TRACK_TO')
-    track.target = target
-    track.track_axis = 'TRACK_NEGATIVE_Z'
-    track.up_axis = 'UP_Y'
+    if constrain:
+        track = obj.constraints.new('TRACK_TO')
+        track.target = target
+        track.track_axis = 'TRACK_NEGATIVE_Z'
+        track.up_axis = 'UP_Y'
     return target
 world = bpy.data.worlds.new('CINEMATICUM World')
 world.use_nodes = True
@@ -352,17 +425,36 @@ world.node_tree.nodes['Background'].inputs['Strength'].default_value = SPEC['wor
 scene.world = world
 camera_data = bpy.data.cameras.new('Render Camera')
 camera_data.sensor_fit = 'VERTICAL'
-camera_data.sensor_height = 24
-camera_data.lens = 12 / math.tan(math.radians(SPEC['camera']['fov'])/2)
+camera_data.sensor_height = SPEC['camera']['sensor_height_mm']
+camera_data.dof.use_dof = SPEC['camera']['dof_enabled']
+camera_data.dof.aperture_blades = SPEC['camera']['aperture_blades']
+camera_data.dof.aperture_rotation = math.radians(SPEC['camera']['aperture_rotation'])
+camera_data.dof.aperture_ratio = SPEC['camera']['aperture_ratio']
 camera_data.clip_start = .05
 camera_data.clip_end = 5000
 camera = bpy.data.objects.new('Render Camera', camera_data)
 scene.collection.objects.link(camera)
 camera.location = SPEC['camera']['position']
-aim(camera, SPEC['camera']['target'])
 scene.camera = camera
-camera_poses = recipe_poses(SPEC['camera'], ('position','target','fov'))
-camera_target = tracking_target(camera, 'Camera aim', SPEC['camera']['target'])
+camera_poses = recipe_poses(SPEC['camera'], ('position','target','fov','roll','shift_x','shift_y','focus_distance','f_stop'))
+camera_target = tracking_target(camera, 'Camera aim', SPEC['camera']['target'], constrain=False)
+def apply_camera(pose):
+    camera.location = pose['position']
+    camera_target.location = pose['target']
+    aim_camera(camera, pose['target'], pose['roll'])
+    camera_data.lens = camera_data.sensor_height / (2 * math.tan(math.radians(pose['fov'])/2))
+    # VERTICAL sensor fit: Blender's x shift is normalized by effective sensor
+    # height. CINEMATICUM principal shifts are normalized by output width/height.
+    focal_ratio = SPEC['camera']['focal_ratio']
+    camera_data.shift_x = -pose['shift_x'] * SPEC['width'] / SPEC['height'] / focal_ratio
+    camera_data.shift_y = -pose['shift_y']
+    # Blender marks output pixel aspect non-animatable. A calibrated focal
+    # ratio is therefore static; validation rejects it in camera pose keys.
+    scene.render.pixel_aspect_x = max(1, 1 / focal_ratio)
+    scene.render.pixel_aspect_y = max(1, focal_ratio)
+    camera_data.dof.focus_distance = pose['focus_distance']
+    camera_data.dof.aperture_fstop = pose['f_stop']
+apply_camera(SPEC['camera'])
 if SPEC['camera'].get('keyframes'):
     for frame,pose in camera_poses:
         camera.location = pose['position']
@@ -371,11 +463,18 @@ if SPEC['camera'].get('keyframes'):
         camera_target.keyframe_insert(data_path='location', frame=frame)
     interpolate_action(camera, camera_poses)
     interpolate_action(camera_target, camera_poses)
-    # FOV-to-lens conversion is nonlinear. Bake integer frames so re-opening
-    # the saved .blend reproduces the authored camera at every rendered frame.
+    # Orientation, projection and thin-lens conversion are nonlinear. Bake
+    # integer frames so the retained .blend independently replays each frame.
+    # Translation keeps its original eased curves; only quaternion channels
+    # are linearized on the camera object after this bake.
     for frame in range(1, SPEC['frame_end']+1):
-        camera_data.lens = 12 / math.tan(math.radians(pose_at(camera_poses, frame)['fov'])/2)
-        camera_data.keyframe_insert(data_path='lens', frame=frame)
+        apply_camera(pose_at(camera_poses, frame))
+        camera.keyframe_insert(data_path='rotation_quaternion', frame=frame)
+        for path in ('lens', 'shift_x', 'shift_y', 'dof.focus_distance', 'dof.aperture_fstop'):
+            camera_data.keyframe_insert(data_path=path, frame=frame)
+    for curve in action_curves(camera):
+        if curve.data_path == 'rotation_quaternion':
+            for key in curve.keyframe_points: key.interpolation = 'LINEAR'
     linearize_action(camera_data)
 lights = []
 for item in SPEC['lights']:
@@ -460,6 +559,15 @@ for item in SPEC['objects']:
     shader.inputs['Base Color'].default_value = color
     shader.inputs['Roughness'].default_value = item['material']['roughness']
     shader.inputs['Metallic'].default_value = item['material']['metallic']
+    # Blender 4+ renamed these Principled inputs; retain Blender 3 compatibility.
+    transmission = shader.inputs.get('Transmission Weight') or shader.inputs.get('Transmission')
+    emission = shader.inputs.get('Emission Color') or shader.inputs.get('Emission')
+    if transmission is None or emission is None:
+        raise RuntimeError('This Blender Principled BSDF lacks required material inputs.')
+    transmission.default_value = item['material']['transmission']
+    shader.inputs['IOR'].default_value = item['material']['ior']
+    emission.default_value = (*linear_color(item['material']['emission_color']), 1)
+    shader.inputs['Emission Strength'].default_value = item['material']['emission_strength']
     obj.data.materials.append(material)
     poses = recipe_poses(item, ('position','rotation','scale'))
     if item['keyframes']:
@@ -483,10 +591,7 @@ for frame in range(START, END+1):
         obj.rotation_euler = [math.radians(v) for v in pose['rotation']]
         obj.scale = pose['scale']
     camera_pose = pose_at(camera_poses, frame)
-    camera.location = camera_pose['position']
-    camera_target.location = camera_pose['target']
-    camera_data.lens = 12 / math.tan(math.radians(camera_pose['fov'])/2)
-    aim(camera, camera_pose['target'])
+    apply_camera(camera_pose)
     for light,light_target,poses,size_path,size_factor in lights:
         pose = pose_at(poses, frame)
         light.location = pose['position']
@@ -546,7 +651,7 @@ def render_scene(scene, output_dir, fps=24, frame_start=1, frame_end=None,
         encoded = work / "encoded.mp4"
         _run_owned([ffmpeg, "-hide_banner", "-nostdin", "-v", "error", "-n", "-framerate", rate.ffmpeg,
                     "-start_number", str(start), "-i", str(frames / "frame_%06d.png"), "-frames:v", str(total),
-                    "-c:v", "libx264", "-preset", "medium", "-crf", "18", "-pix_fmt", "yuv420p",
+                    "-vf", "setsar=1", "-c:v", "libx264", "-preset", "medium", "-crf", "18", "-pix_fmt", "yuv420p",
                     "-movflags", "+faststart", str(encoded)], work / "encode.log", cancel_event, _BLENDER_TIMEOUT)
         if not encoded.is_file() or not encoded.stat().st_size:
             raise AdapterError("The authored scene did not produce a nonempty encoded movie.")

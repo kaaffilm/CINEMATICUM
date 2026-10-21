@@ -3,6 +3,7 @@
 import ast
 import copy
 import json
+import math
 from pathlib import Path
 import shutil
 import subprocess
@@ -40,6 +41,82 @@ def script_constants(script):
 
 
 class SceneRecipeTests(unittest.TestCase):
+    def test_legacy_recipes_gain_physical_defaults_without_changing_framing(self):
+        value = recipe()
+        value.pop("render", None)
+        value["camera"] = {"position": [7, -9, 6], "target": [0, 0, 1], "fov": 45,
+                           "keyframes": [{"frame": 9, "fov": 55}]}
+        normalized = scene.validate_scene(value)
+        camera = normalized["camera"]
+        self.assertEqual(camera["sensor_height_mm"], 24)
+        self.assertFalse(camera["dof_enabled"])
+        self.assertEqual(scene.focal_length_mm(camera), 12 / math.tan(math.radians(22.5)))
+        self.assertEqual(camera["focal_ratio"], 1)
+        self.assertNotIn("focal_ratio", camera["keyframes"][0])
+        self.assertEqual(camera["keyframes"][0]["roll"], 0)
+        self.assertEqual(normalized["render"], scene.RENDER_DEFAULTS)
+        self.assertEqual(normalized["objects"][0]["material"]["transmission"], 0)
+        self.assertEqual(normalized["objects"][0]["material"]["emission_strength"], 0)
+        self.assertEqual(scene.validate_scene(normalized), normalized)
+
+    def test_physical_lens_has_one_canonical_projection_and_rejects_conflicts(self):
+        value = recipe()
+        value["camera"].update(sensor_height_mm=36, focal_length_mm=50)
+        value["camera"].pop("fov")
+        normalized = scene.validate_scene(value)
+        self.assertAlmostEqual(normalized["camera"]["fov"], math.degrees(2 * math.atan(.36)))
+        self.assertAlmostEqual(scene.focal_length_mm(normalized["camera"]), 50)
+        self.assertNotIn("focal_length_mm", normalized["camera"])
+        value["camera"]["fov"] = normalized["camera"]["fov"]
+        self.assertEqual(scene.validate_scene(value), normalized)
+        value["camera"]["fov"] = 45
+        with self.assertRaisesRegex(ValueError, "contradicts"):
+            scene.validate_scene(value)
+        for invalid in (None, True, 0, float("inf")):
+            value["camera"]["focal_length_mm"] = invalid
+            with self.subTest(invalid=invalid), self.assertRaises(ValueError):
+                scene.validate_scene(value)
+
+    def test_physical_camera_channels_share_easing_and_survive_json_roundtrip(self):
+        value = recipe()
+        value["camera"].update(dof_enabled=True, roll=20, shift_x=.2, shift_y=-.1,
+                               focal_ratio=1.2, focus_distance=2, f_stop=2.8)
+        value["camera"]["keyframes"] = [{"frame": 1, "interpolation": "ease_in"},
+                                          {"frame": 9, "roll": 80, "shift_x": -.2, "shift_y": .1,
+                                           "focus_distance": 6, "f_stop": 8}]
+        normalized = scene.validate_scene(json.loads(json.dumps(value)))
+        midway = scene.pose_at(normalized["camera"], 5, "camera")
+        for prop, expected in {"roll": 35, "shift_x": .1, "shift_y": -.05,
+                               "focus_distance": 3, "f_stop": 4.1}.items():
+            self.assertAlmostEqual(midway[prop], expected)
+        self.assertEqual(scene.validate_scene(normalized), normalized)
+
+    def test_physical_controls_are_bounded_and_cannot_smuggle_executable_values(self):
+        mutations = [lambda r: r["camera"].update(dof_enabled=1),
+                     lambda r: r["camera"].update(aperture_blades=2),
+                     lambda r: r["camera"].update(aperture_blades=3.5),
+                     lambda r: r["camera"].update(sensor_height_mm=0),
+                     lambda r: r["camera"].update(sensor_height_mm=1, fov=100),
+                     lambda r: r["camera"].update(aperture_rotation=200),
+                     lambda r: r["camera"].update(focus_distance=0),
+                     lambda r: r["camera"].update(f_stop=float("nan")),
+                     lambda r: r["camera"].update(focal_ratio=0),
+                     lambda r: r["camera"].update(keyframes=[{"frame": 2, "focal_ratio": 1.2}]),
+                     lambda r: r["camera"].update(shift_x=3),
+                     lambda r: r["render"].update(use_denoising="False"),
+                     lambda r: r["render"].update(max_bounces=65),
+                     lambda r: r["render"].update(seed=-1),
+                     lambda r: r["render"].update(integrator_script="run.py"),
+                     lambda r: r["objects"][0]["material"].update(transmission=1.1),
+                     lambda r: r["objects"][0]["material"].update(ior=.5),
+                     lambda r: r["objects"][0]["material"].update(emission_strength=1001),
+                     lambda r: r["objects"][0]["material"].update(emission_color="python")]
+        for mutation in mutations:
+            value = recipe()
+            mutation(value)
+            with self.subTest(mutation=mutation), self.assertRaises(ValueError):
+                scene.validate_scene(value)
+
     def test_recipe_normalizes_independently_and_project_dimensions_win(self):
         original = recipe()
         normalized = scene.validate_scene(original, width=320, height=180)

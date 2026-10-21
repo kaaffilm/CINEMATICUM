@@ -9,7 +9,7 @@ const finite = (v, fallback = 0) => Number.isFinite(Number(v)) ? Number(v) : fal
 const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
 const state = {token:'',project:null,projects:[],capabilities:{},selected:null,selectedAsset:null,mode:'edit',frame:0,zoom:48,playing:false,dirty:false,revision:0,history:[],future:[],media:new Map(),job:null,workflowPath:'',rendered:false,lastRenderUrl:'',savePromise:null,drag:null,projectOps:0,navigating:false,editBusy:false};
 let toastTimer, animation, playbackOrigin, playbackFrame, audioContext;
-let compositorEditor=null, trackingEditor=null, interchangeEditor=null, sceneEditor=null, sceneProjectId='', generationReadiness=null, readinessRequest=0;
+let compositorEditor=null, trackingEditor=null, interchangeEditor=null, colorPipelineEditor=null, cameraImporter=null, sceneEditor=null, sceneProjectId='', generationReadiness=null, readinessRequest=0;
 const editing=window.CinematicumEditing;
 const TRACK_WIDTH=128;
 let frameViewer=null;
@@ -151,7 +151,7 @@ function syncWorkspaces() {
   }
   if(isScene&&window.CinematicumSceneEditor){
     const project=state.project,options={width:project.width,height:project.height,fps:project.fps,renderAvailable:Boolean(state.capabilities.blender?.available??state.capabilities.blender)},scene=project.settings.scene||window.CinematicumSceneEditor.defaultScene({width:project.width,height:project.height,frame_end:Math.round(project.fps*4)});
-    if(!sceneEditor||sceneProjectId!==project.id){sceneEditor?.destroy();sceneProjectId=project.id;const capturedId=project.id;sceneEditor=window.CinematicumSceneEditor.mount($('#scene-module'),{...options,scene,onChange:next=>{if(state.project.id!==capturedId||projectOperationBlocked())return false;mutate(()=>{state.project.settings.scene=clone(next);},{timeline:false});return true;},onImportMesh:payload=>{if(state.project.id!==capturedId||projectOperationBlocked())throw Error('The project changed before mesh import.');return api(projectPath(capturedId)+'/scene/import-obj',{method:'POST',body:payload});},onRender:payload=>{if(state.project.id!==capturedId)throw Error('The project changed before scene submission.');return startSceneRender(payload);}});}
+    if(!sceneEditor||sceneProjectId!==project.id){sceneEditor?.destroy();sceneProjectId=project.id;const capturedId=project.id;sceneEditor=window.CinematicumSceneEditor.mount($('#scene-module'),{...options,scene,onChange:next=>{if(state.project.id!==capturedId||projectOperationBlocked())return false;mutate(()=>{state.project.settings.scene=clone(next);},{timeline:false});return true;},onImportMesh:payload=>{if(state.project.id!==capturedId||projectOperationBlocked())throw Error('The project changed before mesh import.');return api(projectPath(capturedId)+'/scene/import-obj',{method:'POST',body:payload});},onImportCamera:()=>{if(state.project.id!==capturedId)throw Error('The project changed before camera import.');openCameraImport();},onRender:payload=>{if(state.project.id!==capturedId)throw Error('The project changed before scene submission.');return startSceneRender(payload);}});}
     else sceneEditor.setScene(scene,options);
   }
 }
@@ -159,6 +159,40 @@ function openBlendDialog() {
   const ready=Boolean(state.capabilities.blender?.available??state.capabilities.blender),scenes=state.project.assets.filter(asset=>asset.kind==='scene');
   $('#blend-dialog-content').innerHTML=`<p class="muted">Render an existing .blend with its camera, lighting, materials, and animation. Pack linked resources in Blender before importing.</p><label>Scene<select id="blender-scene">${scenes.length?scenes.map(scene=>`<option value="${esc(scene.path)}" ${scene.id===state.selectedAsset?'selected':''}>${esc(scene.name)}</option>`).join(''):'<option value="">Import a .blend file first</option>'}</select></label><button id="import-scene" class="full" style="margin-top:12px">Import .blend</button><div class="field-row"><label>Start frame<input id="blender-start" type="number" min="1" max="100000" step="1" value="1"></label><label>End frame<input id="blender-end" type="number" min="1" max="100000" step="1" value="120"></label></div><button id="blender-button" class="primary full" style="margin-top:18px" ${!ready||!scenes.length?'disabled':''}>Render scene</button>${ready?'':'<p class="muted">Blender is not available on the configured path.</p>'}`;
   $('#blend-dialog').showModal();
+}
+function openCameraImport() {
+  if(projectOperationBlocked()||!window.CinematicumCameraIO)return;
+  stop();
+  cameraImporter??=window.CinematicumCameraIO.mount(document.body,{
+    getContext:()=>({projectId:state.project.id,revision:state.revision,width:state.project.width,height:state.project.height}),
+    onImport:payload=>api(projectPath(state.project.id)+'/scene/import-camera',{method:'POST',body:payload}),
+    onApply:(camera,expected,source)=>{
+      if(projectOperationBlocked()||state.project.id!==expected.projectId||state.revision!==expected.revision)throw Error('The project changed. Reopen camera import before applying.');
+      const next=clone(state.project.settings.scene||sceneEditor?.getScene()||window.CinematicumSceneEditor.defaultScene({width:state.project.width,height:state.project.height,frame_end:Math.round(state.project.fps*4)}));
+      next.camera=clone(camera);next.camera.keyframes=[];
+      mutate(()=>{state.project.settings.scene=next;state.project.settings.camera_import={source:clone(source||{}),imported_at:new Date().toISOString()};},{timeline:false,inspector:true});
+      sceneEditor?.showCamera();
+      return true;
+    },notify:toast
+  });
+  cameraImporter.open();
+}
+function openColorPipeline() {
+  const clip=selectedItem(),asset=assetById(clip?.asset_id);
+  if(projectOperationBlocked()||selectionLocked()||state.selected?.type!=='clip'||clip.track<0||!['video','image'].includes(asset?.kind))return;
+  if(!window.CinematicumColorPipeline)throw Error('Color controls did not load. Reopen CINEMATICUM.');
+  stop();
+  colorPipelineEditor??=window.CinematicumColorPipeline.mount(document.body,{
+    request:api,getClip:()=>clone(selectedItem()),
+    getContext:()=>({projectId:state.project.id,revision:state.revision,clipId:state.selected?.id}),
+    onApply:(pipeline,expected)=>{
+      const current=selectedItem();
+      if(projectOperationBlocked()||selectionLocked()||state.project.id!==expected.projectId||state.revision!==expected.revision||state.selected?.type!=='clip'||current?.id!==expected.clipId)throw Error('The selected clip changed. Reopen its color controls before applying.');
+      mutate(()=>{if(pipeline===null)delete current.color_pipeline;else current.color_pipeline=clone(pipeline);},{timeline:false,inspector:true});
+      return true;
+    },notify:toast
+  });
+  colorPipelineEditor.open();
 }
 async function startSceneRender({scene,frame_start,frame_end}) {
   if(projectOperationBlocked())throw Error('Wait for the current project operation to finish.');
@@ -179,7 +213,7 @@ function renderInspector() {
   const timing=`<div class="inspector-section"><h3>TIMING · FRAMES</h3><div class="field-row">${field('Timeline start','start',c.start)}${state.selected.type==='clip'&&a?.kind!=='image'?field('Source in','in',c.in,{step:.01}):''}</div><div class="field-row">${field('Duration','duration',c.duration,{min:1})}<label>Timeline end<input readonly value="${c.start+c.duration}" title="Exclusive end frame"></label></div><p class="note">${fmt(c.start)} → ${fmt(c.start+c.duration)} · ${rateLabel()}</p></div>`;
   if(state.selected.type==='title'){el.innerHTML=`<div class="inspector-name">Title</div><div class="inspector-section"><label>Text<textarea data-field="text" maxlength="2000">${esc(c.text)}</textarea></label><div class="field-row">${field('Size (px)','size',c.size,{min:6,max:500})}${field('Fade (frames)','fade',c.fade,{min:0,max:Math.floor(c.duration/2)})}</div><div class="color-control"><label>Text color</label><input type="color" data-field="color" value="${esc(c.color)}"></div>${range('Horizontal position','x',c.x,-1,1)}${range('Vertical position','y',c.y,-1,1)}</div>${timing}<div class="inspector-actions"><button data-action="duplicate">Duplicate</button><button data-action="delete">Delete</button></div>`;return;}
   const top=`<div class="inspector-name">${esc(a?.name||'Missing media')}</div><div class="inspector-meta">${a?.width?`${a.width} × ${a.height} · `:''}${a?.kind||'media'} · ${(c.duration/state.project.fps).toFixed(2)}s</div>${a?.kind==='video'&&c.track>=0?'<button class="full tracking-open" data-action="track">Track motion'+(c.tracking?' · stabilized':'')+'</button>':''}`;
-  if(state.mode==='color'){const g=c.grade||{};el.innerHTML=`${top}<div class="inspector-section"><h3>PRIMARY CORRECTION</h3>${range('Exposure · stops','grade.exposure',g.exposure??0,-3,3)}${range('Contrast','grade.contrast',g.contrast??1,0,3)}${range('Saturation','grade.saturation',g.saturation??1,0,3)}${range('Temperature','grade.temperature',g.temperature??0,-1,1)}</div><div class="inspector-actions"><button data-action="reset-color">Reset color</button><button data-action="preview">Render preview</button></div><p class="note">The viewer renders the current frame through the export graph. The scopes measure that rendered image.</p>`;return;}
+  if(state.mode==='color'){if(c.track<0||a?.kind==='audio'){el.innerHTML=`${top}<p class="note">Select a picture clip to change its color.</p>`;return;}const g=c.grade||{};el.innerHTML=`${top}<div class="inspector-section"><h3>COLOR PIPELINE</h3><button class="full" data-action="color-pipeline">Input transform, white balance & LUT</button><p class="note">${c.color_pipeline?.enabled?esc(c.color_pipeline.input_transfer+' / '+c.color_pipeline.input_primaries)+(c.color_pipeline.lut?' · LUT applied':''):'Rec.709 SDR · no input transform'}</p></div><div class="inspector-section"><h3>PRIMARY CORRECTION</h3>${range('Exposure · stops','grade.exposure',g.exposure??0,-3,3)}${range('Contrast','grade.contrast',g.contrast??1,0,3)}${range('Saturation','grade.saturation',g.saturation??1,0,3)}${range('Temperature','grade.temperature',g.temperature??0,-1,1)}</div><div class="inspector-actions"><button data-action="reset-color">Reset primary correction</button><button data-action="preview">Render preview</button></div><p class="note">The viewer renders the current frame through the export graph. The scopes measure that rendered image.</p>`;return;}
   if(state.mode==='composite'){const e=c.effects||{},pose=transformAt(c,state.frame-c.start);el.innerHTML=`${top}<div id="node-inspector" class="node-inspector"></div><details class="clip-transform-details"><summary>Clip placement & motion</summary><div class="inspector-section"><h3>TRANSFORM & MOTION</h3>${range('Horizontal position','x',pose.x,-2,2)}${range('Vertical position','y',pose.y,-2,2)}${range('Scale','scale',pose.scale,.02,4)}${range('Rotation · degrees','rotation',pose.rotation||0,-360,360,1)}${range('Opacity','opacity',pose.opacity,0,1)}<button data-action="keyframe" class="full" style="margin-top:14px">◇ Set pose & gain keyframe</button><div class="keyframe-list">${visibleKeys(c).map(k=>`<span class="keyframe-chip"><button data-jump-key="${k.frame}">${k.frame-(c.animation_offset??0)}f</button><select aria-label="Interpolation after frame ${k.frame}" data-key-easing="${k.frame}">${Object.keys(editing.easings).map(mode=>`<option value="${mode}" ${(k.interpolation||'linear')===mode?'selected':''}>${mode.replaceAll('_',' ')}</option>`).join('')}</select> <button data-remove-key="${k.frame}" aria-label="Delete keyframe at frame ${k.frame}">×</button></span>`).join('')}</div><p class="note">Keyframes animate position, scale, rotation, opacity, and gain. With keyframes present, changing a slider writes one at the playhead.</p></div><div class="inspector-section"><h3>EFFECTS</h3>${range('Blur','effects.blur',e.blur||0,0,30,.1)}${range('Sharpen','effects.sharpen',e.sharpen||0,0,3,.05)}<label class="check-field"><input type="checkbox" data-field="effects.vignette" ${e.vignette?'checked':''}> Vignette</label><div class="color-control"><label class="check-field"><input type="checkbox" id="chroma-enabled" ${e.chroma_key?'checked':''}> Chroma key</label><input id="chroma-color" type="color" value="${esc(e.chroma_key||'#00ff00')}" aria-label="Chroma key color"></div></div><div class="inspector-actions"><button data-action="reset-transform">Reset transform</button><button data-action="preview">Render preview</button></div><p class="note">Render preview evaluates chroma key, sharpening, vignette, and the complete composite.</p></details>`;compositorEditor?.renderInspector($('#node-inspector'));return;}
   el.innerHTML=`${top}${timing}<div class="inspector-section"><h3>RETIME</h3>${field('Playback speed','speed',c.speed??1,{min:.25,max:4,step:.25})}<label class="check-field"><input type="checkbox" data-field="reverse" ${c.reverse?'checked':''}> Reverse selected source range</label><p class="note">Changing speed preserves the selected source range. Rendered playback includes reversed sound.</p></div><div class="inspector-section"><h3>AUDIO</h3>${range('Clip gain','volume',transformAt(c,state.frame-c.start).volume,0,4)}${range('Stereo balance','audio.pan',c.audio?.pan||0,-1,1,.01)}<div class="field-row">${field('Fade in · frames','audio.fade_in',c.audio?.fade_in||0,{min:0,max:Math.max(c.duration,c.audio?.fade_duration||0)})}${field('Fade out · frames','audio.fade_out',c.audio?.fade_out||0,{min:0,max:Math.max(c.duration,c.audio?.fade_duration||0)})}</div><p class="note">${a?.has_audio||a?.kind==='audio'?'Gain 1.00 is original level. Gain 0.00 mutes this clip.':'This source has no audio stream.'}</p></div><div class="inspector-section"><h3>LAYER</h3><label>Track<select data-field="track">${[...new Set(editing.tracks(state.project).filter(t=>a?.kind==='audio'?t.id<0:t.id>=0).map(t=>t.id).concat(c.track))].map(t=>`<option value="${t}" ${c.track===t?'selected':''}>${t<0?'A'+Math.abs(t):'V'+(t+1)}${t===0?' · base picture':''}</option>`).join('')}</select></label></div><div class="inspector-actions"><button data-action="duplicate">Duplicate</button><button data-action="delete">Delete</button></div>`;
 }
@@ -448,6 +482,7 @@ $('#inspector').addEventListener('click',e=>{
   else if(action==='add-title')addTitle();
   else if(action==='preview')startRender('preview');
   else if(action==='track')openTracking();
+  else if(action==='color-pipeline')openColorPipeline();
   else if(action==='reset-color')mutate(()=>{selectedItem().grade={exposure:0,contrast:1,saturation:1,temperature:0};},{inspector:true});
   else if(action==='reset-transform')mutate(()=>{const c=selectedItem(),soundKeys=(c.keyframes||[]).filter(k=>k.volume!==undefined).map(k=>({frame:k.frame,volume:k.volume,interpolation:k.interpolation||'linear'}));Object.assign(c,{x:0,y:0,scale:1,rotation:0,opacity:1,keyframes:soundKeys});},{inspector:true});
   else if(action==='keyframe'){

@@ -1,4 +1,4 @@
-# CINEMATICUM Studio 0.5
+# CINEMATICUM Studio 0.6
 
 A working local audiovisual editor. Media are imported into an owned project,
 edited on a frame-based timeline, previewed, and exported through real render
@@ -10,9 +10,12 @@ issuance effect.
 
 ## This upgrade
 
-Studio 0.5 adds exact rational project clocks, independent compositor parameter
-and polygon-path animation, measured point tracking with reversible stabilization
-and tracked masks, OBJ/MTL mesh authoring, and bounded OpenTimelineIO interchange.
+Studio 0.6 adds calibrated fSpy/COLMAP camera import; camera roll, principal-point
+offset and unequal focal scales; physical sensor/lens, focus/aperture controls;
+transmission, IOR and emissive materials; bounded Cycles ray settings; and an
+actual floating-point input color stage with project-owned 1D/3D Cube LUTs.
+It retains exact rational clocks, compositor/path animation, measured tracking,
+OBJ/MTL geometry and bounded OpenTimelineIO interchange from 0.5.
 Read the [source comparison and capability audit](CAPABILITY_AUDIT.md) for the
 implemented scope, source evidence, tests and remaining professional gaps.
 
@@ -59,8 +62,12 @@ optional engines; the installer does not bundle them or create a signed,
 notarized distribution.
 
 Quit Studio before rebuilding. Replacement is allowed only for a bundle with
-Studio's own identifier, and the previous bundle is retained beside the new
-one as a backup. Projects default to `~/Movies/CINEMATICUM`; application
+Studio's own identifier. The installer creates and reads back a ZIP archive,
+checking every file's bytes and permissions before replacing the old app.
+Archives live in `~/Applications/.CINEMATICUM-Backups.noindex`; recognized old
+`.backup-*.app` and `.rejected-*.app` bundles are consolidated there so only one
+application appears in the launcher. Unrelated bundles and symlinks are preserved.
+The native app now has its own icon. Projects default to `~/Movies/CINEMATICUM`; application
 updates do not replace that folder. On Linux the default is
 `$XDG_DATA_HOME/cinematicum`, or `~/.local/share/cinematicum` when unset.
 
@@ -74,7 +81,8 @@ updates do not replace that folder. On Linux the default is
    each. Higher picture layers composite above lower layers. Track mute, solo,
    lock and gain are shared with the Audio mixer. Gaps render black; audio gaps
    render silence. Solo is evaluated separately for picture and audio tracks.
-4. Use Color for exposure, contrast, saturation, and temperature. Composite
+4. Use Color for input transforms, white balance, LUTs, exposure, contrast,
+   saturation, and temperature. Composite
    provides an editable node graph as well as clip transforms and effects.
    Add titles with position, size, color, duration, and fades.
 5. Editor playback is interactive. When paused in Color or Composite, the
@@ -119,6 +127,56 @@ Space plays/pauses, S splits the selected clip at the playhead, Delete removes
 the selection, and Cmd/Ctrl-Z and Cmd/Ctrl-S undo and save. Titles use actual
 transparent PNG plates generated from the editor canvas, so the Mac does not
 need FFmpeg's optional `drawtext` filter.
+
+## Input color and LUTs
+
+Select a picture clip, open **Color**, then **Input transform, white balance & LUT**.
+Choose the source transfer function (Rec.709, sRGB, linear, or LogC3 EI800), source
+primaries (Rec.709, Rec.2020, ACEScg, or ARRI Wide Gamut 3), and source/target white
+chromaticities. Bradford adaptation and RGB/XYZ matrices run in a float RGBA stage.
+The stage encodes Rec.709 before the clip compositor and creative grading.
+
+Import a selected `.cube` file to keep it with the project. The importer accepts
+one three-channel 1D table (up to 65,536 rows) or one 3D table (up to 65³), with
+finite per-channel input domains. Nearest/linear 1D and nearest/trilinear/
+tetrahedral 3D interpolation are available. Tables are canonicalized and addressed
+by SHA-256; missing or changed bytes stop validation. The selected LUT runs after
+the input conversion, before the compositor. Apply creates one undo entry and
+does not autosave. LUT storage persists independently of undo.
+
+Paused frames and export share this processing. Interactive source playback
+remains approximate; use **Render preview** to judge moving processed footage.
+This is an explicit input-to-SDR stage, not a complete OCIO/ACES display pipeline.
+The downstream compositor/delivery remains SDR; RAW development, HDR mastering,
+general OCIO configs, combined shaper+3D Cube files and automatic camera
+color-space detection are not implemented.
+
+## Calibrated cameras and physical rendering
+
+In **3D**, use **Import camera…** for an fSpy v1 project/export or selected COLMAP
+`cameras.txt` and `images.txt`. Review the solved camera, explicit world up axis
+and translation scale, then apply it as one undoable camera replacement. Previous
+camera animation is replaced; objects and lights remain. No path or photograph
+named in an imported document is opened. Camera import keeps orientation/roll,
+principal-point offsets and `fx/fy`; source and project aspect ratios must agree.
+COLMAP import supports PINHOLE and SIMPLE_PINHOLE only. Distorted camera models
+reject with an explicit error; numerical Brown-model utilities are not a footage
+undistortion feature. The import does not run a reconstruction or calibration solve.
+
+The camera inspector exposes sensor height and focal length, with vertical FOV
+as the authoritative saved projection. Lens edits derive FOV; contradictory API
+values reject. Depth of field exposes focus distance, f-stop and aperture shape.
+Camera roll, shifts, focus distance and f-stop can be animated. The calibrated
+focal ratio is static for the shot because Blender's output pixel aspect cannot
+be keyed; attempts to animate it are rejected before rendering.
+Materials expose transmission, index of refraction and emission alongside base
+color, roughness and metallic. The scene's ray settings control actual Cycles
+bounce limits, denoising and seed. The saved `.blend` retains those settings.
+
+The own WebGL viewport matches camera geometry and offers approximate material
+feedback. Use the actual Cycles render for depth of field, refraction and light
+transport. Spectral/differentiable rendering, lens-prescription optimization and
+full material/node/geometry authoring remain separate engineering requirements.
 
 ## Node compositing
 
