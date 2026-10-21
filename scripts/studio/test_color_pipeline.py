@@ -46,7 +46,9 @@ class CubeTests(unittest.TestCase):
                  "LUT_1D_SIZE 2\nDOMAIN_MIN 1 0 0\nDOMAIN_MAX 1 1 1\n0 0 0\n1 1 1",
                  "LUT_1D_SIZE 2\nDOMAIN_MIN 0 0 0\nDOMAIN_MIN 0 0 0\n0 0 0\n1 1 1",
                  "LUT_1D_SIZE 2\n0 0 0\nDOMAIN_MAX 1 1 1\n1 1 1",
-                 "LUT_1D_SIZE 2\nLUT_1D_INPUT_RANGE 0 1\n0 0 0\n1 1 1",
+                 "LUT_1D_SIZE 2\nLUT_3D_INPUT_RANGE 0 1\n0 0 0\n1 1 1",
+                 "LUT_1D_SIZE 2\nLUT_1D_INPUT_RANGE 0 1\nDOMAIN_MIN 0 0 0\n0 0 0\n1 1 1",
+                 "LUT_1D_SIZE 2\nLUT_1D_INPUT_RANGE 1 1\n0 0 0\n1 1 1",
                  'TITLE "ok"\nTITLE "no"\nLUT_1D_SIZE 2\n0 0 0\n1 1 1',
                  'TITLE "unterminated\nLUT_1D_SIZE 2\n0 0 0\n1 1 1',
                  "INCLUDE /etc/passwd", "LUT_1D_SIZE 2\n0 0 0\n$(echo) 1 1",
@@ -54,6 +56,21 @@ class CubeTests(unittest.TestCase):
         for value in cases:
             with self.subTest(value=value[:60]), self.assertRaises(ValueError):
                 parse_cube(value)
+
+    def test_single_stage_input_range_survives_canonical_roundtrip(self):
+        # INPUT_RANGE binds to its named table. A valid single-stage range is
+        # supported alongside the original per-channel DOMAIN convention.
+        for dimension in (1, 3):
+            rows = "\n".join(" ".join(map(str, row)) for row in identity_cube(dimension).values)
+            lut = parse_cube(f"LUT_{dimension}D_SIZE 2\nLUT_{dimension}D_INPUT_RANGE -1 3\n" + rows)
+            with self.subTest(dimension=dimension):
+                self.assertEqual(lut.domain_min, (-1, -1, -1))
+                self.assertEqual(lut.domain_max, (3, 3, 3))
+                self.assertEqual(sample_lut(lut, (0, 1, 2)), (.25, .5, .75))
+                self.assertEqual(sample_lut(lut, (-2, 1, 4)), (0, .5, 1))
+                restored = parse_cube(lut.text())
+                self.assertEqual(restored, lut)
+                self.assertEqual(restored.sha256, lut.sha256)
 
     def test_red_changes_fastest_and_channels_are_independent(self):
         lut = parse_cube(identity_cube().text())

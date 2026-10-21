@@ -424,13 +424,50 @@ class InterchangeTests(unittest.TestCase):
 
     def test_trailing_gap_is_not_silently_discarded(self):
         p = self.project()
+        before = copy.deepcopy(p)
         doc = self.without_metadata(export_otio(p, self.root)["document"])
         track = doc["tracks"]["children"][-1]
         gap = copy.deepcopy(doc["tracks"]["children"][0]["children"][0])
         gap["source_range"]["duration"]["value"] = 12
         track["children"].append(gap)
-        with self.assertRaisesRegex(ValueError, "Trailing/all-gap"):
-            import_otio(doc, p, self.root, self.mapping())
+        imported = import_otio(doc, p, self.root, self.mapping())["project"]
+        self.assertEqual(imported["sequence_duration"], 60)
+        self.assertEqual(max(c["start"] + c["duration"] for c in imported["clips"]), 48)
+        self.assertEqual(p, before, "Import must remain an unsaved proposal")
+        exported = export_otio(imported, self.root)["document"]
+        for saved_track in exported["tracks"]["children"]:
+            self.assertEqual(sum(item["source_range"]["duration"]["value"]
+                                 for item in saved_track["children"]), 60)
+        restored = import_otio(self.without_metadata(exported), p, self.root, self.mapping())["project"]
+        self.assertEqual(restored["sequence_duration"], 60)
+
+        # Verify that the preserved blank interval also reaches real delivery,
+        # rather than surviving only in an unused metadata field.
+        output = self.root / "ENGINE_TEST_trailing_gap.mov"
+        render_project(imported, self.root, output, "prores")
+        pixels = self.ffmpeg(["-i", str(output), "-map", "0:v:0", "-pix_fmt", "rgb24",
+                              "-threads", "1", "-f", "rawvideo", "pipe:1"])
+        frame_bytes = 96 * 64 * 3
+        self.assertEqual(len(pixels), 60 * frame_bytes)
+        self.assertLessEqual(max(pixels[-12 * frame_bytes:]), 2, "The trailing twelve frames must render black")
+
+    def test_all_gap_track_roundtrips_as_explicit_sequence_duration(self):
+        p = self.project()
+        doc = self.without_metadata(export_otio(p, self.root)["document"])
+        gap = copy.deepcopy(doc["tracks"]["children"][0]["children"][0])
+        gap["source_range"]["duration"]["value"] = 60
+        track = doc["tracks"]["children"][0]
+        track["children"] = [gap]
+        doc["tracks"]["children"] = [track]
+        imported = import_otio(doc, p, self.root)["project"]
+        self.assertEqual(imported["clips"], [])
+        self.assertEqual(imported["sequence_duration"], 60)
+        exported = export_otio(imported, self.root)["document"]
+        self.assertEqual(len(exported["tracks"]["children"]), 1)
+        self.assertEqual(exported["tracks"]["children"][0]["children"], [gap])
+        restored = import_otio(self.without_metadata(exported), p, self.root)["project"]
+        self.assertEqual(restored["clips"], [])
+        self.assertEqual(restored["sequence_duration"], 60)
 
 
 if __name__ == "__main__":

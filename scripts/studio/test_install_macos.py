@@ -2,6 +2,8 @@
 import json
 from pathlib import Path
 import plistlib
+import subprocess
+import sys
 import tempfile
 import unittest
 from unittest.mock import patch
@@ -17,6 +19,23 @@ class ArchiveInstallationTests(unittest.TestCase):
 
     def tearDown(self):
         self.tmp.cleanup()
+
+    def test_packaged_runtime_imports_without_the_development_checkout(self):
+        """A source-tree pass must not hide missing bundled transitive imports."""
+        runtime = self.root / "runtime"
+        installer.copy_runtime(runtime)
+        program = (
+            "import sys,json,pathlib;sys.path.insert(0,sys.argv[1]);"
+            "import server,planar_tracking,projective_warp,install_tracking,install_imaging,managed_generation;"
+            "assert pathlib.Path(server.__file__).parent==pathlib.Path(sys.argv[1]);"
+            "assert install_tracking.LOCK.is_file();assert install_imaging.LOCK.is_file();"
+            "managed_generation.load_lock();print('PACKAGED_RUNTIME_IMPORTS_PASS')"
+        )
+        result = subprocess.run([sys.executable, "-I", "-B", "-c", program, str(runtime)],
+                                cwd=self.root, capture_output=True, text=True, timeout=20)
+        self.assertEqual(0, result.returncode, result.stderr)
+        self.assertIn("PACKAGED_RUNTIME_IMPORTS_PASS", result.stdout)
+        self.assertTrue(installer.runtime_manifest(runtime))
 
     def bundle(self, name, content=b"old executable", identifier=installer.BUNDLE_ID):
         app = self.root / name

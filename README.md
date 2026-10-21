@@ -28,8 +28,8 @@ slip/slide/roll editing, measured source tracking, scopes, multi-source node
 compositing, calibrated fSpy/COLMAP cameras, physical lens/material controls and
 H.264/ProRes export. Authored Cycles scenes retain editable `.blend` files and
 scene-linear float EXR sequences with optional render passes. The Develop
-workspace performs real OCIO transforms, camera RAW still development and aligned
-bracket merging through an optional imaging runtime. Movie editing remains SDR;
+workspace performs real OCIO transforms, camera RAW still development and merges
+pre-aligned brackets through an optional imaging runtime. Movie editing remains SDR;
 RAW-movie and HDR finishing are not implemented.
 
 Recovery checkpoints, saved-version history, portable project archive/restore
@@ -38,20 +38,37 @@ ComfyUI installation, owned MPS startup and one real Wan 1.3B take are verified:
 192 × 128, nine frames at 16 fps, four sampling steps, seed 42. Generation took
 44.410 seconds. Independent media verification and native Add/Play/Save each
 passed 14 checks, including all nine actual source pictures. This is a small
-execution proof; production quality and the default 480 × 272, 17-frame,
-20-step workflow remain unverified after that attempt was cancelled when the
-app terminated. The reason for that ordinary termination remains unknown.
+execution proof. Two later 480 × 272, 17-frame, 20-step Euler takes completed
+and each passed 14 independent media checks. A preceding normal UniPC take was
+nearly black and was rejected. Native playback passed 14 checks for one Euler
+take; the other exposed a final-frame insertion defect, now corrected in source
+and covered by real-media/JavaScript regression. Its final native rerun is pending
+after MIDIA-AI's runtime upgrade invalidated Mac command authorization.
+Production quality and longer takes remain unverified. The cause of an earlier
+ordinary app termination remains unknown.
 
-Native audio acceptance is still open: a fresh test of the second MOV audio
-stream returned silence after an earlier passing capture. The current fix is
-under review. An installed 0.9 candidate exists, but three of its 53 runtime
-files differ from the latest audio JavaScript under review. The original
-production checkout has no Studio, and the existing draft PR remains at 0.8;
-the current 0.9 work has not been published as a release.
+The 0.9.1 candidate replaces browser-decoded live sound with a source-sample
+scheduler and adds measured affine/projective planar motion, stabilization,
+image corner pinning, 16-bit UNORM SDR movie processing, and a lossless FFV1
+RGB+alpha master. Native acceptance now covers source routing, overlapping
+clips, live nested sequences and repeated retimed playback with zero underruns,
+plus transformed 16-bit paused pictures and an actual native master download.
+Current-source regression, remaining native gates and installation are recorded
+separately in [Verification 0.9.1](scripts/studio/VERIFICATION_0_9_1.md).
+
+Native quit now asks before cancelling active media jobs. The installer includes
+the planar modules and tracking/imaging runtime installers, archives the prior
+bundle before replacement, and records a SHA-256 identity for every copied
+runtime file. Existing project data and the original production checkout are
+preserved. The earlier 515-test result applies to its historical source only.
+The current frozen operative source passed **543 tests with zero skips**, and
+all 48 JavaScript files passed syntax checks. Final native synchronization and
+replacement installation require renewed MIDIA-AI execution authorization after
+its runtime upgrade; the current candidate is not yet installed.
 
 Start with [the Studio guide](scripts/studio/README.md),
 [the source comparison and capability audit](scripts/studio/CAPABILITY_AUDIT.md),
-[the 0.9 verification record](scripts/studio/VERIFICATION_0_9.md), and
+[the current verification record](scripts/studio/VERIFICATION_0_9_1.md), and
 [the current unfinished-work register](scripts/studio/UNFINISHED_0_9.md). These
 records separate source implementation, executed acceptance and deployment.
 Run `make studio-doctor` to inspect installed engines or `make studio-test` for

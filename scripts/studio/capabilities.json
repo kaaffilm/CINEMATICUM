@@ -1,9 +1,40 @@
 {
   "version": 1,
-  "build": "0.9.0",
+  "build": "0.9.1",
   "reviewed_on": "2026-10-21",
   "parity_complete": false,
-  "evidence_note": "Paths identify implementation and acceptance harnesses; actual results are recorded in VERIFICATION_0_9.md. A normal Metal job completed in 82.430497 seconds and passed 18 independent checks. Managed ComfyUI setup/start and one 192x128, nine-frame, four-step Wan take completed; independent media and native playback each passed 14 checks, matching all nine source frames. This does not establish production quality or default-size/long-session generation. The default attempt was cancelled on ordinary app termination, cause unknown. Native second-MOV-stream audio remains unaccepted after an intermittently silent fresh capture. The frozen current-source Python suite passed 515 tests in 153.974 seconds with zero failures and zero skips, including genuine RAW and official OTIO integration; this does not override the separate native audio failure. An installed 0.9 candidate exists, but three of its 53 runtime files differ from current audio JavaScript; the original production checkout has no Studio, the draft PR remains at 0.8, and 0.9 is unpublished. Core editor/server use the Python standard library; imaging/roto and managed generation use separate runtimes. Capability statuses remain conservative and do not imply full parity.",
+  "evidence_note": "This ledger describes the 0.9.1 candidate source, with implementation and acceptance recorded separately. Paths identify real code and acceptance harnesses, not automatically passing executions. VERIFICATION_0_9_1.md records current gates; VERIFICATION_0_9.md retains historical results. Its 515-test aggregate belongs to an earlier frozen source. The current isolated Linux strict run passed 543 tests in 169.490 seconds with zero failures, errors, skips or expected failures, actual pinned optional workers and the genuine Kodak RAW fixture; all 189 frozen operative code/test files remained unchanged through the run. All 48 JavaScript syntax checks passed separately. Those results do not certify Mac UI, replacement installation or GitHub CI. Current native source-audio, planar and high16 reports passed their bounded scenarios; remaining native gates, installed-file identity and publication require their own receipts. Core editor/server use the Python standard library; imaging, planar measurement and managed generation use separate runtimes. No status claims full application parity, production-scale performance or signed distribution.",
+  "release_acceptance": {
+    "status": "in_progress",
+    "scope": "Current candidate source; no release acceptance inferred from older results. Native continuation and replacement installation are blocked after MIDIA-AI upgraded from 0.7.2 to 0.8.0 and rejected synchronization with COMMANDER_AUTHORITY_EXPIRED_OR_CHANGED; the successor runtime context has no command-execution grant.",
+    "frozen_regression": {
+      "status": "passed",
+      "environment": "Isolated local Linux runtime with pinned actual optional workers and genuine Kodak RAW input; not native macOS acceptance or GitHub CI.",
+      "tests": 543,
+      "test_seconds": 169.490,
+      "report_elapsed_seconds": 169.725,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "expected_failures": 0,
+      "unchanged_operative_files": 189,
+      "javascript_syntax_checks_passed": 48,
+      "report": "verification/0.9.1/full-actual-runtime-report.json",
+      "report_sha256": "d436f9f736d0c4ba5d41bf5762de9e9039efccd99afc18e5577b2311eee821a8",
+      "source_inventory": "verification/0.9.1/frozen-operative-source.json",
+      "source_inventory_sha256": "5db8cdeef9c316c5809e8c219815c3e7454f448fe08c7a972c80a3662f976653",
+      "unchanged_source_check": "verification/0.9.1/frozen-operative-check.json"
+    },
+    "required": [
+      "Frozen-source full regression including actual optional workers",
+      "Repeated native source-audio, overlap, nested-sequence and retime capture",
+      "Native planar measure/apply/undo/save/reopen/render and stale-dependency checks",
+      "Native high16 precision/export/download plus transform/alpha regression",
+      "Normal 480x272, 17-frame, 20-step genuine local inference and independent media/playback checks, including the corrected final-frame timeline insertion",
+      "Verified replacement installation, prior-bundle preservation and source-manifest comparison",
+      "Updated source-integrity manifest, verification record and draft PR"
+    ]
+  },
   "unfinished_work": "UNFINISHED_0_9.md",
   "capabilities": [
     {
@@ -57,7 +88,6 @@
         "test_multi_source_compositor.py",
         "test_multi_source_ui_macos.py",
         "roto_assets.py",
-        "test_roto.py",
         "test_roto_ui_macos.py"
       ]
     },
@@ -69,7 +99,6 @@
         "compositor.py",
         "web/compositor-ui.js",
         "test_compositor_animation_ui_macos.py",
-        "test_roto.py",
         "test_roto_ui_macos.py"
       ]
     },
@@ -82,7 +111,6 @@
         "roto_assets.py",
         "compositor.py",
         "web/compositor-ui.js",
-        "test_roto.py",
         "test_roto_ui_macos.py"
       ]
     },
@@ -124,14 +152,28 @@
     },
     {
       "id": "tracking.planar",
-      "status": "missing",
-      "scope": "No affine/projective solve, re-identification or lens/rolling-shutter estimation.",
-      "evidence": []
+      "status": "implemented_bounded",
+      "scope": "Actual OpenCV pyramidal Lucas–Kanade tracking with forward/backward and photometric rejection, plus RANSAC affine or projective measurement. Four-corner authoring, source-bound receipts, inverse stabilization and measured image corner pinning feed paused and movie output; pinning accounts for existing stabilization. Limits: 240 frames, 640-pixel analysis edge and 2,073,600 warped canvas pixels. Pure parent timeline moves remap dependent pins; incompatible source/timing/placement/driver-transform edits retain media, authored values and measurements as visibly stale. Stale motion never executes and blocks movie export until remeasured or explicitly cleared; save/reopen and undo preserve it. No automatic reacquisition, neural re-identification, lens/rolling-shutter estimation or unrestricted production tracker.",
+      "evidence": [
+        "planar_tracking.py",
+        "planar_worker.py",
+        "projective_warp.py",
+        "tracking.py",
+        "web/tracking-ui.js",
+        "web/app.js",
+        "engine.py",
+        "test_planar_tracking.py",
+        "test_planar_tracking_macos.py",
+        "macos/PlanarTrackingSmoke.js",
+        "web/viewer-tools.js",
+        "test_frame_preview.py"
+      ],
+      "acceptance": "Native-08 passed 10/10 checks in 9.463 seconds with actual OpenCV 4.11.0/NumPy 2.3.5 measurement on 12/12 visible frames, native apply/undo/redo/timing invalidation/remap/save/reopen/paused-frame/export, and independent ProRes decoding. First/last pinned-image centroids both measured [80.5,64.0]. A prior 12-second export deadline expired while Wan inference was active; the retained-evidence harness now permits a bounded 60-second export and the serialized run passed. This is bounded correctness evidence, not production-scale throughput. Frozen-suite/installed-file identity remain separate release gates."
     },
     {
       "id": "color.sdr",
       "status": "partial",
-      "scope": "Display-referred Rec.709 timeline grades, RGB curves and scopes measured from actual rendered display RGB. Optional OCIO still-image development remains separate from this SDR movie graph.",
+      "scope": "Display-referred Rec.709 movie grades, RGB curves and scopes from actual rendered display RGB. Standard 8-bit and opt-in high16 processing are SDR. Optional OCIO still-image development and scene-linear Cycles EXR masters remain separate from the movie graph.",
       "evidence": [
         "engine.py",
         "compositor.py",
@@ -159,8 +201,7 @@
       "scope": "Bounded cubic roto path editing and one-path SVG boundary exchange exist. Full vector document/layer/gradient/operator model, general SVG/Lottie interchange and text animators remain missing.",
       "evidence": [
         "web/compositor-ui.js",
-        "roto.py",
-        "test_roto.py"
+        "roto.py"
       ]
     },
     {
@@ -176,7 +217,6 @@
         "test_scene_modeling_blender.py",
         "scene_hierarchy.py",
         "render_devices.py",
-        "test_scene_authoring.py",
         "test_scene_authoring_blender.py",
         "test_scene_authoring_ui_macos.py"
       ]
@@ -203,7 +243,6 @@
         "test_scene_modeling_blender.py",
         "test_mesh_modeling_ui_macos.py",
         "scene_hierarchy.py",
-        "test_scene_authoring.py",
         "test_scene_authoring_blender.py"
       ]
     },
@@ -244,7 +283,7 @@
     {
       "id": "ai.comfyui",
       "status": "adapter_implemented_validation_pending",
-      "scope": "Configured API workflow/preflight, scoped prompts and verified output admission; actual pinned ComfyUI 0.42.1 install verified 10,634,173,896 bytes across source, 71 wheels and three models, then owned MPS startup passed 11 core nodes. Wan 1.3B produced 192x128, nine H.264 frames at 16 fps, four steps, seed 42 in 44.410 seconds; 14 independent and 14 native checks passed in 1.393 seconds, including all nine actual source pictures. Remaining validation applies to the default 480x272/17-frame/20-step workflow, quality, longer takes and sustained operation; that default attempt was cancelled about 21 seconds into ordinary app termination, cause unknown. One small core text-to-video proof does not implement general ComfyUI/model-authoring or commercial-provider parity.",
+      "scope": "Configured API workflow/preflight, scoped prompt lifecycle and verified output admission, plus a pinned managed ComfyUI 0.42.1 runtime with one core Wan 1.3B text-to-video workflow. Earlier genuine reduced inference and playback passed at 192x128, nine frames, four steps. After an earlier termination cancellation and a rejected nearly-black UniPC take, two real serial Euler takes at 480x272, 17 frames, 20 steps, 16 fps and CFG 6 passed 14/14 independent media/provenance checks each, with 17 distinct nonblank decoded frames. Exact sample/media/edit-list clocks establish the first file's bounded container-duration quantization without altering source media. Native playback passed 14/14 for the second take and 13/14 for the first, exposing final-frame loss from the old timeline insertion's duration floor. The nearest-frame correction passed focused local regression but awaits Mac rerun after connector execution authority expired. The explicit 33-frame native acceptance is prepared but unexecuted. Longer takes, sustained operation and production quality remain unverified. Custom nodes are disabled; this is not general model authoring, CameraCtrl conditioning or commercial-provider integration.",
       "evidence": [
         "adapters.py",
         "generation_readiness.py",
@@ -256,13 +295,17 @@
         "test_managed_generation.py",
         "test_generation_ui_macos.py",
         "macos/verify_generated_take.py",
-        "test_generated_take_ui_macos.py"
-      ]
+        "test_generated_take_ui_macos.py",
+        "test_generation_inference_macos.py",
+        "macos/GenerationInferenceSmoke.js",
+        "test_generated_take_timing.py"
+      ],
+      "acceptance": "Two normal decoded-media reports passed 14/14 each; native playback is 14/14 and 13/14. Eighteen focused Node/real-media checks passed for exact timing and nearest-frame insertion. Corrected native playback, the 33-frame case and installation are blocked by MIDIA-AI COMMANDER_AUTHORITY_EXPIRED_OR_CHANGED after its 0.7.2 to 0.8.0 upgrade. Generation remains validation pending; rejected/failed evidence is retained."
     },
     {
       "id": "audio.mix",
       "status": "partial",
-      "scope": "Decoded waveforms, track/clip gain, balance, fades, constant retime/reverse and stereo export. Explicit source stream and any valid pair of source channels map to L/R; mapped waveforms/export use those channels. Native live audio remains unaccepted: an earlier 32,768-sample capture passed, but the latest second-MOV-stream capture was silent; the defect and gain/pan/restart acceptance remain unresolved. Reverse interactive audio is muted. No full DAW, buses/plugins or general output layouts.",
+      "scope": "Decoded waveforms, track/clip gain, balance, fades, constant retime/reverse and stereo export. Explicit source stream and any valid source-channel pair map to L/R. Live forward transport now schedules selected-source PCM and applies timeline mixing, including simultaneous layers and nested sequences; source retimes use pitch-preserving tempo derivatives. Reverse interactive audio remains muted and requires rendered playback. Repeated native capture passed the bounded current routing/overlap/nested/retime scenarios; installed-source alignment and broader session coverage remain separate gates. No full DAW, buses/send-return routing, plugin host, surround or general output layouts.",
       "evidence": [
         "waveform.py",
         "engine.py",
@@ -270,7 +313,13 @@
         "editorial.py",
         "web/editorial-ui.js",
         "test_editorial.py",
-        "test_editorial_ui_macos.py"
+        "test_editorial_ui_macos.py",
+        "audio_source.py",
+        "web/pcm-playback.js",
+        "web/audio-routing.js",
+        "test_audio_routing.py",
+        "test_pcm_playback.py",
+        "test_audio_routing_macos.py"
       ]
     },
     {
@@ -288,19 +337,22 @@
     {
       "id": "delivery.formats",
       "status": "partial",
-      "scope": "H.264 MP4 and ProRes MOV with actual render snapshot/source identity. Separate imaging jobs retain float EXR and display PNG. No universal broadcast/cinema/HDR delivery suite.",
+      "scope": "H.264 MP4, ProRes MOV and an opt-in High 16-bit SDR FFV1 level-3 Matroska master with 16-bit RGBA and PCM audio. Render receipts bind the actual snapshot/source and verify encoded stream properties. High16 paused frames retain 16-bit RGBA PNG; ordinary H.264/ProRes profiles retain their own delivery bit depths. Separate imaging jobs retain float EXR and display PNG. No complete broadcast/cinema/HDR delivery or calibrated monitoring suite.",
       "evidence": [
         "engine.py",
         "imaging.py",
         "test_engine.py",
         "test_timebase.py",
-        "test_imaging.py"
+        "test_imaging.py",
+        "frame_preview.py",
+        "test_high_precision.py",
+        "test_high_precision_ui_macos.py"
       ]
     },
     {
       "id": "production.realtime_collaboration",
       "status": "missing",
-      "scope": "No full decoded/GPU realtime cache, collaborative database or signed/notarized bundled runtime.",
+      "scope": "No multi-client shared editing/merge protocol, collaborative project database or remote presence/permissions workflow. Current local revision checks, undo and job ownership prevent bounded stale writes; they do not provide real-time collaborative editing.",
       "evidence": []
     },
     {
@@ -444,12 +496,13 @@
     {
       "id": "production.single_native_app",
       "status": "implemented_bounded",
-      "scope": "One native application with CINEMATICUM authoring controls and owned local service; verified archive/rollback during replacement. A 0.9 candidate is installed, but three of its 53 runtime files differ from current audio JavaScript under review. Original production checkout has no Studio, draft PR remains at 0.8, and no 0.9 publication is recorded. FFmpeg/Blender and optional imaging/generation runtimes are separate installed dependencies; no signed/notarized self-contained distribution.",
+      "scope": "One native macOS application with CINEMATICUM authoring controls and an owned local service. The installer builds version 0.9.1, verifies archived prior-bundle bytes/modes, supports replacement rollback, preserves projects outside the app and embeds a SHA-256 inventory of copied runtime files plus native sources. Current candidate installation and equality with the frozen source require an executed install receipt and independent comparison. FFmpeg/Blender and optional imaging/tracking/generation runtimes remain separate installed dependencies; signing/notarization and self-contained distribution are not implemented.",
       "evidence": [
         "install_macos.py",
         "macos/StudioIcon.swift",
         "test_install_macos.py"
-      ]
+      ],
+      "acceptance": "Current source installation and exact runtime-file identity are unexecuted release gates, blocked by the expired MIDIA-AI command-execution grant following its 0.7.2 to 0.8.0 upgrade. No replacement installation is inferred from installer source or local tests."
     },
     {
       "id": "editor.slip_slide_roll",
@@ -512,7 +565,6 @@
         "web/scene-editor.js",
         "test_scene_modeling_blender.py",
         "test_mesh_modeling_ui_macos.py",
-        "test_scene_authoring.py",
         "test_scene_authoring_blender.py",
         "test_scene_authoring_ui_macos.py"
       ]
@@ -713,7 +765,6 @@
         "scene_hierarchy.py",
         "scene.py",
         "web/scene-editor.js",
-        "test_scene_authoring.py",
         "test_scene_authoring_blender.py",
         "test_scene_authoring_ui_macos.py"
       ]
@@ -726,7 +777,6 @@
         "scene_modeling.py",
         "modeling_blender.py",
         "web/scene-editor.js",
-        "test_scene_authoring.py",
         "test_scene_authoring_blender.py",
         "test_scene_authoring_ui_macos.py"
       ]
@@ -739,23 +789,75 @@
         "render_devices.py",
         "scene.py",
         "web/scene-editor.js",
-        "test_scene_authoring.py",
         "test_scene_authoring_blender.py",
         "test_scene_authoring_ui_macos.py",
         "macos/verify_metal_result.py",
         "macos/verify_metal_blend.py"
       ]
+    },
+    {
+      "id": "color.high16_sdr_movie",
+      "status": "implemented_bounded",
+      "scope": "Opt-in 16-bit unsigned normalized RGBA processing across the movie graph, alpha-aware transforms/source-over, 16-bit paused-frame PNG and lossless FFV1 gbrap16le master with alpha. Canvas limit 8,388,608 pixels and transformed working-image limit 16,777,216 pixels; narrower graph/warp limits still apply. Precision and transparent-background settings persist with the project. Decoded numeric regression checks distinguish 1,024 source values and exercise fractional alpha, hidden color and transformed composition. This remains clamped display-referred SDR: no scene-linear float movie graph, whole-timeline OCIO/ACES, HDR mastering or calibrated high-bit-depth display.",
+      "acceptance": "Native-03 passed 21 checks on three actual 64x32 frames at 12 fps, including transformed alpha, saved precision, export controls and a real 63,252-byte WKDownload of FFV1 gbrap16le plus 48 kHz stereo PCM. This bounded gate does not certify the NSSavePanel chooser, calibrated display, HDR or production scale. Frozen-suite/installed-source identity remain separate gates.",
+      "evidence": [
+        "engine.py",
+        "compositor.py",
+        "color_pipeline.py",
+        "frame_preview.py",
+        "web/app.js",
+        "test_high_precision.py",
+        "test_high_precision_ui_macos.py",
+        "macos/HighPrecisionSmoke.js",
+        "web/viewer-tools.js",
+        "test_frame_preview.py"
+      ]
+    },
+    {
+      "id": "audio.source_sample_playback",
+      "status": "implemented_bounded",
+      "scope": "Owned FFmpeg derivatives preserve the chosen original container stream and selected channel pair as 48 kHz stereo float PCM. A source-sample scheduler reads bounded chunks into AudioBuffers and applies live clip/track mix without browser container decoding or a pre-rendered timeline mix. Pitch-preserving source-tempo derivatives support forward retimes, with source identity/range validation, restart epochs and resource release. Scheduling horizon is three seconds with a 128 MiB in-memory PCM bound; disk derivative cache is bounded to 16 GiB and each standard-WAV derivative to its 32-bit size limit. Reverse transport uses rendered playback.",
+      "acceptance": "Native-03 passed routing (11 checks) plus overlap, nested-sequence and retimed playback (12 checks each), with zero underruns. Routing captured selected-source and gain/pan/restart phases; each of the three sequence scenarios ran three repetitions. Freeze/report and installed-runtime identity remain separate release gates; broad codec/device/long-session performance is not established.",
+      "evidence": [
+        "audio_source.py",
+        "server.py",
+        "web/pcm-playback.js",
+        "web/audio-routing.js",
+        "web/app.js",
+        "test_audio_source.py",
+        "test_audio_routing.py",
+        "test_pcm_playback.py",
+        "test_audio_routing_macos.py",
+        "macos/AudioRoutingSmoke.js"
+      ]
+    },
+    {
+      "id": "production.optional_tracking_runtime",
+      "status": "implemented_bounded",
+      "scope": "Separate managed Python runtime for actual planar measurement, with locked NumPy 2.3.5 and opencv-python-headless 4.11.0.86 wheels, source/output checks and real feature/flow/affine/homography capability probing. The macOS ARM64 runtime is kept at ~/Library/Application Support/CINEMATICUM/Tracking/py313-v1/bin/python, outside app replacement; CINEMATICUM_TRACKING_PYTHON can select a compatible verified worker. Runtime installation alone does not establish measurement or native workflow acceptance.",
+      "evidence": [
+        "install_tracking.py",
+        "tracking-macos-arm64-py313.lock.json",
+        "planar_tracking.py",
+        "planar_worker.py",
+        "server.py",
+        "web/tracking-ui.js",
+        "test_install_tracking.py",
+        "test_planar_tracking.py",
+        "test_planar_tracking_macos.py"
+      ]
+    },
+    {
+      "id": "performance.decoded_frame_cache",
+      "status": "missing",
+      "scope": "No general decoded-frame/GPU playback cache or production-scale real-media performance acceptance. Encoded preview proxies, bounded paused-frame jobs and source PCM caches are implemented for their separate purposes; they do not establish sustained multilayer decoded-picture throughput.",
+      "evidence": []
+    },
+    {
+      "id": "production.signed_distribution",
+      "status": "missing",
+      "scope": "No signed/notarized release with all required runtimes bundled or fully managed. The verified local app installer does not perform signing; FFmpeg and Blender remain external dependencies, and optional runtime installers do not complete distribution acceptance.",
+      "evidence": []
     }
-  ],
-  "research": [
-    "research/editorial.md",
-    "research/compositing-motion.md",
-    "research/spatial.md",
-    "research/ai-motion.md",
-    "research/camera-optics.md",
-    "research/color-science.md",
-    "research/physical-rendering.md",
-    "research/mesh-modeling.md"
-  ],
-  "reviewed_reference_systems": 33
+  ]
 }

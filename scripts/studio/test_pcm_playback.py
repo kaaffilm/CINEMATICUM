@@ -70,6 +70,56 @@ const flush=async()=>{for(let i=0;i<15;i++)await Promise.resolve();};
 })().catch(error=>{console.error(error);process.exitCode=1;});
 """)
 
+    def test_late_range_between_timer_ticks_rebuffers_without_backdated_samples(self):
+        self.run_js(r"""
+const fs=require('fs'),vm=require('vm'),assert=require('assert'),path=JSON.parse(fs.readFileSync(0,'utf8')).path;
+const timers=new Map(),scheduled=[];let serial=0,late;
+const frames=240000,manifest={url:'/api/projects/p/audio-source/key',sha256:'a'.repeat(64),data_offset:58,byte_size:58+frames*8,frames,duration:5,source_time_scale:1};
+const context={currentTime:0,sampleRate:48000,createBuffer(channels,count){return {getChannelData:()=>new Float32Array(count)};},createBufferSource(){return {connect(){},disconnect(){},stop(){},start(when,offset,duration){scheduled.push({when,offset,duration,observed:context.currentTime});}};}};
+const sandbox={window:{},setTimeout(fn){timers.set(++serial,fn);return serial;},clearTimeout(id){timers.delete(id);},fetch:async(url,options)=>{
+ const [first,last]=options.headers.Range.match(/\d+/g).map(Number),index=(first-58)/(48000*8);
+ if(index===3)await new Promise(resolve=>{late=resolve;});
+ return {status:206,headers:{get(name){return name==='Content-Range'?`bytes ${first}-${last}/${manifest.byte_size}`:'"'+manifest.sha256+'"';}},arrayBuffer:async()=>new ArrayBuffer(last-first+1)};
+}};vm.createContext(sandbox);vm.runInContext(fs.readFileSync(path,'utf8'),sandbox);
+const decoder=sandbox.window.CinematicumPCMPlayback.createDecoder(),flush=async()=>{for(let i=0;i<20;i++)await Promise.resolve();};
+(async()=>{
+ decoder.loadSource(context,{},manifest);await flush();await decoder.play();
+ context.currentTime=2.99;const pending=[...timers.values()];timers.clear();for(const tick of pending)tick();await flush();assert(late);
+ // The delayed request returns after the scheduled boundary but before the
+ // next 50 ms timer. A backdated start would silently shift the source audio.
+ context.currentTime=3.04;late();await flush();
+ assert(scheduled.every(event=>event.when+1/48000>=event.observed),'Never launch a delayed source range in the past');
+ assert.strictEqual(decoder.pcmState.underruns,1);assert(decoder.paused);assert.strictEqual(decoder.currentTime,3);
+ await decoder.play();const restart=scheduled[3];assert(restart.when>context.currentTime);assert.strictEqual(restart.offset,0);
+ decoder.clear();assert.strictEqual(timers.size,0);
+})().catch(error=>{console.error(error);process.exitCode=1;});
+""")
+
+    def test_overlapping_voices_share_verified_chunks_but_keep_independent_positions(self):
+        self.run_js(r"""
+const fs=require('fs'),vm=require('vm'),assert=require('assert'),path=JSON.parse(fs.readFileSync(0,'utf8')).path;
+const requests=[],scheduled=[],timers=new Map();let serial=0;
+const frames=288000,manifest={url:'/api/projects/p/audio-source/key',sha256:'a'.repeat(64),data_offset:58,byte_size:58+frames*8,frames,duration:6,source_time_scale:1.5};
+const context={currentTime:0,sampleRate:48000,createBuffer(channels,count){return {data:Array.from({length:channels},()=>new Float32Array(count)),getChannelData(index){return this.data[index];}};},createBufferSource(){return {connect(output){this.output=output;},disconnect(){},stop(){this.stopped=true;},start(when,offset,duration){scheduled.push({node:this,when,offset,duration});}};}};
+const sandbox={window:{},setTimeout(fn){timers.set(++serial,fn);return serial;},clearTimeout(id){timers.delete(id);},fetch:async(url,options)=>{
+ const [first,last]=options.headers.Range.match(/\d+/g).map(Number);requests.push([first,last]);
+ return {status:206,headers:{get(name){return name==='Content-Range'?`bytes ${first}-${last}/${manifest.byte_size}`:'"'+manifest.sha256+'"';}},arrayBuffer:async()=>new ArrayBuffer(last-first+1)};
+}};vm.createContext(sandbox);vm.runInContext(fs.readFileSync(path,'utf8'),sandbox);const api=sandbox.window.CinematicumPCMPlayback;
+const a=api.createDecoder(),b=api.createDecoder(),outA={id:'a'},outB={id:'b'},flush=async()=>{for(let i=0;i<20;i++)await Promise.resolve();};
+(async()=>{
+ a.loadSource(context,outA,manifest,0);b.loadSource(context,outB,manifest,1.125);await flush();
+ assert.strictEqual(requests.length,4,'Overlapping voices reuse their three shared verified sample chunks');
+ await a.play();await b.play();
+ const voiceA=scheduled.filter(event=>event.node.output===outA),voiceB=scheduled.filter(event=>event.node.output===outB);
+ assert.strictEqual(voiceA[0].node.buffer,voiceB[0].node.buffer);assert.strictEqual(voiceB[0].offset,.75);
+ context.currentTime=.52;assert.strictEqual(a.currentTime,.75);assert.strictEqual(b.currentTime,1.875);
+ a.pause();assert(voiceA.every(event=>event.node.stopped));assert(voiceB.every(event=>!event.node.stopped),'Pausing one overlapping clip must not stop another source voice');
+ context.currentTime=.62;assert.strictEqual(a.currentTime,.75);assert(Math.abs(b.currentTime-2.025)<1e-10);
+ const count=requests.length;a.currentTime=1.125;await flush();await a.play();assert.strictEqual(requests.length,count,'Repeated seeks reuse immutable PCM but start separate source nodes');
+ a.clear();b.clear();assert.strictEqual(timers.size,0);
+})().catch(error=>{console.error(error);process.exitCode=1;});
+""")
+
 
 if __name__ == '__main__':
     unittest.main()

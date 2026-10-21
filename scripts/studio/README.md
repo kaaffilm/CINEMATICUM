@@ -1,4 +1,4 @@
-# CINEMATICUM Studio 0.9
+# CINEMATICUM Studio 0.9.1
 
 A working local audiovisual editor. Media are imported into an owned project,
 edited on a frame-based timeline, previewed, and exported through real render
@@ -9,6 +9,14 @@ No missing shot is replaced with filler. Exporting media has no film
 issuance effect.
 
 ## This upgrade
+
+The 0.9.1 candidate adds source-sample live audio, measured affine/projective
+planar tracking and image corner pinning, and 16-bit UNORM SDR processing with
+a lossless FFV1 RGB+alpha master. It also guards native quit while media jobs
+are active and includes the tracking modules and runtime installers in the
+application bundle. These additions have separate native acceptance gates;
+their results and the exact tested source are recorded in
+[Verification 0.9.1](VERIFICATION_0_9_1.md).
 
 The 0.9 source adds live nested sequences, manual multicamera editing, captions,
 source-channel mapping, drop-frame display, verified preview proxies and
@@ -24,12 +32,39 @@ measured tracking and OCIO/RAW/bracket still processing remain available.
 Read the [source comparison and capability audit](CAPABILITY_AUDIT.md),
 [capability ledger](capabilities.json), and
 [current unfinished-work register](UNFINISHED_0_9.md) for implemented bounds and
-remaining professional gaps. [Verification 0.9](VERIFICATION_0_9.md) records
-executed acceptance and deployment separately. A 0.9 candidate is installed;
-three of its 53 runtime files differ from the latest audio JavaScript under
-review. A fresh native second-MOV-stream test returned silence, so that audio
-path is not accepted. The original production checkout still has no Studio,
-the existing draft PR is at 0.8, and this 0.9 work is not a published release.
+remaining professional gaps. [Verification 0.9](VERIFICATION_0_9.md) is historical
+evidence for the earlier candidate. Its 515-test result does not certify newer
+source. The current verification record identifies current-source acceptance,
+installation, and publication independently.
+
+## Source-sample audio and 16-bit masters
+
+Live audio comes from bounded PCM sample ranges decoded from the selected
+original stream. Channel mapping and constant-speed tempo conversion are
+included in the source receipt; the native scheduler applies the clip/track
+gain and pan on a shared playback clock. Overlapping clips and live nested
+sequences retain independent source clocks. A late range stops at the last
+scheduled sample and buffers again instead of shifting late audio against an
+advancing picture clock. Reverse audio still requires Render preview. This
+stereo mixer does not add buses, audio plugins or surround output.
+
+In **Export**, choose **High 16-bit SDR** under Movie processing. This setting
+also enables the processed 16-bit paused image. Select **Transparent background
+for the 16-bit master** when an alpha channel is required, then export
+**16-bit lossless master · MKV**. The actual movie uses FFV1 planar 16-bit RGB
+plus straight alpha and PCM audio. The native download link transfers the
+completed master; Render preview provides browser playback. H.264 and ProRes
+deliveries use their own output bit depths and flatten transparency against
+black. Processing mode and transparency are saved project settings with undo.
+
+Identity samples preserve all 1,024 distinct codes in the numeric acceptance
+fixture. Filtering, association/unassociation and bounded grades can round,
+clip or ring. Lanczos edge overshoot and the scaler's fractional-alpha rounding
+are recorded in the precision tests; 16-bit storage does not promise 16-bit
+numerical accuracy after every transform. The path is bounded to 8,388,608
+canvas pixels and 16,777,216 transformed working pixels. It remains UNORM SDR,
+with no scene-linear floating-point timeline, whole-movie ACES/OCIO management,
+HDR mastering or calibrated output monitoring.
 
 ## Recover edits and move projects
 
@@ -518,8 +553,32 @@ identity must match. Trims/splits preserve applied motion, and retiming rescales
 its keys along with compositor and pose animation. Changing source-in or reverse
 clears derived stabilization and tracked-mask motion in the same undoable edit;
 ordinary authored mask animation is preserved. Track the changed content again.
-This is a classical FFmpeg
-correlation tracker, not SAM 2, TAPIR/TAPNext, planar tracking or a camera solver.
+The point mode is a classical FFmpeg correlation tracker. It does not perform
+neural segmentation, learned point tracking, camera solving or automatic
+re-identification after occlusion.
+
+### Planar measurement, stabilization and corner pin
+
+In the same motion dialog, choose an affine or projective plane model and set
+four corners on the decoded seed frame. The optional tracking runtime uses
+OpenCV feature motion and RANSAC to measure the plane across the requested
+frames. It is bounded to 240 clip frames and a 640-pixel analysis edge. The
+receipt retains source identity, timing, model, feature/inlier measurements and
+per-frame homographies; installation alone does not certify a track.
+
+Apply stabilization to the measured clip or choose an admitted image to create
+an editable corner-pinned overlay. The overlay follows the measured plane,
+including the background's existing point or planar stabilization. Apply,
+remove and undo use normal project history. Measurement data, keys and source
+media remain part of the saved project.
+
+Changing a measured source range, retime, transform or parent stabilization
+marks dependent planar motion stale. The application preserves the authored
+overlay and measurements, shows the reason, and blocks final export until the
+motion is remeasured or explicitly removed. Undo can restore a matching binding.
+A pure timeline move remaps the dependent pin when the source clocks still
+match. This avoids silently applying a measured homography to different source
+content. Source files are rehashed again before rendering.
 
 ## Exchange cut timelines
 
@@ -717,7 +776,10 @@ project**. Back in Generate, enter the prompt, negative prompt and seed, then
 choose **Generate media**. The completed actual video enters the same media bin
 and can be added to the timeline. Setup and startup are owned, cancellable app
 jobs; closing their dialog leaves the job running and reopening it restores
-its controls. Quitting the application stops its owned generation process.
+its controls. Native quit first saves edits and checks active jobs. **Keep
+Working** leaves those jobs running; **Cancel Jobs and Quit** explicitly cancels
+them and stops the owned engine. A shutdown receipt distinguishes that choice
+from a signal or an unexpected interruption.
 
 The managed runtime is pinned ComfyUI 0.42.1 with 71 dependency wheels and three
 Wan 1.3B model files. A real installation verified all 10,634,173,896 downloaded
@@ -730,7 +792,12 @@ Python 3.13; it checks free space before downloading and preserves resumable
 partials. The core managed workflow uses no custom nodes or paid/API services.
 
 The default shot settings are 480 × 272, 17 frames, 20 sampling steps, guidance 6
-and 16 fps. Custom dimensions use multiples of 16 within 192–832 × 128–480;
+and 16 fps, using the upstream Euler sampler and simple schedule. The sampler
+choice is saved in the submitted workflow. The earlier UniPC preset produced a
+completed but nearly-black normal-size take on the measured M3 Mac; independent
+picture checks rejected it. Existing authored workflows are preserved. Apply
+**Use these settings in this project** to write the current managed preset.
+Custom dimensions use multiples of 16 within 192–832 × 128–480;
 length is 9–81 frames in steps of four, and sampling steps are 4–50. These are
 accepted parameter bounds, not a performance or quality guarantee on every Mac.
 
@@ -744,12 +811,21 @@ export or generated-media substitute and no change to the original snapshot.
 This verifies the small take's execution and editing path, not production
 quality or feature parity with the requested AI products.
 
-The normal default 480 × 272/17-frame/20-step attempt was cancelled about
-21 seconds after starting when the application terminated normally through
-AppKit. The cause of that termination remains unknown. Default-size execution,
-quality, longer takes and sustained operation remain unverified. Consult
-[verification 0.9](VERIFICATION_0_9.md) and
-[the unfinished-work register](UNFINISHED_0_9.md) for the current acceptance state.
+Two subsequent normal 480 × 272, 17-frame, 20-step Euler takes completed through
+native Generate controls. Both passed 14/14 independent media/provenance/timing
+checks. Native playback passed 14/14 for one take and exposed a final-frame
+insertion defect in the other. The source correction now preserves nearest
+project-frame duration through import and trim edits; its native rerun is pending
+after MIDIA-AI's runtime upgrade invalidated execution authorization. An explicit
+33-frame acceptance case is prepared but has not executed.
+
+The earlier normal-preset attempt was cancelled when the application terminated
+through AppKit; its historical cause remains unknown. The current native
+inference acceptance runs repeated actual takes through Generate controls and
+independently checks every decoded frame, source hash, request, workflow and
+durable job identity. [Verification 0.9.1](VERIFICATION_0_9_1.md) records the
+executed results, including rejected attempts. Longer takes, production quality
+and sustained production operation require their own acceptance.
 
 ### Separately configured workflows
 
@@ -908,8 +984,8 @@ The optional still-image worker provides actual OCIO/ACES transforms and float
 EXR masters; authored Cycles scenes can also export float EXR sequences and
 passes. Those features do not extend float processing across the movie
 timeline. This implementation still lacks HDR finishing, RAW-movie editing,
-automatic multicamera synchronization, optical-flow retiming, planar/affine
-tracking, neural segmentation, roto hierarchy/paint, unrestricted mesh/rig and
+automatic multicamera synchronization, optical-flow retiming, automatic
+tracking re-identification, neural segmentation, roto hierarchy/paint, unrestricted mesh/rig and
 texture editing, plugin hosting, general AAF/XML/native-project interchange,
 a full audio workstation, collaborative editing and a production-grade decoded
 GPU playback cache. Nested OTIO exchange is bounded to the documented cut subset. Source
@@ -980,17 +1056,17 @@ fixture frame and stereo PCM sample before/after proxy use and exact relinking.
 The earlier short Metal harness timed out; the later normal app render completed
 in 82.430497 seconds and passed 18 independent checks. Managed setup/start and
 the small actual Wan take described above are verified, including 14 independent
-media and 14 native playback checks. The default-size generation attempt remains
-unverified after application termination. Native audio is still unaccepted
-because the latest second-MOV-stream capture was silent.
+media and 14 native playback checks. These are historical 0.9 results; the
+current source-sample audio, planar, high16 and normal-generation gates are
+recorded separately for 0.9.1.
 
-The frozen current-source Python run passed 515 tests in 153.974 seconds with
+The earlier frozen-source Python run passed 515 tests in 153.974 seconds with
 zero failures and zero skips, including real RAW and official OTIO integration.
-That aggregate does not override the separate native audio failure.
-See [verification 0.9](VERIFICATION_0_9.md) for exact commands and results, and
-[the unfinished-work register](UNFINISHED_0_9.md) for the remaining fix,
-reverification and deployment work. The installed candidate and unpublished
-source are different states, as described at the start of this guide.
+It does not certify the later source. See
+[Verification 0.9.1](VERIFICATION_0_9_1.md) for the frozen current-source suite,
+native runs and installed-file identities, and
+[the unfinished-work register](UNFINISHED_0_9.md) for remaining implementation
+and external-access requirements.
 
 Studio writes projects and exports into its own workspace. It does not alter
 the pinned GODCUT, the existing film verification commands, or

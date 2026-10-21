@@ -114,6 +114,8 @@ class ManagedGenerationTests(unittest.TestCase):
         self.assertEqual("h264", graph["50"]["inputs"]["format.codec"])
         self.assertEqual("re-encode", graph["50"]["inputs"]["format.codec.encoding"])
         self.assertEqual("CINEMATICUM_SEED", graph["3"]["inputs"]["seed"])
+        self.assertEqual("euler", graph["3"]["inputs"]["sampler_name"])
+        self.assertEqual("simple", graph["3"]["inputs"]["scheduler"])
 
     def test_shot_bounds_reject_unsupported_or_nonfinite_values(self):
         bad = [{"width": 481}, {"width": True}, {"height": 512}, {"length": 18}, {"length": 85},

@@ -205,14 +205,57 @@ def planar_motion(project,project_dir,clip_id,track,mode="stabilize"):
     if any(not sample["visible"] for sample in track["samples"]):
         raise ValueError("The plane was lost. Shorten or remeasure a fully visible range before applying motion")
     pin=quad_matrix(track["reference_quad"])
-    keys=[{"frame":sample["frame"]+clip.get("animation_offset",0),
-           "matrix":invert(sample["matrix"]) if mode=="stabilize" else multiply(sample["matrix"],pin)} for sample in track["samples"]]
+    keys=[]
+    for sample in track["samples"]:
+        frame=sample["frame"]+clip.get("animation_offset",0)
+        matrix=invert(sample["matrix"]) if mode=="stabilize" else multiply(_background_motion(clip,frame),multiply(sample["matrix"],pin))
+        keys.append({"frame":frame,"matrix":matrix})
     value={"version":1,"mode":mode,"coordinates":COORDINATES,"canvas":{"width":asset["width"],"height":asset["height"]},
            "keys":keys,"outside":"identity" if mode=="stabilize" else "transparent",
            "source":{"track_backend":track["backend"],"model":track["model"],"source":track["source"],
                      "reference_frame":track["reference_frame"],"reference_quad":track["reference_quad"],
                      "tracked_clip_start":clip["start"],"track_sha256":hashlib.sha256(json.dumps(track,sort_keys=True,allow_nan=False).encode()).hexdigest()}}
+    if mode=="corner_pin":value["source"]["tracked_transform"]=_authored_transform(clip)
     return validate_planar_motion(value,clip.get("animation_start",0),clip.get("animation_duration",clip["duration"]))
+
+
+def _authored_transform(clip):
+    """The parent transform copied by the authored corner-pin overlay."""
+    fields=("x","y","scale","rotation")
+    result={key:clip.get(key,1 if key=="scale" else 0) for key in fields}
+    result["keyframes"]=[{key:value for key,value in frame.items() if key in (*fields,"frame","interpolation")}
+                         for frame in clip.get("keyframes",[]) if any(key in frame for key in fields)]
+    result["stabilization"]=_stabilization_identity(clip)
+    return result
+
+
+def _stabilization_identity(clip):
+    # Measurement keys are not editable in the UI. Bind their immutable
+    # measurement identity without copying a second 240-matrix document into
+    # every overlay. Source timing has its own exact binding.
+    return {name:{"track_sha256":motion.get("source",{}).get("track_sha256"),
+                  "invalidated":motion.get("invalidated")}
+            for name in ("tracking","planar_motion") if (motion:=clip.get(name)) is not None}
+
+
+def _background_motion(clip,frame):
+    """Place a pin on the plane as displayed after background stabilization."""
+    matrix=IDENTITY
+    planar=clip.get("planar_motion")
+    if planar:
+        if planar.get("invalidated"):
+            raise ValueError("Remeasure or remove stale background stabilization before creating a corner pin")
+        if planar["mode"]!="stabilize":raise ValueError("The measured video has an unsupported planar transform")
+        matrix=next((key["matrix"] for key in planar["keys"] if key["frame"]==frame),IDENTITY)
+    point=clip.get("tracking")
+    if point:
+        keys=point["keys"]
+        left=max((key for key in keys if key["frame"]<=frame),key=lambda key:key["frame"],default=keys[0])
+        right=min((key for key in keys if key["frame"]>=frame),key=lambda key:key["frame"],default=keys[-1])
+        amount=(frame-left["frame"])/(right["frame"]-left["frame"]) if right["frame"]!=left["frame"] else 0
+        x=left["x"]+(right["x"]-left["x"])*amount;y=left["y"]+(right["y"]-left["y"])*amount
+        matrix=multiply([1.,0.,x,0.,1.,y,0.,0.,1.],matrix)
+    return matrix
 
 
 def validate_planar_binding(motion,project,clip,assets):
@@ -221,6 +264,8 @@ def validate_planar_binding(motion,project,clip,assets):
         from .tracking import _identity
     else:
         from tracking import _identity
+    if motion.get("invalidated"):
+        return
     source=motion["source"].get("source")
     if not isinstance(source,dict):raise ValueError("Planar motion lacks its exact measured source binding")
     tracked=clip if motion["mode"]=="stabilize" else next((c for c in project["clips"] if c["id"]==source.get("clip_id")),None)
@@ -237,6 +282,18 @@ def validate_planar_binding(motion,project,clip,assets):
             raise ValueError("The corner-pin image moved out of sync with its measured background; clear or recreate its planar motion")
         if clip.get("speed",1)!=1 or clip.get("reverse",False):
             raise ValueError("Measured corner-pin images use the original project clock; clear planar motion before retiming")
+        if clip.get("track",0)<=tracked.get("track",0):
+            raise ValueError("A corner-pin image must remain on a picture track above its measured background")
+        if "tracked_transform" in motion["source"] and motion["source"]["tracked_transform"]!=_authored_transform(tracked):
+            raise ValueError("The measured background transform changed; recreate its corner pin")
+
+
+def assert_planar_export_ready(project):
+    """An editable stale measurement is never an accepted delivery state."""
+    stale=[clip["id"] for sequence in [project]+project.get("sequences",[])
+           for clip in sequence.get("clips",[]) if clip.get("planar_motion",{}).get("invalidated")]
+    if stale:
+        raise ValueError("Planar motion is stale on "+", ".join(stale[:8])+". Remeasure or explicitly remove it before exporting.")
 
 
 def verify_planar_source_files(project,project_dir,cancel_event=None):
@@ -256,7 +313,7 @@ def verify_planar_source_files(project,project_dir,cancel_event=None):
     for sequence in [project]+project.get("sequences",[]):
         for clip in sequence.get("clips",[]):
             motion=clip.get("planar_motion")
-            if motion is None:continue
+            if motion is None or motion.get("invalidated"):continue
             source=motion.get("source",{}).get("source",{})
             ident=source.get("asset_id");digest=source.get("sha256")
             if ident not in assets or not isinstance(digest,str) or len(digest)!=64:

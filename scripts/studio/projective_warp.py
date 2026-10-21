@@ -101,7 +101,7 @@ def quad_matrix(quad):
 
 def validate_planar_motion(value, animation_start=0, animation_duration=None):
     if value is None:return None
-    allowed={"version","mode","coordinates","canvas","keys","outside","source"}
+    allowed={"version","mode","coordinates","canvas","keys","outside","source","invalidated"}
     if not isinstance(value,dict) or set(value)-allowed or type(value.get("version")) is not int or value["version"]!=1:
         raise ValueError("Unsupported planar motion document")
     mode=value.get("mode")
@@ -109,24 +109,33 @@ def validate_planar_motion(value, animation_start=0, animation_duration=None):
         raise ValueError("Planar motion needs its declared mode and pixel-center coordinate convention")
     if value.get("outside")!=("identity" if mode=="stabilize" else "transparent"):
         raise ValueError("Planar motion has an unsupported outside-range behavior")
+    invalidated=value.get("invalidated")
+    if invalidated is not None and (not isinstance(invalidated,str) or not invalidated.strip() or len(invalidated)>320):
+        raise ValueError("Invalidated planar motion needs a bounded explanation")
     canvas=value.get("canvas")
     if not isinstance(canvas,dict) or set(canvas)!={"width","height"}:raise ValueError("Planar motion needs its source canvas")
     canvas={key:number(canvas[key],"Planar canvas",16,32768,True) for key in ("width","height")}
     keys=value.get("keys")
     if not isinstance(keys,list) or not 1<=len(keys)<=MAX_PLANAR_FRAMES:raise ValueError("Planar motion needs 1–240 measured frames")
     result=[];previous=None
-    upper=animation_duration-1 if animation_duration is not None else 1_296_000
+    # Preserve measured keys through incompatible timing edits for undo and
+    # save/reopen. Invalidated keys never execute, even if their new domain is
+    # otherwise valid. Export separately requires remeasurement or removal.
+    lower=-1_296_000 if invalidated else animation_start
+    upper=1_296_000 if invalidated or animation_duration is None else animation_duration-1
     for key in keys:
         if not isinstance(key,dict) or set(key)!={"frame","matrix"}:raise ValueError("Planar keys need only an exact frame and matrix")
-        frame=number(key["frame"],"Planar frame",animation_start,upper,True)
+        frame=number(key["frame"],"Planar frame",lower,upper,True)
         if previous is not None and frame!=previous+1:raise ValueError("Planar motion cannot hide or interpolate missing frames")
         result.append({"frame":frame,"matrix":validate_matrix(key["matrix"])})
         previous=frame
     source=value.get("source")
     if not isinstance(source,dict) or len(json.dumps(source,allow_nan=False).encode())>16384:
         raise ValueError("Planar source identity is missing or oversized")
-    return {"version":1,"mode":mode,"coordinates":COORDINATES,"canvas":canvas,
-            "keys":result,"outside":value["outside"],"source":copy.deepcopy(source)}
+    normalized={"version":1,"mode":mode,"coordinates":COORDINATES,"canvas":canvas,
+                "keys":result,"outside":value["outside"],"source":copy.deepcopy(source)}
+    if invalidated:normalized["invalidated"]=invalidated
+    return normalized
 
 
 def compile_planar_warp(motion, animation_offset, width, height, pixel_format="rgba"):
@@ -141,6 +150,12 @@ def compile_planar_warp(motion, animation_offset, width, height, pixel_format="r
     height=number(height,"Planar output height",2,8192,True)
     if width*height>MAX_WARP_PIXELS:raise ValueError("Planar warping is bounded to 2,073,600 pixels")
     if pixel_format not in {"rgba","gbrap16le"}:raise ValueError("Planar warping requires explicit rgba or gbrap16le precision")
+    if motion.get("invalidated"):
+        if motion["mode"]=="stabilize":return []
+        # A stale derived overlay must not turn into an unwarped full-frame
+        # image. Preserve the authored clip but make its paused preview empty.
+        planar="gbrap16le" if pixel_format=="gbrap16le" else "gbrap"
+        return [f"format={planar}","geq=r='r(X,Y)':g='g(X,Y)':b='b(X,Y)':a='0'",f"format={pixel_format}"]
     offset=number(animation_offset,"Planar animation offset",-1_296_000,1_296_000,True)
     keys=motion["keys"];inverses=[invert(k["matrix"]) for k in keys]
     frame=f"(N+({offset}))"

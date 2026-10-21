@@ -44,7 +44,7 @@ from camera_io import import_camera
 from color_pipeline import import_cube, list_luts
 import recovery
 
-VERSION = "0.9.0"
+VERSION = "0.9.1"
 MAX_UPLOAD = 8 * 1024 * 1024 * 1024
 MAX_JSON = 8 * 1024 * 1024
 IDENTIFIER = re.compile(r"^[a-f0-9]{32}$")
@@ -115,6 +115,7 @@ class Store:
         self._shutdown_lock = threading.Lock()
         self._closing = False
         self._closed = False
+        self.shutdown_reason = "owner-shutdown"
         self._workspace_lock_fd = None
         self.pool = None
         self.preview_pool = None
@@ -444,23 +445,6 @@ class Store:
         atomic_json(self.root / "jobs" / (job["id"] + ".json"), job)
 
     def submit(self, project_id, kind, fn, snapshot=None, cleanup=None):
-        with self.lock:
-            self._require_open()
-            active = sum(j["state"] in {"queued", "running"}
-                         and (j.get("kind") == "audio-source") == (kind == "audio-source")
-                         for j in self.jobs.values())
-            if active >= (32 if kind == "audio-source" else 8):
-                raise ValueError("Source audio preparation queue is full. Retry when preparation completes."
-                                 if kind == "audio-source" else "Render queue is full. Wait for or cancel a queued job.")
-            job_id = uuid.uuid4().hex
-            job = {"id": job_id, "project_id": project_id, "kind": kind, "state": "queued", "progress": 0, "created_at": time.time(), "error": None, "result": None}
-            event = threading.Event()
-            self.jobs[job_id] = job
-            self.events[job_id] = event
-            self._write_job(job)
-            if snapshot is not None:
-                atomic_json(self.root / "jobs" / (job_id + ".snapshot"), snapshot)
-
         def execute():
             with self.lock:
                 if event.is_set():
@@ -502,6 +486,15 @@ class Store:
                     self.events.pop(job_id, None)
         def completed(_future):
             try:
+                # Executor shutdown cancels queued Futures without calling
+                # execute(). Settle their durable state before releasing owned
+                # uploads; they must not reopen as unexplained interruptions.
+                if _future.cancelled():
+                    with self.lock:
+                        if job["state"] == "queued":
+                            job.update(state="cancelled", error="Job cancelled before starting", finished_at=time.time())
+                            self._write_job(job)
+                        self.events.pop(job_id, None)
                 if cleanup is not None:
                     cleanup()
             finally:
@@ -509,6 +502,24 @@ class Store:
                     self.futures.pop(job_id, None)
 
         with self.lock:
+            # Job admission and executor ownership are one transaction. Quit
+            # cannot close an executor between the durable queued record and
+            # its Future, or release the workspace before cleanup is owned.
+            self._require_open()
+            active = sum(j["state"] in {"queued", "running"}
+                         and (j.get("kind") == "audio-source") == (kind == "audio-source")
+                         for j in self.jobs.values())
+            if active >= (32 if kind == "audio-source" else 8):
+                raise ValueError("Source audio preparation queue is full. Retry when preparation completes."
+                                 if kind == "audio-source" else "Render queue is full. Wait for or cancel a queued job.")
+            job_id = uuid.uuid4().hex
+            job = {"id": job_id, "project_id": project_id, "kind": kind, "state": "queued", "progress": 0, "created_at": time.time(), "error": None, "result": None}
+            event = threading.Event()
+            self.jobs[job_id] = job
+            self.events[job_id] = event
+            self._write_job(job)
+            if snapshot is not None:
+                atomic_json(self.root / "jobs" / (job_id + ".snapshot"), snapshot)
             pool = self.audio_pool if kind == "audio-source" else self.preview_pool if kind in EPHEMERAL_JOBS else self.pool
             future = pool.submit(execute)
             self.futures[job_id] = future
@@ -517,7 +528,7 @@ class Store:
             future.add_done_callback(completed)
             if event.is_set():
                 future.cancel()
-        return copy.deepcopy(job)
+            return copy.deepcopy(job)
 
     def job(self, job_id):
         with self.lock:
@@ -1144,6 +1155,25 @@ class Store:
                 raise ValueError("Supported automation actions: grade, volume, sequence, trim")
         return self.save(project_id, project)
 
+    def prepare_quit(self, payload):
+        """Reserve shutdown atomically, or leave active work completely alone."""
+        if not isinstance(payload, dict) or set(payload) != {"cancel_active"} or type(payload["cancel_active"]) is not bool:
+            raise ValueError("Quit preparation requires an explicit cancel_active boolean.")
+        with self.lock:
+            self._require_open()
+            jobs = [{"id": job["id"], "kind": job["kind"], "state": job["state"]}
+                    for job in self.jobs.values() if job["state"] in {"queued", "running"}
+                    and job["kind"] not in EPHEMERAL_JOBS and job["kind"] != "audio-source"]
+            if jobs and not payload["cancel_active"]:
+                return {"ready": False, "active_jobs": jobs}
+            self.shutdown_reason = "native-user-confirmed-job-cancellation" if jobs else "native-quit-no-active-jobs"
+            # Close admission under the same lock as the active-work check.
+            # A job submitted concurrently cannot slip through the quit prompt.
+            self._closing = True
+            for event in self.events.values():
+                event.set()
+            return {"ready": True, "active_jobs": jobs}
+
     def shutdown(self):
         # Concurrent/repeated shutdown calls cannot release another caller's
         # lock early while a render subprocess is still finishing.
@@ -1153,6 +1183,8 @@ class Store:
             with self.lock:
                 self._closing = True
                 self.stop_decoding.set()
+                active_at_shutdown = [{"id": job["id"], "kind": job["kind"], "state": job["state"]}
+                                      for job in self.jobs.values() if job["state"] in {"queued", "running"}]
                 for event in self.events.values():
                     event.set()
             self.pool.shutdown(wait=True, cancel_futures=True)
@@ -1161,6 +1193,17 @@ class Store:
             if self.managed_generation is not None:
                 self.managed_generation.shutdown()
             with self.lock:
+                # Preserve the reason and exact affected jobs, without prompt or
+                # media content, so an ordinary quit is distinguishable from a crash.
+                try:
+                    atomic_json(self.root / "last-session-exit.json", {
+                        "version": 1, "reason": self.shutdown_reason, "completed_at": time.time(),
+                        "active_at_shutdown": active_at_shutdown,
+                        "terminal_jobs": [{"id": job["id"], "state": job["state"], "error": job.get("error")}
+                                          for job in self.jobs.values() if job["id"] in {entry["id"] for entry in active_at_shutdown}],
+                    })
+                except OSError as error:
+                    print("CINEMATICUM shutdown receipt could not be saved: " + str(error), file=sys.stderr)
                 self._closed = True
                 self._release_workspace_lock()
 
@@ -1402,6 +1445,8 @@ class Handler(BaseHTTPRequestHandler):
     def dispatch_write(self):
         parsed = urlparse(self.path)
         parts = unquote(parsed.path).strip("/").split("/")
+        if self.command == "POST" and parts == ["api", "prepare-quit"]:
+            return self.json(200, self.store.prepare_quit(self.body()))
         query = parse_qs(parsed.query)
         if self.command == "POST" and parts == ["api", "projects"]:
             return self.json(201, self.store.new_project(self.body()))
@@ -1631,7 +1676,7 @@ def main(argv=None):
     parser.add_argument("--comfy-url", default=os.environ.get("COMFYUI_URL", "http://127.0.0.1:8188"))
     parser.add_argument("--doctor", action="store_true", help="Report installed engines without starting the editor")
     parser.add_argument("--render", metavar="PROJECT_ID", help="Render a saved project without opening the editor")
-    parser.add_argument("--profile", choices=["preview", "h264", "prores"], default="h264")
+    parser.add_argument("--profile", choices=["preview", "h264", "prores", "master16"], default="h264")
     args = parser.parse_args(argv)
     try:
         store = Store(args.workspace, args.comfy_url)
@@ -1661,12 +1706,14 @@ def main(argv=None):
     if args.open:
         webbrowser.open(url)
     def stop(signum, frame):
+        if not store._closing:
+            store.shutdown_reason = "signal:" + signal.Signals(signum).name
         threading.Thread(target=httpd.shutdown, daemon=True).start()
     signal.signal(signal.SIGTERM, stop)
     try:
         httpd.serve_forever(poll_interval=0.25)
     except KeyboardInterrupt:
-        pass
+        store.shutdown_reason = "signal:SIGINT"
     finally:
         httpd.server_close()
         store.shutdown()

@@ -1,0 +1,11 @@
+# Actual verification engines: CPython 3.11/3.12, Linux x86_64.
+# Hashes retrieved from https://pypi.org/pypi/<name>/<version>/json on 2026-10-21.
+# NumPy 2.3.5 satisfies OpenCV 4.11.0.86's published requirements for both
+# Python versions. Keep imaging/tracking pins aligned with their installers.
+# Install with --require-hashes --only-binary=:all:; never use --no-deps.
+numpy==2.3.5 --hash=sha256:8cba086a43d54ca804ce711b2a940b16e452807acebe7852ff327f1ecd49b0d4 --hash=sha256:0d8163f43acde9a73c2a33605353a4f1bc4798745a8b1d73183b28e5b435ae28
+opencolorio==2.6.0 --hash=sha256:9e280c60a80f8383aed8ba0b7b3d1349a47810ced71642c768e9f9d0d53cfa78 --hash=sha256:3df85517096baac44a8d67b6c9514c8b26ad8232ca0d2a3216e405f146da7cf9 --hash=sha256:d023bb26f0a2e85997ea8e86e3e9a8fa43fd632fe26734732159bc6c3da5915f --hash=sha256:a012ebd9bec55a7994870de6231a46a486476b527c5cb5c3b0c4d66bd34965fa
+rawpy==0.27.1 --hash=sha256:80a598796529373e96102458889002b181b31ae6c76dc2731335fffe04270ed9 --hash=sha256:88bc8f7ac8418249afffa7323063d3e886d4eddc65b930aea714e8736e3af75b
+OpenEXR==3.4.15 --hash=sha256:aede05497f27725abfddf337ef31a1cf6f35c24870510015dda01be7090a429e --hash=sha256:5f81c38ec733259da31e257d964de5cfb4b4ef0b9aa1e7037b71fae709abe710
+opentimelineio==0.18.1 --hash=sha256:e45fe3164c6e559e660b7e1cce6c87ef0b5d634743114823c6e1fb5f56f8601e --hash=sha256:8f0924f818b496cf771612d489082bdb83f42b6bd97ed06589dd2e2c086742c9
+opencv-python-headless==4.11.0.86 --hash=sha256:0e0a27c19dd1f40ddff94976cfe43066fbbe9dfbb2ec1907d66c19caef42a57b

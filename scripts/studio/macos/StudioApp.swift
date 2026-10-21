@@ -360,23 +360,56 @@ final class StudioAppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate
         showBusy("Saving and closing…")
         if isLocal(webView.url) && !fatalErrorShown {
             webView.callAsyncJavaScript(
-                "if (typeof state !== 'undefined' && state.dirty && typeof saveProject === 'function') { await saveProject(false); } return true;",
+                "if (typeof state !== 'undefined' && state.dirty && typeof saveProject === 'function') { await saveProject(false); } return await api('/api/prepare-quit', {method:'POST', body:{cancel_active:false}});",
                 arguments: [:], in: nil, in: .page
             ) { [weak self] result in
                 guard let self = self, !self.repliedToQuit else { return }
                 switch result {
-                case .success: self.stopOwnedServer()
+                case .success(let value):
+                    guard let response = value as? [String: Any], let ready = response["ready"] as? Bool else {
+                        self.cancelQuit("The media engine did not confirm whether work is still running.")
+                        return
+                    }
+                    if ready { self.stopOwnedServer() }
+                    else { self.confirmActiveJobQuit((response["active_jobs"] as? [[String: Any]])?.count ?? 1) }
                 case .failure(let error):
-                    self.quitting = false
-                    self.showBusy(nil)
-                    sender.reply(toApplicationShouldTerminate: false)
-                    self.showError("Changes could not be saved. The editor is still open.\n\n\(error.localizedDescription)")
+                    self.cancelQuit("The editor is still open because saving or checking active work failed.\n\n\(error.localizedDescription)")
                 }
             }
         } else {
             stopOwnedServer()
         }
         return .terminateLater
+    }
+
+    private func cancelQuit(_ message: String? = nil) {
+        quitting = false
+        showBusy(nil)
+        NSApp.reply(toApplicationShouldTerminate: false)
+        if let message = message { showError(message) }
+    }
+
+    private func confirmActiveJobQuit(_ count: Int) {
+        let alert = makeAlert("\(count) media job\(count == 1 ? " is" : "s are") still running. Keep CINEMATICUM open to finish, or cancel the active work and quit. Saved projects and completed media will be preserved.")
+        alert.alertStyle = .warning
+        alert.addButton(withTitle: "Keep Working")
+        alert.addButton(withTitle: "Cancel Jobs and Quit")
+        alert.beginSheetModal(for: window) { [weak self] answer in
+            guard let self = self else { return }
+            guard answer == .alertSecondButtonReturn else { self.cancelQuit(); return }
+            self.webView.callAsyncJavaScript(
+                "return await api('/api/prepare-quit', {method:'POST', body:{cancel_active:true}});",
+                arguments: [:], in: nil, in: .page
+            ) { [weak self] result in
+                guard let self = self else { return }
+                switch result {
+                case .success(let value):
+                    if (value as? [String: Any])?["ready"] as? Bool == true { self.stopOwnedServer() }
+                    else { self.cancelQuit("The media engine did not accept the quit request.") }
+                case .failure(let error): self.cancelQuit(error.localizedDescription)
+                }
+            }
+        }
     }
 
     private func stopOwnedServer() {

@@ -1257,6 +1257,11 @@ def render_project(project, project_dir, output_path, profile="h264", progress=N
     if profile not in {"preview", "h264", "prores", "master16"}:
         raise ValueError("Unknown render profile.")
     p = validate_project(project, project_dir)
+    if __package__:
+        from .planar_tracking import assert_planar_export_ready
+    else:
+        from planar_tracking import assert_planar_export_ready
+    assert_planar_export_ready(p)
     high = p.get("settings", {}).get("image_precision", "standard8") == "high16"
     if profile == "master16" and not high:
         raise ValueError("Enable High 16-bit movie processing before exporting a 16-bit master.")

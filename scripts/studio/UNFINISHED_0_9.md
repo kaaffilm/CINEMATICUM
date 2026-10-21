@@ -1,179 +1,121 @@
-# CINEMATICUM 0.9 — what remains unfinished
+# CINEMATICUM 0.9.1 candidate — remaining work
 
-Audit date: 21 October 2026. This report describes the current repository and the recorded native acceptance results. It distinguishes implemented tools with limits, absent systems, outstanding verification and release alignment. It does not modify project media, the authority repository or an existing production checkout.
+Reviewed 21 October 2026. This register distinguishes missing implementations, bounded features, current acceptance and release alignment. The filename is retained for existing links. [Verification 0.9.1](VERIFICATION_0_9_1.md) records the current candidate; [verification 0.9](VERIFICATION_0_9.md) preserves earlier execution without transferring its results to newer source.
 
-**CINEMATICUM is not feature-complete against the combined applications in the requested comparison.** It has a working integrated editor and substantial native authoring/rendering functionality. Those working tools do not supply every system in Blender, Premiere, Resolve, Fusion, Nuke, After Effects, the other editors, the scientific libraries or the listed AI products.
+**CINEMATICUM remains incomplete against the requested application and system scope.** Selected-source audio playback, measured affine/projective tracking and high16 SDR movie processing are implemented in the current source. They do not complete the absent systems below. The machine-readable [capability ledger](capabilities.json) retains `parity_complete: false`.
 
-The current [capability ledger](capabilities.json) explicitly records `parity_complete: false`. Its 67 entries have these states:
-
-| Recorded state | Entries | Meaning in this audit |
+| Ledger state | Entries | Meaning |
 | --- | ---: | --- |
-| `implemented` | 1 | Implemented within its stated contract. |
-| `implemented_bounded` | 41 | Working functionality with explicit data, operation or resource limits. |
-| `partial` | 12 | A useful portion exists; major systems or behaviors remain absent. |
-| `missing` | 12 | The named system has no implemented execution path. |
-| `adapter_implemented_validation_pending` | 1 | Actual reduced generation and playback passed; normal-default quality and sustained operation remain unverified. |
-| **Total** | **67** | These are capability groups, not equally sized features. |
+| `implemented` | 1 | Implementation within the stated contract. |
+| `implemented_bounded` | 45 | Implementation with explicit data, operation or resource limits; acceptance is recorded separately. |
+| `partial` | 12 | A portion exists while major behaviors remain absent. |
+| `missing` | 13 | No implemented execution path for the named system: the 11 major systems plus general decoded-picture caching and signed distribution. |
+| `adapter_implemented_validation_pending` | 1 | Two genuine normal takes pass independent media checks; corrected native playback, longer takes and sustained operation require further acceptance. |
+| **Total** | **72** | Capability groups of different sizes, not a completion percentage. |
 
-No completion percentage follows from those counts. A bounded UV operation, an audio subsystem and an entire reconstruction pipeline have different scopes. Execution wording was reconciled during this audit; the conservative capability states remain unchanged.
+## 1. Current acceptance and release gates
 
-## 1. Confirmed absent systems
-
-These are implementation gaps, not hidden controls or tests that merely need to be rerun. Evidence links point to the implemented contracts and the corresponding capability assessment.
-
-| Domain | Systems still absent | Repository evidence |
+| Gate | Current evidence | Work still required |
 | --- | --- | --- |
-| Editing and conform | Variable-speed ramps; optical-flow retiming; automatic multicamera waveform/timecode synchronization; multicamera audio-lock and multiangle monitoring; general offline/online conform; broad native project, XML, AAF and EDL interchange. | [Editorial operations](editorial.py), [OTIO interchange](interchange.py), [nested interchange](sequence_interchange.py), [editorial comparison](research/editorial.md). |
-| Audio | A full bus/send/return/submix architecture; general surround/immersive output layouts; audio plugin hosting; full recording, restoration, loudness and DAW/session workflows. | [Timeline/audio renderer](engine.py), [live source routing](web/audio-routing.js), [capability ledger](capabilities.json). |
-| Compositing and VFX | General nested node compositions; roto-layer hierarchy and paint/clone systems; deep/multiview/arbitrary-channel compositing; general 3D/particle compositing; general planar/affine/projective and optical-flow tracking; broad node/plugin compatibility and production cache scheduling. | [Compositor](compositor.py), [roto rendering](roto.py), [tracking](tracking.py), [compositing comparison](research/compositing-motion.md). |
-| Motion graphics | A complete vector document/layer model, gradients and shape operators; general procedural/path effects; Lottie/general SVG interchange; text animators, expressions, layer parenting and general motion-design 3D. | [Compositor controls](web/compositor-ui.js), [compositor contracts](compositor.py), [capability ledger](capabilities.json). |
-| Color and image pipeline | Floating-point scene-linear processing throughout the movie graph; whole-timeline OCIO/ACES configuration; HDR mastering/delivery and calibrated HDR monitoring; RAW video; general image-sequence/arbitrary-channel editing; the full colour-science spectral/colorimetry/appearance library. | [Movie renderer](engine.py), [compositor](compositor.py), [color stages](color_pipeline.py), [still imaging](imaging.py), [color comparison](research/color-science.md). |
-| 3D authoring | Edge tools, sculpting and texture painting; a material/shader node graph; camera/light parenting and constraints; armatures, skinning and shape keys; geometry nodes and simulation systems; broad editable scene interchange. | [Scene schema and renderer](scene.py), [modeling operations](scene_modeling.py), [mesh import](spatial_import.py), [spatial comparison](research/spatial.md). |
-| Physical rendering | Mitsuba spectral/polarized/differentiable rendering and inverse optimization; a pbrt scene/backend implementation, compound-lens transport and general participating-medium authoring; Gaffer-style lazy scene/path/set/context processing, variants and distributed dispatch. | [Scene renderer](scene.py), [physical-rendering comparison](research/physical-rendering.md), [capability ledger](capabilities.json). |
-| Camera and optics | An interactive vanishing-line/photo calibration solver; automatic camera/lens calibration; broad distorted/fisheye/rational/anamorphic camera models; Lensfun profile lookup/conversion and chromatic/vignetting correction; rolling-shutter estimation; Optiland/ray-optics optical assemblies, glass catalogs, optimization and aberration/PSF/MTF analysis. | [Camera import/math](camera_io.py), [lens graph contract](compositor.py), [camera/optics comparison](research/camera-optics.md). |
-| Reconstruction | Source-image feature extraction/matching, registration, structure from motion, bundle adjustment, dense depth/fusion, surface reconstruction and texturing; actual AliceVision/Meshroom worker/graph execution. | [Solved-camera import](camera_io.py), [capability ledger](capabilities.json), [spatial comparison](research/spatial.md). |
-| Neural tools | SAM 2 segmentation/correction/object memory; TAPIR/TAPNext inference and learned occlusion/re-identification; CameraCtrl inference and general faithful camera conditioning; DiffusionLight inference and HDR environment generation. | [Classical tracking](tracking.py), [managed generation](managed_generation.py), [AI/motion comparison](research/ai-motion.md), [capability ledger](capabilities.json). |
-| Commercial AI products | Authenticated native integrations and the corresponding product workflows for Runway, Krea, OpenArt, Magnific, Artlist, Firefly, Flow, Luma, Kling, Pika, FLORA and Weave. Generic ComfyUI execution does not establish these products' features, accounts, credits or proprietary models. | [Generation adapter](adapters.py), [managed generation](managed_generation.py), [capability ledger](capabilities.json). |
-| Plugins and scripting | OFX/OpenFX, VST/Audio Unit and general third-party node/renderer hosting; an unrestricted expressions or scripting system. | [Defined compositor nodes](compositor.py), [typed server actions](server.py), [capability ledger](capabilities.json). |
-| Production scale | A sustained decoded/GPU realtime media cache; shared collaborative project databases; distributed rendering; continuation of an interrupted render from its last completed work; broad broadcast/cinema delivery systems. | [Frame preview](frame_preview.py), [job lifecycle](server.py), [delivery profiles](engine.py), [capability audit](CAPABILITY_AUDIT.md). |
+| Live audio | Native-03 passed routing (11 checks) and overlap, nested sequence and retimed playback (12 checks each), with zero underruns. Routing used selected-source and gain/pan/restart phases; each sequence scenario ran three repetitions. The new path schedules source PCM rather than relying on the former container decoder. | Bind these reports to the frozen source and verified installed runtime. Wider media/device coverage and production-scale playback remain unverified. Reverse live sound still requires rendered playback. |
+| High16 SDR movies | Native-03 passed 21/21 checks on three transformed 64 × 32 frames at 12 fps, saved precision, export controls and an actual 63,252-byte WKDownload. The FFV1 `gbrap16le`/alpha master includes 48 kHz stereo PCM. Numeric regression distinguishes 1,024 source values and checks fractional alpha/transforms. | Bind the reports to frozen/installed source. The NSSavePanel chooser, calibrated display and production scale remain unverified. HDR/scene-linear movie work remains separate. |
+| Planar tracking | Native-08 passed 10/10 checks in 9.463 seconds: real OpenCV measurement on 12/12 visible frames, native apply/undo/redo, timing invalidation/remap, save/reopen, processed paused frame and actual ProRes export. First/last pin centroids both measured (80.5, 64.0); output was 268,926 bytes. | Bind the accepted files/reports to the frozen regression and installed runtime. Wider shots, re-identification, lens/rolling-shutter estimation and sustained/concurrent throughput remain open. |
+| Normal local generation | Two actual serial Euler takes at 480 × 272, 17 frames, 20 steps, 16 fps and CFG 6 passed 14/14 independent media/provenance checks each; all 17 frames were distinct and nonblank. The second take passed 14/14 native playback checks. The first passed 13/14: old timeline insertion floored its rounded container duration and lost the last frame. | Rerun actual native playback after the nearest-frame correction, which has focused Node/real-media verification. Mac synchronization was denied after MIDIA-AI's upgrade invalidated the execution grant. The prepared 33-frame acceptance has not run; longer takes, sustained operation and production quality remain open. |
+| Whole-build regression | The current isolated Linux strict run passed 543 tests in 169.490 seconds with zero failures, errors, skips or expected failures, actual pinned optional workers and genuine Kodak RAW input. All 189 frozen operative files stayed unchanged; 48 JavaScript syntax checks also passed. | Local full regression is passed. GitHub CI remains pending; native Mac UI and replacement installation retain separate gates. The earlier 515-test result remains historical. |
+| Installed application | The installer now builds version 0.9.1, preserves prior bundles/projects and embeds a copied-runtime/native-source hash manifest. An earlier 0.9 app installation is historical evidence. | Actual replacement is blocked by the expired MIDIA-AI execution grant. After access is restored, install the accepted source, preserve the prior bundle and projects, independently compare every installed runtime file with the frozen source, and record native launch/runtime availability. |
+| Repository/release records | The capability ledger and this register describe the new source. Manifest generation/verification, current verification documentation and draft-PR alignment are release work in progress. | Finalize the source-integrity manifest without invented hashes, retain gate receipts, update draft PR #162 to the actual source/release scope, and record publication/CI status separately from installation. |
 
-The remaining work is not limited to installing these third-party programs or opening their windows. Each missing authoring system needs a CINEMATICUM data model, usable controls, execution, persistence, undo/recovery and independent output verification.
+An ordinary application quit now checks for active durable jobs and requires an explicit choice before cancelling them. New-job admission closes atomically, and the server records the exit reason and affected jobs. These changes improve preservation and diagnosis; they do not retrospectively establish who or what initiated the earlier generation termination. Sources: [native lifecycle](macos/StudioApp.swift), [server](server.py), [shutdown regression](test_shutdown.py).
 
-## 2. Working implementations that remain bounded or partial
+The current native-work blocker is an actual connector authorization change: MIDIA-AI upgraded from 0.7.2 to 0.8.0 and returned `COMMANDER_AUTHORITY_EXPIRED_OR_CHANGED` on the next synchronization attempt. A successor runtime context exists, but it does not carry a command-execution grant. The denied sync did not install the last local correction. This blocks the corrected Mac playback rerun, the planned 33-frame take and replacement installation; it does not prevent local regression, source review or repository verification. Those unexecuted native actions remain pending rather than being inferred from source or local tests.
 
-The following functionality is real. Its limits explain why it cannot be counted as complete parity with a larger application.
+## 2. Major systems still absent
 
-### Editing, sequences, media and interchange
+These are source-implementation gaps. A model name, installed external program, source review, solved-data importer or generic job adapter does not count as an implementation of the requested system.
 
-The editor implements rational timing; multitrack picture/sound; trim, split, ripple, slip, slide and roll; constant-speed forward/reverse; editable nested sequences; manual multicamera cuts; plain captions; preview proxies and exact-original relink.
-
-The sequence library is bounded to 64 sequences with a shared frame rate/canvas, nesting depth eight, 4,096 stored authored clips and 1,024 expanded clips, text plates or sequence instances. Multicamera cutting uses an explicitly chosen common event and camera-follow audio. It is not automatic synchronization or a multiangle monitor. Plain SRT/WebVTT is supported; styled/timed markup, regions and general broadcast caption behavior are not. Sources: [editorial.py](editorial.py), [editorial controls](web/editorial-ui.js), [engine.py](engine.py).
-
-Proxies preserve the original as the source for export. Relink verifies the exact original size and SHA-256; it is not alternate-take or heuristic path conform. Proxy creation has its own format, resolution and frame-count bounds. Sources: [media_management.py](media_management.py), [media controls](web/media-management-ui.js).
-
-OTIO supports a defined cuts/gaps/Stack/Track subset with nested source ranges and a shared clock. Retimed/reversed export, transitions, same-track overlaps, trimmed Tracks/top-level Stacks and disabled nested items are rejected. CINEMATICUM metadata preserves effects, captions and mixer state only when content identities and public structure agree; those properties do not become portable generic OTIO effects. Sources: [interchange.py](interchange.py), [sequence_interchange.py](sequence_interchange.py).
-
-### Live playback and exact image review
-
-Live source playback draws pose, opacity and a limited basic grade/blur approximation. It does not evaluate the complete compositor, LUT, lens and roto graph in realtime. Exact graph review uses the rendered authoring frame or encoded preview. Sources: [sequence-playback.js](web/sequence-playback.js), [frame_preview.py](frame_preview.py).
-
-The exact authoring-frame worker uses a 45-second timeout and a bounded still cache. This is a useful review path, not a production decoded/GPU playback cache. Sustained large-project performance remains separate from correctness on bounded test fixtures. Sources: [frame_preview.py](frame_preview.py), [server.py](server.py).
-
-### Audio
-
-Decoded waveforms, source stream/channel selection, track/clip gain, balance, fades, constant-speed retiming and stereo export exist. Any valid selected input channel pair can map to output L/R. Output remains stereo, and interactive reverse sound remains muted. Sources: [waveform.py](waveform.py), [engine.py](engine.py), [audio-routing.js](web/audio-routing.js).
-
-The new native routing identifies container audio tracks and mutes unsupported routes instead of silently substituting an unidentified stream. Some actual source-selection runs passed, but a fresh second-stream run reproduced silence despite the correct track identity and an active graph. This is a confirmed intermittent native playback defect; successful isolated runs do not establish reliable routing. The defect and final mixer/lifecycle acceptance are tracked below.
-
-### Compositor, motion and tracking
-
-The image graph supports a primary source plus eight additional owned media sources, at most 32 nodes and a defined set of blend/effect operations. Optional alpha-effect masks exist only on the supported grade, curves, blur, sharpen, key and lens nodes. Curves, sharpen amount and lens calibration are not general animated properties. Source: [compositor.py](compositor.py).
-
-Editable cubic Bézier masks have 2–32 anchors, independent incoming/outgoing handles, per-point feather and up to 64 fixed-topology path keys. Rendering produces measured 16-bit mask coverage, but that does not make the complete movie graph 16-bit or floating point. Timing tangents are bounded monotone cubic interpolation, not arbitrary overshooting curves. SVG exchange supports one closed path from a defined command subset, not a general SVG document. Sources: [roto.py](roto.py), [roto_assets.py](roto_assets.py), [compositor-ui.js](web/compositor-ui.js).
-
-Measured tracking is classical translation tracking with explicit frame/coordinate/visibility bounds. Translation stabilization and a mask following that track are implemented; they are not semantic segmentation, planar solving or neural tracking. Source: [tracking.py](tracking.py).
-
-### Color, RAW, EXR and HDR stills
-
-Declared input transforms and combined 1D-shaper/3D LUT stages are implemented. The final movie/compositor graph still reduces images to 8-bit `rgba`/`rgb24`. A 10-bit ProRes output profile does not restore precision lost earlier. Sources: [color_pipeline.py](color_pipeline.py), [compositor.py](compositor.py), [engine.py](engine.py).
-
-Separate still-imaging paths implement builtin-config CPU OCIO transforms, RAW development through rawpy/LibRaw, floating-point EXR and a known-response merge of 2–16 aligned exposure-timed stills. They are not movie-wide OCIO, RAW video, unrestricted EXR/deep/multipart channels or automatic HDR alignment/deghosting. The genuine camera RAW integration now passed using an actual Kodak DC50 fixture; that specific proof does not establish broad camera-vendor or RAW-video parity. Sources: [imaging.py](imaging.py), [image_worker.py](image_worker.py), [imaging tests](test_imaging.py).
-
-### 3D, UVs, materials and camera
-
-Native scene controls implement primitives/imported polygon meshes, object parenting, pose keys, physical camera/light/material settings, editable cages, UV tools and real headless Cycles output with a retained `.blend`. The authored scene is bounded to 96 objects, 16 lights, 7,200 frames and declared geometry/render budgets. Source: [scene.py](scene.py).
-
-The modifier stack has eight supported types: Mirror, Bevel, Subdivision, Solidify, Array, Decimate, Smooth and Simple Deform. Vertex movement preserves UV corners; topology-changing operations explicitly clear imported UV data where it cannot be preserved correctly. Object parents keep local transforms; camera/light parenting, constraints and automatic keep-world parenting are not included. Sources: [scene_modeling.py](scene_modeling.py), [modeling_blender.py](modeling_blender.py), [scene_hierarchy.py](scene_hierarchy.py).
-
-UV authoring includes projection, actual smart unwrap, selected-face seam separation, point transforms and connected-island grid packing. Grid packing does not optimize texel density or general packing. Imported OBJ UVs/material values are retained, but image textures and a general shader graph are not authored by this path. Rendering an existing `.blend` does not convert every Blender system into editable native CINEMATICUM data. Sources: [scene_modeling.py](scene_modeling.py), [spatial_import.py](spatial_import.py), [3D controls](web/scene-editor.js).
-
-fSpy and selected COLMAP files supply already solved cameras. COLMAP import explicitly accepts distortion-free `PINHOLE`/`SIMPLE_PINHOLE`, not general reconstruction or distorted camera models. Brown footage warping is a static five-coefficient operation with a contraction bound, at most two lens nodes and a 2,073,600-pixel canvas limit. It is not Lensfun profile conversion or an optics-design solver. Sources: [camera_io.py](camera_io.py), [compositor.py](compositor.py), [lens_assets.py](lens_assets.py).
-
-### Generation, automation and production
-
-The managed generation runtime has now executed actual Wan text-to-video inference. Its pinned setup is for Apple Silicon macOS 14 or newer and Python 3.13. Managed controls are bounded to the declared 480p canvas, 9–81 frames and 4–50 steps. The owned engine disables custom nodes. External configured API workflows remain a separate adapter path; neither route establishes the feature set of every listed AI product. Sources: [managed_generation.py](managed_generation.py), [generation-runtime-lock.json](generation-runtime-lock.json), [adapters.py](adapters.py).
-
-Automation uses typed operations, owned jobs, snapshots and receipts. Bulk editorial actions are explicitly grade, volume, sequence and trim. Queued/running jobs recovered after process termination become interrupted and require a new render; resumable model downloads do not imply resumable movie rendering. Source: [server.py](server.py).
-
-The shot-plan workflow binds actual selected source media and assembles a reviewed cut. Missing media prevents assembly. It does not create all missing shots or certify a finished film. The read-only check of the originally requested production checkout found **18 planned shots, zero files/media in its source-shot directory and zero files/media in its film-output directory**. Completion of that production handoff requires all 18 selected source takes, an actual assembled cut, sound work and media/film QC. This finding is specific to those production folders; it does not claim that no media exists elsewhere or that the separate authority/compiler artifact is missing. Source: [production.py](production.py).
-
-Project archives retain owned authoring/media dependencies with a 64 GiB/10,000-file bound; external engines, plugins and model weights are prerequisites, not embedded archive contents. Source: [project_archive.py](project_archive.py).
-
-## 3. Verification: established results and open gates
-
-Implementation, an available harness and a passing actual execution are different evidence levels. Synthetic fixtures are clearly identified as verification inputs and are not production footage.
-
-### Established results
-
-| Verified operation | Actual recorded result | Limit of the result |
+| Missing system | What remains absent | Boundary of current code |
 | --- | --- | --- |
-| Native 3D backend and controls | 19 backend checks and eight native control stages passed. | Covers the tested hierarchy, modeling, UV and device behaviors, not unrestricted Blender parity. |
-| Native editorial, roto and media controls | Four editorial stages, 26 roto checks and four media-management stages passed. | Covers the stated test contracts; manual multicam and the other bounds still apply. |
-| Proxy/export identity | Independently decoded exports retained 12 picture frames and 24,000 stereo sample frames byte-for-byte when preview proxy settings changed. | This establishes the tested original-source export path, not arbitrary conform. |
-| Metal rendering | A normal application render completed in 82.430497 seconds; independent verification passed 18/18 checks in 6.694 seconds, including decoded picture and reopened retained source. | Actual Metal output is proven for the tested machine/job. Other GPU backends require their own hardware executions. The earlier 15.522-second timeout is historical. |
-| Managed runtime installation/startup | Verified source, 71 wheels and three weights installed; actual MPS startup, encoder and required graph nodes passed. | Installation/startup alone is not output or quality acceptance. |
-| Reduced real Wan inference and output | 192 × 128, nine frames, four steps: completed in 44.410 seconds and admitted a nine-frame, 16 fps H.264 asset. Independent decoding passed 14/14 checks; actual native Add → Play → Save/pixel/timeline acceptance passed 14/14 checks in 1.393 seconds. | The reduced take's inference, decoded media and native playback are proven. Normal-default quality and sustained operation remain separate open gates. |
-| Genuine RAW and official OTIO integrations | RAW development: one test in 1.534 seconds, OK. Official OTIO reader/writer: one test in 0.463 seconds, OK. Both executed with zero skips. | Real Kodak DC50 development and the supported OTIO exchange were exercised; broader vendor/format semantics remain outside their scope. |
-| Full Python suite on frozen current source | **515 tests in 153.974 seconds, OK; zero failures and zero skips.** | Includes the genuine RAW and official OTIO gates. Separate native acceptance remains open; this result does not override the reproduced native audio failure. |
-| Candidate installation | A genuine 0.9 candidate was installed and normally launched; 53 files matched that candidate's expected runtime contents and four existing project JSON identities were preserved. | Current source has subsequently changed. Final alignment is still open. |
+| Deep compositing | Deep-image samples/operators, multiview compositing and an arbitrary-channel EXR graph. | The [compositor](compositor.py) uses bounded RGBA nodes; the [still worker](image_worker.py) has separate single-part RGB/RGBA EXR operations. |
+| Meshroom / AliceVision reconstruction | Integrated feature extraction/matching, SfM/bundle adjustment, dense reconstruction, surface/texturing and reconstruction graph. | [Camera import](camera_io.py) reads already-solved pinhole cameras; it does not solve images. |
+| SAM 2 | Actual checkpoint-backed image/video segmentation, correction/object memory and propagation. | [Roto](roto.py) and [tracking](tracking.py) author geometric masks or measure classical motion. |
+| TAPIR / TAPNext | Learned point inference, checkpoint/recurrent state, occlusion/re-identification and editable correction workflow. | [Point](tracking.py) and [planar](planar_tracking.py) tracking use classical measurement. |
+| CameraCtrl | Camera-conditioned model execution and faithful pose/intrinsic/ray conditioning. | [Scene cameras](scene.py) and [managed Wan generation](managed_generation.py) are separate; text-to-video does not consume CameraCtrl conditioning. |
+| Commercial AI services | Authenticated, working integrations for Runway, Krea, OpenArt, Magnific, Artlist, Firefly, Flow, Luma, Kling, Pika, FLORA and Weave. | [Generic API workflows](adapters.py) and local Wan do not establish those services' accounts, models or product workflows. |
+| Optiland / ray-optics | Optical prescriptions, glass catalogues, real-ray/paraxial tracing, optimization, aberration, PSF and MTF tools. | [Camera optics](camera_io.py) and [Brown distortion](lens_assets.py) provide bounded geometric operations. |
+| Mitsuba / pbrt | Spectral/polarized/differentiable transport, inverse optimization and pbrt scene/backend execution. | [Scene rendering](scene.py) drives bounded actual Cycles work. |
+| Gaffer-style scene processing | General scene paths/sets/contexts, lazy processing, asset variants and distributed dispatch. | [Object hierarchy](scene_hierarchy.py) and owned jobs retain a narrower authored scene. |
+| DiffusionLight | Actual model inference and generated probes/HDR environment maps. | The boundary is documented in [AI/motion research](research/ai-motion.md); no checkpoint worker executes it. |
+| Real-time collaboration | Shared project state/database, concurrent editing, conflict handling, presence/permissions and multi-client recovery. | [Local storage/job ownership](server.py) and undo remain local application mechanisms. |
 
-Detailed reproducible evidence and entrypoints are in [VERIFICATION_0_9.md](VERIFICATION_0_9.md), [Metal output verification](macos/verify_metal_result.py), [retained-source verification](macos/verify_metal_blend.py) and [generated-take verification](macos/verify_generated_take.py).
+Each system needs an editable CINEMATICUM representation, usable controls, actual execution, persistence/undo, cancellation/recovery where applicable, and independent output acceptance. The current source does not supply those missing parts.
 
-### Native audio — intermittent defect confirmed; resolution pending
+## 3. Existing systems that remain incomplete
 
-Actual WAV, first MOV and a second MOV source-selection run passed. The successful second-stream run measured 32,768 contiguous samples, the expected selected tones/channel swap and zero steady-state seeks.
-
-A fresh run of the current source then failed the second-stream baseline: **32,768 raw and output samples were zero**, despite correct enabled-track identity, a ready graph, advancing playback, no steady-state seeks and a passing independent audio calibration. Therefore source selection is **intermittently functional and not yet reliable**. This is a recurrent native defect, not merely an unrun gain/pan test.
-
-Gain/pan plus restart/lifecycle acceptance also remains open. A subsequent exact-position activation seek completed its native seek event but still yielded zero PCM; that unproven change was removed. No speculative activation workaround remains in the frozen source. Correct saved metadata and correct exported audio do not close these live playback gates. Evidence: [native audio harness](test_audio_routing_macos.py), [live routing](web/audio-routing.js), [sequence playback](web/sequence-playback.js).
-
-### Generated take — reduced output passed; normal-default operation pending
-
-The reduced real take has completed both independent output and native playback acceptance: **14/14 decoded-media checks and 14/14 native Add → Play → Save/pixel/saved-timeline checks passed**. All nine actual frames matched their corresponding independently decoded frames; mean absolute pixel error was approximately 0.233–0.306, below the declared threshold of 8. The verified asset is nine-frame, 16 fps H.264 at 192 × 128. No export or substitute generation replaced the tested take. This closes the reduced-take gate; the verifier's fixture self-tests are not being counted as actual model output.
-
-The normal-default 480 × 272, 17-frame, 20-step run was cancelled by normal application shutdown after about 21 seconds. The cause of that quit remains unresolved. It is not evidence of a model error and does not establish a completed default run. Normal-default quality, longer runs and sustained-session reliability remain unverified. Evidence: [managed generation](managed_generation.py), [actual-output verifier](macos/verify_generated_take.py), [verification record](VERIFICATION_0_9.md).
-
-### Other open verification
-
-- After resolving the native audio defect, rerun the affected regression and source/mixer/lifecycle gates against the matching installed bundle. The current frozen-source full suite has passed; it does not certify a future fix.
-- Verify CUDA, OptiX, HIP and oneAPI on corresponding actual hardware before claiming those device executions. Device enumeration/selection code is not a substitute for output.
-- Establish sustained large-project/media performance and longer generation/render sessions; the bounded fixture checks do not establish professional scale or every delivery target.
-
-The two optional skips in the historical 509-test run are documented in [VERIFICATION_0_9.md](VERIFICATION_0_9.md). Both passed separately and again in the current 515-test full run, which had zero skips. No skipped or unavailable execution is counted as passed.
-
-## 4. Release and source alignment remain unfinished
-
-The following are concrete integration tasks, separate from the missing feature systems:
-
-1. **Align current source with the installed bundle.** The fresh audit found 50 of 53 runtime files matching current source. `web/app.js`, `web/audio-routing.js` and `web/sequence-playback.js` differ. Rebuild/install the final source, verify its contents and rerun the relevant native gates before calling the current fixes shipped.
-2. **Reconcile the intended original production checkout.** It still lacks the Studio server/runtime and contains the owner's modified Makefile. Preserve that Makefile and the existing main branch while integrating the reviewed 0.9 work. The isolated worktree and installed candidate do not, by themselves, update that checkout. The separate authority repository is not expected to contain the editor.
-3. **Complete source publication and CI.** The remote draft still contains 0.8. The current 0.9 source is unpublished and has no 0.9 CI result. `source-integrity.json` still identifies 0.8.0; its explicit source manifest must be regenerated for a reviewed 0.9 publication. Publication, current-source CI and installation are distinct states.
-4. **Complete distribution packaging.** The native shell locates an external Python runtime; FFmpeg, Blender and optional imaging/model runtimes remain prerequisites. The installer explicitly reports no signing performed. A self-contained, signed/notarized distribution and its verification are unfinished.
-5. **Retain project preservation and rollback guarantees.** The candidate preserved the existing project JSON identities and archived the previous bundle. The final installation must preserve those guarantees as well; it must not overwrite owner changes merely to align versions.
-
-Sources: [native app lifecycle](macos/StudioApp.swift), [installer](install_macos.py), [verification record](VERIFICATION_0_9.md). The app intentionally saves edits and stops its owned jobs on quit; unexplained termination during the default generation run still needs its own diagnosis.
-
-## 5. Documentation reconciled during this audit
-
-The source documentation initially contradicted newer execution evidence. The following corrections have now been made in the current source. They do not publish a release, fix the native audio defect or establish any of the missing capabilities.
-
-| Document | Earlier stale or incomplete statement | Correction made |
+| Area | Implemented scope | Remaining work |
 | --- | --- | --- |
-| [Root README](../../README.md), [Studio README](README.md), [capability audit](CAPABILITY_AUDIT.md), [ledger](capabilities.json) | Metal picture output is still described as unverified after a short timeout. | Record the completed normal app render and independent 18/18 acceptance. Preserve the old timeout only as history. |
-| [Root README](../../README.md), [Studio README](README.md), [capability audit](CAPABILITY_AUDIT.md), [ledger](capabilities.json) | Managed generation is described only as an adapter/pending runtime, or without the actual successful inference. | Record completed installation, startup, reduced real Wan inference and independent actual-output/native playback acceptance; keep default-run quality/reliability open. Add the managed implementation to ledger evidence. |
-| [Studio README](README.md), [capability audit](CAPABILITY_AUDIT.md), [ledger](capabilities.json) | Source playback may use its default audio stream. | Describe explicit container-track selection and fail-muted unsupported routes; incorporate the final native mixer/lifecycle outcome when available. |
-| [Verification 0.9](VERIFICATION_0_9.md) | The normal-default generation run is described as underway. | Record cancellation by normal app shutdown, unresolved quit cause and absent completed default-run acceptance. |
-| [Verification 0.9](VERIFICATION_0_9.md) | Audio-pending language predates the successful source-selection runs and the subsequent reproduced second-stream silence. | Record both outcomes: some baselines passed, but current second-stream playback remains intermittent and requires a defect fix plus repeated source/mixer/lifecycle acceptance. |
-| [Verification 0.9](VERIFICATION_0_9.md) | Reduced-take decoding/native playback is described as pending. | Record the independent 14/14 media and 14/14 native actual-output passes, while retaining the normal-default/sustained-operation gap. |
-| [Capability audit](CAPABILITY_AUDIT.md) | No installed 0.9 application is asserted. | Reconcile this with the actual candidate installation while preserving the current-source mismatch and unpublished-release distinction. |
-| [Root README](../../README.md) | Legacy v1.0/v1.1 compiler boundaries state no external media/network/manual selection alongside the current Studio product. | Clearly identify those sections as historical/separate compiler contracts so they do not misdescribe current media import and managed model setup. |
+| Professional editing | Rational time, multitrack trim/split/ripple/slip/slide/roll, constant forward/reverse speed, shared-format sequences, manual multicam, captions/proxies. | Variable speed ramps, optical-flow retiming, automatic multicamera synchronization, simultaneous angle monitor, audio-lock mode and general offline/online conform. |
+| Project interchange | Bounded OTIO cuts/gaps and nested Stack/Track ranges with identity-checked private roundtrip metadata. | General AAF/XML/native formats; transitions, retime/reverse export, same-track overlaps, trimmed Tracks/top-level Stacks and disabled nested items. |
+| Compositing | One primary source plus eight additional media sources within 32 nodes; defined masks/effects/merges and animated Bézier paths. | Nested/general plugin graphs, broad 3D/particle composition, roto hierarchy/paint and production cache scheduling. |
+| Tracking | Classical point measurement; actual affine/projective planes up to 240 frames/640-pixel analysis edge; bounded stabilization/pinning. | Automatic re-identification, lens/rolling-shutter estimation, broad correction/long-shot workflow and production-scale acceptance. |
+| Color/HDR movies | Display-referred SDR grades/LUTs and opt-in 16-bit integer RGBA movie processing; separate float OCIO/RAW/EXR still and Cycles master paths. | Whole-timeline OCIO/ACES, scene-linear floating-point movie composition, HDR mastering and calibrated output monitoring. |
+| Motion graphics | Cubic roto/path editing, bounded monotone animation tangents and one closed SVG path exchange. | General vector document/layers, gradients/operators, SVG/Lottie interchange, text animators, expressions and reusable compositions. |
+| 3D authoring | Bounded vertex/face/UV editing, object hierarchy, eight modifiers, camera/light/material controls and actual Cycles. | Edge tools, sculpt/texture painting, shader graphs, camera/light parenting, constraints, rigs/shape keys, geometry nodes and simulation. |
+| COLMAP | Selected solved PINHOLE/SIMPLE_PINHOLE camera import. | Feature extraction/matching, structure from motion, bundle adjustment, dense reconstruction and broader camera models. |
+| Audio production | Selected-stream/channel stereo mix, gains/pan/fades, forward live source PCM and rendered reverse audio. | Buses/sends/returns, plugin hosting, surround/general layouts, recording/restoration/loudness and full session workflows. |
+| RAW/HDR still workflows | Actual rawpy/LibRaw development, known-response merge of 2–16 aligned stills and float EXR. | RAW movies, bracket alignment, deghosting, response-curve fitting and panorama stitching. |
+| Lens correction | Static bounded five-term Brown warp with explicit calibration. | Lensfun profiles, broad fisheye/anamorphic/rational models, chromatic/vignette correction and automatic calibration. |
+| Automation | Typed operations, owned jobs, snapshots, receipts and polling recovery. | General scripting, expressions, plugin hosting, wider automation and resumable interrupted renders. |
+| Delivery | H.264, ProRes and a high16 FFV1/alpha master; separate retained float EXR masters. | Complete broadcast/cinema/HDR profiles, target-specific QC and calibrated monitoring. |
+| Performance/distribution | Encoded preview proxies, bounded processed-frame jobs, source PCM caching, verified local app replacement and optional managed runtimes. | General decoded-frame/GPU playback cache, production-scale validation and signed/notarized distribution with all required runtimes bundled or fully managed. |
 
-The verification report limits its installation statement to the recorded candidate and distinguishes source, installation and publication. Reconcile these records with any later executed results before a release; do not treat this documentation cleanup as an implementation pass.
+The limits above are part of the persisted/rendered contract. Examples include 64 shared-format sequences, eight nested levels, 4,096 stored clips and 1,024 expanded instances; manual multicamera groups of 2–16 videos; 2–32 Bézier anchors and 64 path keys; and a 2,073,600-pixel planar/lens warp bound. The [capability audit](CAPABILITY_AUDIT.md) and [ledger](capabilities.json) retain the detailed per-feature limits and source evidence.
 
-## 6. Limit of the claimed exhaustive comparison
+## 4. Boundaries of the new implementations
 
-The [capability audit](CAPABILITY_AUDIT.md) records focused investigation of 33 reference systems. The research files identify inspected source, APIs and retrieval limits. Proprietary applications were assessed through public contracts and documentation; their entire internal source was not reverse engineered.
+### Selected-source sample playback
 
-There is not yet an exhaustive, version-pinned, app-by-app feature inventory mapping every requested upstream feature to a CINEMATICUM control, persisted representation, execution path and acceptance test. The 67 ledger entries are broad capability groups. They cannot establish that every subfeature in every referenced application has been inspected or accounted for.
+[Audio source preparation](audio_source.py) decodes the chosen original stream/channels to verified 48 kHz stereo float PCM. The [scheduler](web/pcm-playback.js) schedules source samples with live mix changes, including simultaneous clips and nested instances. Forward retimes use pitch-preserving source-tempo derivatives. It does not play a pre-rendered timeline mix to simulate interactivity.
 
-Accordingly, this document gives the concrete major gaps supported by the repository and current execution evidence. It does not claim an exact count of every remaining upstream feature, complete source equivalence, complete production readiness or complete parity. `parity_complete` must remain `false` until those missing systems and the corresponding acceptance criteria are actually satisfied.
+Buffering is bounded to a three-second horizon and 128 MiB in memory; the disk derivative cache is bounded to 16 GiB and each standard WAV to its 32-bit size limit. Current native captures establish their tested cases, not every codec, hardware device, long session or output layout. The former browser-decoder silence is retained in historical verification; it must not be presented as a fresh failure of the new scheduler without a matching reproduction.
+
+### Planar measurement and edit dependencies
+
+The [worker](planar_worker.py) executes actual feature flow and RANSAC affine/projective fitting. Source hashes and source-time/rate/clip bindings accompany measurements. Applying stabilization or an image pin changes actual rendered pixels; pinning accounts for the background's existing stabilization.
+
+A pure timeline translation moves a dependent pin once. Incompatible source/timing edits, a deleted driver, independent pin movement, invalid track ordering or changed background transform mark derived motion stale. Clips, imported media, authored keys and the original measurements remain intact. The inspector/Track dialog expose the stale state; stale stabilization is bypassed and stale pins are transparent in preview. [Export preflight](planar_tracking.py) refuses stale motion until the user remeasures or explicitly clears it. Save/reopen and undo retain these states. This preserves authored work without silently issuing a misleading final composite.
+
+Native-07 completed measurement, application, undo, timing edits, save/reopen and processed-frame review, then exceeded its 12-second ProRes wait while Wan inference was active. Native-08 passed after generation stopped. The earlier timeout is retained as history, not converted into a pass. The harness now keeps its isolated source/store, measurements, native logs, job snapshots and active worker files on failure, and uses a bounded 60-second export wait within a 120-second control sequence. These bounded tests do not establish production concurrency.
+
+### High16 SDR movies
+
+The movie graph has an explicit 16-bit unsigned normalized RGBA path, alpha-aware transforms/source-over and 16-bit paused PNG output. The `master16` profile writes lossless FFV1 level-3 `gbrap16le` with alpha and PCM audio. The high16 canvas limit is 8,388,608 pixels and the transformed working-image limit is 16,777,216 pixels; narrower graph limits remain applicable. Sources: [engine](engine.py), [compositor](compositor.py), [frame preview](frame_preview.py), [numeric acceptance](test_high_precision.py).
+
+This remains clamped SDR. A 16-bit container does not prove that all processing preserved precision; decoded numeric/alpha checks are required. Conversely, the old statement that every movie path reduces to 8-bit is no longer accurate. Separate OCIO/RAW/EXR stills and Cycles float masters do not complete a scene-linear/HDR movie pipeline.
+
+### Managed local generation
+
+The managed engine supplies one pinned core Wan 1.3B workflow with custom nodes disabled. The earlier reduced genuine take remains a real inference proof. An earlier normal take was cancelled during ordinary app termination; a later completed UniPC take was nearly black and rejected. Two subsequent serial Euler takes passed independent media acceptance at the normal settings, with 17 distinct decoded frames each. The verifier reads actual sample timestamps/durations and MP4 media/edit-list clocks: it accepts only their measured clock quantization and still rejects missing frames, shortened samples and unrelated timing errors. No accepted source file was altered to obtain this result.
+
+One native playback passed and the other exposed final-frame loss when adding a rounded-duration source to the timeline. The local nearest-frame correction and the exact-timing verifier passed 18 focused Node/real-media checks; corrected Mac playback remains blocked, so normal-workflow acceptance is still incomplete. The native harness binds the current job ID so an earlier completed job cannot satisfy a fresh run. Its new explicit `--frames 33` option uses the real length input after checking the normal 17-frame defaults, retains 480 × 272, 20 steps, 16 fps and CFG 6, and grants a bounded 2,400 seconds per take. This longer case has not executed. Sources: [managed engine](managed_generation.py), [native inference harness](test_generation_inference_macos.py), [output verifier](macos/verify_generated_take.py), [real MP4 timing regression](test_generated_take_timing.py).
+
+## 5. Frozen-source verification and release alignment
+
+The earlier **515 tests in 153.974 seconds with zero failures/skips** belong to the earlier frozen source recorded in [verification 0.9](VERIFICATION_0_9.md). Earlier 3D, editorial, roto, media, Metal, RAW, OTIO and reduced-Wan results retain their value at their actual scope. New code and new harnesses require their own executions.
+
+The current local isolated Linux run passed **543 tests in 169.490 seconds**, with zero failures, errors, skips or expected failures. Report elapsed time was 169.725 seconds. Actual pinned NumPy, OpenCV, OCIO, rawpy/LibRaw, OpenEXR and official OpenTimelineIO dependencies executed, including the genuine Kodak RAW input. The 189 operative code/test files were unchanged across the run; all 48 JavaScript syntax checks passed separately. See the [full report](verification/0.9.1/full-actual-runtime-report.json), [frozen operative inventory](verification/0.9.1/frozen-operative-source.json) and [unchanged-source check](verification/0.9.1/frozen-operative-check.json). Report SHA-256 is `d436f9f736d0c4ba5d41bf5762de9e9039efccd99afc18e5577b2311eee821a8`; inventory SHA-256 is `5db8cdeef9c316c5809e8c219815c3e7454f448fe08c7a972c80a3662f976653`.
+
+This closes local full regression, not native macOS acceptance or installation. GitHub CI remains pending. Final Mac synchronization, corrected playback, longer inference and replacement installation remain blocked by the connector authority change. Release alignment must:
+
+1. Freeze the complete reviewed runtime, tests, native sources, dependency locks and documentation. Include all new files, not only files already listed in the old integrity manifest.
+2. Generate a deterministic inventory from actual bytes, rejecting missing/extra runtime files and unsafe paths. Exclude the manifest from its own digest inventory and document any verification-record exclusion to avoid self-reference. Keep source identity and evidence identity separately reviewable.
+3. Retain the passed full-suite receipt and finish the remaining native workflows against the corresponding frozen content. Record every skip/failure explicitly. A changed runtime or test after a gate requires affected verification and a new source identity.
+4. Build/install that source while preserving existing project data and an independently verified prior-bundle archive. Compare the installed runtime inventory and native-source manifest against the accepted snapshot, then record actual app launch/runtime availability.
+5. Update [verification 0.9.1](VERIFICATION_0_9_1.md), the capability/release records and [draft PR #162](https://github.com/kaaffilm/CINEMATICUM/pull/162) with the actual commit and results. Publication, CI, local installation and signing are separate states.
+
+The original production checkout and the isolated development worktree have distinct state. Preserve the owner's modified files and existing projects; do not overwrite them merely to align a version. The separate issuance/compiler authority is also distinct from the Studio editor. Installing Studio does not generate missing production source takes or certify a finished film. The installer preserves external project storage and the optional runtimes, but it does not make external FFmpeg/Blender prerequisites self-contained or signed. The current signing-identity inspection found one Apple Development identity and no Developer ID Application identity; it does not establish a signed/notarized distribution. No named-provider credential was exported in the inspected MIDIA environment, which does not establish whether credentials exist in another keychain or account.
+
+## 6. Hardware and scope of evidence
+
+Current native `sysctl`/`sw_vers` reports identify Apple M3, 17,179,869,184 bytes of memory (16 GiB), and macOS 26.5.2 build 25F84. Actual tracking probing reports OpenCV 4.11.0 and NumPy 2.3.5. Runtime availability is distinct from a passed authoring workflow. MPS generation and bounded Metal rendering on this machine do not certify CUDA/OptiX/HIP/oneAPI execution, arbitrary checkpoints, long takes or production throughput. Those need suitable hardware and corresponding real-output evidence.
+
+The audit covers focused investigation of 33 reference systems. It is not an exhaustive line-by-line review of entire upstream codebases or proprietary source. The 72 ledger groups do not map every upstream subfeature. Full completion requires the absent systems, remaining professional workflows and their actual acceptance, not a documentation status change. `parity_complete` remains `false`.

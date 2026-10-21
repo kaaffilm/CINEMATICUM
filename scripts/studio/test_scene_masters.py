@@ -17,7 +17,7 @@ import zipfile
 
 from adapters import AdapterCancelled, AdapterError
 import scene
-from test_scene import recipe, script_constants
+from test_scene import recipe, script_constants, write_device_fixture
 from timebase import parse_rate
 
 
@@ -162,6 +162,7 @@ class SceneMasterTests(unittest.TestCase):
                 values = script_constants(Path(argv[-1]).read_text())
                 frames = Path(values['FRAMES'])
                 Path(values['BLEND_PATH']).write_bytes(b'TEST ONLY BLEND')
+                write_device_fixture(values)
                 for frame in range(values['START'], values['END']+1):
                     (frames/('frame_%06d.png' % frame)).write_bytes(b'TEST ONLY PNG')
                 self.write_frames(values['SPEC'], frames)

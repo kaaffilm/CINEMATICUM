@@ -87,6 +87,125 @@ def write_png(path,rgb,width,height):
                           +chunk(b"IDAT",zlib.compress(lines))+chunk(b"IEND",b""))
 
 
+def mp4_timing(path):
+    """Read the actual MP4 clocks/edit, without trusting rounded probe seconds.
+
+    This acceptance reader deliberately supports the single-track, single-edit
+    ordinary MP4 emitted by SaveVideo. It skips media bytes, bounds the movie
+    header to 4 MiB, and rejects unsupported edits instead of estimating them.
+    """
+    def atoms(data):
+        offset=0; result=[]
+        while offset<len(data):
+            if len(result)>=4096 or len(data)-offset<8: raise ValueError("Invalid MP4 atom table.")
+            size,kind=struct.unpack_from(">I4s",data,offset); header=8
+            if size==1:
+                if len(data)-offset<16: raise ValueError("Truncated extended MP4 atom.")
+                size=struct.unpack_from(">Q",data,offset+8)[0]; header=16
+            elif size==0: size=len(data)-offset
+            if size<header or offset+size>len(data): raise ValueError("Truncated MP4 atom.")
+            result.append((kind,data[offset+header:offset+size])); offset+=size
+        return result
+    def one(items,kind):
+        matches=[data for name,data in items if name==kind]
+        if len(matches)!=1: raise ValueError("Expected one MP4 "+kind.decode()+" atom.")
+        return matches[0]
+    def clock(data):
+        if len(data)<20 or data[0] not in (0,1): raise ValueError("Unsupported MP4 clock header.")
+        offset=12 if data[0]==0 else 20; code=">II" if data[0]==0 else ">IQ"
+        if len(data)<offset+struct.calcsize(code): raise ValueError("Truncated MP4 clock header.")
+        scale,duration=struct.unpack_from(code,data,offset)
+        if not scale: raise ValueError("Zero MP4 clock timescale.")
+        return scale,duration
+    movies=[]; total=Path(path).stat().st_size; offset=0; count=0
+    with Path(path).open("rb") as source:
+        while offset<total:
+            count+=1; source.seek(offset); header=source.read(8)
+            if count>4096 or len(header)!=8: raise ValueError("Invalid MP4 file atom table.")
+            size,kind=struct.unpack(">I4s",header); header_size=8
+            if size==1:
+                extended=source.read(8)
+                if len(extended)!=8: raise ValueError("Truncated extended MP4 file atom.")
+                size=struct.unpack(">Q",extended)[0]; header_size=16
+            elif size==0: size=total-offset
+            if size<header_size or offset+size>total: raise ValueError("Truncated MP4 file atom.")
+            if kind==b"moov":
+                if size>4*1024*1024: raise ValueError("MP4 movie header exceeds acceptance limit.")
+                movies.append(source.read(size-header_size))
+            offset+=size
+    if len(movies)!=1: raise ValueError("Expected one ordinary MP4 movie header.")
+    movie=atoms(movies[0]); movie_scale,movie_duration=clock(one(movie,b"mvhd"))
+    track=atoms(one(movie,b"trak")); media=atoms(one(track,b"mdia"))
+    handler=one(media,b"hdlr")
+    if len(handler)<12 or handler[8:12]!=b"vide": raise ValueError("Expected one MP4 video track.")
+    media_scale,media_duration=clock(one(media,b"mdhd"))
+    samples=one(atoms(one(atoms(one(media,b"minf")),b"stbl")),b"stts")
+    if len(samples)<8 or samples[0]!=0: raise ValueError("Unsupported MP4 sample clock table.")
+    sample_runs=struct.unpack_from(">I",samples,4)[0]
+    if not 1<=sample_runs<=81 or len(samples)!=8+8*sample_runs: raise ValueError("Invalid MP4 sample clock table.")
+    sample_times=[dict(zip(("count","delta"),struct.unpack_from(">II",samples,8+8*index))) for index in range(sample_runs)]
+    edits=one(atoms(one(track,b"edts")),b"elst")
+    if len(edits)<8 or edits[0] not in (0,1) or struct.unpack_from(">I",edits,4)[0]!=1:
+        raise ValueError("Expected one ordinary MP4 edit.")
+    code=">Iihh" if edits[0]==0 else ">Qqhh"
+    if len(edits)!=8+struct.calcsize(code): raise ValueError("Invalid MP4 edit size.")
+    edit_duration,media_time,rate_integer,rate_fraction=struct.unpack_from(code,edits,8)
+    if media_time<0 or (rate_integer,rate_fraction)!=(1,0): raise ValueError("Unsupported MP4 edit offset or rate.")
+    return {"movie_timescale":movie_scale,"movie_duration":movie_duration,
+            "media_timescale":media_scale,"media_duration":media_duration,
+            "edit_duration":edit_duration,"edit_media_time":media_time,"sample_time_runs":sample_times}
+
+
+def verify_timing(path,metadata,length,fps):
+    """Prove the full sample timeline and explain movie-clock quantization.
+
+    An edit duration is stored in movie-clock ticks, whereas samples use the
+    media clock. FFmpeg rescales the edit to media ticks and may expose that
+    slightly shorter duration even though every complete sample is present.
+    Accept only the measured floor/ceiling quantization, with an exact packet
+    grid and media duration; a general duration tolerance cannot prove this.
+    """
+    timing=mp4_timing(path); checks={}; rate=Fraction(str(fps)); interval=1/rate
+    stream=metadata["streams"][0]; base=Fraction(stream["time_base"])
+    records=metadata.get("packets_and_frames",[])
+    packets=metadata.get("packets",[item for item in records if item.get("type")=="packet"])
+    frames=metadata.get("frames",[item for item in records if item.get("type")=="frame"])
+    frames=[item for item in frames if item.get("media_type")=="video"]
+    expected=length*interval; media_scale=timing["media_timescale"]; movie_scale=timing["movie_timescale"]
+    ticks=interval*media_scale; movie_ticks=expected*movie_scale
+    floor=movie_ticks.numerator//movie_ticks.denominator; ceiling=-(-movie_ticks.numerator//movie_ticks.denominator)
+    checks["exact_frame_rate"]=Fraction(stream["avg_frame_rate"])==rate
+    checks["exact_media_clock"]=base==Fraction(1,media_scale) and ticks.denominator==1
+    checks["complete_packet_presentation_grid"]=(len(packets)==length and
+        sorted(Fraction(item["pts"])*base for item in packets)==[index*interval for index in range(length)])
+    checks["every_packet_has_full_frame_duration"]=(len(packets)==length and
+        all(item.get("stream_index")==0 and Fraction(item["duration"])*base==interval for item in packets))
+    # The demuxer may infer packet duration from H.264 timing. Check stts too,
+    # so an abbreviated final stored sample cannot hide behind that inference.
+    checks["every_stored_sample_has_full_frame_duration"]=(sum(run["count"] for run in timing["sample_time_runs"])==length and
+        all(run["count"]>0 and run["delta"]==ticks for run in timing["sample_time_runs"]))
+    checks["decode_clock_and_edit_offset_agree"]=(len(packets)==length and
+        [Fraction(item["dts"])*base for item in packets]==[-Fraction(timing["edit_media_time"],media_scale)+index*interval for index in range(length)])
+    checks["exact_decoded_presentation_grid"]=(len(frames)==length and
+        [Fraction(item["best_effort_timestamp"])*base for item in frames]==[index*interval for index in range(length)])
+    checks["complete_media_duration"]=Fraction(timing["media_duration"],media_scale)==expected
+    checks["movie_clock_resolves_each_frame"]=Fraction(1,movie_scale)<=interval
+    checks["movie_duration_is_one_tick_quantization"]=timing["movie_duration"] in {floor,ceiling}
+    checks["edit_duration_is_one_tick_quantization"]=timing["edit_duration"] in {floor,ceiling}
+    # av_rescale uses nearest rounding with halfway cases away from zero.
+    edit_media_ticks=Fraction(timing["edit_duration"]*media_scale,movie_scale)
+    rescaled=(2*edit_media_ticks.numerator+edit_media_ticks.denominator)//(2*edit_media_ticks.denominator)
+    exposed=min(timing["media_duration"],rescaled)
+    checks["probe_duration_is_exactly_explained_by_edit"]=(stream.get("start_pts")==0 and stream.get("duration_ts")==exposed)
+    timing.update(passed=all(checks.values()),checks=checks,expected_duration=str(expected),
+                  expected_media_ticks=str(expected*media_scale),exposed_duration_ticks=stream.get("duration_ts"),
+                  edit_duration_in_media_ticks=str(edit_media_ticks),expected_exposed_duration_ticks=exposed,
+                  edit_quantization_seconds=str(Fraction(timing["edit_duration"],movie_scale)-expected),
+                  interpretation=("Full exact media samples; MP4 edit duration quantized to its measured movie clock."
+                                  if all(checks.values()) else "Sample timing or MP4 edit quantization proof failed."))
+    return timing
+
+
 def verify_take(project_dir,job_json,job_snapshot=None,evidence=None,timeout=8):
     began=time.monotonic(); deadline=began+min(12,float(timeout))
     checks={}; report={"passed":False,"scope":"Actual completed Wan take; no generated or rendered substitute", "checks":checks}
@@ -146,14 +265,18 @@ def verify_take(project_dir,job_json,job_snapshot=None,evidence=None,timeout=8):
         report["current_workflow_sha256"]=hashlib.sha256(current_raw).hexdigest()
         ffmpeg,ffprobe=shutil.which("ffmpeg"),shutil.which("ffprobe")
         if not ffmpeg or not ffprobe: raise RuntimeError("FFmpeg and ffprobe are needed to verify every actual output frame.")
-        metadata=json.loads(run([ffprobe,"-v","error","-count_frames","-show_frames","-show_entries",
-            "stream=codec_type,codec_name,width,height,avg_frame_rate,nb_read_frames,duration:frame=media_type,best_effort_timestamp_time",
+        metadata=json.loads(run([ffprobe,"-v","error","-count_frames","-show_frames","-show_packets","-show_entries",
+            "stream=codec_type,codec_name,width,height,avg_frame_rate,nb_read_frames,duration,duration_ts,time_base,start_pts:frame=media_type,best_effort_timestamp,best_effort_timestamp_time:packet=stream_index,pts,dts,duration",
             "-of","json",str(source)],3))
+        if "packets_and_frames" in metadata:
+            records=metadata.pop("packets_and_frames")
+            metadata["packets"]=[item for item in records if item.get("type")=="packet"]
+            metadata["frames"]=[item for item in records if item.get("type")=="frame"]
         streams=metadata["streams"]; stream=streams[0]; frames=[f for f in metadata["frames"] if f.get("media_type")=="video"]
         checks["actual_codec_dimensions_and_frame_count"]=len(streams)==1 and stream.get("codec_type")=="video" and stream.get("codec_name")=="h264" and (stream.get("width"),stream.get("height"))==(width,height) and int(stream.get("nb_read_frames",0))==length and len(frames)==length
-        checks["actual_rate_and_duration_match_workflow"]=abs(float(Fraction(stream["avg_frame_rate"]))-fps)<1e-6 and abs(float(stream["duration"])-length/fps)<=max(.000002,.001/fps)
-        times=[float(frame["best_effort_timestamp_time"]) for frame in frames]
-        checks["every_frame_has_expected_timestamp"]=len(times)==length and all(abs(moment-index/fps)<.000002 for index,moment in enumerate(times))
+        report["timing"]=verify_timing(source,metadata,length,fps)
+        checks["actual_rate_and_duration_match_workflow"]=report["timing"]["passed"]
+        checks["every_frame_has_expected_timestamp"]=report["timing"]["checks"]["exact_decoded_presentation_grid"]
         pixels=run([ffmpeg,"-v","error","-nostdin","-threads","1","-i",str(source),"-map","0:v:0","-an","-frames:v",str(length+1),"-threads","1","-pix_fmt","rgb24","-f","rawvideo","pipe:1"],4)
         stride=width*height*3
         checks["every_requested_frame_decodes"]=len(pixels)==length*stride

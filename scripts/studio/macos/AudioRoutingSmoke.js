@@ -7,7 +7,7 @@ return await(async()=>{
  function reach(selector){const el=$(selector);if(!el)throw Error('Missing '+selector);for(let parent=el.parentElement;parent;parent=parent.parentElement){if(!parent.matches('.timeline-scroll,.timeline-tools,.inspector,dialog'))continue;const r=el.getBoundingClientRect(),b=parent.getBoundingClientRect();if(r.top<b.top+3)parent.scrollTop+=r.top-b.top-3;else if(r.bottom>b.top+parent.clientHeight-3)parent.scrollTop+=r.bottom-b.top-parent.clientHeight+3;if(r.left<b.left+3)parent.scrollLeft+=r.left-b.left-3;else if(r.right>b.left+parent.clientWidth-3)parent.scrollLeft+=r.right-b.left-parent.clientWidth+3;}const r=el.getBoundingClientRect(),hit=document.elementFromPoint(r.left+r.width/2,r.top+r.height/2);if(r.width<2||r.height<2||r.top<0||r.bottom>innerHeight+.5||(hit!==el&&!el.contains(hit)))throw Error('Unreachable '+selector);return el;}
  function click(selector){const el=reach(selector);if(el.disabled)throw Error('Disabled '+selector);el.click();}
  function set(selector,value,event='input'){const el=reach(selector);el.value=String(value);el.dispatchEvent(new Event(event,{bubbles:true}));}
- const frequencies=[220,330,440,660,997];
+ const frequencies=[220,330,440,660,990,997];
  function measured(values,rate){
   const count=values[0].length,stats={sum:[0,0],squares:[0,0],min:[1,1],max:[-1,-1],tones:frequencies.map(()=>({cos:[0,0],sin:[0,0]}))};
   for(let i=0;i<count;i++){
@@ -81,7 +81,83 @@ return await(async()=>{
   if(frequencies.filter(frequency=>frequency!==leftFrequency&&frequency!==rightFrequency).some(frequency=>result.pcm.amplitudes[frequency].some(value=>value>.015))||result.pcm.amplitudes[rightFrequency][0]>.015||result.pcm.amplitudes[leftFrequency][1]>.015)throw Error('The live route includes the wrong stream or unswapped channels');
   if([0,1].some(channel=>Math.abs(result.raw_source_pcm.rms[channel]-oracle.rms[channel])>.005)||[220,330,440,660].some(frequency=>[0,1].some(channel=>Math.abs(result.raw_source_pcm.amplitudes[frequency][channel]-oracle.amplitudes[frequency][channel])>.005)))throw Error('Raw source PCM does not contain the independently selected original channel pair');
  }
+ async function sequenceScenario(){
+  const report={passed:false,scenario:AUDIO_ROUTING_TEST.scenario,steps:[],metrics:{runs:[]}},voices=new Map();
+  let original=null,processor=null,oscillator=null,calibrationGain=null,context=null,loading=null,ready=false,captured=null,armed=false,runStart=0;
+  const expected=new Map(AUDIO_ROUTING_TEST.routes.map(route=>[route.clip_id,route]));
+  function attach(){
+   if(!ready)return;
+   if(!processor){
+    processor=new AudioWorkletNode(context,'cinematicum-audio-probe',{numberOfInputs:3,numberOfOutputs:1,outputChannelCount:[2],channelCount:2,channelCountMode:'explicit',channelInterpretation:'speakers'});
+    processor.port.onmessage=event=>{captured=event.data;};processor.connect(context.destination);
+    oscillator=context.createOscillator();calibrationGain=context.createGain();oscillator.frequency.value=997;calibrationGain.gain.value=.25;
+    oscillator.connect(calibrationGain);calibrationGain.connect(processor,0,2);oscillator.start();
+   }
+   for(const voice of voices.values())if(!voice.connected&&voice.media.source&&voice.media.audioGate){
+    voice.media.source.connect(processor,0,0);voice.media.audioGate.connect(processor,0,1);voice.connected=true;
+   }
+  }
+  function matches(actual,oracle){
+   return actual.samples>=32768&&[0,1].every(channel=>Math.abs(actual.rms[channel]-oracle.rms[channel])<.005)&&
+    [220,330,440,660,990].every(frequency=>[0,1].every(channel=>Math.abs(actual.amplitudes[frequency][channel]-(oracle.amplitudes[frequency]?.[channel]||0))<.005));
+  }
+  try{
+   await until(()=>$('#viewer-project')?.textContent.includes('ENGINE TEST')&&window.CinematicumAudioRouting,'Sequence audio fixture did not bootstrap',4000);
+   const api=window.CinematicumAudioRouting;original=api.ensure;
+   api.ensure=function(media,audioContext,clip,asset,notify,options){
+    const result=original.call(this,media,audioContext,clip,asset,notify,options),spec=expected.get(clip.id);
+    if(!spec||!audioContext)return result;
+    context=audioContext;let voice=voices.get(clip.id);
+    if(!voice){voice={media,spec,route:result,connected:false,drift:0,observations:0};voices.set(clip.id,voice);}
+    if(voice.media!==media)throw Error('The same authored voice changed decoder during playback');
+    voice.route=result;
+    if(!loading)loading=context.audioWorklet.addModule('/ENGINE_TEST_audio_probe_worklet.js').then(()=>{ready=true;attach();});
+    attach();
+    if(result.ready&&!media.el.paused&&context.currentTime>runStart+.5){
+     voice.drift=Math.max(voice.drift,Math.abs(media.el.currentTime-options.sourceTime));voice.observations++;
+    }
+    return result;
+   };
+   for(let iteration=0;iteration<AUDIO_ROUTING_TEST.repetitions;iteration++){
+    captured=null;armed=false;for(const voice of voices.values()){voice.drift=0;voice.observations=0;}
+    click('#jump-start');runStart=context?.currentTime||0;click('#play-button');
+    await until(()=>{
+     if(!processor||voices.size!==expected.size||[...voices.values()].some(voice=>!voice.connected||!voice.route?.ready||voice.media.el.paused))return false;
+     const clock=window.CinematicumSequencePlayback.clock();
+     if(clock?.waiting||!Number.isFinite(clock?.frame)||clock.frame<AUDIO_ROUTING_TEST.capture_frame)return false;
+     if(!armed){armed=true;processor.port.postMessage({action:'capture',start_frame:Math.ceil(context.currentTime*context.sampleRate)+2048,sample_count:32768});}
+     return Boolean(captured);
+    },'Repeated '+AUDIO_ROUTING_TEST.scenario+' live mix was not captured',12000);
+    const current={iteration:iteration+1,pcm:measured(captured.samples[1],captured.sample_rate),raw_pcm:measured(captured.samples[0],captured.sample_rate),calibration:measured(captured.samples[2],captured.sample_rate),
+     window:{start_frame:captured.start_frame,end_frame:captured.end_frame,sample_rate:captured.sample_rate,render_thread:true},voices:[]};
+    for(const [clipId,voice]of voices){
+     const {media,spec,route}=voice,manifest=route.manifest;
+     current.voices.push({clip_id:clipId,route,decoder:{...media.el.pcmState},clock_drift_seconds:voice.drift,observations:voice.observations,current_time:media.el.currentTime,request_url:media.requestUrl});
+     if(!manifest||route.binding!=='decoded-source-pcm'||manifest.source_sha256!==AUDIO_ROUTING_TEST.source_sha256||manifest.asset_id!==AUDIO_ROUTING_TEST.asset_id||
+        route.stream_index!==spec.stream_index||JSON.stringify(route.channel_map)!==JSON.stringify(spec.channels)||manifest.source_time_scale!==spec.playback_rate||manifest.playback_rate!==spec.playback_rate)throw Error('A sequence voice lost its selected-source or combined-speed identity');
+     if(media.el.pcmState?.kind!=='scheduled-source-pcm'||!media.el.pcmState.scheduled_chunks||media.el.pcmState.underruns)throw Error('Repeated sequence playback underrun');
+     if(voice.observations<3||voice.drift>.08)throw Error('A sequence voice drifted from the shared timeline clock');
+    }
+    report.metrics.runs.push(current);
+    if(Math.abs(current.calibration.amplitudes[997][0]-.25)>.005)throw Error('Live mix observation calibration failed');
+    if(!matches(current.pcm,AUDIO_ROUTING_TEST.oracle))throw Error('Actual simultaneous live mix differs from independently decoded source amplitudes and authored gains');
+    if(!matches(current.raw_pcm,AUDIO_ROUTING_TEST.raw_oracle))throw Error('Actual source voices differ from the independently selected pitch-preserving PCM');
+    click('#play-button');await until(()=>[...voices.values()].every(voice=>voice.media.el.paused),'Pause did not stop all owned source voices');
+    report.steps.push('native_'+AUDIO_ROUTING_TEST.scenario+'_pcm_restart_'+(iteration+1));
+   }
+   click('#save-project');await until(()=>$('#save-state').textContent==='SAVED LOCALLY','Sequence playback project did not save');
+   report.steps.push('native_save_after_repeated_playback');report.passed=true;
+  }catch(error){report.error=error.message;report.toast=$('#toast')?.textContent;report.metrics.routes=[...voices].map(([clip_id,voice])=>({clip_id,route:voice.route,decoder:{...voice.media.el.pcmState},clock_drift_seconds:voice.drift}));}
+  finally{
+   if(original)window.CinematicumAudioRouting.ensure=original;
+   if($('#play-button')?.getAttribute('aria-label')==='Pause timeline')$('#play-button').click();
+   for(const voice of voices.values())if(voice.connected){try{voice.media.source.disconnect(processor);voice.media.audioGate.disconnect(processor);}catch(error){}}
+   if(oscillator){oscillator.stop();oscillator.disconnect();calibrationGain.disconnect();}if(processor){processor.port.onmessage=null;processor.disconnect();}
+  }
+  return report;
+ }
  try{
+  if(AUDIO_ROUTING_TEST.scenario&&AUDIO_ROUTING_TEST.scenario!=='routing')return await sequenceScenario();
   await until(()=>$('#viewer-project')?.textContent.includes('ENGINE TEST')&&window.CinematicumAudioRouting,'Native audio fixture did not bootstrap',4000);
   routing=window.CinematicumAudioRouting;originalEnsure=routing.ensure;
   routing.ensure=function(media,context,...args){const result=originalEnsure.call(this,media,context,...args);if(context)observe(media,context,result);return result;};

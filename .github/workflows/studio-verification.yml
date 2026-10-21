@@ -2,38 +2,58 @@ name: Studio media verification
 on:
   pull_request:
     paths:
+      - 'README.md'
       - 'scripts/studio/**'
       - '.github/workflows/studio-verification.yml'
   push:
     paths:
+      - 'README.md'
       - 'scripts/studio/**'
       - '.github/workflows/studio-verification.yml'
 permissions:
   contents: read
 jobs:
   media-and-http:
-    runs-on: ubuntu-latest
-    timeout-minutes: 10
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
           python-version: '3.11'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Verify the complete declared source inventory
+        run: python3 -I scripts/studio/source_integrity.py --check
       - name: Install media engine
         run: sudo apt-get update -qq && sudo apt-get install -y ffmpeg
-      - name: Install independent interchange reader for verification
-        run: python -m pip install opentimelineio==0.18.1
-      - name: Install pinned imaging engines for real pixel verification
-        run: python -m pip install numpy==2.3.5 opencolorio==2.6.0 rawpy==0.27.1 OpenEXR==3.4.15
+      - name: Install hash-pinned imaging, tracking and interchange engines in a clean venv
+        run: |
+          python3 -m venv "$RUNNER_TEMP/cinematicum-verification"
+          "$RUNNER_TEMP/cinematicum-verification/bin/python" -m pip install --require-hashes --only-binary=:all: \
+            --report "$RUNNER_TEMP/cinematicum-pip-report.json" \
+            -r scripts/studio/verification-linux-x86_64.requirements.txt
+          "$RUNNER_TEMP/cinematicum-verification/bin/python" -m pip check
+      - name: Fetch and verify the authentic camera RAW fixture
+        run: |
+          python3 -I scripts/studio/fetch_verification_raw.py --output "$RUNNER_TEMP/ENGINE_TEST_RAW_KODAK_DC50.KDC"
+          printf 'CINEMATICUM_RAW_TEST_FILE=%s\n' "$RUNNER_TEMP/ENGINE_TEST_RAW_KODAK_DC50.KDC" >> "$GITHUB_ENV"
       - name: Verify real media, adapters, and project API
         run: |
-          python3 - <<'PY'
-          import os, subprocess, sys
-          environment = dict(os.environ, CINEMATICUM_IMAGING_PYTHON=sys.executable)
-          subprocess.run([sys.executable, '-m', 'unittest', 'discover', '-s', 'scripts/studio', '-p', 'test_*.py', '-v'], env=environment, check=True)
-          PY
+          "$RUNNER_TEMP/cinematicum-verification/bin/python" -I scripts/studio/run_verification.py \
+            --report "$RUNNER_TEMP/cinematicum-verification-report.json"
       - name: Check editor JavaScript
         run: |
           for file in scripts/studio/web/*.js scripts/studio/macos/*.js; do
             node --check "$file"
           done
+      - name: Preserve verification receipts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: studio-verification-receipts
+          path: |
+            ${{ runner.temp }}/cinematicum-pip-report.json
+            ${{ runner.temp }}/cinematicum-verification-report.json
+          if-no-files-found: warn

@@ -143,7 +143,10 @@ def default_workflow(options=None):
     """Core-node API graph, based on Comfy's official Wan1.3B recipe.
 
     Smaller authored dimensions and tiled VAE decoding reduce working memory.
-    The model, sampler, CFG and shift retain their actual upstream semantics.
+    Euler uses the upstream sampler unchanged. The upstream UniPC scalar
+    recurrence is unstable on MPS (Comfy-Org/ComfyUI issues 7027 and 16573);
+    a completed prompt can otherwise produce almost-black frames. The saved
+    workflow records this sampler choice for reproducibility.
     """
     if options is None: options = {}
     if not isinstance(options, dict) or set(options) - {"width", "height", "length", "steps", "cfg", "fps"}:
@@ -166,7 +169,7 @@ def default_workflow(options=None):
         "40": {"class_type": "EmptyHunyuanLatentVideo", "inputs": {"width": values["width"], "height": values["height"], "length": values["length"], "batch_size": 1}},
         "48": {"class_type": "ModelSamplingSD3", "inputs": {"model": ["37", 0], "shift": 8.0}},
         "3": {"class_type": "KSampler", "inputs": {"model": ["48", 0], "positive": ["6", 0], "negative": ["7", 0], "latent_image": ["40", 0],
-            "seed": "CINEMATICUM_SEED", "steps": values["steps"], "cfg": values["cfg"], "sampler_name": "uni_pc", "scheduler": "simple", "denoise": 1.0}},
+            "seed": "CINEMATICUM_SEED", "steps": values["steps"], "cfg": values["cfg"], "sampler_name": "euler", "scheduler": "simple", "denoise": 1.0}},
         "8": {"class_type": "VAEDecodeTiled", "inputs": {"samples": ["3", 0], "vae": ["39", 0], "tile_size": 256, "overlap": 64, "temporal_size": 16, "temporal_overlap": 4}},
         "49": {"class_type": "CreateVideo", "inputs": {"images": ["8", 0], "fps": values["fps"]}},
         "50": {"class_type": "SaveVideo", "inputs": {"video": ["49", 0], "filename_prefix": "CINEMATICUM/take", "format": "mp4",

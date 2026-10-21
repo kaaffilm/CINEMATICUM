@@ -214,11 +214,18 @@ class ModelingRecipeTests(unittest.TestCase):
                  [{'id': 'one', 'type': 'subdivision', 'method': 'CUSTOM'}],
                  [{'id': 'one', 'type': 'mirror', 'enabled': 1}],
                  [{'id': 'same', 'type': 'mirror'}, {'id': 'same', 'type': 'bevel'}],
-                 [{'id': str(i), 'type': 'mirror'} for i in range(5)],
                  [{'id': str(i), 'type': 'subdivision', 'levels': 3} for i in range(4)]]
         for modifiers in cases:
             with self.subTest(modifiers=modifiers), self.assertRaises(ValueError):
                 modeling.prepare_operation(prepared(), {'type': 'set_modifiers', 'modifiers': modifiers})
+
+    def test_eight_modifier_boundary_preserves_order_and_rejects_ninth(self):
+        modifiers = [{'id': str(i), 'type': 'mirror'} for i in range(8)]
+        result, _ = modeling.prepare_operation(prepared(), {'type': 'set_modifiers', 'modifiers': modifiers})
+        self.assertEqual([item['id'] for item in result['modeling']['modifiers']], [str(i) for i in range(8)])
+        with self.assertRaisesRegex(ValueError, 'up to eight'):
+            modeling.prepare_operation(prepared(), {'type': 'set_modifiers',
+                'modifiers': modifiers + [{'id': '8', 'type': 'mirror'}]})
 
     def test_saved_modeling_normalization_is_stable_and_stale_preview_is_rejected(self):
         spec = scene.default_scene()

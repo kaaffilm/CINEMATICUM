@@ -31,6 +31,17 @@ BUNDLE_ID = "com.cinematicum.studio"
 APP_NAME = "CINEMATICUM Studio.app"
 EXECUTABLE_NAME = "CINEMATICUMStudio"
 STUDIO_SOURCE = Path(__file__).resolve().parent
+RUNTIME_FILES = (
+    "server.py", "engine.py", "adapters.py", "compositor.py", "scene.py",
+    "generation_readiness.py", "managed_generation.py", "generation-runtime-lock.json",
+    "frame_preview.py", "waveform.py", "audio_source.py", "timebase.py", "tracking.py",
+    "planar_tracking.py", "planar_worker.py", "projective_warp.py", "install_tracking.py",
+    "tracking-macos-arm64-py313.lock.json", "spatial_import.py", "interchange.py", "camera_io.py",
+    "color_pipeline.py", "scene_modeling.py", "modeling_blender.py", "imaging.py", "image_worker.py",
+    "install_imaging.py", "imaging-macos-arm64-py313.lock.json", "lens_assets.py", "media_orientation.py",
+    "recovery.py", "production.py", "project_archive.py", "editorial.py", "sequence_interchange.py",
+    "media_management.py", "roto.py", "roto_assets.py", "scene_hierarchy.py", "render_devices.py",
+)
 
 
 def bundle_info():
@@ -40,8 +51,8 @@ def bundle_info():
         "CFBundleDisplayName": "CINEMATICUM Studio",
         "CFBundleExecutable": EXECUTABLE_NAME,
         "CFBundlePackageType": "APPL",
-        "CFBundleShortVersionString": "0.9.0",
-        "CFBundleVersion": "9",
+        "CFBundleShortVersionString": "0.9.1",
+        "CFBundleVersion": "10",
         "CFBundleIconFile": "StudioIcon.icns",
         "LSApplicationCategoryType": "public.app-category.video",
         "LSMinimumSystemVersion": "12.0",
@@ -81,7 +92,7 @@ def existing_bundle_identity(path):
 
 def copy_runtime(destination, source=STUDIO_SOURCE):
     destination.mkdir(parents=True)
-    for name in ("server.py", "engine.py", "adapters.py", "compositor.py", "scene.py", "generation_readiness.py", "managed_generation.py", "generation-runtime-lock.json", "frame_preview.py", "waveform.py", "audio_source.py", "timebase.py", "tracking.py", "spatial_import.py", "interchange.py", "camera_io.py", "color_pipeline.py", "scene_modeling.py", "modeling_blender.py", "imaging.py", "image_worker.py", "lens_assets.py", "media_orientation.py", "recovery.py", "production.py", "project_archive.py", "editorial.py", "sequence_interchange.py", "media_management.py", "roto.py", "roto_assets.py", "scene_hierarchy.py", "render_devices.py"):
+    for name in RUNTIME_FILES:
         path = source / name
         if path.is_symlink() or not path.is_file():
             raise ValueError("Required runtime source is missing or is a symlink: %s" % path)
@@ -94,6 +105,18 @@ def copy_runtime(destination, source=STUDIO_SOURCE):
             raise ValueError("Refusing a symlink in bundled web assets: %s" % path)
     shutil.copytree(str(web), str(destination / "web"),
                     ignore=shutil.ignore_patterns("__pycache__", "*.pyc", ".DS_Store"))
+
+
+def runtime_manifest(directory):
+    """Record every copied runtime byte; no ambient interpreter packages."""
+    directory = Path(directory)
+    result = {}
+    for path in sorted(directory.rglob("*")):
+        if path.is_symlink():
+            raise ValueError("A bundled runtime may not contain symlinks.")
+        if path.is_file():
+            result[path.relative_to(directory).as_posix()] = hashlib.sha256(path.read_bytes()).hexdigest()
+    return result
 
 
 def bundle_manifest(path):
@@ -268,6 +291,16 @@ def build_app(output, arch=None, source=STUDIO_SOURCE):
         executable = contents / "MacOS" / EXECUTABLE_NAME
         executable.parent.mkdir(parents=True)
         copy_runtime(contents / "Resources" / "studio", source)
+        runtime_files = runtime_manifest(contents / "Resources" / "studio")
+        source_record = {
+            "format": "cinematicum-installed-source-v1",
+            "version": bundle_info()["CFBundleShortVersionString"],
+            "runtime_files": runtime_files,
+            "native_sources": {name: hashlib.sha256((source / "macos" / name).read_bytes()).hexdigest()
+                               for name in ("StudioApp.swift", "StudioIcon.swift")},
+        }
+        source_bytes = (json.dumps(source_record, sort_keys=True, indent=2) + "\n").encode()
+        (contents / "Resources" / "source-manifest.json").write_bytes(source_bytes)
         with (contents / "Info.plist").open("wb") as target:
             plistlib.dump(bundle_info(), target, fmt=plistlib.FMT_XML, sort_keys=True)
         (contents / "PkgInfo").write_bytes(b"APPL????")
@@ -299,11 +332,15 @@ def build_app(output, arch=None, source=STUDIO_SOURCE):
                         str(contents / "Resources" / "StudioIcon.icns")], check=True, capture_output=True, timeout=15)
         backup = install_staged(staged, output, original)
         legacy, warnings = consolidate_legacy_bundles(output)
+        if runtime_manifest(output / "Contents" / "Resources" / "studio") != runtime_files:
+            raise RuntimeError("The installed runtime differs from the built source manifest.")
         launch_services(output, register=True)
         return {"app": str(output), "bundle_id": BUNDLE_ID, "target": target,
                 "backup": str(backup) if backup is not None else None,
                 "legacy_archives": legacy, "archive_warnings": warnings,
                 "compiler_warnings": compiled.stderr.strip(),
+                "source_manifest_sha256": hashlib.sha256(source_bytes).hexdigest(),
+                "runtime_files_verified": len(runtime_files),
                 "signing_performed": False, "launched": False}
 
 

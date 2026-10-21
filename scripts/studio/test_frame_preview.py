@@ -114,6 +114,48 @@ class FramePreviewTests(unittest.TestCase):
 
 
 @unittest.skipUnless(shutil.which("node"), "Node is required")
+class FrameViewerSchedulingTests(unittest.TestCase):
+    def test_planar_and_high16_edit_mode_request_processed_frames_with_transport_guards(self):
+        script = r'''
+        const fs=require('fs'),vm=require('vm'),assert=require('assert');
+        const timers=new Map();let nextTimer=0;
+        class Image {decode(){return Promise.resolve();}}
+        const sandbox={window:{},Image,setTimeout:callback=>{timers.set(++nextTimer,callback);return nextTimer;},clearTimeout:id=>timers.delete(id)};
+        vm.createContext(sandbox);vm.runInContext(fs.readFileSync(process.argv[1],'utf8'),sandbox);
+        const Viewer=sandbox.window.CinematicumFrameViewer,copy=value=>JSON.parse(JSON.stringify(value));
+        (async()=>{
+          for(const trigger of ['planar','high16']) {
+            const project={id:'p',clips:[{id:'clip'}],titles:[],settings:{}};
+            if(trigger==='planar')project.clips[0].planar_motion={mode:'corner_pin'};
+            else project.settings.image_precision='high16';
+            const state={project,mode:'edit',playing:false,rendered:false,frame:7,revision:3};
+            const requests=[],image={hidden:true},status={hidden:true,classList:{remove(){},add(){}}};
+            const viewer=new Viewer({getState:()=>state,prepareSnapshot:async()=>copy(project),image,status,
+              request:async(path,options)=>{requests.push({path,options});return options?{id:'job'}:{state:'completed',result:{url:'/processed.png'}};}});
+            viewer.invalidate();assert.equal(timers.size,1,trigger+' must schedule the exact frame from ordinary edit mode');
+            const [id,callback]=timers.entries().next().value;timers.delete(id);await callback();
+            assert.equal(requests[0].path,'/api/projects/p/frame-preview');
+            assert.equal(requests[0].options.body.frame,7);
+            assert.deepEqual(requests[0].options.body.project,project);
+            assert.equal(requests[1].path,'/api/jobs/job');
+            assert.equal(image.hidden,false);assert.equal(image.src,'/processed.png');
+            assert.equal(status.textContent,'Rendered frame 7 · export graph');
+            for(const blocked of [{mode:'3d'},{mode:'generate'},{playing:true},{rendered:true}]) {
+              Object.assign(state,{mode:'edit',playing:false,rendered:false},blocked);
+              const count=requests.length;viewer.invalidate();
+              assert.equal(timers.size,0,trigger+' must preserve the mode/transport guard');
+              assert.equal(requests.length,count);assert.equal(image.hidden,true);assert.equal(status.hidden,true);
+            }
+          }
+        })().catch(error=>{process.stderr.write(error.stack);process.exitCode=1;});
+        '''
+        completed = subprocess.run([shutil.which("node"), "-e", script,
+                                    str(Path(__file__).parent / "web" / "viewer-tools.js")],
+                                   capture_output=True, text=True, timeout=10)
+        self.assertEqual(completed.returncode, 0, completed.stderr)
+
+
+@unittest.skipUnless(shutil.which("node"), "Node is required")
 class TimelineEvaluationTests(unittest.TestCase):
     def test_independent_property_keys_and_fractional_source_time(self):
         script = r'''
@@ -152,7 +194,7 @@ class TimelineEvaluationTests(unittest.TestCase):
           keyframes:[{frame:0,volume:1,interpolation:'ease_in'},{frame:23,volume:.1}]};
         Object.assign(c,{editing:e,state:{frame:10,selected:{type:'clip'},project:project2},
           selectedItem:()=>selected,selectionLocked:()=>false,checkpoint:()=>{},changed:()=>{},
-          toast:()=>{},clone:v=>JSON.parse(JSON.stringify(v)),clamp:e.clamp,assetById:()=>({kind:'image'})});
+          toast:()=>{},clone:v=>JSON.parse(JSON.stringify(v)),clamp:e.clamp,sourceFor:()=>({kind:'image'})});
         const app=fs.readFileSync(require('path').join(require('path').dirname(process.argv[1]),'app.js'),'utf8');
         for(const [begin,end] of [['function keyPosition(','\nfunction splitSelected('],['function normalizeFades(','\nfunction renderTimeline(']]) {
           vm.runInContext(app.slice(app.indexOf(begin),app.indexOf(end,app.indexOf(begin))),c);

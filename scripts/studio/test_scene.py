@@ -40,6 +40,18 @@ def script_constants(script):
     return constants
 
 
+def write_device_fixture(values):
+    """Supply the CPU receipt contract for the explicit mock process fixture.
+
+    This is not device enumeration or a claim that Blender actually ran.
+    Hardware execution remains the responsibility of the Blender acceptance.
+    """
+    if values["SPEC"]["render"]["device"] != "CPU":
+        raise AssertionError("This test process fixture only models a CPU render")
+    (Path(values["FRAMES"]) / "render-device.json").write_text(
+        json.dumps({"requested": "CPU", "actual": "CPU", "devices": []}), encoding="utf-8")
+
+
 class SceneRecipeTests(unittest.TestCase):
     def test_legacy_recipes_gain_physical_defaults_without_changing_framing(self):
         value = recipe()
@@ -333,6 +345,7 @@ class SceneRenderingTests(unittest.TestCase):
         if argv[0] == "/test/blender":
             values = script_constants(Path(argv[-1]).read_text())
             Path(values["BLEND_PATH"]).write_bytes(b"TEST-ONLY-BLEND-FIXTURE")
+            write_device_fixture(values)
             for frame in range(values["START"], values["END"] + 1):
                 (Path(values["FRAMES"]) / ("frame_%06d.png" % frame)).write_bytes(b"TEST-ONLY-FRAME")
             on_tick()
@@ -355,9 +368,34 @@ class SceneRenderingTests(unittest.TestCase):
         self.assertIn("--disable-autoexec", self.calls[0])
         self.assertEqual(self.calls[1][self.calls[1].index("-frames:v") + 1], "3")
         self.assertEqual(result["provenance"]["frame_end"], 4)
+        self.assertEqual(result["provenance"]["render_device"],
+                         {"requested": "CPU", "actual": "CPU", "devices": []})
+        self.assertEqual(result["provenance"]["renderer"], "Cycles CPU")
         self.assertEqual(result["provenance"]["output_sha256"], scene._sha256(Path(result["path"])))
         self.assertEqual(progress[-1], 1)
         self.assertFalse(list(self.root.glob(".scene-*")))
+
+    def test_missing_or_mismatched_device_receipt_refuses_without_publishing(self):
+        original = self.execute_fixture
+        for receipt in (None, {"requested": "CPU", "actual": "METAL", "devices": []},
+                        {"requested": "METAL", "actual": "CPU", "devices": []},
+                        {"requested": "CPU", "actual": "CPU"}):
+            def invalid_receipt(argv, *args):
+                original(argv, *args)
+                if argv[0] == "/test/blender":
+                    values = script_constants(Path(argv[-1]).read_text())
+                    target = Path(values["FRAMES"]) / "render-device.json"
+                    if receipt is None:
+                        target.unlink()
+                    else:
+                        target.write_text(json.dumps(receipt), encoding="utf-8")
+
+            self.execute_fixture = invalid_receipt
+            self.calls.clear()
+            with self.subTest(receipt=receipt), self.assertRaisesRegex(AdapterError, "render device"):
+                self.run_render()
+            self.assertEqual(len(self.calls), 1, "Invalid execution evidence must fail before encoding")
+            self.assertFalse(list(self.root.iterdir()), "Rejected work must not publish a scene or movie")
 
     def test_empty_scene_and_pre_cancel_do_not_launch_process(self):
         with mock.patch.object(scene, "_run_owned") as run:

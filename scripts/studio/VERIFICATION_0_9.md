@@ -1,5 +1,9 @@
 # CINEMATICUM Studio 0.9 verification
 
+> Historical candidate evidence. Later source and native acceptance are recorded
+> in [Verification 0.9.1](VERIFICATION_0_9_1.md). The 515-test result below applies
+> only to the source frozen for that run and does not certify later changes.
+
 Evidence recorded for the 0.9 source on 2026-10-21. The complete Python regression
 run and installation of a 0.9 candidate have finished. This remains a provisional
 verification record because the explicitly pending native gates below are open

@@ -54,7 +54,7 @@ const secondsLabel = s => `${Math.floor(s/60)}:${String(Math.floor(s)%60).padSta
 function normalizeProject(p) {p=clone(p.project||p);p.assets??=[];p.clips??=[];p.titles??=[];p.settings??={};p.tracks??=[];p.version??=1;if(p.frame_rate)p.fps=p.frame_rate.numerator/p.frame_rate.denominator;for(const seq of projectSequences(p))(seq.clips||[]).forEach(editing.ensureAnimationDomain);return p;}
 function selectedItem() {if(!state.selected)return null;return (state.selected.type==='title'?state.project.titles:state.project.clips).find(c=>c.id===state.selected.id)||null;}
 function checkpoint() {state.history.push(clone(state.project));if(state.history.length>80)state.history.shift();state.future=[];}
-function changed({timeline=true,inspector=false,bin=false}={}) {pruneMedia();state.frame=clamp(state.frame,0,Math.max(0,durationFrames()-1));if(state.rendered)switchPreview(false);state.dirty=true;state.revision++;$('#save-state').textContent='UNSAVED';$('#save-state').classList.add('dirty');$('#undo-button').disabled=!state.history.length;$('#redo-button').disabled=!state.future.length;if(timeline)renderTimeline();if(inspector)renderInspector();if(bin)renderMedia();updateTransport();drawPreview();frameViewer?.invalidate();recoveryEditor?.schedule();}
+function changed({timeline=true,inspector=false,bin=false}={}) {const planar=window.CinematicumTracking?.reconcilePlanarBindings(state.project);if(planar?.invalidated){inspector=true;toast('Measured planar motion is stale. Remeasure or explicitly remove it before export; Undo restores the edit.',true,9000);}if(planar?.restored||planar?.remapped)inspector=true;pruneMedia();state.frame=clamp(state.frame,0,Math.max(0,durationFrames()-1));if(state.rendered)switchPreview(false);state.dirty=true;state.revision++;$('#save-state').textContent='UNSAVED';$('#save-state').classList.add('dirty');$('#undo-button').disabled=!state.history.length;$('#redo-button').disabled=!state.future.length;if(timeline)renderTimeline();if(inspector)renderInspector();if(bin)renderMedia();updateTransport();drawPreview();frameViewer?.invalidate();recoveryEditor?.schedule();}
 function mutate(fn,opts) {checkpoint();fn();changed(opts);}
 function undo(redo=false) {
   const from=redo?state.future:state.history,to=redo?state.history:state.future;if(!from.length)return;
@@ -129,7 +129,9 @@ function renderMedia() {
   $('#media-bin').innerHTML=list.length?list.map(a=>`<div class="media-item ${state.selectedAsset===a.id?'selected':''}" data-asset="${esc(a.id)}" draggable="true" tabindex="0" aria-label="${esc(a.name)}; double-click to add to timeline"><div class="media-thumbnail">${['video','image'].includes(a.kind)?`<img loading="lazy" src="${thumbnailUrl(a)}" alt="">`:`<span class="file-icon">${a.kind==='scene'?'◇':'♫'}</span>`}<span class="media-badge">${a.kind==='image'?'STILL':a.kind==='scene'?'3D':secondsLabel(a.duration||0)}</span></div><div class="media-name" title="${esc(a.name)}">${esc(a.name)}</div><button class="media-add" data-add="${esc(a.id)}" title="${a.kind==='scene'?'Select for 3D rendering':'Add to timeline'}" aria-label="Add ${esc(a.name)}">＋</button></div>`).join(''):`<div class="media-empty"><strong>${all.length?'No matching files':'A place for your material.'}</strong>${all.length?'Try a different search.':'Drop video, audio, images,<br>or Blender scenes here.'}</div>`;
 }
 function defaultClip(a,start=durationFrames(),track=a.kind==='audio'?-1:0) {
-  const clip={id:uid(),asset_id:a.id,track,start:Math.round(start),in:0,duration:Math.max(1,a.kind==='image'?Math.round(state.project.fps*5):Math.floor((a.duration||5)*state.project.fps)),volume:1,speed:1,reverse:false,audio:{fade_in:0,fade_out:0,pan:0},opacity:1,x:0,y:0,scale:1,rotation:0,grade:{exposure:0,contrast:1,saturation:1,temperature:0},effects:{blur:0,sharpen:0,vignette:false,chroma_key:''},keyframes:[]};
+  // Container clocks may quantize duration below the last full picture. Use
+  // the same nearest project-frame boundary as engine validation and trims.
+  const clip={id:uid(),asset_id:a.id,track,start:Math.round(start),in:0,duration:Math.max(1,a.kind==='image'?Math.round(state.project.fps*5):Math.round((a.duration||5)*state.project.fps)),volume:1,speed:1,reverse:false,audio:{fade_in:0,fade_out:0,pan:0},opacity:1,x:0,y:0,scale:1,rotation:0,grade:{exposure:0,contrast:1,saturation:1,temperature:0},effects:{blur:0,sharpen:0,vignette:false,chroma_key:''},keyframes:[]};
   // Develop's display image has already passed through its OCIO view. Decode
   // only its sRGB transfer for the timeline's Rec.709 output; do not run the
   // scene view or tone mapping again.
@@ -163,7 +165,6 @@ function splitSelected() {
       else if(c.reverse){right.in=c.in;c.in+=right.duration*(c.speed??1);}
       else right.in=c.in+offset*(c.speed??1);
       preserveAnimation(c,original);preserveAnimation(right,original,offset);
-      if(original.planar_motion?.mode==='stabilize'){delete c.planar_motion;delete right.planar_motion;}
     }else{c.fade=Math.min(c.fade,Math.floor(c.duration/2));right.fade=Math.min(right.fade,Math.floor(right.duration/2));}
     state.project[type==='title'?'titles':'clips'].push(right);state.selected={type,id:right.id};
   },{inspector:true});
@@ -171,7 +172,7 @@ function splitSelected() {
 
 let trimEditContext=null;
 function clearSourceMeasurements(clip,original,local=0) {
-  let cleared=Boolean(clip.tracking||clip.planar_motion);delete clip.tracking;delete clip.planar_motion;
+  let cleared=Boolean(clip.tracking);delete clip.tracking;
   for(const node of clip.compositor?.nodes||[])if(node.tracking_source){
     const previous=original.compositor?.nodes.find(n=>n.id===node.id),params=window.CinematicumCompositor.paramsAt(previous||node,local+(original.animation_offset??0));
     node.params.x=params.x;node.params.y=params.y;
@@ -203,10 +204,6 @@ function applyTrimEdit(event) {
     const original=state.project.clips.find(c=>c.id===trimEditContext.clipId),local=clamp(state.frame-original.start,0,original.duration-1);
     let cleared=false;
     if(result.kind==='slip')cleared=clearSourceMeasurements(result.clips[0],original,local);
-    for(const next of result.clips){
-      const before=state.project.clips.find(c=>c.id===next.id);
-      if(next.planar_motion?.mode==='stabilize'&&before&&['in','duration','speed','reverse','animation_offset'].some(key=>(next[key]??0)!==(before[key]??0))){delete next.planar_motion;cleared=true;}
-    }
     const replacements=new Map(result.clips.map(c=>[c.id,c]));
     mutate(()=>{state.project.clips=state.project.clips.map(c=>replacements.get(c.id)||c);if(result.kind==='slide'&&state.frame>=original.start&&state.frame<original.start+original.duration)state.frame+=result.delta;},{inspector:true});
     $('#trim-edit-dialog').close();trimEditContext=null;
@@ -364,7 +361,7 @@ function renderInspector() {
   if(c.caption_id){el.innerHTML=`<div class="inspector-name">Caption</div><p class="note">${esc(c.text)}</p><p class="note">${fmt(c.start)} → ${fmt(c.start+c.duration)}</p><button class="full" data-action="captions">Edit cue and caption appearance</button>`;return;}
   const timing=`<div class="inspector-section"><h3>TIMING · FRAMES</h3><div class="field-row">${field('Timeline start','start',c.start)}${state.selected.type==='clip'&&a?.kind!=='image'?field('Source in','in',c.in,{step:.01}):''}</div><div class="field-row">${field('Duration','duration',c.duration,{min:1})}<label>Timeline end<input readonly value="${c.start+c.duration}" title="Exclusive end frame"></label></div><p class="note">${fmt(c.start)} → ${fmt(c.start+c.duration)} · ${rateLabel()}</p></div>`;
   if(state.selected.type==='title'){el.innerHTML=`<div class="inspector-name">Title</div><div class="inspector-section"><label>Text<textarea data-field="text" maxlength="2000">${esc(c.text)}</textarea></label><div class="field-row">${field('Size (px)','size',c.size,{min:6,max:500})}${field('Fade (frames)','fade',c.fade,{min:0,max:Math.floor(c.duration/2)})}</div><div class="color-control"><label>Text color</label><input type="color" data-field="color" value="${esc(c.color)}"></div>${range('Horizontal position','x',c.x,-1,1)}${range('Vertical position','y',c.y,-1,1)}</div>${timing}<div class="inspector-actions"><button data-action="duplicate">Duplicate</button><button data-action="delete">Delete</button></div>`;return;}
-  const top=`<div class="inspector-name">${esc(a?.name||'Missing media')}</div><div class="inspector-meta">${a?.width?`${a.width} × ${a.height} · `:''}${a?.kind||'media'} · ${(c.duration/state.project.fps).toFixed(2)}s</div>${a?.kind==='video'&&c.track>=0?'<button class="full tracking-open" data-action="track">Track motion'+(c.tracking||c.planar_motion?.mode==='stabilize'?' · stabilized':'')+'</button>':''}${c.planar_motion?'<button class="full" data-action="clear-planar">Remove planar '+(c.planar_motion.mode==='corner_pin'?'corner pin':'stabilization')+'</button>':''}`;
+  const top=`<div class="inspector-name">${esc(a?.name||'Missing media')}</div><div class="inspector-meta">${a?.width?`${a.width} × ${a.height} · `:''}${a?.kind||'media'} · ${(c.duration/state.project.fps).toFixed(2)}s</div>${a?.kind==='video'&&c.track>=0?'<button class="full tracking-open" data-action="track">Track motion'+(c.tracking||c.planar_motion?.mode==='stabilize'?' · stabilized':'')+'</button>':''}${c.planar_motion?.invalidated?'<p class="engine-note" data-planar-stale role="alert">Stale planar motion: '+esc(c.planar_motion.invalidated)+' Remeasure or remove this motion before export.</p>':''}${c.planar_motion?'<button class="full" data-action="clear-planar">Remove planar '+(c.planar_motion.mode==='corner_pin'?'corner pin':'stabilization')+'</button>':''}`;
   if(state.mode==='color'){if(c.track<0||a?.kind==='audio'){el.innerHTML=`${top}<p class="note">Select a picture clip to change its color.</p>`;return;}const g=c.grade||{};el.innerHTML=`${top}<div class="inspector-section"><h3>COLOR PIPELINE</h3><button class="full" data-action="color-pipeline">Input transform, white balance & LUT</button><p class="note">${c.color_pipeline?.enabled?esc(c.color_pipeline.input_transfer+' / '+c.color_pipeline.input_primaries)+(c.color_pipeline.lut?' · LUT applied':''):'Rec.709 SDR · no input transform'}</p></div><div class="inspector-section"><h3>PRIMARY CORRECTION</h3>${range('Exposure · stops','grade.exposure',g.exposure??0,-3,3)}${range('Contrast','grade.contrast',g.contrast??1,0,3)}${range('Saturation','grade.saturation',g.saturation??1,0,3)}${range('Temperature','grade.temperature',g.temperature??0,-1,1)}</div><div class="inspector-actions"><button data-action="reset-color">Reset primary correction</button><button data-action="preview">Render preview</button></div><p class="note">The viewer renders the current frame through the export graph. The scopes measure that rendered image.</p>`;return;}
   if(state.mode==='composite'){const e=c.effects||{},pose=transformAt(c,state.frame-c.start);el.innerHTML=`${top}<div id="node-inspector" class="node-inspector"></div><details class="clip-transform-details"><summary>Clip placement & motion</summary><div class="inspector-section"><h3>TRANSFORM & MOTION</h3>${range('Horizontal position','x',pose.x,-2,2)}${range('Vertical position','y',pose.y,-2,2)}${range('Scale','scale',pose.scale,.02,4)}${range('Rotation · degrees','rotation',pose.rotation||0,-360,360,1)}${range('Opacity','opacity',pose.opacity,0,1)}<button data-action="keyframe" class="full" style="margin-top:14px">◇ Set pose & gain keyframe</button><div class="keyframe-list">${visibleKeys(c).map(k=>`<span class="keyframe-chip"><button data-jump-key="${k.frame}">${k.frame-(c.animation_offset??0)}f</button><select aria-label="Interpolation after frame ${k.frame}" data-key-easing="${k.frame}">${Object.keys(editing.easings).map(mode=>`<option value="${mode}" ${(k.interpolation||'linear')===mode?'selected':''}>${mode.replaceAll('_',' ')}</option>`).join('')}</select> <button data-remove-key="${k.frame}" aria-label="Delete keyframe at frame ${k.frame}">×</button></span>`).join('')}</div><p class="note">Keyframes animate position, scale, rotation, opacity, and gain. With keyframes present, changing a slider writes one at the playhead.</p></div><div class="inspector-section"><h3>EFFECTS</h3>${range('Blur','effects.blur',e.blur||0,0,30,.1)}${range('Sharpen','effects.sharpen',e.sharpen||0,0,3,.05)}<label class="check-field"><input type="checkbox" data-field="effects.vignette" ${e.vignette?'checked':''}> Vignette</label><div class="color-control"><label class="check-field"><input type="checkbox" id="chroma-enabled" ${e.chroma_key?'checked':''}> Chroma key</label><input id="chroma-color" type="color" value="${esc(e.chroma_key||'#00ff00')}" aria-label="Chroma key color"></div></div><div class="inspector-actions"><button data-action="reset-transform">Reset transform</button><button data-action="preview">Render preview</button></div><p class="note">Render preview evaluates chroma key, sharpening, vignette, and the complete composite.</p></details>`;compositorEditor?.renderInspector($('#node-inspector'));return;}
   el.innerHTML=`${top}${timing}<div class="inspector-section"><h3>RETIME</h3>${field('Playback speed','speed',c.speed??1,{min:.25,max:4,step:.25})}<label class="check-field"><input type="checkbox" data-field="reverse" ${c.reverse?'checked':''}> Reverse selected source range</label><p class="note">Changing speed preserves the selected source range. Rendered playback includes reversed sound.</p></div><div class="inspector-section"><h3>AUDIO</h3>${range('Clip gain','volume',transformAt(c,state.frame-c.start).volume,0,4)}${range('Stereo balance','audio.pan',c.audio?.pan||0,-1,1,.01)}<div class="field-row">${field('Fade in · frames','audio.fade_in',c.audio?.fade_in||0,{min:0,max:Math.max(c.duration,c.audio?.fade_duration||0)})}${field('Fade out · frames','audio.fade_out',c.audio?.fade_out||0,{min:0,max:Math.max(c.duration,c.audio?.fade_duration||0)})}</div><p class="note">${a?.has_audio||a?.kind==='audio'?'Gain 1.00 is original level. Gain 0.00 mutes this clip.':'This source has no audio stream.'}</p></div><div class="inspector-section"><h3>LAYER</h3><label>Track<select data-field="track">${[...new Set(editing.tracks(state.project).filter(t=>a?.kind==='audio'?t.id<0:t.id>=0).map(t=>t.id).concat(c.track))].map(t=>`<option value="${t}" ${c.track===t?'selected':''}>${t<0?'A'+Math.abs(t):'V'+(t+1)}${t===0?' · base picture':''}</option>`).join('')}</select></label></div><div class="inspector-actions"><button data-action="duplicate">Duplicate</button><button data-action="delete">Delete</button></div>`;
@@ -441,13 +438,13 @@ function writeField(path,value,{checkpointFirst=true}={}) {
       if(c.audio){c.audio.fade_duration=Math.max(1,Math.round((previous.audio?.fade_duration??previous.duration)*ratio));c.audio.fade_offset=Math.round((previous.audio?.fade_offset??0)*ratio);c.audio.fade_in=Math.round((previous.audio?.fade_in||0)*ratio);c.audio.fade_out=Math.round((previous.audio?.fade_out||0)*ratio);}
     }else if(['in','duration'].includes(path))preserveAnimation(c,previous);
     const a=sourceFor(c);
-    if(path==='duration'&&a){const trimmed=editing.trim(previous,'right',previous.start+c.duration,['video','audio','sequence'].includes(a.kind)?a.duration*state.project.fps:Infinity,a.kind==='image');c.in=trimmed.in;c.duration=trimmed.duration;}
+    if(path==='duration'&&a){const trimmed=editing.trim(previous,'right',previous.start+c.duration,['video','audio','sequence'].includes(a.kind)?Math.round(a.duration*state.project.fps):Infinity,a.kind==='image');c.in=trimmed.in;c.duration=trimmed.duration;}
     if((['in','reverse'].includes(path)||c.planar_motion&&['speed','duration'].includes(path))&&value!==previous[path]){
       const cleared=clearSourceMeasurements(c,previous,local);
       if(cleared)toast('Source timing changed. Measured motion was cleared; track this range again. Undo restores it.');
     }
     if(a?.kind==='image')c.in=0;
-    if(a&&['video','audio','sequence'].includes(a.kind)){const max=a.duration*state.project.fps,speed=c.speed??1;c.in=Math.min(c.in,Math.max(0,max-speed));c.duration=Math.min(c.duration,Math.max(1,Math.floor((max-c.in)/speed+1e-8)));}
+    if(a&&['video','audio','sequence'].includes(a.kind)){const max=Math.round(a.duration*state.project.fps),speed=c.speed??1;c.in=Math.min(c.in,Math.max(0,max-speed));c.duration=Math.min(c.duration,Math.max(1,Math.floor((max-c.in)/speed+1e-8)));}
     if(animated){
       const frame=keyPosition(c,local),existing=c.keyframes.find(k=>k.frame===frame),interpolation=existing?.interpolation||'linear';
       c[path]=previous[path];c.keyframes=c.keyframes.filter(k=>k.frame!==frame);c.keyframes.push({...existing,frame,interpolation,[path]:value});c.keyframes.sort((a,b)=>a.frame-b.frame);
@@ -696,7 +693,7 @@ function timelineMove(e) {
   if(!d.moved&&Math.abs(e.clientX-d.startX)<3)return;
   d.moved=true;const c=selectedItem();if(!c)return;
   const o=d.original,delta=Math.round((e.clientX-d.startX)/state.zoom*state.project.fps),a=d.type==='clip'?sourceFor(c):null;
-  const max=a&&['video','audio','sequence'].includes(a.kind)?a.duration*state.project.fps:Infinity;
+  const max=a&&['video','audio','sequence'].includes(a.kind)?Math.round(a.duration*state.project.fps):Infinity;
   if(d.edge==='left'||d.edge==='right'){
     const original=d.edge==='left'?o.start:o.start+o.duration;
     const requested=e.altKey?original+delta:snapFrame(original+delta,c.id);
@@ -704,7 +701,6 @@ function timelineMove(e) {
     c.start=result.start;c.duration=result.duration;if(d.type==='clip')c.in=result.in;
     if(d.type==='clip'){
       preserveAnimation(c,o,result.offset);
-      if(o.planar_motion?.mode==='stabilize'&&['in','duration','animation_offset'].some(key=>(c[key]??0)!==(o[key]??0)))delete c.planar_motion;
     }
   }else{
     c.start=e.altKey?Math.max(0,o.start+delta):snapFrame(o.start+delta,c.id);

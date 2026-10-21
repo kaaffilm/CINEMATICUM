@@ -1,0 +1,105 @@
+{
+  "format": "cinematicum-native-observation-summary-v1",
+  "scope": "Normalized from actual returned MIDIA-AI native reports; full evidence remains in the preserved Mac worktree. These native snapshots precede the final nearest-frame correction, whose affected native rerun remains pending.",
+  "workspace": "/Users/midiakiasat/.midia-ai/gateway-live/workspaces/auto-7978fb133a30bc1735fce292ea179e23",
+  "source_base_commit": "a6454d3514b3afa9ba29f594ab6bb3b79065d1a2",
+  "audio": {
+    "scope": "Actual WKWebView source PCM captures, independent decoded-source oracles",
+    "report": ".completion-evidence/native-03/audio/ENGINE_TEST_audio_acceptance_report.json",
+    "report_sha256": "1db93ed69976bd1b0a4872e5d0723d680cca9f84f0b4b1edab0c6a16f93b0f08",
+    "routing_checks_passed": 11,
+    "routing_checks_total": 11,
+    "sequence_cases": {
+      "overlap": {
+        "passed": 12,
+        "total": 12,
+        "repetitions": 3
+      },
+      "nested": {
+        "passed": 12,
+        "total": 12,
+        "repetitions": 3
+      },
+      "retimed": {
+        "passed": 12,
+        "total": 12,
+        "repetitions": 3
+      }
+    },
+    "zero_underruns": true,
+    "clock_drift_bound_ms": 80
+  },
+  "high16": {
+    "report": ".completion-evidence/native-03/high16/ENGINE_TEST_high16_native_report.json",
+    "report_sha256": "8a6557105a3ebcdf18a68493632f3b744fa5819f241fca6127b6f1d67cf6af1b",
+    "passed": 21,
+    "total": 21,
+    "download_bytes": 63252,
+    "download_sha256": "0635c6f95ee4051e30c839e58eb2d64b2cecb83a9a8c9eeb177ed2c5d9cf7ef4",
+    "scope": "Native export controls and actual WKDownload; clamped 16-bit SDR, not HDR or NSSavePanel interaction"
+  },
+  "planar": {
+    "report": ".completion-evidence/planar-native-08/result.json",
+    "passed": 10,
+    "total": 10,
+    "elapsed_seconds": 9.463,
+    "actual_measurements": 12,
+    "native_stages": 7,
+    "movie_bytes": 268926,
+    "movie_sha256": "1c5bd058c3ca54a033ce1afd6f38aa26086b85c3b0ce9215d6dbf84467beb84c",
+    "pin_centers": [
+      [
+        80.5,
+        64.0
+      ],
+      [
+        80.5,
+        64.0
+      ]
+    ],
+    "measurement_sha256": "9f06e8171f55641f40b6ce4a6e31e52f8c6ea6237eb712fbad1573695db40165"
+  },
+  "generation": {
+    "inference_report": ".completion-evidence/generation-normal-02/report.json",
+    "reverification_report": ".completion-evidence/generation-reverified-03/report.json",
+    "width": 480,
+    "height": 272,
+    "frames_per_take": 17,
+    "steps": 20,
+    "fps": 16,
+    "cfg": 6,
+    "serial_actual_jobs_completed": 2,
+    "inference_workflow_elapsed_seconds": 1094.71,
+    "takes": [
+      {
+        "job_id": "9becc7019e674af7b41b1c496749b215",
+        "seed": 42,
+        "media_passed": 14,
+        "media_total": 14,
+        "native_passed": 13,
+        "native_total": 14,
+        "source_sha256": "57fcc0bf999b53ce0661e467f94688875969ae9d16e60ff7d27e547657242e51",
+        "native_failure": "full_take_played_at_native_rate_without_extra_media; defaultClip floor rounding dropped the last timeline frame"
+      },
+      {
+        "job_id": "4207bdc08fba45c0aa48d731b522d1de",
+        "seed": 43,
+        "media_passed": 14,
+        "media_total": 14,
+        "native_passed": 14,
+        "native_total": 14,
+        "source_sha256": "05a8f65656cc522cb3a637628d2022252216872eb1bcf8025d5905349b562613"
+      }
+    ],
+    "normal_gate_complete": false,
+    "corrected_native_rerun": "Pending renewed MIDIA-AI execution authorization",
+    "longer_33_frame_case": "Harness prepared; not executed"
+  },
+  "installation": {
+    "current_candidate_installed": false,
+    "reason": "MIDIA-AI runtime 0.7.2 to 0.8.0 upgrade invalidated the command grant before final sync/install",
+    "error": "COMMANDER_AUTHORITY_EXPIRED_OR_CHANGED",
+    "predecessor_session": "s_11ff15a431b5298cc1d54555db5fdc5661a4e267b925089a",
+    "successor_session": "s_f87be8477ab753fbb210d6fa6f75a2746b8731a7f92643b5"
+  }
+}

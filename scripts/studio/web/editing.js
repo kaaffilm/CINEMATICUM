@@ -103,7 +103,7 @@
     const source=c=>{
       const a=project.assets.find(a=>a.id===c.asset_id);
       if(!a||!['video','audio','image'].includes(a.kind))throw Error('The clip has no usable source media.');
-      return {still:a.kind==='image',max:a.kind==='image'?Infinity:a.duration*project.fps};
+      return {still:a.kind==='image',max:a.kind==='image'?Infinity:Math.round(a.duration*project.fps)};
     };
     const limits=(c,edge)=>{
       const a=source(c),far=21600*project.fps;

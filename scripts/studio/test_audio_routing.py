@@ -159,14 +159,16 @@ class Element{
  set src(value){this._src=value;this.readyState=0;this.error=null;this.loads.push(value);}
  get src(){return this._src;}
  get audioTracks(){throw Error('Native track selection must never be accessed.');}
+ loadSource(context,output,manifest,sourceTime){this.src=manifest.url;this.context=context;this.output=output;this.sourceTime=sourceTime;this.emit('loadedmetadata');}
+ clear(){this.pause();this._src='';this.readyState=0;}
  pause(){this.paused=true;}load(){}ready(){this.readyState=4;this.emit('loadeddata');}
 }
 const node=kind=>({kind,gain:{value:1},connections:[],connect(...args){this.connections.push(args);},disconnect(){this.connections=[];}});
-const context={destination:node('destination'),createMediaElementSource(){sources++;return node('source');},createGain(){return node('gain');},createChannelSplitter(count){return {...node('split'),count};},createChannelMerger(count){return {...node('merge'),count};}};
+const context={destination:node('destination'),createMediaElementSource(){throw Error('Owned PCM must not create a native media-element source.');},createGain(){sources++;return node('gain');},createChannelSplitter(count){return {...node('split'),count};},createChannelMerger(count){return {...node('merge'),count};}};
 const sandbox={window:{},setTimeout(fn,delay){const id=++timerId;timers.set(id,{fn,delay});return id;},clearTimeout(id){timers.delete(id);}};vm.createContext(sandbox);vm.runInContext(fs.readFileSync(path,'utf8'),sandbox);
 const api=sandbox.window.CinematicumAudioRouting,media=()=>({kind:'audio',el:new Element()}),asset={id:'asset',sha256:'a'.repeat(64),duration:2,has_audio:true,audio_stream_index:1,audio_channels:2,audio_streams:[{index:1,channels:2},{index:2,channels:6}]};
 let project={id:'project'},posts=[],gets=[],requests=[],polls=0;
-const manifest=(body,changes={})=>{const key=String(body.channels?.[0]??0).repeat(64);return {state:'ready',asset_id:body.asset_id,source_sha256:asset.sha256,stream_index:body.stream_index,channels:body.channels,cache_key:key,sha256:'b'.repeat(64),url:'/api/projects/project/audio-source/'+key,codec:'pcm_f32le',rate:48000,output_channels:2,frames:96000,source_frames:72000,padded_frames:24000,duration:2,byte_size:768044,...changes};};
+const manifest=(body,changes={})=>{const key=String(body.channels?.[0]??0).repeat(64);return {state:'ready',version:2,playback_rate:body.playback_rate,source_time_scale:body.playback_rate,data_offset:58,frame_bytes:8,asset_id:body.asset_id,source_sha256:asset.sha256,stream_index:body.stream_index,channels:body.channels,cache_key:key,sha256:'b'.repeat(64),url:'/api/projects/project/audio-source/'+key,codec:'pcm_f32le',rate:48000,output_channels:2,frames:96000,source_frames:72000,padded_frames:24000,duration:2,byte_size:768058,...changes};};
 const flush=async()=>{for(let i=0;i<8;i++)await Promise.resolve();};
 const advance=async()=>{for(const [id,timer]of [...timers])if(timer.delay===150){timers.delete(id);timer.fn();}await flush();};
 api.configure({getProject:()=>project,request:async(path,options)=>{
@@ -180,7 +182,7 @@ const ensure=(m,c=clip,options)=>api.ensure(m,context,c,asset,message=>warnings.
  assert.strictEqual(a.el.src,'');assert.strictEqual(a.el.muted,true);assert.strictEqual(sources,0);
  requests.shift().resolve({job:{id:'job',state:'queued'}});await flush();assert.strictEqual(gets.length,0);
  await advance();assert.strictEqual(gets.length,1);assert.strictEqual(a.el.src,'');await advance();
- assert.strictEqual(a.el.src,manifest(posts[0]).url);assert.strictEqual(b.el.src,a.el.src);assert.strictEqual(sources,2);assert.strictEqual(a.audioGate.gain.value,0);assert.strictEqual(a.el.muted,false);
+ assert.strictEqual(a.el.src,manifest(posts[0]).url);assert.strictEqual(b.el.src,a.el.src);assert.strictEqual(sources,10);assert.strictEqual(a.audioGate.gain.value,0);assert.strictEqual(a.el.muted,false);
  a.el.ready();b.el.ready();let result=ensure(a);assert.strictEqual(result.state,'ready');assert.strictEqual(result.binding,'decoded-source-pcm');assert.strictEqual(result.source_sha256,asset.sha256);
  assert.strictEqual(a.split.count,2,'The engine has already mapped the source pair into stereo');assert.strictEqual(a.split.connections[0][1],0);assert.strictEqual(a.split.connections[1][1],1);assert.strictEqual(a.stereo,null);assert.strictEqual(a.audioGate.gain.value,1);
  const originalSource=a.source,oldURL=a.el.src;
@@ -190,7 +192,7 @@ const ensure=(m,c=clip,options)=>api.ensure(m,context,c,asset,message=>warnings.
  const third={audio:{stream_index:2,channels:[2,1]}};ensure(a,third);assert.strictEqual(posts.length,3);
  const stale=requests.shift(),current=requests.shift();stale.resolve(manifest(stale.body));await flush();assert.strictEqual(a.el.src,oldURL);
  current.resolve(manifest(current.body));await flush();assert.strictEqual(a.el.src,manifest(current.body).url);a.el.ready();
- assert.strictEqual(ensure(a,third).state,'ready');assert.strictEqual(a.source,originalSource);assert.strictEqual(sources,2,'One MediaElementSource per decoder survives a different source pair');
+ assert.strictEqual(ensure(a,third).state,'ready');assert.strictEqual(a.source,originalSource);assert.strictEqual(sources,10,'The existing five-node gain graph survives a different source pair');
  // Cancel only the client's wait. The shared server job must not be cancelled.
  const fourth={audio:{stream_index:2,channels:[3,1]}};ensure(a,fourth);const pending=requests.shift();pending.resolve({job:{id:'cancel-wait',state:'queued'}});await flush();api.suspend();await flush();
  assert(![...timers.values()].some(t=>t.delay===150));assert.strictEqual(posts.length,4);assert(!gets.some(path=>path.includes('cancel')));
@@ -213,11 +215,11 @@ const fs=require('fs'),vm=require('vm'),assert=require('assert'),path=JSON.parse
 const node=()=>({gain:{value:1},connect(){},disconnect(){}}),context={destination:node(),createMediaElementSource:node,createGain:node,createChannelSplitter:node,createChannelMerger:node};
 const sandbox={window:{},setTimeout,clearTimeout};vm.createContext(sandbox);vm.runInContext(fs.readFileSync(path,'utf8'),sandbox);
 const api=sandbox.window.CinematicumAudioRouting,asset={id:'asset',sha256:'a'.repeat(64),duration:1,has_audio:true,audio_stream_index:1,audio_channels:2,audio_streams:[{index:1,channels:2}]};
-const ready={state:'ready',asset_id:'asset',source_sha256:asset.sha256,stream_index:1,channels:[1,0],cache_key:'c'.repeat(64),sha256:'b'.repeat(64),url:'/api/projects/p/audio-source/'+'c'.repeat(64),codec:'pcm_f32le',rate:48000,output_channels:2,frames:48000,source_frames:48000,padded_frames:0,duration:1,byte_size:384044};
-const make=()=>({kind:'audio',el:{readyState:0,muted:false,volume:1,pause(){},load(){},addEventListener(){},removeEventListener(){}}});
+const ready={state:'ready',version:2,playback_rate:1,source_time_scale:1,data_offset:58,frame_bytes:8,asset_id:'asset',source_sha256:asset.sha256,stream_index:1,channels:[1,0],cache_key:'c'.repeat(64),sha256:'b'.repeat(64),url:'/api/projects/p/audio-source/'+'c'.repeat(64),codec:'pcm_f32le',rate:48000,output_channels:2,frames:48000,source_frames:48000,padded_frames:0,duration:1,byte_size:384058};
+const make=()=>({kind:'audio',el:{readyState:0,muted:false,volume:1,pause(){},loadSource(context,output,manifest){this.src=manifest.url;},clear(){this.src='';},addEventListener(){},removeEventListener(){}}});
 const flush=async()=>{for(let i=0;i<10;i++)await Promise.resolve();};
 (async()=>{
- for(const changes of [{source_sha256:'d'.repeat(64)},{stream_index:0},{channels:[0,1]},{rate:44100},{output_channels:1},{codec:'aac'},{url:'https://foreign.example/pcm.wav'},{frames:1},{asset_id:'other'}]){
+ for(const changes of [{source_sha256:'d'.repeat(64)},{stream_index:0},{channels:[0,1]},{rate:44100},{output_channels:1},{codec:'aac'},{url:'https://foreign.example/pcm.wav'},{frames:1},{asset_id:'other'},{version:1},{data_offset:44},{frame_bytes:4},{playback_rate:1.5},{source_time_scale:1.5},{byte_size:384044}]){
   let warnings=0;const m=make(),ownAsset={...asset,id:'asset'+JSON.stringify(changes)};
   api.configure({getProject:()=>({id:'p'}),request:async()=>({...ready,asset_id:ownAsset.id,...changes})});
   api.ensure(m,context,{audio:{channels:[1,0]}},ownAsset,()=>warnings++);await flush();

@@ -115,8 +115,16 @@
       for(const node of [...this.nodes])if(node._end<=frame){try{node.disconnect();}catch(error){}this.nodes.delete(node);}
       while(this._scheduled<this.manifest.frames){
         const index=Math.floor(this._scheduled/CHUNK),entry=this.chunks.get(index);if(!entry?.buffer)break;
-        const start=this._scheduled,end=entry.start+entry.count,source=this.context.createBufferSource();source.buffer=entry.buffer;source.connect(this.output);
-        const when=this._when+(start-this._anchor)/RATE,offset=(start-entry.start)/RATE;
+        const start=this._scheduled,end=entry.start+entry.count,when=this._when+(start-this._anchor)/RATE,offset=(start-entry.start)/RATE;
+        // A range can arrive after its playback boundary but before tick()'s
+        // next timer. WebAudio starts a past timestamp immediately; allowing
+        // that would shift the decoded samples while our source clock keeps
+        // advancing. Freeze at the last scheduled sample and explicitly
+        // rebuffer, exactly as for a timer-detected underrun.
+        if(when<this.context.currentTime-1/RATE){
+          this.pcmState.underruns++;this.pause();this.readyState=1;this.emit('waiting');this.update();return;
+        }
+        const source=this.context.createBufferSource();source.buffer=entry.buffer;source.connect(this.output);
         source._end=end;this.nodes.add(source);source.onended=()=>{source.disconnect();this.nodes.delete(source);};
         source.start(when,offset,(end-start)/RATE);this._scheduled=end;this.pcmState.scheduled_chunks++;
       }

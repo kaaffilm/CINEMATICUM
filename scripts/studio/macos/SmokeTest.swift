@@ -6,25 +6,111 @@ import Foundation
 import WebKit
 import Darwin
 
-@available(macOS 11.0, *)
-final class SmokeDelegate: NSObject, NSApplicationDelegate, WKNavigationDelegate, WKScriptMessageHandler {
+@available(macOS 11.3, *)
+final class SmokeDelegate: NSObject, NSApplicationDelegate, WKNavigationDelegate, WKScriptMessageHandler, WKDownloadDelegate {
     let url: URL
     let output: URL
     let timeout: Double
     let scriptOverride: String?
+    let downloadDirectory: URL?
     var window: NSWindow!
     var webView: WKWebView!
     var pageErrors = [String]()
     var started = false
     var finishing = false
     var finished = false
+    var activeDownloads: [ObjectIdentifier: WKDownload] = [:]
+    var downloadTargets: [ObjectIdentifier: URL] = [:]
+    var downloadEvidence = [[String: Any]]()
+    var downloadErrors = [String]()
 
-    init(url: URL, output: URL, timeout: Double, scriptOverride: String? = nil) {
+    init(url: URL, output: URL, timeout: Double, scriptOverride: String? = nil, downloadDirectory: URL? = nil) {
         self.url = url
         self.output = output
         self.timeout = timeout
         self.scriptOverride = scriptOverride
+        self.downloadDirectory = downloadDirectory?.standardizedFileURL.resolvingSymlinksInPath()
         super.init()
+    }
+
+    private func isLocal(_ candidate: URL?) -> Bool {
+        guard let candidate = candidate else { return false }
+        return candidate.scheme == url.scheme && candidate.host == url.host && candidate.port == url.port
+            && candidate.user == nil && candidate.password == nil
+    }
+
+    func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction,
+                 decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
+        guard downloadDirectory != nil else { decisionHandler(.allow); return }
+        guard isLocal(navigationAction.request.url) else { decisionHandler(.cancel); return }
+        decisionHandler(downloadDirectory != nil && navigationAction.shouldPerformDownload ? .download : .allow)
+    }
+
+    func webView(_ webView: WKWebView, decidePolicyFor navigationResponse: WKNavigationResponse,
+                 decisionHandler: @escaping (WKNavigationResponsePolicy) -> Void) {
+        guard downloadDirectory != nil else { decisionHandler(.allow); return }
+        guard isLocal(navigationResponse.response.url) else { decisionHandler(.cancel); return }
+        let response = navigationResponse.response as? HTTPURLResponse
+        let attachment = response?.value(forHTTPHeaderField: "Content-Disposition")?.lowercased().hasPrefix("attachment") == true
+        decisionHandler(downloadDirectory != nil && (attachment || !navigationResponse.canShowMIMEType) ? .download : .allow)
+    }
+
+    private func register(_ download: WKDownload) {
+        activeDownloads[ObjectIdentifier(download)] = download
+        download.delegate = self
+    }
+
+    func webView(_ webView: WKWebView, navigationAction: WKNavigationAction, didBecome download: WKDownload) { register(download) }
+    func webView(_ webView: WKWebView, navigationResponse: WKNavigationResponse, didBecome download: WKDownload) { register(download) }
+
+    func download(_ download: WKDownload, decideDestinationUsing response: URLResponse,
+                  suggestedFilename: String, completionHandler: @escaping (URL?) -> Void) {
+        guard let directory = downloadDirectory, isLocal(response.url) else { completionHandler(nil); return }
+        do {
+            try FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)
+            // Test downloads are restricted to this explicit evidence directory.
+            // A unique name cannot overwrite a user's or a prior test's file.
+            let name = URL(fileURLWithPath: suggestedFilename).lastPathComponent
+            let target = directory.appendingPathComponent("ENGINE_TEST_" + UUID().uuidString + "_" + name)
+            guard target.deletingLastPathComponent().standardizedFileURL == directory,
+                  !FileManager.default.fileExists(atPath: target.path) else {
+                throw NSError(domain: "CinematicumSmoke", code: 2,
+                              userInfo: [NSLocalizedDescriptionKey: "Unsafe or existing test download destination."])
+            }
+            let key = ObjectIdentifier(download)
+            downloadTargets[key] = target
+            downloadEvidence.append(["url": response.url?.absoluteString ?? "", "path": target.path,
+                                     "suggested_filename": name, "state": "started"])
+            completionHandler(target)
+        } catch {
+            downloadErrors.append(String(describing: error))
+            completionHandler(nil)
+        }
+    }
+
+    func download(_ download: WKDownload, willPerformHTTPRedirection response: HTTPURLResponse,
+                  newRequest request: URLRequest, decisionHandler: @escaping (WKDownload.RedirectPolicy) -> Void) {
+        decisionHandler(isLocal(request.url) ? .allow : .cancel)
+    }
+
+    func downloadDidFinish(_ download: WKDownload) {
+        let key = ObjectIdentifier(download)
+        activeDownloads.removeValue(forKey: key)
+        guard let target = downloadTargets.removeValue(forKey: key) else { return }
+        do {
+            let size = try target.resourceValues(forKeys: [.fileSizeKey]).fileSize ?? 0
+            if let index = downloadEvidence.firstIndex(where: { ($0["path"] as? String) == target.path }) {
+                downloadEvidence[index]["state"] = "completed"
+                downloadEvidence[index]["bytes"] = size
+            }
+        } catch { downloadErrors.append(String(describing: error)) }
+    }
+
+    func download(_ download: WKDownload, didFailWithError error: Error, resumeData: Data?) {
+        let key = ObjectIdentifier(download)
+        activeDownloads.removeValue(forKey: key)
+        if let target = downloadTargets.removeValue(forKey: key) { try? FileManager.default.removeItem(at: target) }
+        downloadErrors.append(String(describing: error))
     }
 
     func applicationDidFinishLaunching(_ notification: Notification) {
@@ -192,11 +278,29 @@ final class SmokeDelegate: NSObject, NSApplicationDelegate, WKNavigationDelegate
         webView.callAsyncJavaScript(script, arguments: [:], in: nil, in: .page) { [weak self] result in
             switch result {
             case .success(let value):
-                self?.captureAndFinish(value as? [String: Any] ?? ["passed": false, "error": "JavaScript returned no test result."])
+                self?.finishAfterDownloads(value as? [String: Any] ?? ["passed": false, "error": "JavaScript returned no test result."])
             case .failure(let error):
                 self?.captureAndFinish(["passed": false, "error": "Browser execution failed: \(error)"])
             }
         }
+    }
+
+    func finishAfterDownloads(_ report: [String: Any], attempt: Int = 0) {
+        guard !finishing else { return }
+        let expectsDownload = report["expect_download"] as? Bool == true
+        if expectsDownload && downloadErrors.isEmpty && (activeDownloads.count > 0 || downloadEvidence.isEmpty) && attempt < 80 {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.05) { [weak self] in
+                self?.finishAfterDownloads(report, attempt: attempt + 1)
+            }
+            return
+        }
+        var result = report
+        if expectsDownload && (downloadEvidence.isEmpty || !activeDownloads.isEmpty || !downloadErrors.isEmpty
+            || downloadEvidence.contains(where: { ($0["state"] as? String) != "completed" })) {
+            result["passed"] = false
+            result["download_error"] = downloadErrors.isEmpty ? "Native download did not complete." : downloadErrors.joined(separator: "; ")
+        }
+        captureAndFinish(result)
     }
 
     func captureAndFinish(_ initial: [String: Any]) {
@@ -204,6 +308,11 @@ final class SmokeDelegate: NSObject, NSApplicationDelegate, WKNavigationDelegate
         finishing = true
         var report = initial
         report["page_errors"] = pageErrors
+        if downloadDirectory != nil {
+            report["downloads"] = downloadEvidence
+            report["download_errors"] = downloadErrors
+            report["download_destination_policy"] = "explicit test evidence directory; no save panel is simulated"
+        }
         if !pageErrors.isEmpty { report["passed"] = false }
         report["screenshot"] = output.path
         let config = WKSnapshotConfiguration()
@@ -249,10 +358,10 @@ func argument(_ name: String) -> String? {
     return CommandLine.arguments[index+1]
 }
 
-if #available(macOS 11.0, *) {
+if #available(macOS 11.3, *) {
     guard let raw = argument("--url"), let url = URL(string: raw), url.scheme == "http", ["127.0.0.1", "localhost"].contains(url.host ?? ""),
           let destination = argument("--output") else {
-        fputs("Usage: cinematicum-webkit-smoke --url http://127.0.0.1:PORT --output screenshot.png [--timeout 14]\n", stderr)
+        fputs("Usage: cinematicum-webkit-smoke --url http://127.0.0.1:PORT --output screenshot.png [--timeout 14] [--download-dir explicit-test-directory]\n", stderr)
         exit(2)
     }
     var scriptOverride: String? = nil
@@ -260,7 +369,8 @@ if #available(macOS 11.0, *) {
         do { scriptOverride = try String(contentsOfFile: scriptPath, encoding: .utf8) }
         catch { fputs("Could not read the requested test script: \(error)\n", stderr); exit(2) }
     }
-    let delegate = SmokeDelegate(url: url, output: URL(fileURLWithPath: destination), timeout: Double(argument("--timeout") ?? "14") ?? 14, scriptOverride: scriptOverride)
+    let downloads = argument("--download-dir").map { URL(fileURLWithPath: $0, isDirectory: true) }
+    let delegate = SmokeDelegate(url: url, output: URL(fileURLWithPath: destination), timeout: Double(argument("--timeout") ?? "14") ?? 14, scriptOverride: scriptOverride, downloadDirectory: downloads)
     let application = NSApplication.shared
     application.setActivationPolicy(.regular)
     application.delegate = delegate
@@ -268,6 +378,6 @@ if #available(macOS 11.0, *) {
         application.run()
     }
 } else {
-    fputs("The WebKit smoke test requires macOS 11 or newer.\n", stderr)
+    fputs("The WebKit smoke test requires macOS 11.3 or newer.\n", stderr)
     exit(2)
 }
