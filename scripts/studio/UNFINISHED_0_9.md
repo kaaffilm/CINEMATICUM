@@ -7,27 +7,38 @@ Reviewed 21 October 2026. This register distinguishes missing implementations, b
 | Ledger state | Entries | Meaning |
 | --- | ---: | --- |
 | `implemented` | 1 | Implementation within the stated contract. |
-| `implemented_bounded` | 45 | Implementation with explicit data, operation or resource limits; acceptance is recorded separately. |
+| `implemented_bounded` | 46 | Implementation with explicit data, operation or resource limits; includes the accepted normal 17-frame Wan workflow. |
 | `partial` | 12 | A portion exists while major behaviors remain absent. |
 | `missing` | 13 | No implemented execution path for the named system: the 11 major systems plus general decoded-picture caching and signed distribution. |
-| `adapter_implemented_validation_pending` | 1 | Two genuine normal takes pass independent media checks; corrected native playback, longer takes and sustained operation require further acceptance. |
 | **Total** | **72** | Capability groups of different sizes, not a completion percentage. |
 
-## 1. Current acceptance and release gates
+## 1. Acceptance and release gates at this evidence freeze
 
 | Gate | Current evidence | Work still required |
 | --- | --- | --- |
-| Live audio | Native-03 passed routing (11 checks) and overlap, nested sequence and retimed playback (12 checks each), with zero underruns. Routing used selected-source and gain/pan/restart phases; each sequence scenario ran three repetitions. The new path schedules source PCM rather than relying on the former container decoder. | Bind these reports to the frozen source and verified installed runtime. Wider media/device coverage and production-scale playback remain unverified. Reverse live sound still requires rendered playback. |
-| High16 SDR movies | Native-03 passed 21/21 checks on three transformed 64 × 32 frames at 12 fps, saved precision, export controls and an actual 63,252-byte WKDownload. The FFV1 `gbrap16le`/alpha master includes 48 kHz stereo PCM. Numeric regression distinguishes 1,024 source values and checks fractional alpha/transforms. | Bind the reports to frozen/installed source. The NSSavePanel chooser, calibrated display and production scale remain unverified. HDR/scene-linear movie work remains separate. |
-| Planar tracking | Native-08 passed 10/10 checks in 9.463 seconds: real OpenCV measurement on 12/12 visible frames, native apply/undo/redo, timing invalidation/remap, save/reopen, processed paused frame and actual ProRes export. First/last pin centroids both measured (80.5, 64.0); output was 268,926 bytes. | Bind the accepted files/reports to the frozen regression and installed runtime. Wider shots, re-identification, lens/rolling-shutter estimation and sustained/concurrent throughput remain open. |
-| Normal local generation | Two actual serial Euler takes at 480 × 272, 17 frames, 20 steps, 16 fps and CFG 6 passed 14/14 independent media/provenance checks each; all 17 frames were distinct and nonblank. The second take passed 14/14 native playback checks. The first passed 13/14: old timeline insertion floored its rounded container duration and lost the last frame. | Rerun actual native playback after the nearest-frame correction, which has focused Node/real-media verification. Mac synchronization was denied after MIDIA-AI's upgrade invalidated the execution grant. The prepared 33-frame acceptance has not run; longer takes, sustained operation and production quality remain open. |
-| Whole-build regression | The current isolated Linux strict run passed 543 tests in 169.490 seconds with zero failures, errors, skips or expected failures, actual pinned optional workers and genuine Kodak RAW input. All 189 frozen operative files stayed unchanged; 48 JavaScript syntax checks also passed. | Local full regression is passed. GitHub CI remains pending; native Mac UI and replacement installation retain separate gates. The earlier 515-test result remains historical. |
-| Installed application | The installer now builds version 0.9.1, preserves prior bundles/projects and embeds a copied-runtime/native-source hash manifest. An earlier 0.9 app installation is historical evidence. | Actual replacement is blocked by the expired MIDIA-AI execution grant. After access is restored, install the accepted source, preserve the prior bundle and projects, independently compare every installed runtime file with the frozen source, and record native launch/runtime availability. |
-| Repository/release records | The capability ledger and this register describe the new source. Manifest generation/verification, current verification documentation and draft-PR alignment are release work in progress. | Finalize the source-integrity manifest without invented hashes, retain gate receipts, update draft PR #162 to the actual source/release scope, and record publication/CI status separately from installation. |
+| Live audio | Final-native-01 routing 11/11 and overlap, nested and retimed playback 12/12 each, with zero underruns. Routing captured two phases; each sequence scenario ran three repetitions. | Wider codecs/devices/long sessions remain unverified. Reverse live audio requires rendered playback. Final installed-source reconciliation has not executed. |
+| High16 SDR movies | Final-extended-01 passed 21/21 in 2.153 seconds. Download-03 additionally verified actual default-destination NSSavePanel Save, exact master bytes, decode and alpha. | Download-03's synthetic Escape did not cancel; aggregate remains failed. The corrected SDK Cancel helper is unexecuted. HDR/scene-linear movies, calibrated display and production scale remain separate work. |
+| Planar tracking | After the worker-launch fix, bundle-fixed-planar passed 10/10 in 10.282 seconds through seven native stages and actual measurement/render. Both pin centers remain (80.5, 64.0), movie 268,926 bytes. | Broader shots, re-identification, lens/rolling-shutter estimation and sustained/concurrent throughput remain open. Corrected canonical-launch outcome and final source reconciliation are uncollected/unexecuted. |
+| Normal local generation | Two real 480 × 272, 17-frame, 20-step Euler takes passed 14/14 media and 14/14 native playback each. One 33-frame case passed 11/11 inference-harness, 14/14 media and 14/14 playback checks. | Broader duration coverage, sustained operation and production quality remain unverified. Earlier termination, nearly-black output and first 13/14 playback remain historical failures. |
+| Whole-build regression | Current worker-corrected source passed 544 tests with zero failures, errors, skips or expected failures; report elapsed 169.194 seconds, wrapper 169.301. All 189 operative files stayed unchanged, actual optional workers and genuine RAW ran. | This evidence freeze records no follow-up CI result; consult the exact subsequent commit and PR #162 checks. Historical base `4530c54` passed 23 workflows, 543 Studio tests and 209 manifest checks; that result does not certify the new runtime fix. |
+| Production ordinary quit | Quit-05 passed 21/21 independent and 10/10 native checks in 67.203 seconds. Real Keep Working completed a 48-frame high16 master; later cancellation stopped a second real render and preserved the first output and saved edits. | This tests unchanged production methods and actual alerts with isolated startup; it is separate from installed-app UI and does not explain the historical generation termination. |
+| Installed application | Install-03's returned output was observed PASSED in 16.515 seconds: all five independent gates, 189 source hashes, 62 runtime files, 67 bundle files, a 70-file previous bundle archive and all 57 protected files preserved. | Full raw install-03 receipt was not collected. Canonical launch-02 started but its result is unobserved. Final source/installed reconciliation has not executed. All are blocked by current MIDIA session access errors. |
+| Repository/release records | Latest code/test freeze and raw native evidence are retained. Install-02 and failed canonical launch-01 remain historical evidence; the original 59-file app archive is preserved. | This freeze precedes follow-up publication and the PR update. Subsequent publication and CI for the worker correction, harness/evidence/docs and manifest must bind to their exact commit and draft PR #162. |
 
-An ordinary application quit now checks for active durable jobs and requires an explicit choice before cancelling them. New-job admission closes atomically, and the server records the exit reason and affected jobs. These changes improve preservation and diagnosis; they do not retrospectively establish who or what initiated the earlier generation termination. Sources: [native lifecycle](macos/StudioApp.swift), [server](server.py), [shutdown regression](test_shutdown.py).
+The canonical app's first actual launch exposed a real preservation defect:
+isolated `-I` Python workers ignored inherited bytecode settings and created
+three cached modules inside the bundle (67 files became 70). Five worker launch
+sites across imaging, planar, lens and roto modules now explicitly pass `-B`.
+The retained failing subprocess regression, corrected 8/8 focused checks,
+544-test freeze and new native planar/quit gates cover that correction.
+Install-03 installed it; corrected canonical-launch evidence remains uncollected.
 
-The current native-work blocker is an actual connector authorization change: MIDIA-AI upgraded from 0.7.2 to 0.8.0 and returned `COMMANDER_AUTHORITY_EXPIRED_OR_CHANGED` on the next synchronization attempt. A successor runtime context exists, but it does not carry a command-execution grant. The denied sync did not install the last local correction. This blocks the corrected Mac playback rerun, the planned 33-frame take and replacement installation; it does not prevent local regression, source review or repository verification. Those unexecuted native actions remain pending rather than being inferred from source or local tests.
+The first MIDIA 0.7.2-to-0.8.0 grant interruption was resolved through successful
+successor execution. A later context change, after install-03 passed, now returns
+`CROSS_CHAT_SESSION_ACCESS_DENIED` for the prior session. Fresh-session creation
+for the current conversation returns `ACTIVE_SESSION_LIMIT` (64). No alternate
+context was used and no other session was closed. This new access block prevents
+remaining Mac execution/collection; it must not be represented as resolved.
 
 ## 2. Major systems still absent
 
@@ -96,21 +107,43 @@ This remains clamped SDR. A 16-bit container does not prove that all processing 
 
 The managed engine supplies one pinned core Wan 1.3B workflow with custom nodes disabled. The earlier reduced genuine take remains a real inference proof. An earlier normal take was cancelled during ordinary app termination; a later completed UniPC take was nearly black and rejected. Two subsequent serial Euler takes passed independent media acceptance at the normal settings, with 17 distinct decoded frames each. The verifier reads actual sample timestamps/durations and MP4 media/edit-list clocks: it accepts only their measured clock quantization and still rejects missing frames, shortened samples and unrelated timing errors. No accepted source file was altered to obtain this result.
 
-One native playback passed and the other exposed final-frame loss when adding a rounded-duration source to the timeline. The local nearest-frame correction and the exact-timing verifier passed 18 focused Node/real-media checks; corrected Mac playback remains blocked, so normal-workflow acceptance is still incomplete. The native harness binds the current job ID so an earlier completed job cannot satisfy a fresh run. Its new explicit `--frames 33` option uses the real length input after checking the normal 17-frame defaults, retains 480 × 272, 20 steps, 16 fps and CFG 6, and grants a bounded 2,400 seconds per take. This longer case has not executed. Sources: [managed engine](managed_generation.py), [native inference harness](test_generation_inference_macos.py), [output verifier](macos/verify_generated_take.py), [real MP4 timing regression](test_generated_take_timing.py).
+The first native playback attempt exposed final-frame loss when adding a rounded-duration source to the timeline. The nearest-frame correction and exact-timing verifier passed 18 focused Node/real-media checks, and both final native playbacks subsequently passed 14/14 with all 17 timeline frames. The normal 17-frame workflow is accepted within those settings. The harness binds both the exact intended project and current job ID so a different fixture or earlier job cannot satisfy a fresh run. Its explicit `--frames 33` option uses the real length input after checking normal defaults, retains 480 × 272, 20 steps, 16 fps and CFG 6, and grants a bounded 2,400 seconds per take. Actual 33-frame inference and native playback passed; generation elapsed 928.394 seconds. Final-extended-01 passed high16, generation33, generation33-playback and source-after in 937.624 seconds. Retained raw reports passed 11/11 inference-harness, 14/14 media and 14/14 playback checks; native playback took 4.208 seconds. All 33 source frames decoded, were distinct/nonblank, and retained their original hash/provenance. Sources: [managed engine](managed_generation.py), [native inference harness](test_generation_inference_macos.py), [output verifier](macos/verify_generated_take.py), [real MP4 timing regression](test_generated_take_timing.py).
 
 ## 5. Frozen-source verification and release alignment
 
 The earlier **515 tests in 153.974 seconds with zero failures/skips** belong to the earlier frozen source recorded in [verification 0.9](VERIFICATION_0_9.md). Earlier 3D, editorial, roto, media, Metal, RAW, OTIO and reduced-Wan results retain their value at their actual scope. New code and new harnesses require their own executions.
 
-The current local isolated Linux run passed **543 tests in 169.490 seconds**, with zero failures, errors, skips or expected failures. Report elapsed time was 169.725 seconds. Actual pinned NumPy, OpenCV, OCIO, rawpy/LibRaw, OpenEXR and official OpenTimelineIO dependencies executed, including the genuine Kodak RAW input. The 189 operative code/test files were unchanged across the run; all 48 JavaScript syntax checks passed separately. See the [full report](verification/0.9.1/full-actual-runtime-report.json), [frozen operative inventory](verification/0.9.1/frozen-operative-source.json) and [unchanged-source check](verification/0.9.1/frozen-operative-check.json). Report SHA-256 is `d436f9f736d0c4ba5d41bf5762de9e9039efccd99afc18e5577b2311eee821a8`; inventory SHA-256 is `5db8cdeef9c316c5809e8c219815c3e7454f448fe08c7a972c80a3662f976653`.
+The current worker-corrected frozen Linux run passed **544 tests with zero
+failures, errors, skips or expected failures**. Report elapsed time was 169.194
+seconds; wrapper elapsed was 169.301 seconds. Actual pinned NumPy, OpenCV, OCIO,
+rawpy/LibRaw, OpenEXR and official OpenTimelineIO ran, including genuine Kodak
+RAW. All 189 operative files stayed unchanged; the 48 unchanged JavaScript
+files retain their successful syntax checks. The
+[current report](verification/0.9.1/bundle-fixed-full-actual-runtime-report.json),
+[operative inventory](verification/0.9.1/bundle-fixed-frozen-operative-source.json)
+and [identity check](verification/0.9.1/bundle-fixed-frozen-operative-check.json)
+retain exact evidence. Report SHA-256 is
+`50f5531cbbd015abb7dc238c91e91ecc685d0cda48014deac31f70e416264541`;
+inventory SHA-256 is
+`30b514a409c8a0d86a047780b004942f6c65defbaf3ccb7e0da72f92085f7f3d`.
+The earlier 543-test reports remain attached to their previous snapshots.
 
-This closes local full regression, not native macOS acceptance or installation. GitHub CI remains pending. Final Mac synchronization, corrected playback, longer inference and replacement installation remain blocked by the connector authority change. Release alignment must:
+Published base `4530c54` passed 23 observed workflows, including 543 Studio
+tests in 172.641 seconds and 209 manifest files. Current source differs by the
+four worker modules and updated tests/harnesses. This evidence freeze records
+no follow-up publication/CI result; consult the exact subsequent commit and
+[PR #162 checks](https://github.com/kaaffilm/CINEMATICUM/pull/162/checks).
+Native audio/high16, both normal-take playbacks, bounded
+33-frame inference/playback, corrected planar and production quit passed at
+their recorded scopes. Install-03 was observed passed; its full raw receipt,
+canonical launch-02 result, native chooser cancellation and final reconciliation
+are blocked by current session access. Release alignment must:
 
-1. Freeze the complete reviewed runtime, tests, native sources, dependency locks and documentation. Include all new files, not only files already listed in the old integrity manifest.
-2. Generate a deterministic inventory from actual bytes, rejecting missing/extra runtime files and unsafe paths. Exclude the manifest from its own digest inventory and document any verification-record exclusion to avoid self-reference. Keep source identity and evidence identity separately reviewable.
-3. Retain the passed full-suite receipt and finish the remaining native workflows against the corresponding frozen content. Record every skip/failure explicitly. A changed runtime or test after a gate requires affected verification and a new source identity.
-4. Build/install that source while preserving existing project data and an independently verified prior-bundle archive. Compare the installed runtime inventory and native-source manifest against the accepted snapshot, then record actual app launch/runtime availability.
-5. Update [verification 0.9.1](VERIFICATION_0_9_1.md), the capability/release records and [draft PR #162](https://github.com/kaaffilm/CINEMATICUM/pull/162) with the actual commit and results. Publication, CI, local installation and signing are separate states.
+1. Preserve the frozen reviewed runtime, tests and dependency identities while updating the documentation and deterministic source manifest from actual bytes.
+2. Bind follow-up publication and CI to the exact new commit; historical `4530c54` results do not certify the runtime correction.
+3. Retain every failed and passed receipt. Collect the full install-03 receipt and canonical launch-02 result when current-conversation MIDIA access is restored; do not infer an outcome from process launch.
+4. Execute the reviewed native Cancel helper and independently reconcile final published runtime/native-source mappings with the installed app. The already observed install-03 includes the production worker fix; the final reconciliation has not run.
+5. Update [verification 0.9.1](VERIFICATION_0_9_1.md), capability/release records and [draft PR #162](https://github.com/kaaffilm/CINEMATICUM/pull/162) with each actual result. Publication, CI, observed installation, canonical launch and signed distribution remain separate states.
 
 The original production checkout and the isolated development worktree have distinct state. Preserve the owner's modified files and existing projects; do not overwrite them merely to align a version. The separate issuance/compiler authority is also distinct from the Studio editor. Installing Studio does not generate missing production source takes or certify a finished film. The installer preserves external project storage and the optional runtimes, but it does not make external FFmpeg/Blender prerequisites self-contained or signed. The current signing-identity inspection found one Apple Development identity and no Developer ID Application identity; it does not establish a signed/notarized distribution. No named-provider credential was exported in the inspected MIDIA environment, which does not establish whether credentials exist in another keychain or account.
 

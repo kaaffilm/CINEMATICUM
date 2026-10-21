@@ -1,0 +1,51 @@
+{
+  "schema_version": 1,
+  "scope": "Explicit -B for five isolated Python launches importing packaged application source; no native launcher or processing behavior changes.",
+  "before_regression": "The initial imaging/planar capability regression executed actual copied-runtime subprocesses and failed because they created runtime/__pycache__. Its raw expected failure is preserved unchanged. The final regression was expanded to actual lens and, where NumPy is available, roto workers.",
+  "after_regression": "Eight focused tests passed with no skips/errors/failures. This includes the expanded copied-runtime preservation regression and real affine/projective measurement. The pinned verification runtime supplies NumPy so the actual roto worker ran.",
+  "acceptance_boundary": "Local regression evidence. It does not substitute for the subsequent frozen full suite, installation, or canonical installed native launch.",
+  "files": {
+    "before-regression.json": {
+      "sha256": "fd53787ee2b3d9db7018afc8d80a557bdfa78ff1a8679cf05d2aa3ff95fa00f0",
+      "bytes": 318
+    },
+    "before-regression.stderr": {
+      "sha256": "556ee0c45620f752f12214af7c5303236f67e7aea0bce62a06cbc3ff6afa732c",
+      "bytes": 1550
+    },
+    "after-focused.json": {
+      "sha256": "9c97ad5cfc16e372bf0ced8b4adb470b86cefc7303fb21d32f87038b1027cdca",
+      "bytes": 1116
+    },
+    "after-focused.stderr": {
+      "sha256": "5eedddb2e50786180ba1f56e8dccfe97c67832e1ff36afbc83f2b9375fa86981",
+      "bytes": 1604
+    },
+    "production.patch": {
+      "sha256": "5168aceb82aeca560434de89d19b31cb239918a618a6bf6a50d8f4dee5e1fd48",
+      "bytes": 3269
+    }
+  },
+  "production_source_files": {
+    "scripts/studio/imaging.py": {
+      "before_sha256": "e19babb529469830cc911b1afe4e89177f91c88f8802a0f3b3f624581ee535a6",
+      "after_sha256": "bfd1d3bede15c35946ade43e127173ccb2d39aad3f0c84208150b5bf61621da5"
+    },
+    "scripts/studio/planar_tracking.py": {
+      "before_sha256": "55cc9477da5e7938e32e449370b6dc0087268c15efad7468b7c7db06b8aa93c3",
+      "after_sha256": "01c0163cc7acfa68eaf02d3f273c6c14c6a2cf6aaed412064441bd6688e4a4a9"
+    },
+    "scripts/studio/lens_assets.py": {
+      "before_sha256": "db97f3bb0772d52ca6914c9b845d5aacee7271a9ec9179f9679ed972bb0f9b2b",
+      "after_sha256": "cb9d6d706bdf40ab7af32911a1c4c8ec0ad0a66d27ac640eda6a910e9b6f585d"
+    },
+    "scripts/studio/roto_assets.py": {
+      "before_sha256": "bcb5f82fa6d25ee01954f4fed9e6970ac067ab02dcbb69637404a6fc0a16deb1",
+      "after_sha256": "bfcf604b05b52987524fb4c9208bd8eb14689cf44078665319dd96a41d4360f8"
+    }
+  },
+  "final_test_source": {
+    "path": "scripts/studio/test_install_macos.py",
+    "sha256": "08105bc8cb5c9650450e49ced27a3a774dd6cdd81cdd59237807206d0efd34bf"
+  }
+}

@@ -50,7 +50,7 @@ def prepare_lens_maps(params, width, height, scratch, cancel_event=None, timeout
         raise RuntimeError("Lens preparation cancelled")
     directory = Path(tempfile.mkdtemp(prefix="lens-" + digest[:12] + "-", dir=str(scratch)))
     executable = find_imaging_python() or sys.executable
-    command = [executable, "-I", str(Path(__file__).with_name("compositor.py")), "--lens-maps", str(directory)]
+    command = [executable, "-I", "-B", str(Path(__file__).with_name("compositor.py")), "--lens-maps", str(directory)]
     environment = os.environ.copy()
     for key in list(environment):
         if key.startswith(("PYTHON", "OCIO")):

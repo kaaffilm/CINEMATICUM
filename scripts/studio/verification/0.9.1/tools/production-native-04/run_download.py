@@ -1,0 +1,231 @@
+#!/usr/bin/env python3
+"""Actual production-class NSSavePanel/WKDownload acceptance in an isolated store.
+
+Run after build.py on macOS. This neither installs an app nor changes a user's
+project directory. The production delegate class is compiled unchanged; only
+the test startup binds a separate actual Store/Server and observes native UI.
+"""
+from __future__ import annotations
+import argparse
+import copy
+import hashlib
+import json
+from pathlib import Path
+import re
+import shutil
+import subprocess
+import sys
+import threading
+import time
+
+
+def sha(path):
+    return hashlib.sha256(Path(path).read_bytes()).hexdigest()
+
+
+def panel_interaction_matches(panel):
+    action = panel.get("interaction", {})
+    if panel.get("operation") == "save":
+        return action.get("kind") == "NSButton.performClick" or (
+            action.get("kind") == "NSApplication.sendEvent" and action.get("key") == "Return"
+            and action.get("key_code") == 36 and action.get("panel_was_key") is True)
+    if panel.get("operation") == "cancel":
+        return action.get("kind") == "NSButton.performClick" or (
+            action.get("kind") == "NSSavePanel.cancel" and action.get("selector") == "cancel:"
+            and action.get("sender") == "actual NSSavePanel"
+            and action.get("documented_public_action") is True
+            and action.get("physical_button_or_keyboard_input") is False)
+    return False
+
+
+def run(source, binary, output):
+    source, binary, output = source.absolute(), binary.absolute(), output.absolute()
+    if sys.platform != "darwin":
+        raise ValueError("Actual AppKit/NSSavePanel acceptance requires macOS; no native result is simulated")
+    build = json.loads((binary.parent / "build.json").read_text())
+    production = source / "scripts/studio/macos/StudioApp.swift"
+    if build.get("compiled") is not True or build.get("binary_sha256") != sha(binary):
+        raise ValueError("Native helper does not match its actual compiled build receipt")
+    if build.get("production_source_sha256") != sha(production):
+        raise ValueError("Native helper did not compile the selected production class")
+    output.mkdir(parents=True, exist_ok=False)
+    work = output / "fixture"
+    work.mkdir()
+    downloads = output / "native-downloads"
+    downloads.mkdir()
+    report = {"schema": "cinematicum-production-native-download-v4", "passed": False,
+              "scope": "Unchanged production StudioAppDelegate class with isolated startup; real default Movies/job-UUID NSSavePanel Save through an actual button or public AppKit Return events, Cancel through an actual button or documented public NSSavePanel.cancel action, and WKDownload; receipt-verified owned output relocated afterward for evidence; not an installed-bundle UI claim",
+              "fixture": "SYNTHETIC ENGINE TEST ONLY — NOT FILM FOOTAGE",
+              "build": build, "runner_sha256": sha(__file__), "checks": {}, "installed_app_ui_certified": False,
+              "existing_destination_replacement_certified": False,
+              "arbitrary_chooser_navigation_or_renamed_destination_certified": False,
+              "cancel_keyboard_route_certified": False,
+              "physical_keyboard_or_mouse_input_certified": False,
+              "full_native_chooser_visual_capture_certified": False,
+              "accessibility_or_screen_recording_permission_requested": False}
+    checks = report["checks"]
+    started = time.monotonic()
+    store = server = thread = None
+    sys.path.insert(0, str(source / "scripts/studio"))
+    from server import Server, Store
+    from test_high_precision import WIDTH, HEIGHT, FPS, FRAMES, decode_rgba16, numeric_ramp, write_fixture
+    from test_editing_ui_macos import read_helper_result
+    try:
+        fixture = write_fixture(work / "ENGINE_TEST_16bit_source.mkv", numeric_ramp())
+        fixture_sha = sha(fixture)
+        store = Store(work / "workspace")
+        sentinel = store.new_project({"name": "ENGINE TEST reopen sentinel", "fps": FPS, "width": WIDTH, "height": HEIGHT})
+        project = store.new_project({"name": "ENGINE TEST — native 16-bit SDR", "fps": FPS, "width": WIDTH, "height": HEIGHT})
+        asset = store.admit(project["id"], fixture, fixture.name)
+        identities = {"project_id": project["id"], "sentinel_id": sentinel["id"], "asset_id": asset["id"]}
+        report["fixture_identity"] = identities
+        report["source_fixture_sha256"] = fixture_sha
+        script_source = source / "scripts/studio/macos/HighPrecisionSmoke.js"
+        script = work / "high16-production-workflow.js"
+        script.write_text("const HIGH16_TEST=" + json.dumps(identities) + ";\n" + script_source.read_text(), encoding="utf-8")
+        report["ui_script_source_sha256"] = sha(script_source)
+        report["bound_ui_script_sha256"] = sha(script)
+        server = Server(0, store)
+        thread = threading.Thread(target=server.serve_forever, kwargs={"poll_interval": 0.05}, daemon=True)
+        thread.start()
+        origin = "http://127.0.0.1:" + str(server.server_port)
+        command = [str(binary), "--mode", "download", "--url", origin + "/", "--evidence", str(downloads),
+                   "--script", str(script), "--timeout", "40"]
+        (work / "native-command.json").write_text(json.dumps(command, indent=2) + "\n")
+        movies = Path.home() / "Movies"
+        if not movies.is_dir() or movies.resolve() != movies:
+            raise ValueError("The actual default Movies directory must be an existing nonsymlink directory")
+        partials_before = {path.name for path in movies.iterdir()
+                           if path.name.startswith(".cinematicum-download-") and path.name.endswith(".partial")}
+        process = subprocess.run(command, capture_output=True, text=True, timeout=45)
+        (output / "native.stdout").write_text(process.stdout)
+        (output / "native.stderr").write_text(process.stderr)
+        native = read_helper_result(process)
+        report.update(native=native, native_returncode=process.returncode)
+        if native.get("error"):
+            report["native_error"] = native["error"]
+        partials_after = {path.name for path in movies.iterdir()
+                          if path.name.startswith(".cinematicum-download-") and path.name.endswith(".partial")}
+        report["default_partial_namespace"] = {"before_count": len(partials_before), "after_count": len(partials_after),
+                                                "new_partial_count": len(partials_after - partials_before),
+                                                "preexisting_missing_count": len(partials_before - partials_after),
+                                                "other_movies_filenames_not_recorded": True}
+        checks["default_movies_partial_namespace_preserved"] = partials_after == partials_before
+        checks["actual_native_class_gate"] = process.returncode == 0 and native.get("passed") is True
+        checks["production_source_hash_unchanged_after_execution"] = sha(production) == build["production_source_sha256"]
+        ui = native.get("ui", {})
+        checks["real_ui_selected_exact_fixture"] = ui.get("passed") is True and ui.get("project_id") == project["id"]
+        saved = store.get(project["id"])
+        directory = store.project_dir(project["id"])
+        report["saved_project"] = saved
+        checks["saved_high16_transparent_project"] = saved.get("settings", {}).get("image_precision") == "high16" and saved["settings"].get("transparent_background") is True
+        checks["reopen_sentinel_not_edited"] = store.get(sentinel["id"]).get("clips") == []
+        with store.lock:
+            jobs = copy.deepcopy([job for job in store.jobs.values() if job["project_id"] == project["id"]])
+        completed = [job for job in jobs if job["kind"] == "render" and job["state"] == "completed"]
+        checks["one_actual_completed_master_job"] = len(completed) == 1
+        report["completed_render_jobs"] = completed
+        if len(completed) == 1:
+            receipt = completed[0]["result"]
+            master = directory / "exports" / receipt["filename"]
+            payload = master.read_bytes()
+            expected_sha = hashlib.sha256(payload).hexdigest()
+            if not re.fullmatch(r"[a-f0-9]{32}\.mkv", receipt["filename"]):
+                raise ValueError("Completed master does not have the expected fresh job-UUID filename")
+            target = downloads / receipt["filename"]
+            default_target = movies / receipt["filename"]
+            checks["download_link_binds_actual_completed_master"] = ui.get("download_href") == receipt["url"] + "?download=1" and ui.get("download_filename") == receipt["filename"]
+            checks["server_master_matches_its_receipt"] = receipt.get("profile") == "master16" and expected_sha == receipt.get("sha256")
+            checks["native_save_exact_bytes"] = target.is_file() and not target.is_symlink() and target.read_bytes() == payload
+            checks["native_observation_matches_independent_hash"] = native.get("saved_file") == {"path": str(target), "bytes": len(payload), "sha256": expected_sha}
+            checks["native_default_destination_binds_actual_master"] = native.get("default_destination") == str(default_target) and native.get("production_saved_file") == {"path": str(default_target), "bytes": len(payload), "sha256": expected_sha}
+            expected_read_receipt = {"id": completed[0]["id"], "project_id": project["id"], "kind": "render", "state": "completed",
+                                     "filename": receipt["filename"], "url": receipt["url"], "profile": "master16",
+                                     "sha256": expected_sha, "size": len(payload)}
+            relocation = native.get("owned_file_relocation", {})
+            checks["actual_job_receipt_verified_before_owned_file_relocation"] = native.get("receipt_before_relocation") == expected_read_receipt and relocation.get("from") == str(default_target) and relocation.get("to") == str(target) and relocation.get("same_filename_preserved") is True
+            checks["cancel_has_no_destination"] = not default_target.exists() and not default_target.is_symlink()
+            checks["no_owned_partial_downloads_remain"] = not list(downloads.glob(".cinematicum-download-*.partial"))
+            checks["cancel_kept_completed_master_intact"] = sha(master) == expected_sha
+            decode_checks = ("downloaded_ffv1_16bit_alpha_pcm", "all_downloaded_frames_independently_decode",
+                             "download_retains_fractional_alpha_and_more_than_256_colors")
+            for name in decode_checks:
+                checks[name] = False
+            if not target.is_file() or target.is_symlink():
+                # Retain the native failure and still check all independent
+                # evidence. Probing an absent path must not replace the real
+                # panel/download error with an unrelated ffprobe exception.
+                report["download_decode_error"] = "Native Save produced no regular destination file; the codec and pixel gates could not execute"
+            else:
+                try:
+                    probe = json.loads(subprocess.run([shutil.which("ffprobe"), "-v", "error", "-count_frames", "-show_streams",
+                                                      "-of", "json", str(target)], capture_output=True, text=True, check=True, timeout=10).stdout)
+                    streams = probe["streams"]
+                    video = next(item for item in streams if item["codec_type"] == "video")
+                    audio = next(item for item in streams if item["codec_type"] == "audio")
+                    report["downloaded_streams"] = streams
+                    checks["downloaded_ffv1_16bit_alpha_pcm"] = video["codec_name"] == "ffv1" and video["pix_fmt"] == "gbrap16le" and video["width"] == WIDTH and video["height"] == HEIGHT and int(video["nb_read_frames"]) == FRAMES and audio["codec_name"] == "pcm_s16le" and audio["channels"] == 2 and int(audio["sample_rate"]) == 48000
+                    pixels = decode_rgba16(target)
+                    checks["all_downloaded_frames_independently_decode"] = len(pixels) == WIDTH * HEIGHT * FRAMES
+                    checks["download_retains_fractional_alpha_and_more_than_256_colors"] = len({p[0] for p in pixels if p[3] > 32768}) > 256 and any(0 < p[3] < 65535 and p[3] % 257 for p in pixels)
+                except Exception as error:
+                    report["download_decode_error"] = str(error)
+                    if isinstance(error, subprocess.CalledProcessError):
+                        report["download_decode_stderr"] = str(error.stderr)[-3000:]
+        panels = native.get("panels", [])
+        # The native observer obtains each window through an NSSavePanel cast;
+        # AppKit may provide a private subclass with a different runtime name.
+        checks["native_save_and_cancel_panels_observed"] = len(panels) == 2 and [item.get("operation") for item in panels] == ["save", "cancel"] and all(item.get("class") and item.get("title") == "Save CINEMATICUM export" and panel_interaction_matches(item) and item.get("untouched_default_destination") is True and item.get("destination_absent_immediately_before_input") is True and item.get("selected_url") == native.get("default_destination") and item.get("filename") == ui.get("download_filename") and item.get("directory") == str(movies) for item in panels)
+        pictures = []
+        for panel in panels:
+            picture = panel.get("picture", {})
+            path = Path(picture.get("path", ""))
+            pictures.append(path.parent == downloads and path.is_file() and not path.is_symlink()
+                            and path.read_bytes().startswith(b"\x89PNG\r\n\x1a\n") and sha(path) == picture.get("sha256"))
+        checks["actual_native_panel_captures_retained"] = len(pictures) == 2 and all(pictures)
+        checks["admitted_source_preserved"] = sha(directory / asset["path"]) == fixture_sha
+        if not all(checks.values()):
+            report["failed_checks"] = [name for name, ok in checks.items() if not ok]
+            report["error"] = report.get("native_error") or "Failed checks: " + ", ".join(report["failed_checks"])
+    except Exception as error:
+        report["error"] = str(error)
+        checks["completed_without_fixture_or_native_error"] = False
+        if isinstance(error, subprocess.TimeoutExpired):
+            report["timeout_seconds"] = error.timeout
+            for name, value in (("native.stdout", error.stdout), ("native.stderr", error.stderr)):
+                if value is not None:
+                    (output / name).write_bytes(value.encode() if isinstance(value, str) else value)
+        elif isinstance(error, subprocess.CalledProcessError):
+            report["subprocess_stderr"] = str(error.stderr)[-3000:]
+    finally:
+        if server is not None:
+            server.shutdown(); server.server_close()
+        if thread is not None:
+            thread.join(timeout=1)
+        if store is not None:
+            store.shutdown()
+    report["elapsed_seconds"] = round(time.monotonic() - started, 3)
+    report["passed"] = bool(checks) and all(checks.values()) and "error" not in report
+    (output / "production-download-report.json").write_text(json.dumps(report, indent=2) + "\n")
+    return report
+
+
+def main():
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--source", required=True, type=Path)
+    parser.add_argument("--binary", required=True, type=Path)
+    parser.add_argument("--output", required=True, type=Path, help="New evidence directory; never reuse a prior gate directory")
+    args = parser.parse_args()
+    try:
+        report = run(args.source, args.binary, args.output)
+        print(json.dumps({"passed": report["passed"], "checks": report["checks"], "error": report.get("error"),
+                          "report": str(args.output.absolute() / "production-download-report.json"),
+                          "elapsed_seconds": report["elapsed_seconds"]}, indent=2))
+        return 0 if report["passed"] else 1
+    except Exception as error:
+        print(json.dumps({"passed": False, "error": str(error)}), file=sys.stderr)
+        return 2
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

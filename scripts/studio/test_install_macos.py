@@ -37,6 +37,61 @@ class ArchiveInstallationTests(unittest.TestCase):
         self.assertIn("PACKAGED_RUNTIME_IMPORTS_PASS", result.stdout)
         self.assertTrue(installer.runtime_manifest(runtime))
 
+    def test_packaged_isolated_workers_do_not_write_into_the_bundle(self):
+        """The launcher's -B/environment must survive actual isolated children."""
+        runtime = self.root / "runtime"
+        installer.copy_runtime(runtime)
+        before = installer.runtime_manifest(runtime)
+        program = r'''
+import importlib.util, json, os, pathlib, sys
+runtime = pathlib.Path(sys.argv[1]).resolve()
+sys.path.insert(0, str(runtime))
+import imaging, planar_tracking
+assert pathlib.Path(imaging.__file__).parent == runtime
+assert pathlib.Path(planar_tracking.__file__).parent == runtime
+os.environ["CINEMATICUM_IMAGING_PYTHON"] = sys.executable
+os.environ["PYTHONDONTWRITEBYTECODE"] = "1"
+launched = []
+def observe(event, args):
+    if event == "subprocess.Popen":
+        for name in ("image_worker.py", "planar_worker.py", "compositor.py", "roto.py"):
+            if str(runtime / name) in args[1]:
+                launched.append(name)
+sys.addaudithook(observe)
+# These real doctor/probe children import imaging/media_orientation and
+# projective_warp even when the optional codec/OpenCV packages are absent.
+image = imaging._short_request({"command": "doctor"}, python=sys.executable)
+assert image["versions"]["python"] == sys.version.split()[0]
+plane = planar_tracking.planar_capabilities(python=sys.executable)
+assert isinstance(plane["available"], bool)
+assert "image_worker.py" in launched and "planar_worker.py" in launched
+from lens_assets import prepare_lens_maps
+scratch = runtime.parent / "worker-output"
+scratch.mkdir()
+lens = prepare_lens_maps({}, 16, 16, scratch)
+assert len(lens["paths"]) == 6 and "compositor.py" in launched
+roto_executed = importlib.util.find_spec("numpy") is not None
+if roto_executed:
+    from roto_assets import prepare_roto_mask
+    mask = prepare_roto_mask({"type": "mask", "params": {"shape": "bezier"}}, 16, 16, scratch)
+    assert mask["static"] and mask["path"].read_bytes().startswith(b"\x89PNG\r\n\x1a\n")
+    assert "roto.py" in launched
+print(json.dumps({"launched": launched, "imaging_available": image["available"],
+                  "planar_available": plane["available"], "roto_executed": roto_executed}))
+'''
+        result = subprocess.run([sys.executable, "-I", "-B", "-c", program, str(runtime)],
+                                cwd=self.root, capture_output=True, text=True, timeout=60)
+        self.assertEqual(0, result.returncode, result.stderr)
+        observed = json.loads(result.stdout)
+        self.assertIn("image_worker.py", observed["launched"])
+        self.assertIn("planar_worker.py", observed["launched"])
+        self.assertIn("compositor.py", observed["launched"])
+        if observed["roto_executed"]:
+            self.assertIn("roto.py", observed["launched"])
+        self.assertEqual([], list(runtime.rglob("__pycache__")),
+                         "Actual isolated capability probes mutated the installed source tree")
+        self.assertEqual(before, installer.runtime_manifest(runtime))
+
     def bundle(self, name, content=b"old executable", identifier=installer.BUNDLE_ID):
         app = self.root / name
         (app / "Contents/MacOS").mkdir(parents=True)

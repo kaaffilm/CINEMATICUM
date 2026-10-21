@@ -149,10 +149,25 @@ python3 scripts/studio/install_macos.py --build-only \
 
 The app starts its own Python service on an available loopback port and opens
 the editor in a native WKWebView, with native import and export dialogs.
-Closing the window saves pending timeline edits and waits for its owned local
-render jobs to stop. The app still requires installed Python, FFmpeg, and any
+Closing the window saves pending timeline edits and asks before cancelling active
+owned media jobs. The app still requires installed Python, FFmpeg, and any
 optional engines; the installer does not bundle them or create a signed,
 notarized distribution.
+
+Install-03's observed verifier output reported PASSED in 16.515 seconds after
+explicit `-B` corrected isolated-worker bytecode writes inside the app. It
+verified the frozen 189-file source, 62 runtime files, 67 bundle files and all
+57 protected workspace files. The full raw install-03 receipt remains on the
+Mac and was not collected. The original 59-file app archive and later 70-file
+bundle archive are preserved. Canonical launch-02 started but its result is
+uncollected; final installed-source reconciliation has not executed.
+
+Actual production quit acceptance passed 21/21 independent and 10/10 native
+checks with completed-export preservation and real job cancellation. Chooser
+Save is verified, but the revised Cancel helper is unexecuted. These isolated
+production-class gates do not certify installed-app editing/export. Mac access
+is currently blocked by a changed session context and a fresh-session limit.
+See [the current verification record](VERIFICATION_0_9_1.md) for exact boundaries.
 
 Quit Studio before rebuilding. Replacement is allowed only for a bundle with
 Studio's own identifier. The installer creates and reads back a ZIP archive,
@@ -813,11 +828,15 @@ quality or feature parity with the requested AI products.
 
 Two subsequent normal 480 × 272, 17-frame, 20-step Euler takes completed through
 native Generate controls. Both passed 14/14 independent media/provenance/timing
-checks. Native playback passed 14/14 for one take and exposed a final-frame
-insertion defect in the other. The source correction now preserves nearest
-project-frame duration through import and trim edits; its native rerun is pending
-after MIDIA-AI's runtime upgrade invalidated execution authorization. An explicit
-33-frame acceptance case is prepared but has not executed.
+checks. The earlier native playback exposed a final-frame insertion defect;
+nearest project-frame quantization now preserves the complete source through
+Add-to-timeline and trim edits. Both final native playback runs passed **14/14**,
+including all 17 timeline frames, saved provenance and unchanged original media.
+The normal workflow is accepted within these settings. The earlier 13/14 result
+remains retained. One real 33-frame case also passed inference and native
+playback; its generation harness took 928.394 seconds. This establishes one
+longer bounded case: 11/11 inference-harness checks, 14/14 independent media
+checks and 14/14 native playback checks, with unaltered raw reports retained.
 
 The earlier normal-preset attempt was cancelled when the application terminated
 through AppKit; its historical cause remains unknown. The current native
@@ -825,7 +844,8 @@ inference acceptance runs repeated actual takes through Generate controls and
 independently checks every decoded frame, source hash, request, workflow and
 durable job identity. [Verification 0.9.1](VERIFICATION_0_9_1.md) records the
 executed results, including rejected attempts. Longer takes, production quality
-and sustained production operation require their own acceptance.
+and sustained production operation require broader acceptance beyond the one
+passed 33-frame case.
 
 ### Separately configured workflows
 
@@ -1060,11 +1080,23 @@ media and 14 native playback checks. These are historical 0.9 results; the
 current source-sample audio, planar, high16 and normal-generation gates are
 recorded separately for 0.9.1.
 
-The earlier frozen-source Python run passed 515 tests in 153.974 seconds with
-zero failures and zero skips, including real RAW and official OTIO integration.
-It does not certify the later source. See
-[Verification 0.9.1](VERIFICATION_0_9_1.md) for the frozen current-source suite,
-native runs and installed-file identities, and
+The earlier 515-test and 543-test runs remain historical source receipts.
+After the isolated-worker bytecode fix, the current frozen Linux run passed
+**544 tests with zero failures, errors, skips or expected failures**. Its report
+elapsed time is 169.194 seconds; wrapper elapsed is 169.301 seconds. All 189
+operative files stayed unchanged, actual optional workers and genuine RAW ran,
+and the 48 unchanged JavaScript files retain their successful syntax checks.
+Base `4530c54` Studio CI passed 543 tests and 209 manifest files. This evidence
+freeze records no CI result for the worker correction and follow-up records;
+see the exact published commit and
+[PR #162 checks](https://github.com/kaaffilm/CINEMATICUM/pull/162/checks) for
+subsequent results. Actual bounded
+33-frame inference/playback, production quit and corrected planar acceptance
+are passed. Install-03 was observed passed; full receipt collection, the
+canonical launch-02 result, native chooser cancellation and final source
+reconciliation remain blocked by the current MIDIA access/session errors.
+See [Verification 0.9.1](VERIFICATION_0_9_1.md) for current source and native
+receipt identities, and
 [the unfinished-work register](UNFINISHED_0_9.md) for remaining implementation
 and external-access requirements.
 

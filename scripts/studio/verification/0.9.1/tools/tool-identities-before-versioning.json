@@ -1,0 +1,50 @@
+{
+  "scope": "Independent acceptance evidence tooling; excluded from production runtime and 189-file operative test inventory. Every tool binds its exact input production sources.",
+  "files": [
+    {
+      "path": "production-native-01/build.py",
+      "sha256": "cb35730549b005398d689caf271c4731cc18ecf60f8049fceb25113afd349836",
+      "bytes": 4076
+    },
+    {
+      "path": "production-native-01/ProductionNativeAcceptance.swift",
+      "sha256": "36be165098625a19a6296eadc5ecf8925b38761c6d1aca09a67488a3b19027e9",
+      "bytes": 16151
+    },
+    {
+      "path": "production-native-01/run_download.py",
+      "sha256": "3b273046a1fea46b6e411048505c34d27a1d72f43643332e16f151d6f7acfc62",
+      "bytes": 11095
+    },
+    {
+      "path": "production-quit-01/build_quit.py",
+      "sha256": "175ed9c90f3e3a75f7b7424e3b1821260a96da6e28dc7a9f18917c1119b783b0",
+      "bytes": 3139
+    },
+    {
+      "path": "production-quit-01/ProductionQuitAcceptance.swift",
+      "sha256": "921a7cfaf45f074d7478d35f243c28c094f78f3577e705b9afa0a0cf101633b0",
+      "bytes": 20387
+    },
+    {
+      "path": "production-quit-01/QuitWorkflow.js",
+      "sha256": "d1604138407113f69afb41c0e326ac2c693ccf51f2274ed7aef6846f4c73504b",
+      "bytes": 2267
+    },
+    {
+      "path": "production-quit-01/QuitRestart.js",
+      "sha256": "45496dad6a27835083f4d5973e93c4de7a292c57fa79f2837aeb08d4e237a802",
+      "bytes": 1535
+    },
+    {
+      "path": "production-quit-01/run_quit.py",
+      "sha256": "25cec7cac6fb5bd7cfdf8c5bd6fce8668acdccc3d4759d050708e09a3abaec5e",
+      "bytes": 18053
+    },
+    {
+      "path": "verify_installation.py",
+      "sha256": "47de0993575e0646d7c507ebf387ea85db766b41d6c56fe597a7cb0b9047121e",
+      "bytes": 26790
+    }
+  ]
+}

@@ -1,0 +1,124 @@
+{
+  "before_sha256": "9f8b6093341312b995c4869f017986ca95041a04e8002998f2871abb9285b226",
+  "derived_from_raw_sha256": "36602c13b42923215360ab4d1dabcaf12955031dcb0d9d215622b5f6aeaee05f",
+  "developer_id_or_notarization_certified": false,
+  "external_runtimes": "Not read or modified; Python/FFmpeg/Blender and optional runtimes remain separate prerequisites",
+  "full_receipts_retained_at": "/Users/midiakiasat/Library/Application Support/CINEMATICUM/Verification/0.9.1-4530-20261021-02",
+  "gates": [
+    {
+      "name": "source",
+      "passed": true
+    },
+    {
+      "name": "installed",
+      "passed": true
+    },
+    {
+      "name": "receipt_and_backup",
+      "passed": true
+    },
+    {
+      "name": "projects",
+      "passed": true
+    },
+    {
+      "name": "original_checkout",
+      "passed": true
+    }
+  ],
+  "installed": {
+    "build": "10",
+    "bundle_file_count": 67,
+    "bundle_id": "com.cinematicum.studio",
+    "bundle_inventory_sha256": "612f8f023d62f07ef7c63e0398d075a28f031a3f883f47dbf95d756cea6c674a",
+    "embedded_source_manifest": {
+      "mode": 384,
+      "sha256": "0f74477629fa14bb0363d790c7b9bf6fe07a0b9bfa2f1d8abc9df3712e9cf5e7",
+      "size": 6090
+    },
+    "executable": {
+      "architecture": "arm64",
+      "code_signature_command_present": true,
+      "cpu_subtype": 0,
+      "cpu_type": 16777228,
+      "file_type": "MH_EXECUTE",
+      "mode": 493,
+      "sha256": "7457dd6edd93583b3efa44586f05a701f7b2a0e8520e18fe49dbc9a17203dfdf",
+      "signature_note": "Presence of a signature command does not certify Developer ID signing or notarization",
+      "size": 225200
+    },
+    "runtime_file_count": 62,
+    "runtime_inventory_sha256": "8079816fe43c639c87436fa042c251c5b4db3295bb29f59f31511803efddd2f8",
+    "version": "0.9.1"
+  },
+  "installer": {
+    "app": "/Users/midiakiasat/Applications/CINEMATICUM Studio.app",
+    "archive_warnings": [],
+    "backup": "/Users/midiakiasat/Applications/.CINEMATICUM-Backups.noindex/CINEMATICUM Studio-20261021T194535Z-0089da9e.zip",
+    "bundle_id": "com.cinematicum.studio",
+    "compiler_warnings": "",
+    "launched": false,
+    "legacy_archives": [],
+    "runtime_files_verified": 62,
+    "signing_performed": false,
+    "source_manifest_sha256": "0f74477629fa14bb0363d790c7b9bf6fe07a0b9bfa2f1d8abc9df3712e9cf5e7",
+    "target": "arm64-apple-macos12.0"
+  },
+  "native_launch_certified": false,
+  "original_checkout": {
+    "Makefile": {
+      "mode": 420,
+      "sha256": "63711cf7cf7bd44fcc32b454f19e2652e0039d8452510ffd8ff297f090b854c6",
+      "size": 4383
+    },
+    "head": "5003627c56413ce1aff1df324668fc11792ea58a",
+    "scope": "Makefile bytes/mode, HEAD and Git status; other owner-file contents and credentials are not inspected",
+    "status_sha256": "bb611ee4fc26723af1b9cdf9208f90ccf8e9ef0409a9581bb32d2fc976c3dcc5"
+  },
+  "passed": true,
+  "previous_bundle": {
+    "ditto_metadata": [],
+    "mode": 384,
+    "path": "/Users/midiakiasat/Applications/.CINEMATICUM-Backups.noindex/CINEMATICUM Studio-20261021T194535Z-0089da9e.zip",
+    "sha256": "16ef0e6eff894dc6a7e9b84869173fa9b8218fc3538a521323506b6947759dba",
+    "size": 765416,
+    "verified_file_count": 59,
+    "verified_file_inventory_sha256": "6470b0d92b63b2946c48a45e69690253ae42210fe7b94fd5c97867c53fea4caf"
+  },
+  "privacy_note": "Full protected project/runtime-cache filename inventories are retained in the original local evidence and are not included in this public summary.",
+  "protected_workspace": {
+    "file_count": 56,
+    "inventory_sha256": "f8330f39fd67995cc28baf0c9c1ffe5d3aa1e7356076118712511924b4faef3e",
+    "total_bytes": 2858327609
+  },
+  "schema": "cinematicum-installation-public-summary-v1",
+  "source": {
+    "code_identity_sha256": "2e76cfc706d79e57ab0bbd71cde55ce7c90e0e5abfbf51a3c59359748f1dbd1a",
+    "git_head": "4530c54faf969b0a42f2eb7e73f67c295443d275",
+    "installer": {
+      "mode": 384,
+      "sha256": "f48b06b22054873a16ef2fa6e29b8fb2240303d9d9d350998486d57c52af3443",
+      "size": 18882
+    },
+    "native_sources": {
+      "StudioApp.swift": {
+        "mode": 384,
+        "sha256": "5bc3028eb4921b8e1d11f1a0e3a4ab2116c6ddcadce43a3968e6b42a0e80e79b",
+        "size": 27144
+      },
+      "StudioIcon.swift": {
+        "mode": 384,
+        "sha256": "9be90f8566a606a664f012926c1e85f99a44b277c616fd597d51df1760a9a49b",
+        "size": 2744
+      }
+    },
+    "runtime_file_count": 62,
+    "scope": "Copied runtime files, two native source files and installer; source-integrity JSON hashed separately",
+    "source_integrity": {
+      "mode": 384,
+      "sha256": "341ba1bdf46eb12c3b8e3c74d2af0c4e4e825eccc1d189481e4c2ea60c744565",
+      "size": 36854
+    },
+    "version": "0.9.1"
+  }
+}

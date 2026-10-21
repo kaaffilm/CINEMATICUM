@@ -48,7 +48,7 @@ def planar_capabilities(python=None):
         seen.add(name);path=Path(name).expanduser()
         if not path.is_absolute() or not path.is_file() or not os.access(path,os.X_OK):continue
         try:
-            result=subprocess.run([str(path),"-I",str(WORKER),"--capabilities"],env=_environment(),
+            result=subprocess.run([str(path),"-I","-B",str(WORKER),"--capabilities"],env=_environment(),
                                   capture_output=True,text=True,timeout=12)
             if result.returncode:raise ValueError(result.stderr.strip()[-500:])
             value=json.loads(result.stdout)
@@ -119,7 +119,7 @@ def track_planar(project,project_dir,clip_id,request,progress=None,cancel_event=
         manifest.write_text(json.dumps({"frames":str(raw),"width":width,"height":height,"count":count,
                                        "model":model,"quad":quad},allow_nan=False))
         output=directory/"result.json"
-        _run([runtime["python"],"-I",str(WORKER),"--request",str(manifest)],directory,"planar-measure",
+        _run([runtime["python"],"-I","-B",str(WORKER),"--request",str(manifest)],directory,"planar-measure",
              cancel_event,deadline,output,env=_environment())
         if output.stat().st_size>1024*1024:raise ValueError("Planar measurement exceeded its result bound")
         measured=json.loads(output.read_text())

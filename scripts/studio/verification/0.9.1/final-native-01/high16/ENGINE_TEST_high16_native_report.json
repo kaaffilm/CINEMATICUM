@@ -1,0 +1,30 @@
+{
+  "passed": false,
+  "browser": "WKWebView",
+  "fixture": "SYNTHETIC ENGINE TEST \u2014 NOT FILM FOOTAGE",
+  "scope": "export-dialog controls and real WKDownload; NSSavePanel selection not tested",
+  "checks": {
+    "native_controls_history_save_reopen_and_download": false,
+    "no_browser_errors": true,
+    "saved_high16_transparent_recipe": false,
+    "saved_nonidentity_transform": false,
+    "one_completed_native_master_job": false,
+    "source_media_identity_preserved": true,
+    "actual_native_screenshot": true
+  },
+  "ui": {
+    "download_destination_policy": "explicit test evidence directory; no save panel is simulated",
+    "download_errors": [],
+    "downloads": [],
+    "elapsed_ms": 5030,
+    "error": "Error: Source project did not bootstrap; toast=; job=",
+    "page_errors": [],
+    "passed": false,
+    "screenshot": "/Users/midiakiasat/.midia-ai/gateway-live/workspaces/auto-d5f5e80a10b691457cec8d25044150b5/.completion-evidence/final-native-01/high16/ENGINE_TEST_high16_native.png",
+    "screenshot_bytes": 828155,
+    "steps": []
+  },
+  "helper_exit_code": 1,
+  "error": "Error: Source project did not bootstrap; toast=; job=",
+  "elapsed_seconds": 5.647
+}

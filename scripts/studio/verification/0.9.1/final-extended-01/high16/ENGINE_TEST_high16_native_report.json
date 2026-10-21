@@ -1,0 +1,101 @@
+{
+  "passed": true,
+  "browser": "WKWebView",
+  "fixture": "SYNTHETIC ENGINE TEST \u2014 NOT FILM FOOTAGE",
+  "scope": "export-dialog controls and real WKDownload; NSSavePanel selection not tested",
+  "checks": {
+    "native_controls_history_save_reopen_and_download": true,
+    "no_browser_errors": true,
+    "saved_high16_transparent_recipe": true,
+    "saved_nonidentity_transform": true,
+    "one_completed_native_master_job": true,
+    "receipt_covers_actual_master": true,
+    "native_link_binds_completed_master": true,
+    "exactly_one_real_wkdownload": true,
+    "download_confined_to_test_evidence": true,
+    "native_download_exact_bytes": true,
+    "native_download_exact_export_url": true,
+    "download_route_attachment_headers_and_length": true,
+    "independent_ffv1_16bit_alpha_and_stereo_pcm_probe": true,
+    "all_actual_master_pictures_decode": true,
+    "transformed_master_retains_more_than_eight_bit_color": true,
+    "transparent_background_and_fractional_alpha_survive": true,
+    "native_viewer_displayed_actual_processed_frame": true,
+    "paused_png_is_rgba16_with_verified_digest": true,
+    "paused_16bit_samples_match_downloaded_master": true,
+    "source_media_identity_preserved": true,
+    "actual_native_screenshot": true
+  },
+  "fixture_identity": {
+    "project_id": "8f498e3787134a2fa939db25cc5f5ea0",
+    "sentinel_id": "5eacb301901a44cdbfd87c171b573682",
+    "asset_id": "4ea6d7f882874044be923dd3001124a1"
+  },
+  "ui": {
+    "download_destination_policy": "explicit test evidence directory; no save panel is simulated",
+    "download_errors": [],
+    "download_filename": "903ae8ff38ae4cde8701e25d0a55a2b6.mkv",
+    "download_href": "/api/projects/8f498e3787134a2fa939db25cc5f5ea0/exports/903ae8ff38ae4cde8701e25d0a55a2b6.mkv?download=1",
+    "downloads": [
+      {
+        "bytes": 63252,
+        "path": "/Users/midiakiasat/.midia-ai/gateway-live/workspaces/auto-d5f5e80a10b691457cec8d25044150b5/.completion-evidence/final-extended-01/high16/native_downloads/ENGINE_TEST_7BC5BC5F-09CE-485E-AE1B-6A687782C726_903ae8ff38ae4cde8701e25d0a55a2b6.mkv",
+        "state": "completed",
+        "suggested_filename": "903ae8ff38ae4cde8701e25d0a55a2b6.mkv",
+        "url": "http://127.0.0.1:60391/api/projects/8f498e3787134a2fa939db25cc5f5ea0/exports/903ae8ff38ae4cde8701e25d0a55a2b6.mkv?download=1"
+      }
+    ],
+    "elapsed_ms": 1466,
+    "expect_download": true,
+    "job_label": "16-bit master complete",
+    "page_errors": [],
+    "passed": true,
+    "processed_frame_url": "/api/projects/8f498e3787134a2fa939db25cc5f5ea0/previews/fce53dcfe51cd10757559a7a734ac4cdfb89f157d040b78e69bde905d12389e9.png",
+    "project_id": "8f498e3787134a2fa939db25cc5f5ea0",
+    "screenshot": "/Users/midiakiasat/.midia-ai/gateway-live/workspaces/auto-d5f5e80a10b691457cec8d25044150b5/.completion-evidence/final-extended-01/high16/ENGINE_TEST_high16_native.png",
+    "screenshot_bytes": 558454,
+    "steps": [
+      "select_exact_fixture_project",
+      "precision_profile_and_transparency_undo_redo",
+      "transformed_project_saved_reopened_and_processed_frame_visible",
+      "native_export_dialog_completed_actual_ffv1_master",
+      "clicked_real_native_master_download"
+    ]
+  },
+  "helper_exit_code": 0,
+  "export_receipt": {
+    "path": "/private/tmp/cinematicum-high16-WEBKIT-ENGINE-TEST-rw5i1wld/workspace/projects/8f498e3787134a2fa939db25cc5f5ea0/exports/903ae8ff38ae4cde8701e25d0a55a2b6.mkv",
+    "sha256": "c864ecf9c5f9962a35a57827e40580f16ef21bf4ac4544cee5491b5282c518d2",
+    "duration": 0.25,
+    "width": 64,
+    "height": 32,
+    "fps": 12,
+    "frame_rate": {
+      "numerator": 12,
+      "denominator": 1
+    },
+    "frames": 3,
+    "size": 63252,
+    "profile": "master16",
+    "color_space": "SDR Rec.709",
+    "image_precision": "high16",
+    "processing_bits": 16,
+    "pixel_format": "gbrap16le",
+    "encoding": "ffv1",
+    "alpha_mode": "straight",
+    "transparent_background": true,
+    "dynamic_range": "SDR UNORM; no scene-linear HDR/ACES movie mastering",
+    "packet_verification": {
+      "video_packets": 3,
+      "pcm_samples": 12000,
+      "pcm_bytes": 48000
+    },
+    "elapsed_seconds": 0.203,
+    "has_audio": true,
+    "issuance_status_changed": false,
+    "url": "/api/projects/8f498e3787134a2fa939db25cc5f5ea0/exports/903ae8ff38ae4cde8701e25d0a55a2b6.mkv",
+    "filename": "903ae8ff38ae4cde8701e25d0a55a2b6.mkv",
+    "project_revision": 3
+  },
+  "elapsed_seconds": 2.153
+}

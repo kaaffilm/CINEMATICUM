@@ -1,0 +1,28 @@
+{
+  "state": "FAILED",
+  "elapsed_seconds": 95.541,
+  "results": [
+    {
+      "name": "download-build",
+      "exit_code": 0
+    },
+    {
+      "name": "download02",
+      "exit_code": 1
+    },
+    {
+      "name": "quit03",
+      "exit_code": 1
+    },
+    {
+      "name": "installed-build",
+      "exit_code": 0
+    },
+    {
+      "name": "source-after",
+      "exit_code": 0
+    }
+  ],
+  "evidence": "/Users/midiakiasat/Library/Application Support/CINEMATICUM/Verification/0.9.1-4530-20261021-dialogs",
+  "canonical_launch_executed": false
+}

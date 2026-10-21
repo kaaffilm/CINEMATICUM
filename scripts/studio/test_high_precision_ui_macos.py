@@ -43,15 +43,20 @@ def run(binary, output):
             fixture = write_fixture(scratch / "ENGINE_TEST_ONLY_16bit_ramp.mkv", numeric_ramp())
             source_hash = hashlib.sha256(fixture.read_bytes()).hexdigest()
             store = Store(scratch / "workspace")
-            store.new_project({"name": "ENGINE TEST reopen sentinel", "fps": FPS, "width": WIDTH, "height": HEIGHT})
+            sentinel = store.new_project({"name": "ENGINE TEST reopen sentinel", "fps": FPS, "width": WIDTH, "height": HEIGHT})
             project = store.new_project({"name": "ENGINE TEST — native 16-bit SDR", "fps": FPS, "width": WIDTH, "height": HEIGHT})
             asset = store.admit(project["id"], fixture, fixture.name)
+            fixture_identity = {"project_id": project["id"], "sentinel_id": sentinel["id"], "asset_id": asset["id"]}
+            result["fixture_identity"] = fixture_identity
+            script = scratch / "high16-workflow.js"
+            script.write_text("const HIGH16_TEST=" + json.dumps(fixture_identity) + ";\n" +
+                              (HERE / "macos" / "HighPrecisionSmoke.js").read_text(encoding="utf-8"), encoding="utf-8")
             server = Server(0, store)
             thread = threading.Thread(target=server.serve_forever, kwargs={"poll_interval": .05}, daemon=True); thread.start()
             origin = f"http://127.0.0.1:{server.server_port}"
             screenshot = output / "ENGINE_TEST_high16_native.png"
             native = subprocess.run([str(Path(binary).resolve()), "--url", origin + "/", "--output", str(screenshot),
-                "--script", str(HERE / "macos" / "HighPrecisionSmoke.js"), "--download-dir", str(downloads),
+                "--script", str(script), "--download-dir", str(downloads),
                 "--timeout", "28"], check=False, capture_output=True, text=True, timeout=32)
             ui = read_helper_result(native)
             result["ui"] = ui; result["helper_exit_code"] = native.returncode

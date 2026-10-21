@@ -8,11 +8,21 @@ The [capability ledger](capabilities.json) retains `parity_complete: false`.
 
 ## Source and release identity
 
-The candidate continues commit `a6454d3514b3afa9ba29f594ab6bb3b79065d1a2`
-on an isolated MIDIA-AI worktree. The owner's production checkout and its
-uncommitted changes are preserved. Final frozen source, complete regression,
-installed-bundle identity and PR publication receipts are recorded below only
-after their corresponding gates complete.
+Published commit `4530c54faf969b0a42f2eb7e73f67c295443d275` is the
+base for the current candidate, continuing
+`a6454d3514b3afa9ba29f594ab6bb3b79065d1a2` in isolated MIDIA-AI worktrees.
+The owner's production checkout and its uncommitted changes are preserved.
+Four native acceptance harness files now select their exact fixture project.
+Subsequent canonical launch exposed bundle mutation by isolated Python workers;
+five launch sites in four runtime modules now explicitly pass `-B`. The frozen
+189-file inventory and 544-test run below include that production correction
+and its actual subprocess regression. The current runtime therefore differs
+from published `4530c54`; that commit's CI does not certify this follow-up.
+This evidence freeze records no follow-up publication/CI result; subsequent
+results belong to the exact published commit and
+[PR #162 checks](https://github.com/kaaffilm/CINEMATICUM/pull/162/checks).
+Canonical launch after replacement and final installed-source reconciliation
+remain separate gates.
 
 The deterministic [source manifest](source-integrity.json) covers the declared
 tracked runtime, tests, native code, web assets, dependency locks, documentation
@@ -25,12 +35,18 @@ hashing. See [the integrity contract](SOURCE_INTEGRITY.md).
 
 | Gate | Result currently recorded | Actual scope |
 | --- | --- | --- |
-| Source PCM playback | Native-03 routing 11/11; overlap, nested and retimed scenarios 12/12 each, three repetitions per sequence scenario | Live AudioWorklet captures, selected original stream/channels, gain/pan, source-tempo retiming, restart, independent FFmpeg PCM, zero underruns and drift below 80 ms |
-| High16 SDR output | Native-03 21/21 | Actual export controls, saved precision, transformed alpha, 16-bit paused frames and a real WKDownload of a lossless FFV1 master |
-| Planar tracking | Native-08 10/10 in 9.463 seconds | All seven native stages completed, 12/12 actual measurements, saved stabilization/pinning, timing invalidation/undo, reopen and independently decoded ProRes with identical first/last pin centers |
-| Normal Wan inference | Two serial jobs and both 14/14 independent media verifications passed; native playback 13/14 and 14/14 | 480 × 272, 17 frames, 20 steps, CFG 6, seeds 42/43; both have 17 distinct nonblank decoded frames. Native playback exposed a final-frame insertion defect, corrected and locally tested; final native rerun is blocked by changed MIDIA-AI authorization |
-| Complete regression | **543 tests passed in 169.490 seconds; zero failures, errors, skips or expected failures** | All 189 operative source/test files remained unchanged; actual isolated OpenCV, NumPy, OCIO, rawpy/LibRaw, OpenEXR and official OTIO executed. All 48 JavaScript files passed syntax checking |
-| Native installation | Not executed; authorization blocked | Installer closure and rollback tests pass; MIDIA-AI's upgrade invalidated command authorization before the final correction could be synchronized or a replacement bundle installed |
+| Source PCM playback | Final-native-01 routing 11/11; overlap, nested and retimed scenarios 12/12 each, three repetitions per sequence scenario | Actual live captures, selected stream/channels, gain/pan, source-tempo retiming and restart; zero underruns and drift below 80 ms |
+| High16 SDR output | Final-extended-01 21/21 in 2.153 seconds | Saved precision, transformed alpha, 16-bit paused frames, real export controls and 63,252-byte WKDownload. The earlier exact-fixture bootstrap failure remains retained |
+| Planar tracking | After the worker correction, bundle-fixed-planar passed 10/10 in 10.282 seconds | Seven native stages, actual measurement, timing invalidation/undo, save/reopen and independent ProRes decoding; identical first/last pin centers |
+| Normal Wan inference | Two real serial takes passed 14/14 media checks and both final native playbacks passed 14/14 | 480 × 272, 17 frames, 20 steps, CFG 6, seeds 42/43; all 17 timeline frames survive Add/Play/Save |
+| Longer Wan case | Inference harness 11/11, independent media 14/14, native playback 14/14; generation 928.394 seconds | One actual 33-frame take at the same resolution/steps/fps/CFG; distinct nonblank pictures. Production quality and sustained operation remain unverified |
+| Complete regression | **544 tests passed; zero failures, errors, skips or expected failures** | All 189 operative files unchanged. Actual pinned optional workers and genuine RAW ran. Report elapsed 169.194 seconds; wrapper elapsed 169.301 seconds. The 48 unchanged JavaScript files retain their syntax-check result |
+| GitHub CI | Historical base `4530c54`: 23 successful workflow runs; Studio 543 tests and 209 manifest files | Historical published base only; this evidence freeze contains no follow-up CI result. Consult the exact subsequent commit and PR #162 checks |
+| Native installation | Install-03 verifier observed PASSED in 16.515 seconds; all five gates and 189 operative hashes passed | 62 runtime files, 67 bundle files, 70-file prior archive and all 57 protected files preserved. Public record is an observation of returned fields; full raw receipt was not collected |
+| Production ordinary quit | Quit-05 passed 21/21 independent and 10/10 native checks in 67.203 seconds | Actual Keep Working and Cancel Jobs and Quit choices with two real FFmpeg jobs; completed 48-frame master retained, second job cancelled, durable and ephemeral jobs settled. Isolated startup, not installed-app UI acceptance |
+| Production chooser | Download-03 verified actual default-destination Save, hash, decode and alpha; aggregate failed because synthetic Escape did not cancel | Original failures are retained. Download-04's SDK Cancel helper is reviewed but **unexecuted**; production cancellation remains unaccepted |
+| Canonical installed launch | Launch-01 found bundle mutation; corrected launch-02 started but its result was **not collected** | The first actual launch/engine/ordinary quit preserved all protected files, but added three bytecode files. The corrected app's whole-bundle immutability remains unaccepted |
+| Final installed-source reconciliation | **Not executed** | Mac access changed: prior session denied cross-chat access, fresh session hit the 64-session limit. No new canonical or reconciliation pass is inferred |
 
 Native UI and backend assertion counts are separate from discoverable Python
 test counts. Tests with synthetic ENGINE TEST material establish those specified
@@ -73,6 +89,18 @@ ACES/OCIO, HDR mastering and calibrated output monitoring remain missing.
 The automated native download exercises WKDownload's actual byte transfer;
 it does not certify interaction with the production NSSavePanel chooser.
 
+The final-native-01 attempt failed before opening its intended fixture because
+the harness relied on creation-time ordering. Its unaltered
+[failed report](verification/0.9.1/final-native-01/high16/ENGINE_TEST_high16_native_report.json)
+is retained. The harness now selects the exact project through native controls;
+[final-extended-01](verification/0.9.1/final-extended-01/high16/ENGINE_TEST_high16_native_report.json)
+passed 21/21 in 2.153 seconds. This changed fixture binding, not movie processing
+or timeout limits. The raw-report SHA-256 is
+`9a20eaaff4c41dfd15aa820d4a39cc6cf5d526087ca052913947037112c2afea`.
+Its 63,252-byte master has SHA-256
+`c864ecf9c5f9962a35a57827e40580f16ef21bf4ac4544cee5491b5282c518d2`.
+The separate production chooser Save has since been verified; native cancellation remains unaccepted as detailed below.
+
 ### Planar state and rendering
 
 The real OpenCV LK/RANSAC worker measures affine/projective motion. Saved
@@ -99,6 +127,23 @@ Native-07's 12-second export wait expired during simultaneous Wan inference;
 that failed attempt remains recorded. The current harness retains its unique
 workspace, job state, source measurements and diagnostics even on failure.
 The passing serialized run does not establish concurrent production throughput.
+
+The [final native rerun](verification/0.9.1/final-native-01/planar/result.json)
+passed 10/10 in 7.342 seconds with seven control stages and no evidence errors.
+Its actual ProRes movie retains the same size, hash and stable pin centroids
+reported above. The final measurement-document SHA-256 is
+`d82e16ee43fcb77acafe579d5ddf962cf011e9ba42a83534e15fb8c4a91f85b6`;
+the final raw report SHA-256 is
+`7a58f14f80987cfd8f6a3ed8dc4dd0323c19d4e63e980cc919670917e3154ed5`.
+
+After adding explicit `-B` to the isolated worker launches, the
+[bundle-fixed planar rerun](verification/0.9.1/bundle-fixed-planar/result.json)
+passed 10/10 in 10.282 seconds, including all seven native stages and actual
+OpenCV 4.11.0/NumPy 2.3.5 measurement. The 268,926-byte movie and both pin
+centroids match the earlier output. Its report SHA-256 is
+`00d5cd9eb9a8287fef76d0b91ad8844a05c80ab1286e97a40f3fcc0803f3e013`;
+the measurement SHA-256 is
+`48c773d26c4b3e1d7e91a7ff8571759aaa2beef3d2795ea031ca5f15f45537a5`.
 
 ### Managed inference and ordinary quit
 
@@ -128,9 +173,34 @@ duration down admitted only 16 timeline frames for that 17-frame take. The
 default clip and inspector/trim/slip limits now use nearest project-frame
 quantization, matching the backend's existing half-frame contract. Eighteen
 focused timing/editing/trim tests pass using real probed media, the shipped
-JavaScript functions and the actual backend validator. The first take's
-native rerun has not executed. The explicit 33-frame acceptance harness is
-prepared but has not run; no longer-take pass is claimed.
+JavaScript functions and the actual backend validator. After authority was
+restored, both final native reruns passed 14/14 with all 17 timeline frames:
+[take 1](verification/0.9.1/final-native-01/actual-take-1/ENGINE_TEST_actual_take_report.json)
+in 2.236 seconds and
+[take 2](verification/0.9.1/final-native-01/actual-take-2/ENGINE_TEST_actual_take_report.json)
+in 2.149 seconds. Their raw-report SHA-256 values are
+`aaa834bdd7c76e567ce8c1c4f8f62a86d2854f18198a8f8f754f1995721d0df6`
+and `d64795e097b5b89aa9da7aae9744a29954c6be976f19da0af6e75fe5e7b20ed9`.
+Original take media, provenance and job snapshots remain unchanged. This closes
+the bounded normal 17-frame workflow; it does not erase the earlier 13/14 failure.
+
+The 33-frame harness now selects its exact intended project through native UI
+events and verifies the saved project/job identities. Actual longer job
+`c3db07f8a6b549e8aed24a593035cb65` passed. The
+[generation harness](verification/0.9.1/final-extended-01/generation33/report.json)
+passed 11/11 in 928.394 seconds, its independent media verifier passed 14/14,
+and [native playback](verification/0.9.1/final-extended-01/generation33-playback/ENGINE_TEST_actual_take_report.json)
+passed 14/14 in 4.208 seconds. All 33 decoded frames were distinct and nonblank;
+the exact sample timeline was 33/16 seconds and original media/provenance stayed
+unchanged. Source SHA-256 is
+`d04d5bad300a117b1519b1d7d2144741591589921275e326bddc15bba86f085e`.
+The inference and playback report SHA-256 values are
+`7df576feb8e7bedae8c45a42925bad64d34f77ede2d371456c1ddfb7ba6ea824`
+and `bfcfbfe1849a522cf1ccaf91b5ed566b37968ac97a6bdfc96af538c66fc3c14e`.
+The [extended batch](verification/0.9.1/final-extended-01/status.json) passed in
+937.624 seconds: high16, generation33, generation33-playback and source-after
+each exited 0. This is one longer bounded test, not a production-quality or
+long-session certification.
 
 The first normal attempt's earlier ordinary application termination remains
 unexplained. The new quit path saves, checks active durable jobs and offers an
@@ -141,20 +211,132 @@ The server records exit reason and affected job IDs without recording prompt
 or media content. This improves prevention and diagnosis without claiming to
 identify the initiator of the historical termination.
 
-## Mac execution authorization interruption
+## Actual production quit acceptance
 
-During completion work, MIDIA-AI upgraded from catalogue 0.7.2 to 0.8.0.
-The next source synchronization returned
-`COMMANDER_AUTHORITY_EXPIRED_OR_CHANGED` before making changes. The documented
-session-successor operation preserved the predecessor worktree and created a
-current-runtime context, but that context reports no reusable execution grant.
-No grant or governance setting was modified to work around the rejection.
+[Quit-05](verification/0.9.1/production-quit-05/production-quit-report.json)
+passed **21/21 independent checks and 10/10 native checks in 67.203 seconds**.
+The unchanged production ordinary-quit methods and actual AppKit alert buttons
+ran against an isolated real server. **Keep Working** allowed the first actual
+640 × 360, 48-frame, 12 fps FFV1 high16 render to complete. A second actual
+render was then cancelled through **Cancel Jobs and Quit**. The dirty edit was
+saved, both job snapshots retained their proper revisions, the second job
+published no partial export, and the owned server exited normally.
 
-Consequently, the final source synchronization, affected native reruns,
-33-frame inference and replacement installation remain unexecuted. The prior
-native successes remain valid at their recorded source scopes; the final
-Mac steps require renewed owner authorization. The local full regression,
-integrity manifest and GitHub draft update proceed independently.
+The completed 9,281,929-byte master and its export manifest survived later
+cancellation; independent decoding verified all 48 picture frames and audio.
+Its SHA-256 is
+`0bdcf44378a04acd0e00f035cd06b4d480c4ff77b85c4361235d36963898528d`.
+The receipt reconciles durable render cancellation with separately settled
+ephemeral frame-preview work. The report SHA-256 is
+`a686c88ca02f35477223756652f3be71ab6af9a3a48d581efb21789d9a99dadf`.
+This certifies the unchanged production methods and real alerts, not installed
+bundle UI or an explanation of the historical generation termination.
+
+Earlier reports remain unchanged: the first invocation refused an output path
+inside source before native execution; quit-03's aggregate failed because the
+fixture upload was moved during admission; quit-04 compared ephemeral preview
+state with durable persistence. The corrected harness preserves the original
+fixture and checks each job according to its actual lifecycle.
+
+## Mac execution access interruptions
+
+MIDIA-AI's catalogue 0.7.2-to-0.8.0 upgrade initially caused
+`COMMANDER_AUTHORITY_EXPIRED_OR_CHANGED` before synchronization made changes.
+A successor later acquired a reusable owner grant and successfully fetched
+verified source, ran native gates and installed the app. That first interruption
+was resolved without modifying governance settings or bypassing an access gate.
+
+After install-03 passed, a connection-context change caused the prior session
+to return `CROSS_CHAT_SESSION_ACCESS_DENIED`. Opening a proper fresh session for
+this conversation returned `ACTIVE_SESSION_LIMIT` at 64 sessions. No fresh
+session was created, no other session was closed and no alternate conversation
+context was used. **Mac evidence collection and final reconciliation are now
+blocked.** Canonical launch-02 had started, but its outcome is unobserved;
+download-04 has not run. Earlier successful executions do not authorize a claim
+that those remaining gates passed.
+
+## Installation and canonical launch
+
+[Install-02](verification/0.9.1/installation-02-summary.json) passed its before
+snapshot, replacement and independent after-verification in 40.491 seconds.
+Its privacy-minimized derived summary records 62 runtime files, 67 bundle files,
+a preserved 59-file original app archive and all 56 then-protected workspace
+files (2,858,327,609 bytes). Full raw filenames remain outside the public repo.
+The original archive remains preserved. The independent helper's initial
+2 GiB inventory bound refused before writes; its 4 GiB bound hashes all observed
+bytes without exclusions.
+
+The [first canonical launch](verification/0.9.1/installed-launch-01/installed-launch-report.json)
+used the exact installed app through LaunchServices, observed its real bundled
+server and default workspace, then performed ordinary native quit. All 56
+protected files survived. The aggregate failed because the bundle grew from
+67 to 70 files: isolated workers wrote cached bytecode for `imaging`,
+`media_orientation` and `projective_warp`. Python `-I` ignored the inherited
+bytecode environment flag. This was a real bundle-preservation defect.
+
+The correction adds explicit `-B` to five subprocess launches in `imaging.py`,
+`planar_tracking.py`, `lens_assets.py` and `roto_assets.py`. Native launcher and
+processing behavior are unchanged. The
+[worker-fix evidence](verification/0.9.1/worker-bytecode-fix/manifest.json)
+retains the failing actual copied-runtime regression and the corrected **8/8**
+focused run. The expanded test runs real imaging/planar/lens/roto subprocesses;
+the full 544-test freeze and later native planar/quit runs include the fix.
+
+[Install-03's observed output](verification/0.9.1/installation-03-observation.json)
+then reported **PASSED in 16.515 seconds**: snapshot-before, actual replacement
+and verify-after each exited 0; source, installed bytes, receipt/backup, projects
+and original-checkout gates all passed. It checked all 189 frozen operative
+files and installed the corrected 62-file runtime in a 67-file bundle. All 57
+protected files, totalling 2,858,327,758 bytes, were preserved. The 70-file prior
+bundle, including the observed caches, was archived separately from the original
+59-file backup. This public record contains selected fields actually returned
+by the verifier; **the full raw install-03 receipt was not collected** before
+access changed.
+
+The observation SHA-256 is
+`de8ef8a29ccaf4126604ace9c9d05c7b16ca314dcf4deb119130fdca0510c9c0`.
+The reported raw after-receipt SHA-256 is
+`08a3d73a39706c46b9c63785f15403fd1abd9a8ea39cb2b11713c519cb10d852`;
+the installed bundle inventory is
+`577a3550a6136bfe130434bf760ff0f21f1e24864facd5c11c52a07028afb6a9`.
+Canonical launch-02 was started with supervisor PID 8525, but its result is
+**uncollected and not accepted**. Final published-source synchronization and
+independent installed-source reconciliation have **not executed**.
+
+The installer copies 40 runtime modules/locks and 22 web files, plus its own
+generated `source-manifest.json`; repository `capabilities.json` and
+`source-integrity.json` are not bundled. The four production worker corrections
+required install-03. Remaining narrative/evidence edits do not themselves
+replace the missing canonical-launch and final-reconciliation evidence.
+
+## Native chooser: Save verified, cancellation still unaccepted
+
+The unchanged production `StudioAppDelegate` was compiled with isolated startup;
+this is not an installed-bundle UI claim. Original
+[attempt 01](verification/0.9.1/production-native-01/production-download-report.json)
+and [attempt 02](verification/0.9.1/production-native-02/production-download-report.json)
+remain failed. Later inspection established that native Save had written each
+exact job's master to its default Movies/job-UUID destination; the helper had
+incorrectly expected a proxy-set destination. The
+[recovery record](verification/0.9.1/owned-default-download-recovery.json)
+binds only those two synthetic files to completed-job receipts and hashes before
+relocation to evidence storage. No aggregate pass is inferred retrospectively.
+
+[Attempt 03](verification/0.9.1/production-native-03/production-download-report.json)
+verified actual native default-destination Save, the completed-job receipt,
+all 63,252 downloaded bytes, FFV1 `gbrap16le`/PCM decoding, fractional alpha and
+more than 256 colors. Master SHA-256 is
+`33e350dc3493366a6e8a902f68324d2626201851aac75d4d47bf9123cac19d7c`.
+Its aggregate remains failed: the helper's synthetic Escape interaction did not
+cancel and the destination was recreated. The
+[exact owned-file recovery](verification/0.9.1/production-native-03/owned-default-download-recovery.json)
+preserves that failure without leaving the synthetic output in Movies.
+
+Download-04 changes only the acceptance helper to use the explicit SDK Cancel
+action. It has been reviewed and curated but is **unexecuted**. Production
+NSSavePanel cancellation, arbitrary chooser navigation, renamed destinations and
+replacement of existing files are not certified. The earlier automated 21/21
+WKDownload gate and the verified Save are not substituted for those behaviors.
 
 ## Reproducible regression contract
 
@@ -169,22 +351,45 @@ The native macOS CLI harnesses and actual Blender/GPU execution are separate
 acceptance gates. Linux unit/media success does not imply native UI, Apple
 Metal, model inference, signed distribution or calibrated monitoring.
 
-The [complete local report](verification/0.9.1/full-actual-runtime-report.json)
-records Python 3.12.14 and NumPy 2.3.5, OpenColorIO 2.6.0, rawpy 0.27.1,
-OpenEXR 3.4.15, OpenTimelineIO 0.18.1 and OpenCV 4.11.0.86. The genuine
-Kodak DC50 fixture is 92,675 bytes with SHA-256
+The [current complete local report](verification/0.9.1/bundle-fixed-full-actual-runtime-report.json)
+records **544 tests passed with zero failures, errors, skips or expected
+failures**. It used Python 3.12.14, NumPy 2.3.5, OpenColorIO 2.6.0,
+rawpy 0.27.1, OpenEXR 3.4.15, OpenTimelineIO 0.18.1 and OpenCV 4.11.0.86.
+The genuine Kodak DC50 fixture is 92,675 bytes with SHA-256
 `37e290dbd0053f00e508d02a6b3a2a990432dad1eb74c40a52ca899f0f225ecc`.
-The [frozen operative inventory](verification/0.9.1/frozen-operative-source.json)
-and [post-run identity check](verification/0.9.1/frozen-operative-check.json)
-bind that execution to the unchanged code and tests. Narrative documentation
-and capability-status updates are outside this execution inventory, but are
-included in the final source-integrity manifest. The report SHA-256 is
-`d436f9f736d0c4ba5d41bf5762de9e9039efccd99afc18e5577b2311eee821a8`.
+The [frozen operative inventory](verification/0.9.1/bundle-fixed-frozen-operative-source.json)
+and [post-run identity check](verification/0.9.1/bundle-fixed-frozen-operative-check.json)
+confirm all 189 files remained unchanged. The report elapsed time is 169.194
+seconds; the wrapper elapsed time is 169.301 seconds. Report SHA-256 is
+`50f5531cbbd015abb7dc238c91e91ecc685d0cda48014deac31f70e416264541`;
+inventory SHA-256 is
+`30b514a409c8a0d86a047780b004942f6c65defbaf3ccb7e0da72f92085f7f3d`.
+The worker correction changes Python files only; the 48 unchanged JavaScript
+files retain the recorded successful syntax checks. Narrative documentation
+and capability-status changes are outside this execution inventory and belong
+in the separately regenerated source-integrity manifest.
+
+The [543-test harness-corrected report](verification/0.9.1/final-full-actual-runtime-report.json)
+(169.407-second test run, 169.519-second wrapper) and
+[earlier 543-test report](verification/0.9.1/full-actual-runtime-report.json)
+(169.490-second test run) remain historical receipts for their own snapshots.
+They do not certify the later worker-launch correction.
+
+On exact commit `4530c54faf969b0a42f2eb7e73f67c295443d275`, all 23 observed
+GitHub workflow runs passed. The
+[Studio CI job](https://github.com/kaaffilm/CINEMATICUM/actions/runs/39661961306/job/119437028259)
+passed 543 tests in 172.641 seconds with zero skips and verified 209 manifest
+files. This evidence freeze contains no CI result for the worker correction
+and harness/documentation follow-up. Consult the exact published follow-up
+commit and [PR #162 checks](https://github.com/kaaffilm/CINEMATICUM/pull/162/checks)
+for subsequent results; success for the earlier head is not transferred to it.
 
 The [native evidence summary](verification/0.9.1/native-evidence-summary.json)
-retains observed gate results, original report locations and available hashes.
-It is explicitly a normalized summary; the full native captures, job snapshots,
-model outputs and rejected reports remain in the preserved Mac worktree.
+retains current and historical results, original report locations and available
+hashes. It is explicitly a normalized summary. Unaltered final-native-01 raw
+reports are retained alongside it; that batch's original failed status remains
+because high16 initially failed fixture bootstrap. Full captures, job snapshots,
+model outputs and earlier rejected reports remain in preserved Mac worktrees.
 
 ## Remaining scope
 
@@ -200,5 +405,6 @@ identity inspection found an Apple Development identity and no Developer ID
 Application identity. This candidate is not a notarized distribution. Its
 native launcher still depends on external Python/FFmpeg/Blender and separately
 managed optional runtimes. No authenticated commercial-provider generation or
-purchase was performed. Longer model takes, production quality and sustained
+purchase was performed. One 33-frame model take has bounded inference/playback
+acceptance; broader longer-duration coverage, production quality and sustained
 production-scale operation remain unverified.

@@ -55,6 +55,7 @@ def run(binary, evidence, repeats=2, frames=17):
         store = Store(evidence / 'workspace')
         project = store.new_project({'name': 'ENGINE TEST — real ' + ('normal' if frames == 17 else 'longer bounded') + ' generation',
                                      'width': 480, 'height': 272, 'fps': 16})
+        result['expected_project_id'] = project['id']
         server = Server(0, store)
         thread = threading.Thread(target=server.serve_forever, kwargs={'poll_interval': .1}, daemon=True)
         thread.start()
@@ -70,7 +71,7 @@ def run(binary, evidence, repeats=2, frames=17):
         monitor = threading.Thread(target=observe, daemon=True)
         monitor.start()
         timeout = 300 + repeats * per_take_timeout
-        native = subprocess.run([str(Path(binary).resolve()), '--url', f'http://127.0.0.1:{server.server_port}/?acceptance_repeats={repeats}&acceptance_frames={frames}',
+        native = subprocess.run([str(Path(binary).resolve()), '--url', f'http://127.0.0.1:{server.server_port}/?acceptance_repeats={repeats}&acceptance_frames={frames}&acceptance_project={project["id"]}',
                                  '--output', str(evidence / 'ENGINE_TEST_generation_native.png'), '--timeout', str(timeout),
                                  '--script', str(HERE / 'macos/GenerationInferenceSmoke.js')],
                                 stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True, timeout=timeout + 15)
@@ -80,12 +81,18 @@ def run(binary, evidence, repeats=2, frames=17):
         result['ui'] = ui
         checks['native_generation_controls_completed'] = native.returncode == 0 and ui.get('passed') is True
         checks['no_uncaught_browser_errors'] = not ui.get('page_errors', [])
+        saved_project = store.get(project['id'])
+        checks['native_and_saved_project_identity_match_requested_project'] = (
+            ui.get('project_id') == project['id'] == saved_project.get('id')
+            and ui.get('expected_project_id') == project['id'])
         with store.lock:
             jobs = copy.deepcopy(list(store.jobs.values()))
         generated = [job for job in jobs if job['kind'] == 'generate']
         checks['exact_requested_number_of_serial_completed_takes'] = len(generated) == repeats and all(job['state'] == 'completed' for job in generated)
         checks['one_actual_owned_engine_start'] = len([job for job in jobs if job['kind'] == 'generation-start' and job['state'] == 'completed']) == 1
         checks['native_and_durable_job_identities_match'] = {item.get('job_id') for item in ui.get('takes', [])} == {job['id'] for job in generated}
+        checks['generated_jobs_belong_to_requested_project'] = len(generated) == repeats and all(
+            job.get('project_id') == project['id'] for job in generated)
         for index, job in enumerate(generated):
             if job['state'] != 'completed':
                 result['takes'].append({'job_id': job['id'], 'state': job['state'], 'error': job['error']})

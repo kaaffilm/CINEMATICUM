@@ -1,0 +1,353 @@
+{
+  "schema": "cinematicum-independent-acceptance-tools-v1",
+  "path_base": "scripts/studio/verification/0.9.1/tools",
+  "scope": "Independent acceptance evidence tooling; excluded from bundled production runtime and operative source-integrity inventory. Includes historical unsuccessful and superseded revisions. Tool presence and hash identity do not claim a passing native result; consult each attempt report.",
+  "inventory_excludes": [
+    "tool-identities.json (this self-referential index)",
+    "bytecode caches",
+    "generated native builds",
+    "fixtures and media"
+  ],
+  "sets": {
+    "installed-launch-01": {
+      "scope": "Canonical installed launch attempt01: independent LaunchServices controller, exact owned canonical bundle/PID/server, real bootstrap and ordinary quit, strict file preservation; corrected all-json/all-png preflight; bound to installation02 native executable SHA, not a UI editing/export claim.",
+      "paths": [
+        "installed-launch-01/InstalledAppControl.swift",
+        "installed-launch-01/build_installed_launch.py",
+        "installed-launch-01/run_installed_launch.py"
+      ]
+    },
+    "installed-source-reconcile-01": {
+      "scope": "Superseded reconciliation helper retained for traceability: source hash followed by importlib execution could consult timestamp-valid bytecode; do not use this revision for final source binding.",
+      "paths": [
+        "installed-source-reconcile-01/reconcile_installed_source.py"
+      ]
+    },
+    "installed-source-reconcile-02": {
+      "scope": "Read-only final source/runtime/native/bundle reconciliation; bounded no-follow verifier read, execute the exact pinned bytes without bytecode cache, exact commit and accepted receipt binding; no installation or native launch.",
+      "paths": [
+        "installed-source-reconcile-02/reconcile_installed_source.py"
+      ]
+    },
+    "production-native-01": {
+      "scope": "Historical download attempt01: unchanged production class with isolated startup; initial native chooser-driving helper; presence is not a passing acceptance claim.",
+      "paths": [
+        "production-native-01/ProductionNativeAcceptance.swift",
+        "production-native-01/build.py",
+        "production-native-01/run_download.py"
+      ]
+    },
+    "production-native-02": {
+      "scope": "Historical download attempt02: unchanged production class with isolated startup; modal polling and ordinary native keyboard input; directory/name setters remained in this superseded revision.",
+      "paths": [
+        "production-native-02/ProductionNativeAcceptance.swift",
+        "production-native-02/build.py",
+        "production-native-02/run_download.py"
+      ]
+    },
+    "production-native-03": {
+      "scope": "Download attempt03: unchanged production class with isolated startup; untouched default Movies/job-UUID real chooser Save/Cancel, actual WKDownload, receipt-verified owned-file retention; excludes installed-app UI and arbitrary chooser navigation.",
+      "paths": [
+        "production-native-03/ProductionNativeAcceptance.swift",
+        "production-native-03/build.py",
+        "production-native-03/run_download.py"
+      ]
+    },
+    "production-native-04": {
+      "scope": "NATIVE_UNEXECUTED download helper04: unchanged production class with isolated startup; default Movies/job-UUID Save via real button or public Return events, Cancel via real button or documented NSSavePanel.cancel action; all independent byte/receipt/decode/pixel/cancel/preservation checks retained. Python syntax and source emission reviewed locally only; no native compile, native execution, keyboard cancellation, full chooser visual, or installed-app UI acceptance claimed.",
+      "paths": [
+        "production-native-04/ProductionNativeAcceptance.swift",
+        "production-native-04/build.py",
+        "production-native-04/run_download.py"
+      ],
+      "native_status": "NATIVE_UNEXECUTED",
+      "native_compiled": false,
+      "native_executed": false,
+      "local_review": {
+        "python_syntax": true,
+        "unchanged_production_class_emission": true,
+        "interaction_scope_checks": 4
+      },
+      "public_cancel_action_reference": "https://developer.apple.com/documentation/appkit/nssavepanel/cancel(_:)"
+    },
+    "production-quit-01": {
+      "scope": "Historical original quit helper: unchanged production quit/alert/cancel methods, isolated actual server launch and child-exit forwarding, 96-frame workload; excludes production launcher and installed-app UI.",
+      "paths": [
+        "production-quit-01/ProductionQuitAcceptance.swift",
+        "production-quit-01/QuitRestart.js",
+        "production-quit-01/QuitWorkflow.js",
+        "production-quit-01/build_quit.py",
+        "production-quit-01/run_quit.py"
+      ]
+    },
+    "production-quit-03": {
+      "scope": "Quit attempt03: same unchanged native class helper, real 48-frame 640x360 render workload; historical runner consumed its original source fixture during admission.",
+      "paths": [
+        "production-quit-03/ProductionQuitAcceptance.swift",
+        "production-quit-03/QuitRestart.js",
+        "production-quit-03/QuitWorkflow.js",
+        "production-quit-03/build_quit.py",
+        "production-quit-03/run_quit.py"
+      ]
+    },
+    "production-quit-04": {
+      "scope": "Quit attempt04: same real 48-frame workload; original fixture retained via copied staging upload; historical terminal-receipt check incorrectly expected ephemeral cache jobs in durable storage.",
+      "paths": [
+        "production-quit-04/ProductionQuitAcceptance.swift",
+        "production-quit-04/QuitRestart.js",
+        "production-quit-04/QuitWorkflow.js",
+        "production-quit-04/build_quit.py",
+        "production-quit-04/run_quit.py"
+      ]
+    },
+    "production-quit-05": {
+      "scope": "Quit attempt05: real active-job Keep Working and Cancel Jobs and Quit with 48-frame workload; exact durable and explicit ephemeral terminal settlement checks; isolated launch/child-exit forwarding, excludes production launcher and installed-app UI.",
+      "paths": [
+        "production-quit-05/ProductionQuitAcceptance.swift",
+        "production-quit-05/QuitRestart.js",
+        "production-quit-05/QuitWorkflow.js",
+        "production-quit-05/build_quit.py",
+        "production-quit-05/run_quit.py"
+      ]
+    }
+  },
+  "files": [
+    {
+      "path": "installed-launch-01/InstalledAppControl.swift",
+      "sha256": "7c6ff3f77b350f6e5b4ee25a136235de51ee5247f9867b3de24b2b76747e1f8b",
+      "bytes": 11040,
+      "scope": "Canonical installed launch attempt01: independent LaunchServices controller, exact owned canonical bundle/PID/server, real bootstrap and ordinary quit, strict file preservation; corrected all-json/all-png preflight; bound to installation02 native executable SHA, not a UI editing/export claim."
+    },
+    {
+      "path": "installed-launch-01/build_installed_launch.py",
+      "sha256": "ff72c75045006aef6d2b93f596df72ab02f3031871ed3fcb5d5c2d6dce34495c",
+      "bytes": 2221,
+      "scope": "Canonical installed launch attempt01: independent LaunchServices controller, exact owned canonical bundle/PID/server, real bootstrap and ordinary quit, strict file preservation; corrected all-json/all-png preflight; bound to installation02 native executable SHA, not a UI editing/export claim."
+    },
+    {
+      "path": "installed-launch-01/run_installed_launch.py",
+      "sha256": "709d06707404862a0e08757271557ffae95bbed7816df5a1afddd2566d83fb2e",
+      "bytes": 31984,
+      "scope": "Canonical installed launch attempt01: independent LaunchServices controller, exact owned canonical bundle/PID/server, real bootstrap and ordinary quit, strict file preservation; corrected all-json/all-png preflight; bound to installation02 native executable SHA, not a UI editing/export claim."
+    },
+    {
+      "path": "installed-source-reconcile-01/reconcile_installed_source.py",
+      "sha256": "3c094e1af7da32b5611825836c88cfad769c372e72d8c6d17696ae42775466ed",
+      "bytes": 8369,
+      "scope": "Superseded reconciliation helper retained for traceability: source hash followed by importlib execution could consult timestamp-valid bytecode; do not use this revision for final source binding."
+    },
+    {
+      "path": "installed-source-reconcile-02/reconcile_installed_source.py",
+      "sha256": "cc83e05179b85ed57afd54e0941bd7ce381731b47c4a8c08c9f8e6523bfa534e",
+      "bytes": 10175,
+      "scope": "Read-only final source/runtime/native/bundle reconciliation; bounded no-follow verifier read, execute the exact pinned bytes without bytecode cache, exact commit and accepted receipt binding; no installation or native launch."
+    },
+    {
+      "path": "production-native-01/ProductionNativeAcceptance.swift",
+      "sha256": "36be165098625a19a6296eadc5ecf8925b38761c6d1aca09a67488a3b19027e9",
+      "bytes": 16151,
+      "scope": "Historical download attempt01: unchanged production class with isolated startup; initial native chooser-driving helper; presence is not a passing acceptance claim."
+    },
+    {
+      "path": "production-native-01/build.py",
+      "sha256": "cb35730549b005398d689caf271c4731cc18ecf60f8049fceb25113afd349836",
+      "bytes": 4076,
+      "scope": "Historical download attempt01: unchanged production class with isolated startup; initial native chooser-driving helper; presence is not a passing acceptance claim."
+    },
+    {
+      "path": "production-native-01/run_download.py",
+      "sha256": "3b273046a1fea46b6e411048505c34d27a1d72f43643332e16f151d6f7acfc62",
+      "bytes": 11095,
+      "scope": "Historical download attempt01: unchanged production class with isolated startup; initial native chooser-driving helper; presence is not a passing acceptance claim."
+    },
+    {
+      "path": "production-native-02/ProductionNativeAcceptance.swift",
+      "sha256": "5ab7992bd328215b4331e5fa281770e43aea47c1409caec1ee89f05e68a20dc9",
+      "bytes": 22445,
+      "scope": "Historical download attempt02: unchanged production class with isolated startup; modal polling and ordinary native keyboard input; directory/name setters remained in this superseded revision."
+    },
+    {
+      "path": "production-native-02/build.py",
+      "sha256": "cb35730549b005398d689caf271c4731cc18ecf60f8049fceb25113afd349836",
+      "bytes": 4076,
+      "scope": "Historical download attempt02: unchanged production class with isolated startup; modal polling and ordinary native keyboard input; directory/name setters remained in this superseded revision."
+    },
+    {
+      "path": "production-native-02/run_download.py",
+      "sha256": "1eada74943a43c9878ea48d7f84f8cd0ea0d0ed755abdc9f1c52e6c8a3a0ffdf",
+      "bytes": 12560,
+      "scope": "Historical download attempt02: unchanged production class with isolated startup; modal polling and ordinary native keyboard input; directory/name setters remained in this superseded revision."
+    },
+    {
+      "path": "production-native-03/ProductionNativeAcceptance.swift",
+      "sha256": "e9432d6f863049d451b42cebce75be5de4b27b9cf5644d9ddbee75462a67c9f9",
+      "bytes": 30714,
+      "scope": "Download attempt03: unchanged production class with isolated startup; untouched default Movies/job-UUID real chooser Save/Cancel, actual WKDownload, receipt-verified owned-file retention; excludes installed-app UI and arbitrary chooser navigation."
+    },
+    {
+      "path": "production-native-03/build.py",
+      "sha256": "cb35730549b005398d689caf271c4731cc18ecf60f8049fceb25113afd349836",
+      "bytes": 4076,
+      "scope": "Download attempt03: unchanged production class with isolated startup; untouched default Movies/job-UUID real chooser Save/Cancel, actual WKDownload, receipt-verified owned-file retention; excludes installed-app UI and arbitrary chooser navigation."
+    },
+    {
+      "path": "production-native-03/run_download.py",
+      "sha256": "8c3c34d507c423e4b513b4252690afff9e349022d3dab613d0bc2041ffefdd20",
+      "bytes": 15272,
+      "scope": "Download attempt03: unchanged production class with isolated startup; untouched default Movies/job-UUID real chooser Save/Cancel, actual WKDownload, receipt-verified owned-file retention; excludes installed-app UI and arbitrary chooser navigation."
+    },
+    {
+      "path": "production-native-04/ProductionNativeAcceptance.swift",
+      "sha256": "44ab3c17cb6c2d9237804e9e295251ade0cd3fe51c627674ebf05984640dfcb7",
+      "bytes": 31447,
+      "scope": "NATIVE_UNEXECUTED download helper04: unchanged production class with isolated startup; default Movies/job-UUID Save via real button or public Return events, Cancel via real button or documented NSSavePanel.cancel action; all independent byte/receipt/decode/pixel/cancel/preservation checks retained. Python syntax and source emission reviewed locally only; no native compile, native execution, keyboard cancellation, full chooser visual, or installed-app UI acceptance claimed.",
+      "native_status": "NATIVE_UNEXECUTED"
+    },
+    {
+      "path": "production-native-04/build.py",
+      "sha256": "cb35730549b005398d689caf271c4731cc18ecf60f8049fceb25113afd349836",
+      "bytes": 4076,
+      "scope": "NATIVE_UNEXECUTED download helper04: unchanged production class with isolated startup; default Movies/job-UUID Save via real button or public Return events, Cancel via real button or documented NSSavePanel.cancel action; all independent byte/receipt/decode/pixel/cancel/preservation checks retained. Python syntax and source emission reviewed locally only; no native compile, native execution, keyboard cancellation, full chooser visual, or installed-app UI acceptance claimed.",
+      "native_status": "NATIVE_UNEXECUTED"
+    },
+    {
+      "path": "production-native-04/run_download.py",
+      "sha256": "90dc8daa73442fb7aa5069b38e3222a1e013690053b099173661338b69a14e0b",
+      "bytes": 16261,
+      "scope": "NATIVE_UNEXECUTED download helper04: unchanged production class with isolated startup; default Movies/job-UUID Save via real button or public Return events, Cancel via real button or documented NSSavePanel.cancel action; all independent byte/receipt/decode/pixel/cancel/preservation checks retained. Python syntax and source emission reviewed locally only; no native compile, native execution, keyboard cancellation, full chooser visual, or installed-app UI acceptance claimed.",
+      "native_status": "NATIVE_UNEXECUTED"
+    },
+    {
+      "path": "production-quit-01/ProductionQuitAcceptance.swift",
+      "sha256": "921a7cfaf45f074d7478d35f243c28c094f78f3577e705b9afa0a0cf101633b0",
+      "bytes": 20387,
+      "scope": "Historical original quit helper: unchanged production quit/alert/cancel methods, isolated actual server launch and child-exit forwarding, 96-frame workload; excludes production launcher and installed-app UI."
+    },
+    {
+      "path": "production-quit-01/QuitRestart.js",
+      "sha256": "45496dad6a27835083f4d5973e93c4de7a292c57fa79f2837aeb08d4e237a802",
+      "bytes": 1535,
+      "scope": "Historical original quit helper: unchanged production quit/alert/cancel methods, isolated actual server launch and child-exit forwarding, 96-frame workload; excludes production launcher and installed-app UI."
+    },
+    {
+      "path": "production-quit-01/QuitWorkflow.js",
+      "sha256": "d1604138407113f69afb41c0e326ac2c693ccf51f2274ed7aef6846f4c73504b",
+      "bytes": 2267,
+      "scope": "Historical original quit helper: unchanged production quit/alert/cancel methods, isolated actual server launch and child-exit forwarding, 96-frame workload; excludes production launcher and installed-app UI."
+    },
+    {
+      "path": "production-quit-01/build_quit.py",
+      "sha256": "175ed9c90f3e3a75f7b7424e3b1821260a96da6e28dc7a9f18917c1119b783b0",
+      "bytes": 3139,
+      "scope": "Historical original quit helper: unchanged production quit/alert/cancel methods, isolated actual server launch and child-exit forwarding, 96-frame workload; excludes production launcher and installed-app UI."
+    },
+    {
+      "path": "production-quit-01/run_quit.py",
+      "sha256": "25cec7cac6fb5bd7cfdf8c5bd6fce8668acdccc3d4759d050708e09a3abaec5e",
+      "bytes": 18053,
+      "scope": "Historical original quit helper: unchanged production quit/alert/cancel methods, isolated actual server launch and child-exit forwarding, 96-frame workload; excludes production launcher and installed-app UI."
+    },
+    {
+      "path": "production-quit-03/ProductionQuitAcceptance.swift",
+      "sha256": "921a7cfaf45f074d7478d35f243c28c094f78f3577e705b9afa0a0cf101633b0",
+      "bytes": 20387,
+      "scope": "Quit attempt03: same unchanged native class helper, real 48-frame 640x360 render workload; historical runner consumed its original source fixture during admission."
+    },
+    {
+      "path": "production-quit-03/QuitRestart.js",
+      "sha256": "45496dad6a27835083f4d5973e93c4de7a292c57fa79f2837aeb08d4e237a802",
+      "bytes": 1535,
+      "scope": "Quit attempt03: same unchanged native class helper, real 48-frame 640x360 render workload; historical runner consumed its original source fixture during admission."
+    },
+    {
+      "path": "production-quit-03/QuitWorkflow.js",
+      "sha256": "d1604138407113f69afb41c0e326ac2c693ccf51f2274ed7aef6846f4c73504b",
+      "bytes": 2267,
+      "scope": "Quit attempt03: same unchanged native class helper, real 48-frame 640x360 render workload; historical runner consumed its original source fixture during admission."
+    },
+    {
+      "path": "production-quit-03/build_quit.py",
+      "sha256": "175ed9c90f3e3a75f7b7424e3b1821260a96da6e28dc7a9f18917c1119b783b0",
+      "bytes": 3139,
+      "scope": "Quit attempt03: same unchanged native class helper, real 48-frame 640x360 render workload; historical runner consumed its original source fixture during admission."
+    },
+    {
+      "path": "production-quit-03/run_quit.py",
+      "sha256": "69d85f9cb19e9c08b0a6dd4bd09ad25eedf7d4bf9f37281c35569d098b9a96de",
+      "bytes": 18273,
+      "scope": "Quit attempt03: same unchanged native class helper, real 48-frame 640x360 render workload; historical runner consumed its original source fixture during admission."
+    },
+    {
+      "path": "production-quit-04/ProductionQuitAcceptance.swift",
+      "sha256": "921a7cfaf45f074d7478d35f243c28c094f78f3577e705b9afa0a0cf101633b0",
+      "bytes": 20387,
+      "scope": "Quit attempt04: same real 48-frame workload; original fixture retained via copied staging upload; historical terminal-receipt check incorrectly expected ephemeral cache jobs in durable storage."
+    },
+    {
+      "path": "production-quit-04/QuitRestart.js",
+      "sha256": "45496dad6a27835083f4d5973e93c4de7a292c57fa79f2837aeb08d4e237a802",
+      "bytes": 1535,
+      "scope": "Quit attempt04: same real 48-frame workload; original fixture retained via copied staging upload; historical terminal-receipt check incorrectly expected ephemeral cache jobs in durable storage."
+    },
+    {
+      "path": "production-quit-04/QuitWorkflow.js",
+      "sha256": "d1604138407113f69afb41c0e326ac2c693ccf51f2274ed7aef6846f4c73504b",
+      "bytes": 2267,
+      "scope": "Quit attempt04: same real 48-frame workload; original fixture retained via copied staging upload; historical terminal-receipt check incorrectly expected ephemeral cache jobs in durable storage."
+    },
+    {
+      "path": "production-quit-04/build_quit.py",
+      "sha256": "175ed9c90f3e3a75f7b7424e3b1821260a96da6e28dc7a9f18917c1119b783b0",
+      "bytes": 3139,
+      "scope": "Quit attempt04: same real 48-frame workload; original fixture retained via copied staging upload; historical terminal-receipt check incorrectly expected ephemeral cache jobs in durable storage."
+    },
+    {
+      "path": "production-quit-04/run_quit.py",
+      "sha256": "7c4b64995c45c63d479cd45f1740d1e5450f1692d387c38d42dde0db802e04f9",
+      "bytes": 18599,
+      "scope": "Quit attempt04: same real 48-frame workload; original fixture retained via copied staging upload; historical terminal-receipt check incorrectly expected ephemeral cache jobs in durable storage."
+    },
+    {
+      "path": "production-quit-05/ProductionQuitAcceptance.swift",
+      "sha256": "921a7cfaf45f074d7478d35f243c28c094f78f3577e705b9afa0a0cf101633b0",
+      "bytes": 20387,
+      "scope": "Quit attempt05: real active-job Keep Working and Cancel Jobs and Quit with 48-frame workload; exact durable and explicit ephemeral terminal settlement checks; isolated launch/child-exit forwarding, excludes production launcher and installed-app UI."
+    },
+    {
+      "path": "production-quit-05/QuitRestart.js",
+      "sha256": "45496dad6a27835083f4d5973e93c4de7a292c57fa79f2837aeb08d4e237a802",
+      "bytes": 1535,
+      "scope": "Quit attempt05: real active-job Keep Working and Cancel Jobs and Quit with 48-frame workload; exact durable and explicit ephemeral terminal settlement checks; isolated launch/child-exit forwarding, excludes production launcher and installed-app UI."
+    },
+    {
+      "path": "production-quit-05/QuitWorkflow.js",
+      "sha256": "d1604138407113f69afb41c0e326ac2c693ccf51f2274ed7aef6846f4c73504b",
+      "bytes": 2267,
+      "scope": "Quit attempt05: real active-job Keep Working and Cancel Jobs and Quit with 48-frame workload; exact durable and explicit ephemeral terminal settlement checks; isolated launch/child-exit forwarding, excludes production launcher and installed-app UI."
+    },
+    {
+      "path": "production-quit-05/build_quit.py",
+      "sha256": "175ed9c90f3e3a75f7b7424e3b1821260a96da6e28dc7a9f18917c1119b783b0",
+      "bytes": 3139,
+      "scope": "Quit attempt05: real active-job Keep Working and Cancel Jobs and Quit with 48-frame workload; exact durable and explicit ephemeral terminal settlement checks; isolated launch/child-exit forwarding, excludes production launcher and installed-app UI."
+    },
+    {
+      "path": "production-quit-05/run_quit.py",
+      "sha256": "055c0065f1e759d59474e96634aa2dc91f566dc28448908a08a0872c46999176",
+      "bytes": 20249,
+      "scope": "Quit attempt05: real active-job Keep Working and Cancel Jobs and Quit with 48-frame workload; exact durable and explicit ephemeral terminal settlement checks; isolated launch/child-exit forwarding, excludes production launcher and installed-app UI."
+    },
+    {
+      "path": "tool-identities-before-versioning.json",
+      "sha256": "fe76af62d012c1752d8c0629b9d72dd7af63010c7b2108ba76d7e1ea6f8fb495",
+      "bytes": 1738,
+      "scope": "Exact original tools inventory before this versioned expansion, retained as historical evidence; its path fields use the same tools root."
+    },
+    {
+      "path": "verify_installation.py",
+      "sha256": "47de0993575e0646d7c507ebf387ea85db766b41d6c56fe597a7cb0b9047121e",
+      "bytes": 26790,
+      "scope": "Independent pre-install snapshot and after-install byte/mode/archive/project/owner verification; no product installer import or launch; exact pinned verifier reused by reconciliation."
+    }
+  ]
+}

@@ -3,15 +3,43 @@
   "build": "0.9.1",
   "reviewed_on": "2026-10-21",
   "parity_complete": false,
-  "evidence_note": "This ledger describes the 0.9.1 candidate source, with implementation and acceptance recorded separately. Paths identify real code and acceptance harnesses, not automatically passing executions. VERIFICATION_0_9_1.md records current gates; VERIFICATION_0_9.md retains historical results. Its 515-test aggregate belongs to an earlier frozen source. The current isolated Linux strict run passed 543 tests in 169.490 seconds with zero failures, errors, skips or expected failures, actual pinned optional workers and the genuine Kodak RAW fixture; all 189 frozen operative code/test files remained unchanged through the run. All 48 JavaScript syntax checks passed separately. Those results do not certify Mac UI, replacement installation or GitHub CI. Current native source-audio, planar and high16 reports passed their bounded scenarios; remaining native gates, installed-file identity and publication require their own receipts. Core editor/server use the Python standard library; imaging, planar measurement and managed generation use separate runtimes. No status claims full application parity, production-scale performance or signed distribution.",
+  "evidence_note": "0.9.1 implementation and acceptance are separate. Current worker-corrected source passed 544 strict tests with zero failures/errors/skips/expected failures; all 189 operative files stayed unchanged, actual optional workers and genuine RAW ran. Native source audio, high16, normal 17-frame and bounded 33-frame generation/playback passed; corrected planar passed 10/10 and production quit passed 21/21 independent plus 10/10 native. Install-03 verifier output was observed PASSED for 62 runtime/67 bundle files and all 57 protected files; its full raw receipt was not collected. Canonical launch-02 started but its outcome is uncollected. Native Save is verified; the corrected Cancel helper is unexecuted. Final installed-source reconciliation has not executed. Current MIDIA session access is blocked after a context change and fresh-session limit. Historical 4530 CI does not certify the four-module runtime fix. This evidence freeze records no follow-up CI result; consult the exact subsequent commit and PR #162 checks. Full parity, production quality, HDR mastering and signed distribution remain unimplemented or unverified.",
   "release_acceptance": {
-    "status": "in_progress",
-    "scope": "Current candidate source; no release acceptance inferred from older results. Native continuation and replacement installation are blocked after MIDIA-AI upgraded from 0.7.2 to 0.8.0 and rejected synchronization with COMMANDER_AUTHORITY_EXPIRED_OR_CHANGED; the successor runtime context has no command-execution grant.",
+    "status": "incomplete_external_access_block",
+    "scope": "Based on published 4530c54 with four exact-fixture harness corrections and five explicit -B worker launch arguments across imaging.py, planar_tracking.py, lens_assets.py and roto_assets.py. The first canonical launch found three bytecode files added inside the bundle; failing evidence is retained. The corrected runtime passed the 544-test frozen suite and was installed by observed successful install-03. Full raw installation receipt and canonical launch-02 outcome were not collected after CROSS_CHAT_SESSION_ACCESS_DENIED; fresh current-conversation session creation returned ACTIVE_SESSION_LIMIT (64). Download-04 is reviewed but unexecuted, and final source reconciliation has not executed. Earlier grant restoration was followed by this new access block.",
     "frozen_regression": {
+      "status": "passed",
+      "environment": "Isolated local Linux with pinned actual optional workers and genuine Kodak RAW; native macOS acceptance and GitHub CI are separate.",
+      "tests": 544,
+      "report_elapsed_seconds": 169.194,
+      "wrapper_elapsed_seconds": 169.301,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "expected_failures": 0,
+      "unchanged_operative_files": 189,
+      "javascript_syntax_checks_passed": 48,
+      "javascript_scope": "Unchanged from the prior successful syntax check; the worker correction changes Python only.",
+      "report": "verification/0.9.1/bundle-fixed-full-actual-runtime-report.json",
+      "report_sha256": "50f5531cbbd015abb7dc238c91e91ecc685d0cda48014deac31f70e416264541",
+      "source_inventory": "verification/0.9.1/bundle-fixed-frozen-operative-source.json",
+      "source_inventory_sha256": "30b514a409c8a0d86a047780b004942f6c65defbaf3ccb7e0da72f92085f7f3d",
+      "unchanged_source_check": "verification/0.9.1/bundle-fixed-frozen-operative-check.json"
+    },
+    "required": [
+      "Frozen-source full regression including actual optional workers",
+      "Repeated native source-audio, overlap, nested-sequence and retime capture",
+      "Native planar measure/apply/undo/save/reopen/render and stale-dependency checks",
+      "Native high16 precision/export/download plus transform/alpha regression",
+      "Normal 480x272, 17-frame, 20-step genuine local inference and independent media/playback checks, including the corrected final-frame timeline insertion",
+      "Verified replacement installation, prior-bundle preservation and source-manifest comparison",
+      "Updated source-integrity manifest, verification record and draft PR"
+    ],
+    "earlier_frozen_regression": {
       "status": "passed",
       "environment": "Isolated local Linux runtime with pinned actual optional workers and genuine Kodak RAW input; not native macOS acceptance or GitHub CI.",
       "tests": 543,
-      "test_seconds": 169.490,
+      "test_seconds": 169.49,
       "report_elapsed_seconds": 169.725,
       "failures": 0,
       "errors": 0,
@@ -25,15 +53,56 @@
       "source_inventory_sha256": "5db8cdeef9c316c5809e8c219815c3e7454f448fe08c7a972c80a3662f976653",
       "unchanged_source_check": "verification/0.9.1/frozen-operative-check.json"
     },
-    "required": [
-      "Frozen-source full regression including actual optional workers",
-      "Repeated native source-audio, overlap, nested-sequence and retime capture",
-      "Native planar measure/apply/undo/save/reopen/render and stale-dependency checks",
-      "Native high16 precision/export/download plus transform/alpha regression",
-      "Normal 480x272, 17-frame, 20-step genuine local inference and independent media/playback checks, including the corrected final-frame timeline insertion",
-      "Verified replacement installation, prior-bundle preservation and source-manifest comparison",
-      "Updated source-integrity manifest, verification record and draft PR"
-    ]
+    "github_ci": {
+      "status": "passed",
+      "commit": "4530c54faf969b0a42f2eb7e73f67c295443d275",
+      "successful_workflow_runs": 23,
+      "studio_workflow_run": 39661961306,
+      "studio_job": 119437028259,
+      "tests": 543,
+      "test_seconds": 172.641,
+      "skipped": 0,
+      "source_manifest_files_verified": 209,
+      "followup_status": "No worker-correction or harness/evidence/documentation follow-up CI result is included in this evidence freeze; consult the exact subsequent commit and https://github.com/kaaffilm/CINEMATICUM/pull/162/checks for later results.",
+      "scope": "Historical published base only; not the worker-corrected follow-up."
+    },
+    "harness_corrected_regression": {
+      "status": "passed",
+      "environment": "Isolated local Linux runtime with pinned actual optional workers and genuine Kodak RAW input; not native macOS acceptance or GitHub CI.",
+      "tests": 543,
+      "test_seconds": 169.407,
+      "report_elapsed_seconds": 169.519,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "expected_failures": 0,
+      "unchanged_operative_files": 189,
+      "javascript_syntax_checks_passed": 48,
+      "report": "verification/0.9.1/final-full-actual-runtime-report.json",
+      "report_sha256": "e03bef95235724b941181a506e1883ef4aeea1ceacd0ee7feb28c0e0e8019108",
+      "source_inventory": "verification/0.9.1/final-frozen-operative-source.json",
+      "source_inventory_sha256": "5ba0151588b6dbba0b10175503c4768f57da691c1feaa8357afc1fd02f3ab1f2",
+      "unchanged_source_check": "verification/0.9.1/final-frozen-operative-check.json"
+    },
+    "current_mac_block": {
+      "existing_session_error": "CROSS_CHAT_SESSION_ACCESS_DENIED",
+      "fresh_session_error": "ACTIVE_SESSION_LIMIT",
+      "active_session_limit": 64,
+      "canonical_launch02": "LAUNCHED_RESULT_UNCOLLECTED",
+      "download04": "UNEXECUTED",
+      "final_source_reconciliation": "NOT_EXECUTED"
+    },
+    "installation_observation": {
+      "status": "observed_passed",
+      "report": "verification/0.9.1/installation-03-observation.json",
+      "report_sha256": "de8ef8a29ccaf4126604ace9c9d05c7b16ca314dcf4deb119130fdca0510c9c0",
+      "full_raw_receipt_copied": false,
+      "elapsed_seconds": 16.515,
+      "runtime_files": 62,
+      "bundle_files": 67,
+      "protected_files": 57,
+      "canonical_launch_certified": false
+    }
   },
   "unfinished_work": "UNFINISHED_0_9.md",
   "capabilities": [
@@ -166,9 +235,11 @@
         "test_planar_tracking_macos.py",
         "macos/PlanarTrackingSmoke.js",
         "web/viewer-tools.js",
-        "test_frame_preview.py"
+        "test_frame_preview.py",
+        "verification/0.9.1/bundle-fixed-planar/result.json",
+        "verification/0.9.1/worker-bytecode-fix/manifest.json"
       ],
-      "acceptance": "Native-08 passed 10/10 checks in 9.463 seconds with actual OpenCV 4.11.0/NumPy 2.3.5 measurement on 12/12 visible frames, native apply/undo/redo/timing invalidation/remap/save/reopen/paused-frame/export, and independent ProRes decoding. First/last pinned-image centroids both measured [80.5,64.0]. A prior 12-second export deadline expired while Wan inference was active; the retained-evidence harness now permits a bounded 60-second export and the serialized run passed. This is bounded correctness evidence, not production-scale throughput. Frozen-suite/installed-file identity remain separate release gates."
+      "acceptance": "Bundle-fixed-planar passed 10/10 in 10.282 seconds after explicit -B worker-launch correction: seven actual native stages, real OpenCV 4.11.0/NumPy 2.3.5 measurement, apply/undo/redo/timing invalidation/remap/save/reopen/paused-frame/ProRes export. Movie remains 268,926 bytes, both pin centers [80.5,64.0]. Earlier 10/10 runs and concurrent-inference timeout remain historical. Install-03 was observed passed; full receipt/canonical launch outcome are uncollected and final source reconciliation has not executed. Wider production throughput is unverified."
     },
     {
       "id": "color.sdr",
@@ -282,8 +353,8 @@
     },
     {
       "id": "ai.comfyui",
-      "status": "adapter_implemented_validation_pending",
-      "scope": "Configured API workflow/preflight, scoped prompt lifecycle and verified output admission, plus a pinned managed ComfyUI 0.42.1 runtime with one core Wan 1.3B text-to-video workflow. Earlier genuine reduced inference and playback passed at 192x128, nine frames, four steps. After an earlier termination cancellation and a rejected nearly-black UniPC take, two real serial Euler takes at 480x272, 17 frames, 20 steps, 16 fps and CFG 6 passed 14/14 independent media/provenance checks each, with 17 distinct nonblank decoded frames. Exact sample/media/edit-list clocks establish the first file's bounded container-duration quantization without altering source media. Native playback passed 14/14 for the second take and 13/14 for the first, exposing final-frame loss from the old timeline insertion's duration floor. The nearest-frame correction passed focused local regression but awaits Mac rerun after connector execution authority expired. The explicit 33-frame native acceptance is prepared but unexecuted. Longer takes, sustained operation and production quality remain unverified. Custom nodes are disabled; this is not general model authoring, CameraCtrl conditioning or commercial-provider integration.",
+      "status": "implemented_bounded",
+      "scope": "Configured API workflow/preflight, owned prompt lifecycle and verified output admission, plus pinned managed ComfyUI 0.42.1 with one core Wan 1.3B text-to-video workflow. Earlier reduced inference passed at 192x128, nine frames and four steps. Two actual serial Euler takes at 480x272, 17 frames, 20 steps, 16 fps and CFG 6 passed 14/14 independent media/provenance checks each, with 17 distinct nonblank decoded frames. After correcting timeline insertion to the backend's nearest-frame contract, both final native Add/Play/Save runs passed 14/14 and retained all 17 timeline frames. Source media stayed unchanged. Exact sample/media/edit-list clocks validate bounded MP4 duration quantization. Earlier termination cancellation, rejected nearly-black UniPC output and the first 13/14 playback remain historical failures. One actual 33-frame case at the same 480x272, 20-step, 16 fps and CFG 6 settings also passed inference and native playback; the generation harness elapsed 928.394 seconds. Its inference harness passed 11/11 checks, independent media passed 14/14 and native playback passed 14/14; all 33 decoded frames were distinct and nonblank. Broader longer-duration coverage, sustained operation and production quality remain unverified. Custom nodes are disabled in the owned runtime; general model authoring, CameraCtrl and commercial-provider integrations remain absent.",
       "evidence": [
         "adapters.py",
         "generation_readiness.py",
@@ -300,7 +371,7 @@
         "macos/GenerationInferenceSmoke.js",
         "test_generated_take_timing.py"
       ],
-      "acceptance": "Two normal decoded-media reports passed 14/14 each; native playback is 14/14 and 13/14. Eighteen focused Node/real-media checks passed for exact timing and nearest-frame insertion. Corrected native playback, the 33-frame case and installation are blocked by MIDIA-AI COMMANDER_AUTHORITY_EXPIRED_OR_CHANGED after its 0.7.2 to 0.8.0 upgrade. Generation remains validation pending; rejected/failed evidence is retained."
+      "acceptance": "Normal 480x272/17-frame/20-step workflow accepted within this bounded case: two real inference outputs each passed 14/14 media checks and both final-native-01 playback runs passed 14/14 (2.236s and 2.149s), including every timeline frame. Final-extended-01 also passed actual 33-frame inference and native playback; generation elapsed 928.394 seconds and the whole extended batch elapsed 937.624 seconds. The exact inference/media/playback reports passed 11/11, 14/14 and 14/14 respectively; playback elapsed 4.208 seconds and all original source bytes/provenance stayed unchanged. This closes one bounded longer case; production-quality and sustained-operation claims remain unsupported."
     },
     {
       "id": "audio.mix",
@@ -496,13 +567,13 @@
     {
       "id": "production.single_native_app",
       "status": "implemented_bounded",
-      "scope": "One native macOS application with CINEMATICUM authoring controls and an owned local service. The installer builds version 0.9.1, verifies archived prior-bundle bytes/modes, supports replacement rollback, preserves projects outside the app and embeds a SHA-256 inventory of copied runtime files plus native sources. Current candidate installation and equality with the frozen source require an executed install receipt and independent comparison. FFmpeg/Blender and optional imaging/tracking/generation runtimes remain separate installed dependencies; signing/notarization and self-contained distribution are not implemented.",
+      "scope": "Own native macOS application and local service; installer archives the previous bundle, supports rollback, preserves external projects and embeds copied-runtime/native-source identities. Canonical launch-01 found three cached Python files added inside the bundle; five isolated launches in four modules now explicitly pass -B. Install-03 observed successful independent verification and installed that correction. Actual unchanged production quit methods/alerts passed separately. Corrected canonical launch-02 outcome is uncollected; final installed-source reconciliation has not executed. FFmpeg/Blender and optional runtimes remain external; signed/notarized distribution is not implemented.",
       "evidence": [
         "install_macos.py",
         "macos/StudioIcon.swift",
         "test_install_macos.py"
       ],
-      "acceptance": "Current source installation and exact runtime-file identity are unexecuted release gates, blocked by the expired MIDIA-AI command-execution grant following its 0.7.2 to 0.8.0 upgrade. No replacement installation is inferred from installer source or local tests."
+      "acceptance": "Install-03 verifier output observed PASSED in 16.515 seconds: all five gates, 189 frozen operative hashes, 62 runtime files, 67 bundle files, 70 archived prior files and all 57 protected files/2,858,327,758 bytes. Full raw receipt remains on the Mac and was not collected; the public JSON is an observation of returned fields. Original 59-file backup remains preserved. Quit-05 passed 21/21 independent plus 10/10 native checks, separate from installed-app UI. Canonical launch-02 started but result is uncollected. Current MIDIA context denial/session limit blocks collection and final reconciliation; chooser cancellation remains unaccepted after failed attempt03, and reviewed helper04 is unexecuted."
     },
     {
       "id": "editor.slip_slide_roll",
@@ -799,7 +870,7 @@
       "id": "color.high16_sdr_movie",
       "status": "implemented_bounded",
       "scope": "Opt-in 16-bit unsigned normalized RGBA processing across the movie graph, alpha-aware transforms/source-over, 16-bit paused-frame PNG and lossless FFV1 gbrap16le master with alpha. Canvas limit 8,388,608 pixels and transformed working-image limit 16,777,216 pixels; narrower graph/warp limits still apply. Precision and transparent-background settings persist with the project. Decoded numeric regression checks distinguish 1,024 source values and exercise fractional alpha, hidden color and transformed composition. This remains clamped display-referred SDR: no scene-linear float movie graph, whole-timeline OCIO/ACES, HDR mastering or calibrated high-bit-depth display.",
-      "acceptance": "Native-03 passed 21 checks on three actual 64x32 frames at 12 fps, including transformed alpha, saved precision, export controls and a real 63,252-byte WKDownload of FFV1 gbrap16le plus 48 kHz stereo PCM. This bounded gate does not certify the NSSavePanel chooser, calibrated display, HDR or production scale. Frozen-suite/installed-source identity remain separate gates.",
+      "acceptance": "Final-extended-01 passed 21/21 in 2.153 seconds after exact-fixture selection corrected its earlier bootstrap failure. Saved precision, transformed alpha, processed frames, export controls and actual 63,252-byte WKDownload passed. Production download-03 subsequently verified real default-destination NSSavePanel Save, exact bytes, independent decode and alpha; aggregate remained failed because synthetic Escape did not cancel. Reviewed SDK Cancel helper download-04 is unexecuted. HDR, calibrated display, unrestricted chooser navigation/existing-file replacement and production scale remain unaccepted.",
       "evidence": [
         "engine.py",
         "compositor.py",
@@ -817,7 +888,7 @@
       "id": "audio.source_sample_playback",
       "status": "implemented_bounded",
       "scope": "Owned FFmpeg derivatives preserve the chosen original container stream and selected channel pair as 48 kHz stereo float PCM. A source-sample scheduler reads bounded chunks into AudioBuffers and applies live clip/track mix without browser container decoding or a pre-rendered timeline mix. Pitch-preserving source-tempo derivatives support forward retimes, with source identity/range validation, restart epochs and resource release. Scheduling horizon is three seconds with a 128 MiB in-memory PCM bound; disk derivative cache is bounded to 16 GiB and each standard-WAV derivative to its 32-bit size limit. Reverse transport uses rendered playback.",
-      "acceptance": "Native-03 passed routing (11 checks) plus overlap, nested-sequence and retimed playback (12 checks each), with zero underruns. Routing captured selected-source and gain/pan/restart phases; each of the three sequence scenarios ran three repetitions. Freeze/report and installed-runtime identity remain separate release gates; broad codec/device/long-session performance is not established.",
+      "acceptance": "Final-native-01 routing 11/11 plus overlap/nested/retimed 12/12 each passed with zero underruns. Routing captured selected-source and gain/pan/restart phases; each sequence scenario ran three repetitions. Native-03 remains earlier evidence. Broad codec/device/long-session performance is unverified; install-03 was observed passed, while corrected canonical launch and final installed-source reconciliation remain uncollected/unexecuted.",
       "evidence": [
         "audio_source.py",
         "server.py",

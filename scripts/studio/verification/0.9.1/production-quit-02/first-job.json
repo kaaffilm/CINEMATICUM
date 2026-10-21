@@ -1,0 +1,11 @@
+{
+  "id": "02739f7a01c74bfa84b09c4678ab1ea1",
+  "project_id": "159f592205414e259fc64dd5f493cfc3",
+  "kind": "render",
+  "state": "cancelled",
+  "progress": 0.868711,
+  "created_at": 1792613142.749314,
+  "error": "Render cancelled; source media and completed exports are unchanged.",
+  "result": null,
+  "finished_at": 1792613204.8443708
+}

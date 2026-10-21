@@ -3,18 +3,24 @@
 return await (async () => {
   const began=performance.now(),deadline=began+22000,steps=[];
   const $=s=>document.querySelector(s),sleep=ms=>new Promise(r=>setTimeout(r,ms));
-  const detail=()=>'; toast='+($('#toast')?.textContent||'')+'; job='+($('#job-detail')?.textContent||'');
+  const detail=()=>'; project='+($('#viewer-project')?.textContent||'')+'; selected='+($('#project-select')?.value||'')+'; toast='+($('#toast')?.textContent||'')+'; job='+($('#job-detail')?.textContent||'');
   function require(ok,message){if(!ok)throw Error(message+detail());}
   function control(s){const e=$(s);require(e&&!e.disabled&&!e.closest('[inert]'),'Unavailable '+s);e.scrollIntoView({block:'nearest'});return e;}
   function click(s){control(s).click();}
   function set(s,v){const e=control(s);if(e.type==='checkbox')e.checked=Boolean(v);else e.value=String(v);if(e.type==='range')e.dispatchEvent(new Event('input',{bubbles:true}));e.dispatchEvent(new Event('change',{bubbles:true}));}
   async function until(fn,label,ms=2500){const end=Math.min(deadline,performance.now()+ms);while(performance.now()<end){if(fn())return;await sleep(35);}throw Error(label+detail());}
   try {
-    await until(()=>$('#viewer-project')?.textContent==='ENGINE TEST — native 16-bit SDR'&&$('.media-item [data-add]'),'Source project did not bootstrap',5000);
-    const projectId=$('#project-select').value;
-    const sentinel=[...$('#project-select').options].find(o=>o.textContent.includes('sentinel'))?.value;
-    require(sentinel&&sentinel!==projectId,'Missing independent reopen project');
-    click('.media-item [data-add]');
+    const projectId=HIGH16_TEST.project_id,sentinel=HIGH16_TEST.sentinel_id;
+    const sourceControl=`.media-item[data-asset="${HIGH16_TEST.asset_id}"] [data-add]`;
+    const bootstrapDeadline=performance.now()+5000;
+    await until(()=>$('#project-select')&&!$('#project-select').disabled&&[...$('#project-select').options].some(o=>o.value===projectId),'Fixture project list did not bootstrap',bootstrapDeadline-performance.now());
+    // Saved timestamps have one-second precision. Select the owned fixture by
+    // its exact ID even when a tied timestamp opens the sentinel first.
+    if($('#project-select').value!==projectId)set('#project-select',projectId);
+    await until(()=>$('#project-select').value===projectId&&!$('#project-select').disabled&&$('#viewer-project')?.textContent==='ENGINE TEST — native 16-bit SDR'&&$(sourceControl),'Source fixture did not open',bootstrapDeadline-performance.now());
+    require(sentinel&&sentinel!==projectId&&[...$('#project-select').options].some(o=>o.value===sentinel),'Missing independent reopen project');
+    steps.push('select_exact_fixture_project');
+    click(sourceControl);
     await until(()=>document.querySelectorAll('.timeline-clip[data-type="clip"]').length===1,'Source did not enter timeline');
     click('#export-button');
     require($('#movie-precision').value==='standard8'&&$('[data-export="master16"]').disabled,'Eight-bit project must not offer an enabled 16-bit master');

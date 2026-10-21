@@ -131,7 +131,7 @@ def _command(python=None):
     executable = find_imaging_python(python)
     if not executable:
         raise ValueError("The isolated imaging runtime is not installed. Install the CINEMATICUM Imaging runtime to use OCIO, RAW development and HDR merging.")
-    return [executable, "-I", str(Path(__file__).with_name("image_worker.py"))]
+    return [executable, "-I", "-B", str(Path(__file__).with_name("image_worker.py"))]
 
 
 def _worker_env():

@@ -42,7 +42,7 @@ def prepare_roto_mask(node, width, height, scratch, *, frame_offset=0, frame_cou
         if key.startswith(("PYTHON","OCIO")):
             environment.pop(key,None)
     environment.update(OMP_NUM_THREADS="2",OPENBLAS_NUM_THREADS="2")
-    command = [executable,"-I",str(Path(__file__).with_name("roto.py")),"--render",str(directory)]
+    command = [executable,"-I","-B",str(Path(__file__).with_name("roto.py")),"--render",str(directory)]
     with tempfile.TemporaryFile() as incoming, tempfile.TemporaryFile() as outgoing, tempfile.TemporaryFile() as errors:
         incoming.write(encoded);incoming.seek(0)
         process = subprocess.Popen(command,stdin=incoming,stdout=outgoing,stderr=errors,start_new_session=True,env=environment)

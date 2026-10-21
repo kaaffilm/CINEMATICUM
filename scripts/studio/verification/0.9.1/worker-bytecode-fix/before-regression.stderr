@@ -1,0 +1,23 @@
+test_packaged_isolated_capability_workers_do_not_write_into_the_bundle (test_install_macos.ArchiveInstallationTests.test_packaged_isolated_capability_workers_do_not_write_into_the_bundle)
+The launcher's -B/environment must survive actual isolated children. ... FAIL
+
+======================================================================
+FAIL: test_packaged_isolated_capability_workers_do_not_write_into_the_bundle (test_install_macos.ArchiveInstallationTests.test_packaged_isolated_capability_workers_do_not_write_into_the_bundle)
+The launcher's -B/environment must survive actual isolated children.
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/scratch/091f394ee5df/cinematicum/scripts/studio/test_install_macos.py", line 77, in test_packaged_isolated_capability_workers_do_not_write_into_the_bundle
+    self.assertEqual([], list(runtime.rglob("__pycache__")),
+AssertionError: Lists differ: [] != [PosixPath('/workspace/scratch/091f394ee5d[80 chars]__')]
+
+Second list contains 1 additional elements.
+First extra element 0:
+PosixPath('/workspace/scratch/091f394ee5df/cinematicum/scripts/studio/cinematicum-INSTALL-TEST-344gzu55/runtime/__pycache__')
+
+- []
++ [PosixPath('/workspace/scratch/091f394ee5df/cinematicum/scripts/studio/cinematicum-INSTALL-TEST-344gzu55/runtime/__pycache__')] : Actual isolated capability probes mutated the installed source tree
+
+----------------------------------------------------------------------
+Ran 1 test in 0.187s
+
+FAILED (failures=1)

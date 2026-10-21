@@ -1,0 +1,55 @@
+{
+  "state": "FAILED",
+  "elapsed_seconds": 58.989,
+  "results": [
+    {
+      "name": "source-before",
+      "exit_code": 0,
+      "stdout": "/Users/midiakiasat/.midia-ai/gateway-live/workspaces/auto-d5f5e80a10b691457cec8d25044150b5/.completion-evidence/final-native-01/source-before.stdout",
+      "stderr": "/Users/midiakiasat/.midia-ai/gateway-live/workspaces/auto-d5f5e80a10b691457cec8d25044150b5/.completion-evidence/final-native-01/source-before.stderr"
+    },
+    {
+      "name": "compile",
+      "exit_code": 0,
+      "stdout": "/Users/midiakiasat/.midia-ai/gateway-live/workspaces/auto-d5f5e80a10b691457cec8d25044150b5/.completion-evidence/final-native-01/compile.stdout",
+      "stderr": "/Users/midiakiasat/.midia-ai/gateway-live/workspaces/auto-d5f5e80a10b691457cec8d25044150b5/.completion-evidence/final-native-01/compile.stderr"
+    },
+    {
+      "name": "audio",
+      "exit_code": 0,
+      "stdout": "/Users/midiakiasat/.midia-ai/gateway-live/workspaces/auto-d5f5e80a10b691457cec8d25044150b5/.completion-evidence/final-native-01/audio.stdout",
+      "stderr": "/Users/midiakiasat/.midia-ai/gateway-live/workspaces/auto-d5f5e80a10b691457cec8d25044150b5/.completion-evidence/final-native-01/audio.stderr"
+    },
+    {
+      "name": "high16",
+      "exit_code": 1,
+      "stdout": "/Users/midiakiasat/.midia-ai/gateway-live/workspaces/auto-d5f5e80a10b691457cec8d25044150b5/.completion-evidence/final-native-01/high16.stdout",
+      "stderr": "/Users/midiakiasat/.midia-ai/gateway-live/workspaces/auto-d5f5e80a10b691457cec8d25044150b5/.completion-evidence/final-native-01/high16.stderr"
+    },
+    {
+      "name": "planar",
+      "exit_code": 0,
+      "stdout": "/Users/midiakiasat/.midia-ai/gateway-live/workspaces/auto-d5f5e80a10b691457cec8d25044150b5/.completion-evidence/final-native-01/planar.stdout",
+      "stderr": "/Users/midiakiasat/.midia-ai/gateway-live/workspaces/auto-d5f5e80a10b691457cec8d25044150b5/.completion-evidence/final-native-01/planar.stderr"
+    },
+    {
+      "name": "actual-take-1",
+      "exit_code": 0,
+      "stdout": "/Users/midiakiasat/.midia-ai/gateway-live/workspaces/auto-d5f5e80a10b691457cec8d25044150b5/.completion-evidence/final-native-01/actual-take-1.stdout",
+      "stderr": "/Users/midiakiasat/.midia-ai/gateway-live/workspaces/auto-d5f5e80a10b691457cec8d25044150b5/.completion-evidence/final-native-01/actual-take-1.stderr"
+    },
+    {
+      "name": "actual-take-2",
+      "exit_code": 0,
+      "stdout": "/Users/midiakiasat/.midia-ai/gateway-live/workspaces/auto-d5f5e80a10b691457cec8d25044150b5/.completion-evidence/final-native-01/actual-take-2.stdout",
+      "stderr": "/Users/midiakiasat/.midia-ai/gateway-live/workspaces/auto-d5f5e80a10b691457cec8d25044150b5/.completion-evidence/final-native-01/actual-take-2.stderr"
+    },
+    {
+      "name": "source-after",
+      "exit_code": 0,
+      "stdout": "/Users/midiakiasat/.midia-ai/gateway-live/workspaces/auto-d5f5e80a10b691457cec8d25044150b5/.completion-evidence/final-native-01/source-after.stdout",
+      "stderr": "/Users/midiakiasat/.midia-ai/gateway-live/workspaces/auto-d5f5e80a10b691457cec8d25044150b5/.completion-evidence/final-native-01/source-after.stderr"
+    }
+  ],
+  "source_commit": "4530c54faf969b0a42f2eb7e73f67c295443d275"
+}

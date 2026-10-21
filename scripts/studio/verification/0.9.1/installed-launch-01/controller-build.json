@@ -1,0 +1,25 @@
+{
+  "schema": "cinematicum-installed-app-controller-build-v1",
+  "compiled": true,
+  "scope": "Independent LaunchServices control only; no production source compiled or injected",
+  "source_sha256": "7c6ff3f77b350f6e5b4ee25a136235de51ee5247f9867b3de24b2b76747e1f8b",
+  "binary_sha256": "4144ca5b36167e61c4514786a968bf3f0b9cd79e3e61c2d09c2cc33e9a3d8d73",
+  "command": [
+    "/usr/bin/xcrun",
+    "swiftc",
+    "-O",
+    "-swift-version",
+    "5",
+    "-framework",
+    "Cocoa",
+    "-framework",
+    "CoreGraphics",
+    "-target",
+    "arm64-apple-macos12.0",
+    "-module-cache-path",
+    "/Users/midiakiasat/.midia-ai/gateway-live/workspaces/auto-d5f5e80a10b691457cec8d25044150b5/.completion-evidence/final-dialogs-01/native-installed-build/module-cache",
+    "/Users/midiakiasat/.midia-ai/gateway-live/workspaces/auto-d5f5e80a10b691457cec8d25044150b5/.completion-evidence/final-dialogs-01/helpers/installed01/InstalledAppControl.swift",
+    "-o",
+    "/Users/midiakiasat/.midia-ai/gateway-live/workspaces/auto-d5f5e80a10b691457cec8d25044150b5/.completion-evidence/final-dialogs-01/native-installed-build/cinematicum-installed-app-control"
+  ]
+}

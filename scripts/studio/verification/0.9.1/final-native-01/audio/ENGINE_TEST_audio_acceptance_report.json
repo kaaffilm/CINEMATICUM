@@ -1,0 +1,3215 @@
+{
+  "passed": true,
+  "reports": [
+    {
+      "passed": true,
+      "stream_choice": "second",
+      "source_codec": "pcm_s16le",
+      "source_container": "mov",
+      "fixture": "SYNTHETIC ENGINE TEST \u2014 NOT A FILM",
+      "checks": {
+        "actual_native_controls": true,
+        "native_screenshot": true,
+        "saved_source_mapping": true,
+        "saved_live_gain_pan": true,
+        "live_pcm_matches_independent_decoded_source": true,
+        "live_gain_pan_matches_decoded_source": true,
+        "http_pcm_provenance": true,
+        "decoded_pcm_is_exact_source_pair": true,
+        "gain_pan_uses_same_source_recipe": true,
+        "owned_source_audio_job": true,
+        "no_export_substitution": true
+      },
+      "source_streams": [
+        {
+          "index": 1,
+          "channels": 2,
+          "container_id": "0x2",
+          "sample_rate": 48000,
+          "codec": "pcm_s16le",
+          "language": "",
+          "duration": 4.0
+        },
+        {
+          "index": 2,
+          "channels": 2,
+          "container_id": "0x3",
+          "sample_rate": 48000,
+          "codec": "pcm_s16le",
+          "language": "",
+          "duration": 4.0
+        }
+      ],
+      "independent_source_pcm_oracle": {
+        "rms": [
+          0.2829884315176774,
+          0.21221623471040676
+        ],
+        "amplitudes": {
+          "220": [
+            0.0009459395819401157,
+            0.002071477338598865
+          ],
+          "330": [
+            0.0018200451147428755,
+            0.00289296410933828
+          ],
+          "440": [
+            0.0028837446375753624,
+            0.30023903759623866
+          ],
+          "660": [
+            0.4004118526144153,
+            0.0027874714325046546
+          ]
+        }
+      },
+      "ui": {
+        "metrics": {
+          "audio_context": {
+            "sample_rate": 48000,
+            "state": "running",
+            "time": 2.288
+          },
+          "capture_window": {
+            "end_frame": 107392,
+            "render_thread": true,
+            "requested_start_frame": 74624,
+            "sample_rate": 48000,
+            "start_frame": 74624
+          },
+          "current_src": "http://127.0.0.1:59857/api/projects/3efde8d939244b51937f3a04ec015389/audio-source/cb7be6a6a3c025adb9716f7c1948348922b525fe0a926d1a4a5ba1ac6b08a47d",
+          "decoder": {
+            "kind": "scheduled-source-pcm",
+            "range_requests": 4,
+            "scheduled_chunks": 4,
+            "underruns": 0
+          },
+          "element": {
+            "connected": false,
+            "cross_origin": "anonymous",
+            "current_time": 2.0653333333333332,
+            "duration": 4,
+            "error": null,
+            "muted": false,
+            "network_state": 1,
+            "paused": false,
+            "playback_rate": 1,
+            "played": [
+              [
+                0,
+                2.0653333333333332
+              ]
+            ],
+            "ready_state": 4,
+            "seeking": false,
+            "volume": 1
+          },
+          "gain_pan": {
+            "audio_context": {
+              "sample_rate": 48000,
+              "state": "running",
+              "time": 4.317333333333333
+            },
+            "capture_window": {
+              "end_frame": 205312,
+              "render_thread": true,
+              "requested_start_frame": 172544,
+              "sample_rate": 48000,
+              "start_frame": 172544
+            },
+            "current_src": "http://127.0.0.1:59857/api/projects/3efde8d939244b51937f3a04ec015389/audio-source/cb7be6a6a3c025adb9716f7c1948348922b525fe0a926d1a4a5ba1ac6b08a47d",
+            "decoder": {
+              "kind": "scheduled-source-pcm",
+              "range_requests": 7,
+              "scheduled_chunks": 8,
+              "underruns": 0
+            },
+            "element": {
+              "connected": false,
+              "cross_origin": "anonymous",
+              "current_time": 1.9719791666666664,
+              "duration": 4,
+              "error": null,
+              "muted": false,
+              "network_state": 1,
+              "paused": false,
+              "playback_rate": 1,
+              "played": [
+                [
+                  0,
+                  2.0653333333333332
+                ]
+              ],
+              "ready_state": 4,
+              "seeking": false,
+              "volume": 1
+            },
+            "graph": {
+              "gain": 0.5,
+              "gate": 1,
+              "left": 0.75,
+              "right": 1,
+              "source_channel_count": 2,
+              "source_interpretation": "discrete",
+              "split_outputs": 2,
+              "stereo": null
+            },
+            "measurement_calibration": {
+              "amplitudes": {
+                "220": [
+                  0.000201551549155414,
+                  0.000201551549155414
+                ],
+                "330": [
+                  0.00018026749771294032,
+                  0.00018026749771294032
+                ],
+                "440": [
+                  0.00014785906148282507,
+                  0.00014785906148282507
+                ],
+                "660": [
+                  2.6273460998408698e-05,
+                  2.6273460998408698e-05
+                ],
+                "990": [
+                  0.01072713405791883,
+                  0.01072713405791883
+                ],
+                "997": [
+                  0.2499603494504186,
+                  0.2499603494504186
+                ]
+              },
+              "left": -0.00010884521136950154,
+              "max": [
+                0.2499999850988388,
+                0.2499999850988388
+              ],
+              "min": [
+                -0.2499999701976776,
+                -0.2499999701976776
+              ],
+              "right": -0.00010884521136950154,
+              "rms": [
+                0.17676265640169497,
+                0.17676265640169497
+              ],
+              "sample_rate": 48000,
+              "samples": 32768
+            },
+            "original_request_url": "/api/projects/3efde8d939244b51937f3a04ec015389/media/d2944521c2af4ffeb42a40f1502badad",
+            "pcm": {
+              "amplitudes": {
+                "220": [
+                  0.00018821137626087435,
+                  0.0001992129343370616
+                ],
+                "330": [
+                  0.0001870623304821026,
+                  0.00019634902299421595
+                ],
+                "440": [
+                  0.00018473071843839306,
+                  0.14999637915031352
+                ],
+                "660": [
+                  0.14998759876243986,
+                  0.00017567029180878084
+                ],
+                "990": [
+                  0.00014076199897525562,
+                  0.00013179742757464093
+                ],
+                "997": [
+                  2.9179879284610366e-05,
+                  8.74367304991123e-05
+                ]
+              },
+              "left": -9.439000859856534e-05,
+              "max": [
+                0.14999771118164062,
+                0.149993896484375
+              ],
+              "min": [
+                -0.14999771118164062,
+                -0.149993896484375
+              ],
+              "right": -0.00010060286149382591,
+              "rms": [
+                0.10606169052887798,
+                0.10606460567953824
+              ],
+              "sample_rate": 48000,
+              "samples": 32768
+            },
+            "raw_source_pcm": {
+              "amplitudes": {
+                "220": [
+                  0.0005018970033623339,
+                  0.0003984258686741232
+                ],
+                "330": [
+                  0.0004988328812856118,
+                  0.0003926980459884319
+                ],
+                "440": [
+                  0.0004926152491690497,
+                  0.29999275830062705
+                ],
+                "660": [
+                  0.3999669300331779,
+                  0.0003513405836175617
+                ],
+                "990": [
+                  0.0003753653306006823,
+                  0.00026359485514928187
+                ],
+                "997": [
+                  7.781301142562398e-05,
+                  0.0001748734609982246
+                ]
+              },
+              "left": -0.00025170668959617425,
+              "max": [
+                0.399993896484375,
+                0.29998779296875
+              ],
+              "min": [
+                -0.399993896484375,
+                -0.29998779296875
+              ],
+              "right": -0.00020120572298765182,
+              "rms": [
+                0.28283117474367464,
+                0.21212921135907647
+              ],
+              "sample_rate": 48000,
+              "samples": 32768
+            },
+            "route": {
+              "binding": "decoded-source-pcm",
+              "cache_key": "cb7be6a6a3c025adb9716f7c1948348922b525fe0a926d1a4a5ba1ac6b08a47d",
+              "channel_map": [
+                1,
+                0
+              ],
+              "channels": 2,
+              "manifest": {
+                "asset_id": "d2944521c2af4ffeb42a40f1502badad",
+                "byte_size": 1536058,
+                "cache_key": "cb7be6a6a3c025adb9716f7c1948348922b525fe0a926d1a4a5ba1ac6b08a47d",
+                "cached": false,
+                "channels": [
+                  1,
+                  0
+                ],
+                "codec": "pcm_f32le",
+                "created_at": 1792611246.980104,
+                "data_offset": 58,
+                "duration": 4,
+                "export_source": "original",
+                "frame_bytes": 8,
+                "frames": 192000,
+                "output_channels": 2,
+                "padded_frames": 0,
+                "playback_rate": 1,
+                "rate": 48000,
+                "recipe": {
+                  "channels": [
+                    1,
+                    0
+                  ],
+                  "codec": "pcm_f32le",
+                  "output_channels": 2,
+                  "pad_frames": 192000,
+                  "playback_rate": 1,
+                  "rate": 48000,
+                  "source_channels": 2,
+                  "stream_index": 2,
+                  "version": 2
+                },
+                "sha256": "4be008fc5ad351f797a8f782b749bce7ef21617a6f984f7862592b7b1d7bddd7",
+                "source_frames": 192000,
+                "source_sha256": "05016c49538f38e7e2e045dee59001c2221eeb08f86956627e66e6711a7f09e2",
+                "source_time_scale": 1,
+                "state": "ready",
+                "stream_index": 2,
+                "url": "/api/projects/3efde8d939244b51937f3a04ec015389/audio-source/cb7be6a6a3c025adb9716f7c1948348922b525fe0a926d1a4a5ba1ac6b08a47d",
+                "version": 2
+              },
+              "message": "",
+              "playback_rate": 1,
+              "ready": true,
+              "sha256": "4be008fc5ad351f797a8f782b749bce7ef21617a6f984f7862592b7b1d7bddd7",
+              "source_sha256": "05016c49538f38e7e2e045dee59001c2221eeb08f86956627e66e6711a7f09e2",
+              "state": "ready",
+              "stream_index": 2,
+              "url": "/api/projects/3efde8d939244b51937f3a04ec015389/audio-source/cb7be6a6a3c025adb9716f7c1948348922b525fe0a926d1a4a5ba1ac6b08a47d"
+            },
+            "source_url": "/api/projects/3efde8d939244b51937f3a04ec015389/audio-source/cb7be6a6a3c025adb9716f7c1948348922b525fe0a926d1a4a5ba1ac6b08a47d",
+            "steady_seeks": 0
+          },
+          "graph": {
+            "gain": 1,
+            "gate": 1,
+            "left": 1,
+            "right": 1,
+            "source_channel_count": 2,
+            "source_interpretation": "discrete",
+            "split_outputs": 2,
+            "stereo": null
+          },
+          "last_route": {
+            "binding": "decoded-source-pcm",
+            "cache_key": "cb7be6a6a3c025adb9716f7c1948348922b525fe0a926d1a4a5ba1ac6b08a47d",
+            "channel_map": [
+              1,
+              0
+            ],
+            "channels": 2,
+            "manifest": {
+              "asset_id": "d2944521c2af4ffeb42a40f1502badad",
+              "byte_size": 1536058,
+              "cache_key": "cb7be6a6a3c025adb9716f7c1948348922b525fe0a926d1a4a5ba1ac6b08a47d",
+              "cached": false,
+              "channels": [
+                1,
+                0
+              ],
+              "codec": "pcm_f32le",
+              "created_at": 1792611246.980104,
+              "data_offset": 58,
+              "duration": 4,
+              "export_source": "original",
+              "frame_bytes": 8,
+              "frames": 192000,
+              "output_channels": 2,
+              "padded_frames": 0,
+              "playback_rate": 1,
+              "rate": 48000,
+              "recipe": {
+                "channels": [
+                  1,
+                  0
+                ],
+                "codec": "pcm_f32le",
+                "output_channels": 2,
+                "pad_frames": 192000,
+                "playback_rate": 1,
+                "rate": 48000,
+                "source_channels": 2,
+                "stream_index": 2,
+                "version": 2
+              },
+              "sha256": "4be008fc5ad351f797a8f782b749bce7ef21617a6f984f7862592b7b1d7bddd7",
+              "source_frames": 192000,
+              "source_sha256": "05016c49538f38e7e2e045dee59001c2221eeb08f86956627e66e6711a7f09e2",
+              "source_time_scale": 1,
+              "state": "ready",
+              "stream_index": 2,
+              "url": "/api/projects/3efde8d939244b51937f3a04ec015389/audio-source/cb7be6a6a3c025adb9716f7c1948348922b525fe0a926d1a4a5ba1ac6b08a47d",
+              "version": 2
+            },
+            "message": "",
+            "playback_rate": 1,
+            "ready": true,
+            "sha256": "4be008fc5ad351f797a8f782b749bce7ef21617a6f984f7862592b7b1d7bddd7",
+            "source_sha256": "05016c49538f38e7e2e045dee59001c2221eeb08f86956627e66e6711a7f09e2",
+            "state": "ready",
+            "stream_index": 2,
+            "url": "/api/projects/3efde8d939244b51937f3a04ec015389/audio-source/cb7be6a6a3c025adb9716f7c1948348922b525fe0a926d1a4a5ba1ac6b08a47d"
+          },
+          "measurement_calibration": {
+            "amplitudes": {
+              "220": [
+                0.00015498868834028137,
+                0.00015498868834028137
+              ],
+              "330": [
+                0.00015441851909241445,
+                0.00015441851909241445
+              ],
+              "440": [
+                0.00014577100769943576,
+                0.00014577100769943576
+              ],
+              "660": [
+                7.46912342617395e-05,
+                7.46912342617395e-05
+              ],
+              "990": [
+                0.010667327530196277,
+                0.010667327530196277
+              ],
+              "997": [
+                0.2500012338242213,
+                0.2500012338242213
+              ]
+            },
+            "left": -7.579302081123229e-05,
+            "max": [
+              0.2499999850988388,
+              0.2499999850988388
+            ],
+            "min": [
+              -0.25,
+              -0.25
+            ],
+            "right": -7.579302081123229e-05,
+            "rms": [
+              0.17677710995194862,
+              0.17677710995194862
+            ],
+            "sample_rate": 48000,
+            "samples": 32768
+          },
+          "media_events": [
+            {
+              "context_time": 0.20266666666666666,
+              "media_time": 0,
+              "paused": false,
+              "phase": "baseline",
+              "rate": 1,
+              "seeking": false,
+              "type": "play"
+            },
+            {
+              "context_time": 2.288,
+              "media_time": 2.0653333333333332,
+              "paused": true,
+              "phase": "baseline",
+              "rate": 1,
+              "seeking": false,
+              "type": "pause"
+            },
+            {
+              "context_time": 2.288,
+              "media_time": 2,
+              "paused": true,
+              "phase": "gain_pan",
+              "rate": 1,
+              "seeking": true,
+              "type": "seeking"
+            },
+            {
+              "context_time": 2.3173333333333335,
+              "media_time": 2,
+              "paused": true,
+              "phase": "gain_pan",
+              "rate": 1,
+              "seeking": false,
+              "type": "seeked"
+            },
+            {
+              "context_time": 2.3226666666666667,
+              "media_time": 0,
+              "paused": true,
+              "phase": "gain_pan",
+              "rate": 1,
+              "seeking": true,
+              "type": "seeking"
+            },
+            {
+              "context_time": 2.3226666666666667,
+              "media_time": 0,
+              "paused": true,
+              "phase": "gain_pan",
+              "rate": 1,
+              "seeking": false,
+              "type": "seeked"
+            },
+            {
+              "context_time": 2.3253333333333335,
+              "media_time": 0,
+              "paused": false,
+              "phase": "gain_pan",
+              "rate": 1,
+              "seeking": false,
+              "type": "play"
+            },
+            {
+              "context_time": 4.317333333333333,
+              "media_time": 1.9719791666666666,
+              "paused": true,
+              "phase": "gain_pan",
+              "rate": 1,
+              "seeking": false,
+              "type": "pause"
+            },
+            {
+              "context_time": 4.381333333333333,
+              "media_time": 1.9166666666666667,
+              "paused": true,
+              "phase": "gain_pan",
+              "rate": 1,
+              "seeking": true,
+              "type": "seeking"
+            },
+            {
+              "context_time": 4.381333333333333,
+              "media_time": 1.9166666666666667,
+              "paused": true,
+              "phase": "gain_pan",
+              "rate": 1,
+              "seeking": false,
+              "type": "seeked"
+            }
+          ],
+          "original_request_url": "/api/projects/3efde8d939244b51937f3a04ec015389/media/d2944521c2af4ffeb42a40f1502badad",
+          "pcm": {
+            "amplitudes": {
+              "220": [
+                0.00038594211101245434,
+                0.0005586149726517656
+              ],
+              "330": [
+                0.00042433957999915334,
+                0.0005273157840249477
+              ],
+              "440": [
+                0.0004624679479233326,
+                0.30011161182742585
+              ],
+              "660": [
+                0.4000122014088056,
+                0.00037805535735396545
+              ],
+              "990": [
+                0.00047165408064031187,
+                0.000193054655677486
+              ],
+              "997": [
+                0.00012900551539882146,
+                0.00017743120684898602
+              ]
+            },
+            "left": 0.00017276033759117126,
+            "max": [
+              0.399993896484375,
+              0.29998779296875
+            ],
+            "min": [
+              -0.399993896484375,
+              -0.29998779296875
+            ],
+            "right": 0.0002922704443335533,
+            "rms": [
+              0.2828471803922759,
+              0.2121712388596767
+            ],
+            "sample_rate": 48000,
+            "samples": 32768
+          },
+          "raw_source_pcm": {
+            "amplitudes": {
+              "220": [
+                0.00038594211101245434,
+                0.0005586149726517656
+              ],
+              "330": [
+                0.00042433957999915334,
+                0.0005273157840249477
+              ],
+              "440": [
+                0.0004624679479233326,
+                0.30011161182742585
+              ],
+              "660": [
+                0.4000122014088056,
+                0.00037805535735396545
+              ],
+              "990": [
+                0.00047165408064031187,
+                0.000193054655677486
+              ],
+              "997": [
+                0.00012900551539882146,
+                0.00017743120684898602
+              ]
+            },
+            "left": 0.00017276033759117126,
+            "max": [
+              0.399993896484375,
+              0.29998779296875
+            ],
+            "min": [
+              -0.399993896484375,
+              -0.29998779296875
+            ],
+            "right": 0.0002922704443335533,
+            "rms": [
+              0.2828471803922759,
+              0.2121712388596767
+            ],
+            "sample_rate": 48000,
+            "samples": 32768
+          },
+          "route": {
+            "binding": "decoded-source-pcm",
+            "cache_key": "cb7be6a6a3c025adb9716f7c1948348922b525fe0a926d1a4a5ba1ac6b08a47d",
+            "channel_map": [
+              1,
+              0
+            ],
+            "channels": 2,
+            "manifest": {
+              "asset_id": "d2944521c2af4ffeb42a40f1502badad",
+              "byte_size": 1536058,
+              "cache_key": "cb7be6a6a3c025adb9716f7c1948348922b525fe0a926d1a4a5ba1ac6b08a47d",
+              "cached": false,
+              "channels": [
+                1,
+                0
+              ],
+              "codec": "pcm_f32le",
+              "created_at": 1792611246.980104,
+              "data_offset": 58,
+              "duration": 4,
+              "export_source": "original",
+              "frame_bytes": 8,
+              "frames": 192000,
+              "output_channels": 2,
+              "padded_frames": 0,
+              "playback_rate": 1,
+              "rate": 48000,
+              "recipe": {
+                "channels": [
+                  1,
+                  0
+                ],
+                "codec": "pcm_f32le",
+                "output_channels": 2,
+                "pad_frames": 192000,
+                "playback_rate": 1,
+                "rate": 48000,
+                "source_channels": 2,
+                "stream_index": 2,
+                "version": 2
+              },
+              "sha256": "4be008fc5ad351f797a8f782b749bce7ef21617a6f984f7862592b7b1d7bddd7",
+              "source_frames": 192000,
+              "source_sha256": "05016c49538f38e7e2e045dee59001c2221eeb08f86956627e66e6711a7f09e2",
+              "source_time_scale": 1,
+              "state": "ready",
+              "stream_index": 2,
+              "url": "/api/projects/3efde8d939244b51937f3a04ec015389/audio-source/cb7be6a6a3c025adb9716f7c1948348922b525fe0a926d1a4a5ba1ac6b08a47d",
+              "version": 2
+            },
+            "message": "",
+            "playback_rate": 1,
+            "ready": true,
+            "sha256": "4be008fc5ad351f797a8f782b749bce7ef21617a6f984f7862592b7b1d7bddd7",
+            "source_sha256": "05016c49538f38e7e2e045dee59001c2221eeb08f86956627e66e6711a7f09e2",
+            "state": "ready",
+            "stream_index": 2,
+            "url": "/api/projects/3efde8d939244b51937f3a04ec015389/audio-source/cb7be6a6a3c025adb9716f7c1948348922b525fe0a926d1a4a5ba1ac6b08a47d"
+          },
+          "source_url": "/api/projects/3efde8d939244b51937f3a04ec015389/audio-source/cb7be6a6a3c025adb9716f7c1948348922b525fe0a926d1a4a5ba1ac6b08a47d",
+          "steady_seeks": 0
+        },
+        "page_errors": [],
+        "passed": true,
+        "screenshot": "/Users/midiakiasat/.midia-ai/gateway-live/workspaces/auto-d5f5e80a10b691457cec8d25044150b5/.completion-evidence/final-native-01/audio/routing/ENGINE_TEST_audio_routing.png",
+        "screenshot_bytes": 307747,
+        "steps": [
+          "native_source_stream_and_channel_controls",
+          "measured_actual_live_stream_2_swapped_stereo_pcm",
+          "native_gain_pan_and_explicit_restart_pcm",
+          "saved_mapping"
+        ]
+      },
+      "http_source_pcm_comparison": {
+        "original_samples": 384000,
+        "decoded_samples": 384000,
+        "max_absolute_error": 0.0,
+        "padding_peak": 0
+      },
+      "elapsed_seconds": 6.533
+    },
+    {
+      "passed": true,
+      "scenario": "overlap",
+      "repetitions": 3,
+      "fixture": "SYNTHETIC ENGINE TEST \u2014 NOT A FILM",
+      "checks": {
+        "actual_native_controls": true,
+        "native_screenshot": true,
+        "all_repeated_runs_captured": true,
+        "every_actual_live_mix_matches_independent_pcm": true,
+        "every_actual_source_mix_matches_independent_pcm": true,
+        "all_voices_observed_each_run": true,
+        "zero_native_underruns": true,
+        "shared_clock_drift_below_80ms": true,
+        "all_http_source_bytes_match_original_stream_tempo_and_mapping": true,
+        "saved_authored_structure_preserved": true,
+        "original_media_preserved": true,
+        "no_render_substitution": true
+      },
+      "independent_voice_oracles": [
+        {
+          "clip_id": "primary",
+          "rms": [
+            0.2828253820754241,
+            0.21215793423102344
+          ],
+          "amplitudes": {
+            "220": [
+              0.0005377326170645913,
+              0.0005133595118686863
+            ],
+            "330": [
+              0.000523169235305075,
+              0.00048874525328439
+            ],
+            "440": [
+              0.0005030868524770211,
+              0.3000739920202875
+            ],
+            "660": [
+              0.3999505442023062,
+              0.00036980473556506074
+            ],
+            "990": [
+              0.0003337525360472187,
+              0.0002178602275519031
+            ]
+          }
+        },
+        {
+          "clip_id": "overlap",
+          "rms": [
+            0.0706960358723881,
+            0.14142896312891629
+          ],
+          "amplitudes": {
+            "220": [
+              0.09995911382503637,
+              0.00031694224188864623
+            ],
+            "330": [
+              0.00011647925386097562,
+              0.20002085569352268
+            ],
+            "440": [
+              0.00010878705675553732,
+              0.00028140292164267704
+            ],
+            "660": [
+              8.902124576349594e-05,
+              0.00022878186259565019
+            ],
+            "990": [
+              5.511319435661813e-05,
+              0.00013767314266050406
+            ]
+          }
+        }
+      ],
+      "independent_mix_oracle": {
+        "rms": [
+          0.14982167612091948,
+          0.13238361684789143
+        ],
+        "amplitudes": {
+          "220": [
+            0.07024024598605774,
+            0.0004341674113919851
+          ],
+          "330": [
+            0.00034312009535522045,
+            0.1122560518150149
+          ],
+          "440": [
+            0.00032769436596738667,
+            0.15019458164626365
+          ],
+          "660": [
+            0.20003758697318755,
+            0.00031302021083609447
+          ],
+          "990": [
+            0.00020545550407324203,
+            0.00018602707366583384
+          ]
+        }
+      },
+      "ui": {
+        "metrics": {
+          "runs": [
+            {
+              "calibration": {
+                "amplitudes": {
+                  "220": [
+                    0.00011742928036494414,
+                    0.00011742928036494414
+                  ],
+                  "330": [
+                    0.00013606301172994312,
+                    0.00013606301172994312
+                  ],
+                  "440": [
+                    0.00014446906741300363,
+                    0.00014446906741300363
+                  ],
+                  "660": [
+                    9.26911702191589e-05,
+                    9.26911702191589e-05
+                  ],
+                  "990": [
+                    0.010630300229576072,
+                    0.010630300229576072
+                  ],
+                  "997": [
+                    0.25002642831096633,
+                    0.25002642831096633
+                  ]
+                },
+                "left": -4.4535094563757927e-05,
+                "max": [
+                  0.2499999701976776,
+                  0.2499999701976776
+                ],
+                "min": [
+                  -0.25,
+                  -0.25
+                ],
+                "right": -4.4535094563757927e-05,
+                "rms": [
+                  0.1767860173716729,
+                  0.1767860173716729
+                ],
+                "sample_rate": 48000,
+                "samples": 32768
+              },
+              "iteration": 1,
+              "pcm": {
+                "amplitudes": {
+                  "220": [
+                    0.07010192230740771,
+                    0.00040657295035013643
+                  ],
+                  "330": [
+                    0.0003368970563092222,
+                    0.11212464963187851
+                  ],
+                  "440": [
+                    0.0003192142560408051,
+                    0.15012307095345856
+                  ],
+                  "660": [
+                    0.20002151680100333,
+                    0.00026844080518964364
+                  ],
+                  "990": [
+                    0.00018402703426258294,
+                    0.00012828061528625352
+                  ],
+                  "997": [
+                    5.336235861484124e-05,
+                    0.00013400778788476506
+                  ]
+                },
+                "left": 0.00018032556565116892,
+                "max": [
+                  0.23600463569164276,
+                  0.25595277547836304
+                ],
+                "min": [
+                  -0.23600463569164276,
+                  -0.25595277547836304
+                ],
+                "right": -0.0002132427869980553,
+                "rms": [
+                  0.14985229762734087,
+                  0.13243179332110308
+                ],
+                "sample_rate": 48000,
+                "samples": 32768
+              },
+              "raw_pcm": {
+                "amplitudes": {
+                  "220": [
+                    0.10022343812664633,
+                    0.0007784962339275903
+                  ],
+                  "330": [
+                    0.000631353827841629,
+                    0.20024957748104347
+                  ],
+                  "440": [
+                    0.0005996522330865428,
+                    0.30022604709126643
+                  ],
+                  "660": [
+                    0.40001599377433705,
+                    0.0005156074270101325
+                  ],
+                  "990": [
+                    0.00035532943633703783,
+                    0.0002487730030805397
+                  ],
+                  "997": [
+                    8.696930062023617e-05,
+                    0.00025617434283822663
+                  ]
+                },
+                "left": 0.0003369273617863562,
+                "max": [
+                  0.451019287109375,
+                  0.48883056640625
+                ],
+                "min": [
+                  -0.451019287109375,
+                  -0.48883056640625
+                ],
+                "right": -0.00040819123387331776,
+                "rms": [
+                  0.29157223532770343,
+                  0.2550661324696985
+                ],
+                "sample_rate": 48000,
+                "samples": 32768
+              },
+              "voices": [
+                {
+                  "clip_id": "primary",
+                  "clock_drift_seconds": 0.002666666666666817,
+                  "current_time": 3.2813333333333334,
+                  "decoder": {
+                    "kind": "scheduled-source-pcm",
+                    "range_requests": 7,
+                    "scheduled_chunks": 11,
+                    "underruns": 0
+                  },
+                  "observations": 155,
+                  "request_url": "/api/projects/fd43215d583640fca1cb8a3dba107ba9/media/472144a4f4ab4c0ebfccd3f77d246a2e",
+                  "route": {
+                    "binding": "decoded-source-pcm",
+                    "cache_key": "39ba0eff40a1bc371c25603b5ee28f17255d3c4adab3447e1739b1c2898ae644",
+                    "channel_map": [
+                      1,
+                      0
+                    ],
+                    "channels": 2,
+                    "manifest": {
+                      "asset_id": "472144a4f4ab4c0ebfccd3f77d246a2e",
+                      "byte_size": 3072058,
+                      "cache_key": "39ba0eff40a1bc371c25603b5ee28f17255d3c4adab3447e1739b1c2898ae644",
+                      "cached": false,
+                      "channels": [
+                        1,
+                        0
+                      ],
+                      "codec": "pcm_f32le",
+                      "created_at": 1792611252.9921558,
+                      "data_offset": 58,
+                      "duration": 8,
+                      "export_source": "original",
+                      "frame_bytes": 8,
+                      "frames": 384000,
+                      "output_channels": 2,
+                      "padded_frames": 0,
+                      "playback_rate": 1,
+                      "rate": 48000,
+                      "recipe": {
+                        "channels": [
+                          1,
+                          0
+                        ],
+                        "codec": "pcm_f32le",
+                        "output_channels": 2,
+                        "pad_frames": 384000,
+                        "playback_rate": 1,
+                        "rate": 48000,
+                        "source_channels": 2,
+                        "stream_index": 2,
+                        "version": 2
+                      },
+                      "sha256": "701a232c80200fe92ea698f4f68394df3cda6ff689da94269ff171ed25f352e3",
+                      "source_frames": 384000,
+                      "source_sha256": "27896f79318c7b3dba6c91c6d9c9456849d6258a3059998796d88abddfb59ed4",
+                      "source_time_scale": 1,
+                      "state": "ready",
+                      "stream_index": 2,
+                      "url": "/api/projects/fd43215d583640fca1cb8a3dba107ba9/audio-source/39ba0eff40a1bc371c25603b5ee28f17255d3c4adab3447e1739b1c2898ae644",
+                      "version": 2
+                    },
+                    "message": "",
+                    "playback_rate": 1,
+                    "ready": true,
+                    "sha256": "701a232c80200fe92ea698f4f68394df3cda6ff689da94269ff171ed25f352e3",
+                    "source_sha256": "27896f79318c7b3dba6c91c6d9c9456849d6258a3059998796d88abddfb59ed4",
+                    "state": "ready",
+                    "stream_index": 2,
+                    "url": "/api/projects/fd43215d583640fca1cb8a3dba107ba9/audio-source/39ba0eff40a1bc371c25603b5ee28f17255d3c4adab3447e1739b1c2898ae644"
+                  }
+                },
+                {
+                  "clip_id": "overlap",
+                  "clock_drift_seconds": 0.002666666666667039,
+                  "current_time": 2.2813333333333334,
+                  "decoder": {
+                    "kind": "scheduled-source-pcm",
+                    "range_requests": 6,
+                    "scheduled_chunks": 6,
+                    "underruns": 0
+                  },
+                  "observations": 109,
+                  "request_url": "/api/projects/fd43215d583640fca1cb8a3dba107ba9/media/472144a4f4ab4c0ebfccd3f77d246a2e",
+                  "route": {
+                    "binding": "decoded-source-pcm",
+                    "cache_key": "fe144b8ac79502addbacd5de0a12ddd2471751e46a1d16205d60392854a5ccbf",
+                    "channel_map": [
+                      0,
+                      1
+                    ],
+                    "channels": 2,
+                    "manifest": {
+                      "asset_id": "472144a4f4ab4c0ebfccd3f77d246a2e",
+                      "byte_size": 3072058,
+                      "cache_key": "fe144b8ac79502addbacd5de0a12ddd2471751e46a1d16205d60392854a5ccbf",
+                      "cached": false,
+                      "channels": [
+                        0,
+                        1
+                      ],
+                      "codec": "pcm_f32le",
+                      "created_at": 1792611254.3785799,
+                      "data_offset": 58,
+                      "duration": 8,
+                      "export_source": "original",
+                      "frame_bytes": 8,
+                      "frames": 384000,
+                      "output_channels": 2,
+                      "padded_frames": 0,
+                      "playback_rate": 1,
+                      "rate": 48000,
+                      "recipe": {
+                        "channels": [
+                          0,
+                          1
+                        ],
+                        "codec": "pcm_f32le",
+                        "output_channels": 2,
+                        "pad_frames": 384000,
+                        "playback_rate": 1,
+                        "rate": 48000,
+                        "source_channels": 2,
+                        "stream_index": 1,
+                        "version": 2
+                      },
+                      "sha256": "3c7315902d321bd689c722f7836b50eb5db0e60be63dbcf819d654e874dbf775",
+                      "source_frames": 384000,
+                      "source_sha256": "27896f79318c7b3dba6c91c6d9c9456849d6258a3059998796d88abddfb59ed4",
+                      "source_time_scale": 1,
+                      "state": "ready",
+                      "stream_index": 1,
+                      "url": "/api/projects/fd43215d583640fca1cb8a3dba107ba9/audio-source/fe144b8ac79502addbacd5de0a12ddd2471751e46a1d16205d60392854a5ccbf",
+                      "version": 2
+                    },
+                    "message": "",
+                    "playback_rate": 1,
+                    "ready": true,
+                    "sha256": "3c7315902d321bd689c722f7836b50eb5db0e60be63dbcf819d654e874dbf775",
+                    "source_sha256": "27896f79318c7b3dba6c91c6d9c9456849d6258a3059998796d88abddfb59ed4",
+                    "state": "ready",
+                    "stream_index": 1,
+                    "url": "/api/projects/fd43215d583640fca1cb8a3dba107ba9/audio-source/fe144b8ac79502addbacd5de0a12ddd2471751e46a1d16205d60392854a5ccbf"
+                  }
+                }
+              ],
+              "window": {
+                "end_frame": 156289,
+                "render_thread": true,
+                "sample_rate": 48000,
+                "start_frame": 123521
+              }
+            },
+            {
+              "calibration": {
+                "amplitudes": {
+                  "220": [
+                    0.00012256977858768515,
+                    0.00012256977858768515
+                  ],
+                  "330": [
+                    0.00013840534571952403,
+                    0.00013840534571952403
+                  ],
+                  "440": [
+                    0.00014462667645930474,
+                    0.00014462667645930474
+                  ],
+                  "660": [
+                    9.07104320433713e-05,
+                    9.07104320433713e-05
+                  ],
+                  "990": [
+                    0.010634771629608155,
+                    0.010634771629608155
+                  ],
+                  "997": [
+                    0.25002339062101364,
+                    0.25002339062101364
+                  ]
+                },
+                "left": 4.9364746607244436e-05,
+                "max": [
+                  0.25,
+                  0.25
+                ],
+                "min": [
+                  -0.24999994039535522,
+                  -0.24999994039535522
+                ],
+                "right": 4.9364746607244436e-05,
+                "rms": [
+                  0.17678494338031867,
+                  0.17678494338031867
+                ],
+                "sample_rate": 48000,
+                "samples": 32768
+              },
+              "iteration": 2,
+              "pcm": {
+                "amplitudes": {
+                  "220": [
+                    0.07001267784966127,
+                    0.00036417683648498145
+                  ],
+                  "330": [
+                    0.00019667821790976084,
+                    0.11202613899063006
+                  ],
+                  "440": [
+                    0.00023967461093476547,
+                    0.15011069508727973
+                  ],
+                  "660": [
+                    0.20004120347172077,
+                    0.0002478395955859947
+                  ],
+                  "990": [
+                    0.00028894319333749364,
+                    0.00012866355459967998
+                  ],
+                  "997": [
+                    9.728897844308044e-05,
+                    0.000122573766004318
+                  ]
+                },
+                "left": 4.0001981005843845e-05,
+                "max": [
+                  0.2570861876010895,
+                  0.25021058320999146
+                ],
+                "min": [
+                  -0.2570861876010895,
+                  -0.25982362031936646
+                ],
+                "right": -0.00019043961455622593,
+                "rms": [
+                  0.1498484936916652,
+                  0.13240746106411974
+                ],
+                "sample_rate": 48000,
+                "samples": 32768
+              },
+              "raw_pcm": {
+                "amplitudes": {
+                  "220": [
+                    0.10005936023552149,
+                    0.0007086095496483332
+                  ],
+                  "330": [
+                    0.00038940020102823863,
+                    0.2000638942930087
+                  ],
+                  "440": [
+                    0.0004688477454307944,
+                    0.30020863238350864
+                  ],
+                  "660": [
+                    0.40006801367612116,
+                    0.0004798384169999273
+                  ],
+                  "990": [
+                    0.0005576993603676002,
+                    0.0002457561044788269
+                  ],
+                  "997": [
+                    0.00018011973530089563,
+                    0.00023584359779978847
+                  ]
+                },
+                "left": 9.232759475708008e-05,
+                "max": [
+                  0.48138427734375,
+                  0.478240966796875
+                ],
+                "min": [
+                  -0.48138427734375,
+                  -0.4959716796875
+                ],
+                "right": -0.0003707371652126312,
+                "rms": [
+                  0.29157609688355424,
+                  0.25502460831089285
+                ],
+                "sample_rate": 48000,
+                "samples": 32768
+              },
+              "voices": [
+                {
+                  "clip_id": "primary",
+                  "clock_drift_seconds": 0.002666666666667261,
+                  "current_time": 3.2693333333333325,
+                  "decoder": {
+                    "kind": "scheduled-source-pcm",
+                    "range_requests": 13,
+                    "scheduled_chunks": 18,
+                    "underruns": 0
+                  },
+                  "observations": 139,
+                  "request_url": "/api/projects/fd43215d583640fca1cb8a3dba107ba9/media/472144a4f4ab4c0ebfccd3f77d246a2e",
+                  "route": {
+                    "binding": "decoded-source-pcm",
+                    "cache_key": "39ba0eff40a1bc371c25603b5ee28f17255d3c4adab3447e1739b1c2898ae644",
+                    "channel_map": [
+                      1,
+                      0
+                    ],
+                    "channels": 2,
+                    "manifest": {
+                      "asset_id": "472144a4f4ab4c0ebfccd3f77d246a2e",
+                      "byte_size": 3072058,
+                      "cache_key": "39ba0eff40a1bc371c25603b5ee28f17255d3c4adab3447e1739b1c2898ae644",
+                      "cached": false,
+                      "channels": [
+                        1,
+                        0
+                      ],
+                      "codec": "pcm_f32le",
+                      "created_at": 1792611252.9921558,
+                      "data_offset": 58,
+                      "duration": 8,
+                      "export_source": "original",
+                      "frame_bytes": 8,
+                      "frames": 384000,
+                      "output_channels": 2,
+                      "padded_frames": 0,
+                      "playback_rate": 1,
+                      "rate": 48000,
+                      "recipe": {
+                        "channels": [
+                          1,
+                          0
+                        ],
+                        "codec": "pcm_f32le",
+                        "output_channels": 2,
+                        "pad_frames": 384000,
+                        "playback_rate": 1,
+                        "rate": 48000,
+                        "source_channels": 2,
+                        "stream_index": 2,
+                        "version": 2
+                      },
+                      "sha256": "701a232c80200fe92ea698f4f68394df3cda6ff689da94269ff171ed25f352e3",
+                      "source_frames": 384000,
+                      "source_sha256": "27896f79318c7b3dba6c91c6d9c9456849d6258a3059998796d88abddfb59ed4",
+                      "source_time_scale": 1,
+                      "state": "ready",
+                      "stream_index": 2,
+                      "url": "/api/projects/fd43215d583640fca1cb8a3dba107ba9/audio-source/39ba0eff40a1bc371c25603b5ee28f17255d3c4adab3447e1739b1c2898ae644",
+                      "version": 2
+                    },
+                    "message": "",
+                    "playback_rate": 1,
+                    "ready": true,
+                    "sha256": "701a232c80200fe92ea698f4f68394df3cda6ff689da94269ff171ed25f352e3",
+                    "source_sha256": "27896f79318c7b3dba6c91c6d9c9456849d6258a3059998796d88abddfb59ed4",
+                    "state": "ready",
+                    "stream_index": 2,
+                    "url": "/api/projects/fd43215d583640fca1cb8a3dba107ba9/audio-source/39ba0eff40a1bc371c25603b5ee28f17255d3c4adab3447e1739b1c2898ae644"
+                  }
+                },
+                {
+                  "clip_id": "overlap",
+                  "clock_drift_seconds": 0.020000000000000462,
+                  "current_time": 2.2493333333333334,
+                  "decoder": {
+                    "kind": "scheduled-source-pcm",
+                    "range_requests": 10,
+                    "scheduled_chunks": 12,
+                    "underruns": 0
+                  },
+                  "observations": 110,
+                  "request_url": "/api/projects/fd43215d583640fca1cb8a3dba107ba9/media/472144a4f4ab4c0ebfccd3f77d246a2e",
+                  "route": {
+                    "binding": "decoded-source-pcm",
+                    "cache_key": "fe144b8ac79502addbacd5de0a12ddd2471751e46a1d16205d60392854a5ccbf",
+                    "channel_map": [
+                      0,
+                      1
+                    ],
+                    "channels": 2,
+                    "manifest": {
+                      "asset_id": "472144a4f4ab4c0ebfccd3f77d246a2e",
+                      "byte_size": 3072058,
+                      "cache_key": "fe144b8ac79502addbacd5de0a12ddd2471751e46a1d16205d60392854a5ccbf",
+                      "cached": false,
+                      "channels": [
+                        0,
+                        1
+                      ],
+                      "codec": "pcm_f32le",
+                      "created_at": 1792611254.3785799,
+                      "data_offset": 58,
+                      "duration": 8,
+                      "export_source": "original",
+                      "frame_bytes": 8,
+                      "frames": 384000,
+                      "output_channels": 2,
+                      "padded_frames": 0,
+                      "playback_rate": 1,
+                      "rate": 48000,
+                      "recipe": {
+                        "channels": [
+                          0,
+                          1
+                        ],
+                        "codec": "pcm_f32le",
+                        "output_channels": 2,
+                        "pad_frames": 384000,
+                        "playback_rate": 1,
+                        "rate": 48000,
+                        "source_channels": 2,
+                        "stream_index": 1,
+                        "version": 2
+                      },
+                      "sha256": "3c7315902d321bd689c722f7836b50eb5db0e60be63dbcf819d654e874dbf775",
+                      "source_frames": 384000,
+                      "source_sha256": "27896f79318c7b3dba6c91c6d9c9456849d6258a3059998796d88abddfb59ed4",
+                      "source_time_scale": 1,
+                      "state": "ready",
+                      "stream_index": 1,
+                      "url": "/api/projects/fd43215d583640fca1cb8a3dba107ba9/audio-source/fe144b8ac79502addbacd5de0a12ddd2471751e46a1d16205d60392854a5ccbf",
+                      "version": 2
+                    },
+                    "message": "",
+                    "playback_rate": 1,
+                    "ready": true,
+                    "sha256": "3c7315902d321bd689c722f7836b50eb5db0e60be63dbcf819d654e874dbf775",
+                    "source_sha256": "27896f79318c7b3dba6c91c6d9c9456849d6258a3059998796d88abddfb59ed4",
+                    "state": "ready",
+                    "stream_index": 1,
+                    "url": "/api/projects/fd43215d583640fca1cb8a3dba107ba9/audio-source/fe144b8ac79502addbacd5de0a12ddd2471751e46a1d16205d60392854a5ccbf"
+                  }
+                }
+              ],
+              "window": {
+                "end_frame": 292352,
+                "render_thread": true,
+                "sample_rate": 48000,
+                "start_frame": 259584
+              }
+            },
+            {
+              "calibration": {
+                "amplitudes": {
+                  "220": [
+                    0.00013529564322413233,
+                    0.00013529564322413233
+                  ],
+                  "330": [
+                    0.00014445105869503224,
+                    0.00014445105869503224
+                  ],
+                  "440": [
+                    0.00014504496660238552,
+                    0.00014504496660238552
+                  ],
+                  "660": [
+                    8.521791138419537e-05,
+                    8.521791138419537e-05
+                  ],
+                  "990": [
+                    0.010646656046308265,
+                    0.010646656046308265
+                  ],
+                  "997": [
+                    0.25001531043506303,
+                    0.25001531043506303
+                  ]
+                },
+                "left": 6.035875839405236e-05,
+                "max": [
+                  0.2499999701976776,
+                  0.2499999701976776
+                ],
+                "min": [
+                  -0.2499999850988388,
+                  -0.2499999850988388
+                ],
+                "right": 6.035875839405236e-05,
+                "rms": [
+                  0.1767820866334085,
+                  0.1767820866334085
+                ],
+                "sample_rate": 48000,
+                "samples": 32768
+              },
+              "iteration": 3,
+              "pcm": {
+                "amplitudes": {
+                  "220": [
+                    0.07022996985866019,
+                    0.00015927920324538495
+                  ],
+                  "330": [
+                    0.000368670715305652,
+                    0.11200199236082828
+                  ],
+                  "440": [
+                    0.0003506626466508349,
+                    0.14989821910765844
+                  ],
+                  "660": [
+                    0.20005170723396024,
+                    0.000184295557667004
+                  ],
+                  "990": [
+                    0.00020717226047092146,
+                    0.00016010858477537814
+                  ],
+                  "997": [
+                    7.347896234485542e-05,
+                    0.0001012103591754356
+                  ]
+                },
+                "left": -0.00019624922327921013,
+                "max": [
+                  0.2570861876010895,
+                  0.25021058320999146
+                ],
+                "min": [
+                  -0.2570861876010895,
+                  -0.25982362031936646
+                ],
+                "right": -7.51211681233599e-05,
+                "rms": [
+                  0.14987734772820493,
+                  0.13234222935796555
+                ],
+                "sample_rate": 48000,
+                "samples": 32768
+              },
+              "raw_pcm": {
+                "amplitudes": {
+                  "220": [
+                    0.10043704842599432,
+                    0.00027489041619088695
+                  ],
+                  "330": [
+                    0.0006663158283904272,
+                    0.19998748649767573
+                  ],
+                  "440": [
+                    0.0006392557742113665,
+                    0.2998084137543468
+                  ],
+                  "660": [
+                    0.4000655295263795,
+                    0.0003532303774512968
+                  ],
+                  "990": [
+                    0.00040474822509021277,
+                    0.00031605644393020363
+                  ],
+                  "997": [
+                    0.00012342222690076737,
+                    0.00019314238104294577
+                  ]
+                },
+                "left": -0.0003506150096654892,
+                "max": [
+                  0.48138427734375,
+                  0.478240966796875
+                ],
+                "min": [
+                  -0.48138427734375,
+                  -0.4959716796875
+                ],
+                "right": -0.0001242058351635933,
+                "rms": [
+                  0.2916075897811167,
+                  0.2548920333099061
+                ],
+                "sample_rate": 48000,
+                "samples": 32768
+              },
+              "voices": [
+                {
+                  "clip_id": "primary",
+                  "clock_drift_seconds": 0.0026666666666685934,
+                  "current_time": 3.3493333333333335,
+                  "decoder": {
+                    "kind": "scheduled-source-pcm",
+                    "range_requests": 19,
+                    "scheduled_chunks": 25,
+                    "underruns": 0
+                  },
+                  "observations": 147,
+                  "request_url": "/api/projects/fd43215d583640fca1cb8a3dba107ba9/media/472144a4f4ab4c0ebfccd3f77d246a2e",
+                  "route": {
+                    "binding": "decoded-source-pcm",
+                    "cache_key": "39ba0eff40a1bc371c25603b5ee28f17255d3c4adab3447e1739b1c2898ae644",
+                    "channel_map": [
+                      1,
+                      0
+                    ],
+                    "channels": 2,
+                    "manifest": {
+                      "asset_id": "472144a4f4ab4c0ebfccd3f77d246a2e",
+                      "byte_size": 3072058,
+                      "cache_key": "39ba0eff40a1bc371c25603b5ee28f17255d3c4adab3447e1739b1c2898ae644",
+                      "cached": false,
+                      "channels": [
+                        1,
+                        0
+                      ],
+                      "codec": "pcm_f32le",
+                      "created_at": 1792611252.9921558,
+                      "data_offset": 58,
+                      "duration": 8,
+                      "export_source": "original",
+                      "frame_bytes": 8,
+                      "frames": 384000,
+                      "output_channels": 2,
+                      "padded_frames": 0,
+                      "playback_rate": 1,
+                      "rate": 48000,
+                      "recipe": {
+                        "channels": [
+                          1,
+                          0
+                        ],
+                        "codec": "pcm_f32le",
+                        "output_channels": 2,
+                        "pad_frames": 384000,
+                        "playback_rate": 1,
+                        "rate": 48000,
+                        "source_channels": 2,
+                        "stream_index": 2,
+                        "version": 2
+                      },
+                      "sha256": "701a232c80200fe92ea698f4f68394df3cda6ff689da94269ff171ed25f352e3",
+                      "source_frames": 384000,
+                      "source_sha256": "27896f79318c7b3dba6c91c6d9c9456849d6258a3059998796d88abddfb59ed4",
+                      "source_time_scale": 1,
+                      "state": "ready",
+                      "stream_index": 2,
+                      "url": "/api/projects/fd43215d583640fca1cb8a3dba107ba9/audio-source/39ba0eff40a1bc371c25603b5ee28f17255d3c4adab3447e1739b1c2898ae644",
+                      "version": 2
+                    },
+                    "message": "",
+                    "playback_rate": 1,
+                    "ready": true,
+                    "sha256": "701a232c80200fe92ea698f4f68394df3cda6ff689da94269ff171ed25f352e3",
+                    "source_sha256": "27896f79318c7b3dba6c91c6d9c9456849d6258a3059998796d88abddfb59ed4",
+                    "state": "ready",
+                    "stream_index": 2,
+                    "url": "/api/projects/fd43215d583640fca1cb8a3dba107ba9/audio-source/39ba0eff40a1bc371c25603b5ee28f17255d3c4adab3447e1739b1c2898ae644"
+                  }
+                },
+                {
+                  "clip_id": "overlap",
+                  "clock_drift_seconds": 0.020000000000000684,
+                  "current_time": 2.329333333333333,
+                  "decoder": {
+                    "kind": "scheduled-source-pcm",
+                    "range_requests": 14,
+                    "scheduled_chunks": 18,
+                    "underruns": 0
+                  },
+                  "observations": 105,
+                  "request_url": "/api/projects/fd43215d583640fca1cb8a3dba107ba9/media/472144a4f4ab4c0ebfccd3f77d246a2e",
+                  "route": {
+                    "binding": "decoded-source-pcm",
+                    "cache_key": "fe144b8ac79502addbacd5de0a12ddd2471751e46a1d16205d60392854a5ccbf",
+                    "channel_map": [
+                      0,
+                      1
+                    ],
+                    "channels": 2,
+                    "manifest": {
+                      "asset_id": "472144a4f4ab4c0ebfccd3f77d246a2e",
+                      "byte_size": 3072058,
+                      "cache_key": "fe144b8ac79502addbacd5de0a12ddd2471751e46a1d16205d60392854a5ccbf",
+                      "cached": false,
+                      "channels": [
+                        0,
+                        1
+                      ],
+                      "codec": "pcm_f32le",
+                      "created_at": 1792611254.3785799,
+                      "data_offset": 58,
+                      "duration": 8,
+                      "export_source": "original",
+                      "frame_bytes": 8,
+                      "frames": 384000,
+                      "output_channels": 2,
+                      "padded_frames": 0,
+                      "playback_rate": 1,
+                      "rate": 48000,
+                      "recipe": {
+                        "channels": [
+                          0,
+                          1
+                        ],
+                        "codec": "pcm_f32le",
+                        "output_channels": 2,
+                        "pad_frames": 384000,
+                        "playback_rate": 1,
+                        "rate": 48000,
+                        "source_channels": 2,
+                        "stream_index": 1,
+                        "version": 2
+                      },
+                      "sha256": "3c7315902d321bd689c722f7836b50eb5db0e60be63dbcf819d654e874dbf775",
+                      "source_frames": 384000,
+                      "source_sha256": "27896f79318c7b3dba6c91c6d9c9456849d6258a3059998796d88abddfb59ed4",
+                      "source_time_scale": 1,
+                      "state": "ready",
+                      "stream_index": 1,
+                      "url": "/api/projects/fd43215d583640fca1cb8a3dba107ba9/audio-source/fe144b8ac79502addbacd5de0a12ddd2471751e46a1d16205d60392854a5ccbf",
+                      "version": 2
+                    },
+                    "message": "",
+                    "playback_rate": 1,
+                    "ready": true,
+                    "sha256": "3c7315902d321bd689c722f7836b50eb5db0e60be63dbcf819d654e874dbf775",
+                    "source_sha256": "27896f79318c7b3dba6c91c6d9c9456849d6258a3059998796d88abddfb59ed4",
+                    "state": "ready",
+                    "stream_index": 1,
+                    "url": "/api/projects/fd43215d583640fca1cb8a3dba107ba9/audio-source/fe144b8ac79502addbacd5de0a12ddd2471751e46a1d16205d60392854a5ccbf"
+                  }
+                }
+              ],
+              "window": {
+                "end_frame": 430720,
+                "render_thread": true,
+                "sample_rate": 48000,
+                "start_frame": 397952
+              }
+            }
+          ]
+        },
+        "page_errors": [],
+        "passed": true,
+        "scenario": "overlap",
+        "screenshot": "/Users/midiakiasat/.midia-ai/gateway-live/workspaces/auto-d5f5e80a10b691457cec8d25044150b5/.completion-evidence/final-native-01/audio/overlap/ENGINE_TEST_sequence_audio.png",
+        "screenshot_bytes": 292883,
+        "steps": [
+          "native_overlap_pcm_restart_1",
+          "native_overlap_pcm_restart_2",
+          "native_overlap_pcm_restart_3",
+          "native_save_after_repeated_playback"
+        ]
+      },
+      "elapsed_seconds": 10.605
+    },
+    {
+      "passed": true,
+      "scenario": "nested",
+      "repetitions": 3,
+      "fixture": "SYNTHETIC ENGINE TEST \u2014 NOT A FILM",
+      "checks": {
+        "actual_native_controls": true,
+        "native_screenshot": true,
+        "all_repeated_runs_captured": true,
+        "every_actual_live_mix_matches_independent_pcm": true,
+        "every_actual_source_mix_matches_independent_pcm": true,
+        "all_voices_observed_each_run": true,
+        "zero_native_underruns": true,
+        "shared_clock_drift_below_80ms": true,
+        "all_http_source_bytes_match_original_stream_tempo_and_mapping": true,
+        "saved_authored_structure_preserved": true,
+        "original_media_preserved": true,
+        "no_render_substitution": true
+      },
+      "independent_voice_oracles": [
+        {
+          "clip_id": "primary",
+          "rms": [
+            0.2828253820754241,
+            0.21215793423102344
+          ],
+          "amplitudes": {
+            "220": [
+              0.0005377326170645913,
+              0.0005133595118686863
+            ],
+            "330": [
+              0.000523169235305075,
+              0.00048874525328439
+            ],
+            "440": [
+              0.0005030868524770211,
+              0.3000739920202875
+            ],
+            "660": [
+              0.3999505442023062,
+              0.00036980473556506074
+            ],
+            "990": [
+              0.0003337525360472187,
+              0.0002178602275519031
+            ]
+          }
+        }
+      ],
+      "independent_mix_oracle": {
+        "rms": [
+          0.09163542379243743,
+          0.07332178207024173
+        ],
+        "amplitudes": {
+          "220": [
+            0.00017422536792892763,
+            0.00017741704730181806
+          ],
+          "330": [
+            0.00016950683223884434,
+            0.00016891035953508528
+          ],
+          "440": [
+            0.00016300014020255487,
+            0.1037055716422114
+          ],
+          "660": [
+            0.12958397632154722,
+            0.00012780451661128503
+          ],
+          "990": [
+            0.00010813582167929888,
+            7.529249464193774e-05
+          ]
+        }
+      },
+      "ui": {
+        "metrics": {
+          "runs": [
+            {
+              "calibration": {
+                "amplitudes": {
+                  "220": [
+                    0.0001938655556380302,
+                    0.0001938655556380302
+                  ],
+                  "330": [
+                    0.00017581987087842544,
+                    0.00017581987087842544
+                  ],
+                  "440": [
+                    0.00014747908065357125,
+                    0.00014747908065357125
+                  ],
+                  "660": [
+                    3.98146700541641e-05,
+                    3.98146700541641e-05
+                  ],
+                  "990": [
+                    0.010716210495195822,
+                    0.010716210495195822
+                  ],
+                  "997": [
+                    0.2499678344837267,
+                    0.2499678344837267
+                  ]
+                },
+                "left": -0.00010358618518230278,
+                "max": [
+                  0.2499999850988388,
+                  0.2499999850988388
+                ],
+                "min": [
+                  -0.2499999701976776,
+                  -0.2499999701976776
+                ],
+                "right": -0.00010358618518230278,
+                "rms": [
+                  0.17676530244144786,
+                  0.17676530244144786
+                ],
+                "sample_rate": 48000,
+                "samples": 32768
+              },
+              "iteration": 1,
+              "pcm": {
+                "amplitudes": {
+                  "220": [
+                    0.00012504524758697217,
+                    9.499157013159809e-05
+                  ],
+                  "330": [
+                    0.00013748602564466982,
+                    0.0001019469722645147
+                  ],
+                  "440": [
+                    0.00014983961864529274,
+                    0.10365520548418104
+                  ],
+                  "660": [
+                    0.12960395665693455,
+                    0.00011610891424150389
+                  ],
+                  "990": [
+                    0.00015281592311683435,
+                    0.00010191420463895312
+                  ],
+                  "997": [
+                    4.1797785980458526e-05,
+                    5.995241275606234e-05
+                  ]
+                },
+                "left": 5.597435077930868e-05,
+                "max": [
+                  0.12959802150726318,
+                  0.10367578268051147
+                ],
+                "min": [
+                  -0.12959802150726318,
+                  -0.10367578268051147
+                ],
+                "right": -4.385219127733819e-05,
+                "rms": [
+                  0.09164248885156223,
+                  0.07330397629507954
+                ],
+                "sample_rate": 48000,
+                "samples": 32768
+              },
+              "raw_pcm": {
+                "amplitudes": {
+                  "220": [
+                    0.000385942111012447,
+                    0.0002748598484999462
+                  ],
+                  "330": [
+                    0.00042433957999917806,
+                    0.00029498544320609264
+                  ],
+                  "440": [
+                    0.00046246794792331557,
+                    0.299928242849701
+                  ],
+                  "660": [
+                    0.4000122014088056,
+                    0.0003359632747169811
+                  ],
+                  "990": [
+                    0.0004716540806402876,
+                    0.0002948906188011346
+                  ],
+                  "997": [
+                    0.00012900551539881536,
+                    0.00017347340715761188
+                  ]
+                },
+                "left": 0.00017276033759117126,
+                "max": [
+                  0.399993896484375,
+                  0.29998779296875
+                ],
+                "min": [
+                  -0.399993896484375,
+                  -0.29998779296875
+                ],
+                "right": -0.00012688711285591125,
+                "rms": [
+                  0.2828471803922759,
+                  0.21210640316019494
+                ],
+                "sample_rate": 48000,
+                "samples": 32768
+              },
+              "voices": [
+                {
+                  "clip_id": "primary",
+                  "clock_drift_seconds": 0.002666666666667261,
+                  "current_time": 3.78,
+                  "decoder": {
+                    "kind": "scheduled-source-pcm",
+                    "range_requests": 6,
+                    "scheduled_chunks": 6,
+                    "underruns": 0
+                  },
+                  "observations": 171,
+                  "request_url": "/api/projects/c71b094d825a49848b08bb738b06b936/media/47928575c6a74bf780f4000f29858944",
+                  "route": {
+                    "binding": "decoded-source-pcm",
+                    "cache_key": "39ba0eff40a1bc371c25603b5ee28f17255d3c4adab3447e1739b1c2898ae644",
+                    "channel_map": [
+                      1,
+                      0
+                    ],
+                    "channels": 2,
+                    "manifest": {
+                      "asset_id": "47928575c6a74bf780f4000f29858944",
+                      "byte_size": 3072058,
+                      "cache_key": "39ba0eff40a1bc371c25603b5ee28f17255d3c4adab3447e1739b1c2898ae644",
+                      "cached": false,
+                      "channels": [
+                        1,
+                        0
+                      ],
+                      "codec": "pcm_f32le",
+                      "created_at": 1792611263.4989738,
+                      "data_offset": 58,
+                      "duration": 8,
+                      "export_source": "original",
+                      "frame_bytes": 8,
+                      "frames": 384000,
+                      "output_channels": 2,
+                      "padded_frames": 0,
+                      "playback_rate": 1,
+                      "rate": 48000,
+                      "recipe": {
+                        "channels": [
+                          1,
+                          0
+                        ],
+                        "codec": "pcm_f32le",
+                        "output_channels": 2,
+                        "pad_frames": 384000,
+                        "playback_rate": 1,
+                        "rate": 48000,
+                        "source_channels": 2,
+                        "stream_index": 2,
+                        "version": 2
+                      },
+                      "sha256": "701a232c80200fe92ea698f4f68394df3cda6ff689da94269ff171ed25f352e3",
+                      "source_frames": 384000,
+                      "source_sha256": "27896f79318c7b3dba6c91c6d9c9456849d6258a3059998796d88abddfb59ed4",
+                      "source_time_scale": 1,
+                      "state": "ready",
+                      "stream_index": 2,
+                      "url": "/api/projects/c71b094d825a49848b08bb738b06b936/audio-source/39ba0eff40a1bc371c25603b5ee28f17255d3c4adab3447e1739b1c2898ae644",
+                      "version": 2
+                    },
+                    "message": "",
+                    "playback_rate": 1,
+                    "ready": true,
+                    "sha256": "701a232c80200fe92ea698f4f68394df3cda6ff689da94269ff171ed25f352e3",
+                    "source_sha256": "27896f79318c7b3dba6c91c6d9c9456849d6258a3059998796d88abddfb59ed4",
+                    "state": "ready",
+                    "stream_index": 2,
+                    "url": "/api/projects/c71b094d825a49848b08bb738b06b936/audio-source/39ba0eff40a1bc371c25603b5ee28f17255d3c4adab3447e1739b1c2898ae644"
+                  }
+                }
+              ],
+              "window": {
+                "end_frame": 142080,
+                "render_thread": true,
+                "sample_rate": 48000,
+                "start_frame": 109312
+              }
+            },
+            {
+              "calibration": {
+                "amplitudes": {
+                  "220": [
+                    0.00010213108387663187,
+                    0.00010213108387663187
+                  ],
+                  "330": [
+                    0.000129471151681502,
+                    0.000129471151681502
+                  ],
+                  "440": [
+                    0.00014403910193351468,
+                    0.00014403910193351468
+                  ],
+                  "660": [
+                    9.788116012082161e-05,
+                    9.788116012082161e-05
+                  ],
+                  "990": [
+                    0.01061811679726803,
+                    0.01061811679726803
+                  ],
+                  "997": [
+                    0.25003469853128596,
+                    0.25003469853128596
+                  ]
+                },
+                "left": -2.7361505585521417e-05,
+                "max": [
+                  0.25,
+                  0.25
+                ],
+                "min": [
+                  -0.25,
+                  -0.25
+                ],
+                "right": -2.7361505585521417e-05,
+                "rms": [
+                  0.17678894136787962,
+                  0.17678894136787962
+                ],
+                "sample_rate": 48000,
+                "samples": 32768
+              },
+              "iteration": 2,
+              "pcm": {
+                "amplitudes": {
+                  "220": [
+                    0.00013688362183526906,
+                    0.00010477862425849488
+                  ],
+                  "330": [
+                    0.0001448233309867301,
+                    0.00010941362445668787
+                  ],
+                  "440": [
+                    0.00015270762610471077,
+                    0.1036595956151635
+                  ],
+                  "660": [
+                    0.12959974851651268,
+                    0.00011717516667734123
+                  ],
+                  "990": [
+                    0.0001445542366210999,
+                    9.987809107946565e-05
+                  ],
+                  "997": [
+                    3.7789097105075066e-05,
+                    6.004854389187318e-05
+                  ]
+                },
+                "left": 6.436084728278502e-05,
+                "max": [
+                  0.12959802150726318,
+                  0.10367578268051147
+                ],
+                "min": [
+                  -0.12959802150726318,
+                  -0.10367578268051147
+                ],
+                "right": 4.995957910125526e-05,
+                "rms": [
+                  0.09164100083663584,
+                  0.07330552915570634
+                ],
+                "sample_rate": 48000,
+                "samples": 32768
+              },
+              "raw_pcm": {
+                "amplitudes": {
+                  "220": [
+                    0.0004224803023053894,
+                    0.0003031788680936265
+                  ],
+                  "330": [
+                    0.0004469855863916271,
+                    0.0003165903297396692
+                  ],
+                  "440": [
+                    0.00047131982351852366,
+                    0.2999409457848536
+                  ],
+                  "660": [
+                    0.399999213320395,
+                    0.00033904849103364424
+                  ],
+                  "990": [
+                    0.0004461550465608833,
+                    0.0002889990920668988
+                  ],
+                  "997": [
+                    0.00011663301679657622,
+                    0.00017375156719253213
+                  ]
+                },
+                "left": 0.00019864458590745926,
+                "max": [
+                  0.399993896484375,
+                  0.29998779296875
+                ],
+                "min": [
+                  -0.399993896484375,
+                  -0.29998779296875
+                ],
+                "right": 0.00014455895870923996,
+                "rms": [
+                  0.2828425877530003,
+                  0.21211089639836087
+                ],
+                "sample_rate": 48000,
+                "samples": 32768
+              },
+              "voices": [
+                {
+                  "clip_id": "primary",
+                  "clock_drift_seconds": 0.002666666666666373,
+                  "current_time": 3.7853333333333326,
+                  "decoder": {
+                    "kind": "scheduled-source-pcm",
+                    "range_requests": 11,
+                    "scheduled_chunks": 12,
+                    "underruns": 0
+                  },
+                  "observations": 141,
+                  "request_url": "/api/projects/c71b094d825a49848b08bb738b06b936/media/47928575c6a74bf780f4000f29858944",
+                  "route": {
+                    "binding": "decoded-source-pcm",
+                    "cache_key": "39ba0eff40a1bc371c25603b5ee28f17255d3c4adab3447e1739b1c2898ae644",
+                    "channel_map": [
+                      1,
+                      0
+                    ],
+                    "channels": 2,
+                    "manifest": {
+                      "asset_id": "47928575c6a74bf780f4000f29858944",
+                      "byte_size": 3072058,
+                      "cache_key": "39ba0eff40a1bc371c25603b5ee28f17255d3c4adab3447e1739b1c2898ae644",
+                      "cached": false,
+                      "channels": [
+                        1,
+                        0
+                      ],
+                      "codec": "pcm_f32le",
+                      "created_at": 1792611263.4989738,
+                      "data_offset": 58,
+                      "duration": 8,
+                      "export_source": "original",
+                      "frame_bytes": 8,
+                      "frames": 384000,
+                      "output_channels": 2,
+                      "padded_frames": 0,
+                      "playback_rate": 1,
+                      "rate": 48000,
+                      "recipe": {
+                        "channels": [
+                          1,
+                          0
+                        ],
+                        "codec": "pcm_f32le",
+                        "output_channels": 2,
+                        "pad_frames": 384000,
+                        "playback_rate": 1,
+                        "rate": 48000,
+                        "source_channels": 2,
+                        "stream_index": 2,
+                        "version": 2
+                      },
+                      "sha256": "701a232c80200fe92ea698f4f68394df3cda6ff689da94269ff171ed25f352e3",
+                      "source_frames": 384000,
+                      "source_sha256": "27896f79318c7b3dba6c91c6d9c9456849d6258a3059998796d88abddfb59ed4",
+                      "source_time_scale": 1,
+                      "state": "ready",
+                      "stream_index": 2,
+                      "url": "/api/projects/c71b094d825a49848b08bb738b06b936/audio-source/39ba0eff40a1bc371c25603b5ee28f17255d3c4adab3447e1739b1c2898ae644",
+                      "version": 2
+                    },
+                    "message": "",
+                    "playback_rate": 1,
+                    "ready": true,
+                    "sha256": "701a232c80200fe92ea698f4f68394df3cda6ff689da94269ff171ed25f352e3",
+                    "source_sha256": "27896f79318c7b3dba6c91c6d9c9456849d6258a3059998796d88abddfb59ed4",
+                    "state": "ready",
+                    "stream_index": 2,
+                    "url": "/api/projects/c71b094d825a49848b08bb738b06b936/audio-source/39ba0eff40a1bc371c25603b5ee28f17255d3c4adab3447e1739b1c2898ae644"
+                  }
+                }
+              ],
+              "window": {
+                "end_frame": 278529,
+                "render_thread": true,
+                "sample_rate": 48000,
+                "start_frame": 245761
+              }
+            },
+            {
+              "calibration": {
+                "amplitudes": {
+                  "220": [
+                    0.0001533258042652528,
+                    0.0001533258042652528
+                  ],
+                  "330": [
+                    0.0001535509620198984,
+                    0.0001535509620198984
+                  ],
+                  "440": [
+                    0.0001457059762320321,
+                    0.0001457059762320321
+                  ],
+                  "660": [
+                    7.569508097699249e-05,
+                    7.569508097699249e-05
+                  ],
+                  "990": [
+                    0.010665475321415332,
+                    0.010665475321415332
+                  ],
+                  "997": [
+                    0.25000249625908216,
+                    0.25000249625908216
+                  ]
+                },
+                "left": -7.453935860565752e-05,
+                "max": [
+                  0.25,
+                  0.25
+                ],
+                "min": [
+                  -0.2499999850988388,
+                  -0.2499999850988388
+                ],
+                "right": -7.453935860565752e-05,
+                "rms": [
+                  0.17677755625886343,
+                  0.17677755625886343
+                ],
+                "sample_rate": 48000,
+                "samples": 32768
+              },
+              "iteration": 3,
+              "pcm": {
+                "amplitudes": {
+                  "220": [
+                    0.00010440929223900819,
+                    0.000189330376908274
+                  ],
+                  "330": [
+                    0.00012545277850681803,
+                    0.00017905184782685595
+                  ],
+                  "440": [
+                    0.00014535995119420024,
+                    0.10371538033216751
+                  ],
+                  "660": [
+                    0.1296103836883259,
+                    0.00012996012388985439
+                  ],
+                  "990": [
+                    0.00016463187530479142,
+                    6.893057995663157e-05
+                  ],
+                  "997": [
+                    4.7264032271143894e-05,
+                    6.124686205439366e-05
+                  ]
+                },
+                "left": 3.9896284292240125e-05,
+                "max": [
+                  0.12959802150726318,
+                  0.10367578268051147
+                ],
+                "min": [
+                  -0.12959802150726318,
+                  -0.10367578268051147
+                ],
+                "right": -9.891751268753524e-05,
+                "rms": [
+                  0.09164476140227346,
+                  0.07332525284900122
+                ],
+                "sample_rate": 48000,
+                "samples": 32768
+              },
+              "raw_pcm": {
+                "amplitudes": {
+                  "220": [
+                    0.00032225089230571245,
+                    0.0005478309302773021
+                  ],
+                  "330": [
+                    0.0003871999243025952,
+                    0.0005180898091879744
+                  ],
+                  "440": [
+                    0.0004486418119794703,
+                    0.30010235989320333
+                  ],
+                  "660": [
+                    0.4000320379271704,
+                    0.0003760420139496532
+                  ],
+                  "990": [
+                    0.0005081230561819857,
+                    0.0001994518989840133
+                  ],
+                  "997": [
+                    0.00014587663846140118,
+                    0.00017721892217106833
+                  ]
+                },
+                "left": 0.00012313667684793472,
+                "max": [
+                  0.399993896484375,
+                  0.29998779296875
+                ],
+                "min": [
+                  -0.399993896484375,
+                  -0.29998779296875
+                ],
+                "right": -0.00028621964156627655,
+                "rms": [
+                  0.2828541944390754,
+                  0.21216796727039566
+                ],
+                "sample_rate": 48000,
+                "samples": 32768
+              },
+              "voices": [
+                {
+                  "clip_id": "primary",
+                  "clock_drift_seconds": 0.0026666666666685934,
+                  "current_time": 3.804,
+                  "decoder": {
+                    "kind": "scheduled-source-pcm",
+                    "range_requests": 16,
+                    "scheduled_chunks": 18,
+                    "underruns": 0
+                  },
+                  "observations": 137,
+                  "request_url": "/api/projects/c71b094d825a49848b08bb738b06b936/media/47928575c6a74bf780f4000f29858944",
+                  "route": {
+                    "binding": "decoded-source-pcm",
+                    "cache_key": "39ba0eff40a1bc371c25603b5ee28f17255d3c4adab3447e1739b1c2898ae644",
+                    "channel_map": [
+                      1,
+                      0
+                    ],
+                    "channels": 2,
+                    "manifest": {
+                      "asset_id": "47928575c6a74bf780f4000f29858944",
+                      "byte_size": 3072058,
+                      "cache_key": "39ba0eff40a1bc371c25603b5ee28f17255d3c4adab3447e1739b1c2898ae644",
+                      "cached": false,
+                      "channels": [
+                        1,
+                        0
+                      ],
+                      "codec": "pcm_f32le",
+                      "created_at": 1792611263.4989738,
+                      "data_offset": 58,
+                      "duration": 8,
+                      "export_source": "original",
+                      "frame_bytes": 8,
+                      "frames": 384000,
+                      "output_channels": 2,
+                      "padded_frames": 0,
+                      "playback_rate": 1,
+                      "rate": 48000,
+                      "recipe": {
+                        "channels": [
+                          1,
+                          0
+                        ],
+                        "codec": "pcm_f32le",
+                        "output_channels": 2,
+                        "pad_frames": 384000,
+                        "playback_rate": 1,
+                        "rate": 48000,
+                        "source_channels": 2,
+                        "stream_index": 2,
+                        "version": 2
+                      },
+                      "sha256": "701a232c80200fe92ea698f4f68394df3cda6ff689da94269ff171ed25f352e3",
+                      "source_frames": 384000,
+                      "source_sha256": "27896f79318c7b3dba6c91c6d9c9456849d6258a3059998796d88abddfb59ed4",
+                      "source_time_scale": 1,
+                      "state": "ready",
+                      "stream_index": 2,
+                      "url": "/api/projects/c71b094d825a49848b08bb738b06b936/audio-source/39ba0eff40a1bc371c25603b5ee28f17255d3c4adab3447e1739b1c2898ae644",
+                      "version": 2
+                    },
+                    "message": "",
+                    "playback_rate": 1,
+                    "ready": true,
+                    "sha256": "701a232c80200fe92ea698f4f68394df3cda6ff689da94269ff171ed25f352e3",
+                    "source_sha256": "27896f79318c7b3dba6c91c6d9c9456849d6258a3059998796d88abddfb59ed4",
+                    "state": "ready",
+                    "stream_index": 2,
+                    "url": "/api/projects/c71b094d825a49848b08bb738b06b936/audio-source/39ba0eff40a1bc371c25603b5ee28f17255d3c4adab3447e1739b1c2898ae644"
+                  }
+                }
+              ],
+              "window": {
+                "end_frame": 412800,
+                "render_thread": true,
+                "sample_rate": 48000,
+                "start_frame": 380032
+              }
+            }
+          ]
+        },
+        "page_errors": [],
+        "passed": true,
+        "scenario": "nested",
+        "screenshot": "/Users/midiakiasat/.midia-ai/gateway-live/workspaces/auto-d5f5e80a10b691457cec8d25044150b5/.completion-evidence/final-native-01/audio/nested/ENGINE_TEST_sequence_audio.png",
+        "screenshot_bytes": 279149,
+        "steps": [
+          "native_nested_pcm_restart_1",
+          "native_nested_pcm_restart_2",
+          "native_nested_pcm_restart_3",
+          "native_save_after_repeated_playback"
+        ]
+      },
+      "elapsed_seconds": 10.397
+    },
+    {
+      "passed": true,
+      "scenario": "retimed",
+      "repetitions": 3,
+      "fixture": "SYNTHETIC ENGINE TEST \u2014 NOT A FILM",
+      "checks": {
+        "actual_native_controls": true,
+        "native_screenshot": true,
+        "all_repeated_runs_captured": true,
+        "every_actual_live_mix_matches_independent_pcm": true,
+        "every_actual_source_mix_matches_independent_pcm": true,
+        "all_voices_observed_each_run": true,
+        "zero_native_underruns": true,
+        "shared_clock_drift_below_80ms": true,
+        "all_http_source_bytes_match_original_stream_tempo_and_mapping": true,
+        "saved_authored_structure_preserved": true,
+        "original_media_preserved": true,
+        "no_render_substitution": true
+      },
+      "independent_voice_oracles": [
+        {
+          "clip_id": "primary",
+          "rms": [
+            0.2826844599161426,
+            0.2120316870119355
+          ],
+          "amplitudes": {
+            "220": [
+              0.0005163457803839493,
+              0.0003852906664105185
+            ],
+            "330": [
+              0.0004682393706245019,
+              0.00029286594020075304
+            ],
+            "440": [
+              0.0003816834326144139,
+              0.2984598167382063
+            ],
+            "660": [
+              0.39551507264397273,
+              0.00042992369410498174
+            ],
+            "990": [
+              0.0004110558475417858,
+              0.00024774007336837
+            ]
+          }
+        }
+      ],
+      "independent_mix_oracle": {
+        "rms": [
+          0.2826844599161426,
+          0.2120316870119355
+        ],
+        "amplitudes": {
+          "220": [
+            0.0005163457803839493,
+            0.0003852906664105185
+          ],
+          "330": [
+            0.0004682393706245019,
+            0.00029286594020075304
+          ],
+          "440": [
+            0.0003816834326144139,
+            0.2984598167382063
+          ],
+          "660": [
+            0.39551507264397273,
+            0.00042992369410498174
+          ],
+          "990": [
+            0.0004110558475417858,
+            0.00024774007336837
+          ]
+        }
+      },
+      "ui": {
+        "metrics": {
+          "runs": [
+            {
+              "calibration": {
+                "amplitudes": {
+                  "220": [
+                    9.795918285921414e-05,
+                    9.795918285921414e-05
+                  ],
+                  "330": [
+                    0.00012778023789160117,
+                    0.00012778023789160117
+                  ],
+                  "440": [
+                    0.0001439319987181935,
+                    0.0001439319987181935
+                  ],
+                  "660": [
+                    9.912876281198868e-05,
+                    9.912876281198868e-05
+                  ],
+                  "990": [
+                    0.010615086772681795,
+                    0.010615086772681795
+                  ],
+                  "997": [
+                    0.2500367538096972,
+                    0.2500367538096972
+                  ]
+                },
+                "left": -2.1019007367228948e-05,
+                "max": [
+                  0.2499999850988388,
+                  0.2499999850988388
+                ],
+                "min": [
+                  -0.2499999701976776,
+                  -0.2499999701976776
+                ],
+                "right": -2.1019007367228948e-05,
+                "rms": [
+                  0.17678966803400625,
+                  0.17678966803400625
+                ],
+                "sample_rate": 48000,
+                "samples": 32768
+              },
+              "iteration": 1,
+              "pcm": {
+                "amplitudes": {
+                  "220": [
+                    0.0003593117667177665,
+                    0.00047291189485550243
+                  ],
+                  "330": [
+                    0.00033999536823893923,
+                    0.00033506631558297736
+                  ],
+                  "440": [
+                    0.00028308480672273025,
+                    0.2985249617572167
+                  ],
+                  "660": [
+                    0.3954441862133135,
+                    0.00047796802696760654
+                  ],
+                  "990": [
+                    0.0005326071992370424,
+                    0.00020635607977165276
+                  ],
+                  "997": [
+                    0.00023722249006877437,
+                    0.00021972945421421197
+                  ]
+                },
+                "left": -0.00018308423695102133,
+                "max": [
+                  0.3999927341938019,
+                  0.29998621344566345
+                ],
+                "min": [
+                  -0.39998704195022583,
+                  -0.2999876141548157
+                ],
+                "right": 0.0002688749446732013,
+                "rms": [
+                  0.282682155251898,
+                  0.2120709580857575
+                ],
+                "sample_rate": 48000,
+                "samples": 32768
+              },
+              "raw_pcm": {
+                "amplitudes": {
+                  "220": [
+                    0.0003593117667177665,
+                    0.00047291189485550243
+                  ],
+                  "330": [
+                    0.00033999536823893923,
+                    0.00033506631558297736
+                  ],
+                  "440": [
+                    0.00028308480672273025,
+                    0.2985249617572167
+                  ],
+                  "660": [
+                    0.3954441862133135,
+                    0.00047796802696760654
+                  ],
+                  "990": [
+                    0.0005326071992370424,
+                    0.00020635607977165276
+                  ],
+                  "997": [
+                    0.00023722249006877437,
+                    0.00021972945421421197
+                  ]
+                },
+                "left": -0.00018308423695102133,
+                "max": [
+                  0.3999927341938019,
+                  0.29998621344566345
+                ],
+                "min": [
+                  -0.39998704195022583,
+                  -0.2999876141548157
+                ],
+                "right": 0.0002688749446732013,
+                "rms": [
+                  0.282682155251898,
+                  0.2120709580857575
+                ],
+                "sample_rate": 48000,
+                "samples": 32768
+              },
+              "voices": [
+                {
+                  "clip_id": "primary",
+                  "clock_drift_seconds": 0.004000000000000448,
+                  "current_time": 4.614,
+                  "decoder": {
+                    "kind": "scheduled-source-pcm",
+                    "range_requests": 6,
+                    "scheduled_chunks": 6,
+                    "underruns": 0
+                  },
+                  "observations": 167,
+                  "request_url": "/api/projects/6cd08dbfcee349df892ff04bb3ef0965/media/8e9cfa7101294d5098245e145975e025",
+                  "route": {
+                    "binding": "decoded-source-pcm",
+                    "cache_key": "f3c904555b0674928bab68d8e080bea87469142681305223a10331db6c082f71",
+                    "channel_map": [
+                      1,
+                      0
+                    ],
+                    "channels": 2,
+                    "manifest": {
+                      "asset_id": "8e9cfa7101294d5098245e145975e025",
+                      "byte_size": 2048058,
+                      "cache_key": "f3c904555b0674928bab68d8e080bea87469142681305223a10331db6c082f71",
+                      "cached": false,
+                      "channels": [
+                        1,
+                        0
+                      ],
+                      "codec": "pcm_f32le",
+                      "created_at": 1792611273.9185731,
+                      "data_offset": 58,
+                      "duration": 5.333333333333333,
+                      "export_source": "original",
+                      "frame_bytes": 8,
+                      "frames": 256000,
+                      "output_channels": 2,
+                      "padded_frames": 41,
+                      "playback_rate": 1.5,
+                      "rate": 48000,
+                      "recipe": {
+                        "channels": [
+                          1,
+                          0
+                        ],
+                        "codec": "pcm_f32le",
+                        "output_channels": 2,
+                        "pad_frames": 256000,
+                        "playback_rate": 1.5,
+                        "rate": 48000,
+                        "source_channels": 2,
+                        "stream_index": 2,
+                        "version": 2
+                      },
+                      "sha256": "1db2987c3e9ecd0e6778cb2908c3942685869aecca4aef1b92d5bc6a1469f4d1",
+                      "source_frames": 255959,
+                      "source_sha256": "27896f79318c7b3dba6c91c6d9c9456849d6258a3059998796d88abddfb59ed4",
+                      "source_time_scale": 1.5,
+                      "state": "ready",
+                      "stream_index": 2,
+                      "url": "/api/projects/6cd08dbfcee349df892ff04bb3ef0965/audio-source/f3c904555b0674928bab68d8e080bea87469142681305223a10331db6c082f71",
+                      "version": 2
+                    },
+                    "message": "",
+                    "playback_rate": 1.5,
+                    "ready": true,
+                    "sha256": "1db2987c3e9ecd0e6778cb2908c3942685869aecca4aef1b92d5bc6a1469f4d1",
+                    "source_sha256": "27896f79318c7b3dba6c91c6d9c9456849d6258a3059998796d88abddfb59ed4",
+                    "state": "ready",
+                    "stream_index": 2,
+                    "url": "/api/projects/6cd08dbfcee349df892ff04bb3ef0965/audio-source/f3c904555b0674928bab68d8e080bea87469142681305223a10331db6c082f71"
+                  }
+                }
+              ],
+              "window": {
+                "end_frame": 141056,
+                "render_thread": true,
+                "sample_rate": 48000,
+                "start_frame": 108288
+              }
+            },
+            {
+              "calibration": {
+                "amplitudes": {
+                  "220": [
+                    0.00011035906444785088,
+                    0.00011035906444785088
+                  ],
+                  "330": [
+                    0.00013294316247638874,
+                    0.00013294316247638874
+                  ],
+                  "440": [
+                    0.00014426305525529017,
+                    0.00014426305525529017
+                  ],
+                  "660": [
+                    9.521497368620076e-05,
+                    9.521497368620076e-05
+                  ],
+                  "990": [
+                    0.010624460194736503,
+                    0.010624460194736503
+                  ],
+                  "997": [
+                    0.2500303937652446,
+                    0.2500303937652446
+                  ]
+                },
+                "left": 3.730073957725066e-05,
+                "max": [
+                  0.2499999850988388,
+                  0.2499999850988388
+                ],
+                "min": [
+                  -0.25,
+                  -0.25
+                ],
+                "right": 3.730073957725066e-05,
+                "rms": [
+                  0.17678741937689427,
+                  0.17678741937689427
+                ],
+                "sample_rate": 48000,
+                "samples": 32768
+              },
+              "iteration": 2,
+              "pcm": {
+                "amplitudes": {
+                  "220": [
+                    0.00024296002970586238,
+                    0.0001285761809367724
+                  ],
+                  "330": [
+                    0.00025885455430352657,
+                    8.200418341201936e-05
+                  ],
+                  "440": [
+                    0.0002373582283475474,
+                    0.29832062975091017
+                  ],
+                  "660": [
+                    0.3955670286231615,
+                    0.00039291632888180725
+                  ],
+                  "990": [
+                    0.000582252825868084,
+                    0.0002963743295696531
+                  ],
+                  "997": [
+                    0.000256191515721999,
+                    0.0001862597415691516
+                  ]
+                },
+                "left": -0.00010502459224748933,
+                "max": [
+                  0.3999927341938019,
+                  0.29998621344566345
+                ],
+                "min": [
+                  -0.39998704195022583,
+                  -0.2999876141548157
+                ],
+                "right": -6.775063607102234e-05,
+                "rms": [
+                  0.2826790516294903,
+                  0.21197640175133398
+                ],
+                "sample_rate": 48000,
+                "samples": 32768
+              },
+              "raw_pcm": {
+                "amplitudes": {
+                  "220": [
+                    0.00024296002970586238,
+                    0.0001285761809367724
+                  ],
+                  "330": [
+                    0.00025885455430352657,
+                    8.200418341201936e-05
+                  ],
+                  "440": [
+                    0.0002373582283475474,
+                    0.29832062975091017
+                  ],
+                  "660": [
+                    0.3955670286231615,
+                    0.00039291632888180725
+                  ],
+                  "990": [
+                    0.000582252825868084,
+                    0.0002963743295696531
+                  ],
+                  "997": [
+                    0.000256191515721999,
+                    0.0001862597415691516
+                  ]
+                },
+                "left": -0.00010502459224748933,
+                "max": [
+                  0.3999927341938019,
+                  0.29998621344566345
+                ],
+                "min": [
+                  -0.39998704195022583,
+                  -0.2999876141548157
+                ],
+                "right": -6.775063607102234e-05,
+                "rms": [
+                  0.2826790516294903,
+                  0.21197640175133398
+                ],
+                "sample_rate": 48000,
+                "samples": 32768
+              },
+              "voices": [
+                {
+                  "clip_id": "primary",
+                  "clock_drift_seconds": 0.004000000000000892,
+                  "current_time": 4.674,
+                  "decoder": {
+                    "kind": "scheduled-source-pcm",
+                    "range_requests": 11,
+                    "scheduled_chunks": 12,
+                    "underruns": 0
+                  },
+                  "observations": 132,
+                  "request_url": "/api/projects/6cd08dbfcee349df892ff04bb3ef0965/media/8e9cfa7101294d5098245e145975e025",
+                  "route": {
+                    "binding": "decoded-source-pcm",
+                    "cache_key": "f3c904555b0674928bab68d8e080bea87469142681305223a10331db6c082f71",
+                    "channel_map": [
+                      1,
+                      0
+                    ],
+                    "channels": 2,
+                    "manifest": {
+                      "asset_id": "8e9cfa7101294d5098245e145975e025",
+                      "byte_size": 2048058,
+                      "cache_key": "f3c904555b0674928bab68d8e080bea87469142681305223a10331db6c082f71",
+                      "cached": false,
+                      "channels": [
+                        1,
+                        0
+                      ],
+                      "codec": "pcm_f32le",
+                      "created_at": 1792611273.9185731,
+                      "data_offset": 58,
+                      "duration": 5.333333333333333,
+                      "export_source": "original",
+                      "frame_bytes": 8,
+                      "frames": 256000,
+                      "output_channels": 2,
+                      "padded_frames": 41,
+                      "playback_rate": 1.5,
+                      "rate": 48000,
+                      "recipe": {
+                        "channels": [
+                          1,
+                          0
+                        ],
+                        "codec": "pcm_f32le",
+                        "output_channels": 2,
+                        "pad_frames": 256000,
+                        "playback_rate": 1.5,
+                        "rate": 48000,
+                        "source_channels": 2,
+                        "stream_index": 2,
+                        "version": 2
+                      },
+                      "sha256": "1db2987c3e9ecd0e6778cb2908c3942685869aecca4aef1b92d5bc6a1469f4d1",
+                      "source_frames": 255959,
+                      "source_sha256": "27896f79318c7b3dba6c91c6d9c9456849d6258a3059998796d88abddfb59ed4",
+                      "source_time_scale": 1.5,
+                      "state": "ready",
+                      "stream_index": 2,
+                      "url": "/api/projects/6cd08dbfcee349df892ff04bb3ef0965/audio-source/f3c904555b0674928bab68d8e080bea87469142681305223a10331db6c082f71",
+                      "version": 2
+                    },
+                    "message": "",
+                    "playback_rate": 1.5,
+                    "ready": true,
+                    "sha256": "1db2987c3e9ecd0e6778cb2908c3942685869aecca4aef1b92d5bc6a1469f4d1",
+                    "source_sha256": "27896f79318c7b3dba6c91c6d9c9456849d6258a3059998796d88abddfb59ed4",
+                    "state": "ready",
+                    "stream_index": 2,
+                    "url": "/api/projects/6cd08dbfcee349df892ff04bb3ef0965/audio-source/f3c904555b0674928bab68d8e080bea87469142681305223a10331db6c082f71"
+                  }
+                }
+              ],
+              "window": {
+                "end_frame": 276993,
+                "render_thread": true,
+                "sample_rate": 48000,
+                "start_frame": 244225
+              }
+            },
+            {
+              "calibration": {
+                "amplitudes": {
+                  "220": [
+                    0.0002011215080486291,
+                    0.0002011215080486291
+                  ],
+                  "330": [
+                    0.00018001699122610518,
+                    0.00018001699122610518
+                  ],
+                  "440": [
+                    0.00014783746266560174,
+                    0.00014783746266560174
+                  ],
+                  "660": [
+                    2.722637850712788e-05,
+                    2.722637850712788e-05
+                  ],
+                  "990": [
+                    0.010726512012929196,
+                    0.010726512012929196
+                  ],
+                  "997": [
+                    0.24996077586052515,
+                    0.24996077586052515
+                  ]
+                },
+                "left": -0.00010855246956606446,
+                "max": [
+                  0.25,
+                  0.25
+                ],
+                "min": [
+                  -0.2499999850988388,
+                  -0.2499999850988388
+                ],
+                "right": -0.00010855246956606446,
+                "rms": [
+                  0.17676280713346293,
+                  0.17676280713346293
+                ],
+                "sample_rate": 48000,
+                "samples": 32768
+              },
+              "iteration": 3,
+              "pcm": {
+                "amplitudes": {
+                  "220": [
+                    0.0003593117667177665,
+                    0.0004729118948554838
+                  ],
+                  "330": [
+                    0.00033999536823893923,
+                    0.0003350663155829689
+                  ],
+                  "440": [
+                    0.00028308480672273025,
+                    0.2985249617572167
+                  ],
+                  "660": [
+                    0.3954441862133135,
+                    0.0004779680269676296
+                  ],
+                  "990": [
+                    0.0005326071992370424,
+                    0.00020635607977167404
+                  ],
+                  "997": [
+                    0.00023722249006877437,
+                    0.0002197294542141912
+                  ]
+                },
+                "left": -0.00018308423695102133,
+                "max": [
+                  0.3999927341938019,
+                  0.29998621344566345
+                ],
+                "min": [
+                  -0.39998704195022583,
+                  -0.2999876141548157
+                ],
+                "right": 0.00026887494467318744,
+                "rms": [
+                  0.282682155251898,
+                  0.2120709580857575
+                ],
+                "sample_rate": 48000,
+                "samples": 32768
+              },
+              "raw_pcm": {
+                "amplitudes": {
+                  "220": [
+                    0.0003593117667177665,
+                    0.0004729118948554838
+                  ],
+                  "330": [
+                    0.00033999536823893923,
+                    0.0003350663155829689
+                  ],
+                  "440": [
+                    0.00028308480672273025,
+                    0.2985249617572167
+                  ],
+                  "660": [
+                    0.3954441862133135,
+                    0.0004779680269676296
+                  ],
+                  "990": [
+                    0.0005326071992370424,
+                    0.00020635607977167404
+                  ],
+                  "997": [
+                    0.00023722249006877437,
+                    0.0002197294542141912
+                  ]
+                },
+                "left": -0.00018308423695102133,
+                "max": [
+                  0.3999927341938019,
+                  0.29998621344566345
+                ],
+                "min": [
+                  -0.39998704195022583,
+                  -0.2999876141548157
+                ],
+                "right": 0.00026887494467318744,
+                "rms": [
+                  0.282682155251898,
+                  0.2120709580857575
+                ],
+                "sample_rate": 48000,
+                "samples": 32768
+              },
+              "voices": [
+                {
+                  "clip_id": "primary",
+                  "clock_drift_seconds": 0.004000000000003112,
+                  "current_time": 4.665999999999999,
+                  "decoder": {
+                    "kind": "scheduled-source-pcm",
+                    "range_requests": 16,
+                    "scheduled_chunks": 18,
+                    "underruns": 0
+                  },
+                  "observations": 170,
+                  "request_url": "/api/projects/6cd08dbfcee349df892ff04bb3ef0965/media/8e9cfa7101294d5098245e145975e025",
+                  "route": {
+                    "binding": "decoded-source-pcm",
+                    "cache_key": "f3c904555b0674928bab68d8e080bea87469142681305223a10331db6c082f71",
+                    "channel_map": [
+                      1,
+                      0
+                    ],
+                    "channels": 2,
+                    "manifest": {
+                      "asset_id": "8e9cfa7101294d5098245e145975e025",
+                      "byte_size": 2048058,
+                      "cache_key": "f3c904555b0674928bab68d8e080bea87469142681305223a10331db6c082f71",
+                      "cached": false,
+                      "channels": [
+                        1,
+                        0
+                      ],
+                      "codec": "pcm_f32le",
+                      "created_at": 1792611273.9185731,
+                      "data_offset": 58,
+                      "duration": 5.333333333333333,
+                      "export_source": "original",
+                      "frame_bytes": 8,
+                      "frames": 256000,
+                      "output_channels": 2,
+                      "padded_frames": 41,
+                      "playback_rate": 1.5,
+                      "rate": 48000,
+                      "recipe": {
+                        "channels": [
+                          1,
+                          0
+                        ],
+                        "codec": "pcm_f32le",
+                        "output_channels": 2,
+                        "pad_frames": 256000,
+                        "playback_rate": 1.5,
+                        "rate": 48000,
+                        "source_channels": 2,
+                        "stream_index": 2,
+                        "version": 2
+                      },
+                      "sha256": "1db2987c3e9ecd0e6778cb2908c3942685869aecca4aef1b92d5bc6a1469f4d1",
+                      "source_frames": 255959,
+                      "source_sha256": "27896f79318c7b3dba6c91c6d9c9456849d6258a3059998796d88abddfb59ed4",
+                      "source_time_scale": 1.5,
+                      "state": "ready",
+                      "stream_index": 2,
+                      "url": "/api/projects/6cd08dbfcee349df892ff04bb3ef0965/audio-source/f3c904555b0674928bab68d8e080bea87469142681305223a10331db6c082f71",
+                      "version": 2
+                    },
+                    "message": "",
+                    "playback_rate": 1.5,
+                    "ready": true,
+                    "sha256": "1db2987c3e9ecd0e6778cb2908c3942685869aecca4aef1b92d5bc6a1469f4d1",
+                    "source_sha256": "27896f79318c7b3dba6c91c6d9c9456849d6258a3059998796d88abddfb59ed4",
+                    "state": "ready",
+                    "stream_index": 2,
+                    "url": "/api/projects/6cd08dbfcee349df892ff04bb3ef0965/audio-source/f3c904555b0674928bab68d8e080bea87469142681305223a10331db6c082f71"
+                  }
+                }
+              ],
+              "window": {
+                "end_frame": 415104,
+                "render_thread": true,
+                "sample_rate": 48000,
+                "start_frame": 382336
+              }
+            }
+          ]
+        },
+        "page_errors": [],
+        "passed": true,
+        "scenario": "retimed",
+        "screenshot": "/Users/midiakiasat/.midia-ai/gateway-live/workspaces/auto-d5f5e80a10b691457cec8d25044150b5/.completion-evidence/final-native-01/audio/retimed/ENGINE_TEST_sequence_audio.png",
+        "screenshot_bytes": 279863,
+        "steps": [
+          "native_retimed_pcm_restart_1",
+          "native_retimed_pcm_restart_2",
+          "native_retimed_pcm_restart_3",
+          "native_save_after_repeated_playback"
+        ]
+      },
+      "elapsed_seconds": 10.821
+    }
+  ]
+}

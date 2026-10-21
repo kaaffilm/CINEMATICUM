@@ -1,0 +1,53 @@
+--- a/scripts/studio/imaging.py
++++ b/scripts/studio/imaging.py
+@@ -131,7 +131,7 @@
+     executable = find_imaging_python(python)
+     if not executable:
+         raise ValueError("The isolated imaging runtime is not installed. Install the CINEMATICUM Imaging runtime to use OCIO, RAW development and HDR merging.")
+-    return [executable, "-I", str(Path(__file__).with_name("image_worker.py"))]
++    return [executable, "-I", "-B", str(Path(__file__).with_name("image_worker.py"))]
+ 
+ 
+ def _worker_env():
+--- a/scripts/studio/planar_tracking.py
++++ b/scripts/studio/planar_tracking.py
+@@ -48,7 +48,7 @@
+         seen.add(name);path=Path(name).expanduser()
+         if not path.is_absolute() or not path.is_file() or not os.access(path,os.X_OK):continue
+         try:
+-            result=subprocess.run([str(path),"-I",str(WORKER),"--capabilities"],env=_environment(),
++            result=subprocess.run([str(path),"-I","-B",str(WORKER),"--capabilities"],env=_environment(),
+                                   capture_output=True,text=True,timeout=12)
+             if result.returncode:raise ValueError(result.stderr.strip()[-500:])
+             value=json.loads(result.stdout)
+@@ -119,7 +119,7 @@
+         manifest.write_text(json.dumps({"frames":str(raw),"width":width,"height":height,"count":count,
+                                        "model":model,"quad":quad},allow_nan=False))
+         output=directory/"result.json"
+-        _run([runtime["python"],"-I",str(WORKER),"--request",str(manifest)],directory,"planar-measure",
++        _run([runtime["python"],"-I","-B",str(WORKER),"--request",str(manifest)],directory,"planar-measure",
+              cancel_event,deadline,output,env=_environment())
+         if output.stat().st_size>1024*1024:raise ValueError("Planar measurement exceeded its result bound")
+         measured=json.loads(output.read_text())
+--- a/scripts/studio/lens_assets.py
++++ b/scripts/studio/lens_assets.py
+@@ -50,7 +50,7 @@
+         raise RuntimeError("Lens preparation cancelled")
+     directory = Path(tempfile.mkdtemp(prefix="lens-" + digest[:12] + "-", dir=str(scratch)))
+     executable = find_imaging_python() or sys.executable
+-    command = [executable, "-I", str(Path(__file__).with_name("compositor.py")), "--lens-maps", str(directory)]
++    command = [executable, "-I", "-B", str(Path(__file__).with_name("compositor.py")), "--lens-maps", str(directory)]
+     environment = os.environ.copy()
+     for key in list(environment):
+         if key.startswith(("PYTHON", "OCIO")):
+--- a/scripts/studio/roto_assets.py
++++ b/scripts/studio/roto_assets.py
+@@ -42,7 +42,7 @@
+         if key.startswith(("PYTHON","OCIO")):
+             environment.pop(key,None)
+     environment.update(OMP_NUM_THREADS="2",OPENBLAS_NUM_THREADS="2")
+-    command = [executable,"-I",str(Path(__file__).with_name("roto.py")),"--render",str(directory)]
++    command = [executable,"-I","-B",str(Path(__file__).with_name("roto.py")),"--render",str(directory)]
+     with tempfile.TemporaryFile() as incoming, tempfile.TemporaryFile() as outgoing, tempfile.TemporaryFile() as errors:
+         incoming.write(encoded);incoming.seek(0)
+         process = subprocess.Popen(command,stdin=incoming,stdout=outgoing,stderr=errors,start_new_session=True,env=environment)

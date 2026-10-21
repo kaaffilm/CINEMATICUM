@@ -1,0 +1,33 @@
+{
+  "schema": "cinematicum-owned-native-download-recovery-v1",
+  "scope": "Recovery of only two exact synthetic test exports saved by the actual native chooser. Original failed acceptance reports are unchanged; no aggregate pass is inferred.",
+  "recorded_at": 1792613940.470371,
+  "records": [
+    {
+      "attempt": "attempt02",
+      "report_sha256": "ea959a498d2c1f6d58542b0833e6e71f9ddd345694c4f99b5500a63d6c68acf7",
+      "report_pass_status_unchanged": false,
+      "job_id": "c19c10ec388a40a48934eee6747c04d9",
+      "project_id": "7a8029bc2bc444d497e99c61533cd2c8",
+      "source_path": "/Users/midiakiasat/Movies/c19c10ec388a40a48934eee6747c04d9.mkv",
+      "retained_path": "/Users/midiakiasat/Library/Application Support/CINEMATICUM/Verification/0.9.1-4530-20261021-dialogs/recovered-default-downloads/attempt02-default-save.mkv",
+      "bytes": 63252,
+      "sha256": "5f70288b5b735ba89d8c314692b1068a194a7ff51858512094b76181441fd7e2",
+      "exact_job_master_and_ui_binding": true,
+      "owned_default_file_relocated_without_overwrite": true
+    },
+    {
+      "attempt": "attempt01",
+      "report_sha256": "d8b85fdb3b2296b404800db17f02e1c7a9d5c45e02b6e33473db6b02d09ade2b",
+      "report_pass_status_unchanged": false,
+      "job_id": "d975835d46fe4b70ab23c40a015370ac",
+      "project_id": "8609524952c74ab3930aeaaf2aa7d5ba",
+      "source_path": "/Users/midiakiasat/Movies/d975835d46fe4b70ab23c40a015370ac.mkv",
+      "retained_path": "/Users/midiakiasat/Library/Application Support/CINEMATICUM/Verification/0.9.1-4530-20261021-dialogs/recovered-default-downloads/attempt01-default-save.mkv",
+      "bytes": 63252,
+      "sha256": "8cc0c8a0f8ef06689f0bbbfd6c0a9687b71029187a22f6a1af24ba9dadd63b01",
+      "exact_job_master_and_ui_binding": true,
+      "owned_default_file_relocated_without_overwrite": true
+    }
+  ]
+}

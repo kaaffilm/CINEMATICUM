@@ -40,12 +40,13 @@ ComfyUI installation, owned MPS startup and one real Wan 1.3B take are verified:
 passed 14 checks, including all nine actual source pictures. This is a small
 execution proof. Two later 480 × 272, 17-frame, 20-step Euler takes completed
 and each passed 14 independent media checks. A preceding normal UniPC take was
-nearly black and was rejected. Native playback passed 14 checks for one Euler
-take; the other exposed a final-frame insertion defect, now corrected in source
-and covered by real-media/JavaScript regression. Its final native rerun is pending
-after MIDIA-AI's runtime upgrade invalidated Mac command authorization.
-Production quality and longer takes remain unverified. The cause of an earlier
-ordinary app termination remains unknown.
+nearly black and was rejected. An earlier native playback exposed a final-frame
+insertion defect. After the nearest-frame correction, both final native
+Add/Play/Save runs passed **14/14 checks** and preserved all 17 timeline frames.
+The normal workflow is accepted within these settings. One real 33-frame take
+also passed inference and native playback; its generation harness took 928.394
+seconds. This is one bounded longer case. Production quality and sustained
+operation remain unverified; the earlier ordinary termination's cause is unknown.
 
 The 0.9.1 candidate replaces browser-decoded live sound with a source-sample
 scheduler and adds measured affine/projective planar motion, stabilization,
@@ -56,15 +57,33 @@ plus transformed 16-bit paused pictures and an actual native master download.
 Current-source regression, remaining native gates and installation are recorded
 separately in [Verification 0.9.1](scripts/studio/VERIFICATION_0_9_1.md).
 
-Native quit now asks before cancelling active media jobs. The installer includes
-the planar modules and tracking/imaging runtime installers, archives the prior
-bundle before replacement, and records a SHA-256 identity for every copied
-runtime file. Existing project data and the original production checkout are
-preserved. The earlier 515-test result applies to its historical source only.
-The current frozen operative source passed **543 tests with zero skips**, and
-all 48 JavaScript files passed syntax checks. Final native synchronization and
-replacement installation require renewed MIDIA-AI execution authorization after
-its runtime upgrade; the current candidate is not yet installed.
+Native quit now asks before cancelling active media jobs. Actual production
+alert acceptance passed **21/21 independent and 10/10 native checks**: one real
+48-frame high16 master completed after Keep Working, and a second render was
+cancelled without damaging the first export. The installer archives the prior
+bundle and records every copied runtime file's SHA-256 identity. The original
+production checkout remains preserved.
+
+Canonical launch exposed isolated workers creating bytecode inside the app.
+Five launches in four modules now explicitly suppress it with `-B`; the frozen
+corrected source passed **544 tests with zero failures, errors or skips** and
+all 189 operative files stayed unchanged. The 48 unchanged JavaScript files
+retain their successful syntax checks. Published base `4530c54` passed CI.
+This evidence freeze records no CI result for the worker correction and
+follow-up records; see the exact published commit and
+[PR #162 checks](https://github.com/kaaffilm/CINEMATICUM/pull/162/checks) for
+subsequent results.
+
+Install-03's returned verifier output reported **PASSED in 16.515 seconds**,
+including the corrected 62-file runtime, 67-file bundle, 70-file prior archive
+and preservation of all 57 protected workspace files. The public record is an
+observation of returned fields; its full raw receipt was not collected.
+Canonical launch-02 started but its result is unobserved. Production chooser
+Save is verified; the corrected Cancel helper has not run. Final installed-source
+reconciliation has not executed. A later MIDIA access-context change denied the
+prior session, and fresh-session creation hit the 64-session limit; these
+remaining Mac gates are blocked. Earlier failures remain in the verification
+record, and no full-completion or signed-distribution claim is made.
 
 Start with [the Studio guide](scripts/studio/README.md),
 [the source comparison and capability audit](scripts/studio/CAPABILITY_AUDIT.md),
