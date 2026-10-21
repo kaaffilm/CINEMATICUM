@@ -11,7 +11,10 @@ return await (async()=>{
   const cameraKeys=()=>all('.scene-key-lane[data-track-id="camera"] .scene-key:not(.implicit)').length;
   const prop=name=>Number($('[data-scene-property="'+name+'"]')?.value);
   const cameraSelected=()=>click('.scene-object-list [data-scene-select="camera"]');
-  function checkCamera(expected){cameraSelected();for(const name of ['fov','roll','shift_x','shift_y','focal_ratio'])if(Math.abs(prop(name)-expected[name])>.0011)throw Error('Camera '+name+' differs from imported projection: '+prop(name)+' vs '+expected[name]);}
+  function checkCamera(expected){cameraSelected();for(const name of ['fov','roll','shift_x','shift_y','focal_ratio']){const tolerance=['fov','roll'].includes(name)?.0051:.000051;if(Math.abs(prop(name)-expected[name])>tolerance)throw Error('Displayed camera '+name+' differs from imported projection: '+prop(name)+' vs '+expected[name]);}}
+  // Inspector fields intentionally display two decimals for FOV/roll and four
+  // for shifts/ratio. The Python harness still compares saved numbers exactly;
+  // source-to-Blender projection acceptance retains its independent tolerance.
   try{
     await until(()=>$('#viewer-project')?.textContent.includes('ENGINE TEST')&&$('#project-select')?.value,'Test project did not bootstrap',4500);
     click('[data-mode="3d"]');await until(()=>$('.scene-viewport canvas')?.getBoundingClientRect().width>100,'3D workspace did not mount');
