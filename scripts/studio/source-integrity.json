@@ -199,8 +199,8 @@
     },
     {
       "path": "scripts/studio/test_camera_io.py",
-      "size": 21695,
-      "sha256": "f0c7d34c5293ed1ade0656fded75284a9e60cdbe0928f417596b3c42e2d5be06"
+      "size": 21851,
+      "sha256": "56040209f3d033378e291cbafc13ce6338f14e6840a9f704327a01b3e76632dd"
     },
     {
       "path": "scripts/studio/test_color_pipeline.py",

@@ -212,7 +212,9 @@ class ColmapTests(unittest.TestCase):
         camera=camera_io.import_camera(payload,1200,800)["cameras"][0]["camera"]
         self.assertEqual(camera["position"],[0,0,0])
         self.assertEqual(camera["target"],[0,0,1])
-        self.assertEqual(canonical_project(camera,[1,2,4],1200,800),[825,850])
+        # Trigonometric roundtrips differ by one ULP across Python/libm builds.
+        for actual, expected in zip(canonical_project(camera,[1,2,4],1200,800),[825,850]):
+            self.assertAlmostEqual(actual, expected, places=10)
 
     def test_empty_observation_lines_and_multiple_poses(self):
         payload=colmap_payload()
