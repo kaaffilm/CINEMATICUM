@@ -4,6 +4,8 @@ import ast
 import copy
 import json
 from pathlib import Path
+import shutil
+import subprocess
 import tempfile
 import threading
 from types import SimpleNamespace
@@ -115,8 +117,90 @@ class SceneRecipeTests(unittest.TestCase):
             self.assertEqual(curve.extrapolation, "CONSTANT")
         with self.assertRaisesRegex(RuntimeError, "animation curves"):
             scope["linearize_action"](SimpleNamespace(animation_data=SimpleNamespace(action=SimpleNamespace(layers=[]))))
-        self.assertLess(script.index("linearize_action(obj)\n    objects.append"), script.index("bpy.ops.wm.save_as_mainfile"))
+        self.assertLess(script.index("interpolate_action(obj, poses)\n    objects.append"), script.index("bpy.ops.wm.save_as_mainfile"))
         self.assertIn("scene.render.filepath = '//renders/frame_######'", script)
+
+    def test_camera_light_keys_and_easing_share_exact_endpoint_semantics(self):
+        value = recipe()
+        value["camera"]["keyframes"] = [{"frame": 1, "interpolation": "ease_in"},
+                                         {"frame": 9, "position": [15, -9, 6], "target": [0, 0, 3], "fov": 85}]
+        value["lights"][0]["keyframes"] = [{"frame": 1, "interpolation": "constant"},
+                                             {"frame": 9, "power": 2100, "size": 9}]
+        normalized = scene.validate_scene(value)
+        camera = normalized["camera"]
+        self.assertEqual(scene.pose_at(camera, 5, "camera")["position"], [9, -9, 6])
+        self.assertEqual(scene.pose_at(camera, 5, "camera")["fov"], 55)
+        self.assertEqual(scene.pose_at(camera, 9, "camera")["fov"], 85)
+        light = normalized["lights"][0]
+        self.assertEqual(scene.pose_at(light, 8.999, "light")["power"], 1100)
+        self.assertEqual(scene.pose_at(light, 9, "light")["power"], 2100)
+        for mode, expected in (("linear", .25), ("constant", 0), ("ease_in", .0625),
+                               ("ease_out", .4375), ("ease_in_out", .15625)):
+            self.assertEqual(scene.easing(.25, mode), expected)
+
+    def test_camera_light_animation_rejects_unsupported_and_invalid_values(self):
+        cases = [("camera", {"frame": 2, "fov": 200}), ("camera", {"frame": 2, "fov": True}),
+                 ("camera", {"frame": 2, "position": [0, 0, 0], "target": [0, 0, 0]}),
+                 ("camera", {"frame": 2, "interpolation": "python:execute"}),
+                 ("light", {"frame": 2, "power": -1}), ("light", {"frame": 2, "size": 0}),
+                 ("light", {"frame": 2, "expression": "frame*2"})]
+        for kind, key in cases:
+            value = recipe()
+            target = value["camera"] if kind == "camera" else value["lights"][0]
+            target["keyframes"] = [key]
+            with self.subTest(kind=kind, key=key), self.assertRaises(ValueError):
+                scene.validate_scene(value)
+
+    def test_blender_curve_handles_reproduce_polynomial_easing(self):
+        source = scene._build_script(scene.validate_scene(recipe()), "/owned/scene.blend", "/owned/frames", 24, 1, 9)
+        tree = ast.parse(source)
+        functions = [node for node in tree.body if isinstance(node, ast.FunctionDef)
+                     and node.name in {"linearize_action", "action_curves", "interpolate_action", "recipe_poses", "pose_at"}]
+        scope = {}
+        exec(compile(ast.Module(body=functions, type_ignores=[]), "scene-generated-curves", "exec"), scope)
+        for mode in scene.INTERPOLATIONS:
+            points = [SimpleNamespace(co=[1., 2.], interpolation="LINEAR"), SimpleNamespace(co=[9., 10.], interpolation="LINEAR")]
+            curve = SimpleNamespace(keyframe_points=points)
+            owner = SimpleNamespace(animation_data=SimpleNamespace(action=SimpleNamespace(fcurves=[curve])))
+            poses = [(1, {"frame": 1, "interpolation": mode}), (9, {"frame": 9})]
+            scope["interpolate_action"](owner, poses)
+            for t in (.125, .25, .5, .75, .875):
+                if mode.startswith("ease_"):
+                    left, right = points
+                    actual = (1-t)**3*left.co[1] + 3*(1-t)**2*t*left.handle_right[1] + 3*(1-t)*t*t*right.handle_left[1] + t**3*right.co[1]
+                    self.assertAlmostEqual(left.handle_right[0], 1+8/3)
+                    self.assertAlmostEqual(right.handle_left[0], 9-8/3)
+                else:
+                    actual = 2 if mode == "constant" else 2+8*t
+                    self.assertEqual(points[0].interpolation, "CONSTANT" if mode == "constant" else "LINEAR")
+                self.assertAlmostEqual(actual, 2+8*scene.easing(t, mode), places=10)
+
+    def test_javascript_python_and_generated_render_evaluate_identically(self):
+        node = shutil.which("node")
+        if not node:
+            self.skipTest("Node is required to compare the authoring evaluator.")
+        values = []
+        for mode in scene.INTERPOLATIONS:
+            value = recipe()
+            value["objects"][0]["keyframes"].insert(0, {"frame": 1, "interpolation": mode})
+            value["camera"]["keyframes"] = [{"frame": 1, "interpolation": mode}, {"frame": 9, "fov": 75, "position": [11, -5, 7]}]
+            value["lights"][0]["keyframes"] = [{"frame": 1, "interpolation": mode}, {"frame": 9, "power": 1500, "size": 2, "position": [0, -2, 4]}]
+            value = scene.validate_scene(value)
+            for kind, item in (("object", value["objects"][0]), ("camera", value["camera"]), ("light", value["lights"][0])):
+                for frame in (0, 1, 3, 5, 8.999, 9, 20):
+                    values.append({"kind": kind, "item": item, "frame": frame, "expected": scene.pose_at(item, frame, kind)})
+        script = "const fs=require('fs'),vm=require('vm');global.window={};vm.runInThisContext(fs.readFileSync(process.argv[1],'utf8'));const rows=JSON.parse(fs.readFileSync(0,'utf8'));console.log(JSON.stringify(rows.map(r=>window.CinematicumSceneEditor.poseAt(r.item,r.frame,r.kind))));"
+        output = subprocess.run([node, "-e", script, str(Path(__file__).parent / "web" / "scene-editor.js")],
+                                input=json.dumps(values), text=True, capture_output=True, check=True, timeout=10)
+        results = json.loads(output.stdout)
+        generated = ast.parse(scene._build_script(scene.validate_scene(recipe()), "/owned/a.blend", "/owned/frames", 24, 1, 9))
+        functions = [node for node in generated.body if isinstance(node, ast.FunctionDef) and node.name in {"recipe_poses", "pose_at"}]
+        scope = {}
+        exec(compile(ast.Module(body=functions, type_ignores=[]), "scene-render-evaluation", "exec"), scope)
+        for row, actual in zip(values, results):
+            self.assertEqual(actual, row["expected"])
+            poses = scope["recipe_poses"](row["item"], scene.POSE_FIELDS[row["kind"]])
+            self.assertEqual(scope["pose_at"](poses, row["frame"]), row["expected"])
 
 
 class SceneRenderingTests(unittest.TestCase):

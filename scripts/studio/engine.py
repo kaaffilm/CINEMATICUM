@@ -1,6 +1,7 @@
 """CINEMATICUM's local, frame-based SDR media compositor.
 
-All times are integer project frames and all end points are exclusive. This
+Timeline positions are integer project frames; source in points may be
+fractional after a retimed edit. All end points are exclusive. This
 module renders imported media; it never substitutes generated filler for absent
 footage or changes a film's issuance status. No shell commands are accepted.
 """
@@ -33,6 +34,9 @@ AUDIO_EXTENSIONS = {".wav", ".mp3", ".aac", ".m4a", ".flac", ".ogg", ".aif", ".a
 IMAGE_EXTENSIONS = {".png", ".jpg", ".jpeg", ".webp", ".tif", ".tiff", ".bmp"}
 MEDIA_EXTENSIONS = VIDEO_EXTENSIONS | AUDIO_EXTENSIONS | IMAGE_EXTENSIONS
 MAX_TIMELINE_SECONDS = 6 * 60 * 60
+INTERPOLATIONS = {"linear", "constant", "ease_in", "ease_out", "ease_in_out"}
+ANIMATED_PROPERTIES = {"x": (-4, 4), "y": (-4, 4), "scale": (.02, 4),
+                       "opacity": (0, 1), "rotation": (-360, 360), "volume": (0, 4)}
 _PROBE_CACHE = OrderedDict()
 _PROBE_LOCK = threading.Lock()
 
@@ -128,6 +132,22 @@ def probe_media(path):
                 break
         except (ValueError, TypeError):
             pass
+    audio_duration = 0.0
+    if audios:
+        audio_values = [audios[0].get("duration")]
+        audio_tag = audios[0].get("tags", {}).get("DURATION", "")
+        if isinstance(audio_tag, str) and re.fullmatch(r"\d+:\d+:\d+(\.\d+)?", audio_tag):
+            hours, minutes, seconds = audio_tag.split(":")
+            audio_values.append(int(hours) * 3600 + int(minutes) * 60 + float(seconds))
+        audio_values.extend([data.get("format", {}).get("duration"), duration])
+        for value in audio_values:
+            try:
+                candidate = float(value)
+                if math.isfinite(candidate) and candidate > 0:
+                    audio_duration = candidate
+                    break
+            except (ValueError, TypeError):
+                pass
     if not image and duration <= 0:
         raise ValueError("Media must have a finite, positive duration.")
     width, height = int(video.get("width", 0)), int(video.get("height", 0))
@@ -159,6 +179,9 @@ def probe_media(path):
         "fps": video.get("avg_frame_rate", "0/0"),
         "video_stream_index": video.get("index"),
         "audio_stream_index": audios[0].get("index") if audios else None,
+        "audio_sample_rate": int(audios[0].get("sample_rate", 0) or 0) if audios else 0,
+        "audio_channels": int(audios[0].get("channels", 0) or 0) if audios else 0,
+        "audio_duration": audio_duration,
         "size": path.stat().st_size,
     }
     with _PROBE_LOCK:
@@ -185,6 +208,27 @@ def validate_project(project, project_dir):
         if not isinstance(p.get(key, []), list) or len(p.get(key, [])) > limit:
             raise ValueError(f"{key} must be a list with at most {limit} items.")
         p.setdefault(key, [])
+    tracks = p.setdefault("tracks", [])
+    if not isinstance(tracks, list) or len(tracks) > 32:
+        raise ValueError("Tracks must be a list with at most 32 items.")
+    track_ids = set()
+    for track in tracks:
+        if not isinstance(track, dict):
+            raise ValueError("Invalid track settings.")
+        track_id = _number(track.get("id"), "Track id", -16, 15, True)
+        if track_id in track_ids:
+            raise ValueError("Track ids must be unique.")
+        track_ids.add(track_id)
+        track["id"] = track_id
+        default_name = "A" + str(abs(track_id)) if track_id < 0 else "V" + str(track_id + 1)
+        name = track.setdefault("name", default_name)
+        if not isinstance(name, str) or not name.strip() or len(name) > 100 or "\x00" in name:
+            raise ValueError("Track name must contain 1–100 characters.")
+        for flag in ("mute", "solo", "locked"):
+            track.setdefault(flag, False)
+            if not isinstance(track[flag], bool):
+                raise ValueError(f"Track {flag} must be true or false.")
+        track["gain"] = _number(track.get("gain", 1), "Track gain", 0, 4)
     assets = {}
     for a in p["assets"]:
         if not isinstance(a, dict):
@@ -222,12 +266,25 @@ def validate_project(project, project_dir):
             raise ValueError("Audio files belong on an audio track (negative track number).")
         if c["track"] < 0 and not a["has_audio"]:
             raise ValueError("An audio-track clip must contain audio.")
-        for key, default, low in (("start", 0, 0), ("in", 0, 0), ("duration", fps, 1)):
+        for key, default, low in (("start", 0, 0), ("duration", fps, 1)):
             c[key] = _number(c.get(key, default), f"Clip {key}", low, maximum, True)
+        # Edits select a window of the original animation rather than fitting
+        # new curves to sampled boundary values. Domain bounds remain fixed
+        # through trims, even when a negative-domain key is no longer visible.
+        c["animation_start"] = _number(c.get("animation_start", 0), "Animation start", -maximum, 0, True)
+        c["animation_duration"] = _number(c.get("animation_duration", c["duration"]), "Animation duration", 1, maximum, True)
+        c["animation_offset"] = _number(c.get("animation_offset", 0), "Animation offset", -maximum, maximum, True)
+        # Retime split/trim boundaries can fall between project frames in the
+        # source. Timeline starts and durations remain integer project frames.
+        c["in"] = _number(c.get("in", 0), "Clip in", 0, maximum)
+        c["speed"] = _number(c.get("speed", 1), "Clip speed", .25, 4)
+        c.setdefault("reverse", False)
+        if not isinstance(c["reverse"], bool):
+            raise ValueError("Clip reverse must be true or false.")
         if c["start"] + c["duration"] > maximum:
             raise ValueError("Timeline exceeds the six-hour limit.")
         # Permit only half a project frame of metadata rounding, never a freeze-frame fallback.
-        if a["kind"] != "image" and (c["in"] + c["duration"]) / fps > a["duration"] + 0.5 / fps:
+        if a["kind"] != "image" and (c["in"] + c["duration"] * c["speed"]) / fps > a["duration"] + 0.5 / fps:
             raise ValueError(f"Clip {ident} extends beyond its source media. Shorten the trim.")
         if a["kind"] == "image" and c["in"]:
             raise ValueError("Still images have no source in point.")
@@ -235,6 +292,16 @@ def validate_project(project, project_dir):
                                        ("x", 0, -4, 4), ("y", 0, -4, 4),
                                        ("scale", 1, .02, 4), ("rotation", 0, -360, 360)):
             c[key] = _number(c.get(key, default), key, low, high)
+        audio = c.setdefault("audio", {})
+        if not isinstance(audio, dict):
+            raise ValueError("Clip audio settings must be an object.")
+        audio["fade_duration"] = _number(audio.get("fade_duration", c["duration"]), "Audio fade duration", 1, maximum, True)
+        audio["fade_offset"] = _number(audio.get("fade_offset", 0), "Audio fade offset", -maximum, maximum, True)
+        for key in ("fade_in", "fade_out"):
+            audio[key] = _number(audio.get(key, 0), f"Audio {key}", 0, audio["fade_duration"], True)
+        if audio["fade_in"] + audio["fade_out"] > audio["fade_duration"]:
+            raise ValueError("Audio fades cannot overlap beyond their fade duration.")
+        audio["pan"] = _number(audio.get("pan", 0), "Audio stereo balance", -1, 1)
         grade = c.setdefault("grade", {})
         effects = c.setdefault("effects", {})
         if not isinstance(grade, dict) or not isinstance(effects, dict):
@@ -255,21 +322,35 @@ def validate_project(project, project_dir):
             raise ValueError("A clip may contain at most 128 keyframes.")
         seen = set()
         for keyframe in keyframes:
-            if not isinstance(keyframe, dict) or set(keyframe) - {"frame", "x", "y", "scale", "opacity"}:
-                raise ValueError("Keyframes support frame, x, y, scale and opacity only.")
-            frame = _number(keyframe.get("frame"), "Keyframe position", 0, c["duration"] - 1, True)
+            if not isinstance(keyframe, dict) or set(keyframe) - ({"frame", "interpolation"} | set(ANIMATED_PROPERTIES)):
+                raise ValueError("Keyframes support frame, interpolation, x, y, scale, opacity, rotation and volume only.")
+            frame = _number(keyframe.get("frame"), "Keyframe position", c["animation_start"], c["animation_duration"] - 1, True)
             if frame in seen:
                 raise ValueError("Keyframes on a clip must have distinct positions.")
             seen.add(frame)
             keyframe["frame"] = frame
-            for key, low, high in (("x", -4, 4), ("y", -4, 4), ("scale", .02, 4), ("opacity", 0, 1)):
+            interpolation = keyframe.get("interpolation", "linear")
+            if not isinstance(interpolation, str) or interpolation not in INTERPOLATIONS:
+                raise ValueError("Keyframe interpolation must be linear, constant, ease_in, ease_out or ease_in_out.")
+            keyframe["interpolation"] = interpolation
+            for key, (low, high) in ANIMATED_PROPERTIES.items():
                 if key in keyframe:
                     keyframe[key] = _number(keyframe[key], f"Keyframe {key}", low, high)
         c["keyframes"] = sorted(keyframes, key=lambda k: k["frame"])
         largest_scale = max([c["scale"]] + [k.get("scale", c["scale"]) for k in keyframes])
         if a["kind"] != "audio":
             fit = min(width / a["width"], height / a["height"])
-            if a["width"] * a["height"] * (fit * largest_scale) ** 2 > 67_108_864:
+            working_width, working_height = a["width"] * fit * largest_scale, a["height"] * fit * largest_scale
+            working_pixels = working_width * working_height
+            if any("rotation" in key for key in keyframes):
+                extent = math.ceil(math.hypot(working_width, working_height) / 2) * 2
+                working_pixels = max(working_pixels, extent * extent)
+            elif c["rotation"]:
+                angle = math.radians(c["rotation"])
+                rotated_width = abs(working_width * math.cos(angle)) + abs(working_height * math.sin(angle))
+                rotated_height = abs(working_width * math.sin(angle)) + abs(working_height * math.cos(angle))
+                working_pixels = max(working_pixels, (math.ceil(rotated_width / 2) * 2) * (math.ceil(rotated_height / 2) * 2))
+            if working_pixels > 67_108_864:
                 raise ValueError("Clip transform exceeds the 67-million-pixel working-image limit. Reduce scale or project dimensions.")
         if c.get("compositor") is not None:
             if c["track"] < 0 or a["kind"] == "audio":
@@ -325,7 +406,11 @@ def get_capabilities():
             "drawtext": "drawtext" in filters, "raster_titles": "overlay" in filters,
             "h264": "libx264" in encoders,
             "prores": "prores_ks" in encoders, "color_space": "SDR Rec.709",
-            "keyframes": ["x", "y", "scale", "opacity"], "filters": sorted(filters)}
+            "keyframes": list(ANIMATED_PROPERTIES), "interpolations": sorted(INTERPOLATIONS),
+            "retime": all(name in filters for name in ("reverse", "areverse", "atempo")),
+            "audio_mixer": all(name in filters for name in ("aeval", "afade", "pan", "amix")),
+            "waveforms": all(name in filters for name in ("astats", "ametadata", "asetnsamples")),
+            "filters": sorted(filters)}
 
 
 def _decimal(value):
@@ -333,18 +418,82 @@ def _decimal(value):
 
 
 def _curve(clip, key, fps, variable="t"):
-    points = [(0, clip[key])]
+    """Evaluate a fixed property curve through the clip's selected time window."""
+    values = {0: (clip[key], "linear")}
     for k in clip["keyframes"]:
         if key in k:
-            if k["frame"] == 0:
-                points[0] = (0, k[key])
-            else:
-                points.append((k["frame"] / fps, k[key]))
+            values[k["frame"]] = (k[key], k.get("interpolation", "linear"))
+    points = [(frame, value, interpolation) for frame, (value, interpolation) in sorted(values.items())]
+    if len(points) == 1:
+        return _decimal(points[0][1])
+    # Keep key positions and offsets in integer frame units. Converting both
+    # to decimal seconds could leave a held segment one frame late at 7/24 s.
+    variable = f"(({variable})*{fps}+{clip.get('animation_offset', 0)})"
     expression = _decimal(points[-1][1])
-    for (start, a), (end, b) in reversed(list(zip(points, points[1:]))):
-        linear = f"({_decimal(a)}+({_decimal(b-a)})*({variable}-{_decimal(start)})/{_decimal(end-start)})"
-        expression = f"if(lt({variable},{_decimal(end)}),{linear},{expression})"
+    for (start, a, interpolation), (end, b, _) in reversed(list(zip(points, points[1:]))):
+        u = f"(({variable}-{_decimal(start)})/{_decimal(end-start)})"
+        factor = {"linear": u, "constant": "0", "ease_in": f"({u}*{u})",
+                  "ease_out": f"(1-(1-{u})*(1-{u}))",
+                  "ease_in_out": f"({u}*{u}*(3-2*{u}))"}[interpolation]
+        value = f"({_decimal(a)}+({_decimal(b-a)})*{factor})"
+        # Timestamp multiplication can still differ by a few ulps at a key.
+        # The tolerance is far below one 48 kHz sample at every accepted fps.
+        expression = f"if(lt({variable},{_decimal(end)}-0.0000001),{value},{expression})"
+    return f"if(lt({variable},{_decimal(points[0][0])}),{_decimal(points[0][1])},{expression})"
+
+
+def _fade_curve(clip, fps):
+    """Sample-accurate linear fade envelope in its original frame domain."""
+    audio = clip["audio"]
+    position = f"(n*{fps}/48000+{audio['fade_offset']})"
+    factors = ["1"]
+    if audio["fade_in"]:
+        factors.append(f"max(0,{position}/{audio['fade_in']})")
+    if audio["fade_out"]:
+        factors.append(f"max(0,({audio['fade_duration']}-{position})/{audio['fade_out']})")
+    expression = factors[0]
+    for factor in factors[1:]:
+        expression = f"min({expression},{factor})"
     return expression
+
+
+def track_state(project, track_id):
+    """Return effective (enabled, audio_gain) without altering the saved mixer."""
+    tracks = project.get("tracks", [])
+    settings = next((t for t in tracks if t["id"] == track_id), {})
+    has_solo = any(t.get("solo", False) for t in tracks if (t["id"] < 0) == (track_id < 0))
+    enabled = not settings.get("mute", False) and (not has_solo or settings.get("solo", False))
+    return enabled, settings.get("gain", 1.0)
+
+
+def _tempo_filters(speed):
+    """Keep each atempo stage inside [0.5, 2] for quality and build compatibility."""
+    factors = []
+    while speed < .5:
+        factors.append(.5)
+        speed /= .5
+    while speed > 2:
+        factors.append(2)
+        speed /= 2
+    if abs(speed - 1) > 1e-10:
+        factors.append(speed)
+    return ["atempo=" + _decimal(value) for value in factors]
+
+
+def _video_timing(clip, fps):
+    source_in = clip["in"] / fps
+    source_duration = clip["duration"] * clip["speed"] / fps
+    # Keep the frame that overlaps a fractional in point. Trimming by its PTS
+    # first would discard it and jump a slowed split forward by a source frame.
+    # The fps filter drops earlier frames while retaining the one at time zero.
+    chain = ["setpts=PTS-STARTPTS", f"trim=end={_decimal(source_in + source_duration)}",
+             "settb=AVTB", f"setpts=(PTS-{_decimal(source_in)}/TB)/{_decimal(clip['speed'])}",
+             f"fps=fps={fps}:start_time=0:round=near:eof_action=pass", f"trim=end_frame={clip['duration']}"]
+    if clip["reverse"]:
+        # Reverse after conforming the selected range so splitting a retimed
+        # reverse clip preserves its exact output frame sequence.
+        chain.extend(["reverse", "setpts=PTS-STARTPTS"])
+    return chain
 
 
 def _quote_filter_path(path):
@@ -363,7 +512,9 @@ def _graph(project, project_dir, temp_dir):
     filters = [f"color=c=black:s={width}x{height}:r={fps}:d={_decimal(duration)},format=rgba[canvas0]"]
     filters += [f"anullsrc=r=48000:cl=stereo,atrim=duration={_decimal(duration)}[silence]"]
     inputs, audio, canvas = [], ["[silence]"], "canvas0"
-    ordered = sorted(enumerate(project["clips"]), key=lambda item: (item[1]["track"], item[0]))
+    ordered = sorted(((i, clip) for i, clip in enumerate(project["clips"])
+                      if track_state(project, clip["track"])[0]),
+                     key=lambda item: (item[1]["track"], item[0]))
     for index, (_, clip) in enumerate(ordered):
         asset = assets[clip["asset_id"]]
         source = _media_path(project_dir, asset["path"])
@@ -375,17 +526,18 @@ def _graph(project, project_dir, temp_dir):
         if clip["track"] >= 0:
             fit = min(width / asset["width"], height / asset["height"])
             base_w, base_h = max(2, asset["width"] * fit), max(2, asset["height"] * fit)
+            largest_scale = max([clip["scale"]] + [key["scale"] for key in clip["keyframes"] if "scale" in key])
             scale = _curve(clip, "scale", fps)
-            chain = [f"trim=start={_decimal(source_in)}:duration={_decimal(length)}", "setpts=PTS-STARTPTS", f"fps={fps}",
-                     f"scale=w='max(2,trunc({_decimal(base_w)}*({scale})/2)*2)':h='max(2,trunc({_decimal(base_h)}*({scale})/2)*2)':eval=frame:flags=lanczos", "setsar=1"]
+            timing = _video_timing(clip, fps)
+            chain = timing + [f"scale=w='max(2,trunc({_decimal(base_w)}*({scale})/2)*2)':h='max(2,trunc({_decimal(base_h)}*({scale})/2)*2)':eval=frame:flags=lanczos", "setsar=1"]
             stream = f"{index}:{asset['video_stream_index']}"
             if clip.get("compositor") is not None:
                 # Normalize once before the node DAG. All branches share the
                 # same geometry/timing, then the existing clip controls apply.
                 fitted_width, fitted_height = max(2, int(base_w / 2) * 2), max(2, int(base_h / 2) * 2)
                 input_label = f"compositor{index}input"
-                filters.append(f"[{stream}]trim=start={_decimal(source_in)}:duration={_decimal(length)},"
-                               f"setpts=PTS-STARTPTS,fps={fps},scale={fitted_width}:{fitted_height}:flags=lanczos,"
+                filters.append(f"[{stream}]" + ",".join(timing) + ","
+                               f"scale={fitted_width}:{fitted_height}:flags=lanczos,"
                                f"setsar=1,format=rgba[{input_label}]")
                 clauses, stream = compile_graph(clip["compositor"], input_label, f"compositor{index}")
                 filters.extend(clauses)
@@ -408,27 +560,70 @@ def _graph(project, project_dir, temp_dir):
             chain += ["format=rgba"]
             if e["chroma_key"]:
                 chain += [f"colorkey=0x{e['chroma_key'][1:]}:0.18:0.08"]
-            if clip["rotation"]:
-                angle = _decimal(clip["rotation"] * math.pi / 180)
-                chain += [f"rotate={angle}:ow='rotw({angle})':oh='roth({angle})':c=none"]
+            if clip["rotation"] or any("rotation" in key or "scale" in key for key in clip["keyframes"]):
+                # Pixel filters can cache geometry at configuration time. Keep
+                # their input canvas fixed through scale animation so a trimmed
+                # first frame cannot alter centers, alpha or working bounds.
+                pad_width = max(2, int(base_w * largest_scale / 2) * 2)
+                pad_height = max(2, int(base_h * largest_scale / 2) * 2)
+                chain += [f"pad=w={pad_width}:h={pad_height}:x='(ow-iw)/2':y='(oh-ih)/2':color=black@0:eval=frame"]
+            if any("rotation" in key for key in clip["keyframes"]):
+                angle = _curve(clip, "rotation", fps)
+                # Rotate configures its canvas once. Derive it from the whole
+                # preserved scale domain, not from whichever input frame starts
+                # this trimmed window; otherwise later scale keys get cropped.
+                extent = math.ceil(math.hypot(base_w, base_h) * largest_scale / 2) * 2
+                # `none` disables background initialization; it can retain old
+                # picture data. Explicit zero alpha makes every frame clean.
+                chain += [f"rotate=angle='({angle})*PI/180':ow={extent}:oh={extent}:c=black@0"]
+            elif clip["rotation"]:
+                angle = math.radians(clip["rotation"])
+                rotated_width = math.ceil((abs(base_w * math.cos(angle)) + abs(base_h * math.sin(angle))) * largest_scale / 2) * 2
+                rotated_height = math.ceil((abs(base_w * math.sin(angle)) + abs(base_h * math.cos(angle))) * largest_scale / 2) * 2
+                chain += [f"rotate={_decimal(angle)}:ow={rotated_width}:oh={rotated_height}:c=black@0"]
             if any("opacity" in k for k in clip["keyframes"]):
                 opacity = _curve(clip, "opacity", fps, "T")
                 chain += [f"geq=r='r(X,Y)':g='g(X,Y)':b='b(X,Y)':a='alpha(X,Y)*({opacity})'"]
             elif clip["opacity"] != 1:
                 chain += [f"colorchannelmixer=aa={_decimal(clip['opacity'])}"]
-            chain += [f"setpts=PTS+{_decimal(start)}/TB"]
+            # Integer-frame placement avoids a rounded 5/24-second offset
+            # becoming 4 ticks when FFmpeg converts the expression to PTS.
+            chain += [f"settb=expr=1/{fps}", f"setpts=PTS+{clip['start']}"]
             filters += [f"[{stream}]" + ",".join(chain) + f"[picture{index}]"]
-            x = _curve(clip, "x", fps, f"(t-{_decimal(start)})")
-            y = _curve(clip, "y", fps, f"(t-{_decimal(start)})")
+            x = _curve(clip, "x", fps, f"(t-{clip['start']}/{fps})")
+            y = _curve(clip, "y", fps, f"(t-{clip['start']}/{fps})")
             next_canvas = f"canvas{index+1}"
             filters += [f"[{canvas}][picture{index}]overlay=x='(W-w)/2+W*({x})':y='(H-h)/2+H*({y})':"
-                        f"enable='gte(t,{_decimal(start)})*lt(t,{_decimal(start+length)})':eof_action=pass:repeatlast=0:format=auto[{next_canvas}]"]
+                        f"enable='gte(t*{fps},{clip['start']}-0.0000001)*lt(t*{fps},{clip['start']+clip['duration']}-0.0000001)':eof_action=pass:repeatlast=0:format=auto[{next_canvas}]"]
             canvas = next_canvas
-        if asset["has_audio"] and clip["volume"] > 0:
+        track_gain = track_state(project, clip["track"])[1]
+        largest_volume = max([clip["volume"]] + [k["volume"] for k in clip["keyframes"] if "volume" in k])
+        if asset["has_audio"] and largest_volume > 0 and track_gain > 0:
             delay = round(start * 48000)
-            filters += [f"[{index}:{asset['audio_stream_index']}]atrim=start={_decimal(source_in)}:duration={_decimal(length)},asetpts=PTS-STARTPTS,"
-                        f"aresample=48000,aformat=sample_fmts=fltp:channel_layouts=stereo,volume={_decimal(clip['volume'])},"
-                        f"adelay={delay}S:all=1[audio{index}]"]
+            source_length = length * clip["speed"]
+            chain = [f"atrim=start={_decimal(source_in)}:duration={_decimal(source_length)}",
+                     "asetpts=PTS-STARTPTS", "aresample=48000", "aformat=sample_fmts=fltp:channel_layouts=stereo"]
+            if clip["reverse"]:
+                chain.append("areverse")
+            chain.extend(_tempo_filters(clip["speed"]))
+            samples = round(length * 48000)
+            # Tempo filters can finish a short analysis window early. Pad only
+            # that resampler tail and constrain the clip to its exact duration.
+            chain.extend([f"apad=whole_len={samples}", f"atrim=end_sample={samples}", "asetpts=PTS-STARTPTS"])
+            audio_settings = clip["audio"]
+            if any("volume" in key for key in clip["keyframes"]) or audio_settings["fade_in"] or audio_settings["fade_out"]:
+                gain = f"({_curve(clip, 'volume', fps)})*{_decimal(track_gain)}"
+                if audio_settings["fade_in"] or audio_settings["fade_out"]:
+                    gain += f"*({_fade_curve(clip, fps)})"
+                chain.append(f"aeval=exprs='val(0)*({gain})|val(1)*({gain})':channel_layout=stereo")
+            else:
+                chain.append(f"volume={_decimal(clip['volume'] * track_gain)}")
+            if audio_settings["pan"]:
+                left = min(1, 1 - audio_settings["pan"])
+                right = min(1, 1 + audio_settings["pan"])
+                chain.append(f"pan=stereo|c0={_decimal(left)}*c0|c1={_decimal(right)}*c1")
+            chain.append(f"adelay={delay}S:all=1")
+            filters += [f"[{index}:{asset['audio_stream_index']}]" + ",".join(chain) + f"[audio{index}]"]
             audio.append(f"[audio{index}]")
     for index, title in enumerate(project["titles"]):
         start, end, fade = title["start"] / fps, (title["start"] + title["duration"]) / fps, title["fade"] / fps
@@ -444,11 +639,11 @@ def _graph(project, project_dir, temp_dir):
             if fade:
                 chain += [f"fade=t=in:st=0:d={_decimal(fade)}:alpha=1",
                           f"fade=t=out:st={_decimal(end-start-fade)}:d={_decimal(fade)}:alpha=1"]
-            chain += [f"setpts=PTS+{_decimal(start)}/TB"]
+            chain += [f"settb=expr=1/{fps}", f"setpts=PTS+{title['start']}"]
             filters += [f"[{input_index}:{raster['video_stream_index']}]" + ",".join(chain) + f"[raster{index}]"]
             output = f"title{index}"
             filters += [f"[{canvas}][raster{index}]overlay=x=0:y=0:"
-                        f"enable='gte(t,{_decimal(start)})*lt(t,{_decimal(end)})':eof_action=pass:repeatlast=0:format=auto[{output}]"]
+                        f"enable='gte(t*{fps},{title['start']}-0.0000001)*lt(t*{fps},{title['start']+title['duration']}-0.0000001)':eof_action=pass:repeatlast=0:format=auto[{output}]"]
             canvas = output
             continue
         filename = Path(temp_dir) / f"title-{index}.txt"
@@ -458,7 +653,7 @@ def _graph(project, project_dir, temp_dir):
         filters += [f"[{canvas}]drawtext=textfile='{_quote_filter_path(filename)}':expansion=none:"
                     f"fontcolor={title['color']}:fontsize={title['size']}:"
                     f"x='(w-tw)/2+w*{_decimal(title['x'])}':y='(h-th)/2+h*{_decimal(title['y'])}':"
-                    f"alpha='{alpha}':enable='gte(t,{_decimal(start)})*lt(t,{_decimal(end)})'[{output}]"]
+                    f"alpha='{alpha}':enable='gte(t*{fps},{title['start']}-0.0000001)*lt(t*{fps},{title['start']+title['duration']}-0.0000001)'[{output}]"]
         canvas = output
     filters += [f"[{canvas}]trim=end_frame={frames},setpts=PTS-STARTPTS,scale=out_color_matrix=bt709:out_range=tv[vout]"]
     filters += ["".join(audio) + f"amix=inputs={len(audio)}:duration=longest:normalize=0,"

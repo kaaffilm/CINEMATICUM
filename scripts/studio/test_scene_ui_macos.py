@@ -69,6 +69,9 @@ def run(binary, evidence):
             if process.stderr.strip():
                 result["helper_stderr_tail"] = process.stderr[-1800:]
             checks["native_scene_ui_passed"] = ui.get("passed") is True and process.returncode == 0
+            checks["direct_gizmo_gestures_and_escape"] = "direct_transform_gizmos_single_checkpoint_and_escape" in ui.get("steps", [])
+            checks["draggable_keys_and_interpolation"] = "dope_sheet_retiming_and_outgoing_easing" in ui.get("steps", [])
+            checks["camera_light_authoring"] = "animate_camera_lens_and_light_power" in ui.get("steps", [])
             checks["undo_redo_retains_completed_media"] = ("undo_redo_preserves_rendered_media" in ui.get("steps", [])
                                                            and 1 <= ui.get("undo_count", 0) <= 3
                                                            and ui.get("undone_rotation") == 0)
@@ -88,6 +91,14 @@ def run(binary, evidence):
             checks["two_pose_keys_saved"] = len(keys) == 2 and set(keys) == {1, 2}
             checks["first_pose_saved"] = keys.get(1, {}).get("position") == [0, 0, 1] and keys.get(1, {}).get("rotation") == [0, 0, 0]
             checks["second_pose_saved"] = keys.get(2, {}).get("position") == [.6, 0, 1] and keys.get(2, {}).get("rotation") == [0, 0, 25]
+            checks["object_easing_saved"] = keys.get(1, {}).get("interpolation") == "ease_in_out"
+            camera_keys = {key["frame"]: key for key in recipe.get("camera", {}).get("keyframes", [])}
+            checks["camera_motion_saved"] = (set(camera_keys) == {1, 2} and camera_keys[1].get("interpolation") == "ease_in"
+                                               and camera_keys[2].get("position") == [7.5, -9, 6] and camera_keys[2].get("fov") == 48)
+            key_light = next((light for light in recipe.get("lights", []) if light["id"] == "key"), {})
+            light_keys = {key["frame"]: key for key in key_light.get("keyframes", [])}
+            checks["light_motion_saved"] = (set(light_keys) == {1, 2} and light_keys[1].get("interpolation") == "ease_out"
+                                              and light_keys[2].get("position") == [3, -4, 7.5] and light_keys[2].get("power") == 1350)
             with store.lock:
                 jobs = json.loads(json.dumps([job for job in store.jobs.values() if job["project_id"] == project["id"] and job["kind"] == "scene"]))
             result["jobs"] = jobs

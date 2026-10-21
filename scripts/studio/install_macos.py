@@ -38,8 +38,8 @@ def bundle_info():
         "CFBundleDisplayName": "CINEMATICUM Studio",
         "CFBundleExecutable": EXECUTABLE_NAME,
         "CFBundlePackageType": "APPL",
-        "CFBundleShortVersionString": "0.3.0",
-        "CFBundleVersion": "3",
+        "CFBundleShortVersionString": "0.4.0",
+        "CFBundleVersion": "4",
         "LSMinimumSystemVersion": "12.0",
         "NSHighResolutionCapable": True,
         "NSPrincipalClass": "NSApplication",
@@ -77,16 +77,11 @@ def existing_bundle_identity(path):
 
 def copy_runtime(destination, source=STUDIO_SOURCE):
     destination.mkdir(parents=True)
-    for name in ("server.py", "engine.py", "adapters.py", "compositor.py", "scene.py", "generation_readiness.py", "native_runtime.py", "native_proxy.py"):
+    for name in ("server.py", "engine.py", "adapters.py", "compositor.py", "scene.py", "generation_readiness.py", "frame_preview.py", "waveform.py"):
         path = source / name
         if path.is_symlink() or not path.is_file():
             raise ValueError("Required runtime source is missing or is a symlink: %s" % path)
         shutil.copy2(str(path), str(destination / name))
-    runtime = source / "full_runtime"
-    if runtime.is_symlink() or not runtime.is_dir() or any(p.is_symlink() for p in runtime.rglob("*")):
-        raise ValueError("The full-editor runtime source is missing or contains symlinks.")
-    shutil.copytree(str(runtime), str(destination / "full_runtime"),
-                    ignore=shutil.ignore_patterns("__pycache__", "*.pyc", "bundles", ".DS_Store"))
     web = source / "web"
     if web.is_symlink() or not web.is_dir():
         raise ValueError("The editor web assets are missing or are a symlink.")

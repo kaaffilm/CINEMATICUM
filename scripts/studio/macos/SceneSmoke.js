@@ -20,6 +20,15 @@ return await (async () => {
     if(!element||element.disabled)throw Error('Unavailable field: '+selector+diagnostics());
     element.value=String(value);element.dispatchEvent(new Event('change',{bubbles:true}));
   }
+  const objectKeys=()=>document.querySelectorAll('.scene-key-lane[data-track-type="object"] [data-scene-key]');
+  function pointer(target,type,x,y) {target.dispatchEvent(new PointerEvent(type,{bubbles:true,cancelable:true,pointerId:71,pointerType:'mouse',isPrimary:true,button:0,buttons:type==='pointerup'?0:1,clientX:x,clientY:y}));}
+  async function dragControl(selector,dx,dy,cancel=false) {
+    const handle=$(selector);if(!handle||handle.hidden)throw Error('Missing visible transform handle: '+selector);
+    const rect=handle.getBoundingClientRect(),x=rect.left+rect.width/2,y=rect.top+rect.height/2,root=$('.scene-editor');
+    pointer(handle,'pointerdown',x,y);pointer(root,'pointermove',x+dx*.45,y+dy*.45);pointer(root,'pointermove',x+dx,y+dy);
+    if(cancel)root.dispatchEvent(new KeyboardEvent('keydown',{key:'Escape',bubbles:true,cancelable:true}));
+    pointer(root,'pointerup',x+dx,y+dy);await sleep(90);
+  }
   function sampleViewport() {
     const canvas=$('.scene-viewport canvas');
     if(!canvas||canvas.width<32||canvas.height<32)throw Error('3D canvas has no visible drawing buffer.');
@@ -50,13 +59,55 @@ return await (async () => {
     set('.scene-end-frame',2);
     set('.scene-samples select',4);
     set('[data-scene-property="material.color"]','#4d9bd8');
+    await dragControl('[data-scene-axis="x"]',45,-8);
+    const movedX=Number($('[data-scene-property="position.0"]').value);
+    if(Math.abs(movedX)<.01)throw Error('Dragging the actual X handle did not move the object.');
+    click('#undo-button');
+    if(Number($('[data-scene-property="position.0"]').value)!==0)throw Error('A transform gesture did not undo as one project change.');
+    click('#redo-button');
+    if(Number($('[data-scene-property="position.0"]').value)!==movedX)throw Error('Redo did not restore the transform gesture.');
+    click('#undo-button');
+    await dragControl('[data-scene-axis="x"]',35,10,true);
+    if(Number($('[data-scene-property="position.0"]').value)!==0)throw Error('Escape did not cancel the transform gesture.');
+    click('[data-scene-tool="rotate"]');
+    await dragControl('[data-scene-axis="z"]',30,25);
+    if(Math.abs(Number($('[data-scene-property="rotation.2"]').value))<1)throw Error('Dragging the rotation ring did not rotate the object.');
+    click('#undo-button');
+    if(Number($('[data-scene-property="rotation.2"]').value)!==0)throw Error('Rotation did not undo as one gesture.');
+    click('[data-scene-tool="scale"]');
+    await dragControl('[data-scene-axis="free"]',20,-20);
+    if(Number($('[data-scene-property="scale.0"]').value)<=1.05)throw Error('Uniform scale handle did not scale the object.');
+    click('#undo-button');
+    if(Number($('[data-scene-property="scale.0"]').value)!==1)throw Error('Scale did not undo as one gesture.');
+    click('[data-scene-tool="move"]');
+    steps.push('direct_transform_gizmos_single_checkpoint_and_escape');
     set('.scene-current-frame',1);
     click('[data-scene-action="keyframe"]');
     await until(()=>$('[data-scene-key="1"]'),'First pose key was not created');
     set('.scene-current-frame',2);
     set('[data-scene-property="position.0"]',.6);
+    set('.scene-end-frame',3);
+    const lane=$('.scene-key-lane[data-track-type="object"]'),laneWidth=lane.getBoundingClientRect().width;
+    await dragControl('.scene-key-lane[data-track-type="object"] [data-scene-key="2"]',laneWidth/2,0);
+    if(!$('.scene-key-lane[data-track-type="object"] [data-scene-key="3"]'))throw Error('Dragging the dope-sheet key did not retime the pose.');
+    click('#undo-button');
+    if(!$('.scene-key-lane[data-track-type="object"] [data-scene-key="2"]')||$('.scene-key-lane[data-track-type="object"] [data-scene-key="3"]'))throw Error('Key retiming did not undo as a single project change.');
+    set('.scene-end-frame',2);
+    click('.scene-key-lane[data-track-type="object"] [data-scene-key="1"]');
+    set('.scene-key-interpolation','ease_in_out');
+    steps.push('dope_sheet_retiming_and_outgoing_easing');
+    click('.scene-object-list [data-scene-select="camera"]');
+    set('.scene-current-frame',1);click('[data-scene-action="keyframe"]');
+    set('.scene-current-frame',2);set('[data-scene-property="position.0"]',7.5);set('[data-scene-property="fov"]',48);
+    click('.scene-key-lane[data-track-type="camera"] [data-scene-key="1"]');set('.scene-key-interpolation','ease_in');
+    click('.scene-object-list [data-scene-select="light"][data-id="key"]');
+    set('.scene-current-frame',1);click('[data-scene-action="keyframe"]');
+    set('.scene-current-frame',2);set('[data-scene-property="position.2"]',7.5);set('[data-scene-property="power"]',1350);
+    click('.scene-key-lane[data-track-id="key"] [data-scene-key="1"]');set('.scene-key-interpolation','ease_out');
+    steps.push('animate_camera_lens_and_light_power');
+    click('.scene-object-list [data-scene-select="object"]');set('.scene-current-frame',2);
     set('[data-scene-property="rotation.2"]',25);
-    await until(()=>document.querySelectorAll('[data-scene-key]').length===2&&Number($('[data-scene-property="position.0"]')?.value)===.6&&Number($('[data-scene-property="rotation.2"]')?.value)===25,'Second pose did not persist in scene controls');
+    await until(()=>objectKeys().length===2&&Number($('[data-scene-property="position.0"]')?.value)===.6&&Number($('[data-scene-property="rotation.2"]')?.value)===25,'Second pose did not persist in scene controls');
     steps.push('author_cube_material_and_two_pose_keys');
     const picture=sampleViewport();let changed=0;
     for(let i=0;i<picture.samples.length;i+=3)if(Math.abs(picture.samples[i]-empty.samples[i])+Math.abs(picture.samples[i+1]-empty.samples[i+1])+Math.abs(picture.samples[i+2]-empty.samples[i+2])>25)changed++;
@@ -85,14 +136,14 @@ return await (async () => {
       click('#redo-button');
       if(!$(assetSelector))throw Error('Redo removed completed scene media from the bin.');
     }
-    if(Number($('[data-scene-property="rotation.2"]')?.value)!==25||Number($('[data-scene-property="position.0"]')?.value)!==.6||document.querySelectorAll('[data-scene-key]').length!==2)throw Error('Redo did not restore both authored scene keys.');
+    if(Number($('[data-scene-property="rotation.2"]')?.value)!==25||Number($('[data-scene-property="position.0"]')?.value)!==.6||objectKeys().length!==2)throw Error('Redo did not restore both authored scene keys.');
     steps.push('undo_redo_preserves_rendered_media');
     $(assetSelector).dispatchEvent(new MouseEvent('dblclick',{bubbles:true,view:window,button:0}));
     await until(()=>document.querySelectorAll('.timeline-clip[data-type="clip"]').length===1,'Rendered shot did not enter the timeline');
     click('#save-project');
     await until(()=>$('#save-state').textContent==='SAVED LOCALLY','Timeline save did not finish',1500);
     steps.push('add_authored_shot_to_timeline_and_save');
-    return {passed:true,steps,project_id:$('#project-select').value,asset_id:assetID,scene_href:sceneHref,movie_href:movieHref,scene_frame:Number($('.scene-current-frame').value),scene_key_count:document.querySelectorAll('[data-scene-key]').length,undo_count:undoCount,undone_rotation:undoneRotation,webgl:{width:picture.width,height:picture.height,unique_colors:picture.unique_colors,nonuniform_pixels:picture.nonuniform_pixels,changed_pixels_from_empty:changed},job_label:$('#job-label').textContent,elapsed_ms:Math.round(performance.now()-began)};
+    return {passed:true,steps,project_id:$('#project-select').value,asset_id:assetID,scene_href:sceneHref,movie_href:movieHref,scene_frame:Number($('.scene-current-frame').value),scene_key_count:objectKeys().length,camera_key_count:document.querySelectorAll('.scene-key-lane[data-track-type="camera"] [data-scene-key]').length,light_key_count:document.querySelectorAll('.scene-key-lane[data-track-id="key"] [data-scene-key]').length,undo_count:undoCount,undone_rotation:undoneRotation,webgl:{width:picture.width,height:picture.height,unique_colors:picture.unique_colors,nonuniform_pixels:picture.nonuniform_pixels,changed_pixels_from_empty:changed},job_label:$('#job-label').textContent,elapsed_ms:Math.round(performance.now()-began)};
   } catch(error) {
     return {passed:false,steps,error:String(error),toast:$('#toast')?.textContent||'',scene_message:$('.scene-message')?.textContent||'',job_label:$('#job-label')?.textContent||'',job_detail:$('#job-detail')?.textContent||'',elapsed_ms:Math.round(performance.now()-began)};
   }

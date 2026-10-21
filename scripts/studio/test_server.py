@@ -153,6 +153,53 @@ class ServerTests(unittest.TestCase):
         report_path = self.store.project_dir(p["id"]) / "exports" / (job["id"] + ".json")
         self.assertEqual("NONE", json.loads(report_path.read_text())["issuance_effect"])
 
+    def test_authoring_frame_is_real_cached_and_does_not_save_unsaved_edits(self):
+        asset = self.upload()
+        p = self.add_clip(asset)
+        p["clips"][0]["grade"] = {"saturation": 0}
+        route = f"/api/projects/{p['id']}/frame-preview"
+        status, _, _ = self.request("POST", route, {"project": p, "frame": 4}, token=False)
+        self.assertEqual(403, status)
+        for cached in (False, True):
+            status, _, job = self.request("POST", route, {"project": p, "frame": 4})
+            self.assertEqual(202, status, job)
+            deadline = time.monotonic() + 10
+            while time.monotonic() < deadline:
+                _, _, completed = self.request("GET", f"/api/jobs/{job['id']}")
+                if completed["state"] not in {"queued", "running"}:
+                    break
+                time.sleep(.03)
+            self.assertEqual("completed", completed["state"], completed)
+            result = completed["result"]
+            self.assertEqual(4, result["frame"])
+            self.assertEqual("timeline-export-graph", result["pipeline"])
+            self.assertEqual(cached, result.get("cached", False))
+            status, headers, picture = self.request("GET", result["url"])
+            self.assertEqual(200, status)
+            self.assertEqual(b"\x89PNG\r\n\x1a\n", picture[:8])
+            self.assertFalse((self.store.root / "jobs" / (job["id"] + ".json")).exists())
+        self.assertEqual([], self.store.get(p["id"])["clips"])
+        status, _, _ = self.request("POST", route, {"project": p, "frame": 24})
+        self.assertEqual(400, status)
+
+    def test_waveform_uses_admitted_audio_and_bounded_sample_bins(self):
+        source = Path(self.tmp.name) / "ENGINE_TEST_wave.wav"
+        subprocess.run([shutil.which("ffmpeg"), "-v", "error", "-nostdin", "-y", "-f", "lavfi", "-i",
+                        "sine=frequency=440:sample_rate=48000:duration=0.25", str(source)], check=True)
+        asset = self.store.admit(self.p["id"], source, source.name)
+        route = f"/api/projects/{self.p['id']}/waveform/{asset['id']}"
+        status, _, wave = self.request("GET", route + "?bins=32")
+        self.assertEqual(200, status, wave)
+        self.assertEqual(2, wave["channels"])
+        self.assertEqual(12000, sum(wave["sample_counts"]))
+        self.assertGreater(max(wave["peaks"][0]["max"]), .05)
+        self.assertLess(min(wave["peaks"][0]["min"]), -.05)
+        status, _, repeat = self.request("GET", route + "?bins=32")
+        self.assertEqual(200, status)
+        self.assertTrue(repeat["cached"])
+        status, _, _ = self.request("GET", route + "?bins=999999")
+        self.assertEqual(400, status)
+
     def test_atomic_automation_and_invalid_recipe(self):
         asset = self.upload()
         p = self.add_clip(asset)

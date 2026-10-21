@@ -27,6 +27,15 @@ _COLOR = re.compile(r"#[a-fA-F0-9]{6}\Z")
 MAX_OBJECTS = 96
 MAX_LIGHTS = 16
 MAX_FRAMES = 7200
+INTERPOLATIONS = frozenset({"linear", "constant", "ease_in", "ease_out", "ease_in_out"})
+POSE_FIELDS = {
+    "object": {"position": ([-0., 0., 1.], -1000, 1000), "rotation": ([0., 0., 0.], -3600, 3600),
+               "scale": ([1., 1., 1.], .01, 100)},
+    "camera": {"position": ([7., -9., 6.], -1000, 1000), "target": ([0., 0., 1.], -1000, 1000),
+               "fov": (45., 10, 100)},
+    "light": {"position": ([3., -4., 7.], -1000, 1000), "target": ([0., 0., 0.], -1000, 1000),
+              "power": (1000., 0, 10000), "size": (4., .01, 100)},
+}
 
 
 def _number(value, label, low, high, integer=False):
@@ -67,6 +76,32 @@ def _name(value, default):
     return value.strip() or default
 
 
+def _keyframes(item, kind, frame_end):
+    """Normalize complete, bounded poses. A key owns its outgoing interpolation."""
+    fields = POSE_FIELDS[kind]
+    keys = item.setdefault("keyframes", [])
+    if not isinstance(keys, list) or len(keys) > 128:
+        raise ValueError("Each scene item supports at most 128 keyframes.")
+    seen = set()
+    for key in keys:
+        _object(key, kind.title() + " keyframe", {"frame", "interpolation", *fields})
+        key["frame"] = _number(key.get("frame"), "Keyframe", 1, frame_end, True)
+        if key["frame"] in seen:
+            raise ValueError("Scene keyframes must use distinct frames.")
+        seen.add(key["frame"])
+        mode = key.setdefault("interpolation", "linear")
+        if not isinstance(mode, str) or mode not in INTERPOLATIONS:
+            raise ValueError("Keyframe interpolation must be linear, constant, ease_in, ease_out, or ease_in_out.")
+        for prop, (default, low, high) in fields.items():
+            value = key.get(prop, item[prop])
+            key[prop] = (_vector(value, "Keyframe " + prop, low, high) if isinstance(default, list)
+                         else _number(value, "Keyframe " + prop, low, high))
+        if kind == "camera" or kind == "light" and item["type"] != "point":
+            if sum((a - b) ** 2 for a, b in zip(key["position"], key["target"])) < .0001:
+                raise ValueError("Animated camera and directional light positions must differ from their targets.")
+    item["keyframes"] = sorted(keys, key=lambda key: key["frame"])
+
+
 def default_scene(width=1280, height=720):
     """A camera and lighting setup; nothing is passed off as user-made footage."""
     return {"version": 1, "width": width, "height": height, "frame_end": 96, "samples": 32,
@@ -96,12 +131,13 @@ def validate_scene(scene, width=None, height=None):
     world = _object(src.setdefault("world", {}), "World", {"color", "strength"})
     world["color"] = _color(world.get("color", "#263142"), "World color")
     world["strength"] = _number(world.get("strength", .35), "World strength", 0, 5)
-    camera = _object(src.setdefault("camera", {}), "Camera", {"position", "target", "fov"})
+    camera = _object(src.setdefault("camera", {}), "Camera", {"position", "target", "fov", "keyframes"})
     camera["position"] = _vector(camera.get("position", [7, -9, 6]), "Camera position", -1000, 1000)
     camera["target"] = _vector(camera.get("target", [0, 0, 1]), "Camera target", -1000, 1000)
     camera["fov"] = _number(camera.get("fov", 45), "Vertical field of view", 10, 100)
     if sum((a - b) ** 2 for a, b in zip(camera["position"], camera["target"])) < .0001:
         raise ValueError("Camera position and target must differ.")
+    _keyframes(camera, "camera", src["frame_end"])
     for key, limit in (("objects", MAX_OBJECTS), ("lights", MAX_LIGHTS)):
         if not isinstance(src.get(key, []), list) or len(src.get(key, [])) > limit:
             raise ValueError("Scene %s must be a list with at most %d items." % (key, limit))
@@ -123,21 +159,9 @@ def validate_scene(scene, width=None, height=None):
         mat["color"] = _color(mat.get("color", "#d8a85f"), "Material color")
         mat["roughness"] = _number(mat.get("roughness", .45), "Roughness", 0, 1)
         mat["metallic"] = _number(mat.get("metallic", 0), "Metallic", 0, 1)
-        keys = obj.setdefault("keyframes", [])
-        if not isinstance(keys, list) or len(keys) > 128:
-            raise ValueError("Each scene object supports at most 128 keyframes.")
-        seen = set()
-        for key in keys:
-            _object(key, "Object keyframe", {"frame", "position", "rotation", "scale"})
-            key["frame"] = _number(key.get("frame"), "Keyframe", 1, src["frame_end"], True)
-            if key["frame"] in seen:
-                raise ValueError("Object keyframes must use distinct frames.")
-            seen.add(key["frame"])
-            for prop, low, high in (("position", -1000, 1000), ("rotation", -3600, 3600), ("scale", .01, 100)):
-                key[prop] = _vector(key.get(prop, obj[prop]), "Keyframe " + prop, low, high)
-        obj["keyframes"] = sorted(keys, key=lambda key: key["frame"])
+        _keyframes(obj, "object", src["frame_end"])
     for light in src["lights"]:
-        _object(light, "Light", {"id", "name", "type", "position", "target", "color", "power", "size"})
+        _object(light, "Light", {"id", "name", "type", "position", "target", "color", "power", "size", "keyframes"})
         ident = _id(light.get("id"), "Light ID")
         if ident in identifiers:
             raise ValueError("Scene IDs must be unique.")
@@ -152,23 +176,39 @@ def validate_scene(scene, width=None, height=None):
         light["size"] = _number(light.get("size", 4), "Light size", .01, 100)
         if light["type"] != "point" and sum((a - b) ** 2 for a, b in zip(light["position"], light["target"])) < .0001:
             raise ValueError("Directional light position and target must differ.")
+        _keyframes(light, "light", src["frame_end"])
     return src
 
 
-def pose_at(obj, frame):
-    """Linear interpolation shared with the authoring viewport, no Euler wrapping."""
-    props = ("position", "rotation", "scale")
-    first = {"frame": 1, **{key: list(obj[key]) for key in props}}
+def easing(t, mode="linear"):
+    """Explicit polynomial easing, shared with the viewport and Blender handles."""
+    if mode == "constant":
+        return 0.0
+    if mode == "ease_in":
+        return t * t
+    if mode == "ease_out":
+        return t * (2 - t)
+    if mode == "ease_in_out":
+        return t * t * (3 - 2 * t)
+    return t
+
+
+def pose_at(obj, frame, kind="object"):
+    """Evaluate an authored pose. XYZ Euler degrees deliberately do not wrap."""
+    props = POSE_FIELDS[kind]
+    first = {"frame": 1, "interpolation": "linear", **{key: copy.deepcopy(obj[key]) for key in props}}
     by_frame = {1: first}
     by_frame.update({key["frame"]: key for key in obj.get("keyframes", [])})
     keys = [by_frame[f] for f in sorted(by_frame)]
     if frame <= keys[0]["frame"]:
-        return {prop: list(keys[0][prop]) for prop in props}
+        return {prop: copy.deepcopy(keys[0][prop]) for prop in props}
     for left, right in zip(keys, keys[1:]):
-        if frame <= right["frame"]:
-            t = (frame - left["frame"]) / (right["frame"] - left["frame"])
-            return {prop: [a + (b - a) * t for a, b in zip(left[prop], right[prop])] for prop in props}
-    return {prop: list(keys[-1][prop]) for prop in props}
+        if frame < right["frame"]:
+            t = easing((frame - left["frame"]) / (right["frame"] - left["frame"]), left.get("interpolation", "linear"))
+            return {prop: ([a + (b - a) * t for a, b in zip(left[prop], right[prop])]
+                           if isinstance(left[prop], list) else left[prop] + (right[prop] - left[prop]) * t)
+                    for prop in props}
+    return {prop: copy.deepcopy(keys[-1][prop]) for prop in props}
 
 
 def _build_script(spec, blend_path, frames_dir, fps, frame_start, frame_end):
@@ -212,6 +252,8 @@ def linear_color(value):
     return [c/12.92 if c <= 0.04045 else ((c+.055)/1.055)**2.4 for c in color]
 def aim(obj, target):
     direction = Vector(target) - obj.location
+    if direction.length_squared < .0001:
+        raise RuntimeError('An animated camera or directional light reached its target.')
     obj.rotation_euler = direction.to_track_quat('-Z', 'Y').to_euler()
 def linearize_action(obj):
     action = obj.animation_data.action
@@ -230,6 +272,63 @@ def linearize_action(obj):
         curve.extrapolation = 'CONSTANT'
         for key in curve.keyframe_points:
             key.interpolation = 'LINEAR'
+def action_curves(obj):
+    action = obj.animation_data.action
+    curves = []
+    for layer in getattr(action, 'layers', ()):
+        for strip in layer.strips:
+            for bag in getattr(strip, 'channelbags', ()):
+                curves.extend(bag.fcurves)
+    if not curves: curves.extend(getattr(action, 'fcurves', ()))
+    return curves
+def interpolate_action(obj, poses):
+    linearize_action(obj)
+    modes = {frame:pose.get('interpolation', 'linear') for frame,pose in poses}
+    handles = {'ease_in':(0, 1/3), 'ease_out':(2/3, 1), 'ease_in_out':(0, 1)}
+    for curve in action_curves(obj):
+        points = sorted(curve.keyframe_points, key=lambda point:point.co[0])
+        for point in points:
+            point.handle_left_type = 'FREE'
+            point.handle_right_type = 'FREE'
+        for left,right in zip(points, points[1:]):
+            mode = modes.get(round(left.co[0]), 'linear')
+            if mode == 'constant': left.interpolation = 'CONSTANT'
+            elif mode in handles:
+                left.interpolation = 'BEZIER'
+                dx = (right.co[0]-left.co[0])/3
+                dy = right.co[1]-left.co[1]
+                a,b = handles[mode]
+                left.handle_right = (left.co[0]+dx, left.co[1]+dy*a)
+                right.handle_left = (right.co[0]-dx, left.co[1]+dy*b)
+def recipe_poses(item, properties):
+    poses = {1:{'frame':1, 'interpolation':'linear', **{p:item[p] for p in properties}}}
+    poses.update({pose['frame']:pose for pose in item.get('keyframes', [])})
+    return sorted(poses.items())
+def pose_at(poses, frame):
+    def values(pose): return {p:value for p,value in pose.items() if p not in ('frame','interpolation')}
+    if frame <= poses[0][0]: return values(poses[0][1])
+    for (af,a),(bf,b) in zip(poses,poses[1:]):
+        if frame < bf:
+            t = (frame-af)/(bf-af)
+            mode = a.get('interpolation', 'linear')
+            if mode == 'constant': t = 0
+            elif mode == 'ease_in': t = t*t
+            elif mode == 'ease_out': t = t*(2-t)
+            elif mode == 'ease_in_out': t = t*t*(3-2*t)
+            return {p:([x+(y-x)*t for x,y in zip(value,b[p])] if isinstance(value,list)
+                       else value+(b[p]-value)*t) for p,value in values(a).items()}
+    return values(poses[-1][1])
+def tracking_target(obj, name, position):
+    target = bpy.data.objects.new(name, None)
+    scene.collection.objects.link(target)
+    target.location = position
+    target.empty_display_type = 'PLAIN_AXES'
+    target.empty_display_size = .3
+    track = obj.constraints.new('TRACK_TO')
+    track.target = target
+    track.track_axis = 'TRACK_NEGATIVE_Z'
+    track.up_axis = 'UP_Y'
+    return target
 world = bpy.data.worlds.new('CINEMATICUM World')
 world.use_nodes = True
 world.node_tree.nodes['Background'].inputs['Color'].default_value = (*linear_color(SPEC['world']['color']), 1)
@@ -246,6 +345,23 @@ scene.collection.objects.link(camera)
 camera.location = SPEC['camera']['position']
 aim(camera, SPEC['camera']['target'])
 scene.camera = camera
+camera_poses = recipe_poses(SPEC['camera'], ('position','target','fov'))
+camera_target = tracking_target(camera, 'Camera aim', SPEC['camera']['target'])
+if SPEC['camera'].get('keyframes'):
+    for frame,pose in camera_poses:
+        camera.location = pose['position']
+        camera_target.location = pose['target']
+        camera.keyframe_insert(data_path='location', frame=frame)
+        camera_target.keyframe_insert(data_path='location', frame=frame)
+    interpolate_action(camera, camera_poses)
+    interpolate_action(camera_target, camera_poses)
+    # FOV-to-lens conversion is nonlinear. Bake integer frames so re-opening
+    # the saved .blend reproduces the authored camera at every rendered frame.
+    for frame in range(1, SPEC['frame_end']+1):
+        camera_data.lens = 12 / math.tan(math.radians(pose_at(camera_poses, frame)['fov'])/2)
+        camera_data.keyframe_insert(data_path='lens', frame=frame)
+    linearize_action(camera_data)
+lights = []
 for item in SPEC['lights']:
     light_data = bpy.data.lights.new(item['name'], item['type'].upper())
     light_data.color = linear_color(item['color'])
@@ -260,7 +376,28 @@ for item in SPEC['lights']:
     light = bpy.data.objects.new(item['name'], light_data)
     scene.collection.objects.link(light)
     light.location = item['position']
-    if item['type'] != 'point': aim(light, item['target'])
+    light_target = None
+    if item['type'] != 'point':
+        aim(light, item['target'])
+        light_target = tracking_target(light, item['name'] + ' aim', item['target'])
+    light_poses = recipe_poses(item, ('position','target','power','size'))
+    size_path = {'area':'size', 'point':'shadow_soft_size', 'sun':'angle'}[item['type']]
+    size_factor = {'area':1, 'point':.5, 'sun':math.pi/180}[item['type']]
+    if item.get('keyframes'):
+        for frame,pose in light_poses:
+            light.location = pose['position']
+            light.keyframe_insert(data_path='location', frame=frame)
+            if light_target:
+                light_target.location = pose['target']
+                light_target.keyframe_insert(data_path='location', frame=frame)
+            light_data.energy = pose['power']
+            setattr(light_data, size_path, pose['size']*size_factor)
+            light_data.keyframe_insert(data_path='energy', frame=frame)
+            light_data.keyframe_insert(data_path=size_path, frame=frame)
+        interpolate_action(light, light_poses)
+        interpolate_action(light_data, light_poses)
+        if light_target: interpolate_action(light_target, light_poses)
+    lights.append((light, light_target, light_poses, size_path, size_factor))
 objects = []
 for item in SPEC['objects']:
     primitive = item['type']
@@ -286,23 +423,15 @@ for item in SPEC['objects']:
     shader.inputs['Roughness'].default_value = item['material']['roughness']
     shader.inputs['Metallic'].default_value = item['material']['metallic']
     obj.data.materials.append(material)
-    poses = {1: {'frame':1, 'position':item['position'], 'rotation':item['rotation'], 'scale':item['scale']}}
-    poses.update({p['frame']:p for p in item['keyframes']})
+    poses = recipe_poses(item, ('position','rotation','scale'))
     if item['keyframes']:
-        for frame, pose in sorted(poses.items()):
+        for frame, pose in poses:
             obj.location = pose['position']
             obj.rotation_euler = [math.radians(v) for v in pose['rotation']]
             obj.scale = pose['scale']
             for path in ('location','rotation_euler','scale'): obj.keyframe_insert(data_path=path, frame=frame)
-        linearize_action(obj)
-    objects.append((obj, sorted(poses.items())))
-def pose_at(poses, frame):
-    if frame <= poses[0][0]: return poses[0][1]
-    for (af,a),(bf,b) in zip(poses,poses[1:]):
-        if frame <= bf:
-            t = (frame-af)/(bf-af)
-            return {p:[x+(y-x)*t for x,y in zip(a[p],b[p])] for p in ('position','rotation','scale')}
-    return poses[-1][1]
+        interpolate_action(obj, poses)
+    objects.append((obj, poses))
 scene.frame_set(START)
 scene.render.filepath = '//renders/frame_######'
 text = bpy.data.texts.new('CINEMATICUM Scene Recipe.json')
@@ -315,6 +444,19 @@ for frame in range(START, END+1):
         obj.location = pose['position']
         obj.rotation_euler = [math.radians(v) for v in pose['rotation']]
         obj.scale = pose['scale']
+    camera_pose = pose_at(camera_poses, frame)
+    camera.location = camera_pose['position']
+    camera_target.location = camera_pose['target']
+    camera_data.lens = 12 / math.tan(math.radians(camera_pose['fov'])/2)
+    aim(camera, camera_pose['target'])
+    for light,light_target,poses,size_path,size_factor in lights:
+        pose = pose_at(poses, frame)
+        light.location = pose['position']
+        light.data.energy = pose['power']
+        setattr(light.data, size_path, pose['size']*size_factor)
+        if light_target:
+            light_target.location = pose['target']
+            aim(light, pose['target'])
     scene.render.filepath = FRAMES + '/frame_%%06d.png' %% frame
     bpy.ops.render.render(write_still=True)
 ''' % (payload, str(blend_path), str(frames_dir), fps, frame_start, frame_end)

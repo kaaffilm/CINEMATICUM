@@ -190,7 +190,7 @@ class EngineTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             validate_project(test, self.root)
         test["clips"][0]["scale"] = 1
-        test["clips"][0]["keyframes"] = [{"frame": 0, "rotation": 90}]
+        test["clips"][0]["keyframes"] = [{"frame": 0, "unsupported_property": 90}]
         with self.assertRaisesRegex(ValueError, "support"):
             validate_project(test, self.root)
 

@@ -20,7 +20,6 @@ import re
 import secrets
 import shutil
 import signal
-import stat
 import subprocess
 import sys
 import tempfile
@@ -28,7 +27,7 @@ import threading
 import time
 from concurrent.futures import ThreadPoolExecutor
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
-from urllib.parse import parse_qs, unquote, urlparse, urlencode
+from urllib.parse import parse_qs, unquote, urlparse
 import uuid
 import webbrowser
 
@@ -36,10 +35,10 @@ from engine import probe_media, validate_project, render_project, MEDIA_EXTENSIO
 from adapters import AdapterError, check_comfyui, find_blender, generate_comfyui, render_blender, validate_workflow
 from generation_readiness import workflow_readiness
 from scene import validate_scene, render_scene
-from native_runtime import NativeRuntime
-from native_proxy import proxy_http, proxy_websocket
+from frame_preview import render_frame, preview_identity
+from waveform import extract_waveform
 
-VERSION = "0.3.0"
+VERSION = "0.4.0"
 MAX_UPLOAD = 8 * 1024 * 1024 * 1024
 MAX_JSON = 8 * 1024 * 1024
 IDENTIFIER = re.compile(r"^[a-f0-9]{32}$")
@@ -106,6 +105,9 @@ class Store:
         self._closed = False
         self._workspace_lock_fd = None
         self.pool = None
+        self.preview_pool = None
+        self.waveform_slots = threading.BoundedSemaphore(2)
+        self.stop_decoding = threading.Event()
         self._acquire_workspace_lock()
         try:
             # Recovery may rewrite queued/running jobs, so it must follow the
@@ -116,9 +118,8 @@ class Store:
             self.comfy_url = comfy_url.rstrip("/")
             self.jobs = {}
             self.events = {}
-            self.native = NativeRuntime(self.root)
-            self.native_routes = {}
             self.pool = ThreadPoolExecutor(max_workers=1, thread_name_prefix="cinematicum-render")
+            self.preview_pool = ThreadPoolExecutor(max_workers=1, thread_name_prefix="cinematicum-frame")
             self._cap_cache = None
             self._cap_time = 0
             for path in (self.root / "jobs").glob("*.json"):
@@ -133,6 +134,8 @@ class Store:
         except BaseException:
             if self.pool is not None:
                 self.pool.shutdown(wait=True, cancel_futures=True)
+            if self.preview_pool is not None:
+                self.preview_pool.shutdown(wait=True, cancel_futures=True)
             self._release_workspace_lock()
             raise
 
@@ -314,6 +317,10 @@ class Store:
         return result
 
     def _write_job(self, job):
+        # Authoring stills are a reproducible cache. Scrubbing must not create
+        # thousands of durable render receipts or hide actual export history.
+        if job.get("kind") == "frame-preview":
+            return
         atomic_json(self.root / "jobs" / (job["id"] + ".json"), job)
 
     def submit(self, project_id, kind, fn, snapshot=None):
@@ -367,7 +374,7 @@ class Store:
                     job["finished_at"] = time.time()
                     self._write_job(job)
                     self.events.pop(job_id, None)
-        self.pool.submit(execute)
+        (self.preview_pool if kind == "frame-preview" else self.pool).submit(execute)
         return copy.deepcopy(job)
 
     def job(self, job_id):
@@ -417,6 +424,60 @@ class Store:
             atomic_json(directory / "exports" / (job_id + ".json"), {"result": result, "snapshot": snapshot, "issuance_effect": "NONE"})
             return result
         return self.submit(project_id, "render", work, snapshot)
+
+    def frame_preview(self, project_id, payload):
+        if not isinstance(payload, dict):
+            raise ValueError("Expected a frame preview request")
+        project = copy.deepcopy(payload.get("project", self.get(project_id)))
+        project["id"] = project_id
+        project["assets"] = self.get(project_id)["assets"]
+        directory = self.project_dir(project_id)
+        project = validate_project(project, directory)
+        frame = payload.get("frame")
+        total = max([c["start"] + c["duration"] for c in project["clips"]] +
+                    [t["start"] + t["duration"] for t in project["titles"]] + [0])
+        if type(frame) is not int or not 0 <= frame < total:
+            raise ValueError("Preview frame must be inside this timeline")
+        identity = preview_identity(project, frame)
+        output = directory / "previews" / (identity + ".png")
+        with self.lock:
+            for previous in list(self.jobs.values()):
+                if previous.get("project_id") == project_id and previous.get("kind") == "frame-preview" and previous.get("state") in {"queued", "running"}:
+                    self.cancel(previous["id"])
+            old_jobs = sorted((job for job in self.jobs.values() if job.get("kind") == "frame-preview"
+                               and job.get("state") not in {"queued", "running"}),
+                              key=lambda job: job["created_at"], reverse=True)
+            for old in old_jobs[64:]:
+                self.jobs.pop(old["id"], None)
+
+        def work(job_id, progress, event):
+            if event.is_set():
+                raise RuntimeError("Frame preview superseded")
+            if output.is_file() and not output.is_symlink():
+                result = {"frame": frame, "width": project["width"], "height": project["height"],
+                          "sha256": digest_file(output), "pipeline": "timeline-export-graph", "cached": True}
+            else:
+                result = render_frame(project, directory, frame, output, cancel_event=event)
+            result["url"] = f"/api/projects/{project_id}/previews/{output.name}"
+            # Only reproducible, app-named still cache files are evicted.
+            cached = sorted(output.parent.glob("*.png"), key=lambda item: item.stat().st_mtime, reverse=True)
+            for old in cached[64:]:
+                if re.fullmatch(r"[a-f0-9]{64}\.png", old.name) and old != output and not old.is_symlink():
+                    old.unlink(missing_ok=True)
+            return result
+        return self.submit(project_id, "frame-preview", work)
+
+    def waveform(self, project_id, asset_id, bins):
+        asset, path = self.asset(project_id, asset_id)
+        if not asset.get("has_audio"):
+            raise ValueError("This source has no audio stream")
+        if not self.waveform_slots.acquire(timeout=1):
+            raise ValueError("Waveform decoding is busy. Retry shortly.")
+        try:
+            return extract_waveform(path, self.project_dir(project_id) / "waveforms", bins=bins,
+                                    cancel_event=self.stop_decoding)
+        finally:
+            self.waveform_slots.release()
 
     def generation(self, project_id, payload):
         directory = self.project_dir(project_id)
@@ -529,6 +590,11 @@ class Store:
             ids = op.get("clip_ids")
             clips = project["clips"] if ids is None else [c for c in project["clips"] if c["id"] in ids]
             action = op.get("action")
+            locked = {track["id"] for track in project.get("tracks", []) if track.get("locked")}
+            if any(clip.get("track", 0) in locked for clip in clips):
+                raise ValueError("Unlock the selected tracks before applying editing automation")
+            if action == "sequence" and op.get("track", 0) in locked:
+                raise ValueError("Unlock the destination track before arranging clips")
             if action == "grade":
                 values = op.get("values", {})
                 if not isinstance(values, dict) or not set(values) <= {"exposure", "contrast", "saturation", "temperature"}:
@@ -538,6 +604,9 @@ class Store:
             elif action == "volume":
                 for clip in clips:
                     clip["volume"] = op.get("value")
+                    for key in clip.get("keyframes", []):
+                        if "volume" in key:
+                            key["volume"] = op.get("value")
             elif action == "sequence":
                 position = op.get("start", 0)
                 for clip in sorted(clips, key=lambda c: c["start"]):
@@ -545,80 +614,18 @@ class Store:
                     position += clip["duration"]
             elif action == "trim":
                 for clip in clips:
+                    clip.setdefault("animation_start", 0)
+                    clip.setdefault("animation_duration", clip["duration"])
+                    clip.setdefault("animation_offset", 0)
+                    audio = clip.setdefault("audio", {})
+                    audio.setdefault("fade_duration", clip["duration"])
+                    audio.setdefault("fade_offset", 0)
                     for key in ("in", "duration"):
                         if key in op:
                             clip[key] = op[key]
             else:
                 raise ValueError("Supported automation actions: grade, volume, sequence, trim")
         return self.save(project_id, project)
-
-    def native_install(self, project_id):
-        self.project_dir(project_id)
-        def run(job_id, progress, cancel):
-            return self.native.provision(progress=progress, cancel_event=cancel)
-        return self.submit(project_id, "native-install", run)
-
-    def native_open(self, project_id, editor):
-        directory = self.project_dir(project_id)
-        def run(job_id, progress, cancel):
-            if cancel.is_set():
-                raise RuntimeError("Editor open cancelled before starting")
-            result = self.native.open_editor(editor, project_id, directory, cancel_event=cancel)
-            # Access credentials are fetched separately and never stored in jobs.
-            return {"project_id": project_id, "runtime_ready": True, "editor": editor,
-                    "runtime": result}
-        return self.submit(project_id, "native-open", run)
-
-    def native_access(self, project_id):
-        self.project_dir(project_id)
-        access = self.native.access(project_id)
-        with self.lock:
-            nonce = next((key for key, value in self.native_routes.items() if value == project_id), None)
-            if nonce is None:
-                nonce = secrets.token_urlsafe(32)
-                self.native_routes[nonce] = project_id
-        prefix = "/native/" + nonce + "/"
-        query = urlencode({"username": "cinematicum", "password": access["password"],
-                           "path": prefix, "sound": "true", "reconnect": "true",
-                           "floating_menu": "false", "printing": "false", "file_transfer": "false",
-                           "swap_keys": "true", "remote_logging": "false"})
-        return {"viewer_url": prefix + "index.html?" + query, "project_id": project_id}
-
-    def native_exports(self, project_id):
-        directory = self.project_dir(project_id)
-        base = self.root / "nativeprojects" / project_id / "exports"
-        if not base.is_dir() or base.is_symlink():
-            raise ValueError("Save completed media into this native project's exports folder first.")
-        root = base.resolve()
-        imported, skipped = [], []
-        candidates = sorted(base.iterdir(), key=lambda p: p.name)[:100]
-        for source in candidates:
-            if source.suffix.lower() not in MEDIA_SUFFIXES or source.is_symlink() or not source.is_file():
-                continue
-            if source.resolve().parent != root:
-                continue
-            info = source.stat()
-            if time.time() - info.st_mtime < 2 or not 0 < info.st_size <= MAX_UPLOAD:
-                skipped.append({"name": source.name, "reason": "The export is still changing, empty, or above the import size limit."})
-                continue
-            temporary = directory / ("native-import-" + uuid.uuid4().hex + source.suffix.lower())
-            try:
-                fd = os.open(str(source), os.O_RDONLY | getattr(os, "O_NOFOLLOW", 0))
-                with os.fdopen(fd, "rb") as incoming, temporary.open("xb") as outgoing:
-                    before = os.fstat(incoming.fileno())
-                    if not stat.S_ISREG(before.st_mode) or (before.st_dev, before.st_ino) != (info.st_dev, info.st_ino):
-                        raise ValueError("Export changed before import")
-                    shutil.copyfileobj(incoming, outgoing, 1024 * 1024)
-                    after = os.fstat(incoming.fileno())
-                if (before.st_size, before.st_mtime_ns) != (after.st_size, after.st_mtime_ns):
-                    raise ValueError("Export is still being written")
-                imported.append(self.admit(project_id, temporary, source.name,
-                                           {"kind": "native-editor-export", "original_name": source.name}))
-            except (OSError, ValueError, RuntimeError) as exc:
-                skipped.append({"name": source.name, "reason": str(exc)})
-            finally:
-                temporary.unlink(missing_ok=True)
-        return {"project": self.get(project_id), "imported": imported, "skipped": skipped}
 
     def shutdown(self):
         # Concurrent/repeated shutdown calls cannot release another caller's
@@ -628,10 +635,11 @@ class Store:
                 return
             with self.lock:
                 self._closing = True
+                self.stop_decoding.set()
                 for event in self.events.values():
                     event.set()
             self.pool.shutdown(wait=True, cancel_futures=True)
-            self.native.shutdown()
+            self.preview_pool.shutdown(wait=True, cancel_futures=True)
             with self.lock:
                 self._closed = True
                 self._release_workspace_lock()
@@ -782,37 +790,13 @@ class Handler(BaseHTTPRequestHandler):
     def dispatch_get(self):
         parsed = urlparse(self.path)
         parts = unquote(parsed.path).strip("/").split("/")
-        if parts[0] == "native" and len(parts) >= 2:
-            nonce = parts[1]
-            with self.store.lock:
-                project_id = self.store.native_routes.get(nonce)
-            if not project_id:
-                raise PermissionError("Native workspace session expired. Open the editor again.")
-            access = self.store.native.access(project_id)
-            prefix = "/native/" + nonce + "/"
-            if not parsed.path.startswith(prefix):
-                raise ValueError("Invalid native workspace path")
-            path = "/" + parsed.path[len(prefix):]
-            if parsed.query:
-                path += "?" + parsed.query
-            if self.headers.get("Upgrade", "").lower() == "websocket":
-                return proxy_websocket(self, access["port"], path, lambda: self.store._closing)
-            return proxy_http(self, access["port"], path, prefix)
-        if parsed.path in {"/", "/index.html", "/app.js", "/style.css", "/compositor-ui.js", "/scene-editor.js", "/scene-editor.css", "/native-editors.js", "/native-editors.css"}:
+        if parsed.path in {"/", "/index.html", "/app.js", "/style.css", "/editing.js", "/viewer-tools.js", "/compositor-ui.js", "/scene-editor.js", "/scene-editor.css"}:
             return self.file(WEB / ("index.html" if parsed.path == "/" else parsed.path[1:]))
-        if parts == ["api", "native"]:
-            status = self.store.native.status()
-            active = next((j for j in self.store.jobs.values() if j["kind"] == "native-install" and j["state"] in {"queued", "running"}), None)
-            status["building"] = active is not None
-            if active:
-                status["job_id"] = active["id"]
-            if status.get("errors"):
-                status["error"] = "; ".join(status["errors"])
-            return self.json(200, status)
         if parts == ["api", "bootstrap"]:
             projects = self.store.projects()
             p = self.store.get(projects[0]["id"]) if projects else self.store.new_project({"name": "Untitled film"})
-            return self.json(200, {"token": self.store.token, "project": p, "projects": self.store.projects(), "capabilities": self.store.capabilities(), "jobs": sorted(self.store.jobs.values(), key=lambda j: j["created_at"], reverse=True)[:30]})
+            durable_jobs = [job for job in self.store.jobs.values() if job.get("kind") != "frame-preview"]
+            return self.json(200, {"token": self.store.token, "project": p, "projects": self.store.projects(), "capabilities": self.store.capabilities(), "jobs": sorted(durable_jobs, key=lambda j: j["created_at"], reverse=True)[:30]})
         if parts == ["api", "capabilities"]:
             return self.json(200, self.store.capabilities(fresh=True))
         if parts == ["api", "projects"]:
@@ -830,6 +814,13 @@ class Handler(BaseHTTPRequestHandler):
                 return self.file(path, download=asset["kind"] == "scene")
             if len(parts) == 5 and parts[3] == "thumbnail":
                 return self.thumbnail(project_id, parts[4])
+            if len(parts) == 5 and parts[3] == "waveform":
+                bins = int(parse_qs(parsed.query).get("bins", ["512"])[0])
+                return self.json(200, self.store.waveform(project_id, parts[4], bins))
+            if len(parts) == 5 and parts[3] == "previews":
+                if not re.fullmatch(r"[a-f0-9]{64}\.png", parts[4]):
+                    raise ValueError("Invalid frame preview filename")
+                return self.file(self.store.project_dir(project_id) / "previews" / parts[4])
             if len(parts) == 5 and parts[3] == "exports":
                 if not re.fullmatch(r"[a-f0-9]{32}\.(mp4|mov|json|blend)", parts[4]):
                     raise ValueError("Invalid export filename")
@@ -840,11 +831,6 @@ class Handler(BaseHTTPRequestHandler):
         parsed = urlparse(self.path)
         parts = unquote(parsed.path).strip("/").split("/")
         query = parse_qs(parsed.query)
-        if self.command == "POST" and parts == ["api", "native", "install"]:
-            payload = self.body()
-            if not isinstance(payload, dict):
-                raise ValueError("Expected a JSON object")
-            return self.json(202, self.store.native_install(payload.get("project_id")))
         if self.command == "POST" and parts == ["api", "projects"]:
             return self.json(201, self.store.new_project(self.body()))
         if self.command == "POST" and len(parts) == 4 and parts[:2] == ["api", "jobs"] and parts[3] == "cancel":
@@ -852,19 +838,6 @@ class Handler(BaseHTTPRequestHandler):
         if len(parts) >= 3 and parts[:2] == ["api", "projects"]:
             project_id = parts[2]
             directory = self.store.project_dir(project_id)
-            if self.command == "POST" and len(parts) == 5 and parts[3] == "native":
-                payload = self.body()
-                if not isinstance(payload, dict):
-                    raise ValueError("Expected a JSON object")
-                if parts[4] == "open":
-                    return self.json(202, self.store.native_open(project_id, payload.get("editor")))
-                if parts[4] == "access":
-                    return self.json(200, self.store.native_access(project_id))
-                if parts[4] == "command":
-                    return self.json(200, self.store.native.command(project_id, payload.get("action")))
-                if parts[4] == "exports":
-                    return self.json(200, self.store.native_exports(project_id))
-                raise FileNotFoundError("Route does not exist")
             if self.command == "PUT" and len(parts) == 3:
                 return self.json(200, self.store.save(project_id, self.body()))
             if self.command != "POST" or len(parts) != 4:
@@ -907,6 +880,8 @@ class Handler(BaseHTTPRequestHandler):
                 return self.json(202, self.store.blender(project_id, payload))
             if action == "scene":
                 return self.json(202, self.store.scene_render(project_id, payload))
+            if action == "frame-preview":
+                return self.json(202, self.store.frame_preview(project_id, payload))
             if action == "automate":
                 return self.json(200, self.store.automate(project_id, payload))
         raise FileNotFoundError("Route does not exist")

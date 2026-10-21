@@ -26,6 +26,7 @@ jobs:
       - name: Check editor JavaScript
         run: |
           node --check scripts/studio/web/app.js
+          node --check scripts/studio/web/editing.js
+          node --check scripts/studio/web/viewer-tools.js
           node --check scripts/studio/web/compositor-ui.js
           node --check scripts/studio/web/scene-editor.js
-          node --check scripts/studio/web/native-editors.js

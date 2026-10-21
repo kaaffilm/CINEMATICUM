@@ -2,18 +2,15 @@
 
 ## CINEMATICUM Studio — editable production workspace
 
-Studio 0.3 adds embedded complete Linux editor workspaces for Kdenlive, Shotcut,
-Cinelerra-GG, Natron, Friction, Glaxnimate, and Blender using a local Docker/Xpra
-runtime. Native projects stay editable in their own engines. See the Studio guide
-for installation, shared media, and the CPU/software-graphics deployment limits.
-
 Open the actual media editor with `make studio`. On macOS, `make studio-install-macos`
 builds a native **CINEMATICUM Studio.app** window using the installed Xcode tools.
-The application imports your media, edits a frame-based multitrack timeline, previews
-composition, grades footage, mixes audio, animates transforms and titles, and exports
-H.264 or ProRes through FFmpeg. Its node compositor processes actual exported frames.
-The in-app 3D workspace creates primitive scenes, materials, lighting, cameras, and
-pose animation; Blender renders those scenes into timeline media and editable
+The application imports your media, edits a frame-based multitrack timeline with
+retiming and reverse, previews composition, grades footage with RGB curves and
+scopes, mixes audio with real waveforms, animates transforms and titles, and exports
+H.264 or ProRes through FFmpeg. Its node compositor processes actual exported frames and
+paused authoring frames, with editable polygon masks and alpha-correct blend modes.
+The in-app 3D workspace has direct transform handles and a draggable dope sheet
+for primitive scenes, materials, lighting, cameras, and pose animation; Blender renders those scenes into timeline media and editable
 `.blend` sources. Configured local ComfyUI workflows can also produce media after
 node and model compatibility checks.
 
@@ -23,7 +20,7 @@ application tests. Production footage is supplied by the user; missing media are
 never replaced with a procedural film. Studio exports do not change Case 001's
 issuance status or the authority relationship between the repositories.
 
-This is the first working editor implementation. Full professional feature parity
+This is the CINEMATICUM-owned editor implementation. Full professional feature parity
 with the referenced applications and paid model integrations are not implemented.
 
 Strict realistic production stack for **THE LAST RENDER**.

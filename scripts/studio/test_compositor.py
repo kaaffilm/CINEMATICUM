@@ -9,7 +9,7 @@ import unittest
 import wave
 import zlib
 
-from compositor import validate_graph
+from compositor import compile_graph, validate_graph
 from engine import probe_media, render_project, validate_project
 
 
@@ -62,6 +62,29 @@ class GraphValidationTests(unittest.TestCase):
             chain.append(node("n" + str(i), "blur", [chain[-1]["id"]]))
         with self.assertRaisesRegex(ValueError, "working-image budget"):
             validate_graph(graph(*chain), 8192, 4096)
+
+    def test_curve_polygon_and_blend_parameters_are_bounded_data(self):
+        source = node("source", "source")
+        invalid = [
+            node("curve", "curves", ["source"], master="0/0;movie=/tmp/input"),
+            node("curve", "curves", ["source"], master=[[0, 0], [.5, .2], [.5, .8], [1, 1]]),
+            node("curve", "curves", ["source"], red=[[.1, 0], [1, 1]]),
+            node("curve", "curves", ["source"], blue=[[0, 0], [1, float("nan")]]),
+            node("curve", "curves", ["source"], green=[[i / 12, i / 12] for i in range(13)]),
+            node("mask", "mask", ["source"], shape="polygon", points=[[0, 0], [1, 1]]),
+            node("mask", "mask", ["source"], shape="polygon", points=[[0, 0], [True, 1], [1, 0]]),
+            node("mask", "mask", ["source"], shape="polygon", points=[[0, 0], [0, 0], [1, 1]]),
+            node("mask", "mask", ["source"], rotation=float("inf")),
+            node("merge", "merge", ["source", "source"], mode="multiply;movie=x"),
+        ]
+        for item in invalid:
+            with self.subTest(node=item), self.assertRaises(ValueError):
+                validate_graph(graph(source, item))
+        raw = graph(source, node("curve", "curves", ["source"], red=[[0, 1], [1, 0]]))
+        normalized = validate_graph(raw)
+        self.assertEqual(normalized["nodes"][1]["params"]["master"], [[0, 0], [1, 1]])
+        normalized["nodes"][1]["params"]["red"][0][1] = .5
+        self.assertEqual(raw["nodes"][1]["params"]["red"][0][1], 1)
 
 
 @unittest.skipUnless(shutil.which("ffmpeg") and shutil.which("ffprobe"), "FFmpeg and ffprobe are required")
@@ -125,6 +148,86 @@ class CompositorMediaTests(unittest.TestCase):
                                 check=True, capture_output=True, timeout=20)
         at = (y * 160 + x) * 3
         return tuple(result.stdout[at:at + 3])
+
+    def graph_rgba(self, name, recipe):
+        """Decode the real graph's lossless RGBA result, including its matte."""
+        clauses, output = compile_graph(recipe, "sourceimage", "check")
+        filters = "[0:v]format=rgba[sourceimage];" + ";".join(clauses)
+        result = subprocess.run([shutil.which("ffmpeg"), "-v", "error", "-threads", "1", "-filter_complex_threads", "1",
+                                 "-i", str(self.root / "media" / ("ENGINE_TEST_" + name + ".png")),
+                                 "-filter_complex", filters, "-map", "[" + output + "]", "-frames:v", "1",
+                                 "-threads", "1", "-f", "rawvideo", "-pix_fmt", "rgba", "pipe:1"],
+                                check=True, capture_output=True, timeout=20)
+        self.assertEqual(len(result.stdout), 160 * 90 * 4)
+        return lambda x=80, y=45: tuple(result.stdout[(y * 160 + x) * 4:(y * 160 + x) * 4 + 4])
+
+    def test_master_and_rgb_curves_change_real_pixels_without_changing_alpha(self):
+        recipe = graph(node("source", "source"), node("curve", "curves", ["source"],
+                       red=[[0, 1], [1, 0]], master=[[0, 0], [1, .5]]))
+        pixel = self.graph_rgba("alpha", recipe)()
+        for actual, expected in zip(pixel, (117, 30, 60, 128)):
+            self.assertAlmostEqual(actual, expected, delta=2)
+        p = self.project("gray")
+        p["clips"] = [self.clip("gray", graph(node("source", "source"), node("curve", "curves", ["source"],
+                      master=[[0, 0], [.3, .8], [1, 1]])))]
+        rendered = self.render(p, "curve_midpoint")
+        self.assertGreater(min(self.pixel(rendered)), 195)
+
+    def test_rotating_mask_turns_its_geometry_in_pixel_space(self):
+        recipe = graph(node("source", "source"), node("mask", "mask", ["source"], width=.75, height=.25))
+        p = self.project("red", "blue")
+        p["clips"] = [self.clip("red"), self.clip("blue", recipe, track=1)]
+        horizontal = self.render(p, "horizontal_mask")
+        self.assertGreater(self.pixel(horizontal, 110, 45)[2], 240)
+        self.assertGreater(self.pixel(horizontal, 80, 10)[0], 240)
+        p["clips"][1]["compositor"]["nodes"][1]["params"]["rotation"] = 90
+        vertical = self.render(p, "vertical_mask")
+        self.assertGreater(self.pixel(vertical, 110, 45)[0], 240)
+        self.assertGreater(self.pixel(vertical, 80, 10)[2], 240)
+
+    def test_polygon_vertices_feather_and_inversion_control_exported_matte(self):
+        recipe = graph(node("source", "source"), node("mask", "mask", ["source"],
+                       shape="polygon", points=[[0, 1], [.5, 0], [1, 1]], feather=.2))
+        pixels = self.graph_rgba("alpha", recipe)
+        self.assertEqual(pixels(80, 45)[3], 128)
+        self.assertEqual(pixels(10, 10)[3], 0)
+        self.assertTrue(10 < pixels(43, 45)[3] < 90)
+        p = self.project("red", "blue")
+        p["clips"] = [self.clip("red"), self.clip("blue", recipe, track=1)]
+        original = self.render(p, "polygon_original")
+        self.assertGreater(self.pixel(original, 40, 70)[2], 210)
+        mask = p["clips"][1]["compositor"]["nodes"][1]["params"]
+        mask["points"][0] = [.4, 1]
+        moved = self.render(p, "polygon_moved_vertex")
+        self.assertGreater(self.pixel(moved, 40, 70)[0], 235)
+        mask["invert"] = True
+        inverse = self.render(p, "polygon_inverse")
+        self.assertGreater(self.pixel(inverse, 40, 70)[2], 235)
+        self.assertGreater(self.pixel(inverse, 96, 45)[0], 235)
+
+    def test_separable_blend_modes_preserve_partial_alpha_and_source_over_math(self):
+        color, ab, opacity = (20, 60, 120), 128 / 255, .5
+        af = ab * opacity
+        output_alpha = af + ab * (1 - af)
+        operations = {"multiply": lambda a, b: a * b / 255,
+                      "screen": lambda a, b: 255 - (255 - a) * (255 - b) / 255,
+                      "add": lambda a, b: min(255, a + b),
+                      "difference": lambda a, b: abs(a - b)}
+        for mode, blend in operations.items():
+            with self.subTest(mode=mode):
+                recipe = graph(node("source", "source"), node("mix", "merge", ["source", "source"], mode=mode, opacity=opacity))
+                actual = self.graph_rgba("alpha", recipe)()
+                expected = [(af * ((1 - ab) * c + ab * blend(c, c)) + ab * (1 - af) * c) / output_alpha for c in color]
+                for value, reference in zip(actual, expected + [output_alpha * 255]):
+                    self.assertAlmostEqual(value, reference, delta=3)
+                # A fully transparent background must not darken the source,
+                # even in multiply mode. A transparent foreground is neutral.
+                for inputs in (["empty", "source"], ["source", "empty"]):
+                    empty = node("empty", "mask", ["source"], width=.1, height=.1)
+                    recipe = graph(node("source", "source"), empty, node("mix", "merge", inputs, mode=mode))
+                    actual = self.graph_rgba("alpha", recipe)(10, 10)
+                    for value, reference in zip(actual, color + (128,)):
+                        self.assertAlmostEqual(value, reference, delta=2)
 
     def test_branching_merge_opacity_and_selected_output_change_exported_pixels(self):
         recipe = graph(node("source", "source"), node("dark", "grade", ["source"], exposure=-1),

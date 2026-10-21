@@ -5,14 +5,20 @@
   const escape = value => String(value ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
   const clamp = (value, min, max) => Math.max(min, Math.min(max, value));
   const number = (value, fallback = 0) => Number.isFinite(Number(value)) ? Number(value) : fallback;
+  const CURVE_CHANNELS = ['master','red','green','blue'];
+  const CURVE_COLORS = {master:'#e6e8ee',red:'#ed7979',green:'#81c998',blue:'#83a6f4'};
+  const IDENTITY = [[0,0],[1,1]], POLYGON = [[.1,.85],[.5,.1],[.9,.85]];
+  const POINT_GAP = 1/255+.00001;
+  const BLEND_MODES = {normal:'Normal',multiply:'Multiply',screen:'Screen',add:'Add',difference:'Difference'};
   const definitions = {
     source: {name:'Source',inputs:[],color:'#6d9fac',defaults:{},description:'The selected clip, trimmed and fitted to the project canvas. Every branch starts with this image.'},
     grade: {name:'Color grade',inputs:['Image'],color:'#bc9bd3',defaults:{exposure:0,contrast:1,saturation:1,temperature:0},description:'Correct this branch before combining it with other branches.',fields:[['exposure','Exposure · stops',-3,3,.05],['contrast','Contrast',0,3,.05],['saturation','Saturation',0,3,.05],['temperature','Temperature',-1,1,.02]]},
-    blur: {name:'Gaussian blur',inputs:['Image'],color:'#82a4ce',defaults:{sigma:2},description:'Blur the image and its alpha with a Gaussian filter.',fields:[['sigma','Radius',0,30,.1]]},
+    curves: {name:'Color curves',inputs:['Image'],color:'#bc9bd3',defaults:{master:copy(IDENTITY),red:copy(IDENTITY),green:copy(IDENTITY),blue:copy(IDENTITY)},description:'Shape the master tone curve and individual RGB channels. Channel curves are applied before the master curve.'},
+    blur: {name:'Gaussian blur',inputs:['Image'],color:'#82a4ce',defaults:{sigma:2},description:'Blur the image while retaining its existing transparency.',fields:[['sigma','Radius',0,30,.1]]},
     sharpen: {name:'Sharpen',inputs:['Image'],color:'#82a4ce',defaults:{amount:1},description:'Recover edge definition with an unsharp mask.',fields:[['amount','Amount',0,3,.05]]},
     chroma_key: {name:'Chroma key',inputs:['Image'],color:'#80b99b',defaults:{color:'#00ff00',similarity:.18,blend:.08},description:'Remove a selected color. Connect the transparent result to a Merge foreground.',fields:[['similarity','Color similarity',.01,1,.01],['blend','Edge blend',0,1,.01]]},
-    mask: {name:'Shape mask',inputs:['Image'],color:'#cfad76',defaults:{shape:'ellipse',x:.5,y:.5,width:.65,height:.65,feather:.15,invert:false},description:'Multiply this branch’s alpha by an ellipse or rectangle. Positions and dimensions are normalized to the image.',fields:[['x','Center X',0,1,.01],['y','Center Y',0,1,.01],['width','Width',.01,2,.01],['height','Height',.01,2,.01],['feather','Inward feather',0,1,.01]]},
-    merge: {name:'Merge',inputs:['Background','Foreground'],color:'#d39c84',defaults:{opacity:1},description:'Composite the foreground over the background using its alpha and this opacity.',fields:[['opacity','Foreground opacity',0,1,.01]]}
+    mask: {name:'Shape mask',inputs:['Image'],color:'#cfad76',defaults:{shape:'ellipse',x:.5,y:.5,width:.65,height:.65,rotation:0,feather:.15,invert:false,points:copy(POLYGON)},description:'Choose an ellipse or rectangle, or draw a polygon. Place, rotate, and feather the mask over this branch.',fields:[['x','Center X',0,1,.01],['y','Center Y',0,1,.01],['width','Width',.01,2,.01],['height','Height',.01,2,.01],['rotation','Rotation · degrees',-360,360,1],['feather','Inward feather',0,1,.01]]},
+    merge: {name:'Merge',inputs:['Background','Foreground'],color:'#d39c84',defaults:{opacity:1,mode:'normal'},description:'Blend the foreground over the background. Each branch’s transparency and foreground opacity determine its contribution.',fields:[['opacity','Foreground opacity',0,1,.01]]}
   };
   const NODE_WIDTH = 174;
   const nodeHeight = node => node.type === 'source' ? 132 : node.type === 'merge' ? 120 : 110;
@@ -24,6 +30,11 @@
       if (!node || typeof node.id !== 'string' || !node.id || nodes.has(node.id)) return 'Every node needs a unique ID.';
       if (!definitions[node.type]) return 'This graph contains an unsupported node.';
       if (!Array.isArray(node.inputs) || node.inputs.length !== definitions[node.type].inputs.length) return `${definitions[node.type].name} has the wrong number of inputs.`;
+      const p={...definitions[node.type].defaults,...node.params};
+      const validPoints=(points,min,max)=>Array.isArray(points)&&points.length>=min&&points.length<=max&&points.every(point=>Array.isArray(point)&&point.length===2&&point.every(value=>typeof value==='number'&&Number.isFinite(value)&&value>=0&&value<=1));
+      if(node.type==='curves')for(const channel of CURVE_CHANNELS){const points=p[channel];if(!validPoints(points,2,12)||points[0][0]!==0||points.at(-1)[0]!==1||points.some((point,i)=>i&&point[0]-points[i-1][0]<1/255-1e-9))return 'Curve points need distinct, increasing inputs from 0 to 1.';}
+      if(node.type==='mask'&&(!['ellipse','rectangle','polygon'].includes(p.shape)||!validPoints(p.points,3,24)||p.points.some((point,i)=>Math.hypot(point[0]-p.points[(i+1)%p.points.length][0],point[1]-p.points[(i+1)%p.points.length][1])<.00001)))return 'A mask polygon needs 3–24 distinct neighboring vertices.';
+      if(node.type==='merge'&&!BLEND_MODES[p.mode])return 'Choose an available blend mode.';
       nodes.set(node.id,node);
     }
     if (graph.nodes.filter(node => node.type === 'source').length !== 1) return 'A graph needs exactly one Source node.';
@@ -49,9 +60,24 @@
     }
     return contains(from);
   }
+  function curveValue(points, x) {
+    // Shape-preserving cubic Hermite interpolation, matching the render curve.
+    const count=points.length,h=[],d=[],slopes=[];
+    for(let i=0;i<count-1;i++){h[i]=points[i+1][0]-points[i][0];d[i]=(points[i+1][1]-points[i][1])/h[i];}
+    if(count===2)slopes.push(d[0],d[0]);
+    else {
+      const end=(h0,h1,d0,d1)=>{const value=((2*h0+h1)*d0-h0*d1)/(h0+h1);return value*d0<=0?0:(d0*d1<0&&Math.abs(value)>Math.abs(3*d0)?3*d0:value);};
+      slopes[0]=end(h[0],h[1],d[0],d[1]);slopes[count-1]=end(h[count-2],h[count-3],d[count-2],d[count-3]);
+      for(let i=1;i<count-1;i++){const w1=2*h[i]+h[i-1],w2=h[i]+2*h[i-1];slopes[i]=d[i-1]*d[i]<=0?0:(w1+w2)/(w1/d[i-1]+w2/d[i]);}
+    }
+    let i=0;while(i<count-2&&x>points[i+1][0])i++;
+    const t=clamp((x-points[i][0])/h[i],0,1),t2=t*t,t3=t2*t;
+    return clamp((2*t3-3*t2+1)*points[i][1]+(t3-2*t2+t)*h[i]*slopes[i]+(-2*t3+3*t2)*points[i+1][1]+(t3-t2)*h[i]*slopes[i+1],0,1);
+  }
   function mount(host, bridge = {}) {
     let graph = freshGraph(), context = {}, selected = 'source', inspector = null, pending = null, drag = null;
     let zoom = 1, pan = {x:0,y:0}, destroyed = false, positions = new Map();
+    let curveChannel='master',curvePoint=0,polygonPoint=0,editorDrag=null;
     host.classList.add('compositor-editor');
     host.innerHTML = `<div class="compositor-toolbar"><span class="compositor-title">NODE COMPOSITOR</span><select data-graph-add-type aria-label="Node type to add">${Object.entries(definitions).filter(([type])=>type!=='source').map(([type,definition])=>`<option value="${type}">${definition.name}</option>`).join('')}</select><button data-graph-action="add" class="small" title="Add after the selected node">＋ Add</button><button data-graph-action="masked" class="quiet small" title="Create a grade, feathered mask, and merge branch">Masked correction</button><span class="compositor-toolbar-spacer"></span><button data-graph-action="fit" class="quiet small" title="Fit all nodes">Fit</button><button data-graph-action="preview" class="small">Render preview ↗</button></div><div class="compositor-stage" tabindex="0" aria-label="Node graph. Drag nodes, or connect an output port to an input port."><div class="compositor-world"><svg class="compositor-wires" aria-hidden="true"></svg><div class="compositor-nodes"></div></div><div class="compositor-empty" hidden><strong>Select a picture clip.</strong><span>Import a video or image, add it to the timeline, then select its clip.</span><button data-graph-action="import" class="small">Import media</button></div><div class="compositor-connection-hint" hidden></div></div><div class="compositor-footer"><span data-graph-status>Source → output</span><span>Drag background to pan · ⌘/Ctrl + wheel to zoom</span><label>Output <select data-graph-output aria-label="Compositor output node"></select></label></div>`;
     const stage=host.querySelector('.compositor-stage'),world=host.querySelector('.compositor-world'),nodesElement=host.querySelector('.compositor-nodes'),wires=host.querySelector('.compositor-wires');
@@ -75,11 +101,12 @@
       const p={...definitions[node.type].defaults,...node.params};
       if(node.type==='source')return context.sourceLabel||'Selected clip';
       if(node.type==='grade')return `${number(p.exposure).toFixed(2)} EV · sat ${number(p.saturation).toFixed(2)}`;
+      if(node.type==='curves')return `Master + RGB · ${CURVE_CHANNELS.reduce((sum,name)=>sum+(p[name]?.length||2),0)} points`;
       if(node.type==='blur')return `Radius ${number(p.sigma).toFixed(1)}`;
       if(node.type==='sharpen')return `Amount ${number(p.amount).toFixed(2)}`;
       if(node.type==='chroma_key')return `${p.color} · ${number(p.similarity).toFixed(2)}`;
       if(node.type==='mask')return `${p.shape}${p.invert?' · inverted':''} · feather ${number(p.feather).toFixed(2)}`;
-      return `Foreground ${Math.round(number(p.opacity,1)*100)}%`;
+      return `${BLEND_MODES[p.mode]||'Normal'} · ${Math.round(number(p.opacity,1)*100)}%`;
     }
     function renderGraph() {
       const enabled=Boolean(context.key),active=activeNodes();
@@ -135,12 +162,116 @@
       const next=copy(graph),node=next.nodes.find(n=>n.id===to);if(input<0||input>=node.inputs.length)return;node.inputs[input]=from;pending=null;commit(next,to);
     }
     function parameterControl(name,title,min,max,step,value) {return `<div class="node-parameter"><div><label>${escape(title)}</label><input type="number" data-node-param="${name}" min="${min}" max="${max}" step="${step}" value="${value}" aria-label="${escape(title)}"></div><input type="range" data-node-param="${name}" min="${min}" max="${max}" step="${step}" value="${value}" aria-label="${escape(title)} slider"></div>`;}
+    const editorStyle='width:100%;aspect-ratio:1;display:block;touch-action:none;background:#10141c;border:1px solid #354050;border-radius:6px;cursor:crosshair';
+    function editorGrid(curve=false) {
+      return [0,.25,.5,.75,1].map(value=>`<path d="M${18+220*value} 18V238 M18 ${18+220*value}H238" fill="none" stroke="#303a49" stroke-width="${value===0||value===1?1:.6}"/>`).join('')+
+        (curve?'<path d="M18 238L238 18" stroke="#6b7280" stroke-width=".7" stroke-dasharray="3 4"/>':'')+
+        `<text x="128" y="252" text-anchor="middle" fill="#8e9bad" font-size="9">${curve?'INPUT':'LOCAL X'}</text><text x="8" y="128" text-anchor="middle" transform="rotate(-90 8 128)" fill="#8e9bad" font-size="9">${curve?'OUTPUT':'LOCAL Y'}</text>`;
+    }
+    function curveGraphic(points) {
+      const color=CURVE_COLORS[curveChannel],path=Array.from({length:129},(_,i)=>{const x=i/128;return `${i?'L':'M'}${18+220*x} ${238-220*curveValue(points,x)}`;}).join(' ');
+      return editorGrid(true)+`<path d="${path}" fill="none" stroke="${color}" stroke-width="2"/>`+points.map((point,index)=>`<circle data-curve-point="${index}" cx="${18+220*point[0]}" cy="${238-220*point[1]}" r="${index===curvePoint?5.7:4.3}" fill="${index===curvePoint?color:'#10141c'}" stroke="${color}" stroke-width="1.6" tabindex="0" role="button" aria-label="Curve point ${index+1}, input ${point[0].toFixed(3)}, output ${point[1].toFixed(3)}" style="cursor:grab"><title>Input ${point[0].toFixed(3)} · Output ${point[1].toFixed(3)}</title></circle>`).join('');
+    }
+    function polygonGraphic(points) {
+      return editorGrid()+`<polygon points="${points.map(point=>`${18+220*point[0]},${18+220*point[1]}`).join(' ')}" fill="#cfad76" fill-opacity=".15" fill-rule="evenodd" stroke="#cfad76" stroke-width="1.8"/>`+points.map((point,index)=>`<circle data-polygon-point="${index}" cx="${18+220*point[0]}" cy="${18+220*point[1]}" r="${index===polygonPoint?5.7:4.3}" fill="${index===polygonPoint?'#cfad76':'#10141c'}" stroke="#cfad76" stroke-width="1.6" tabindex="0" role="button" aria-label="Polygon vertex ${index+1}, X ${point[0].toFixed(3)}, Y ${point[1].toFixed(3)}" style="cursor:grab"><title>Vertex ${index+1}</title></circle>`).join('');
+    }
+    function curveEditor(params) {
+      const points=params[curveChannel]||IDENTITY;curvePoint=clamp(curvePoint,0,points.length-1);const point=points[curvePoint],end=curvePoint===0||curvePoint===points.length-1;
+      return `<div class="inspector-section node-curve-editor"><label>Channel<select data-curve-channel aria-label="Curve channel">${CURVE_CHANNELS.map(channel=>`<option value="${channel}" ${channel===curveChannel?'selected':''}>${channel==='master'?'Master · RGB':channel[0].toUpperCase()+channel.slice(1)}</option>`).join('')}</select></label><svg data-curve-editor viewBox="0 0 256 256" tabindex="0" role="group" aria-label="Editable ${curveChannel} tone curve" style="${editorStyle};margin-top:12px">${curveGraphic(points)}</svg><p class="note">Click to add a point; drag to shape the curve. Arrow keys nudge the selected point.</p><div class="field-row"><label>Input<input data-curve-coordinate="0" type="number" min="${end?point[0]:points[curvePoint-1][0]+POINT_GAP}" max="${end?point[0]:points[curvePoint+1][0]-POINT_GAP}" step=".001" value="${point[0]}" ${end?'disabled':''}></label><label>Output<input data-curve-coordinate="1" type="number" min="0" max="1" step=".001" value="${point[1]}"></label></div><div class="inspector-actions"><button data-node-action="curve-remove" ${end?'disabled':''}>Remove point</button><button data-node-action="curve-reset">Reset channel</button></div></div>`;
+    }
+    function polygonEditor(params) {
+      const points=params.points||POLYGON;polygonPoint=clamp(polygonPoint,0,points.length-1);const point=points[polygonPoint];
+      return `<div class="inspector-section node-polygon-editor"><svg data-polygon-editor viewBox="0 0 256 256" tabindex="0" role="group" aria-label="Editable polygon mask vertices" style="${editorStyle}">${polygonGraphic(points)}</svg><p class="note">Drag a vertex. Double-click an edge to add one. Placement, size and rotation apply to the whole shape.</p><div class="field-row"><label>Vertex X<input data-polygon-coordinate="0" type="number" min="0" max="1" step=".001" value="${point[0]}"></label><label>Vertex Y<input data-polygon-coordinate="1" type="number" min="0" max="1" step=".001" value="${point[1]}"></label></div><div class="inspector-actions"><button data-node-action="polygon-add" ${points.length>=24?'disabled':''}>Add vertex</button><button data-node-action="polygon-remove" ${points.length<=3?'disabled':''}>Remove vertex</button></div><button data-node-action="polygon-reset" class="quiet full">Reset polygon</button></div>`;
+    }
     function renderInspector(element=inspector) {
-      if(element!==inspector){if(inspector){inspector.removeEventListener('input',inspectorInput);inspector.removeEventListener('change',inspectorChange);inspector.removeEventListener('click',inspectorClick);inspector.removeEventListener('keydown',onKey);}inspector=element;if(inspector){inspector.addEventListener('input',inspectorInput);inspector.addEventListener('change',inspectorChange);inspector.addEventListener('click',inspectorClick);inspector.addEventListener('keydown',onKey);}}
+      if(element!==inspector){if(inspector){inspector.removeEventListener('input',inspectorInput);inspector.removeEventListener('change',inspectorChange);inspector.removeEventListener('click',inspectorClick);inspector.removeEventListener('keydown',onKey);inspector.removeEventListener('pointerdown',inspectorPointerDown);inspector.removeEventListener('dblclick',inspectorDoubleClick);}inspector=element;if(inspector){inspector.addEventListener('input',inspectorInput);inspector.addEventListener('change',inspectorChange);inspector.addEventListener('click',inspectorClick);inspector.addEventListener('keydown',onKey);inspector.addEventListener('pointerdown',inspectorPointerDown);inspector.addEventListener('dblclick',inspectorDoubleClick);}}
       if(!inspector)return;
       const node=nodeById(selected);if(!context.key||!node){inspector.innerHTML='<p class="note">Select a picture clip to edit its image graph.</p>';return;}
       const definition=definitions[node.type],p={...definition.defaults,...node.params},output=node.id===graph.output;
-      inspector.innerHTML=`<div class="node-inspector-heading"><span style="background:${definition.color}"></span><strong>${escape(label(node))}</strong>${output?'<small>OUTPUT</small>':''}</div><p class="note">${escape(definition.description)}</p>${node.type==='source'?`<div class="node-source-info">${context.sourceThumb?`<img src="${escape(context.sourceThumb)}" alt="Selected source">`:''}<strong>${escape(context.sourceLabel||'Selected clip')}</strong><span>The graph processes this clip. Clip transforms and timeline layers are applied afterward.</span></div>`:''}${node.inputs.length?`<div class="inspector-section"><h3>CONNECTIONS</h3>${node.inputs.map((id,index)=>`<label>${definition.inputs[index]}<select data-node-connection="${index}" aria-label="${definition.inputs[index]} connection">${graph.nodes.filter(item=>!wouldCycle(graph,item.id,node.id)).map(item=>`<option value="${escape(item.id)}" ${id===item.id?'selected':''}>${escape(label(item))}</option>`).join('')}</select></label>`).join('')}</div>`:''}${node.type==='chroma_key'?`<div class="color-control"><label>Remove color</label><input type="color" data-node-param="color" value="${escape(p.color)}" aria-label="Chroma key color"></div>`:''}${node.type==='mask'?`<div class="inspector-section"><label>Shape<select data-node-param="shape"><option value="ellipse" ${p.shape==='ellipse'?'selected':''}>Ellipse</option><option value="rectangle" ${p.shape==='rectangle'?'selected':''}>Rectangle</option></select></label></div>`:''}${(definition.fields||[]).map(([name,title,min,max,step])=>parameterControl(name,title,min,max,step,number(p[name],definition.defaults[name]))).join('')}${node.type==='mask'?`<label class="check-field"><input type="checkbox" data-node-param="invert" ${p.invert?'checked':''}> Invert mask</label>`:''}<div class="inspector-actions"><button data-node-action="output" ${output?'disabled':''}>Use as output</button>${node.type!=='source'?'<button data-node-action="duplicate">Duplicate</button>':''}</div>${node.type!=='source'?'<button class="quiet full node-delete" data-node-action="delete">Delete node · reconnect its inputs</button>':''}<p class="note node-render-note">Render preview evaluates this graph. Source preview shows the original clip with its clip-level controls.</p>`;
+      inspector.innerHTML=`<div class="node-inspector-heading"><span style="background:${definition.color}"></span><strong>${escape(label(node))}</strong>${output?'<small>OUTPUT</small>':''}</div><p class="note">${escape(definition.description)}</p>${node.type==='source'?`<div class="node-source-info">${context.sourceThumb?`<img src="${escape(context.sourceThumb)}" alt="Selected source">`:''}<strong>${escape(context.sourceLabel||'Selected clip')}</strong><span>The graph processes this clip. Clip transforms and timeline layers are applied afterward.</span></div>`:''}${node.inputs.length?`<div class="inspector-section"><h3>CONNECTIONS</h3>${node.inputs.map((id,index)=>`<label>${definition.inputs[index]}<select data-node-connection="${index}" aria-label="${definition.inputs[index]} connection">${graph.nodes.filter(item=>!wouldCycle(graph,item.id,node.id)).map(item=>`<option value="${escape(item.id)}" ${id===item.id?'selected':''}>${escape(label(item))}</option>`).join('')}</select></label>`).join('')}</div>`:''}${node.type==='chroma_key'?`<div class="color-control"><label>Remove color</label><input type="color" data-node-param="color" value="${escape(p.color)}" aria-label="Chroma key color"></div>`:''}${node.type==='curves'?curveEditor(p):''}${node.type==='mask'?`<div class="inspector-section"><label>Shape<select data-node-param="shape"><option value="ellipse" ${p.shape==='ellipse'?'selected':''}>Ellipse</option><option value="rectangle" ${p.shape==='rectangle'?'selected':''}>Rectangle</option><option value="polygon" ${p.shape==='polygon'?'selected':''}>Polygon</option></select></label></div>${p.shape==='polygon'?polygonEditor(p):''}`:''}${node.type==='merge'?`<div class="inspector-section"><label>Blend mode<select data-node-param="mode" aria-label="Merge blend mode">${Object.entries(BLEND_MODES).map(([value,name])=>`<option value="${value}" ${p.mode===value?'selected':''}>${name}</option>`).join('')}</select></label></div>`:''}${(definition.fields||[]).map(([name,title,min,max,step])=>parameterControl(name,title,min,max,step,number(p[name],definition.defaults[name]))).join('')}${node.type==='mask'?`<label class="check-field"><input type="checkbox" data-node-param="invert" ${p.invert?'checked':''}> Invert mask</label>`:''}<div class="inspector-actions"><button data-node-action="output" ${output?'disabled':''}>Use as output</button>${node.type!=='source'?'<button data-node-action="duplicate">Duplicate</button>':''}</div>${node.type!=='source'?'<button class="quiet full node-delete" data-node-action="delete">Delete node · reconnect its inputs</button>':''}<p class="note node-render-note">Frame preview and export evaluate the connected graph. Clip placement is applied afterward.</p>`;
+    }
+    function editorPoints(next,kind,channel=curveChannel,nodeId=selected) {
+      const target=next.nodes.find(node=>node.id===nodeId);target.params??={};
+      const key=kind==='curve'?channel:'points';
+      target.params[key]??=copy(kind==='curve'?IDENTITY:POLYGON);
+      return target.params[key];
+    }
+    function editorPosition(event,svg,kind) {
+      const rect=svg.getBoundingClientRect(),x=(event.clientX-rect.left)*256/rect.width,y=(event.clientY-rect.top)*256/rect.height;
+      return [clamp((x-18)/220,0,1),clamp((kind==='curve'?238-y:y-18)/220,0,1)];
+    }
+    function updateEditorGraphic(edit) {
+      const points=editorPoints(edit.next,edit.kind,edit.channel,edit.nodeId),point=points[edit.index];
+      edit.svg.innerHTML=edit.kind==='curve'?curveGraphic(points):polygonGraphic(points);
+      inspector?.querySelectorAll(`[data-${edit.kind==='curve'?'curve':'polygon'}-coordinate]`).forEach(input=>{const axis=Number(input.dataset[edit.kind==='curve'?'curveCoordinate':'polygonCoordinate']);input.value=point[axis];});
+    }
+    function inspectorPointerDown(event) {
+      if(event.button!==0||event.isPrimary===false||!context.key)return;
+      const svg=event.target.closest('[data-curve-editor],[data-polygon-editor]');if(!svg)return;
+      const kind=svg.hasAttribute('data-curve-editor')?'curve':'polygon',next=copy(graph),points=editorPoints(next,kind),handle=event.target.closest(`[data-${kind}-point]`);
+      let index=handle?Number(handle.dataset[kind==='curve'?'curvePoint':'polygonPoint']):-1,inserted=false;
+      if(index<0&&kind==='curve'){
+        const point=editorPosition(event,svg,kind);index=points.findIndex(existing=>Math.abs(existing[0]-point[0])<POINT_GAP);
+        if(index<0){if(points.length>=12){notify('A channel supports up to 12 curve points.');return;}index=points.findIndex(existing=>existing[0]>point[0]);if(index<1)index=points.length-1;points.splice(index,0,point);inserted=true;}
+      }
+      event.preventDefault();event.stopPropagation();svg.focus({preventScroll:true});
+      if(index<0)return;
+      if(kind==='curve')curvePoint=index;else polygonPoint=index;
+      editorDrag={kind,next,index,inserted,changed:inserted,svg,nodeId:selected,channel:curveChannel,key:context.key,pointerId:event.pointerId};
+      try{svg.setPointerCapture?.(event.pointerId);}catch(_){}updateEditorGraphic(editorDrag);
+    }
+    function editorPointerMove(event) {
+      const edit=editorDrag;if(!edit||event.pointerId!==edit.pointerId)return;
+      const points=editorPoints(edit.next,edit.kind,edit.channel,edit.nodeId),point=editorPosition(event,edit.svg,edit.kind);
+      if(edit.kind==='curve')point[0]=edit.index===0?0:edit.index===points.length-1?1:clamp(point[0],points[edit.index-1][0]+POINT_GAP,points[edit.index+1][0]-POINT_GAP);
+      const rounded=point.map(value=>Math.round(value*1e6)/1e6);
+      if(rounded[0]!==points[edit.index][0]||rounded[1]!==points[edit.index][1])edit.changed=true;
+      points[edit.index]=rounded;updateEditorGraphic(edit);event.preventDefault();
+    }
+    function finishEditor(cancel=false) {
+      const edit=editorDrag;if(!edit)return;editorDrag=null;
+      try{if(edit.svg.hasPointerCapture?.(edit.pointerId))edit.svg.releasePointerCapture(edit.pointerId);}catch(_){}
+      if(!cancel&&edit.changed&&edit.key===context.key&&edit.nodeId===selected&&!destroyed){if(!commit(edit.next))renderInspector();}
+      else renderInspector();
+    }
+    function insertPolygon(next,index,point) {
+      const points=editorPoints(next,'polygon');if(points.length>=24){notify('A mask supports up to 24 vertices.');return;}
+      points.splice(index+1,0,point);polygonPoint=index+1;commit(next);
+    }
+    function inspectorDoubleClick(event) {
+      const svg=event.target.closest('[data-polygon-editor]');if(!svg||event.target.closest('[data-polygon-point]'))return;
+      event.preventDefault();event.stopPropagation();const next=copy(graph),points=editorPoints(next,'polygon'),point=editorPosition(event,svg,'polygon');let best=null;
+      for(let i=0;i<points.length;i++){const a=points[i],b=points[(i+1)%points.length],dx=b[0]-a[0],dy=b[1]-a[1],t=clamp(((point[0]-a[0])*dx+(point[1]-a[1])*dy)/(dx*dx+dy*dy),.05,.95),projected=[a[0]+t*dx,a[1]+t*dy],distance=Math.hypot(point[0]-projected[0],point[1]-projected[1]);if(!best||distance<best.distance)best={index:i,point:projected,distance};}
+      if(best?.distance<.07)insertPolygon(next,best.index,best.point);
+    }
+    function editPointAction(action) {
+      const node=nodeById(selected);if(!node)return;
+      if(action.startsWith('curve-')&&node.type==='curves'){
+        const next=copy(graph),points=editorPoints(next,'curve');
+        if(action==='curve-reset'){next.nodes.find(item=>item.id===selected).params[curveChannel]=copy(IDENTITY);curvePoint=0;commit(next);}
+        else if(action==='curve-remove'&&curvePoint>0&&curvePoint<points.length-1){points.splice(curvePoint,1);curvePoint=Math.max(0,curvePoint-1);commit(next);}
+      }
+      if(action.startsWith('polygon-')&&node.type==='mask'){
+        const next=copy(graph),points=editorPoints(next,'polygon');
+        if(action==='polygon-reset'){next.nodes.find(item=>item.id===selected).params.points=copy(POLYGON);polygonPoint=0;commit(next);}
+        else if(action==='polygon-remove'&&points.length>3){points.splice(polygonPoint,1);polygonPoint=clamp(polygonPoint,0,points.length-1);commit(next);}
+        else if(action==='polygon-add'){const a=points[polygonPoint],b=points[(polygonPoint+1)%points.length];insertPolygon(next,polygonPoint,[(a[0]+b[0])/2,(a[1]+b[1])/2]);}
+      }
+    }
+    function editorKey(event) {
+      const svg=event.target.closest('[data-curve-editor],[data-polygon-editor]');if(!svg)return false;
+      const kind=svg.hasAttribute('data-curve-editor')?'curve':'polygon',handle=event.target.closest(`[data-${kind}-point]`);
+      if(handle){if(kind==='curve')curvePoint=Number(handle.dataset.curvePoint);else polygonPoint=Number(handle.dataset.polygonPoint);}
+      if(!['ArrowLeft','ArrowRight','ArrowUp','ArrowDown','Delete','Backspace','Escape'].includes(event.key))return true;
+      event.preventDefault();event.stopPropagation();
+      if(event.key==='Escape'){finishEditor(true);return true;}
+      if(event.key==='Delete'||event.key==='Backspace'){editPointAction(kind+'-remove');inspector?.querySelector(`[data-${kind}-editor]`)?.focus({preventScroll:true});return true;}
+      const next=copy(graph),points=editorPoints(next,kind),index=kind==='curve'?curvePoint:polygonPoint,axis=['ArrowLeft','ArrowRight'].includes(event.key)?0:1,step=event.altKey ? .001 : event.shiftKey ? .02 : .005;
+      let direction=['ArrowRight','ArrowDown'].includes(event.key)?1:-1;if(kind==='curve'&&axis===1)direction*=-1;
+      points[index][axis]=clamp(points[index][axis]+direction*step,0,1);
+      if(kind==='curve'&&axis===0)points[index][0]=index===0?0:index===points.length-1?1:clamp(points[index][0],points[index-1][0]+POINT_GAP,points[index+1][0]-POINT_GAP);
+      if(commit(next))inspector?.querySelector(`[data-${kind}-point="${index}"]`)?.focus({preventScroll:true});
+      return true;
     }
     function inspectorInput(event) {
       const input=event.target;if(!input.dataset.nodeParam||!['range','number'].includes(input.type))return;
@@ -148,12 +279,19 @@
     }
     function inspectorChange(event) {
       const input=event.target,node=nodeById(selected);if(!node)return;
+      if(input.hasAttribute('data-curve-channel')){if(CURVE_CHANNELS.includes(input.value)){curveChannel=input.value;curvePoint=0;renderInspector();}return;}
+      if(input.dataset.curveCoordinate!==undefined||input.dataset.polygonCoordinate!==undefined){
+        const kind=input.dataset.curveCoordinate!==undefined?'curve':'polygon',axis=Number(input.dataset[kind==='curve'?'curveCoordinate':'polygonCoordinate']),value=Number(input.value);
+        if(!Number.isFinite(value)||![0,1].includes(axis)){renderInspector();return;}
+        const next=copy(graph),points=editorPoints(next,kind),index=kind==='curve'?curvePoint:polygonPoint;
+        points[index][axis]=clamp(value,Number(input.min),Number(input.max));if(!commit(next))renderInspector();return;
+      }
       if(input.dataset.nodeConnection!==undefined){connect(input.value,node.id,Number(input.dataset.nodeConnection));return;}
       const name=input.dataset.nodeParam;if(!name)return;let value=input.type==='checkbox'?input.checked:input.value;
       if(['range','number'].includes(input.type)){if(!Number.isFinite(Number(value))){renderInspector();return;}value=clamp(Number(value),Number(input.min),Number(input.max));}
       const next=copy(graph),target=next.nodes.find(n=>n.id===node.id);target.params??={};target.params[name]=value;commit(next);
     }
-    function inspectorClick(event) {const action=event.target.closest('[data-node-action]')?.dataset.nodeAction;if(action==='delete')deleteNode();else if(action==='duplicate')duplicateNode();else if(action==='output'){const next=copy(graph);next.output=selected;commit(next);}}
+    function inspectorClick(event) {const action=event.target.closest('[data-node-action]')?.dataset.nodeAction;if(action==='delete')deleteNode();else if(action==='duplicate')duplicateNode();else if(action==='output'){const next=copy(graph);next.output=selected;commit(next);}else if(action)editPointAction(action);}
     function localPoint(event) {const rect=stage.getBoundingClientRect();return {x:(event.clientX-rect.left-pan.x)/zoom,y:(event.clientY-rect.top-pan.y)/zoom};}
     function onPointerDown(event) {
       if(event.button!==0&&event.button!==1)return;
@@ -166,6 +304,7 @@
       event.preventDefault();stage.focus({preventScroll:true});drag={kind:'pan',x:event.clientX,y:event.clientY,original:{...pan}};stage.classList.add('panning');
     }
     function onPointerMove(event) {
+      if(editorDrag){editorPointerMove(event);return;}
       if(!drag)return;
       if(drag.kind==='wire'){drawWires(localPoint(event));return;}
       if(drag.kind==='pan'){pan={x:drag.original.x+event.clientX-drag.x,y:drag.original.y+event.clientY-drag.y};applyView();return;}
@@ -173,6 +312,7 @@
       const element=[...nodesElement.children].find(n=>n.dataset.node===drag.id);if(element){element.style.left=`${p.x}px`;element.style.top=`${p.y}px`;}drawWires();
     }
     function onPointerUp(event) {
+      if(editorDrag){if(event.pointerId===editorDrag.pointerId)finishEditor();return;}
       if(!drag)return;const done=drag;drag=null;stage.classList.remove('panning');
       if(done.kind==='wire'){const input=document.elementFromPoint(event.clientX,event.clientY)?.closest('[data-node-input]');if(input&&host.contains(input))connect(pending,input.dataset.nodeTarget,Number(input.dataset.nodeInput));else renderGraph();return;}
       if(done.kind==='node'&&done.moved){const next=copy(graph);next.nodes.find(node=>node.id===done.id).position={...positions.get(done.id)};commit(next);}
@@ -184,21 +324,23 @@
     }
     function onKey(event) {
       if(event.target.matches('input,select,textarea')||event.metaKey||event.ctrlKey)return;
+      if(editorKey(event))return;
       if(['Delete','Backspace'].includes(event.key)){event.preventDefault();event.stopPropagation();deleteNode();}
       if(event.key==='Escape'){event.preventDefault();event.stopPropagation();pending=null;drag=null;cachePositions();renderGraph();}
     }
+    function onPointerCancel(){if(editorDrag)finishEditor(true);drag=null;pending=null;stage.classList.remove('panning');cachePositions();renderGraph();}
     function onClick(event) {const action=event.target.closest('[data-graph-action]')?.dataset.graphAction;if(action==='add')addNode(host.querySelector('[data-graph-add-type]').value);else if(action==='masked')maskedCorrection();else if(action==='fit')fit();else if(action==='preview')bridge.onRender?.();else if(action==='import')bridge.onImport?.();}
     function onChange(event) {if(event.target.matches('[data-graph-output]')){const next=copy(graph);next.output=event.target.value;commit(next);}}
-    host.addEventListener('click',onClick);host.addEventListener('change',onChange);host.addEventListener('keydown',onKey);stage.addEventListener('pointerdown',onPointerDown);stage.addEventListener('wheel',onWheel,{passive:false});window.addEventListener('pointermove',onPointerMove);window.addEventListener('pointerup',onPointerUp);
+    host.addEventListener('click',onClick);host.addEventListener('change',onChange);host.addEventListener('keydown',onKey);stage.addEventListener('pointerdown',onPointerDown);stage.addEventListener('wheel',onWheel,{passive:false});window.addEventListener('pointermove',onPointerMove);window.addEventListener('pointerup',onPointerUp);window.addEventListener('pointercancel',onPointerCancel);
     const resize = new ResizeObserver(()=>{if(!destroyed&&context.key)fit();});resize.observe(stage);
     cachePositions();renderGraph();
     return {
-      setContext(next) {const different=context.key!==next.key;context=next;graph=copy(next.graph||freshGraph());if(validate(graph)){notify(validate(graph),true);}if(different||!nodeById(selected))selected=graph.output;pending=null;drag=null;cachePositions();renderGraph();renderInspector();if(different)requestAnimationFrame(fit);},
+      setContext(next) {const different=context.key!==next.key;context=next;graph=copy(next.graph||freshGraph());if(validate(graph)){notify(validate(graph),true);}if(different||!nodeById(selected))selected=graph.output;pending=null;drag=null;editorDrag=null;if(different){curveChannel='master';curvePoint=0;polygonPoint=0;}cachePositions();renderGraph();renderInspector();if(different)requestAnimationFrame(fit);},
       renderInspector,
       refresh(){renderGraph();renderInspector();},
       fit,
-      destroy(){destroyed=true;resize.disconnect();host.removeEventListener('click',onClick);host.removeEventListener('change',onChange);host.removeEventListener('keydown',onKey);stage.removeEventListener('pointerdown',onPointerDown);stage.removeEventListener('wheel',onWheel);window.removeEventListener('pointermove',onPointerMove);window.removeEventListener('pointerup',onPointerUp);if(inspector){inspector.removeEventListener('input',inspectorInput);inspector.removeEventListener('change',inspectorChange);inspector.removeEventListener('click',inspectorClick);inspector.removeEventListener('keydown',onKey);}host.innerHTML='';}
+      destroy(){destroyed=true;editorDrag=null;resize.disconnect();host.removeEventListener('click',onClick);host.removeEventListener('change',onChange);host.removeEventListener('keydown',onKey);stage.removeEventListener('pointerdown',onPointerDown);stage.removeEventListener('wheel',onWheel);window.removeEventListener('pointermove',onPointerMove);window.removeEventListener('pointerup',onPointerUp);window.removeEventListener('pointercancel',onPointerCancel);if(inspector){inspector.removeEventListener('input',inspectorInput);inspector.removeEventListener('change',inspectorChange);inspector.removeEventListener('click',inspectorClick);inspector.removeEventListener('keydown',onKey);inspector.removeEventListener('pointerdown',inspectorPointerDown);inspector.removeEventListener('dblclick',inspectorDoubleClick);}host.innerHTML='';}
     };
   }
-  window.CinematicumCompositor = {mount,validate,wouldCycle,defaultGraph:freshGraph,nodeTypes:copy(definitions)};
+  window.CinematicumCompositor = {mount,validate,wouldCycle,defaultGraph:freshGraph,nodeTypes:copy(definitions),curveValue};
 })();

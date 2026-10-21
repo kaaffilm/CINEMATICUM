@@ -1,45 +1,11 @@
-# CINEMATICUM Studio
-
-## Complete native editor workspaces
-
-Studio 0.3 adds embedded workspaces for the actual Linux applications: Kdenlive,
-Shotcut, Cinelerra-GG, Natron, Friction, Glaxnimate, and Blender. Their own editing
-interfaces, native project files, plugins bundled by upstream, and render engines
-run in an app-owned Docker Desktop container. Xpra streams the desktop and audio
-into the CINEMATICUM window. The **Assembly** button returns to Studio's existing
-local timeline. These are separately maintained native document models; this
-integration does not translate all seven into one lossless timeline format.
-
-Start Docker Desktop, open Studio, and choose **Install editors** once. The
-installer downloads the exact packages in `full_runtime/engines.json`, checks
-published hashes where available, records a SHA-256 acquisition lock for every
-archive, verifies that lock again before extraction, and builds the local image.
-Source changes reuse the verified package cache. No privileged container or
-Docker socket mount is used. The image and native projects stay on this Mac.
-
-Each project's native documents live in `nativeprojects/PROJECT_ID` inside the
-Studio workspace; the editors see that folder as `/projects/PROJECT_ID`.
-Imported Studio media is available read-only at `/media`. Save completed media
-in `/projects/PROJECT_ID/exports`, then choose **Import exports** to copy and
-validate the results into the Assembly media bin. Native documents remain
-editable in their originating editor. Saving from the Studio header forwards
-the native editor's Save command when its workspace is active.
-
-Closing the Studio window disconnects the viewer and preserves native editor
-processes, including unsaved documents, for reopening. Save and close projects
-inside their editors before stopping Docker Desktop. Studio does not silently
-terminate these documents or another application's containers.
-
-On Apple Silicon this deployment runs Linux x86-64 applications with software
-Mesa graphics and CPU rendering. It does not provide Metal/CUDA passthrough,
-native capture hardware integration, a reference-quality HDR monitor stream,
-or a claim of identical performance to native Mac builds. Friction's selected
-upstream release is a release candidate. The commercial AI providers remain
-unconnected; their names are not reported as installed engines.
+# CINEMATICUM Studio 0.4
 
 A working local audiovisual editor. Media are imported into an owned project,
 edited on a frame-based timeline, previewed, and exported through real render
-engines. No missing shot is replaced with filler. Exporting media has no film
+engines. Timeline, compositor, mixer and 3D authoring are CINEMATICUM controls
+sharing one saved project and undo history. FFmpeg and Blender run as headless
+processing engines; no external editor interface is embedded or launched.
+No missing shot is replaced with filler. Exporting media has no film
 issuance effect.
 
 ## Open it
@@ -96,16 +62,43 @@ updates do not replace that folder. On Linux the default is
    by dropping files into the media bin. Imports are copied and content-hashed.
 2. Double-click a video, image, or audio asset to add it to the timeline. Drag to
    change its start or layer; use the clip edges or Inspector for exact trims.
-3. Put picture layers on V1–V4 and audio on A1–A2. Higher picture layers composite
-   above lower layers. Gaps render black, and audio gaps render silence.
+3. Add picture and audio tracks with **＋ Video** and **＋ Audio**, up to 16 of
+   each. Higher picture layers composite above lower layers. Track mute, solo,
+   lock and gain are shared with the Audio mixer. Gaps render black; audio gaps
+   render silence. Solo is evaluated separately for picture and audio tracks.
 4. Use Color for exposure, contrast, saturation, and temperature. Composite
    provides an editable node graph as well as clip transforms and effects.
    Add titles with position, size, color, duration, and fades.
-5. Source preview is interactive and approximate. Render preview evaluates the
-   complete FFmpeg composition and plays the actual encoded output.
+5. Editor playback is interactive. When paused in Color or Composite, the
+   current frame is rendered by the same graph as export, including unsaved
+   effects. Color scopes measure that rendered display RGB image: histogram,
+   luma waveform and vectorscope. Render preview plays actual encoded output.
 6. Save the project, or export H.264 MP4 or ProRes MOV. Export snapshots retain
    the exact project revision and output SHA-256; editing later does not alter a
    running render.
+
+### Timing, animation and sound
+
+The clip inspector exposes 0.25×–4× speed, reverse of the selected source range,
+clip gain, stereo balance and audio fades. Source in points may be fractional
+project frames; timeline starts and durations remain integer frames. Speed
+changes preserve the selected source range to frame precision. Trim handles
+and split account for speed and reverse. Ripple delete closes a gap on the
+selected track. Track locking prevents direct clip editing.
+
+Source audio waveforms come from decoded 48 kHz stereo PCM with real minimum,
+maximum and RMS samples, cached by source identity. The Audio workspace has
+track names, gain, mute, solo and lock. Export processes pitch-preserving tempo,
+reversed audio, sample-based fades, stereo balance and animated volume. Reverse
+audio and multichannel downmix should be reviewed with rendered playback.
+
+Clip position, scale, rotation, opacity and volume can be keyframed, with linear,
+hold, ease-in, ease-out and smooth ease-in/out interpolation. Each property uses
+its own keys and the base property value at frame zero. Keyframe chips expose
+playhead navigation, outgoing interpolation and deletion. Trims and splits preserve the complete animation and fade envelopes, including
+hidden keys outside the trimmed range. Editing a fade resets its envelope to
+the current clip range. Retiming rescales animation and fade times to integer
+output frames.
 
 Space plays/pauses, S splits the selected clip at the playhead, Delete removes
 the selection, and Cmd/Ctrl-Z and Cmd/Ctrl-S undo and save. Titles use actual
@@ -115,18 +108,24 @@ need FFmpeg's optional `drawtext` filter.
 ## Node compositing
 
 Select a picture clip and open **Composite**. Add and connect grade, blur,
-sharpen, chroma-key, rectangle/ellipse mask, and merge nodes. Connections,
+sharpen, chroma-key, RGB curves, rectangle/ellipse/polygon mask, and merge nodes. Connections,
 parameters, node positions, and the chosen output are saved with the clip.
 The **Masked correction** action creates an editable branch: the original
 picture is merged with a graded, masked version of itself. Masks support
-feathering and inversion; merge inputs are ordered background, foreground.
+feathering, rotation and inversion; polygon points are draggable. RGB curves
+have draggable and numeric points for the master and individual channels,
+using monotone cubic interpolation. Merge supports normal, multiply, screen,
+add and difference, with source-over alpha and ordered background/foreground
+inputs. Each completed curve or polygon gesture creates one undo entry; Escape
+cancels it.
 
 The graph processes that clip's trimmed source before ordinary clip
 transforms, grading, effects, and placement on the timeline. Higher timeline
 layers combine different footage sources. The graph currently branches and
 recombines one clip; it is not a separate multi-source shot composition.
-Render preview evaluates the connected output and plays the resulting file.
-The interactive source viewer does not evaluate graph nodes.
+The paused current-frame renderer evaluates the connected output automatically.
+During interactive playback, use Render preview to review the complete node
+processing in the encoded movie.
 
 Graphs allow up to 32 nodes, one source, and no missing connections or cycles.
 A resource limit bounds canvas pixels multiplied by active graph nodes to
@@ -136,8 +135,12 @@ A resource limit bounds canvas pixels multiplied by active graph nodes to
 
 Open **3D** to author a scene inside Studio. Add cubes, spheres, planes, and
 cylinders; edit object transforms and materials; position lights and the
-render camera; and set pose keyframes. The offline WebGL viewport supports
-orbit, pan, zoom, object selection, camera framing, and animation playback.
+render camera; and set pose keyframes. Direct move/rotate/scale handles support
+axis constraints, snapping, keyboard nudges and Escape cancellation. The
+offline WebGL viewport supports orbit, pan, zoom, object selection, duplication,
+camera framing, and animation playback. Its dope sheet has draggable object,
+camera and light keys with interpolation controls. Camera position/target/FOV
+and light position/target/power/size can all be animated.
 Scene recipes are stored in the same project and participate in undo and save.
 
 **Render scene** builds the authored scene in Blender using Cycles CPU,
@@ -147,7 +150,10 @@ the timeline to edit and composite it with footage, sound, and titles.
 WebGL lighting is an interactive approximation; Blender produces the rendered
 materials, shadows, and lighting. Supported authored scenes contain up to
 96 primitive objects, 16 lights, 128 pose keys per object, and 7,200 frames.
-Transforms use Z-up coordinates and linear XYZ Euler interpolation.
+Transforms use Z-up coordinates and XYZ Euler rotation. Linear, hold, quadratic
+ease-in/out and cubic smooth ease-in/out have matching viewport and render
+evaluation. Saved Blender actions retain these curves; camera lens conversion
+is baked at integer render frames.
 
 ### Existing Blender scenes
 
@@ -228,7 +234,9 @@ by installing or testing Studio.
 
 The editor has concrete bulk actions: monochrome grading, muting clip audio,
 and arranging a track without gaps. The underlying local API supports atomic
-typed recipes with `grade`, `volume`, `sequence`, and `trim` actions. It has no
+typed recipes with `grade`, `volume`, `sequence`, and absolute source-in/output-duration
+`trim` actions. Locked tracks reject automation atomically; volume recipes also
+update animated volume keys. It has no
 shell, `eval`, arbitrary code execution, or claim of a natural-language agent.
 
 A saved project can be rendered from a script without opening the editor:
@@ -250,6 +258,9 @@ foreign browser origins and invalid Host headers. Supported routes:
 | `POST /api/projects/{id}/import?name=...` | Stream a media file into this project |
 | `GET /api/projects/{id}/media/{asset_id}` | Play imported media; byte ranges supported |
 | `POST /api/projects/{id}/render` | Snapshot and queue preview/H.264/ProRes export |
+| `POST /api/projects/{id}/frame-preview` | Render one unsaved timeline frame through the export graph |
+| `GET /api/projects/{id}/previews/{hash}.png` | Read a cached actual rendered frame |
+| `GET /api/projects/{id}/waveform/{asset_id}?bins=512` | Decode source min/max/RMS waveform data |
 | `POST /api/projects/{id}/workflow` | Validate and save API workflow JSON |
 | `GET /api/projects/{id}/generation-readiness` | Inspect workflow and installed node/model compatibility |
 | `POST /api/projects/{id}/generate` | Queue configured ComfyUI generation |
@@ -261,13 +272,16 @@ foreign browser origins and invalid Host headers. Supported routes:
 
 ## Current boundaries
 
-The project stores integer frames with exclusive clip ends and an integer
+The project stores integer timeline frames with exclusive clip ends and an integer
 frame rate from 1 to 60. The rendering workspace is SDR; PQ/HLG material is
 refused until an explicit conversion is available. Practical limits are 512
 assets, 256 clips, 128 titles, six hours, and a maximum canvas area of
-33.5 million pixels. Timeline controls show four video and two audio tracks.
+33.5 million pixels. Timeline controls expose up to 16 video and 16 audio tracks.
+Authoring stills have a 45-second processing limit and a 64-image cache. They
+are evaluated from the timeline start, so long timelines may need an encoded
+preview. Scope values are display-referred SDR RGB, not reference HDR scopes.
 
-This first implementation does not yet provide ACES/OCIO color management,
+This implementation does not yet provide ACES/OCIO color management,
 HDR finishing, fractional project rates, multicam, optical-flow retiming,
 tracking/roto, arbitrary mesh editing, plugin-host compatibility,
 AAF/XML/OTIO project interchange, a full audio workstation, collaborative
@@ -286,6 +300,8 @@ implemented; full feature parity is not claimed.
 ```bash
 make studio-test
 node --check scripts/studio/web/app.js
+node --check scripts/studio/web/editing.js
+node --check scripts/studio/web/viewer-tools.js
 node --check scripts/studio/web/compositor-ui.js
 node --check scripts/studio/web/scene-editor.js
 make qc-stack
@@ -293,8 +309,13 @@ make qc-stack
 
 Tests decode exported frames and audio to check timing, gaps, grading,
 transparency, chroma key, motion, title fades, audio gain, and ProRes output.
-Node tests decode branching, output rewiring, masks, feathering, merge alpha,
-and filtered edges. Scene tests validate recipes and generated Blender source.
+Node tests decode branching, output rewiring, rotated/polygon masks, feathering,
+master/RGB curves, blend modes, merge alpha, and filtered edges. Timeline tests
+measure rendered frames and decoded PCM for retime, reverse, source boundaries,
+rotation, easing, fades, stereo balance, track state and waveform statistics.
+Scene tests compare JavaScript, Python and Blender animation evaluation. Native
+WKWebView acceptance scripts exercise the actual controls and save/export paths;
+`test_scene_motion_blender.py` also reopens and evaluates the retained .blend.
 Adapter tests cover protocol failures, explicit prompt binding, cancellation,
 and compositor file-output controls. API tests cover output admission, upload,
 save/reopen, revision conflicts, byte-range playback, actual export, and
