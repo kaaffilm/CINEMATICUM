@@ -488,7 +488,7 @@
       if(input.dataset.nodeConnection!==undefined){connect(input.value,node.id,Number(input.dataset.nodeConnection));return;}
       const name=input.dataset.nodeParam;if(!name)return;let value=input.type==='checkbox'?input.checked:input.value;
       if(['range','number'].includes(input.type)){if(!Number.isFinite(Number(value))){renderInspector();return;}value=clamp(Number(value),Number(input.min),Number(input.max));}
-      const next=copy(graph),target=next.nodes.find(n=>n.id===node.id);if(writeParameter(target,name,value))commit(next);else renderInspector();
+      const next=copy(graph),target=next.nodes.find(n=>n.id===node.id);if(!writeParameter(target,name,value)||!commit(next))renderInspector();
     }
     function inspectorClick(event) {
       const keyed=event.target.closest('[data-node-key]');if(keyed){toggleKey(keyed.dataset.nodeKey);return;}

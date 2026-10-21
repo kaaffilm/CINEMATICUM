@@ -468,14 +468,23 @@ def _filter_path(path):
     return "".join("\\" + c if c in "\\'[],;" else c for c in first)
 
 
-def compile_pipeline(value, project_dir, temp_dir, prefix="color"):
+def compile_pipeline(value, project_dir, temp_dir, prefix="color", *, input_unorm16=False):
     """Return trusted FFmpeg filters; the parent owns subsequent SDR conversion.
 
     GEQ uses planar float RGBA and explicitly copies alpha. Its output retains
     negative/highlight values until later effects or the SDR renderer clamp.
     Lut filters receive normalized coordinates and a unit-domain table, because
     FFmpeg's native Cube reader does not fully implement nonzero domains.
+
+    input_unorm16 is a trusted renderer fact, never a project setting. The
+    renderer may set it for its admitted 16-bit imaging display PNG. With only
+    the sRGB -> Rec.709 encoding change, lutrgb precomputes 65,536 entries per
+    component once instead of executing the general GEQ expression at every
+    full-resolution pixel. Each result is rounded to its nearest UNORM16 code;
+    alpha is copied exactly. All other transforms keep the float path.
     """
+    if not isinstance(input_unorm16, bool):
+        raise ValueError("Integer input capability must be a trusted boolean")
     p = validate_pipeline(value, project_dir)
     if p is None or not p["enabled"]:
         return []
@@ -484,6 +493,13 @@ def compile_pipeline(value, project_dir, temp_dir, prefix="color"):
     conversion = p["input_transfer"] != "rec709" or p["input_primaries"] != "rec709" or p["source_white"] != p["target_white"]
     if not conversion and p["lut"] is None:
         return []
+    if (input_unorm16 and p["input_transfer"] == "srgb" and p["input_primaries"] == "rec709"
+            and p["source_white"] == list(WHITEPOINTS["D65"])
+            and p["target_white"] == list(WHITEPOINTS["D65"]) and p["lut"] is None):
+        expression = ("st(0,val/65535);st(1,if(lte(ld(0),0.04045),ld(0)/12.92,"
+                      "pow((ld(0)+0.055)/1.055,2.4)));floor(65535*if(lt(ld(1),0.018),"
+                      "4.5*ld(1),1.099*pow(ld(1),0.45)-0.099)+0.5)")
+        return ["format=rgba64le", "lutrgb=" + ":".join(c + "='" + expression + "'" for c in "rgb") + ":a='val'"]
     filters = ["format=gbrapf32le"]
     if conversion:
         matrix = input_matrix(p)

@@ -40,6 +40,8 @@ return await (async()=>{
     click('[data-node-action="lens-reset"]');checkCoefficients(true);click('#undo-button');checkCoefficients();
     click('#redo-button');checkCoefficients(true);click('#undo-button');checkCoefficients();
     set('[data-node-param="k1"]',1);checkCoefficients();
+    require(!$('#redo-button').disabled,'Rejected calibration edit discarded the existing redo entry');
+    click('#redo-button');checkCoefficients(true);click('#undo-button');checkCoefficients();
     require(!all('[data-node-key]').length,'Static calibration exposes unsupported animation controls');
     steps.push('visible_lens_controls_camera_intrinsics_validation_and_single_undo_redo');
     for(let i=0;i<6;i++)click('#step-forward');

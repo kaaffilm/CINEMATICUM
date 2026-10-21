@@ -125,7 +125,24 @@ def probe_media(path):
     if image and not video:
         raise ValueError("The image has no decodable picture stream.")
     primary = video if videos else audios[0]
-    duration_values = [primary.get("duration")]
+
+    def tick_duration(stream):
+        # FFprobe's decimal duration is rounded (80/24 becomes 3.333333).
+        # Preserve AVStream's integer duration in its rational time base before
+        # converting once to seconds, so a real last frame remains available.
+        ticks, base = stream.get("duration_ts"), stream.get("time_base")
+        if isinstance(ticks, str) and re.fullmatch(r"[0-9]{1,19}", ticks):
+            ticks = int(ticks)
+        if isinstance(ticks, bool) or not isinstance(ticks, int) or not 0 < ticks < 2 ** 63:
+            return None
+        if not isinstance(base, str) or not re.fullmatch(r"[1-9][0-9]{0,9}/[1-9][0-9]{0,9}", base):
+            return None
+        numerator, denominator = map(int, base.split("/"))
+        if numerator >= 2 ** 31 or denominator >= 2 ** 31:
+            return None
+        return float(Fraction(ticks * numerator, denominator))
+
+    duration_values = [tick_duration(primary), primary.get("duration")]
     # Matroska commonly puts stream duration in a DURATION tag instead.
     tag_duration = primary.get("tags", {}).get("DURATION", "")
     if isinstance(tag_duration, str) and re.fullmatch(r"\d+:\d+:\d+(\.\d+)?", tag_duration):
@@ -143,7 +160,7 @@ def probe_media(path):
             pass
     audio_duration = 0.0
     if audios:
-        audio_values = [audios[0].get("duration")]
+        audio_values = [tick_duration(audios[0]), audios[0].get("duration")]
         audio_tag = audios[0].get("tags", {}).get("DURATION", "")
         if isinstance(audio_tag, str) and re.fullmatch(r"\d+:\d+:\d+(\.\d+)?", audio_tag):
             hours, minutes, seconds = audio_tag.split(":")
@@ -565,6 +582,12 @@ def _graph(project, project_dir, temp_dir, cancel_event=None):
     input_count = 0
     prepared_lenses = {}
 
+    def developed_display(asset):
+        provenance = asset.get("provenance")
+        return (asset.get("kind") == "image" and Path(asset.get("path", "")).suffix.lower() == ".png"
+                and isinstance(provenance, dict) and provenance.get("type") == "cinematicum-imaging"
+                and provenance.get("version") == 1 and provenance.get("display_encoding") == "sRGB")
+
     def add_input(asset):
         nonlocal input_count
         source = _media_path(project_dir, asset["path"])
@@ -592,7 +615,7 @@ def _graph(project, project_dir, temp_dir, cancel_event=None):
                 # Decode/white-balance/gamut conversion and creative LUTs feed
                 # both the compositor and the direct clip path identically.
                 timing += compile_pipeline(clip["color_pipeline"], project_dir, temp_dir,
-                                           prefix="color%d" % index)
+                                           prefix="color%d" % index, input_unorm16=developed_display(asset))
             chain = timing + [f"scale=w='max(2,trunc({_decimal(base_w)}*({scale})/2)*2)':h='max(2,trunc({_decimal(base_h)}*({scale})/2)*2)':eval=frame:flags=lanczos", "setsar=1"]
             stream = f"{input_index}:{asset['video_stream_index']}"
             if clip.get("compositor") is not None:
@@ -610,15 +633,13 @@ def _graph(project, project_dir, temp_dir, cancel_event=None):
                     label = f"compositor{index}media{ordinal}"
                     external_labels[node["id"]] = label
                     external_color = []
-                    provenance = external_asset.get("provenance")
-                    if (isinstance(provenance, dict) and provenance.get("type") == "cinematicum-imaging"
-                            and provenance.get("version") == 1 and provenance.get("display_encoding") == "sRGB"):
+                    if developed_display(external_asset):
                         # The display view is already baked into Develop's PNG.
                         # Match a new direct clip's transfer conversion without
                         # applying another OCIO view or scene tone mapping.
                         external_color = compile_pipeline(
                             {"version": 1, "enabled": True, "input_transfer": "srgb", "input_primaries": "rec709"},
-                            project_dir, temp_dir, prefix=f"externalcolor{index}_{ordinal}")
+                            project_dir, temp_dir, prefix=f"externalcolor{index}_{ordinal}", input_unorm16=True)
                     # Each node has an independent project-rate source clock.
                     # Preserve zero-origin frame numbers before the DAG trims
                     # its selected range and applies domain offsets/padding.

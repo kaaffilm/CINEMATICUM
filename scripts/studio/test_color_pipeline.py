@@ -1,5 +1,6 @@
 """Measured float-pixel acceptance tests; all pixels are synthetic test signals."""
 import copy
+import array
 import hashlib
 import math
 from pathlib import Path
@@ -236,6 +237,57 @@ class FloatRenderTests(unittest.TestCase):
         want = 1.099 * 0.21404114048223255 ** 0.45 - 0.099
         self.assert_pixels(self.render([(0.5, 0.5, 0.5, 0.8), (0, 0, 0, 1)], pipeline(input_transfer="srgb")),
                            [(want, want, want, 0.8), (0, 0, 0, 1)])
+
+    def test_integer_display_fast_path_measures_every_16bit_level_and_exact_alpha(self):
+        # Every channel independently covers all 65,536 input codes. The
+        # permutation prevents a component-order bug from passing as gray.
+        import sys
+        pixels = array.array("H")
+        for code in range(65536):
+            pixels.extend((code, (31 * code) % 65536, 65535 - code, code))
+        if sys.byteorder != "little":
+            pixels.byteswap()
+        filters = compile_pipeline(pipeline(input_transfer="srgb"), self.root, self.root, input_unorm16=True)
+        result = subprocess.run([shutil.which("ffmpeg"), "-v", "error", "-nostdin", "-threads", "1", "-filter_threads", "1",
+                                 "-f", "rawvideo", "-pix_fmt", "rgba64le", "-s", "256x256", "-i", "pipe:0",
+                                 "-vf", ",".join(filters), "-frames:v", "1", "-f", "rawvideo", "-pix_fmt", "rgba64le",
+                                 "-threads", "1", "pipe:1"], input=pixels.tobytes(), capture_output=True, check=True, timeout=10)
+        measured = array.array("H")
+        measured.frombytes(result.stdout)
+        if sys.byteorder != "little":
+            measured.byteswap()
+        self.assertEqual(len(measured), 4 * 65536)
+        # Independent piecewise IEC sRGB inverse and BT.709 OETF; no production
+        # color evaluator or filter-expression generator supplies this oracle.
+        reference = []
+        for code in range(65536):
+            encoded = code / 65535
+            linear = encoded / 12.92 if encoded <= .04045 else ((encoded + .055) / 1.055) ** 2.4
+            reference.append(65535 * (4.5 * linear if linear < .018 else 1.099 * linear ** .45 - .099))
+        largest_error = 0
+        for code in range(65536):
+            self.assertEqual(measured[code * 4 + 3], code)
+            for channel, source in enumerate((code, (31 * code) % 65536, 65535 - code)):
+                largest_error = max(largest_error, abs(measured[code * 4 + channel] - reference[source]))
+        self.assertLessEqual(largest_error, .50000001, "Lookup error exceeds half one UNORM16 code")
+
+    def test_integer_fast_path_never_replaces_general_float_or_creative_transforms(self):
+        srgb = pipeline(input_transfer="srgb")
+        self.assertEqual(compile_pipeline(srgb, self.root, self.root)[0], "format=gbrapf32le")
+        descriptor = import_cube("LUT_1D_SIZE 2\n-1 2 3\n4 5 6", self.root)
+        for changes in ({"input_transfer": "linear"}, {"input_transfer": "logc3_ei800"},
+                        {"input_primaries": "acescg"}, {"source_white": list(WHITEPOINTS["D50"])},
+                        {"target_white": list(WHITEPOINTS["D50"])},
+                        {"lut": {"sha256": descriptor["sha256"], "interpolation": "linear"}}):
+            with self.subTest(changes=changes):
+                self.assertEqual(compile_pipeline({**srgb, **changes}, self.root, self.root, input_unorm16=True)[0],
+                                 "format=gbrapf32le")
+        # The default sRGB float route still preserves out-of-integer-range data.
+        values = [(-.1, .5, 1.5, .25), (1.5, -.1, .5, .75)]
+        rendered = self.render(values, srgb)
+        self.assertLess(rendered[0][0], 0)
+        self.assertGreater(rendered[0][2], 1)
+        self.assert_pixels(rendered, [transform_rgb(p[:3], srgb) + (p[3],) for p in values])
 
     def test_actual_awg_logc3_middle_gray_and_acescg_white(self):
         p = pipeline(input_transfer="logc3_ei800", input_primaries="arri_wide_gamut3")

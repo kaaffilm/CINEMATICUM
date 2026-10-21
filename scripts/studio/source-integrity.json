@@ -44,8 +44,8 @@
     },
     {
       "path": "scripts/studio/color_pipeline.py",
-      "size": 24303,
-      "sha256": "32cc1a6706835cd742af8f6782a5371c3347ee39c2859d6d506959dba9a75e02"
+      "size": 25500,
+      "sha256": "19bb78522cba28a7a13f091ffc974fba01e5b0b27406f7591e538091ea4c6b3d"
     },
     {
       "path": "scripts/studio/compositor.py",
@@ -54,8 +54,8 @@
     },
     {
       "path": "scripts/studio/engine.py",
-      "size": 56918,
-      "sha256": "42b8dd78891602afa639fb9df72e09fa788102c50587c2f78c225af6771008f8"
+      "size": 58075,
+      "sha256": "02978983d2f521172ceaf08eb1a8f09a98df8a8ea1c0264ae8730c612a967d49"
     },
     {
       "path": "scripts/studio/frame_preview.py",
@@ -134,8 +134,8 @@
     },
     {
       "path": "scripts/studio/macos/LensSmoke.js",
-      "size": 6840,
-      "sha256": "239068f986742eaa2d1cf1279956fa0abc981f000e5182cf227d5c586af930a1"
+      "size": 7037,
+      "sha256": "db295fda86ead2328c079f4ba7d94210cfdd584d41764d6632523a2cbbc2abb1"
     },
     {
       "path": "scripts/studio/macos/MeshImportSmoke.js",
@@ -204,8 +204,8 @@
     },
     {
       "path": "scripts/studio/research/color-science.md",
-      "size": 40320,
-      "sha256": "0a2e97651a3952a5b8aa1566aefbf8091e5b0081f5f5fd7045b9d855c3a69438"
+      "size": 42912,
+      "sha256": "6a3bc07ea95f4b21610506375b2cf4c46ccc41bc61c9b269536cf2809240c3c2"
     },
     {
       "path": "scripts/studio/research/compositing-motion.md",
@@ -269,8 +269,8 @@
     },
     {
       "path": "scripts/studio/test_color_pipeline.py",
-      "size": 15912,
-      "sha256": "184a9b83472ca47e827f0dfce11df8c6495e8e1ec3c030579a2aadb400b95697"
+      "size": 19299,
+      "sha256": "f463534429d79d1133016aeee4e9e8090456b621c6bbf06d851f0c40504f3d23"
     },
     {
       "path": "scripts/studio/test_color_pipeline_ui_macos.py",
@@ -386,6 +386,11 @@
       "path": "scripts/studio/test_physical_scene_ui_macos.py",
       "size": 5856,
       "sha256": "4aa377dd1585263dcfbbcddb543036d7b36e9f5f76985aef6704c84d7958e45c"
+    },
+    {
+      "path": "scripts/studio/test_probe_timing.py",
+      "size": 6176,
+      "sha256": "3cc3504161fb64445b03e61d2f63add50d2edce45d30b487900750b6bc327e2b"
     },
     {
       "path": "scripts/studio/test_scene.py",
@@ -504,8 +509,8 @@
     },
     {
       "path": "scripts/studio/web/compositor-ui.js",
-      "size": 70453,
-      "sha256": "05cee5ccd9dc0a7d56df520c8b3564e80eddad8529df537669562d42e9261b8f"
+      "size": 70451,
+      "sha256": "5591311e3595eee6bdf065960d800b9ab3bccfdd9d466609184ef6366a62d31e"
     },
     {
       "path": "scripts/studio/web/editing.js",
