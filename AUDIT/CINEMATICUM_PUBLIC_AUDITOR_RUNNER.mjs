@@ -85,36 +85,6 @@ function requireEqual(actual, expected, label, errors) {
   if (actual !== expected) errors.push(`${label}: expected ${expected}; got ${actual}`);
 }
 
-function getJson(url) {
-  const body = execFileSync(process.execPath, ["-e", `
-    const https = require("https");
-    const url = ${JSON.stringify(url)};
-    function fetch(u, n = 0) {
-      https.get(u, {
-        headers: {
-          "User-Agent": "cinematicum-public-auditor-runner",
-          "Accept": "application/vnd.github+json"
-        }
-      }, res => {
-        if ([301,302,303,307,308].includes(res.statusCode)) return fetch(res.headers.location, n + 1);
-        if (res.statusCode < 200 || res.statusCode >= 300) {
-          console.error("HTTP " + res.statusCode + " " + u);
-          process.exit(2);
-        }
-        let data = "";
-        res.setEncoding("utf8");
-        res.on("data", c => data += c);
-        res.on("end", () => process.stdout.write(data));
-      }).on("error", e => {
-        console.error(String(e.stack || e));
-        process.exit(2);
-      });
-    }
-    fetch(url);
-  `], { encoding: "utf8" });
-  return JSON.parse(body);
-}
-
 function download(url, dest) {
   execFileSync(process.execPath, ["-e", `
     const https = require("https");
@@ -146,10 +116,10 @@ function download(url, dest) {
 }
 
 function releaseAssetUrl(tag, name) {
-  const release = getJson(`https://api.github.com/repos/${repo}/releases/tags/${tag}`);
-  const asset = release.assets.find(a => a.name === name);
-  if (!asset) throw new Error(`asset not found on ${tag}: ${name}`);
-  return asset.browser_download_url;
+  // Tags, names and expected content hashes are pinned above. Use the public
+  // download endpoint directly; anonymous API discovery adds a separate rate
+  // limit without strengthening any of the byte, artifact or replay checks.
+  return `https://github.com/${repo}/releases/download/${encodeURIComponent(tag)}/${encodeURIComponent(name)}`;
 }
 
 function findFile(root, basename) {
