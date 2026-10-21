@@ -244,9 +244,9 @@ class LensMapWorkerTests(unittest.TestCase):
                         if expected is None:
                             self.assertEqual([maps[name][y][x][0] for name in LENS_MAP_NAMES[:4]],[65535]*4)
                         else:
-                            for name in ("wx","wy"): self.assertEqual(len(set(maps[name][y][x])),1)
-                            actual=(maps["x0"][y][x][0]+maps["wx"][y][x][0]/65535,
-                                    maps["y0"][y][x][0]+maps["wy"][y][x][0]/65535)
+                            for name in ("wx","wy"): self.assertEqual(maps[name][y][x][:3],(65535,65535,65535))
+                            actual=(maps["x0"][y][x][0]+maps["wx"][y][x][3]/65535,
+                                    maps["y0"][y][x][0]+maps["wy"][y][x][3]/65535)
                             self.assertLessEqual(abs(actual[0]-expected[0]),.5001/65535)
                             self.assertLessEqual(abs(actual[1]-expected[1]),.5001/65535)
 

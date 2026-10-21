@@ -49,8 +49,8 @@
     },
     {
       "path": "scripts/studio/compositor.py",
-      "size": 58093,
-      "sha256": "2ed872ed1bf9c78dfd11c4d00dcf706aa5d163fd7fcba717bffacd811f7e95dd"
+      "size": 58799,
+      "sha256": "dbbb7a236338d2d78dc3d628095737108114716de3a604604e1f8e7f5354d4b0"
     },
     {
       "path": "scripts/studio/engine.py",
@@ -59,8 +59,8 @@
     },
     {
       "path": "scripts/studio/frame_preview.py",
-      "size": 4625,
-      "sha256": "1eea98691d52dfa36aabbc41fa058770195a1149c007addf3a8a5aa882c45905"
+      "size": 4626,
+      "sha256": "e7c0c57d790da834693ee509fa8a83691dd4ddc5bb4866aaf5cc6463b64edf01"
     },
     {
       "path": "scripts/studio/generation_readiness.py",
@@ -209,8 +209,8 @@
     },
     {
       "path": "scripts/studio/research/compositing-motion.md",
-      "size": 20457,
-      "sha256": "3ad05c94e32e2803f555a137f4f720ec74bd25d460aebd834839227488b417da"
+      "size": 21563,
+      "sha256": "e2f6317cad1efbc40ce3120e1c00f6f30ba63fe19fc4c11dbd03ecdc94924424"
     },
     {
       "path": "scripts/studio/research/editorial.md",
@@ -349,13 +349,13 @@
     },
     {
       "path": "scripts/studio/test_lens_compositor.py",
-      "size": 22805,
-      "sha256": "eee8e9a2c4e0415b6533c3d3bee6d9b35f12a62c23fac794fce0db125b4ec6ea"
+      "size": 22817,
+      "sha256": "87649582a07695a58231a3e2e5b41c31c257a41732f82c6cd95b444fb223686d"
     },
     {
       "path": "scripts/studio/test_lens_ui_macos.py",
-      "size": 11185,
-      "sha256": "15c1374d7f94a72cb5b7988e5cff77426777a852cdbe5eff07d12226bdc3c6c1"
+      "size": 13138,
+      "sha256": "d388cb6890ed90c5622f2b891e842869211660ad83b832dffe71cdf91b1337a4"
     },
     {
       "path": "scripts/studio/test_mesh_import_ui_macos.py",

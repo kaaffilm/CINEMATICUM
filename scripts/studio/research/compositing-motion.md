@@ -96,6 +96,7 @@ footage or reproduce a calibrated distortion in a connected image branch.
 | [FFmpeg vf_remap.c](https://github.com/FFmpeg/FFmpeg/blob/58892c922e348b3010803d2dcaac74f79565633e/libavfilter/vf_remap.c) | Commit `58892c922e348b3010803d2dcaac74f79565633e`; blob `de83bb467166d1c0e24d2287cd3dacb84f86e4e5` | Integer-coordinate 16-bit maps, out-of-bounds fill, and supported high-depth alpha formats. A single remap does not provide the fractional sampling required here. |
 | [FFmpeg vf_maskedmerge.c](https://github.com/FFmpeg/FFmpeg/blob/58892c922e348b3010803d2dcaac74f79565633e/libavfilter/vf_maskedmerge.c) | Same commit; blob `299c05c1ba4b52f8bd2bd9fb1952f81717fa9bb9` | Per-plane weighted mixing, including supported 16-bit RGBA planes. This enables fractional interpolation after selecting the four source corners. |
 | [FFmpeg vf_geq.c](https://github.com/FFmpeg/FFmpeg/blob/58892c922e348b3010803d2dcaac74f79565633e/libavfilter/vf_geq.c) | Same commit; blob `fc3dd6740ef6a4618c4195b5672995f48da1c8a2` | Pixel lookup, bilinear boundaries and expression evaluation. An initial per-frame expression implementation was rejected after measured cost proved unsuitable for video. |
+| [FFmpeg vf_premultiply.c](https://github.com/FFmpeg/FFmpeg/blob/58892c922e348b3010803d2dcaac74f79565633e/libavfilter/vf_premultiply.c) and [formats.c](https://github.com/FFmpeg/FFmpeg/blob/58892c922e348b3010803d2dcaac74f79565633e/libavfilter/formats.c) | Same commit; blobs `1cea3cab7f4a7e90bbb8c8ed5aa68eddbd1e0256` and `2994cdaa8978c0546687e4f0e825c11c159aeb1c` | Explicit straight/premultiplied alpha metadata, common alpha-mode negotiation across filter inputs, and automatically inserted alpha conversion. Numeric interpolation masks must use a representation consistent with that metadata. |
 
 ### Calibration and image conventions
 
@@ -165,14 +166,21 @@ same algorithm with NumPy over 32-row strips; NumPy is not imported by the
 Studio server.
 
 The worker emits exactly six 16-bit PNGs: floor/ceiling X and Y coordinate
-maps, plus horizontal and vertical fractional weight maps. Coordinates are
+maps, plus horizontal and vertical fractional weight maps. The weight PNGs
+store white RGB and the fraction in alpha. Coordinates are
 not rounded to a nearest pixel. The two fractions are rounded to units of
 1/65535, so each coordinate's fractional quantization error is at most
 0.5/65535 pixel. The engine checks the request digest, fixed filenames, PNG
 dimensions/depth, byte counts and SHA-256 digests before accepting these maps.
 
 Each PNG is decoded once and its frame is repeated for the clip's exact
-duration. Four remaps sample the source corners in premultiplied 16-bit RGBA.
+duration. The two weight streams are explicitly premultiplied once, producing
+the numeric fraction in every plane with premultiplied alpha metadata.
+Encoding the same fraction in straight RGB and alpha would let newer FFmpeg
+versions automatically multiply the RGB weight a second time. Native FFmpeg
+8.1.1 direct-pixel tests exposed that version-dependent error, independently
+of WebKit; the representation was corrected without relaxing the pixel oracle.
+Four remaps sample the source corners in premultiplied 16-bit RGBA.
 Two horizontal weighted merges and one vertical weighted merge interpolate
 all four channels identically. The result is unpremultiplied before returning
 to the existing SDR graph. This avoids hidden color bleeding from transparent

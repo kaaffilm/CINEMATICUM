@@ -503,7 +503,7 @@ def lens_map_request(params, width, height):
 
 
 class _LensPNG:
-    """Small streaming PNG writer: 16-bit grayscale or four equal RGBA planes.
+    """Small streaming PNG writer: 16-bit grayscale or RGBA numeric maps.
 
     These are numeric maps, not display pictures. No color profile/gamma,
     metadata or arbitrary chunks are emitted. Deflate is dependency-free.
@@ -542,13 +542,13 @@ def _lens_rows_python(params, width, height):
             point = sample(x, y)
             if point is None:
                 for name in LENS_MAP_NAMES[:4]: rows[name].append(65535)
-                rows["wx"].extend((0,) * 4); rows["wy"].extend((0,) * 4)
+                rows["wx"].extend((65535,65535,65535,0)); rows["wy"].extend((65535,65535,65535,0))
             else:
                 u, v = point; x0, y0 = math.floor(u), math.floor(v)
                 rows["x0"].append(x0); rows["x1"].append(min(x0 + 1, width - 1))
                 rows["y0"].append(y0); rows["y1"].append(min(y0 + 1, height - 1))
-                rows["wx"].extend((round((u - x0) * 65535),) * 4)
-                rows["wy"].extend((round((v - y0) * 65535),) * 4)
+                rows["wx"].extend((65535,65535,65535,round((u - x0) * 65535)))
+                rows["wy"].extend((65535,65535,65535,round((v - y0) * 65535)))
         if sys.byteorder != "big":
             for row in rows.values(): row.byteswap()
         yield {name: b"\0" + row.tobytes() for name, row in rows.items()}
@@ -595,7 +595,9 @@ def _lens_rows_numpy(params, width, height, np):
         result = {}
         for name, values in arrays.items():
             if name in {"wx", "wy"}:
-                values = np.repeat(np.where(valid, values, 0)[:, :, None], 4, axis=2)
+                fraction = np.where(valid, values, 0)
+                values = np.full((rows, width, 4), 65535, dtype=np.uint16)
+                values[:, :, 3] = fraction
             else:
                 values = np.where(valid, values, 65535)
             raw = values.astype(">u2").tobytes()
@@ -773,8 +775,10 @@ def compile_graph(graph, input_label, prefix, *, fps=24, frame_offset=0,
     of the independent animation domain, including transparent/held gaps.
     Nonzero lens nodes require six already-decoded static map streams from the
     owned map worker, repeated by the engine for exactly frame_count frames.
-    Coordinate maps are gray16 and weights carry the same 16-bit weight in
-    RGBA. Neither graph parameters nor node IDs can supply executable input.
+    Coordinate maps are gray16. Weight PNGs contain white RGB and the 16-bit
+    fraction in alpha; explicit premultiplication makes all planes numeric
+    weights with the same alpha-mode metadata as the source branches.
+    Neither graph parameters nor node IDs can supply executable input.
     """
     valid_label = lambda value: isinstance(value, str) and re.fullmatch(r"[A-Za-z][A-Za-z0-9_]*", value)
     if not valid_label(prefix) or not valid_label(input_label):
@@ -875,8 +879,13 @@ def compile_graph(graph, input_label, prefix, *, fps=24, frame_offset=0,
                                + "".join(f"[{output}s{corner}]" for corner in ("00", "10", "01", "11")))
                 for name in LENS_MAP_NAMES[:4]:
                     filters.append(f"[{lens_labels[ident][name]}]format=gray16le,split=2[{output}{name}a][{output}{name}b]")
-                filters.append(f"[{lens_labels[ident]['wx']}]format=gbrap16le,split=2[{output}wxa][{output}wxb]")
-                filters.append(f"[{lens_labels[ident]['wy']}]format=gbrap16le[{output}wyy]")
+                # FFmpeg 8 negotiates alpha modes across maskedmerge inputs.
+                # Numeric weights stored as straight RGBA=(w,w,w,w) would be
+                # auto-premultiplied into RGB=w². Store white+fractional alpha,
+                # then explicitly premultiply once so values and metadata
+                # agree with the premultiplied picture branches on all builds.
+                filters.append(f"[{lens_labels[ident]['wx']}]format=gbrap16le,premultiply=inplace=1,split=2[{output}wxa][{output}wxb]")
+                filters.append(f"[{lens_labels[ident]['wy']}]format=gbrap16le,premultiply=inplace=1[{output}wyy]")
                 for corner, xmap, ymap in (("00", "x0a", "y0a"), ("10", "x1a", "y0b"),
                                            ("01", "x0b", "y1a"), ("11", "x1b", "y1b")):
                     filters.append(f"[{output}s{corner}][{output}{xmap}][{output}{ymap}]remap=fill=black@0[{output}c{corner}]")

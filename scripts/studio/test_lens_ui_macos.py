@@ -21,6 +21,8 @@ import time
 from urllib.parse import urlsplit
 
 from engine import probe_media
+from frame_preview import preview_identity
+import server as server_module
 from scene import default_scene,validate_scene
 from server import Server,Store
 from test_editing_ui_macos import read_helper_result
@@ -47,6 +49,15 @@ def run(binary,output):
                               check=True,capture_output=True,timeout=budget(3)).stdout
     with tempfile.TemporaryDirectory(prefix="cinematicum-lens-webkit-TEST-") as temporary:
         scratch=Path(temporary);store=server=thread=None
+        original_frame_renderer=server_module.render_frame
+        frame_requests={}
+        def recorded_frame_renderer(project,project_dir,frame,output_path,*args,**kwargs):
+            # Observe the exact production call, without replacing its result
+            # or taking a second snapshot from potentially newer UI state.
+            frame_requests[Path(output_path).stem]={"project":copy.deepcopy(project),"frame":frame,
+                                                   "identity":preview_identity(project,frame)}
+            return original_frame_renderer(project,project_dir,frame,output_path,*args,**kwargs)
+        server_module.render_frame=recorded_frame_renderer
         try:
             if not shutil.which("ffmpeg") or not shutil.which("ffprobe"):
                 raise RuntimeError("FFmpeg and ffprobe are required for actual calibrated pixel acceptance.")
@@ -92,6 +103,7 @@ def run(binary,output):
             checks["original_camera_and_settings_preserved"]=saved["settings"].get("scene")==spec and saved["settings"].get("engine_test_sentinel")=="preserved"
             checks["one_owned_source_no_unrequested_assets"]=len(saved["assets"])==1 and not saved.get("titles")
             with store.lock:jobs=copy.deepcopy([job for job in store.jobs.values() if job["project_id"]==project["id"]])
+            (output/"ENGINE_TEST_frame_requests.json").write_text(json.dumps(frame_requests,indent=2),encoding="utf-8")
             pictures={};size=WIDTH*HEIGHT*3
             for direction in ("undistort","distort"):
                 requested=ui.get(direction+"_frame",{})
@@ -99,6 +111,14 @@ def run(binary,output):
                 checks[direction+"_is_actual_frame6_job"]=bool(found) and requested.get("frame")==6
                 if found:
                     receipt=found[-1]["result"];picture=directory/"previews"/Path(urlsplit(receipt["url"]).path).name
+                    request=frame_requests.get(picture.stem,{})
+                    request_clips=request.get("project",{}).get("clips",[])
+                    request_nodes=request_clips[0].get("compositor",{}).get("nodes",[]) if len(request_clips)==1 else []
+                    request_lens=next((item for item in request_nodes if item.get("id")==ui.get("lens_id")),{})
+                    expected_params=dict(params,direction=direction);request_params=request_lens.get("params",{})
+                    checks[direction+"_snapshot_identity_is_actual_render_call"]=request.get("frame")==6 and request.get("identity")==picture.stem
+                    checks[direction+"_snapshot_has_expected_calibration"]=set(request_params)==set(expected_params) and all(request_params.get(key)==value if isinstance(value,str) else math.isclose(request_params.get(key,math.inf),value,abs_tol=1e-13,rel_tol=0) for key,value in expected_params.items())
+                    result[direction+"_snapshot_calibration"]=request_params
                     checks[direction+"_preview_receipt_verified"]=picture.read_bytes().startswith(PNG_SIGNATURE) and hashlib.sha256(picture.read_bytes()).hexdigest()==receipt.get("sha256") and receipt.get("pipeline")=="timeline-export-graph"
                     pictures[direction]=decode(picture);shutil.copy2(picture,output/("ENGINE_TEST_"+direction+"_frame6.png"))
                     errors=[]
@@ -133,6 +153,7 @@ def run(binary,output):
             if server is not None:server.shutdown();server.server_close()
             if thread is not None:thread.join(timeout=.2)
             if store is not None:store.shutdown()
+            server_module.render_frame=original_frame_renderer
     result["elapsed_seconds"]=round(time.monotonic()-started,3)
     checks["bounded_whole_run"]=result["elapsed_seconds"]<18.5
     result["passed"]=bool(checks) and all(checks.values()) and "error" not in result
