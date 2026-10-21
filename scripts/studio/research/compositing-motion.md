@@ -212,7 +212,7 @@ The engine's worker timeout is 90 seconds and cancellation is propagated
 during preparation. Full-resolution previews may wait for map preparation;
 the UI therefore does not claim realtime calibrated processing.
 
-`test_lens_compositor.py` passes 13 tests, including more than 1,200
+`test_lens_compositor.py` includes 14 tests, including more than 1,200
 independent forward/Newton inverse point comparisons; every map sample in
 two small images against a separate Newton solver; exact NumPy/standard
 Python map equality; strict JSON, bounds, exclusive output files and PNG
@@ -227,6 +227,23 @@ media and a lens, verifies single preparation of shared calibration maps,
 exact retained paused PNGs, every exported frame, the deliberately empty
 timeline gap, both independent media contributions, and paused/export
 consistency. The earlier 45 compositor and multi-source tests also pass.
+
+The high-frequency moving-alpha native fixture also exposed a misleading
+delivery assertion: its paused RGB frame and decoded H.264 frame differed
+by a mean 5.11294 levels on FFmpeg 8.1.1, while the independent calibrated
+pixel oracle passed. Merely encoding that same paused PNG with the delivery
+settings already produced a mean 4.03442-level difference. A repeated still
+is not a full codec control because it changes temporal compression. The
+acceptance now materializes the complete lossless RGB sequence, requires
+its sixth frame to equal the paused RGB bytes exactly, independently encodes
+the complete sequence with the delivery settings, and requires every decoded
+export byte to equal that separate codec control. The original RGB error
+and both pairs of SHA-256 digests remain in the report. The numerical lens
+oracle is unchanged. Local isolation also verified that raw YUV 4:2:0 emitted
+directly by the graph exactly equals a separate BT.709 conversion of that
+lossless RGB sequence, ruling out upstream format negotiation for this
+fixture. This replaces an ambiguous compressed-versus-uncompressed threshold
+with stricter, separate picture and codec assertions.
 
 `macos/LensSmoke.js` and `test_lens_ui_macos.py` form a separate native gate:
 they operate shipped controls, check camera-intrinsic copying, invalid-fold

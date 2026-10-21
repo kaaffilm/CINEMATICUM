@@ -26,7 +26,7 @@ import server as server_module
 from scene import default_scene,validate_scene
 from server import Server,Store
 from test_editing_ui_macos import read_helper_result
-from test_lens_compositor import BASE,WIDTH,HEIGHT,FPS,fixture,expected_pixel
+from test_lens_compositor import BASE,WIDTH,HEIGHT,FPS,fixture,expected_pixel,render_delivery_control
 
 
 HERE=Path(__file__).resolve().parent
@@ -140,7 +140,23 @@ def run(binary,output):
                 pixels=decode(movie);checks["every_movie_frame_decodes"]=len(pixels)==FRAMES*size
                 if "distort" in pictures and len(pixels)==FRAMES*size:
                     error=sum(abs(a-b) for a,b in zip(pictures["distort"],pixels[6*size:7*size]))/size
-                    result["paused_export_mean_rgb_error"]=error;checks["paused_calibration_matches_export"]=error<4
+                    result["paused_export_mean_rgb_error"]=error
+                    # Lossy 4:2:0 delivery of this moving, high-frequency alpha
+                    # fixture exceeds four RGB levels even when encoding the
+                    # exact same pixels. Prove the boundary in two strict steps
+                    # instead of increasing that ambiguous error threshold.
+                    control_dir=scratch/"delivery-control";control_dir.mkdir()
+                    lossless,control,control_movie=render_delivery_control(saved,directory,control_dir,timeout=budget)
+                    checks["paused_calibration_matches_lossless_movie_frame"]=pictures["distort"]==lossless[6*size:7*size]
+                    checks["complete_export_matches_separate_rgb_sequence_codec"]=pixels==control
+                    checks["paused_calibration_matches_export"]=checks["paused_calibration_matches_lossless_movie_frame"] and checks["complete_export_matches_separate_rgb_sequence_codec"]
+                    result["lossless_frame6_sha256"]=hashlib.sha256(lossless[6*size:7*size]).hexdigest()
+                    result["paused_rgb_sha256"]=hashlib.sha256(pictures["distort"]).hexdigest()
+                    result["decoded_export_sha256"]=hashlib.sha256(pixels).hexdigest()
+                    result["decoded_codec_control_sha256"]=hashlib.sha256(control).hexdigest()
+                    result["codec_control_frame6_mean_rgb_error"]=sum(abs(a-b) for a,b in zip(pictures["distort"],control[6*size:7*size]))/size
+                    result["decoded_export_control_mean_rgb_error"]=sum(abs(a-b) for a,b in zip(pixels,control))/len(pixels)
+                    shutil.copy2(control_movie,output/"ENGINE_TEST_rgb_sequence_codec_control.mp4")
                 shutil.copy2(movie,output/"ENGINE_TEST_calibrated_export.mp4")
             checks["source_media_unchanged"]=asset["sha256"]==original and hashlib.sha256((directory/asset["path"]).read_bytes()).hexdigest()==original
             checks["actual_native_screenshot"]=screenshot.is_file() and screenshot.stat().st_size>1000 and screenshot.read_bytes().startswith(PNG_SIGNATURE)

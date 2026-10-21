@@ -145,6 +145,46 @@ def render_pixels(graph, directory, *, first=0, frames=4, pixel=fixture, backend
     return result.stdout
 
 
+def render_delivery_control(project, directory, scratch, *, timeout=lambda maximum: maximum):
+    """Separate lossless picture identity from the temporal H.264 codec.
+
+    The complete sequence is essential: encoding a repeated still changes the
+    encoder's motion decisions and is not a control for a moving movie. This
+    reference first materializes the RGB timeline without video compression,
+    then feeds that independent raw stream into the actual delivery settings.
+    It never substitutes for the independent Newton/alpha pixel oracle.
+    """
+    import engine
+    from timebase import project_rate
+    project = engine.validate_project(project, directory)
+    rate = project_rate(project)
+    ffmpeg = engine._executable("ffmpeg")
+    inputs, graph, frames = engine._graph(project, directory, scratch)
+    picture = graph + ";[aout]anullsink;[vout]format=rgb24[lossless]"
+    common = [ffmpeg, "-v", "error", "-nostdin", "-y", "-threads", "1"]
+    lossless = subprocess.run(common + ["-filter_complex_threads", "1"] + inputs + [
+        "-filter_complex", picture, "-map", "[lossless]", "-an", "-threads", "1",
+        "-pix_fmt", "rgb24", "-f", "rawvideo", "pipe:1"],
+        capture_output=True, check=True, timeout=timeout(4)).stdout
+    if len(lossless) != frames * project["width"] * project["height"] * 3:
+        raise AssertionError("Lossless delivery control has an incorrect frame count.")
+    movie = Path(scratch) / "ENGINE_TEST_rgb_sequence_codec_control.mp4"
+    subprocess.run(common + [
+        "-f", "rawvideo", "-pixel_format", "rgb24", "-video_size", f"{project['width']}x{project['height']}",
+        "-framerate", rate.ffmpeg, "-i", "pipe:0", "-vf", "scale=out_color_matrix=bt709:out_range=tv",
+        "-r", rate.ffmpeg, "-t", rate.seconds_decimal(frames), "-an", "-threads", "2",
+        "-c:v", "libx264", "-preset", "medium", "-crf", "18", "-pix_fmt", "yuv420p",
+        "-color_primaries", "bt709", "-color_trc", "bt709", "-colorspace", "bt709",
+        "-movie_timescale", "48000", "-movflags", "+faststart", str(movie)],
+        input=lossless, capture_output=True, check=True, timeout=timeout(3))
+    decoded = subprocess.run(common + ["-i", str(movie), "-map", "0:v:0", "-an", "-threads", "1",
+                                      "-pix_fmt", "rgb24", "-f", "rawvideo", "pipe:1"],
+                             capture_output=True, check=True, timeout=timeout(3)).stdout
+    if len(decoded) != len(lossless):
+        raise AssertionError("H.264 delivery control has an incorrect frame count.")
+    return lossless, decoded, movie
+
+
 class LensValidationTests(unittest.TestCase):
     def test_static_bounded_schema_and_independent_certificate(self):
         graph = graph_for(); clean = validate_graph(graph, WIDTH, HEIGHT)
@@ -379,6 +419,37 @@ class LensRenderedPixelTests(unittest.TestCase):
             # their external inputs plus the twelve per-window map inputs.
             at=3*(50*WIDTH+130);self.assertGreater(paused[at+2],50)
             at=3*(50*WIDTH+40);self.assertGreater(paused[at],30)
+
+    def test_high_frequency_alpha_movie_matches_complete_sequence_codec_control(self):
+        import engine
+        from frame_preview import render_frame
+        from test_multi_source_compositor import decode
+        with tempfile.TemporaryDirectory() as temporary:
+            root=Path(temporary);(root/"media").mkdir();(root/"control").mkdir()
+            source=root/"media"/"alpha.mkv";frames=12
+            pixels=b"".join(bytes(fixture(frame,x,y)) for frame in range(frames)
+                            for y in range(HEIGHT) for x in range(WIDTH))
+            subprocess.run([shutil.which("ffmpeg"),"-v","error","-nostdin","-y","-threads","1",
+                            "-f","rawvideo","-pixel_format","rgba","-video_size",f"{WIDTH}x{HEIGHT}",
+                            "-framerate",str(FPS),"-i","pipe:0","-an","-c:v","ffv1","-pix_fmt","bgra",
+                            "-threads","1",str(source)],input=pixels,check=True,capture_output=True,timeout=5)
+            fy=.5/math.tan(math.radians(48)/2)
+            params=dict(BASE,fx=fy*HEIGHT/WIDTH*1.12,fy=fy,cx=.54,cy=.475,direction="distort")
+            asset={"id":"source","name":"alpha","path":"media/alpha.mkv",**engine.probe_media(source)}
+            project={"version":1,"id":"lens_codec_test","name":"ENGINE TEST moving alpha codec",
+                     "width":WIDTH,"height":HEIGHT,"fps":FPS,"assets":[asset],"titles":[],
+                     "clips":[{"id":"clip","asset_id":"source","track":0,"start":0,"in":0,
+                               "duration":frames,"compositor":graph_for(params)}]}
+            paused=root/"frame6.png";movie=root/"movie.mp4"
+            render_frame(project,root,6,paused);engine.render_project(project,root,movie,"h264")
+            lossless,control,_=render_delivery_control(project,root,root/"control")
+            decoded=decode(movie,rgba=False);size=WIDTH*HEIGHT*3
+            self.assertEqual(decode(paused,rgba=False),lossless[6*size:7*size])
+            self.assertEqual(decoded,control,"Decoded delivery must match the separate complete-RGB-sequence encoder.")
+            # This control preserves the strict pixel assertion even where
+            # chroma subsampling and temporal coding exceed a flat RGB budget.
+            self.assertNotEqual(decoded[6*size:7*size],lossless[6*size:7*size])
+            self.assertNotEqual(decoded[5*size:6*size],control[6*size:7*size])
 
 
 if __name__=="__main__":unittest.main()
