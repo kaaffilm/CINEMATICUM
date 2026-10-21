@@ -16,12 +16,13 @@
   function mount(host,bridge) {
     const dialog=document.createElement('dialog');dialog.className='cinematicum-color-pipeline';
     dialog.innerHTML=`<style>
-      .cinematicum-color-pipeline{width:min(760px,94vw);max-height:90vh;padding:0;color:#e6e8ed;background:#171a20;border:1px solid #48505d;border-radius:12px;font:13px/1.45 -apple-system,BlinkMacSystemFont,Segoe UI,sans-serif;box-shadow:0 24px 80px #0009}
+      .cinematicum-color-pipeline{box-sizing:border-box;width:min(760px,94vw);max-height:90vh;padding:0;overflow:hidden;color:#e6e8ed;background:#171a20;border:1px solid #48505d;border-radius:12px;font:13px/1.45 -apple-system,BlinkMacSystemFont,Segoe UI,sans-serif;box-shadow:0 24px 80px #0009}
+      .cinematicum-color-pipeline[open]{display:flex;flex-direction:column}
       .cinematicum-color-pipeline::backdrop{background:#05080caf}
-      .cinematicum-color-pipeline header,.cinematicum-color-pipeline footer{display:flex;gap:12px;align-items:center;justify-content:space-between;padding:16px 20px;background:#1d222a}
+      .cinematicum-color-pipeline header,.cinematicum-color-pipeline footer{display:flex;flex:0 0 auto;gap:12px;align-items:center;justify-content:space-between;padding:16px 20px;background:#1d222a}
       .cinematicum-color-pipeline h2,.cinematicum-color-pipeline h3,.cinematicum-color-pipeline p{margin:0}
       .cinematicum-color-pipeline h2{font-size:17px}.cinematicum-color-pipeline h3{font-size:12px;color:#a7bbd5;letter-spacing:.06em;text-transform:uppercase;margin-bottom:12px}
-      .cinematicum-color-pipeline .color-body{padding:20px;display:grid;gap:18px}.cinematicum-color-pipeline .color-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+      .cinematicum-color-pipeline .color-body{flex:1 1 auto;min-height:0;overflow:auto;overscroll-behavior:contain;padding:20px;display:grid;gap:18px}.cinematicum-color-pipeline .color-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
       .cinematicum-color-pipeline label{display:grid;gap:6px;color:#b4bdca}.cinematicum-color-pipeline select,.cinematicum-color-pipeline input[type=number]{min-width:0;width:100%;box-sizing:border-box;padding:8px;background:#10141a;color:#e5eaf2;border:1px solid #3c4451;border-radius:6px;font:inherit}
       .cinematicum-color-pipeline .color-xy{display:grid;grid-template-columns:1fr 1fr;gap:8px}.cinematicum-color-pipeline .color-note{font-size:12px;color:#919eaf}.cinematicum-color-pipeline .color-enable{display:flex;gap:8px;align-items:center}
       .cinematicum-color-pipeline button{padding:8px 12px;color:#e7edf5;background:#303846;border:1px solid #505d70;border-radius:6px;cursor:pointer}.cinematicum-color-pipeline button:disabled{opacity:.45;cursor:default}.cinematicum-color-pipeline .color-primary{background:#3569ab;border-color:#568bcd}

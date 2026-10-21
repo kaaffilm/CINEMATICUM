@@ -36,7 +36,16 @@ final class SmokeDelegate: NSObject, NSApplicationDelegate, WKNavigationDelegate
         window.addEventListener('error', event => window.webkit.messageHandlers.smokeError.postMessage(String(event.message) + ' @ ' + String(event.filename) + ':' + event.lineno));
         window.addEventListener('unhandledrejection', event => window.webkit.messageHandlers.smokeError.postMessage('Unhandled rejection: ' + String(event.reason)));
         """, injectionTime: .atDocumentStart, forMainFrameOnly: true))
-        webView = WKWebView(frame: NSRect(x: 0, y: 0, width: 1440, height: 960), configuration: configuration)
+        // Test-only sizing allows native acceptance at the application's
+        // minimum supported content size as well as the normal desktop size.
+        let environment = ProcessInfo.processInfo.environment
+        let width = Double(environment["CINEMATICUM_SMOKE_WIDTH"] ?? "1440") ?? 0
+        let height = Double(environment["CINEMATICUM_SMOKE_HEIGHT"] ?? "960") ?? 0
+        guard width.isFinite, height.isFinite, (1000...2560).contains(width), (700...1600).contains(height) else {
+            emit(["passed": false, "error": "Native test viewport must be 1000–2560 by 700–1600 pixels."])
+            return
+        }
+        webView = WKWebView(frame: NSRect(x: 0, y: 0, width: CGFloat(width), height: CGFloat(height)), configuration: configuration)
         webView.navigationDelegate = self
         window = NSWindow(contentRect: webView.frame, styleMask: [.titled, .closable, .resizable], backing: .buffered, defer: false)
         window.title = "CINEMATICUM browser test — synthetic test media"

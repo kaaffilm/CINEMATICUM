@@ -11,7 +11,7 @@
 .scene-workspace-heading>div{display:flex;align-items:center;gap:16px}
 .scene-workspace-heading>div>span:last-child{font-size:10px;color:#8e98a4}
 .scene-module{flex:1;min-height:0;min-width:0;position:relative;overflow:hidden}
-.app[data-workspace="3d"]{grid-template-rows:58px 39px minmax(390px,1fr) 245px}
+.app[data-workspace="3d"]{grid-template-rows:58px 39px minmax(0,1fr) clamp(150px,22vh,190px)}
 .app[data-workspace="composite"]{grid-template-rows:58px 39px minmax(370px,1fr) 218px}
 .app[data-workspace="composite"] .viewer-stage{flex:0 1 34%;min-height:85px;padding:9px}
 .app[data-workspace="composite"] .viewer-stage canvas,.app[data-workspace="composite"] .viewer-stage video{max-height:100%;height:100%}
@@ -82,7 +82,7 @@
 .clip-transform-details>summary{cursor:pointer;font-size:11px;color:#bdc5cf;font-weight:500;user-select:none}
 .clip-transform-details[open]>summary{margin-bottom:17px;color:var(--accent)}
 @media(max-width:1300px){.compositor-title{display:none}.compositor-footer>span:nth-child(2){display:none}.compositor-toolbar select{max-width:117px}.scene-workspace-heading>div>span:last-child{display:none}}
-@media(max-height:760px){.app[data-workspace="3d"]{grid-template-rows:51px 35px minmax(390px,1fr) 210px}.app[data-workspace="composite"]{grid-template-rows:51px 35px minmax(350px,1fr) 205px}.app[data-workspace="composite"] .viewer-stage{min-height:64px;flex-basis:26%}.compositor-editor{min-height:200px}.app[data-workspace="composite"] .viewer-heading{height:31px;min-height:31px}.empty-actions button{font-size:10px;padding:6px 9px}}
+@media(max-height:760px){.app[data-workspace="3d"]{grid-template-rows:51px 35px minmax(0,1fr) clamp(140px,21vh,170px)}.app[data-workspace="composite"]{grid-template-rows:51px 35px minmax(350px,1fr) 205px}.app[data-workspace="composite"] .viewer-stage{min-height:64px;flex-basis:26%}.compositor-editor{min-height:200px}.app[data-workspace="composite"] .viewer-heading{height:31px;min-height:31px}.empty-actions button{font-size:10px;padding:6px 9px}}
 
 /* Shared authoring tools: every control edits the same CINEMATICUM project. */
 .track-label{width:128px;min-width:128px;padding:4px 8px}.track-row{height:46px}.track-label strong{overflow:hidden;white-space:nowrap;text-overflow:ellipsis;color:#aebbc9;font:10px var(--sans,system-ui)}

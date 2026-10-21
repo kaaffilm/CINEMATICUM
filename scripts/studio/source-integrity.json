@@ -79,13 +79,13 @@
     },
     {
       "path": "scripts/studio/macos/CameraImportSmoke.js",
-      "size": 6723,
-      "sha256": "c8eb27011cb0019dab656049fa54c47c782b8b760bafb44a643bd0380fab148a"
+      "size": 8615,
+      "sha256": "7b9faa046923c55d079b41886ad71de6d6a09edf7bf96803861ae6b4069a47fd"
     },
     {
       "path": "scripts/studio/macos/ColorPipelineSmoke.js",
-      "size": 6210,
-      "sha256": "ce70873806175fcdb4a87c95eb1a9927e662118fc01be4185f2ac38337cb4132"
+      "size": 8382,
+      "sha256": "4181d2f23a7aa730e56f77db8ac19a6c9cd6da4de4dfe764f9fbd93dbf1bb1c3"
     },
     {
       "path": "scripts/studio/macos/CompositorAnimationSmoke.js",
@@ -109,8 +109,8 @@
     },
     {
       "path": "scripts/studio/macos/PhysicalSceneSmoke.js",
-      "size": 4788,
-      "sha256": "747c2d677b0c81b71bbf9e76e9bda97eda3bbda2045621a8fba543c7ed936811"
+      "size": 9161,
+      "sha256": "9c23ac17ca41913bc21ec2aea81f26235d205e86ba43b46b52fb677f84d70e62"
     },
     {
       "path": "scripts/studio/macos/SceneSmoke.js",
@@ -119,8 +119,8 @@
     },
     {
       "path": "scripts/studio/macos/SmokeTest.swift",
-      "size": 14755,
-      "sha256": "cbd4d8513c26c6306dac20663877319ef8e1b252fbac146b902f68a70adabf81"
+      "size": 15411,
+      "sha256": "336cf5150154835236e025d9ad012e5fa73d820a807b23387def6569853e065d"
     },
     {
       "path": "scripts/studio/macos/StudioApp.swift",
@@ -364,13 +364,13 @@
     },
     {
       "path": "scripts/studio/web/camera-io-ui.js",
-      "size": 14204,
-      "sha256": "88eeefd090e730b66ba39023725aab535f7496105f9d2b18af3744bd6e27130d"
+      "size": 15889,
+      "sha256": "b6eba14106224ebd3712f514bba60d4df0363267d12f1675e899feb8c85ebbec"
     },
     {
       "path": "scripts/studio/web/color-pipeline-ui.js",
-      "size": 16018,
-      "sha256": "4d7f1caf38a29360ebe237f527e78a4585008d074b97190c562168e4e2ce8b7a"
+      "size": 16215,
+      "sha256": "7fff658fb1162e2eb7fabb09090115aacdc578d10e091c08abe6745b88eb900a"
     },
     {
       "path": "scripts/studio/web/compositor-ui.js",
@@ -394,18 +394,18 @@
     },
     {
       "path": "scripts/studio/web/scene-editor.css",
-      "size": 13783,
-      "sha256": "9704eb514b2f6c444199d3afd49a30fb5f868dbde7eacc3fbf310fc13e905279"
+      "size": 15557,
+      "sha256": "ebebfc824777f56f46eeccaffdaf0aab8d29dbc333ab568973f1e1589fbeec4f"
     },
     {
       "path": "scripts/studio/web/scene-editor.js",
-      "size": 69471,
-      "sha256": "2e8548d0b7c102bd8a89853529682ad7e56607cd1d1b3d996bdc5bd9e272ecec"
+      "size": 70249,
+      "sha256": "731c1722203cd0c7389b37ce6d1d9034b83cad610b4437d4b9ee8d1ef2c9e8e8"
     },
     {
       "path": "scripts/studio/web/style.css",
-      "size": 31240,
-      "sha256": "6d4b4bcefb816dd45c3b33ffab447e4e2edb3ad8315ad23c124c5ee1f68c57c1"
+      "size": 31268,
+      "sha256": "99e548badc2c64f8600a0b89128c8f38832c6e9f0b8f36f5e8912a9c711c6a01"
     },
     {
       "path": "scripts/studio/web/tracking-ui.js",

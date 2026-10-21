@@ -10,3 +10,26 @@
 .scene-dope-sheet{overflow:auto;min-height:0;position:relative;--scene-playhead:0%}.scene-dope-ruler,.scene-dope-row{display:grid;grid-template-columns:135px minmax(80px,1fr);min-height:25px}.scene-dope-ruler{height:23px;min-height:23px;position:sticky;top:0;z-index:3;background:#1e252e;border-bottom:1px solid #343e4b}.scene-dope-ruler>span{padding:4px 10px;color:#75869c;font-size:9px;text-transform:uppercase;letter-spacing:.07em}.scene-dope-ruler>div{position:relative;margin:0 12px;border-left:1px solid #3c4755}.scene-dope-ruler i{font:9px/20px ui-monospace,SFMono-Regular,Menlo,monospace;position:absolute;color:#8e9bad;transform:translateX(-50%);font-style:normal}.scene-dope-row{border-bottom:1px solid #252c36}.scene-dope-row.selected{background:#2a303a}.scene-dope-row .scene-track-name{border:none;border-right:1px solid #343c49;border-radius:0;background:transparent;text-align:left;font-size:10px;min-height:25px;padding:3px 10px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:#9caabc}.scene-dope-row.selected .scene-track-name{color:#e5bd7c}.scene-key-lane{position:relative;margin:0 12px;min-height:25px;touch-action:none;background-image:linear-gradient(to right,#94a1b20a 1px,transparent 1px);background-size:12.5% 100%;cursor:crosshair}.scene-key-lane .scene-key{position:absolute;top:2px;transform:translateX(-50%);height:21px;min-height:21px;width:17px;padding:0;line-height:19px;font-size:13px;color:#a2afbf;border:1px solid transparent;background:transparent;border-radius:3px;cursor:ew-resize;touch-action:none;z-index:2}.scene-key-lane .scene-key.implicit{color:#667789;opacity:.8;cursor:pointer}.scene-key-lane .scene-key:hover{color:#f6d497;background:#3d4654}.scene-key-lane .scene-key.selected{color:#f5c77c;border-color:#b28649;background:#493d2a}.scene-motion-playhead{position:absolute;top:0;bottom:0;left:var(--scene-playhead);width:1px;background:#ce846f;pointer-events:none;z-index:1}.scene-footer{padding:6px 10px}.scene-footnote{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 @media(max-width:1250px){.scene-tools{justify-content:flex-start}.scene-view-buttons{margin-left:auto}.scene-motion-toolbar{gap:4px}.scene-motion-toolbar>strong{display:none}.scene-easing-curve{width:62px;min-width:48px}.scene-dope-ruler,.scene-dope-row{grid-template-columns:115px minmax(80px,1fr)}}
 @media(max-width:900px){.scene-editor{grid-template-rows:auto minmax(160px,1fr) minmax(112px,150px) auto auto}.scene-tools{gap:5px}.scene-transform-tools{order:2}.scene-view-buttons{margin-left:0;order:3}.scene-key-label{display:none}.scene-easing-curve{display:none}.scene-motion-toolbar>label{font-size:9px}.scene-motion-toolbar select{width:90px}.scene-dope-ruler,.scene-dope-row{grid-template-columns:102px minmax(80px,1fr)}.scene-inspector-heading>div{flex-direction:column}}
+/* The film timeline owns the window height. Keep every scene control inside
+   its remaining space; only the relevant tools, list or inspector scroll. */
+.scene-editor{min-height:0;min-width:0;grid-template-rows:auto minmax(0,1fr) clamp(88px,20%,112px) auto auto}
+.scene-tools{min-width:0;flex-wrap:nowrap;overflow-x:auto;overflow-y:hidden;justify-content:flex-start;padding:6px 10px;scrollbar-width:thin}
+.scene-tools>div{flex:0 0 auto;flex-wrap:nowrap}
+.scene-view-buttons{margin-left:auto}
+.scene-main{min-width:0;overflow:hidden}
+.scene-properties{display:grid;grid-template-rows:clamp(84px,32%,112px) minmax(0,1fr);overflow:hidden;min-width:0}
+.scene-outliner{display:flex;flex-direction:column;min-height:0;overflow:hidden;padding:7px 10px}
+.scene-outliner h3{flex:none;margin-bottom:5px}
+.scene-object-list{flex:1;min-height:0;max-height:none;overscroll-behavior:contain;scrollbar-width:thin}
+.scene-object-list button{flex:0 0 auto}
+.scene-inspector{min-height:0;overflow:auto;overscroll-behavior:contain;scrollbar-width:thin;scroll-padding-block:12px}
+.scene-editor label>input:not([type=range],[type=checkbox],[type=color]),.scene-editor label>select{margin-top:0}
+.scene-motion-toolbar{min-width:0;min-height:34px;padding-block:3px;box-sizing:border-box;scrollbar-width:thin}
+.scene-motion-toolbar>*{flex-shrink:0}
+.scene-footer{min-width:0;flex-wrap:nowrap;overflow-x:auto;overflow-y:hidden;scrollbar-width:thin;gap:7px}
+.scene-footer>button,.scene-footer>label{flex:0 0 auto}
+.scene-footer .scene-samples{display:flex}
+.scene-footer input[type=range]{flex:1 1 80px;min-width:60px;width:80px}
+.scene-footer .primary{position:sticky;right:0;z-index:2;box-shadow:-7px 0 8px #1b2027}
+.scene-footer>label>input[type=number]{width:60px}
+.scene-footnote{min-width:0}

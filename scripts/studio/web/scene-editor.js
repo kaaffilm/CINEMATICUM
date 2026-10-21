@@ -158,7 +158,12 @@
     function setFrame(value) {frame=clamp(Math.round(Number(value)||1),1,scene.frame_end);updateFrameUI();if(!playing)renderInspector();draw();}
     function stop() {playing=false;cancelAnimationFrame(animation);root.querySelector('[data-scene-action="play"]').textContent='▶';}
     function play() {if(playing){stop();renderInspector();return;}if(gesture)return;playing=true;root.querySelector('[data-scene-action="play"]').textContent='Ⅱ';const start=performance.now(),initial=frame;function tick(now){if(!playing||disposed)return;setFrame(1+(initial-1+Math.floor((now-start)*opts.fps/1000))%scene.frame_end);animation=requestAnimationFrame(tick);}animation=requestAnimationFrame(tick);}
-    function select(type,id) {selected={type,id:id||type};selectedKey=null;if(type!=='object')tool='move';refresh();}
+    function revealSelection() {
+      inspector.scrollTop=0;
+      const list=outliner.querySelector('.scene-object-list'),button=list?.querySelector('.selected');
+      if(button){const bounds=list.getBoundingClientRect(),item=button.getBoundingClientRect();if(item.top<bounds.top)list.scrollTop+=item.top-bounds.top;else if(item.bottom>bounds.bottom)list.scrollTop+=item.bottom-bounds.bottom;}
+    }
+    function select(type,id) {selected={type,id:id||type};selectedKey=null;if(type!=='object')tool='move';refresh();revealSelection();}
     function addPrimitive(type) {
       if(scene.objects.length>=96){report('A scene supports at most 96 objects.',true);return;}
       commit(()=>{const item={id:uid(),name:type[0].toUpperCase()+type.slice(1)+' '+(scene.objects.length+1),type,position:[0,0,type==='plane'?0:1],rotation:[0,0,0],scale:type==='plane'?[5,5,1]:[1,1,1],material:{color:type==='plane'?'#727a88':'#d8a85f',roughness:.45,metallic:0},keyframes:[]};scene.objects.push(item);selected={type:'object',id:item.id};selectedKey=null;});
@@ -167,7 +172,9 @@
     const checkbox=(label,path,value)=>`<label class="scene-check">${label}<input data-scene-property="${path}" type="checkbox" ${value?'checked':''}></label>`;
     const vector=(label,path,values,step=.1,min=-1000,max=1000)=>`<fieldset><legend>${label}</legend><div class="scene-vector">${['X','Y','Z'].map((name,i)=>number(name,path+'.'+i,values[i],step,min,max)).join('')}</div></fieldset>`;
     function renderOutliner() {
+      const previous=outliner.querySelector('.scene-object-list')?.scrollTop||0;
       outliner.innerHTML=`<h3>Scene <span>${scene.objects.length} objects</span></h3><div class="scene-object-list">${tracks().map(t=>`<button class="${selected.type===t.type&&selected.id===t.id?'selected':''}" data-scene-select="${t.type}" data-id="${esc(t.id)}"><span>${t.type==='camera'?'▱':t.type==='light'?'☀':'◇'}</span>${esc(t.name)}<small>${t.item.keyframes.length?'◆ '+t.item.keyframes.length:t.type}</small></button>`).join('')}<button class="${selected.type==='world'?'selected':''}" data-scene-select="world"><span>◉</span>World</button><button class="${selected.type==='render'?'selected':''}" data-scene-select="render"><span>◈</span>Light paths & sampling</button></div>`;
+      outliner.querySelector('.scene-object-list').scrollTop=previous;
     }
     function renderInspector() {
       const item=selectedItem();if(!item){selected={type:'camera',id:'camera'};return renderInspector();}
@@ -186,7 +193,8 @@
       else html=`<h3>World</h3><label>Environment color<input type="color" data-scene-property="color" value="${esc(item.color)}"></label>${number('Environment strength','strength',item.strength,.05,0,5)}`;
       if(selected.type==='object'&&item.type==='mesh')html+=`<div class="scene-mesh-info"><h4>Imported geometry</h4><p>${item.mesh.vertices.length.toLocaleString()} vertices · ${item.mesh.triangles.length.toLocaleString()} triangles</p><p>${item.mesh.uvs?.length?'UV coordinates retained':'No UV coordinates'} · ${item.mesh.normals?.length?'Corner normals retained':'Face normals'}</p>${item.mesh.source?`<p title="${esc(item.mesh.source.sha256)}">${esc(item.mesh.source.name)}</p>`:''}</div>`;
       if(animated())html+=`<div class="scene-keyframes"><h4>Motion <span>${item.keyframes.length} keys</span></h4><p>${item.keyframes.length?'Pose edits update a key at frame '+frame+'.':'Enable Auto key or add a pose key to begin animation.'} Drag diamonds in the motion tracks to retime. Hold keeps the preceding pose until the next key.</p></div>`;
-      inspector.innerHTML=html;
+      const selection=selected.type+':'+selected.id,scroll=inspector.dataset.selection===selection?inspector.scrollTop:0;
+      inspector.innerHTML=html;inspector.dataset.selection=selection;inspector.scrollTop=scroll;
     }
     function renderKeyTools() {
       const selection=selectedKey,item=selection&&getItem(selection.type,selection.id),key=item?.keyframes.find(k=>k.frame===selection.frame);
@@ -433,7 +441,7 @@
     refresh();
     return {
       getScene(){return copy(scene);},
-      showCamera(){if(gesture)finishGesture(false);stop();selected={type:'camera',id:'camera'};selectedKey=null;viewCamera=true;tool='move';refresh();},
+      showCamera(){if(gesture)finishGesture(false);stop();selected={type:'camera',id:'camera'};selectedKey=null;viewCamera=true;tool='move';refresh();revealSelection();},
       replaceCamera(camera){stop();return commit(()=>{scene.camera={...copy(CAMERA_DEFAULTS),...copy(camera)};selected={type:'camera',id:'camera'};selectedKey=null;viewCamera=true;tool='move';});},
       setScene(next,options={}){if(gesture)finishGesture(false);stop();opts={...opts,...options};scene=copy(next||defaultScene(opts));revision++;refresh();},
       setRenderAvailable(value){opts.renderAvailable=!!value;refresh();},
