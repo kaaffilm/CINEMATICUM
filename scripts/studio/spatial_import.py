@@ -53,7 +53,10 @@ def _number(value, label, low=-MAX_COORDINATE, high=MAX_COORDINATE):
         raise ValueError(label + " must be a finite number.")
     if not low <= value <= high:
         raise ValueError("%s must be between %s and %s." % (label, low, high))
-    return float(value)
+    # JSON.stringify emits 0 for both IEEE-754 zero signs. Canonical geometry
+    # must use the same zero before its digest is computed, so an unchanged
+    # mesh survives browser transport without relaxing integrity checks.
+    return 0.0 if value == 0 else float(value)
 
 
 def _text(value, label, max_bytes):

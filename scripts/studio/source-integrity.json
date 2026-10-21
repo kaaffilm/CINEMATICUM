@@ -139,8 +139,8 @@
     },
     {
       "path": "scripts/studio/spatial_import.py",
-      "size": 26852,
-      "sha256": "5845b1944cf553e09de34f695187cf8a1a6d30127adf30a2d129a2445d61647c"
+      "size": 27102,
+      "sha256": "2eba894b06571be9faaecefdd10d53ef77fee84c07cfaa35373abb71aa0df0f6"
     },
     {
       "path": "scripts/studio/test_adapters.py",
@@ -154,8 +154,8 @@
     },
     {
       "path": "scripts/studio/test_compositor_animation_ui_macos.py",
-      "size": 12782,
-      "sha256": "173ddaa434eb54c55e546c1e40f84e17f4340f7173b04a45f0161580b76790fd"
+      "size": 13122,
+      "sha256": "110240b732c31609fa00743f07e1db76f3568f7fdb360be5cec9cf3e63d0bbf6"
     },
     {
       "path": "scripts/studio/test_editing.py",
@@ -224,8 +224,8 @@
     },
     {
       "path": "scripts/studio/test_spatial_import.py",
-      "size": 15061,
-      "sha256": "e0b2fceb87038985f9ac77da236da213ed7be29d205ae81c5813c1c8b148cb1f"
+      "size": 17465,
+      "sha256": "a588df83a6095057fcb7a11ce16ca31ccb876c356b7f0324677cb13aba9035c7"
     },
     {
       "path": "scripts/studio/test_studio_v2.py",

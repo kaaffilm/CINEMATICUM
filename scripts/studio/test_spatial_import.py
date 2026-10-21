@@ -184,6 +184,43 @@ class ObjImportTests(unittest.TestCase):
             with self.subTest(candidate=candidate), self.assertRaises(ValueError):
                 spatial.validate_mesh(candidate)
 
+    def test_mesh_digest_survives_real_javascript_json_transport_and_rejects_changes(self):
+        node = shutil.which("node")
+        if not node:
+            self.skipTest("Node is required to exercise actual JavaScript JSON transport.")
+        from test_spatial_blender import OBJ, MTL
+        imports = [spatial.import_obj({"name": "ENGINE_TEST.obj", "obj": OBJ,
+                                      "materials": {"ENGINE_TEST.mtl": MTL}}),
+                   imported(up_axis="Y"),
+                   imported("v -0.0 1e-7 0\nv 1.2345678901234567 0 0\nv 0 1 0\n"
+                            "vt -0.0 1e-7\nvt 1 0\nvt 0 1\nvn -0.0 0 1\n"
+                            "f 1/1/1 2/2/1 3/3/1\n")]
+        originals = []
+        for result in imports:
+            spec = scene.default_scene(160, 90)
+            spec["objects"] = result["objects"]
+            originals.append(scene.validate_scene(spec))
+        script = """const fs=require('fs');let scenes=JSON.parse(fs.readFileSync(0,'utf8'));
+// The browser clones recipes for history and serializes them again for Save.
+scenes=JSON.parse(JSON.stringify(scenes));process.stdout.write(JSON.stringify(scenes));"""
+        process = subprocess.run([node, "-e", script], input=json.dumps(originals),
+                                 text=True, capture_output=True, check=True, timeout=5)
+        returned = json.loads(process.stdout)
+        self.assertEqual(len(returned), len(originals))
+        for before, after in zip(originals, returned):
+            normalized = scene.validate_scene(after)
+            self.assertEqual(normalized, before)
+            for original, received in zip(before["objects"], normalized["objects"]):
+                self.assertEqual(spatial._json_bytes(received["mesh"]), spatial._json_bytes(original["mesh"]))
+                self.assertEqual(received["mesh"]["source"], original["mesh"]["source"])
+                for field in ("vertices", "normals", "uvs"):
+                    self.assertTrue(all(math.copysign(1, value) == 1 for row in received["mesh"][field]
+                                        for value in row if value == 0), "Canonical zero must have one representation")
+                changed = copy.deepcopy(received["mesh"])
+                changed["vertices"][0][0] += .125
+                with self.assertRaisesRegex(ValueError, "SHA-256 digest"):
+                    spatial.validate_mesh(changed)
+
     def test_scene_accepts_mesh_animation_but_enforces_total_geometry_budget(self):
         result = imported()
         spec = scene.default_scene(160, 90)

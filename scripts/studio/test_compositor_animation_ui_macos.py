@@ -90,7 +90,8 @@ def run(binary, evidence):
             original_hash = hashlib.sha256(fixture.read_bytes()).hexdigest()
             store = Store(scratch / "workspace")
             project = store.new_project({"name": "ENGINE TEST — animated compositor", "fps": FPS, "width": WIDTH, "height": HEIGHT})
-            store.admit(project["id"], fixture, fixture.name)
+            admitted = store.admit(project["id"], fixture, fixture.name)
+            admitted_media = store.project_dir(project["id"]) / admitted["path"]
             server = Server(0, store)
             thread = threading.Thread(target=server.serve_forever, kwargs={"poll_interval": .05}, daemon=True)
             thread.start()
@@ -149,7 +150,10 @@ def run(binary, evidence):
                     checks["displayed_png_matches_decoded_movie_frame"] = error < 10
                     result["paused_vs_export_mean_rgb_error"] = round(error, 5)
                 shutil.copy2(movie, evidence / "ENGINE_TEST_animated_export.mp4")
-            checks["source_unchanged"] = hashlib.sha256(fixture.read_bytes()).hexdigest() == original_hash
+            checks["source_unchanged"] = (admitted["sha256"] == original_hash
+                and any(asset["id"] == admitted["id"] and asset["path"] == admitted["path"]
+                        and asset["sha256"] == original_hash for asset in saved["assets"])
+                and hashlib.sha256(admitted_media.read_bytes()).hexdigest() == original_hash)
             checks["actual_native_screenshot"] = screenshot.is_file() and screenshot.stat().st_size > 1000 and screenshot.read_bytes()[:8] == PNG_SIGNATURE
             result["jobs"] = [{"kind": job["kind"], "state": job["state"], **({"error": job["error"]} if job.get("error") else {})} for job in jobs]
             if not all(checks.values()):
