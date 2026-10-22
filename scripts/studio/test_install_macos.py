@@ -27,6 +27,9 @@ class ArchiveInstallationTests(unittest.TestCase):
         program = (
             "import sys,json,pathlib;sys.path.insert(0,sys.argv[1]);"
             "import server,planar_tracking,projective_warp,install_tracking,install_imaging,managed_generation;"
+            "import studio_tools,collaboration,collaboration_store,learned_tools,learned_tracking,install_learned_tracking;"
+            "import runtime_management,install_physical_rendering,install_ray_optics,install_reconstruction;"
+            "import scene_processing,scene_dispatch,scene_dispatch_store,reconstruction;"
             "assert pathlib.Path(server.__file__).parent==pathlib.Path(sys.argv[1]);"
             "assert install_tracking.LOCK.is_file();assert install_imaging.LOCK.is_file();"
             "managed_generation.load_lock();print('PACKAGED_RUNTIME_IMPORTS_PASS')"

@@ -26,7 +26,7 @@ import uuid
 
 if __package__:
     from .compositor import (compile_graph, validate_graph, media_sources, validate_media_sources, lens_nodes, LENS_MAP_NAMES,
-                            roto_nodes, HIGH16_FILTERS, high16_geq, high16_grade, high16_place, high16_source_over, high16_associate, high16_unassociate)
+                            roto_nodes, HIGH16_FILTERS, high16_geq, high16_grade, high16_place, high16_source_over, high16_associate, high16_unassociate, high16_source_conversion)
     from .projective_warp import validate_planar_motion, compile_planar_warp
     from .lens_assets import prepare_lens_maps
     from .roto_assets import prepare_roto_mask
@@ -36,7 +36,7 @@ if __package__:
     from .media_orientation import still_display_info
 else:
     from compositor import (compile_graph, validate_graph, media_sources, validate_media_sources, lens_nodes, LENS_MAP_NAMES,
-                           roto_nodes, HIGH16_FILTERS, high16_geq, high16_grade, high16_place, high16_source_over, high16_associate, high16_unassociate)
+                           roto_nodes, HIGH16_FILTERS, high16_geq, high16_grade, high16_place, high16_source_over, high16_associate, high16_unassociate, high16_source_conversion)
     from projective_warp import validate_planar_motion, compile_planar_warp
     from lens_assets import prepare_lens_maps
     from roto_assets import prepare_roto_mask
@@ -467,6 +467,15 @@ def _validate_single_project(project, project_dir, sequence_assets=None):
             c["color_pipeline"] = validate_pipeline(c["color_pipeline"], project_dir)
         if a["kind"] != "audio" and a.get("color_transfer") in {"smpte2084", "arib-std-b67"}:
             raise ValueError("HDR PQ/HLG media needs an explicit SDR conversion. This workspace renders SDR Rec.709.")
+        if "learned_recipe" in c or "learned_bindings" in c:
+            if __package__:
+                from .learned_tracking import validate_recipe, validate_learned_bindings
+            else:
+                from learned_tracking import validate_recipe, validate_learned_bindings
+            if "learned_recipe" in c:
+                c["learned_recipe"] = validate_recipe(c["learned_recipe"])
+            if "learned_bindings" in c:
+                c["learned_bindings"] = validate_learned_bindings(c["learned_bindings"], p, c, assets)
     if any(c.get("planar_motion") is not None for c in p["clips"]):
         if __package__:
             from .planar_tracking import validate_planar_binding
@@ -543,7 +552,11 @@ def _validate_single_project(project, project_dir, sequence_assets=None):
             else:
                 from timebase import format_timecode
             format_timecode(0, rate, drop_frame=True)
-    return p
+    if __package__:
+        from .studio_tools import validate_authoring_documents
+    else:
+        from studio_tools import validate_authoring_documents
+    return validate_authoring_documents(p, project_dir)
 
 
 def validate_project(project, project_dir):
@@ -611,9 +624,17 @@ def validate_project(project, project_dir):
                 raise ValueError("A multicamera angle must reference a distinct valid video angle.")
             angle_ids.add(_identifier(angle.get("id"), "Multicamera angle id"))
             source_ids.add(angle["asset_id"])
-            source_frame = _number(angle.get("in", 0), "Multicamera source frame", 0, 10_000_000, True)
+            # Measured audio offsets retain fractional project-frame positions;
+            # timeline edits remain whole frames, while sound stays sample exact.
+            source_frame = _number(angle.get("in", 0), "Multicamera source frame", 0, 10_000_000)
             if source_frame >= media[angle["asset_id"]]["duration"] * result["fps"]:
                 raise ValueError("A multicamera synchronization point is beyond its source.")
+    try:
+        from .multicam_sync import validate_group_synchronization
+    except ImportError:
+        from multicam_sync import validate_group_synchronization
+    for group in groups:
+        validate_group_synchronization(group, media, project_rate(result))
     group_map = {group["id"]: group for group in groups}
     for value in normalized.values():
         for clip in value["clips"]:
@@ -791,10 +812,14 @@ def _graph(project, project_dir, temp_dir, cancel_event=None, _context=None, _na
     if _context is None:
         if __package__:
             from .planar_tracking import verify_planar_source_files
+            from .learned_tracking import assert_learned_export_ready, verify_learned_source_files
         else:
             from planar_tracking import verify_planar_source_files
+            from learned_tracking import assert_learned_export_ready, verify_learned_source_files
         try:
             verify_planar_source_files(project, project_dir, cancel_event=cancel_event)
+            assert_learned_export_ready(project)
+            verify_learned_source_files(project, project_dir, cancel_event=cancel_event)
         except RuntimeError:
             if cancel_event is not None and cancel_event.is_set():
                 raise RenderCancelled("Planar source verification cancelled")
@@ -862,7 +887,7 @@ def _graph(project, project_dir, temp_dir, cancel_event=None, _context=None, _na
             scale = _curve(clip, "scale", rate)
             timing = _video_timing(clip, rate, nested=nested)
             if high:
-                timing.append("format=gbrap16le")
+                timing += high16_source_conversion(None if nested else asset.get("pixel_format"))
             if clip.get("color_pipeline") is not None:
                 # Decode/white-balance/gamut conversion and creative LUTs feed
                 # both the compositor and the direct clip path identically.
@@ -898,12 +923,12 @@ def _graph(project, project_dir, temp_dir, cancel_event=None, _context=None, _na
                     external_index = add_input(external_asset)
                     label = f"compositor{index}media{ordinal}"
                     external_labels[node["id"]] = label
-                    external_color = []
+                    external_color = high16_source_conversion(external_asset.get("pixel_format")) if high else []
                     if developed_display(external_asset):
                         # The display view is already baked into Develop's PNG.
                         # Match a new direct clip's transfer conversion without
                         # applying another OCIO view or scene tone mapping.
-                        external_color = compile_pipeline(
+                        external_color += compile_pipeline(
                             {"version": 1, "enabled": True, "input_transfer": "srgb", "input_primaries": "rec709"},
                             project_dir, temp_dir, prefix=f"externalcolor{index}_{ordinal}", input_unorm16=True, precision=precision)
                     # Each node has an independent project-rate source clock.
@@ -1259,9 +1284,12 @@ def render_project(project, project_dir, output_path, profile="h264", progress=N
     p = validate_project(project, project_dir)
     if __package__:
         from .planar_tracking import assert_planar_export_ready
+        from .learned_tracking import assert_learned_export_ready
     else:
         from planar_tracking import assert_planar_export_ready
+        from learned_tracking import assert_learned_export_ready
     assert_planar_export_ready(p)
+    assert_learned_export_ready(p)
     high = p.get("settings", {}).get("image_precision", "standard8") == "high16"
     if profile == "master16" and not high:
         raise ValueError("Enable High 16-bit movie processing before exporting a 16-bit master.")

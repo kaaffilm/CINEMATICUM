@@ -1,0 +1,77 @@
+/* Actual photo import, calibrated COLMAP solve and editing acceptance. Requires --python, --browser, --evidence plus explicit CINEMATICUM_RECONSTRUCTION_PYTHON and CINEMATICUM_IMAGING_PYTHON. */
+const fs=require('fs'),path=require('path'),crypto=require('crypto'),{spawn,spawnSync}=require('child_process');
+const {chromium}=require('playwright');
+const args={};
+if((process.argv.length-2)%2)throw Error('Use paired --option value arguments.');
+for(let i=2;i<process.argv.length;i+=2){if(args[process.argv[i]])throw Error('Duplicate option');args[process.argv[i]]=process.argv[i+1];}
+for(const key of ['--python','--browser','--evidence'])if(!args[key]||!path.isAbsolute(args[key]))throw Error(key+' requires an absolute path');
+if(Object.keys(args).some(key=>!['--python','--browser','--evidence'].includes(key)))throw Error('Unknown option');
+const studio=__dirname,repo=path.resolve(studio,'../..');
+for(const key of ["CINEMATICUM_RECONSTRUCTION_PYTHON", "CINEMATICUM_IMAGING_PYTHON"])if(!process.env[key]||!path.isAbsolute(process.env[key]))throw Error(key+' requires an explicit accepted runtime path');
+fs.mkdirSync(args['--evidence']); // Preserve every earlier attempt; use a fresh directory.
+const browserIdentity=crypto.createHash('sha256').update(fs.readFileSync(args['--browser'])).digest('hex');
+const prepared=spawnSync(args['--python'],['-I','-B','-c',"from pathlib import Path\nimport json,sys,tempfile,hashlib\nstudio=Path(sys.argv[1]);sys.path.insert(0,str(studio));evidence=Path(sys.argv[2])\nfrom server import Store\nfrom scene import default_scene\nfrom test_reconstruction import photographs\nroot=Path(tempfile.mkdtemp(prefix='cinematicum-reconstruction-browser-',dir='/tmp'))\ntruth=photographs(root/'photos');(root/'truth.json').write_text(json.dumps(truth,indent=2)+'\\n')\nstore=Store(root/'workspace')\ntry:\n    project=store.new_project({'name':'ENGINE TEST actual photo reconstruction','width':640,'height':360,'fps':24})\n    project['settings']['scene']=default_scene(640,360);project=store.save(project['id'],project)\n    record={'id':project['id'],'owned_root':str(root),'source_photos':{p.name:hashlib.sha256(p.read_bytes()).hexdigest() for p in sorted((root/'photos').glob('*.png'))}}\n    (evidence/'project.json').write_text(json.dumps(record,indent=2)+'\\n')\n    (root/'project-before.json').write_text(json.dumps(project,indent=2)+'\\n');print(json.dumps(record))\nfinally:store.shutdown()\n",studio,args['--evidence']],{env:{...process.env,PYTHONDONTWRITEBYTECODE:'1'},encoding:'utf8',timeout:30000,maxBuffer:1024*1024});
+if(prepared.status!==0)throw Error(prepared.stderr||String(prepared.error)||'Actual fixture preparation failed');
+const evidence=args['--evidence'],config=JSON.parse(prepared.stdout),root=config.owned_root,projectId=config.id;
+const checks=[],errors=[],downloads=[],phases=[];let browser,server,page,origin;
+const digest=data=>crypto.createHash('sha256').update(data).digest('hex');
+const files=['server.py','engine.py','studio_tools.py','project_archive.py','reconstruction.py','reconstruction_worker.py','install_reconstruction.py','runtime_management.py','web/app.js','web/index.html','web/reconstruction-ui.js','web/runtime-management-ui.js','test_reconstruction.py','test_reconstruction_browser.cjs'];
+const hashes=()=>Object.fromEntries(files.map(name=>[name,digest(fs.readFileSync(path.join(studio,name)))]));
+const before=hashes(),begun=Date.now();
+function write(error){fs.writeFileSync(path.join(evidence,'browser-report.json'),JSON.stringify({schema:'cinematicum-real-reconstruction-chromium-acceptance',project_id:projectId,owned_root:root,origin,chromium_executable_sha256:browserIdentity,source_before:before,source_after:hashes(),checks,phases,downloads,page_errors:errors,error:error?String(error):null,elapsed_ms:Date.now()-begun},null,2)+'\n');}
+function record(name,value,detail){checks.push({name,passed:!!value,detail});write();if(!value)throw Error(name+': '+JSON.stringify(detail));}
+function phase(name){phases.push({name,elapsed_ms:Date.now()-begun});write();}
+async function project(){const r=await page.request.get(origin+'/api/projects/'+projectId);if(!r.ok())throw Error('Exact project read failed');return r.json();}
+async function openTool(){await page.locator('#authoring-tools').click();await page.locator('[data-authoring-tool="reconstruction"]').click();await page.locator('#reconstruction-dialog').waitFor({state:'visible'});await page.locator('[data-recon-run]:not([disabled])').waitFor();}
+async function saveMain(){await page.locator('#save-project').click();await page.waitForFunction(()=>document.querySelector('#save-state').textContent==='SAVED LOCALLY');}
+function jobs(){return fs.readdirSync(path.join(root,'workspace/jobs')).filter(n=>n.endsWith('.json')).map(n=>JSON.parse(fs.readFileSync(path.join(root,'workspace/jobs',n)))).filter(j=>j.project_id===projectId&&j.kind==='reconstruction');}
+async function download(name,expected){const promise=page.waitForEvent('download');await page.locator('[data-recon-links] a').filter({hasText:name}).click();const item=await promise,target=path.join(evidence,name);await item.saveAs(target);const data=fs.readFileSync(target),actual=digest(data);downloads.push({name,bytes:data.length,sha256:actual,suggested_filename:item.suggestedFilename()});record('exact_download_'+name,actual===expected,{expected,actual});}
+async function run(){
+  phase('owned_server');const env={...process.env,TMPDIR:path.join(root,'tmp'),PYTHONDONTWRITEBYTECODE:'1'};fs.mkdirSync(env.TMPDIR,{recursive:true});
+  server=spawn(args['--python'],['-B',path.join(studio,'server.py'),'--workspace',path.join(root,'workspace'),'--port','0'],{cwd:repo,env,stdio:['ignore','pipe','pipe']});server.stderr.pipe(fs.createWriteStream(path.join(evidence,'server.stderr')));
+  origin=await new Promise((resolve,reject)=>{let text='';const timer=setTimeout(()=>reject(Error('Owned server startup timed out')),20000);server.stdout.on('data',chunk=>{text+=chunk;const match=text.match(/CINEMATICUM editor: (http:\/\/127\.0\.0\.1:\d+)/);if(match){clearTimeout(timer);resolve(match[1]);}});server.once('exit',code=>{clearTimeout(timer);reject(Error('Owned server exited '+code));});});
+  browser=await chromium.launch({executablePath:args['--browser'],headless:true});const context=await browser.newContext({viewport:{width:1440,height:1100},acceptDownloads:true});
+  await context.route('**/*',route=>{const url=route.request().url();return url.startsWith(origin+'/')||url.startsWith('data:')||url.startsWith('blob:')?route.continue():route.abort();});
+  page=await context.newPage();page.setDefaultTimeout(45000);page.on('pageerror',error=>{errors.push(String(error));write();});await page.goto(origin);await page.waitForFunction(id=>document.querySelector('#project-select')?.value===id,projectId);
+  record('exact_project_loaded',await page.locator('#project-select').inputValue()===projectId,projectId);
+  phase('actual_media_import');await page.locator('#media-input').setInputFiles(Object.keys(config.source_photos).map(name=>path.join(root,'photos',name)));
+  await page.waitForFunction(()=>document.querySelector('#asset-count')?.textContent.trim()==='8'&&document.querySelector('#media-footer-label')?.textContent==='Media is copied into your project');
+  const imported=await project();record('eight_photos_imported_via_ui',imported.assets.length===8&&imported.assets.every(a=>a.kind==='image'&&a.width===640&&a.height===480));
+  record('admission_preserves_original_photo_bytes',imported.assets.every(a=>a.sha256===config.source_photos[a.name])&&Object.entries(config.source_photos).every(([name,sha])=>digest(fs.readFileSync(path.join(root,'photos',name)))===sha));
+  phase('settings_save_undo_redo');await openTool();record('actual_colmap_runtime_available',/COLMAP 4\.2\.1/.test(await page.locator('[data-recon-runtime]').textContent()));
+  await page.locator('[data-recon-select-all]').click();await page.locator('[data-recon-model]').selectOption('PINHOLE');await page.locator('[data-recon-params]').fill('650, 650, 320, 240');await page.locator('[data-recon-refine]').uncheck();await page.locator('[data-recon-max-image-size]').fill('640');await page.locator('[data-recon-marker-limit]').fill('150');
+  await page.locator('[data-recon-save]').click();await page.waitForFunction(()=>document.querySelector('[data-recon-status]')?.textContent.includes('settings saved'));
+  const saved=await project();record('typed_settings_saved',saved.reconstruction.asset_ids.length===8&&saved.reconstruction.camera_model==='PINHOLE'&&saved.reconstruction.marker_limit===150);
+  await page.locator('[data-recon-close]').click();await page.locator('#undo-button').click();await saveMain();record('settings_undo_saved',!(await project()).reconstruction);
+  await page.locator('#redo-button').click();await saveMain();record('settings_redo_saved',JSON.stringify((await project()).reconstruction)===JSON.stringify(saved.reconstruction));
+  phase('actual_photo_solve');await openTool();await page.locator('[data-recon-run]').click();await page.waitForFunction(()=>document.querySelector('[data-recon-status]')?.textContent.includes('Actual COLMAP reconstruction completed'));
+  const job=jobs().filter(j=>j.state==='completed').sort((a,b)=>b.created_at-a.created_at)[0];record('owned_actual_reconstruction_job',!!job&&job.result.output_id===job.id,job?.id);
+  const stats=job.result.statistics;record('measured_eight_view_geometry',stats.registered_images===8&&stats.points3D>1000&&stats.observations>5000&&stats.reprojection.rms_pixels<.5,stats);
+  record('no_silent_application_on_completion',JSON.stringify((await project()).settings.scene)===JSON.stringify(saved.settings.scene));
+  await page.waitForFunction(()=>document.querySelector('[data-recon-preview]')?.naturalWidth>0);record('actual_corrected_reference_preview',await page.locator('[data-recon-preview]').evaluate(n=>n.naturalWidth>0&&n.naturalHeight>0));
+  phase('explicit_canvas_guard');record('resize_is_explicit_and_unchecked',await page.locator('[data-recon-resize-label]').isVisible()&&!await page.locator('[data-recon-resize]').isChecked(),await page.locator('[data-recon-resize-note]').textContent());
+  const untouched=await project();await page.locator('[data-recon-apply-result]').click();await page.waitForFunction(()=>document.querySelector('[data-recon-status]')?.textContent.includes('resolution differs'));
+  record('unchecked_resize_rejected_without_mutation',JSON.stringify(await project())===JSON.stringify(untouched));
+  await page.screenshot({path:path.join(evidence,'resolution-guard.png')});
+  phase('actual_downloads');for(const name of ['sparse.ply','undistorted-images.zip','provenance.json'])await download(name,job.result.artifacts.find(a=>a.filename===name).sha256);
+  phase('explicit_atomic_application');await page.locator('[data-recon-resize]').check();await page.locator('[data-recon-apply-result]').click();await page.waitForFunction(()=>document.querySelector('[data-recon-status]')?.textContent.includes('Measured camera and sparse point markers saved'));
+  const applied=await project(),marker='reconstruction_points_'+job.id.slice(0,16);
+  record('checked_resize_camera_and_markers_saved_atomically',applied.width===640&&applied.height===480&&applied.settings.scene.width===640&&applied.settings.scene.height===480&&applied.settings.scene.objects.some(o=>o.id===marker));
+  record('existing_scene_objects_preserved',JSON.stringify(applied.settings.scene.objects.filter(o=>o.id!==marker))===JSON.stringify(saved.settings.scene.objects));
+  await page.locator('[data-recon-close]').click();await page.locator('#undo-button').click();await saveMain();const undone=await project();record('one_undo_restores_scene_and_canvas',undone.width===640&&undone.height===360&&JSON.stringify(undone.settings.scene)===JSON.stringify(saved.settings.scene));
+  await page.locator('#redo-button').click();await saveMain();record('redo_restores_camera_and_canvas',(await project()).height===480&&(await project()).settings.scene.objects.some(o=>o.id===marker));
+  phase('history_and_reload');await page.reload();await page.waitForFunction(id=>document.querySelector('#project-select')?.value===id,projectId);await openTool();await page.locator('[data-recon-open-saved]').click();await page.waitForFunction(()=>document.querySelector('[data-recon-status]')?.textContent.includes('Saved measured reconstruction reopened'));
+  record('actual_saved_result_reopened',await page.locator('[data-recon-camera] option').count()===8&&await page.locator('[data-recon-history]').inputValue()===job.id);
+  record('project_survives_reload',(await project()).height===480&&(await project()).settings.scene.objects.some(o=>o.id===marker));
+  await page.locator('[data-recon-apply-result]').click();await page.waitForFunction(()=>document.querySelector('[data-recon-status]')?.textContent.includes('already exist'));
+  record('duplicate_marker_application_rejected',(await project()).settings.scene.objects.filter(o=>o.id===marker).length===1);
+  await page.screenshot({path:path.join(evidence,'reconstruction-result.png')});await page.locator('[data-recon-close]').click();
+  phase('four_fixed_runtime_cards');await page.locator('#authoring-tools').click();await page.locator('#runtime-management-button').click();await page.locator('#runtime-management-dialog').waitFor();await page.waitForFunction(()=>document.querySelectorAll('[data-runtime-id]').length===4);
+  record('four_fixed_runtime_cards',JSON.stringify((await page.locator('[data-runtime-id]').evaluateAll(nodes=>nodes.map(n=>n.dataset.runtimeId))).sort())===JSON.stringify(['learned','optiland','physical','reconstruction']));
+  record('reconstruction_exact_lock_visible',await page.locator('[data-runtime-id="reconstruction"] .runtime-lock').first().textContent()==='Lock SHA-256 '+digest(fs.readFileSync(path.join(studio,process.platform==='darwin'?'reconstruction-macos-arm64-py313.lock.json':'reconstruction-linux-x86_64-py312.lock.json'))));
+  await page.locator('[data-runtime-id="reconstruction"]').scrollIntoViewIfNeeded();await page.screenshot({path:path.join(evidence,'runtime-four-engines.png')});await page.locator('[data-runtime-close]').click();
+  record('source_photos_unchanged_after_full_workflow',Object.entries(config.source_photos).every(([name,sha])=>digest(fs.readFileSync(path.join(root,'photos',name)))===sha));
+  record('no_uncaught_browser_errors',errors.length===0,errors);record('tested_source_unchanged',JSON.stringify(hashes())===JSON.stringify(before));phase('complete');write();
+  fs.writeFileSync(path.join(evidence,'completed-job.json'),JSON.stringify(job,null,2)+'\n');process.stdout.write(JSON.stringify({passed:checks.filter(c=>c.passed).length,total:checks.length,elapsed_ms:Date.now()-begun,report:path.join(evidence,'browser-report.json')})+'\n');
+}
+run().catch(async error=>{write(error);if(page){await page.screenshot({path:path.join(evidence,'failure.png')}).catch(()=>{});fs.writeFileSync(path.join(evidence,'failure-dom.txt'),await page.locator('body').innerText().catch(()=>''));}process.stderr.write(String(error.stack||error)+'\n');process.exitCode=1;}).finally(async()=>{if(browser)await browser.close();if(server&&!server.killed){server.kill('SIGTERM');await new Promise(resolve=>{const timer=setTimeout(()=>{server.kill('SIGKILL');resolve();},10000);server.once('exit',()=>{clearTimeout(timer);resolve();});});}});

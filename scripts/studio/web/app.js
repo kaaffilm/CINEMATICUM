@@ -13,7 +13,9 @@ let playbackAudioFrame=0,playbackEpoch=0,playbackRequest=0,playbackPreparing=fal
 let compositorEditor=null, trackingEditor=null, interchangeEditor=null, colorPipelineEditor=null, imagingEditor=null, cameraImporter=null, sceneEditor=null, sceneProjectId='', generationReadiness=null, readinessRequest=0;
 const editing=window.CinematicumEditing;
 const TRACK_WIDTH=128;
-let frameViewer=null, recoveryEditor=null, productionEditor=null, archiveEditor=null, mediaEditor=null, editorialEditor=null, generationEditor=null;
+let frameViewer=null, recoveryEditor=null, productionEditor=null, archiveEditor=null, mediaEditor=null, editorialEditor=null, multicamSyncEditor=null, generationEditor=null;
+let learnedEditor=null, collaborationEditor=null, runtimeEditor=null;
+const authoringEditors=new Map();
 const waveforms=new Map(),waveformPending=new Set(),waveformQueue=[];let waveformActive=0;
 const canvas = $('#preview-canvas');
 const ctx = canvas.getContext('2d', {alpha:false});
@@ -22,7 +24,7 @@ async function api(path, {method='GET',body,raw=false}={}) {
   const headers={};if(method!=='GET'){headers['X-Cinematicum-Token']=state.token;headers['Content-Type']=raw?'application/octet-stream':'application/json';}
   const r=await fetch(path,{method,headers,body:body===undefined?undefined:(raw?body:JSON.stringify(body)),cache:'no-store'});
   const data=await r.json().catch(()=>({error:`Server returned ${r.status}`}));
-  if(!r.ok)throw Object.assign(Error(typeof data.error==='string'?data.error:(data.message||JSON.stringify(data.error||data))),{status:r.status}); return data;
+  if(!r.ok)throw Object.assign(Error(typeof data.error==='string'?data.error:(data.message||JSON.stringify(data.error||data))),{status:r.status,code:data.code,conflicts:data.conflicts,revision:data.revision,missing_blobs:data.missing_blobs,validation_error:data.validation_error}); return data;
 }
 const projectUrl = () => `/api/projects/${encodeURIComponent(state.project.id)}`;
 const projectPath = id => `/api/projects/${encodeURIComponent(id)}`;
@@ -54,9 +56,13 @@ const secondsLabel = s => `${Math.floor(s/60)}:${String(Math.floor(s)%60).padSta
 function normalizeProject(p) {p=clone(p.project||p);p.assets??=[];p.clips??=[];p.titles??=[];p.settings??={};p.tracks??=[];p.version??=1;if(p.frame_rate)p.fps=p.frame_rate.numerator/p.frame_rate.denominator;for(const seq of projectSequences(p))(seq.clips||[]).forEach(editing.ensureAnimationDomain);return p;}
 function selectedItem() {if(!state.selected)return null;return (state.selected.type==='title'?state.project.titles:state.project.clips).find(c=>c.id===state.selected.id)||null;}
 function checkpoint() {state.history.push(clone(state.project));if(state.history.length>80)state.history.shift();state.future=[];}
-function changed({timeline=true,inspector=false,bin=false}={}) {const planar=window.CinematicumTracking?.reconcilePlanarBindings(state.project);if(planar?.invalidated){inspector=true;toast('Measured planar motion is stale. Remeasure or explicitly remove it before export; Undo restores the edit.',true,9000);}if(planar?.restored||planar?.remapped)inspector=true;pruneMedia();state.frame=clamp(state.frame,0,Math.max(0,durationFrames()-1));if(state.rendered)switchPreview(false);state.dirty=true;state.revision++;$('#save-state').textContent='UNSAVED';$('#save-state').classList.add('dirty');$('#undo-button').disabled=!state.history.length;$('#redo-button').disabled=!state.future.length;if(timeline)renderTimeline();if(inspector)renderInspector();if(bin)renderMedia();updateTransport();drawPreview();frameViewer?.invalidate();recoveryEditor?.schedule();}
+function changed({timeline=true,inspector=false,bin=false}={}) {const planar=window.CinematicumTracking?.reconcilePlanarBindings(state.project);if(planar?.invalidated){inspector=true;toast('Measured planar motion is stale. Remeasure or explicitly remove it before export; Undo restores the edit.',true,9000);}if(planar?.restored||planar?.remapped)inspector=true;pruneMedia();state.frame=clamp(state.frame,0,Math.max(0,durationFrames()-1));if(state.rendered)switchPreview(false);state.dirty=true;state.revision++;$('#save-state').textContent='UNSAVED';$('#save-state').classList.add('dirty');$('#undo-button').disabled=!state.history.length&&!collaborationEditor?.isActive();$('#redo-button').disabled=!state.future.length;if(timeline)renderTimeline();if(inspector)renderInspector();if(bin)renderMedia();updateTransport();drawPreview();frameViewer?.invalidate();recoveryEditor?.schedule();collaborationEditor?.changed();}
 function mutate(fn,opts) {checkpoint();fn();changed(opts);}
 function undo(redo=false) {
+  if(!state.dirty&&collaborationEditor?.isActive()){
+    if(redo){toast('Use the shared edit history to selectively undo an undo.',false);return;}
+    collaborationEditor.undoLatest().catch(error=>toast(error.message,true));return;
+  }
   const from=redo?state.future:state.history,to=redo?state.history:state.future;if(!from.length)return;
   stop();to.push(clone(state.project));
   // Imported and rendered media are immutable inventory, independent of edit history.
@@ -80,9 +86,11 @@ async function prepareTitleAssets(project) {
     title.asset_id=asset.id;title.raster_key=signature;
   }
 }
-async function saveProject(show=true) {
+async function saveProject(show=true,lockEdits=false) {
   if(!state.project)return;
   if(state.savePromise){const pendingId=state.project.id,result=await state.savePromise;if(state.project.id!==pendingId)return result;if(state.dirty)return saveProject(show);return result;}
+  const wasEditBusy=state.editBusy,sharedSave=lockEdits||(collaborationEditor&&collaborationEditor.isActive()!==false);
+  if(sharedSave)state.editBusy=true;
   const projectId=beginProjectOperation();
   $('#save-state').textContent='SAVING…';
   state.savePromise=(async()=>{
@@ -96,8 +104,9 @@ async function saveProject(show=true) {
     }
     if(show)toast('Project saved.');return result;
   })();
-  try{return await state.savePromise;}catch(e){if(state.project.id===projectId)$('#save-state').textContent='SAVE FAILED';throw e;}finally{state.savePromise=null;recoveryEditor?.saved();endProjectOperation();}
+  try{const result=await state.savePromise;sharedSaveCompleted();return result;}catch(e){if(state.project.id===projectId)$('#save-state').textContent='SAVE FAILED';collaborationEditor?.failed(e);throw e;}finally{state.savePromise=null;if(sharedSave)state.editBusy=wasEditBusy;recoveryEditor?.saved();endProjectOperation();}
 }
+function sharedSaveCompleted(){if(collaborationEditor?.isActive()&&!state.dirty){state.history=[];state.future=[];updateTransport();}collaborationEditor?.saved();}
 function releaseMedia(id) {
   const m=state.media.get(id);if(!m)return;
   window.CinematicumAudioRouting?.release(m);
@@ -119,7 +128,7 @@ function pruneMedia(activeIds=null) {
   const inactive=[...state.media.keys()].filter(id=>!activeIds.has(id));
   for(const id of inactive.slice(0,Math.max(0,inactive.length-12)))releaseMedia(id);
 }
-function adoptProject(p) {stop();clearMedia();generationReadiness=null;readinessRequest++;state.project=normalizeProject(p);state.selected=null;state.selectedAsset=null;state.frame=0;state.dirty=false;state.history=[];state.future=[];state.revision=0;state.workflowPath=state.project.settings.comfy_workflow_path||'';state.lastRenderUrl='';switchPreview(false);$('#rendered-preview').disabled=true;canvas.width=state.project.width;canvas.height=state.project.height;canvas.style.aspectRatio=`${state.project.width}/${state.project.height}`;$('#save-state').textContent='LOCAL PROJECT';$('#save-state').classList.remove('dirty');renderAll();frameViewer?.invalidate();recoveryEditor?.reset();mediaEditor?.reset();}
+function adoptProject(p) {stop();clearMedia();generationReadiness=null;readinessRequest++;state.project=normalizeProject(p);state.selected=null;state.selectedAsset=null;state.frame=0;state.dirty=false;state.history=[];state.future=[];state.revision=0;state.workflowPath=state.project.settings.comfy_workflow_path||'';state.lastRenderUrl='';switchPreview(false);$('#rendered-preview').disabled=true;canvas.width=state.project.width;canvas.height=state.project.height;canvas.style.aspectRatio=`${state.project.width}/${state.project.height}`;$('#save-state').textContent='LOCAL PROJECT';$('#save-state').classList.remove('dirty');renderAll();frameViewer?.invalidate();recoveryEditor?.reset();mediaEditor?.reset();collaborationEditor?.reset();}
 function renderProjectList() {const found=state.projects.some(p=>p.id===state.project.id);if(!found)state.projects.push({id:state.project.id,name:state.project.name});$('#project-select').innerHTML=state.projects.map(p=>`<option value="${esc(p.id)}">${esc(p.id===state.project.id?state.project.name:p.name)}</option>`).join('');$('#project-select').value=state.project.id;}
 function renderAll() {renderProjectList();renderMedia();renderTimeline();renderInspector();updateTransport();renderCapabilities();drawPreview();$('#viewer-project').textContent=state.project.name;$('#project-format').textContent=`${state.project.width} × ${state.project.height}   /   ${rateLabel()}`;}
 function renderCapabilities() {const ff=Boolean(state.capabilities.ffmpeg?.available??state.capabilities.ffmpeg);$('#generate-center').textContent=state.capabilities.comfyui?.available?'Generate a shot':'Set up video generation';$('#empty-engine-note').textContent=state.capabilities.comfyui?.available?'YOUR MEDIA · YOUR SCENE · CONNECTED VIDEO ENGINE':'CREATE WITH YOUR MEDIA OR 3D · VIDEO GENERATION REQUIRES SETUP';$('#preview-render').disabled=!ff;$('#export-button').disabled=!ff;$('#preview-render').title=ff?'Render exact timeline preview':'FFmpeg is not installed';$$('[data-export]').forEach(b=>{b.disabled=!ff||state.capabilities[b.dataset.export]===false;b.title=b.disabled?'This encoder is not available in the installed FFmpeg':'';});}
@@ -135,7 +144,7 @@ function defaultClip(a,start=durationFrames(),track=a.kind==='audio'?-1:0) {
   // Develop's display image has already passed through its OCIO view. Decode
   // only its sRGB transfer for the timeline's Rec.709 output; do not run the
   // scene view or tone mapping again.
-  if(a.provenance?.type==='cinematicum-imaging'&&a.provenance?.version===1&&a.provenance?.display_encoding==='sRGB')clip.color_pipeline={version:1,enabled:true,input_transfer:'srgb',input_primaries:'rec709'};
+  if(['cinematicum-imaging','cinematicum-deep-compositing','cinematicum-physical-rendering'].includes(a.provenance?.type)&&a.provenance?.version===1&&a.provenance?.display_encoding==='sRGB')clip.color_pipeline={version:1,enabled:true,input_transfer:'srgb',input_primaries:'rec709'};
   return clip;
 }
 function addAsset(id,start,track) {const a=assetById(id);if(!a)return;if(a.path?.toLowerCase().endsWith('.exr')){state.selectedAsset=id;openImaging('ocio');return;}const destination=track??(a.kind==='audio'?-1:0);if(editing.track(state.project,destination).locked){toast('Unlock the destination track before adding media.');return;}if(a.kind==='scene'){state.selectedAsset=id;setMode('3d');openBlendDialog();return;}const c=defaultClip(a,start??durationFrames(),destination);mutate(()=>{state.project.clips.push(c);state.selected={type:'clip',id:c.id};state.frame=c.start;},{inspector:true});switchPreview(false);}
@@ -212,7 +221,7 @@ function applyTrimEdit(event) {
 }
 
 function setFrame(frame) {state.frame=clamp(Math.round(frame),0,Math.max(0,durationFrames()-1));playbackAudioFrame=state.frame;playbackEpoch++;if(state.playing){playbackFrame=state.frame;playbackOrigin=performance.now();}updateTransport();drawPreview();frameViewer?.invalidate();if(!state.playing&&!state.drag&&state.selected)renderInspector();}
-function updateTransport() {const selected=selectedItem();if(state.mode==='composite'&&selected&&state.selected.type==='clip')compositorEditor?.setFrame(clamp(state.frame-selected.start,0,selected.duration-1)+(selected.animation_offset??0));$('#timecode').textContent=fmt(state.frame);$('#duration').textContent=fmt(durationFrames());$('#timeline-stats').textContent=`${state.project?.clips.length||0} clips · ${state.project?.titles.length||0} titles`;const c=selectedItem();$('#split-button').disabled=!c;$('#trim-edit-button').disabled=!c||state.selected?.type!=='clip';$('#duplicate-button').disabled=!c;$('#delete-button').disabled=!c;$('#undo-button').disabled=!state.history.length;$('#redo-button').disabled=!state.future.length;$('#play-button').disabled=!durationFrames();const playhead=$('.timeline-playhead');if(playhead)playhead.style.left=`${TRACK_WIDTH+state.frame/state.project.fps*state.zoom}px`;$('#empty-viewer').hidden=Boolean(state.project?.clips.length||state.project?.titles.length||state.rendered);}
+function updateTransport() {const selected=selectedItem();if(state.mode==='composite'&&selected&&state.selected.type==='clip')compositorEditor?.setFrame(clamp(state.frame-selected.start,0,selected.duration-1)+(selected.animation_offset??0));$('#timecode').textContent=fmt(state.frame);$('#duration').textContent=fmt(durationFrames());$('#timeline-stats').textContent=`${state.project?.clips.length||0} clips · ${state.project?.titles.length||0} titles`;const c=selectedItem();$('#split-button').disabled=!c;$('#trim-edit-button').disabled=!c||state.selected?.type!=='clip';$('#duplicate-button').disabled=!c;$('#delete-button').disabled=!c;$('#undo-button').disabled=!state.history.length&&!collaborationEditor?.isActive();$('#redo-button').disabled=!state.future.length;$('#play-button').disabled=!durationFrames();const playhead=$('.timeline-playhead');if(playhead)playhead.style.left=`${TRACK_WIDTH+state.frame/state.project.fps*state.zoom}px`;$('#empty-viewer').hidden=Boolean(state.project?.clips.length||state.project?.titles.length||state.rendered);}
 function setMode(mode) {if(projectOperationBlocked())return;state.mode=mode;$$('.mode').forEach(b=>b.classList.toggle('active',b.dataset.mode===mode));if(mode==='3d'){stop();$('#render-video').pause();}renderInspector();updatePreviewNote();frameViewer?.invalidate();$('#color-scopes').hidden=mode!=='color';}
 function updatePreviewNote() {
   $('#preview-note').textContent=state.rendered?'Rendered timeline · saved render snapshot':state.project?.clips.some(c=>c.reverse)?'Reverse audio plays in rendered preview · paused picture uses the export graph':(state.mode==='color'||state.mode==='composite')?'Current-frame rendering uses the export graph':'Interactive picture and sound · render for final effects';
@@ -329,6 +338,166 @@ function openImaging(operation) {
   });
   const asset=assetById(state.selectedAsset)||assetById(selectedItem()?.asset_id);
   imagingEditor.open({operation,assetId:asset?.kind==='image'?asset.id:undefined});
+}
+async function openAuthoringTool(tool) {
+  if(projectOperationBlocked())return;
+  const spec={
+    'deep-compositing':{module:'CinematicumDeepCompositing',field:'deep_compositing'},
+    'ray-optics':{module:'CinematicumRayOptics',field:'ray_optics'},
+    'physical-rendering':{module:'CinematicumPhysicalRendering',field:'physical_rendering'},
+    'scene-processing':{module:'CinematicumSceneProcessing',field:'scene_processing'},
+    'reconstruction':{module:'CinematicumReconstruction',field:'reconstruction'}
+  }[tool];
+  if(!spec||!window[spec.module])throw Error('The requested studio tool did not load. Reopen CINEMATICUM.');
+  stop();
+  // Scene jobs use the saved authored scene and reconstruction input inventory.
+  // Freeze pending edits before opening those controls.
+  if(['physical-rendering','scene-processing','reconstruction'].includes(tool)&&state.dirty)await saveProject(false);
+  const apply=(value,context)=>applyAuthoringDocument(tool,value,context);
+  if(!authoringEditors.has(tool))authoringEditors.set(tool,window[spec.module].mount(document.body,{
+    request:api,getProject:()=>clone(state.project),getContext:()=>({projectId:state.project.id,revision:state.revision}),notify:toast,
+    applyRecipe:apply,applyPrescription:apply,applySettings:apply,
+    applyScene:async(scene,settings,context,options)=>{
+      await applyAuthoringDocument(tool,settings,context,scene,options);
+      sceneProjectId='';
+      if(state.mode==='3d')setMode('3d');
+      return true;
+    },
+    onComplete:async(result,context)=>{
+      if(state.project.id!==context.projectId)return;
+      const fresh=await api(projectPath(context.projectId));
+      if(state.project.id!==context.projectId)return;
+      const known=new Set(state.project.assets.map(asset=>asset.id));
+      for(const asset of fresh.assets||[])if(!known.has(asset.id)){state.project.assets.push(asset);known.add(asset.id);}
+      if(result.asset?.id)state.selectedAsset=result.asset.id;
+      renderMedia();
+    }
+  }));
+  $('#authoring-tools-dialog').close();
+  authoringEditors.get(tool).open();
+}
+async function applyAuthoringDocument(tool,document,context,scene,options) {
+  if(state.savePromise)await state.savePromise;
+  if(projectOperationBlocked()||state.project.id!==context.projectId||state.revision!==context.revision)throw Error('The project changed. Reopen this tool before applying its document.');
+  state.editBusy=true;const projectId=beginProjectOperation();
+  try{
+    const payload=clone(state.project);if(recoveryEditor)payload._recovery=recoveryEditor.receipt();
+    if(options!==undefined){
+      if(tool!=='reconstruction'||!options||Object.keys(options).length!==1||options.resizeProject!==true||!scene||!Number.isSafeInteger(scene.width)||!Number.isSafeInteger(scene.height))throw Error('This scene application does not support that project resize request.');
+      payload.width=scene.width;payload.height=scene.height;
+    }
+    await prepareTitleAssets(payload);
+    const body={tool,document:clone(document),project:payload};if(scene!==undefined)body.scene=clone(scene);
+    const saved=normalizeProject(await api(projectPath(projectId)+'/authoring-apply',{method:'POST',body}));
+    // Rejection never changes the local project or its undo history. A commit
+    // becomes exactly one undoable edit after server validation succeeds.
+    checkpoint();state.project=saved;changed({timeline:false,inspector:true,bin:true});
+    state.dirty=false;$('#save-state').textContent='SAVED LOCALLY';$('#save-state').classList.remove('dirty');
+    recoveryEditor?.saved();sharedSaveCompleted();renderAll();return true;
+  }finally{state.editBusy=false;endProjectOperation();}
+}
+async function openStudioTools() {
+  if(projectOperationBlocked())return;
+  const projectId=state.project.id,dialog=$('#authoring-tools-dialog'),history=$('#studio-result-history');
+  dialog.showModal();history.textContent='Loading saved results…';
+  try{
+    const payload=await api(projectPath(projectId)+'/studio-results');
+    if(state.project.id!==projectId||!dialog.open)return;
+    history.replaceChildren();
+    if(!payload.results?.length){history.textContent='Processed results remain available here after reopening or restoring the project.';return;}
+    for(const record of payload.results){
+      const row=document.createElement('section'),heading=document.createElement('p'),links=document.createElement('div');
+      heading.textContent=record.label+' · '+new Date(record.modified_at*1000).toLocaleString();row.append(heading,links);
+      links.style.cssText='display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px';
+      for(const [name,value] of Object.entries(record.artifact_urls||{})){
+        const url=new URL(value,location.origin);
+        if(url.origin!==location.origin||!url.pathname.startsWith(projectPath(projectId)+'/'))throw Error('Saved result belongs to a different project.');
+        const link=document.createElement('a');link.className='button small';link.textContent=name;link.href=url.href;link.download=name;links.append(link);
+      }
+      history.append(row);
+    }
+  }catch(error){if(state.project.id===projectId&&dialog.open)history.textContent=error.message;}
+}
+async function applyLearnedEdit(recipe,plan,context){
+  if(state.savePromise)await state.savePromise;
+  if(projectOperationBlocked()||state.project.id!==context.projectId||state.revision!==context.revision||state.selected?.type!=='clip'||state.selected.id!==context.clipId)throw Error('The selected clip changed. Reopen learned tracking before applying this result.');
+  state.editBusy=true;const projectId=beginProjectOperation();
+  try{
+    const candidate=clone(state.project),clip=candidate.clips.find(item=>item.id===context.clipId);
+    if(!clip)throw Error('The measured clip no longer exists.');
+    clip.learned_recipe=clone(recipe);
+    if(plan){
+      if(plan.clip_id!==clip.id||!plan.binding)throw Error('The learned application plan belongs to another clip.');
+      if(plan.compositor)clip.compositor=clone(plan.compositor);
+      if(plan.tracking)clip.tracking=clone(plan.tracking);
+      const target=plan.binding.target;
+      clip.learned_bindings=(clip.learned_bindings||[]).filter(binding=>target.kind==='tracking-motion'?binding.target?.kind!=='tracking-motion':binding.target?.node_id!==target.node_id);
+      clip.learned_bindings.push(clone(plan.binding));
+    }
+    if(recoveryEditor)candidate._recovery=recoveryEditor.receipt();
+    await prepareTitleAssets(candidate);
+    const saved=normalizeProject(await api(projectPath(projectId),{method:'PUT',body:candidate}));
+    checkpoint();state.project=saved;changed({inspector:true,bin:true});state.dirty=false;
+    $('#save-state').textContent='SAVED LOCALLY';$('#save-state').classList.remove('dirty');
+    recoveryEditor?.saved();sharedSaveCompleted();renderAll();return true;
+  }finally{state.editBusy=false;endProjectOperation();}
+}
+function openLearnedTracking(){
+  if(projectOperationBlocked())return;
+  const clip=state.selected?.type==='clip'?selectedItem():null,asset=clip&&assetById(clip.asset_id);
+  if(!clip||clip.track<0||!['video','image'].includes(asset?.kind)){toast('Select an imported picture clip to measure learned masks or points.',true);return;}
+  stop();$('#authoring-tools-dialog').close();
+  learnedEditor??=window.CinematicumLearnedTracking.mount(document.body,{
+    request:api,getProject:()=>clone(state.project),getContext:()=>({projectId:state.project.id,clipId:state.selected?.type==='clip'?state.selected.id:null,revision:state.revision}),notify:toast,
+    applyRecipe:(recipe,context)=>applyLearnedEdit(recipe,null,context),
+    applyPlan:(plan,context)=>applyLearnedEdit(plan.recipe,plan,context),
+    onComplete:async(result,context)=>{
+      if(state.project.id!==context.projectId)return;
+      const fresh=await api(projectPath(context.projectId));if(state.project.id!==context.projectId)return;
+      for(const asset of fresh.assets||[])if(!state.project.assets.some(existing=>existing.id===asset.id))state.project.assets.push(asset);
+      renderMedia();
+    }
+  });learnedEditor.open();
+}
+async function synchronizeSharedProject({discardDraft=false,resumeHost=false}={}){
+  if(state.savePromise)await state.savePromise;
+  if(state.projectOps||state.navigating||state.editBusy)throw Error('Wait for the current project operation before synchronizing.');
+  if(state.dirty&&!discardDraft)throw Error('The open draft must be saved or explicitly retained before synchronization.');
+  const projectId=state.project.id;state.editBusy=true;beginProjectOperation();
+  try{
+    if(discardDraft&&state.dirty){
+      await api(projectPath(projectId)+'/checkpoint',{method:'POST',body:{editor_id:crypto.randomUUID().replace(/-/g,''),sequence:1,project:clone(state.project)}});
+    }
+    const result=await api(projectPath(projectId)+'/collaboration-'+(resumeHost?'resume':'sync'),{method:'POST',body:resumeHost?{}:{revision:state.project.revision}});
+    if(result.project.revision!==state.project.revision||discardDraft){
+      const selected=clone(state.selected),frame=state.frame;
+      stop();clearMedia();state.project=normalizeProject(result.project);state.dirty=false;state.history=[];state.future=[];state.revision++;
+      state.selected=selected;state.frame=clamp(frame,0,Math.max(0,durationFrames()-1));if(!selectedItem())state.selected=null;
+      canvas.width=state.project.width;canvas.height=state.project.height;canvas.style.aspectRatio=`${state.project.width}/${state.project.height}`;
+      state.workflowPath=state.project.settings.comfy_workflow_path||'';sceneProjectId='';generationReadiness=null;readinessRequest++;
+      $('#save-state').textContent='SHARED PROJECT';$('#save-state').classList.remove('dirty');renderAll();frameViewer?.invalidate();recoveryEditor?.saved();
+    }
+    return result;
+  }finally{state.editBusy=false;endProjectOperation();}
+}
+function initializeCollaboration(){
+  collaborationEditor??=window.CinematicumCollaboration.mount(document.body,{
+    request:async(path,options={})=>{
+      if(options.method!=='POST'||!path.includes('/collaboration-'))return api(path,options);
+      if(state.projectOps||state.savePromise||state.navigating||state.editBusy)throw Error('Wait for the current project operation before changing shared state.');
+      state.editBusy=true;beginProjectOperation();try{return await api(path,options);}finally{state.editBusy=false;endProjectOperation();}
+    },getProject:()=>state.project?clone(state.project):null,getContext:()=>({projectId:state.project?.id,revision:state.revision}),
+    isBusy:()=>Boolean(state.projectOps||state.savePromise||state.navigating||state.editBusy||state.playing||state.drag),isDirty:()=>state.dirty,
+    saveProject:()=>saveProject(false,true),sync:()=>synchronizeSharedProject(),discardDraftAndSync:()=>synchronizeSharedProject({discardDraft:true}),
+    resumeShared:()=>synchronizeSharedProject({discardDraft:true,resumeHost:true}),
+    adoptRemote:async(project)=>{if(state.dirty||state.savePromise)throw Error('The local draft is still open. Save or preserve it before adopting a shared project.');adoptProject(project);},
+    notify:toast
+  });
+}
+function openRuntimeManagement(){
+  if(projectOperationBlocked())return;$('#authoring-tools-dialog').close();
+  runtimeEditor??=window.CinematicumRuntimeManagement.mount(document.body,{request:api,getProject:()=>clone(state.project),notify:toast});
+  runtimeEditor.open();
 }
 async function startModelMesh(payload,expectedProjectId) {
   if(projectOperationBlocked()||state.project.id!==expectedProjectId)throw Error('The project changed before mesh evaluation.');
@@ -578,7 +747,7 @@ async function importFiles(files) {
   const projectId=beginProjectOperation();stop();$('#media-footer-label').textContent='Importing…';
   try{await saveProject(false);for(let i=0;i<files.length;i++){const file=files[i];if(state.project.id===projectId)$('#media-footer-label').textContent=`Importing ${i+1}/${files.length}…`;const r=await api(`${projectPath(projectId)}/import?name=${encodeURIComponent(file.name)}`,{method:'POST',raw:true,body:file});const a=r.asset||r;if(!a.id)throw Error('Import returned no media asset.');if(state.project.id===projectId){if(!state.project.assets.some(x=>x.id===a.id))state.project.assets.push(a);if(a.kind==='scene')state.selectedAsset=a.id;renderMedia();}}
     if(state.project.id===projectId){state.revision++;state.dirty=true;await saveProject(false);renderInspector();}toast(`${files.length} file${files.length===1?'':'s'} imported. Double-click media to add it to the timeline.`);
-  }catch(e){toast(e.message,true,9000);}finally{if(state.project.id===projectId)$('#media-footer-label').textContent='Files stay on this computer';$('#media-input').value='';endProjectOperation();}
+  }catch(e){toast(e.message,true,9000);}finally{if(state.project.id===projectId)$('#media-footer-label').textContent='Media is copied into your project';$('#media-input').value='';endProjectOperation();}
 }
 async function startRender(profile) {
   if(projectOperationBlocked())return;
@@ -717,7 +886,7 @@ function timelineUp() {const d=state.drag;if(!d)return;state.drag=null;if(d.scru
 function fitTimeline() {state.zoom=clamp(($('#timeline-scroll').clientWidth-TRACK_WIDTH-40)/Math.max(5,durationFrames()/state.project.fps+1),12,160);$('#timeline-zoom').value=state.zoom;renderTimeline();}
 async function bootstrap() {try{recoveryEditor??=window.CinematicumRecovery.mount({request:api,notify:toast,button:$('#recovery-button'),status:$('#recovery-state'),getContext:()=>({project:state.project,revision:state.revision,dirty:state.dirty,saving:Boolean(state.savePromise),blocked:state.navigating||state.editBusy||state.projectOps>0}),onRecover:(project,expected)=>{if(state.project.id!==expected.projectId||state.revision!==expected.revision||state.project.revision!==expected.savedRevision||project.revision!==state.project.revision)throw Error('The project changed. Reopen it before recovering this version.');stop();mutate(()=>{state.project=normalizeProject(project);state.selected=null;clearMedia();canvas.width=state.project.width;canvas.height=state.project.height;canvas.style.aspectRatio=`${state.project.width}/${state.project.height}`;state.workflowPath=state.project.settings.comfy_workflow_path||'';generationReadiness=null;readinessRequest++;},{inspector:true,bin:true});renderAll();}});const b=await api('/api/bootstrap');state.token=b.token;state.projects=b.projects||[];state.capabilities=b.capabilities||{};if(!b.project)throw Error('The server did not provide a project.');adoptProject(b.project);const active=(b.jobs||[]).find(j=>j.project_id===state.project.id&&j.kind!=='frame-preview'&&['queued','running'].includes(j.state));if(active)trackJob(active,active.kind==='render'?'Rendering timeline':active.kind==='blender'?'Rendering Blender scene':active.kind==='scene'?'Rendering your 3D scene':'Generating media',active.kind||'render');if(!state.capabilities.ffmpeg)toast('Install FFmpeg and ffprobe to render media, then check engines.',true,8000);}catch(e){toast(`Could not open CINEMATICUM: ${e.message}`,true,30000);$('#preview-note').textContent='Server connection failed';}}
 
-// UI bindings stay local; no project data leaves this server.
+// UI actions use the authenticated Studio API; sharing requires explicit pairing.
 for(const id of ['import-button','import-footer','import-center'])$('#'+id).addEventListener('click',()=>$('#media-input').click());
 $('#create-scene-center').addEventListener('click',()=>setMode('3d'));
 $('#generate-center').addEventListener('click',()=>{setMode('generate');$('#generate-prompt')?.focus();});
@@ -795,6 +964,12 @@ function openInterchange() {
   interchangeEditor.open();
 }
 $('#develop-image').addEventListener('click',()=>openImaging());
+$('#authoring-tools').addEventListener('click',openStudioTools);
+$('#learned-tracking-button').addEventListener('click',openLearnedTracking);
+$('#runtime-management-button').addEventListener('click',openRuntimeManagement);
+$('#collaboration-button').addEventListener('click',()=>{if(projectOperationBlocked())return;$('#authoring-tools-dialog').close();initializeCollaboration();collaborationEditor.open();});
+$('#close-authoring-tools').addEventListener('click',()=>$('#authoring-tools-dialog').close());
+$$('[data-authoring-tool]').forEach(button=>button.addEventListener('click',()=>openAuthoringTool(button.dataset.authoringTool).catch(error=>toast(error.message,true))));
 $('#trim-edit-button').addEventListener('click',openTrimEdit);
 $('#close-trim-edit').addEventListener('click',()=>{$('#trim-edit-dialog').close();trimEditContext=null;});
 $('#trim-edit-kind').addEventListener('change',updateTrimEdit);
@@ -862,12 +1037,24 @@ function openEditorial(tab='sequences'){
   editorialEditor??=window.CinematicumEditorial.mount(document.body,{
     request:api,getProject:()=>clone(state.project),getContext:()=>({projectId:state.project.id,revision:state.revision}),
     getFrame:()=>state.frame,getSelectedClip:()=>state.selected?.type==='clip'?selectedItem():null,onSeek:setFrame,notify:toast,
+    onAutoSync:()=>{editorialEditor.close();openMulticamSync();},
     onApply:(candidate,expected)=>{
       if(projectOperationBlocked()||state.project.id!==expected.projectId||state.revision!==expected.revision)return false;
       const inventory=state.project.assets,savedRevision=state.project.revision;
       stop();clearMedia();mutate(()=>{state.project=normalizeProject(candidate);state.project.assets=inventory;state.project.revision=savedRevision;state.selected=null;state.selectedAsset=null;state.frame=Math.min(state.frame,Math.max(0,durationFrames()-1));},{inspector:true,bin:true});renderAll();return true;
     }
   });editorialEditor.open(tab);
+}
+function openMulticamSync(){
+  if(projectOperationBlocked())return;stop();
+  multicamSyncEditor??=window.CinematicumMulticamSync.mount(document.body,{
+    request:api,getProject:()=>clone(state.project),getContext:()=>({projectId:state.project.id,revision:state.revision}),getFrame:()=>state.frame,
+    onApply:(candidate,expected)=>{
+      if(projectOperationBlocked()||state.project.id!==expected.projectId||state.revision!==expected.revision)return false;
+      const inventory=state.project.assets,savedRevision=state.project.revision;
+      stop();clearMedia();mutate(()=>{state.project=normalizeProject(candidate);state.project.assets=inventory;state.project.revision=savedRevision;state.selected=null;state.selectedAsset=null;state.frame=Math.min(state.frame,Math.max(0,durationFrames()-1));},{inspector:true,bin:true});renderAll();return true;
+    }
+  });void multicamSyncEditor.open();
 }
 $('#editorial-button').addEventListener('click',()=>openEditorial());
 $('#captions-button').addEventListener('click',()=>openEditorial('captions'));
@@ -879,6 +1066,7 @@ mediaEditor=window.CinematicumMediaManagement.mount({button:$('#media-management
   onPlaybackChange:()=>{if(!state.project)return;stop();clearMedia();drawPreview();}
 });
 
+initializeCollaboration();
 bootstrap();
 
 // Track and keyframe authoring use the same project history as every clip edit.

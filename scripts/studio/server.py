@@ -43,8 +43,9 @@ from spatial_import import import_obj
 from camera_io import import_camera
 from color_pipeline import import_cube, list_luts
 import recovery
+from collaboration import CollaborationError
 
-VERSION = "0.9.1"
+VERSION = "0.10.0"
 MAX_UPLOAD = 8 * 1024 * 1024 * 1024
 MAX_JSON = 8 * 1024 * 1024
 IDENTIFIER = re.compile(r"^[a-f0-9]{32}$")
@@ -120,6 +121,8 @@ class Store:
         self.pool = None
         self.preview_pool = None
         self.audio_pool = None
+        self.collaboration = None
+        self.scene_workers = None
         self.audio_pending = {}
         self.waveform_slots = threading.BoundedSemaphore(2)
         self.stop_decoding = threading.Event()
@@ -165,6 +168,10 @@ class Store:
                     self.jobs[job["id"]] = job
                 except (ValueError, KeyError, OSError):
                     continue
+            from collaboration_store import CollaborationStore
+            self.collaboration = CollaborationStore(self)
+            from scene_dispatch_store import SceneDispatchStore
+            self.scene_workers = SceneDispatchStore(self)
         except BaseException:
             if self.pool is not None:
                 self.pool.shutdown(wait=True, cancel_futures=True)
@@ -264,6 +271,8 @@ class Store:
         if not isinstance(project, dict):
             raise ValueError("Project must be an object")
         with self.lock:
+            if not creating and self.collaboration is not None and self.collaboration.bound(project_id):
+                return self.collaboration.save(project_id, project)
             directory = self.project_dir(project_id)
             p = copy.deepcopy(project)
             receipt = p.pop("_recovery", None)
@@ -385,7 +394,8 @@ class Store:
             # receipt, even when another image happens to contain equal pixels.
             # Ordinary duplicate imports and unchanged title plates still reuse
             # their immutable media.
-            development = isinstance(provenance, dict) and provenance.get("type") == "cinematicum-imaging"
+            development = isinstance(provenance, dict) and provenance.get("type") in {
+                "cinematicum-imaging", "cinematicum-deep-compositing", "cinematicum-physical-rendering", "cinematicum-learned-mask", "cinematicum-scene-processing"}
             duplicate = next((a for a in assets if a.get("sha256") == asset["sha256"]
                               and a.get("kind") == asset["kind"]
                               and (not development or a.get("provenance") == provenance)), None)
@@ -714,7 +724,7 @@ class Store:
             return result
         return self.submit(project_id, "imaging", work, {"recipe": recipe})
 
-    def tracking(self, project_id, payload, seed_only=False):
+    def tracking(self, project_id, payload, seed_only=False, learned_seed=False):
         project = self.analysis_snapshot(project_id, payload)
         directory = self.project_dir(project_id)
         clip_id = payload.get("clip_id")
@@ -732,7 +742,11 @@ class Store:
         def work(job_id, progress, event):
             output = directory / "analysis" / (job_id + (".png" if seed_only else ".json"))
             if seed_only:
-                result = tracking_frame(project, directory, clip_id, request, output, cancel_event=event)
+                if learned_seed:
+                    from learned_tracking import learned_frame
+                    result = learned_frame(project, directory, clip_id, request, output, cancel_event=event)
+                else:
+                    result = tracking_frame(project, directory, clip_id, request, output, cancel_event=event)
                 cached = sorted(output.parent.glob("*.png"), key=lambda path: path.stat().st_mtime, reverse=True)
                 for old in cached[32:]:
                     if re.fullmatch(r"[a-f0-9]{32}\.png", old.name) and not old.is_symlink():
@@ -1192,6 +1206,10 @@ class Store:
             self.audio_pool.shutdown(wait=True, cancel_futures=True)
             if self.managed_generation is not None:
                 self.managed_generation.shutdown()
+            if self.collaboration is not None:
+                self.collaboration.close()
+            if self.scene_workers is not None:
+                self.scene_workers.close()
             with self.lock:
                 # Preserve the reason and exact affected jobs, without prompt or
                 # media content, so an ordinary quit is distinguishable from a crash.
@@ -1361,7 +1379,14 @@ class Handler(BaseHTTPRequestHandler):
     def dispatch_get(self):
         parsed = urlparse(self.path)
         parts = unquote(parsed.path).strip("/").split("/")
-        if parsed.path in {"/", "/index.html", "/app.js", "/style.css", "/editing.js", "/viewer-tools.js", "/compositor-ui.js", "/scene-editor.js", "/scene-editor.css", "/tracking-ui.js", "/interchange-ui.js", "/camera-io-ui.js", "/color-pipeline-ui.js", "/imaging-ui.js", "/recovery-ui.js", "/production-ui.js", "/archive-ui.js", "/media-management-ui.js", "/editorial-ui.js", "/sequence-playback.js", "/managed-generation-ui.js", "/audio-routing.js", "/pcm-playback.js"}:
+        if parsed.path in {"/learned-tracking-ui.js", "/collaboration-ui.js", "/runtime-management-ui.js", "/reconstruction-ui.js", "/scene-processing-ui.js", "/multicam-sync-ui.js"}:
+            return self.file(WEB / parsed.path[1:])
+        if parts == ["api", "runtime-management"]:
+            from runtime_management import inventory
+            return self.json(200, inventory())
+        if parts == ["api", "scene-workers"]:
+            return self.json(200, self.store.scene_workers.inventory())
+        if parsed.path in {"/", "/index.html", "/app.js", "/style.css", "/editing.js", "/viewer-tools.js", "/compositor-ui.js", "/scene-editor.js", "/scene-editor.css", "/tracking-ui.js", "/interchange-ui.js", "/camera-io-ui.js", "/color-pipeline-ui.js", "/imaging-ui.js", "/deep-compositing-ui.js", "/ray-optics-ui.js", "/physical-rendering-ui.js", "/recovery-ui.js", "/production-ui.js", "/archive-ui.js", "/media-management-ui.js", "/editorial-ui.js", "/sequence-playback.js", "/managed-generation-ui.js", "/audio-routing.js", "/pcm-playback.js"}:
             return self.file(WEB / ("index.html" if parsed.path == "/" else parsed.path[1:]))
         if parts == ["api", "bootstrap"]:
             projects = self.store.projects()
@@ -1373,6 +1398,22 @@ class Handler(BaseHTTPRequestHandler):
         if parts == ["api", "imaging-capabilities"]:
             from imaging import imaging_capabilities
             return self.json(200, imaging_capabilities())
+        if parts == ["api", "learned-capabilities"]:
+            from learned_tracking import learned_capabilities
+            return self.json(200, learned_capabilities())
+        if parts == ["api", "multicam-sync-capabilities"]:
+            from multicam_sync import sync_capabilities
+            return self.json(200, sync_capabilities())
+        if len(parts) == 2 and parts[0] == "api" and parts[1] in {"deep-capabilities", "ray-optics-capabilities", "physical-rendering-capabilities", "scene-processing-capabilities", "reconstruction-capabilities"}:
+            from studio_tools import capabilities
+            tool = {"deep-capabilities": "deep-compositing", "ray-optics-capabilities": "ray-optics",
+                    "physical-rendering-capabilities": "physical-rendering", "scene-processing-capabilities": "scene-processing",
+                    "reconstruction-capabilities": "reconstruction"}[parts[1]]
+            return self.json(200, capabilities(tool))
+        if parts == ["api", "ray-optics-catalog"]:
+            from ray_optics import ray_optics_catalog
+            query = parse_qs(parsed.query)
+            return self.json(200, ray_optics_catalog(query.get("q", [""])[0], int(query.get("limit", ["100"])[0])))
         if parts == ["api", "generation-runtime"]:
             return self.json(200, self.store.generation_runtime_status())
         if parts == ["api", "projects"]:
@@ -1398,6 +1439,28 @@ class Handler(BaseHTTPRequestHandler):
             if len(parts) == 4 and parts[3] == "imaging-sources":
                 from imaging import list_raw_sources
                 return self.json(200, {"sources": list_raw_sources(self.store.project_dir(project_id))})
+            if len(parts) == 4 and parts[3] == "deep-sources":
+                from deep_compositing import list_deep_sources
+                return self.json(200, {"sources": list_deep_sources(self.store.project_dir(project_id))})
+            if len(parts) == 4 and parts[3] == "studio-results":
+                from studio_tools import list_results
+                return self.json(200, {"results": list_results(self.store, project_id)})
+            if len(parts) in {4, 5} and parts[3] == "scene-dispatch":
+                return self.json(200, self.store.scene_workers.status(project_id, parts[4] if len(parts) == 5 else None))
+            if len(parts) == 4 and parts[3] == "collaboration":
+                return self.json(200, self.store.collaboration.status(project_id))
+            if len(parts) == 4 and parts[3] == "collaboration-members":
+                from collaboration import Client
+                binding = self.store.collaboration._binding(project_id)
+                return self.json(200, Client(binding["connection"]).members())
+            if len(parts) == 7 and parts[3] in {"deep", "optics", "physical", "learned", "scene-processing", "reconstruction"} and parts[4] == "outputs":
+                from studio_tools import artifact
+                path = artifact(self.store, project_id, parts[3], parts[5], parts[6])
+                return self.file(path, download=path.suffix not in {".png", ".svg", ".mp4"} or "download" in parse_qs(parsed.query))
+            if len(parts) == 7 and parts[3:5] == ["multicam-sync", "outputs"]:
+                from multicam_sync import artifact
+                path, identity = artifact(self.store.project_dir(project_id), parts[5], parts[6])
+                return self.file(path, download=True, etag=identity["sha256"])
             if len(parts) == 7 and parts[3:5] == ["imaging", "outputs"]:
                 if not IDENTIFIER.fullmatch(parts[5]) or parts[6] not in {"linear.exr", "display.png", "receipt.json"}:
                     raise ValueError("Invalid image processing artifact")
@@ -1447,6 +1510,10 @@ class Handler(BaseHTTPRequestHandler):
         parts = unquote(parsed.path).strip("/").split("/")
         if self.command == "POST" and parts == ["api", "prepare-quit"]:
             return self.json(200, self.store.prepare_quit(self.body()))
+        if self.command == "POST" and len(parts) == 3 and parts[:2] == ["api", "scene-workers"]:
+            if parts[2] not in {"start", "pair", "invite", "revoke", "stop"}:
+                raise FileNotFoundError("Unknown scene-worker operation")
+            return self.json(200, getattr(self.store.scene_workers, parts[2])(self.body()))
         query = parse_qs(parsed.query)
         if self.command == "POST" and parts == ["api", "projects"]:
             return self.json(201, self.store.new_project(self.body()))
@@ -1455,6 +1522,20 @@ class Handler(BaseHTTPRequestHandler):
         if len(parts) >= 3 and parts[:2] == ["api", "projects"]:
             project_id = parts[2]
             directory = self.store.project_dir(project_id)
+            if self.command == "POST" and len(parts) == 6 and parts[3] == "scene-dispatch":
+                return self.json(202, self.store.scene_workers.control(project_id, parts[4], parts[5], self.body()))
+            if self.command == "POST" and len(parts) == 5 and parts[3] == "runtime-management":
+                from runtime_management import validate_request, run
+                runtime_id = parts[4]
+                request = validate_request(runtime_id, self.body())
+                def setup(job_id, progress, event):
+                    result = run(runtime_id, request, progress=progress, cancel_event=event)
+                    with self.store.lock:
+                        self.store._cap_cache = None
+                    return result
+                job = self.store.submit(project_id, "runtime-setup", setup,
+                                        {"runtime_id": runtime_id, **request})
+                return self.json(202, job)
             if self.command == "PUT" and len(parts) == 3:
                 return self.json(200, self.store.save(project_id, self.body()))
             if self.command == "POST" and len(parts) == 5 and parts[3:] == ["scene", "import-obj"]:
@@ -1531,6 +1612,28 @@ class Handler(BaseHTTPRequestHandler):
                         self.store._require_open()
                         result = import_raw_source(directory, incoming, name)
                 return self.json(201, result)
+            if action == "deep-import":
+                from studio_tools import import_deep
+                if self.headers.get_content_type() != "application/octet-stream":
+                    raise ValueError("Expected a selected OpenEXR file as application/octet-stream")
+                length = self.length(min(MAX_UPLOAD, 1024 * 1024 * 1024))
+                name = safe_name(query.get("name", ["source.exr"])[0])
+                if Path(name).suffix.lower() != ".exr":
+                    raise ValueError("Deep source import requires an OpenEXR file")
+                with tempfile.TemporaryDirectory(prefix="deep-upload-", dir=str(directory)) as temp:
+                    incoming = Path(temp) / name
+                    with incoming.open("xb") as target:
+                        remaining = length
+                        while remaining:
+                            chunk = self.rfile.read(min(1024 * 1024, remaining))
+                            if not chunk:
+                                raise ValueError("OpenEXR upload was interrupted")
+                            target.write(chunk)
+                            remaining -= len(chunk)
+                        target.flush()
+                        os.fsync(target.fileno())
+                    result = import_deep(self.store, project_id, incoming, name)
+                return self.json(201, result)
             if action == "import":
                 length = self.length(MAX_UPLOAD)
                 name = safe_name(query.get("name", ["media.mp4"])[0])
@@ -1582,6 +1685,10 @@ class Handler(BaseHTTPRequestHandler):
             payload = self.body(32 * 1024 * 1024 if action == "color-lut-import" else MAX_JSON)
             if not isinstance(payload, dict):
                 raise ValueError("Expected a JSON object")
+            if action in {"collaboration-create", "collaboration-join", "collaboration-sync", "collaboration-invite",
+                          "collaboration-undo", "collaboration-leave", "collaboration-resume", "collaboration-revoke"}:
+                operation = getattr(self.store.collaboration, action.removeprefix("collaboration-"))
+                return self.json(200, operation(project_id, payload))
             if action == "color-lut-import":
                 if set(payload) != {"text"}:
                     raise ValueError("LUT import accepts selected .cube text only.")
@@ -1608,12 +1715,31 @@ class Handler(BaseHTTPRequestHandler):
                 return self.json(202 if "job" in result else 200, result)
             if action == "editorial":
                 return self.json(200, self.store.editorial(project_id, payload))
+            if action in {"multicam-sync", "multicam-sync-apply"}:
+                from multicam_sync import submit_analysis, apply_plan
+                return self.json(202 if action == "multicam-sync" else 200,
+                                 (submit_analysis if action == "multicam-sync" else apply_plan)(self.store, project_id, payload))
             if action == "blender":
                 return self.json(202, self.store.blender(project_id, payload))
             if action == "scene":
                 return self.json(202, self.store.scene_render(project_id, payload))
             if action == "imaging-render":
                 return self.json(202, self.store.imaging_render(project_id, payload))
+            if action in {"deep-render", "ray-optics", "physical-rendering", "scene-processing", "reconstruction"}:
+                from studio_tools import run_tool
+                tool = "deep-compositing" if action == "deep-render" else action
+                return self.json(202, run_tool(self.store, project_id, tool, payload))
+            if action == "scene-dispatch":
+                return self.json(202, self.store.scene_workers.submit(project_id, payload))
+            if action == "authoring-apply":
+                from studio_tools import apply_document
+                return self.json(200, apply_document(self.store, project_id, payload))
+            if action in {"learned-track", "learned-apply-plan"}:
+                from learned_tools import track, apply_plan
+                result = (track if action == "learned-track" else apply_plan)(self.store, project_id, payload)
+                return self.json(202 if action == "learned-track" else 200, result)
+            if action == "learned-frame":
+                return self.json(202, self.store.tracking(project_id, payload, seed_only=True, learned_seed=True))
             if action == "frame-preview":
                 return self.json(202, self.store.frame_preview(project_id, payload))
             if action in {"tracking-frame", "tracking"}:
@@ -1637,6 +1763,8 @@ class Handler(BaseHTTPRequestHandler):
             return
         except ConflictError as exc:
             self.json(409, {"error": str(exc)})
+        except CollaborationError as exc:
+            self.json(exc.status, exc.as_dict())
         except PermissionError as exc:
             self.json(403, {"error": str(exc)})
         except FileNotFoundError as exc:

@@ -41,6 +41,16 @@ RUNTIME_FILES = (
     "install_imaging.py", "imaging-macos-arm64-py313.lock.json", "lens_assets.py", "media_orientation.py",
     "recovery.py", "production.py", "project_archive.py", "editorial.py", "sequence_interchange.py",
     "media_management.py", "roto.py", "roto_assets.py", "scene_hierarchy.py", "render_devices.py",
+    "studio_tools.py", "deep_compositing.py", "deep_compositing_worker.py",
+    "ray_optics.py", "ray_optics_worker.py", "physical_rendering.py", "physical_rendering_worker.py",
+    "install_ray_optics.py", "ray-optics-macos-arm64-py313.lock.json",
+    "collaboration.py", "collaboration_store.py",
+    "learned_tools.py", "learned_tracking.py", "learned_tracking_worker.py", "learned-runtime-lock.json",
+    "install_learned_tracking.py", "reconstruction.py", "reconstruction_worker.py",
+    "install_reconstruction.py", "reconstruction-macos-arm64-py313.lock.json",
+    "scene_processing.py", "scene_processing_worker.py", "scene_dispatch.py", "scene_dispatch_store.py",
+    "runtime_management.py", "install_physical_rendering.py", "physical-rendering-macos-arm64-py313.lock.json",
+    "multicam_sync.py", "multicam_sync_worker.py",
 )
 
 
@@ -51,8 +61,8 @@ def bundle_info():
         "CFBundleDisplayName": "CINEMATICUM Studio",
         "CFBundleExecutable": EXECUTABLE_NAME,
         "CFBundlePackageType": "APPL",
-        "CFBundleShortVersionString": "0.9.1",
-        "CFBundleVersion": "10",
+        "CFBundleShortVersionString": "0.10.0",
+        "CFBundleVersion": "11",
         "CFBundleIconFile": "StudioIcon.icns",
         "LSApplicationCategoryType": "public.app-category.video",
         "LSMinimumSystemVersion": "12.0",

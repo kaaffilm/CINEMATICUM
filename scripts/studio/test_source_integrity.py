@@ -22,6 +22,7 @@ class SourceIntegrityTests(unittest.TestCase):
             "scripts/studio/test_example.py": "# source fixture\n",
             "scripts/studio/macos/App.swift": "// source fixture\n",
             "scripts/studio/web/app.js": "// source fixture\n",
+            "scripts/studio/test_browser.cjs": "// CommonJS source fixture\n",
             "scripts/studio/research/topic.md": "Test documentation\n",
         }
         for name, data in self.sources.items():
@@ -58,6 +59,7 @@ class SourceIntegrityTests(unittest.TestCase):
 
     def test_new_tracked_untracked_and_ignored_source_cannot_escape_inventory(self):
         for name, staged in (("scripts/studio/new_package/worker.py", False),
+                             ("scripts/studio/undeclared-browser.cjs", False),
                              ("scripts/studio/web/new.js", True),
                              ("scripts/studio/web/ignored.js", False),
                              ("scripts/studio/cinematicum-adapter.py", False)):
@@ -67,7 +69,7 @@ class SourceIntegrityTests(unittest.TestCase):
         self.write(".gitignore", "scripts/studio/web/ignored.js\n")
         result = integrity.verify_manifest(self.root)
         self.assertFalse(result["passed"])
-        self.assertEqual(result["unexpected"], ["scripts/studio/cinematicum-adapter.py", "scripts/studio/new_package/worker.py",
+        self.assertEqual(result["unexpected"], ["scripts/studio/cinematicum-adapter.py", "scripts/studio/new_package/worker.py", "scripts/studio/undeclared-browser.cjs",
                                                  "scripts/studio/web/ignored.js", "scripts/studio/web/new.js"])
         with self.assertRaisesRegex(ValueError, "Stage intended new source"):
             integrity.write_manifest(self.root)

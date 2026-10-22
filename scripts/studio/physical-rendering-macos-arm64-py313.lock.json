@@ -1,0 +1,62 @@
+{
+  "external_runtime": {
+    "llvm": {
+      "install": "brew install llvm",
+      "macos_guidance": "https://drjit.readthedocs.io/en/stable/what.html#backends",
+      "minimum": "11.1",
+      "pinning": "Record actual package/bottle/library identity during installation; LLVM is not bundled in these wheels."
+    },
+    "pbrt": {
+      "accepted_source_commit": "b4ce9687e6c695f5582997c61b0c66cf064bdb4a",
+      "optional_for": [
+        "pbrt_import",
+        "pbrt_export"
+      ],
+      "required_for": [
+        "pbrt_render"
+      ],
+      "source": "https://github.com/mmp/pbrt-v4"
+    }
+  },
+  "licenses": {
+    "drjit": "BSD-3-Clause (upstream wheel retains its license)",
+    "mitsuba": "BSD-3-Clause (upstream wheel retains its license)",
+    "numpy": "BSD-3-Clause plus bundled third-party notices in wheel",
+    "pbrt": "Apache-2.0 plus bundled third-party notices"
+  },
+  "packages": [
+    {
+      "filename": "drjit-1.5.0-cp313-cp313-macosx_11_0_arm64.whl",
+      "name": "drjit",
+      "sha256": "05a2f4736aad8aebf74a2813b8293f71e0550401fb33abd4f284e822314549a5",
+      "size": 4193205,
+      "source": "https://pypi.org/pypi/drjit/1.5.0/json",
+      "url": "https://files.pythonhosted.org/packages/af/62/af65164239a8fc0f5a473c63438aa6d29d23bfdedcda931fbc33985c8453/drjit-1.5.0-cp313-cp313-macosx_11_0_arm64.whl",
+      "version": "1.5.0"
+    },
+    {
+      "filename": "mitsuba-3.9.1-cp313-cp313-macosx_11_0_arm64.whl",
+      "name": "mitsuba",
+      "sha256": "ab829531fa2766510ffc0d5f53bb91267b049e06854d97531a0fc591207debc2",
+      "size": 52328893,
+      "source": "https://pypi.org/pypi/mitsuba/3.9.1/json",
+      "url": "https://files.pythonhosted.org/packages/ba/a4/f1011427a0118a05d329755814d8594a8f3688de3b8d7722bdfe6411bb8d/mitsuba-3.9.1-cp313-cp313-macosx_11_0_arm64.whl",
+      "version": "3.9.1"
+    },
+    {
+      "filename": "numpy-2.5.4-cp313-cp313-macosx_14_0_arm64.whl",
+      "name": "numpy",
+      "sha256": "6d6a71b9d9a97c03633aa12565ef2825ffa036cc1d99cfd50dacf0f128af4fe2",
+      "size": 5445803,
+      "source": "https://pypi.org/pypi/numpy/2.5.4/json",
+      "url": "https://files.pythonhosted.org/packages/e2/84/6a3d75b3ba3dfe84ac0053450753d1e6d250a8bf80f66474cc46d1fb643f/numpy-2.5.4-cp313-cp313-macosx_14_0_arm64.whl",
+      "version": "2.5.4"
+    }
+  ],
+  "platform": "macos-arm64",
+  "python": "3.13",
+  "resolved_at": "2026-10-21T23:14:39.781016+00:00",
+  "schema": "cinematicum-physical-rendering-wheel-lock",
+  "source": "Actual downloaded wheels independently matched to primary PyPI release JSON. macOS execution is a separate acceptance gate.",
+  "version": 1
+}

@@ -57,10 +57,11 @@ DEFAULT_BEZIER = [[.5, .1, .2790861, .1, .7209139, .1, 1],
                  [.1, .5, .1, .7209139, .1, .2790861, 1]]
 MASKABLE = {"grade", "curves", "blur", "sharpen", "chroma_key", "lens_distortion"}
 INPUT_COUNTS = {"source": 0, "media_source": 0, "grade": 1, "curves": 1, "blur": 1, "sharpen": 1,
-                "chroma_key": 1, "mask": 1, "merge": 2, "lens_distortion": 1}
+                "chroma_key": 1, "mask": 1, "alpha_mask": 2, "merge": 2, "lens_distortion": 1}
 PARAMETERS = {
     "source": {},
     "media_source": {},
+    "alpha_mask": {},
     "lens_distortion": {"fx": (1, .1, 20), "fy": (1, .1, 20),
                         "cx": (.5, -2, 3), "cy": (.5, -2, 3),
                         "k1": (0, -1, 1), "k2": (0, -1, 1), "k3": (0, -1, 1),
@@ -354,6 +355,7 @@ def validate_graph(graph, width=None, height=None, *, animation_duration=None, a
         extra = ({"direction"} if kind == "lens_distortion"
                  else {"asset_id", "source_in", "duration", "offset", "outside"} if kind == "media_source"
                  else {"color"} if kind == "chroma_key" else {"shape", "invert", "points", "bezier"} if kind == "mask"
+                 else {"invert"} if kind == "alpha_mask"
                  else {"mode"} if kind == "merge" else set(CURVE_CHANNELS) if kind == "curves" else set())
         if not isinstance(params, dict) or set(params) - set(PARAMETERS[kind]) - extra:
             raise ValueError(f"Unsupported parameter for compositor {kind}.")
@@ -390,6 +392,10 @@ def validate_graph(graph, width=None, height=None, *, animation_duration=None, a
             clean.update(shape=shape, invert=invert, points=points)
             if "bezier" in params or shape == "bezier" or isinstance(raw.get("animation"), dict) and "bezier" in raw["animation"]:
                 clean["bezier"] = _bezier(params.get("bezier", DEFAULT_BEZIER))
+        if kind == "alpha_mask":
+            if not isinstance(params.get("invert", False), bool):
+                raise ValueError("Alpha-mask inversion must be boolean.")
+            clean["invert"] = params.get("invert", False)
         if kind == "curves":
             for channel in CURVE_CHANNELS:
                 points = _points(params.get(channel, [[0, 0], [1, 1]]), "curves." + channel, 2, MAX_CURVE_POINTS)
@@ -460,6 +466,7 @@ def validate_graph(graph, width=None, height=None, *, animation_duration=None, a
         raise ValueError("Calibrated lens processing supports at most 2,073,600 pixels per graph canvas (1920 × 1080).")
     working_images = sum(5 if by_id[key]["type"] == "merge" and by_id[key]["params"]["mode"] != "normal"
                          else 22 if by_id[key]["type"]=="lens_distortion"
+                         else 6 if by_id[key]["type"] == "alpha_mask"
                          else 2 if by_id[key]["type"] == "curves" else 1 for key in active)
     # Associated-colour interpolation keeps 16-bit RGB+alpha branches and
     # separate 8-bit source/effect mattes until the final alpha merge.
@@ -840,6 +847,27 @@ def high16_geq(red="r(X,Y)", green="g(X,Y)", blue="b(X,Y)", alpha="alpha(X,Y)"):
     return "geq=" + ":".join(c + "='" + v + "'" for c, v in zip("rgba", (red, green, blue, alpha))) + ":interpolation=nearest"
 
 
+def high16_source_conversion(pixel_format=None):
+    """Convert a decoded source while retaining its actual alpha semantics.
+
+    swscale can synthesize 65532 (rather than 65535) when converting an opaque
+    packed RGB source to planar UNORM16+alpha. No-alpha source formats have
+    exact unit coverage, so restore that semantic before any compositing.
+    Explicit alpha formats, palettes and unknown formats are never flattened.
+    Nested rendered streams must omit pixel_format to preserve their alpha.
+    """
+    opaque = re.fullmatch(
+        r"(?:0rgb|rgb0|0bgr|bgr0|rgb24|bgr24|"
+        r"(?:rgb|bgr)(?:4|8|444|555|565|48)(?:be|le)?|"
+        r"gbrp(?:(?:9|10|12|14|16|f32)(?:be|le))?|"
+        r"yuvj?(?:410|411|420|422|440|444)p(?:(?:9|10|12|14|16)(?:be|le))?|"
+        r"gray(?:8|(?:9|10|12|14|16|f32)(?:be|le))?|"
+        r"nv(?:12|21|16|24|42|20be|20le)|"
+        r"p(?:010|016|210|216|410|416)(?:be|le)|"
+        r"yuyv422|uyvy422|yvyu422|uyyvyy411)", pixel_format or "")
+    return ["format=gbrap16le"] + ([high16_geq(alpha="65535")] if opaque else [])
+
+
 def high16_associate():
     # GEQ changes samples, not alpha-mode metadata. All arithmetic operands use
     # the same straight metadata, so FFmpeg 8 cannot silently multiply a weight
@@ -1157,6 +1185,23 @@ def compile_graph(graph, input_label, prefix, *, fps=24, frame_offset=0,
                 high16_attach_matte(filters, rgb, matte, output)
             else:
                 filters.append(f"[{rgb}][{matte}]alphamerge,format=rgba[{output}]")
+        elif kind == "alpha_mask":
+            # Image alpha is multiplied by the second stream's alpha. Its
+            # RGB is irrelevant; keep the first stream's straight RGB planes
+            # byte-for-byte, including fractional and zero source alpha.
+            color, matte, original, weight, alpha = (output + suffix for suffix in
+                                                     ("color", "matte", "original", "weight", "alpha"))
+            maximum, gray = (65535, "gray16le") if high else (255, "gray")
+            filters.append(f"[{incoming[0]}]split=2[{color}][{matte}]")
+            filters.append(f"[{matte}]alphaextract,format={gray}[{original}]")
+            filters.append(f"[{incoming[1]}]alphaextract,format={gray}[{weight}]")
+            multiplier = f"({maximum}-B)" if params["invert"] else "B"
+            filters.append(f"[{original}][{weight}]blend=all_expr='floor(A*{multiplier}/{maximum}+0.5)':"
+                           f"shortest=1:repeatlast=0[{alpha}]")
+            if high:
+                high16_attach_matte(filters, color, alpha, output)
+            else:
+                filters.append(f"[{color}][{alpha}]alphamerge,format=rgba[{output}]")
         elif kind == "mask":
             color, matte, alpha = output + "color", output + "matte", output + "alpha"
             # Apply geometry only to an extracted grayscale matte. This avoids

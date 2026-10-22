@@ -21,7 +21,7 @@ const manifest={url:'/api/projects/p/audio-source/'+'c'.repeat(64),sha256:'a'.re
 const context={currentTime:0,sampleRate:48000,createBuffer(channels,count){return {getChannelData:()=>new Float32Array(count)};},createBufferSource(){const node={connect:noop,disconnect(){this.disconnected=true;},stop(){this.stopped=true;},start:noop};pcmNodes.push(node);return node;}};
 const sandbox={state,document:{createElement:()=>new Element()},Image:Element,mediaUrl:a=>'/owned/'+a.id,
   assetById:id=>state.project.assets.find(a=>a.id===id),drawPreview:noop,toast:noop,
-  window:{CinematicumSequencePlayback:{clear:noop}},mediaEditor:null,
+  window:{CinematicumSequencePlayback:{clear:noop}},mediaEditor:null,collaborationEditor:null,
   frameViewer:null,recoveryEditor:{schedule:()=>checkpoints++},$:()=>widget,renderTimeline:noop,renderInspector:noop,renderMedia:noop,updateTransport:noop,
   durationFrames:()=>24,clamp:(v,a,b)=>Math.max(a,Math.min(b,v)),switchPreview:noop,
   setTimeout(fn){timers.set(++timerId,fn);return timerId;},clearTimeout(id){timers.delete(id);},

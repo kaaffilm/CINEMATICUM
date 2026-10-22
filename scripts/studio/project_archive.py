@@ -113,6 +113,17 @@ def _allowed(value):
         return name.suffix in {".raw", ".json"} and bool(_SHA.fullmatch(name.stem))
     if len(parts) == 4 and parts[:2] == ["imaging", "outputs"]:
         return bool(_ID.fullmatch(parts[2])) and parts[3] in {"display.png", "linear.exr", "receipt.json"}
+    if len(parts) == 4 and parts[:2] == ["multicam-sync", "outputs"]:
+        from multicam_sync import ARTIFACT_NAMES
+        return bool(_ID.fullmatch(parts[2])) and parts[3] in ARTIFACT_NAMES
+    if len(parts) == 3 and parts[:2] == ["deep", "sources"]:
+        name = Path(parts[2])
+        return name.suffix in {".exr", ".json"} and bool(_SHA.fullmatch(name.stem))
+    if len(parts) == 4 and parts[1] == "outputs" and parts[0] in {"deep", "optics", "physical", "learned", "scene-processing", "reconstruction"}:
+        from studio_tools import TOOLS, implementation
+        tool = next(key for key, spec in TOOLS.items() if spec["directory"] == parts[0])
+        _, module = implementation(tool)
+        return bool(re.fullmatch(r"[a-f0-9]{32}", parts[2])) and parts[3] in module.ARTIFACT_NAMES
     if len(parts) == 2 and parts[0] == "exports":
         return bool(_ID.fullmatch(Path(parts[1]).stem)) and Path(parts[1]).suffix in {".blend", ".json", ".zip"}
     return False
@@ -157,23 +168,43 @@ def _read_owned(root, relative):
     return _json_load(payload), payload
 
 
-def _portable_json(value, workflow=False):
+def _portable_json(value, workflow=False, scene_graph=None):
     """Reject explicit machine/file/network references in managed path fields.
 
     Creative text is left intact. Model names and relative engine inputs are
     disclosed as external engine prerequisites, never fetched by this module.
     """
-    pending, inspected = [(value, "")], 0
+    pending, inspected = [(value, "", ())], 0
     while pending:
-        item, key = pending.pop()
+        item, key, location = pending.pop()
         inspected += 1
         if inspected > 500000:
             raise ValueError("Project metadata exceeds the portable inspection bound.")
         if isinstance(item, dict):
-            pending.extend((v, str(k)) for k, v in item.items())
+            for child_key, child in item.items():
+                if not location and child_key == "scene_processing" and child is not None:
+                    # A validated graph is data-only. Its absolute hierarchy
+                    # identities and context strings are not filesystem paths.
+                    from scene_processing import validate_scene_graph
+                    validate_scene_graph(child)
+                    continue
+                if scene_graph is not None and not location and child_key == "context":
+                    from scene_processing import validate_context
+                    if not isinstance(child, dict):
+                        raise ValueError("A scene receipt requires its typed evaluation context.")
+                    normalized = validate_context({k: v for k, v in child.items() if k != "time"}, scene_graph["context"])
+                    if normalized != child:
+                        raise ValueError("A scene receipt context differs from its typed graph schema.")
+                    continue
+                pending.append((child, str(child_key), location + (child_key,)))
         elif isinstance(item, list):
-            pending.extend((v, key) for v in item)
+            pending.extend((v, key, location + (index,)) for index, v in enumerate(item))
         elif isinstance(item, str):
+            if (scene_graph is not None and len(location) == 3 and location[0] == "baked_transforms"
+                    and type(location[1]) is int and location[2] == "path"):
+                from scene_processing import validate_path
+                validate_path(item)
+                continue
             path_field = key.lower() in _PATH_KEYS or key.lower().endswith(("_path", "_file", "_filename", "_directory", "_url"))
             if workflow:
                 path_field = path_field or key.lower().endswith("_name")
@@ -201,6 +232,103 @@ def _scan(root, relative, suffix):
             if entry.name.endswith(suffix):
                 result.append(relative + "/" + entry.name)
     return sorted(result)
+
+
+def _collect_authoring(root, project, add):
+    """Retain EXR source identities and each atomically published tool result."""
+    sources = set()
+    for relative in _scan(root, "deep/sources", ".json"):
+        descriptor, payload = _read_owned(root, relative)
+        digest = Path(relative).stem
+        if (not _SHA.fullmatch(digest) or not isinstance(descriptor, dict)
+                or descriptor.get("version") != 1 or descriptor.get("id") != digest
+                or descriptor.get("sha256") != digest or descriptor.get("path") != "deep/sources/" + digest + ".exr"):
+            raise ValueError("A deep EXR source descriptor is inconsistent.")
+        _portable_json(descriptor)
+        add(relative, "deep-source-descriptor", data=payload)
+        add(descriptor["path"], "deep-exr-source", digest, descriptor.get("size"))
+        sources.add(digest)
+    for node in (project.get("deep_compositing") or {}).get("nodes", []):
+        if node.get("op") == "source" and node["source_id"] not in sources:
+            raise ValueError("An authored deep graph references an absent EXR original.")
+
+    from studio_tools import TOOLS, implementation
+    for tool, spec in TOOLS.items():
+        for relative in _scan(root, spec["directory"] + "/outputs", ""):
+            if not re.fullmatch(r"[a-f0-9]{32}", Path(relative).name):
+                continue
+            _, module = implementation(tool)
+            receipt_name = spec.get("receipt", "receipt.json")
+            receipt, payload = _read_owned(root, relative + "/" + receipt_name)
+            if not isinstance(receipt, dict):
+                raise ValueError("An authoring output receipt must be an object.")
+            scene_graph = None
+            if tool == "scene-processing":
+                from scene_processing import digest, validate_scene_graph
+                document, _ = _read_owned(root, relative + "/graph.json")
+                scene_graph = validate_scene_graph(document)
+                if (receipt.get("format") != "CINEMATICUM_SCENE_PROCESSING" or receipt.get("version") != 1
+                        or receipt.get("graph_sha256") != digest(scene_graph)):
+                    raise ValueError("A scene-processing receipt differs from its validated graph identity.")
+            _portable_json(receipt, scene_graph=scene_graph)
+            add(relative + "/" + receipt_name, tool + "-receipt", data=payload)
+            entries = receipt.get("artifacts")
+            if isinstance(entries, dict):
+                entries = [dict(value, filename=value.get("filename", key))
+                           for key, value in entries.items() if isinstance(value, dict)]
+            if not isinstance(entries, list) or not entries:
+                raise ValueError("An authoring output lacks its artifact identities.")
+            found = set()
+            for entry in entries:
+                if not isinstance(entry, dict):
+                    raise ValueError("Invalid authoring artifact identity.")
+                name = entry.get("filename")
+                if name not in module.ARTIFACT_NAMES or name == receipt_name or name in found:
+                    raise ValueError("An authoring receipt declares duplicate or unowned artifacts.")
+                found.add(name)
+                add(relative + "/" + name, tool + "-artifact", entry.get("sha256"), entry.get("size", entry.get("bytes")))
+            actual = {Path(path).name for path in _scan(root, relative, "")}
+            if actual != found | {receipt_name}:
+                raise ValueError("An authoring output inventory no longer matches its receipt.")
+
+    # Audio alignment is authored evidence, including its actual decoded mono
+    # windows. Keep complete receipts across restore and shared-project transfer.
+    from multicam_sync import ALGORITHM, RATE, artifact_names
+    measured_bindings = {}
+    for group in project.get("multicam_groups", []):
+        binding = group.get("synchronization")
+        if binding is not None:
+            ident, digest = binding["output_id"], binding["receipt_sha256"]
+            if ident in measured_bindings and measured_bindings[ident] != digest:
+                raise ValueError("Measured camera groups disagree about their source receipt.")
+            measured_bindings[ident] = digest
+    found_measurements = set()
+    for relative in _scan(root, "multicam-sync/outputs", ""):
+        ident = Path(relative).name
+        if not _ID.fullmatch(ident):
+            continue
+        receipt, payload = _read_owned(root, relative + "/receipt.json")
+        if (not isinstance(receipt, dict) or receipt.get("format") != "cinematicum-multicam-sync"
+                or receipt.get("version") != 1 or receipt.get("algorithm") != ALGORITHM or receipt.get("rate") != RATE
+                or receipt.get("output_id") != ident or not isinstance(receipt.get("sources"), list)
+                or not isinstance(receipt.get("artifacts"), dict)):
+            raise ValueError("An owned camera synchronization receipt is invalid.")
+        _portable_json(receipt)
+        names = artifact_names(len(receipt["sources"]))
+        if (set(receipt["artifacts"]) != names - {"receipt.json"}
+                or {Path(path).name for path in _scan(root, relative, "")} != names):
+            raise ValueError("A camera synchronization output inventory differs from its receipt.")
+        digest = hashlib.sha256(payload).hexdigest()
+        if ident in measured_bindings and measured_bindings[ident] != digest:
+            raise ValueError("The measured camera synchronization receipt changed after applying its edit.")
+        add(relative + "/receipt.json", "multicam-sync-receipt", digest, data=payload)
+        for name, entry in receipt["artifacts"].items():
+            if not isinstance(entry, dict) or set(entry) != {"sha256", "size"}:
+                raise ValueError("A camera synchronization artifact has no exact content identity.")
+            add(relative + "/" + name, "multicam-sync-artifact", entry["sha256"], entry["size"])
+        found_measurements.add(ident)
+    if set(measured_bindings) - found_measurements:
+        raise ValueError("A measured camera group is missing its retained sample evidence.")
 
 
 def _collect(project, project_dir, cancel_event=None):
@@ -277,6 +405,8 @@ def _collect(project, project_dir, cancel_event=None):
         add(relative, "raw-descriptor", data=payload)
         add(descriptor["path"], "camera-raw-source", digest, descriptor.get("size"))
         raw_sources[digest] = descriptor
+
+    _collect_authoring(root, p, add)
 
     for asset in p["assets"]:
         provenance = asset.get("provenance", {})

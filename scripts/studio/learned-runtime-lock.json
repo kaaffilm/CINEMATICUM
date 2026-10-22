@@ -1,0 +1,937 @@
+{
+  "device_policy": "cpu-default; MPS requires explicit selection and separate acceptance",
+  "models": {
+    "sam2": {
+      "bytes": 156008466,
+      "filename": "sam2.1_hiera_tiny.pt",
+      "id": "sam2.1-hiera-tiny",
+      "kind": "checkpoint",
+      "license": "Apache-2.0",
+      "name": "sam2.1_hiera_tiny.pt",
+      "sha256": "7402e0d864fa82708a20fbd15bc84245c2f26dff0eb43a4b5b93452deb34be69",
+      "size": 156008466,
+      "url": "https://huggingface.co/facebook/sam2.1-hiera-tiny/resolve/de431c4043854a71d8101e17995dfe596bf101a5/sam2.1_hiera_tiny.pt"
+    },
+    "tapir": {
+      "bytes": 124348474,
+      "filename": "tapir_checkpoint_panning.pt",
+      "id": "tapir-panning",
+      "kind": "checkpoint",
+      "license": "Apache-2.0",
+      "name": "tapir_checkpoint_panning.pt",
+      "sha256": "628611c656b3bd65d4a70fbf5526b62afe82d1b085ce6044685287fb78509daa",
+      "size": 124348474,
+      "url": "https://huggingface.co/google/tapnet/resolve/5d3fb48e76c5422841e38501514121e251beabb7/tapir_checkpoint_panning.pt"
+    }
+  },
+  "packages": {
+    "absl-py": {
+      "version": "2.5.1"
+    },
+    "antlr4-python3-runtime": {
+      "version": "4.9.3"
+    },
+    "attrs": {
+      "version": "26.1.0"
+    },
+    "dm-tree": {
+      "version": "0.1.9"
+    },
+    "einshape": {
+      "version": "1.0"
+    },
+    "filelock": {
+      "version": "3.32.3"
+    },
+    "fsspec": {
+      "version": "2026.7.0"
+    },
+    "hydra-core": {
+      "version": "1.3.2"
+    },
+    "iopath": {
+      "version": "0.1.10"
+    },
+    "jinja2": {
+      "version": "3.1.6"
+    },
+    "markupsafe": {
+      "version": "3.0.3"
+    },
+    "mpmath": {
+      "version": "1.3.0"
+    },
+    "networkx": {
+      "version": "3.6.1"
+    },
+    "numpy": {
+      "version": "2.3.5"
+    },
+    "omegaconf": {
+      "version": "2.3.1"
+    },
+    "packaging": {
+      "version": "26.3"
+    },
+    "pillow": {
+      "version": "12.1.1"
+    },
+    "pip": {
+      "version": "26.0.1"
+    },
+    "portalocker": {
+      "version": "4.4.1"
+    },
+    "pyyaml": {
+      "version": "6.0.3"
+    },
+    "setuptools": {
+      "version": "78.1.0"
+    },
+    "sympy": {
+      "version": "1.14.0"
+    },
+    "torch": {
+      "version": "2.8.0"
+    },
+    "torchvision": {
+      "version": "0.23.0"
+    },
+    "tqdm": {
+      "version": "4.67.3"
+    },
+    "typing-extensions": {
+      "version": "4.16.0"
+    },
+    "wheel": {
+      "version": "0.45.1"
+    },
+    "wrapt": {
+      "version": "2.5.1"
+    }
+  },
+  "platforms": {
+    "linux-x86_64-py312": {
+      "packages": [
+        {
+          "filename": "pip-26.0.1-py3-none-any.whl",
+          "kind": "wheel",
+          "name": "pip",
+          "sha256": "bdb1b08f4274833d62c1aa29e20907365a2ceb950410df15fc9521bad440122b",
+          "size": 1787723,
+          "url": "https://files.pythonhosted.org/packages/de/f0/c81e05b613866b76d2d1066490adf1a3dbc4ee9d9c839961c3fc8a6997af/pip-26.0.1-py3-none-any.whl",
+          "version": "26.0.1"
+        },
+        {
+          "filename": "setuptools-78.1.0-py3-none-any.whl",
+          "kind": "wheel",
+          "name": "setuptools",
+          "sha256": "3e386e96793c8702ae83d17b853fb93d3e09ef82ec62722e61da5cd22376dcd8",
+          "size": 1256108,
+          "url": "https://files.pythonhosted.org/packages/54/21/f43f0a1fa8b06b32812e0975981f4677d28e0f3271601dc88ac5a5b83220/setuptools-78.1.0-py3-none-any.whl",
+          "version": "78.1.0"
+        },
+        {
+          "filename": "wheel-0.45.1-py3-none-any.whl",
+          "kind": "wheel",
+          "name": "wheel",
+          "sha256": "708e7481cc80179af0e556bbf0cc00b8444c7321e2700b8d8580231d13017248",
+          "size": 72494,
+          "url": "https://files.pythonhosted.org/packages/0b/2c/87f3254fd8ffd29e4c02732eee68a83a1d3c346ae39bc6822dcbcb697f2b/wheel-0.45.1-py3-none-any.whl",
+          "version": "0.45.1"
+        },
+        {
+          "filename": "absl_py-2.5.1-py3-none-any.whl",
+          "kind": "wheel",
+          "name": "absl-py",
+          "sha256": "721200f2f0e9960f2ca9dc3a2a706b201f5f75d812c158f059cbbe29eeafbdb8",
+          "size": 137673,
+          "url": "https://files.pythonhosted.org/packages/b3/7d/01e62f59e4166af1be6238d9f2b7f3453630c51b8044b412d05b5606532a/absl_py-2.5.1-py3-none-any.whl",
+          "version": "2.5.1"
+        },
+        {
+          "filename": "antlr4-python3-runtime-4.9.3.tar.gz",
+          "kind": "sdist",
+          "name": "antlr4-python3-runtime",
+          "sha256": "f224469b4168294902bb1efa80a8bf7855f24c99aef99cbefc1bcd3cce77881b",
+          "size": 117034,
+          "url": "https://files.pythonhosted.org/packages/3e/38/7859ff46355f76f8d19459005ca000b6e7012f2f1ca597746cbcd1fbfe5e/antlr4-python3-runtime-4.9.3.tar.gz",
+          "version": "4.9.3"
+        },
+        {
+          "filename": "attrs-26.1.0-py3-none-any.whl",
+          "kind": "wheel",
+          "name": "attrs",
+          "sha256": "c647aa4a12dfbad9333ca4e71fe62ddc36f4e63b2d260a37a8b83d2f043ac309",
+          "size": 67548,
+          "url": "https://files.pythonhosted.org/packages/64/b4/17d4b0b2a2dc85a6df63d1157e028ed19f90d4cd97c36717afef2bc2f395/attrs-26.1.0-py3-none-any.whl",
+          "version": "26.1.0"
+        },
+        {
+          "filename": "dm_tree-0.1.9-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl",
+          "kind": "wheel",
+          "name": "dm-tree",
+          "sha256": "2334cfe9d2ed4293f9f1c7aefba0657deaab9ea74b5fadd966f6d01d9b6b42d9",
+          "size": 153013,
+          "url": "https://files.pythonhosted.org/packages/86/52/27607a275c12858b979b8e943d2bd3bd0f9028503bb7079d5830a8b3cac0/dm_tree-0.1.9-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl",
+          "version": "0.1.9"
+        },
+        {
+          "filename": "einshape-1.0-py3-none-any.whl",
+          "kind": "wheel",
+          "name": "einshape",
+          "sha256": "42da4c2dea3a27f87ee45a7cee5072a636b97cb184bb07bf5d6412ba0ff7b965",
+          "size": 21392,
+          "url": "https://files.pythonhosted.org/packages/71/bb/34cc02f13b438d550e4709216ee1df9da8e55e15b0cc87a2cb5dee19a729/einshape-1.0-py3-none-any.whl",
+          "version": "1.0"
+        },
+        {
+          "filename": "filelock-3.32.3-py3-none-any.whl",
+          "kind": "wheel",
+          "name": "filelock",
+          "sha256": "7f0ca4bcc0e181c60dbbd8aa9ab5b120ebb99e4e064e83636340056f833a1f09",
+          "size": 98901,
+          "url": "https://files.pythonhosted.org/packages/a7/8e/50f46a9c0ce8d2861a394c1347caae037ea0431d2f67d7feb151cbc4649a/filelock-3.32.3-py3-none-any.whl",
+          "version": "3.32.3"
+        },
+        {
+          "filename": "fsspec-2026.7.0-py3-none-any.whl",
+          "kind": "wheel",
+          "name": "fsspec",
+          "sha256": "b57ddbafedfaef7018c1ecab32aa200a9d7ca26b77965f64e48b70061249d279",
+          "size": 206583,
+          "url": "https://files.pythonhosted.org/packages/fd/3c/6a2bf344106328fd04963664a60b9bb6496fc25df8e962fcdc1367285fb9/fsspec-2026.7.0-py3-none-any.whl",
+          "version": "2026.7.0"
+        },
+        {
+          "filename": "hydra_core-1.3.2-py3-none-any.whl",
+          "kind": "wheel",
+          "name": "hydra-core",
+          "sha256": "fa0238a9e31df3373b35b0bfb672c34cc92718d21f81311d8996a16de1141d8b",
+          "size": 154547,
+          "url": "https://files.pythonhosted.org/packages/c6/50/e0edd38dcd63fb26a8547f13d28f7a008bc4a3fd4eb4ff030673f22ad41a/hydra_core-1.3.2-py3-none-any.whl",
+          "version": "1.3.2"
+        },
+        {
+          "filename": "iopath-0.1.10.tar.gz",
+          "kind": "sdist",
+          "name": "iopath",
+          "sha256": "3311c16a4d9137223e20f141655759933e1eda24f8bff166af834af3c645ef01",
+          "size": 42226,
+          "url": "https://files.pythonhosted.org/packages/72/73/b3d451dfc523756cf177d3ebb0af76dc7751b341c60e2a21871be400ae29/iopath-0.1.10.tar.gz",
+          "version": "0.1.10"
+        },
+        {
+          "filename": "jinja2-3.1.6-py3-none-any.whl",
+          "kind": "wheel",
+          "name": "jinja2",
+          "sha256": "85ece4451f492d0c13c5dd7c13a64681a86afae63a5f347908daf103ce6d2f67",
+          "size": 134899,
+          "url": "https://files.pythonhosted.org/packages/62/a1/3d680cbfd5f4b8f15abc1d571870c5fc3e594bb582bc3b64ea099db13e56/jinja2-3.1.6-py3-none-any.whl",
+          "version": "3.1.6"
+        },
+        {
+          "filename": "markupsafe-3.0.3-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl",
+          "kind": "wheel",
+          "name": "markupsafe",
+          "sha256": "d6dd0be5b5b189d31db7cda48b91d7e0a9795f31430b7f271219ab30f1d3ac9d",
+          "size": 22947,
+          "url": "https://files.pythonhosted.org/packages/3c/2e/8d0c2ab90a8c1d9a24f0399058ab8519a3279d1bd4289511d74e909f060e/markupsafe-3.0.3-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl",
+          "version": "3.0.3"
+        },
+        {
+          "filename": "mpmath-1.3.0-py3-none-any.whl",
+          "kind": "wheel",
+          "name": "mpmath",
+          "sha256": "a0b2b9fe80bbcd81a6647ff13108738cfb482d481d826cc0e02f5b35e5c88d2c",
+          "size": 536198,
+          "url": "https://files.pythonhosted.org/packages/43/e3/7d92a15f894aa0c9c4b49b8ee9ac9850d6e63b03c9c32c0367a13ae62209/mpmath-1.3.0-py3-none-any.whl",
+          "version": "1.3.0"
+        },
+        {
+          "filename": "networkx-3.6.1-py3-none-any.whl",
+          "kind": "wheel",
+          "name": "networkx",
+          "sha256": "d47fbf302e7d9cbbb9e2555a0d267983d2aa476bac30e90dfbe5669bd57f3762",
+          "size": 2068504,
+          "url": "https://files.pythonhosted.org/packages/9e/c9/b2622292ea83fbb4ec318f5b9ab867d0a28ab43c5717bb85b0a5f6b3b0a4/networkx-3.6.1-py3-none-any.whl",
+          "version": "3.6.1"
+        },
+        {
+          "filename": "numpy-2.3.5-cp312-cp312-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl",
+          "kind": "wheel",
+          "name": "numpy",
+          "sha256": "0d8163f43acde9a73c2a33605353a4f1bc4798745a8b1d73183b28e5b435ae28",
+          "size": 16606086,
+          "url": "https://files.pythonhosted.org/packages/b6/23/2a1b231b8ff672b4c450dac27164a8b2ca7d9b7144f9c02d2396518352eb/numpy-2.3.5-cp312-cp312-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl",
+          "version": "2.3.5"
+        },
+        {
+          "filename": "omegaconf-2.3.1-py3-none-any.whl",
+          "kind": "wheel",
+          "name": "omegaconf",
+          "sha256": "3d701d14e9a8828f1edd28bb70b725908b34277cdd72cf7d6a83f94dadc6b6a0",
+          "size": 79502,
+          "url": "https://files.pythonhosted.org/packages/a4/0e/152509871bf30df6fc38569f52a2db9b55dd41aae957adae50a053ac7778/omegaconf-2.3.1-py3-none-any.whl",
+          "version": "2.3.1"
+        },
+        {
+          "filename": "packaging-26.3-py3-none-any.whl",
+          "kind": "wheel",
+          "name": "packaging",
+          "sha256": "d7193f7c8e4e93f444fde0262bf90af30e16fa0ad0ad44cb553c87339b23cd1c",
+          "size": 129956,
+          "url": "https://files.pythonhosted.org/packages/63/34/ba1c580383c9eada3711951fef0795c80b829a078d72188184bcab9dd527/packaging-26.3-py3-none-any.whl",
+          "version": "26.3"
+        },
+        {
+          "filename": "pillow-12.1.1-cp312-cp312-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl",
+          "kind": "wheel",
+          "name": "pillow",
+          "sha256": "7aac39bcf8d4770d089588a2e1dd111cbaa42df5a94be3114222057d68336bd0",
+          "size": 7041540,
+          "url": "https://files.pythonhosted.org/packages/ff/79/6df7b2ee763d619cda2fb4fea498e5f79d984dae304d45a8999b80d6cf5c/pillow-12.1.1-cp312-cp312-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl",
+          "version": "12.1.1"
+        },
+        {
+          "filename": "portalocker-4.4.1-py3-none-any.whl",
+          "kind": "wheel",
+          "name": "portalocker",
+          "sha256": "4a184e8fb1adb37e078ca1804f1b7c0d8e73d81136790b1ad695ae8f1c8be291",
+          "size": 129702,
+          "url": "https://files.pythonhosted.org/packages/47/ec/02e439b10c6b2aa26629f269a27ae2aa395fae70207fd344046858a34156/portalocker-4.4.1-py3-none-any.whl",
+          "version": "4.4.1"
+        },
+        {
+          "filename": "pyyaml-6.0.3-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl",
+          "kind": "wheel",
+          "name": "pyyaml",
+          "sha256": "ba1cc08a7ccde2d2ec775841541641e4548226580ab850948cbfda66a1befcdc",
+          "size": 807870,
+          "url": "https://files.pythonhosted.org/packages/8b/9d/b3589d3877982d4f2329302ef98a8026e7f4443c765c46cfecc8858c6b4b/pyyaml-6.0.3-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl",
+          "version": "6.0.3"
+        },
+        {
+          "filename": "sympy-1.14.0-py3-none-any.whl",
+          "kind": "wheel",
+          "name": "sympy",
+          "sha256": "e091cc3e99d2141a0ba2847328f5479b05d94a6635cb96148ccb3f34671bd8f5",
+          "size": 6299353,
+          "url": "https://files.pythonhosted.org/packages/a2/09/77d55d46fd61b4a135c444fc97158ef34a095e5681d0a6c10b75bf356191/sympy-1.14.0-py3-none-any.whl",
+          "version": "1.14.0"
+        },
+        {
+          "filename": "torch-2.8.0+cpu-cp312-cp312-manylinux_2_28_x86_64.whl",
+          "kind": "wheel",
+          "name": "torch",
+          "sha256": "cb9a8ba8137ab24e36bf1742cb79a1294bd374db570f09fc15a5e1318160db4e",
+          "size": 183914597,
+          "url": "https://download-r2.pytorch.org/whl/cpu/torch-2.8.0%2Bcpu-cp312-cp312-manylinux_2_28_x86_64.whl",
+          "version": "2.8.0+cpu"
+        },
+        {
+          "filename": "torchvision-0.23.0+cpu-cp312-cp312-manylinux_2_28_x86_64.whl",
+          "kind": "wheel",
+          "name": "torchvision",
+          "sha256": "ae459d4509d3b837b978dc6c66106601f916b6d2cda75c137e3f5f48324ce1da",
+          "size": 1911535,
+          "url": "https://download-r2.pytorch.org/whl/cpu/torchvision-0.23.0%2Bcpu-cp312-cp312-manylinux_2_28_x86_64.whl",
+          "version": "0.23.0+cpu"
+        },
+        {
+          "filename": "tqdm-4.67.3-py3-none-any.whl",
+          "kind": "wheel",
+          "name": "tqdm",
+          "sha256": "ee1e4c0e59148062281c49d80b25b67771a127c85fc9676d3be5f243206826bf",
+          "size": 78374,
+          "url": "https://files.pythonhosted.org/packages/16/e1/3079a9ff9b8e11b846c6ac5c8b5bfb7ff225eee721825310c91b3b50304f/tqdm-4.67.3-py3-none-any.whl",
+          "version": "4.67.3"
+        },
+        {
+          "filename": "typing_extensions-4.16.0-py3-none-any.whl",
+          "kind": "wheel",
+          "name": "typing-extensions",
+          "sha256": "481caa481374e813c1b176ada14e97f1f67a4539ce9cfeb3f350d78d6370c2e8",
+          "size": 45571,
+          "url": "https://files.pythonhosted.org/packages/49/d3/b8441a820a491ddfc024b0b0cf0393375b75ea13866d9c66727e54c2fc80/typing_extensions-4.16.0-py3-none-any.whl",
+          "version": "4.16.0"
+        },
+        {
+          "filename": "wrapt-2.5.1-cp312-cp312-manylinux1_x86_64.manylinux_2_28_x86_64.manylinux_2_5_x86_64.whl",
+          "kind": "wheel",
+          "name": "wrapt",
+          "sha256": "bfaa998ceeea4d0aa72b40cdd0023d19409504e244b439ff2aa9f01729341c5f",
+          "size": 250438,
+          "url": "https://files.pythonhosted.org/packages/4a/5a/2a34ba5a468e9d3d6e5b0733280e1ae3c850bfc5f1d681fc0e97f564d1f2/wrapt-2.5.1-cp312-cp312-manylinux1_x86_64.manylinux_2_28_x86_64.manylinux_2_5_x86_64.whl",
+          "version": "2.5.1"
+        }
+      ],
+      "platform": "linux-x86_64",
+      "python": "3.12",
+      "upstream_metadata": "https://pypi.org/pypi/{package}/{version}/json; official CPU Torch index on Linux"
+    },
+    "macos-arm64-py313": {
+      "packages": [
+        {
+          "filename": "pip-26.0.1-py3-none-any.whl",
+          "kind": "wheel",
+          "name": "pip",
+          "sha256": "bdb1b08f4274833d62c1aa29e20907365a2ceb950410df15fc9521bad440122b",
+          "size": 1787723,
+          "url": "https://files.pythonhosted.org/packages/de/f0/c81e05b613866b76d2d1066490adf1a3dbc4ee9d9c839961c3fc8a6997af/pip-26.0.1-py3-none-any.whl",
+          "version": "26.0.1"
+        },
+        {
+          "filename": "setuptools-78.1.0-py3-none-any.whl",
+          "kind": "wheel",
+          "name": "setuptools",
+          "sha256": "3e386e96793c8702ae83d17b853fb93d3e09ef82ec62722e61da5cd22376dcd8",
+          "size": 1256108,
+          "url": "https://files.pythonhosted.org/packages/54/21/f43f0a1fa8b06b32812e0975981f4677d28e0f3271601dc88ac5a5b83220/setuptools-78.1.0-py3-none-any.whl",
+          "version": "78.1.0"
+        },
+        {
+          "filename": "wheel-0.45.1-py3-none-any.whl",
+          "kind": "wheel",
+          "name": "wheel",
+          "sha256": "708e7481cc80179af0e556bbf0cc00b8444c7321e2700b8d8580231d13017248",
+          "size": 72494,
+          "url": "https://files.pythonhosted.org/packages/0b/2c/87f3254fd8ffd29e4c02732eee68a83a1d3c346ae39bc6822dcbcb697f2b/wheel-0.45.1-py3-none-any.whl",
+          "version": "0.45.1"
+        },
+        {
+          "filename": "absl_py-2.5.1-py3-none-any.whl",
+          "kind": "wheel",
+          "name": "absl-py",
+          "sha256": "721200f2f0e9960f2ca9dc3a2a706b201f5f75d812c158f059cbbe29eeafbdb8",
+          "size": 137673,
+          "url": "https://files.pythonhosted.org/packages/b3/7d/01e62f59e4166af1be6238d9f2b7f3453630c51b8044b412d05b5606532a/absl_py-2.5.1-py3-none-any.whl",
+          "version": "2.5.1"
+        },
+        {
+          "filename": "antlr4-python3-runtime-4.9.3.tar.gz",
+          "kind": "sdist",
+          "name": "antlr4-python3-runtime",
+          "sha256": "f224469b4168294902bb1efa80a8bf7855f24c99aef99cbefc1bcd3cce77881b",
+          "size": 117034,
+          "url": "https://files.pythonhosted.org/packages/3e/38/7859ff46355f76f8d19459005ca000b6e7012f2f1ca597746cbcd1fbfe5e/antlr4-python3-runtime-4.9.3.tar.gz",
+          "version": "4.9.3"
+        },
+        {
+          "filename": "attrs-26.1.0-py3-none-any.whl",
+          "kind": "wheel",
+          "name": "attrs",
+          "sha256": "c647aa4a12dfbad9333ca4e71fe62ddc36f4e63b2d260a37a8b83d2f043ac309",
+          "size": 67548,
+          "url": "https://files.pythonhosted.org/packages/64/b4/17d4b0b2a2dc85a6df63d1157e028ed19f90d4cd97c36717afef2bc2f395/attrs-26.1.0-py3-none-any.whl",
+          "version": "26.1.0"
+        },
+        {
+          "filename": "dm_tree-0.1.9-cp313-cp313-macosx_10_13_universal2.whl",
+          "kind": "wheel",
+          "name": "dm-tree",
+          "sha256": "cfa33c2e028155810ad1b4e11928707bf47489516763a86e79cab2954d23bf68",
+          "size": 175000,
+          "url": "https://files.pythonhosted.org/packages/5f/13/823788cd0f7964cadcfa56d1e0f9e5e987ee73b5db6273bc00168f524f1a/dm_tree-0.1.9-cp313-cp313-macosx_10_13_universal2.whl",
+          "version": "0.1.9"
+        },
+        {
+          "filename": "einshape-1.0-py3-none-any.whl",
+          "kind": "wheel",
+          "name": "einshape",
+          "sha256": "42da4c2dea3a27f87ee45a7cee5072a636b97cb184bb07bf5d6412ba0ff7b965",
+          "size": 21392,
+          "url": "https://files.pythonhosted.org/packages/71/bb/34cc02f13b438d550e4709216ee1df9da8e55e15b0cc87a2cb5dee19a729/einshape-1.0-py3-none-any.whl",
+          "version": "1.0"
+        },
+        {
+          "filename": "filelock-3.32.3-py3-none-any.whl",
+          "kind": "wheel",
+          "name": "filelock",
+          "sha256": "7f0ca4bcc0e181c60dbbd8aa9ab5b120ebb99e4e064e83636340056f833a1f09",
+          "size": 98901,
+          "url": "https://files.pythonhosted.org/packages/a7/8e/50f46a9c0ce8d2861a394c1347caae037ea0431d2f67d7feb151cbc4649a/filelock-3.32.3-py3-none-any.whl",
+          "version": "3.32.3"
+        },
+        {
+          "filename": "fsspec-2026.7.0-py3-none-any.whl",
+          "kind": "wheel",
+          "name": "fsspec",
+          "sha256": "b57ddbafedfaef7018c1ecab32aa200a9d7ca26b77965f64e48b70061249d279",
+          "size": 206583,
+          "url": "https://files.pythonhosted.org/packages/fd/3c/6a2bf344106328fd04963664a60b9bb6496fc25df8e962fcdc1367285fb9/fsspec-2026.7.0-py3-none-any.whl",
+          "version": "2026.7.0"
+        },
+        {
+          "filename": "hydra_core-1.3.2-py3-none-any.whl",
+          "kind": "wheel",
+          "name": "hydra-core",
+          "sha256": "fa0238a9e31df3373b35b0bfb672c34cc92718d21f81311d8996a16de1141d8b",
+          "size": 154547,
+          "url": "https://files.pythonhosted.org/packages/c6/50/e0edd38dcd63fb26a8547f13d28f7a008bc4a3fd4eb4ff030673f22ad41a/hydra_core-1.3.2-py3-none-any.whl",
+          "version": "1.3.2"
+        },
+        {
+          "filename": "iopath-0.1.10.tar.gz",
+          "kind": "sdist",
+          "name": "iopath",
+          "sha256": "3311c16a4d9137223e20f141655759933e1eda24f8bff166af834af3c645ef01",
+          "size": 42226,
+          "url": "https://files.pythonhosted.org/packages/72/73/b3d451dfc523756cf177d3ebb0af76dc7751b341c60e2a21871be400ae29/iopath-0.1.10.tar.gz",
+          "version": "0.1.10"
+        },
+        {
+          "filename": "jinja2-3.1.6-py3-none-any.whl",
+          "kind": "wheel",
+          "name": "jinja2",
+          "sha256": "85ece4451f492d0c13c5dd7c13a64681a86afae63a5f347908daf103ce6d2f67",
+          "size": 134899,
+          "url": "https://files.pythonhosted.org/packages/62/a1/3d680cbfd5f4b8f15abc1d571870c5fc3e594bb582bc3b64ea099db13e56/jinja2-3.1.6-py3-none-any.whl",
+          "version": "3.1.6"
+        },
+        {
+          "filename": "markupsafe-3.0.3-cp313-cp313-macosx_11_0_arm64.whl",
+          "kind": "wheel",
+          "name": "markupsafe",
+          "sha256": "116bb52f642a37c115f517494ea5feb03889e04df47eeff5b130b1808ce7c219",
+          "size": 12029,
+          "url": "https://files.pythonhosted.org/packages/9c/d9/5f7756922cdd676869eca1c4e3c0cd0df60ed30199ffd775e319089cb3ed/markupsafe-3.0.3-cp313-cp313-macosx_11_0_arm64.whl",
+          "version": "3.0.3"
+        },
+        {
+          "filename": "mpmath-1.3.0-py3-none-any.whl",
+          "kind": "wheel",
+          "name": "mpmath",
+          "sha256": "a0b2b9fe80bbcd81a6647ff13108738cfb482d481d826cc0e02f5b35e5c88d2c",
+          "size": 536198,
+          "url": "https://files.pythonhosted.org/packages/43/e3/7d92a15f894aa0c9c4b49b8ee9ac9850d6e63b03c9c32c0367a13ae62209/mpmath-1.3.0-py3-none-any.whl",
+          "version": "1.3.0"
+        },
+        {
+          "filename": "networkx-3.6.1-py3-none-any.whl",
+          "kind": "wheel",
+          "name": "networkx",
+          "sha256": "d47fbf302e7d9cbbb9e2555a0d267983d2aa476bac30e90dfbe5669bd57f3762",
+          "size": 2068504,
+          "url": "https://files.pythonhosted.org/packages/9e/c9/b2622292ea83fbb4ec318f5b9ab867d0a28ab43c5717bb85b0a5f6b3b0a4/networkx-3.6.1-py3-none-any.whl",
+          "version": "3.6.1"
+        },
+        {
+          "filename": "numpy-2.3.5-cp313-cp313-macosx_11_0_arm64.whl",
+          "kind": "wheel",
+          "name": "numpy",
+          "sha256": "aa5bc7c5d59d831d9773d1170acac7893ce3a5e130540605770ade83280e7188",
+          "size": 12254652,
+          "url": "https://files.pythonhosted.org/packages/79/fb/f505c95ceddd7027347b067689db71ca80bd5ecc926f913f1a23e65cf09b/numpy-2.3.5-cp313-cp313-macosx_11_0_arm64.whl",
+          "version": "2.3.5"
+        },
+        {
+          "filename": "omegaconf-2.3.1-py3-none-any.whl",
+          "kind": "wheel",
+          "name": "omegaconf",
+          "sha256": "3d701d14e9a8828f1edd28bb70b725908b34277cdd72cf7d6a83f94dadc6b6a0",
+          "size": 79502,
+          "url": "https://files.pythonhosted.org/packages/a4/0e/152509871bf30df6fc38569f52a2db9b55dd41aae957adae50a053ac7778/omegaconf-2.3.1-py3-none-any.whl",
+          "version": "2.3.1"
+        },
+        {
+          "filename": "packaging-26.3-py3-none-any.whl",
+          "kind": "wheel",
+          "name": "packaging",
+          "sha256": "d7193f7c8e4e93f444fde0262bf90af30e16fa0ad0ad44cb553c87339b23cd1c",
+          "size": 129956,
+          "url": "https://files.pythonhosted.org/packages/63/34/ba1c580383c9eada3711951fef0795c80b829a078d72188184bcab9dd527/packaging-26.3-py3-none-any.whl",
+          "version": "26.3"
+        },
+        {
+          "filename": "pillow-12.1.1-cp313-cp313-macosx_11_0_arm64.whl",
+          "kind": "wheel",
+          "name": "pillow",
+          "sha256": "8b7e5304e34942bf62e15184219a7b5ad4ff7f3bb5cca4d984f37df1a0e1aee2",
+          "size": 4657460,
+          "url": "https://files.pythonhosted.org/packages/bb/ad/ad9dc98ff24f485008aa5cdedaf1a219876f6f6c42a4626c08bc4e80b120/pillow-12.1.1-cp313-cp313-macosx_11_0_arm64.whl",
+          "version": "12.1.1"
+        },
+        {
+          "filename": "portalocker-4.4.1-py3-none-any.whl",
+          "kind": "wheel",
+          "name": "portalocker",
+          "sha256": "4a184e8fb1adb37e078ca1804f1b7c0d8e73d81136790b1ad695ae8f1c8be291",
+          "size": 129702,
+          "url": "https://files.pythonhosted.org/packages/47/ec/02e439b10c6b2aa26629f269a27ae2aa395fae70207fd344046858a34156/portalocker-4.4.1-py3-none-any.whl",
+          "version": "4.4.1"
+        },
+        {
+          "filename": "pyyaml-6.0.3-cp313-cp313-macosx_11_0_arm64.whl",
+          "kind": "wheel",
+          "name": "pyyaml",
+          "sha256": "2283a07e2c21a2aa78d9c4442724ec1eb15f5e42a723b99cb3d822d48f5f7ad1",
+          "size": 173252,
+          "url": "https://files.pythonhosted.org/packages/b1/16/95309993f1d3748cd644e02e38b75d50cbc0d9561d21f390a76242ce073f/pyyaml-6.0.3-cp313-cp313-macosx_11_0_arm64.whl",
+          "version": "6.0.3"
+        },
+        {
+          "filename": "sympy-1.14.0-py3-none-any.whl",
+          "kind": "wheel",
+          "name": "sympy",
+          "sha256": "e091cc3e99d2141a0ba2847328f5479b05d94a6635cb96148ccb3f34671bd8f5",
+          "size": 6299353,
+          "url": "https://files.pythonhosted.org/packages/a2/09/77d55d46fd61b4a135c444fc97158ef34a095e5681d0a6c10b75bf356191/sympy-1.14.0-py3-none-any.whl",
+          "version": "1.14.0"
+        },
+        {
+          "filename": "torch-2.8.0-cp313-none-macosx_11_0_arm64.whl",
+          "kind": "wheel",
+          "name": "torch",
+          "sha256": "7b677e17f5a3e69fdef7eb3b9da72622f8d322692930297e4ccb52fefc6c8211",
+          "size": 73632395,
+          "url": "https://files.pythonhosted.org/packages/04/6e/650bb7f28f771af0cb791b02348db8b7f5f64f40f6829ee82aa6ce99aabe/torch-2.8.0-cp313-none-macosx_11_0_arm64.whl",
+          "version": "2.8.0"
+        },
+        {
+          "filename": "torchvision-0.23.0-cp313-cp313-macosx_11_0_arm64.whl",
+          "kind": "wheel",
+          "name": "torchvision",
+          "sha256": "1c37e325e09a184b730c3ef51424f383ec5745378dc0eca244520aca29722600",
+          "size": 1856886,
+          "url": "https://files.pythonhosted.org/packages/91/37/45a5b9407a7900f71d61b2b2f62db4b7c632debca397f205fdcacb502780/torchvision-0.23.0-cp313-cp313-macosx_11_0_arm64.whl",
+          "version": "0.23.0"
+        },
+        {
+          "filename": "tqdm-4.67.3-py3-none-any.whl",
+          "kind": "wheel",
+          "name": "tqdm",
+          "sha256": "ee1e4c0e59148062281c49d80b25b67771a127c85fc9676d3be5f243206826bf",
+          "size": 78374,
+          "url": "https://files.pythonhosted.org/packages/16/e1/3079a9ff9b8e11b846c6ac5c8b5bfb7ff225eee721825310c91b3b50304f/tqdm-4.67.3-py3-none-any.whl",
+          "version": "4.67.3"
+        },
+        {
+          "filename": "typing_extensions-4.16.0-py3-none-any.whl",
+          "kind": "wheel",
+          "name": "typing-extensions",
+          "sha256": "481caa481374e813c1b176ada14e97f1f67a4539ce9cfeb3f350d78d6370c2e8",
+          "size": 45571,
+          "url": "https://files.pythonhosted.org/packages/49/d3/b8441a820a491ddfc024b0b0cf0393375b75ea13866d9c66727e54c2fc80/typing_extensions-4.16.0-py3-none-any.whl",
+          "version": "4.16.0"
+        },
+        {
+          "filename": "wrapt-2.5.1-cp313-cp313-macosx_11_0_arm64.whl",
+          "kind": "wheel",
+          "name": "wrapt",
+          "sha256": "ab6db7d2a18d366cc57c2228253cf26443190aba0a6dd0939b3c1e8ac6e29e2c",
+          "size": 106190,
+          "url": "https://files.pythonhosted.org/packages/01/b9/41642877fe741db56d240833c8822188b663c4c5d52beb087964774035d4/wrapt-2.5.1-cp313-cp313-macosx_11_0_arm64.whl",
+          "version": "2.5.1"
+        }
+      ],
+      "platform": "macos-arm64",
+      "python": "3.13",
+      "upstream_metadata": "https://pypi.org/pypi/{package}/{version}/json; official CPU Torch index on Linux"
+    }
+  },
+  "references": [
+    "https://github.com/facebookresearch/sam2/tree/2b90b9f5ceec907a1c18123530e92e794ad901a4",
+    "https://github.com/google-deepmind/tapnet/tree/730cda1c730877cfedbe01bf87fb1cadb78a565d",
+    "https://pytorch.org/get-started/previous-versions/",
+    "https://huggingface.co/facebook/sam2.1-hiera-tiny",
+    "https://huggingface.co/google/tapnet"
+  ],
+  "runtime_version": "torch28-v1",
+  "schema": "cinematicum-learned-runtime-lock",
+  "sources": [
+    {
+      "bytes": 55645345,
+      "commit": "2b90b9f5ceec907a1c18123530e92e794ad901a4",
+      "filename": "sam2-source.tar.gz",
+      "files": [
+        {
+          "package": "sam2",
+          "path": "LICENSE",
+          "sha256": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4",
+          "size": 11357
+        },
+        {
+          "package": "sam2",
+          "path": "README.md",
+          "sha256": "eea69ee1042fb30933c5ca5019fbf0f6f9366cec5e792109281b5023a4f1589c",
+          "size": 16249
+        },
+        {
+          "package": "sam2",
+          "path": "sam2/__init__.py",
+          "sha256": "b87ca1e95cd54b81766e8c74acf0e937952639529e40d2b4088693286f49419e",
+          "size": 395
+        },
+        {
+          "package": "sam2",
+          "path": "sam2/automatic_mask_generator.py",
+          "sha256": "66df266dbe14412305ae3398f0ec1bb21b303a93216b102d767e6c4ee5d4c3d7",
+          "size": 18461
+        },
+        {
+          "package": "sam2",
+          "path": "sam2/benchmark.py",
+          "sha256": "9b7a3506b88842ec09031fb7cd0fc1d3fed82e137ce06dbca10495e6c180dda9",
+          "size": 2811
+        },
+        {
+          "package": "sam2",
+          "path": "sam2/build_sam.py",
+          "sha256": "856d64d71e44407401297b551884fb4cd1aba8082de0ff5fc60fac3dd42f094d",
+          "size": 6405
+        },
+        {
+          "package": "sam2",
+          "path": "sam2/configs/sam2.1/sam2.1_hiera_b+.yaml",
+          "sha256": "37d6c56b07a7f8d08baaa314315c60dc3aabe2edc66cd92bac6d1ed50038e788",
+          "size": 3650
+        },
+        {
+          "package": "sam2",
+          "path": "sam2/configs/sam2.1/sam2.1_hiera_l.yaml",
+          "sha256": "1dbd6cb6dfebeaf588c7006ee222c6efbfa9049a7ad472a3cdfb2f5d919e8107",
+          "size": 3798
+        },
+        {
+          "package": "sam2",
+          "path": "sam2/configs/sam2.1/sam2.1_hiera_s.yaml",
+          "sha256": "0f36b91e86e58d06c87e42997166212468b88b98b60e4d816d5e4d4d088b6f55",
+          "size": 3761
+        },
+        {
+          "package": "sam2",
+          "path": "sam2/configs/sam2.1/sam2.1_hiera_t.yaml",
+          "sha256": "f932eac1c6241e910031b2f000a81cd9f8a8d4896e2277ab5ffb721f378b188d",
+          "size": 3855
+        },
+        {
+          "package": "sam2",
+          "path": "sam2/configs/sam2.1_training/sam2.1_hiera_b+_MOSE_finetune.yaml",
+          "sha256": "d96919e157527116c3a80c6ec961151bda98e5eb988ae4dd85be6e7efbd2b51f",
+          "size": 11256
+        },
+        {
+          "package": "sam2",
+          "path": "sam2/configs/sam2/sam2_hiera_b+.yaml",
+          "sha256": "644d1a9aaa7e14183802246dee4f43627e067d77dd89f1f40d83657db18d038b",
+          "size": 3548
+        },
+        {
+          "package": "sam2",
+          "path": "sam2/configs/sam2/sam2_hiera_l.yaml",
+          "sha256": "0ee9f2037fd98489212bb0b78a56f33ac82eb177cf5e52c88be3714cb84eea26",
+          "size": 3696
+        },
+        {
+          "package": "sam2",
+          "path": "sam2/configs/sam2/sam2_hiera_s.yaml",
+          "sha256": "20e0ade957a4ab5e8138c93c346a8d8965c0b00d1a05fa0e79ce477985904188",
+          "size": 3659
+        },
+        {
+          "package": "sam2",
+          "path": "sam2/configs/sam2/sam2_hiera_t.yaml",
+          "sha256": "33399c73cd13bbc3d0c1cea843fa2fc255fdb20139fe07f042743e046ac46b6b",
+          "size": 3753
+        },
+        {
+          "package": "sam2",
+          "path": "sam2/csrc/connected_components.cu",
+          "sha256": "926c277e24f40609622bb4ce49912838d1c799e63edcccc1c75e65e701acd497",
+          "size": 7808
+        },
+        {
+          "package": "sam2",
+          "path": "sam2/modeling/__init__.py",
+          "sha256": "34bd8069c54764e7b8d73a78905dbe6467140a2f73170875128f6ca4d8cdd0aa",
+          "size": 197
+        },
+        {
+          "package": "sam2",
+          "path": "sam2/modeling/backbones/__init__.py",
+          "sha256": "34bd8069c54764e7b8d73a78905dbe6467140a2f73170875128f6ca4d8cdd0aa",
+          "size": 197
+        },
+        {
+          "package": "sam2",
+          "path": "sam2/modeling/backbones/hieradet.py",
+          "sha256": "03785581ca304d0451ae0df7a08ee0bf1e1dbe66fad285066e6b9ffc0d88d64f",
+          "size": 10003
+        },
+        {
+          "package": "sam2",
+          "path": "sam2/modeling/backbones/image_encoder.py",
+          "sha256": "16eaad232220386f510ca8dfab8655e63699977149a4daf9ce9c6f374e6777a9",
+          "size": 4706
+        },
+        {
+          "package": "sam2",
+          "path": "sam2/modeling/backbones/utils.py",
+          "sha256": "c4a0657db2a92bda2a7ff116cd4017f6b1c59af6408093d8874eb08a0df476ad",
+          "size": 3007
+        },
+        {
+          "package": "sam2",
+          "path": "sam2/modeling/memory_attention.py",
+          "sha256": "07358cb7f58ec3788e88ff4e6415f8a9d628a3963529d6e2c915494a5347c8e2",
+          "size": 5509
+        },
+        {
+          "package": "sam2",
+          "path": "sam2/modeling/memory_encoder.py",
+          "sha256": "73f7089ae5fdacdfcaaf3deca1ca6d9f84d89e7deb9cf97589622a9ef17ba42f",
+          "size": 5657
+        },
+        {
+          "package": "sam2",
+          "path": "sam2/modeling/position_encoding.py",
+          "sha256": "b51404718c0d38f381293c8e5e00a15d129651b7f09b1158002d8974a30967b5",
+          "size": 8980
+        },
+        {
+          "package": "sam2",
+          "path": "sam2/modeling/sam/__init__.py",
+          "sha256": "34bd8069c54764e7b8d73a78905dbe6467140a2f73170875128f6ca4d8cdd0aa",
+          "size": 197
+        },
+        {
+          "package": "sam2",
+          "path": "sam2/modeling/sam/mask_decoder.py",
+          "sha256": "ca3523c58365574faddf1bfb54f374e4b4beba05127185ea2b17d22b916e099a",
+          "size": 12657
+        },
+        {
+          "package": "sam2",
+          "path": "sam2/modeling/sam/prompt_encoder.py",
+          "sha256": "4965ccb4a4504aa4d7246b2ad66ffeacd2626415c86a261dc1c65ffd8ae1d40d",
+          "size": 7541
+        },
+        {
+          "package": "sam2",
+          "path": "sam2/modeling/sam/transformer.py",
+          "sha256": "cda19052331e775190ce8b1159efcb828a4632d931a6d8bd4d47109f121782f1",
+          "size": 10761
+        },
+        {
+          "package": "sam2",
+          "path": "sam2/modeling/sam2_base.py",
+          "sha256": "69a46b44e8625f509791352bd09beaafe589cd7d872721384e63d37f9fdc6e41",
+          "size": 46983
+        },
+        {
+          "package": "sam2",
+          "path": "sam2/modeling/sam2_utils.py",
+          "sha256": "e35bbf13bc2e544a0272cd3f9539af38a752676ac3cd744be31cd8220afee804",
+          "size": 13173
+        },
+        {
+          "package": "sam2",
+          "path": "sam2/sam2_image_predictor.py",
+          "sha256": "f13e5f9d94e5c8d9d2c3622dab20c8f334c089ef2ee5ea8e199da7d332b029ba",
+          "size": 19937
+        },
+        {
+          "package": "sam2",
+          "path": "sam2/sam2_video_predictor.py",
+          "sha256": "912555920a77f72ded07839efa33fcceecc79f3523abbec783f0be46ee2c55c2",
+          "size": 58921
+        },
+        {
+          "package": "sam2",
+          "path": "sam2/sam2_video_predictor_legacy.py",
+          "sha256": "e0c054112f21bfa63620f2026c8bb2e0f4e284b138d09426a08d39f2e882c3f2",
+          "size": 58777
+        },
+        {
+          "package": "sam2",
+          "path": "sam2/utils/__init__.py",
+          "sha256": "34bd8069c54764e7b8d73a78905dbe6467140a2f73170875128f6ca4d8cdd0aa",
+          "size": 197
+        },
+        {
+          "package": "sam2",
+          "path": "sam2/utils/amg.py",
+          "sha256": "b7b33090e2af72e04dbb815c8f32aff41a4ed1abf9668f62b59f1bdd640ca5d8",
+          "size": 12842
+        },
+        {
+          "package": "sam2",
+          "path": "sam2/utils/misc.py",
+          "sha256": "01600c01c161cd079d7106fb1d4da845cf91aa31ab2bcecaf8cb151b6d6d20a2",
+          "size": 13090
+        },
+        {
+          "package": "sam2",
+          "path": "sam2/utils/transforms.py",
+          "sha256": "ba3a64f4600c62f209206a6df3b40e3fcf133edae32fad658831bb0c2a6d1146",
+          "size": 4885
+        }
+      ],
+      "kind": "source",
+      "license": "Apache-2.0",
+      "name": "sam2-source.tar.gz",
+      "package": "sam2",
+      "sha256": "1f2fbfad3ffa38110368abac76c6ef9df9c282a66d5c2807bc94abf4d2fb30f8",
+      "size": 55645345,
+      "url": "https://codeload.github.com/facebookresearch/sam2/tar.gz/2b90b9f5ceec907a1c18123530e92e794ad901a4"
+    },
+    {
+      "bytes": 2252491,
+      "commit": "730cda1c730877cfedbe01bf87fb1cadb78a565d",
+      "filename": "tapnet-source.tar.gz",
+      "files": [
+        {
+          "package": "tapnet",
+          "path": "LICENSE",
+          "sha256": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30",
+          "size": 11358
+        },
+        {
+          "package": "tapnet",
+          "path": "README.md",
+          "sha256": "c0cda10a66a91513fd78e1638ff6db7789d4320dc24e5897ce6bc1bd567c15c3",
+          "size": 22951
+        },
+        {
+          "package": "tapnet",
+          "path": "tapnet/__init__.py",
+          "sha256": "35b29d7968272465e0f9cbb0d2c1035003ef96b140f4de7516eb85a047ec9ab3",
+          "size": 1350
+        },
+        {
+          "package": "tapnet",
+          "path": "tapnet/torch/__init__.py",
+          "sha256": "f7c8d8c66e2f93ac350ce82c03f02152ffc82524cd120ebc944c931b6ea879e1",
+          "size": 656
+        },
+        {
+          "package": "tapnet",
+          "path": "tapnet/torch/nets.py",
+          "sha256": "4961a8e4882e8c9ac219c4714f6f2c811cc1ab665a439d4d2e79942002a9517c",
+          "size": 12032
+        },
+        {
+          "package": "tapnet",
+          "path": "tapnet/torch/tapir_model.py",
+          "sha256": "87c05fb17d48d0f4353a00b67c9d40d3a264e13e43d88e3f7b5829119845e3ba",
+          "size": 27917
+        },
+        {
+          "package": "tapnet",
+          "path": "tapnet/torch/utils.py",
+          "sha256": "a4267b3a6bd8ecf2dfe5effacab9f7a43664dc5d08966c98f6a0cc68f5ccedd3",
+          "size": 10477
+        }
+      ],
+      "kind": "source",
+      "license": "Apache-2.0",
+      "name": "tapnet-source.tar.gz",
+      "package": "tapnet",
+      "sha256": "0041940feae134a3391616648746ddc6b4dd15c496143a70191ccef666b00969",
+      "size": 2252491,
+      "url": "https://codeload.github.com/google-deepmind/tapnet/tar.gz/730cda1c730877cfedbe01bf87fb1cadb78a565d"
+    }
+  ],
+  "version": 1
+}
