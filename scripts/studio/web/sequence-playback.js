@@ -54,7 +54,7 @@
         // Native forward decoding already owns a playback queue. Copying every
         // displayed 4K frame into RGBA snapshots would compete with that queue.
         // Retain snapshots only for explicit pause/scrub/reverse reuse.
-        if(cacheIntent&&decodedPictures){pictureDecoders.add(el);decodedPictures.observe(el,identity,()=>!media.disposed);}
+        if(cacheIntent&&decodedPictures){pictureDecoders.add(el);decodedPictures.observe(el,identity,()=>!media.disposed,()=>media.onDecodedPicture?.());}
         const playbackRate=media.kind==='audio'?rate:Math.max(.0625,Math.min(16,rate));
         // Native media setters may rebuild an AVFoundation audio tap even if
         // the requested value is unchanged. Keep steady playback untouched.
@@ -71,10 +71,9 @@
           if(sound&&playing)media.audioSyncKey=syncKey;
         }
         if(!playing)media.audioSyncKey=null;
-        if(identity&&decodedPictures&&(!playing||backwards)&&!media.decodedPicture&&!el.seeking&&el.readyState>=2){
-          decodedPictures.capture(identity,el.currentTime,el);
-          media.decodedPicture=decodedPictures.get(identity,seek);
-        }
+        // currentTime/seeked identify the requested seek, not a submitted
+        // decoded picture. Only timestamp-checked video-frame callbacks may
+        // populate snapshots; other browsers retain uncached native drawing.
         const routing=sound?ensureAudio(media,clip,asset,{playbackRate:rate,sourceTime:seek,reverse:backwards}):null,audible=sound&&routing?.ready!==false;
         const muted=media.source?false:!audible;
         if(el.muted!==muted)el.muted=muted;

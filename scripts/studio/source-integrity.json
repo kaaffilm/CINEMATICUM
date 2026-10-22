@@ -58,7 +58,7 @@
     {
       "path": ".github/workflows/studio-verification.yml",
       "size": 13145,
-      "sha256": "4f0f2be60f3c675a91c716ca188efcc4c1c9809cc1b003fcb23cb28e46f391f7"
+      "sha256": "6aee82aad34575cd1bfdd3fbbe2520387d4af5b980603d7052bd0bd2046dbd29"
     },
     {
       "path": "README.md",
@@ -1102,13 +1102,13 @@
     },
     {
       "path": "scripts/studio/test_decoded_frame_cache.cjs",
-      "size": 6690,
-      "sha256": "b7c1518e14e1ba7aca94e83370313645022ba4e6642081473fa22ef6582fe6a6"
+      "size": 8745,
+      "sha256": "52d929ddf41c8b0bc4957cc49591fffc6d51030a7e241288c7add5cdf37ffe2e"
     },
     {
       "path": "scripts/studio/test_decoded_frame_cache_browser.cjs",
-      "size": 15144,
-      "sha256": "504873517d6fb89a4de2c786d575b52c00d708b98547778e607eab55fbc1cbb7"
+      "size": 20725,
+      "sha256": "0d2a2ddb27e358f0ed4d7d1563753ee06da71727895152b168a881fcfc461aa0"
     },
     {
       "path": "scripts/studio/test_deep_compositing.py",
@@ -1792,8 +1792,8 @@
     },
     {
       "path": "scripts/studio/web/app.js",
-      "size": 141069,
-      "sha256": "eca6b3ce708a68370a17abd9d07d64db49b1cfda412aa20ddd932ad109152de0"
+      "size": 141187,
+      "sha256": "f13c853f7510bf820fa8f214de1afb8df1f280a5efb5df154956ac555e8e7a86"
     },
     {
       "path": "scripts/studio/web/archive-ui.js",
@@ -1827,8 +1827,8 @@
     },
     {
       "path": "scripts/studio/web/decoded-frame-cache.js",
-      "size": 4312,
-      "sha256": "e28bd391c5f714de95cb645e130025038a154cb96967925eee608c6793634951"
+      "size": 4998,
+      "sha256": "b029be5f61c37c35e27c4de211435b5619fdd008dd3ba58ca36fa0ff9973ce7a"
     },
     {
       "path": "scripts/studio/web/deep-compositing-ui.js",
@@ -1952,8 +1952,8 @@
     },
     {
       "path": "scripts/studio/web/sequence-playback.js",
-      "size": 14512,
-      "sha256": "b44a4b8a8f327e63f784849872313bbb68a745dd3172e5d73f70549fbf4baabc"
+      "size": 14517,
+      "sha256": "1e2e1f26389229b50a34db7f775bd4c012432c034f3a2e8224acddaf7a9d71af"
     },
     {
       "path": "scripts/studio/web/style.css",

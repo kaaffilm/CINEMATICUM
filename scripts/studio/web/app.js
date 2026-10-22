@@ -706,6 +706,7 @@ function mediaFor(c,a) {
   if(m){state.media.delete(c.id);state.media.set(c.id,m);return m;}
   const el=a.kind==='image'?new Image():a.kind==='audio'?window.CinematicumPCMPlayback.createDecoder():document.createElement('video');
   m={el,kind:a.kind,assetId:a.id,path:a.path,sourceHash:a.sha256,requestUrl,url:a.kind==='audio'?'':requestUrl,source:null,gain:null,warned:false,disposed:false,listeners:[]};
+  m.onDecodedPicture=()=>{if(!m.disposed&&state.media.get(c.id)===m&&!state.playing&&!state.rendered)drawPreview();};
   const listen=(event,handler)=>{const bound=()=>{if(!m.disposed&&state.media.get(c.id)===m)handler();};m.listeners.push([event,bound]);el.addEventListener(event,bound);};
   if(a.kind!=='image'){el.crossOrigin='anonymous';el.preload='auto';el.playsInline=true;for(const event of ['seeked','loadeddata'])listen(event,()=>{if(!state.playing&&!state.rendered)drawPreview();});}
   else listen('load',()=>drawPreview());

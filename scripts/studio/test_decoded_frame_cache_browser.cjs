@@ -70,13 +70,23 @@ class CDP {
 async function main(){
  const started=Date.now(),deadline=started+15000,web=path.join(__dirname,'web');
  const temporary=fs.mkdtempSync(path.join(os.tmpdir(),'cinematicum-decoded-frame-ENGINE-TEST-'));
- let server,browser,cdp,evidence=null,stderr='',spawnError=null,exited=false,ownedBrowserGroup=null;
+ let server,browser,cdp,evidence=null,stderr='',spawnError=null,exited=false,ownedBrowserGroup=null,observations=null;
  const signal=()=>{signalOwnedGroup(ownedBrowserGroup,'SIGKILL');if(server){server.closeAllConnections();server.close();}fs.rmSync(temporary,{recursive:true,force:true});process.exit(143);};process.once('SIGTERM',signal);process.once('SIGINT',signal);
  try{
   if(options['--evidence']){evidence=options['--evidence'];fs.mkdirSync(evidence);}
   const fixture=path.join(temporary,'ENGINE-TEST-decoded-frames.mp4');
-  const generated=spawnSync('ffmpeg',['-v','error','-nostdin','-y','-f','lavfi','-i','testsrc2=size=64x48:rate=24:duration=2','-c:v','libx264','-pix_fmt','yuv420p','-g','1',fixture],{encoding:'utf8',timeout:Math.min(6000,Math.max(1,deadline-Date.now())),maxBuffer:1024*1024});
-  if(generated.status!==0)throw Error('ENGINE TEST fixture generation failed: '+(generated.error||generated.stderr));
+  const raw=Buffer.alloc(48*64*48*3),stride=64*48*3;
+  // Each picture carries its frame index in a spatially uniform grey level.
+  // Independent FFmpeg decoding supplies the expected per-frame pixel values.
+  for(let frame=0;frame<48;frame++)raw.fill(16+frame*4,frame*stride,(frame+1)*stride);
+  const generated=spawnSync('ffmpeg',['-v','error','-nostdin','-y','-f','rawvideo','-pixel_format','rgb24','-video_size','64x48','-framerate','24','-i','pipe:0','-frames:v','48','-c:v','libx264','-pix_fmt','yuv420p','-g','1',fixture],{input:raw,timeout:Math.min(6000,Math.max(1,deadline-Date.now())),maxBuffer:1024*1024});
+  if(generated.status!==0)throw Error('ENGINE TEST fixture generation failed: '+(generated.error||String(generated.stderr)));
+  const decoded=spawnSync('ffmpeg',['-v','error','-nostdin','-i',fixture,'-map','0:v:0','-pix_fmt','rgb24','-f','rawvideo','pipe:1'],{timeout:Math.min(4000,Math.max(1,deadline-Date.now())),maxBuffer:2*1024*1024});
+  assert.equal(decoded.status,0,'Independent fixture decode failed');assert.equal(decoded.stdout.length,raw.length);
+  const expectedFrames={};for(const frame of [6,12]){const data=decoded.stdout.subarray(frame*stride,(frame+1)*stride),rgb=[...data.subarray(0,3)];for(let i=0;i<data.length;i++)assert.equal(data[i],rgb[i%3],'The encoded frame-index patch must remain uniform');expectedFrames[frame]={rgb,sha256:hash(data)};}
+  assert.notEqual(expectedFrames[6].sha256,expectedFrames[12].sha256,'Independently decoded source frames must differ');
+  const application=fs.readFileSync(path.join(web,'app.js'),'utf8'),ownerCallbacks=application.split('\n').filter(line=>line.trim().startsWith('m.onDecodedPicture='));
+  assert.equal(ownerCallbacks.length,1,'The actual application must install one media-owned presented-frame callback');const ownerCallbackSource=ownerCallbacks[0].trim();
   const index=fs.readFileSync(path.join(web,'index.html'),'utf8');
   assert(index.indexOf('src="/decoded-frame-cache.js"')>index.indexOf('src="/editing.js"'));
   assert(index.indexOf('src="/sequence-playback.js"')>index.indexOf('src="/decoded-frame-cache.js"'),'Production script order must initialize the cache before traversal');
@@ -109,32 +119,67 @@ async function main(){
   const {targetId}=await cdp.send('Target.createTarget',{url:'about:blank'}),{sessionId}=await cdp.send('Target.attachToTarget',{targetId,flatten:true});
   await cdp.send('Page.enable',{},sessionId);await cdp.send('Runtime.enable',{},sessionId);
   const loaded=cdp.event('Page.loadEventFired',sessionId);loaded.catch(()=>{});await cdp.send('Page.navigate',{url:origin},sessionId);await loaded;
-  const scenario=async()=>{
+  const scenario=async({expectedFrames,ownerCallbackSource})=>{
+   const diagnostics=window.__cacheAcceptance={presentations:[],samples:[],notifications:0,seeks:0,seekAssignments:0,currentFrame:0};
    const video=document.createElement('video');video.muted=true;video.preload='auto';document.body.append(video);
    const loaded=new Promise((resolve,reject)=>{video.addEventListener('loadeddata',resolve,{once:true});video.addEventListener('error',reject,{once:true});});video.src='/fixture.mp4';await loaded;
-   let registrations=0;const request=video.requestVideoFrameCallback;
-   if(request)video.requestVideoFrameCallback=function(callback){registrations++;return request.call(this,callback);};
+   let registrations=0;const request=video.requestVideoFrameCallback;if(typeof request!=='function')throw Error('Presented-frame metadata is required');
+   video.requestVideoFrameCallback=function(callback){registrations++;return request.call(this,callback);};
+   const timeProperty=Object.getOwnPropertyDescriptor(HTMLMediaElement.prototype,'currentTime');
+   Object.defineProperty(video,'currentTime',{get(){return timeProperty.get.call(this);},set(value){diagnostics.seekAssignments++;return timeProperty.set.call(this,value);}});
+   video.addEventListener('seeking',()=>diagnostics.seeks++);
    const canvas=document.createElement('canvas');canvas.width=64;canvas.height=48;document.body.append(canvas);const target=canvas.getContext('2d',{willReadFrequently:true});
-   const media={kind:'video',el:video,requestUrl:'/fixture.mp4',disposed:false};let seeks=0;video.addEventListener('seeking',()=>seeks++);
+   const media={kind:'video',el:video,requestUrl:'/fixture.mp4',disposed:false},m=media,c={id:'clip'},state={media:new Map([['clip',media]]),playing:false,rendered:false};
    const project={id:'ENGINE-TEST-cache',fps:24,width:64,height:48,titles:[],tracks:[],assets:[{id:'asset',kind:'video',sha256:'a'.repeat(64),width:64,height:48}],clips:[{id:'clip',asset_id:'asset',start:0,in:0,duration:48,track:0}]};
-   const playback=window.CinematicumSequencePlayback,draw=(frame,playing=false)=>{target.clearRect(0,0,64,48);playback.draw({project,frame,context:target,width:64,height:48,mediaFor:()=>media,ensureAudio:()=>null,playing,activeIds:new Set(),revision:0});};
-   const pixels=()=>Array.from(target.getImageData(0,0,64,48).data),fingerprint=()=>pixels().reduce((hash,value)=>Math.imul(hash^value,16777619)>>>0,2166136261);
-   const seekDraw=async frame=>{draw(frame);if(video.seeking)await new Promise(resolve=>video.addEventListener('seeked',resolve,{once:true}));draw(frame);return fingerprint();};
-   const first=await seekDraw(6),firstPixels=pixels(),second=await seekDraw(12),before=seeks;draw(6);await new Promise(resolve=>setTimeout(resolve,30));
-   const reused=fingerprint(),reusedPixels=pixels(),identicalPixels=firstPixels.every((value,i)=>value===reusedPixels[i]),after=seeks,stats=playback.cacheStats();
+   const playback=window.CinematicumSequencePlayback,draw=(frame,playing=false)=>{diagnostics.currentFrame=frame;target.clearRect(0,0,64,48);playback.draw({project,frame,context:target,width:64,height:48,mediaFor:()=>media,ensureAudio:()=>null,playing,activeIds:new Set(),revision:0});};
+   const drawPreview=()=>{diagnostics.notifications++;draw(diagnostics.currentFrame,state.playing);};
+   // Execute the exact shipped media-owner callback with the current live UI
+   // state, rather than granting this test a special post-seek redraw path.
+   new Function('m','state','c','drawPreview',ownerCallbackSource)(m,state,c,drawPreview);
+   const pixels=()=>Array.from(target.getImageData(0,0,64,48).data),fingerprint=data=>data.reduce((hash,value)=>Math.imul(hash^value,16777619)>>>0,2166136261);
+   function presented(time,forward=false){
+    return new Promise((resolve,reject)=>{
+     let id=null;const timer=setTimeout(()=>{if(id!==null)video.cancelVideoFrameCallback(id);reject(Error('No matching presented frame: '+JSON.stringify(diagnostics)));},4000);
+     const next=()=>{id=request.call(video,(now,metadata)=>{
+      id=null;diagnostics.presentations.push({mediaTime:metadata.mediaTime,currentTime:video.currentTime,seeking:video.seeking,presentedFrames:metadata.presentedFrames});
+      if(!video.seeking&&video.readyState>=2&&(forward?metadata.mediaTime>time+1e-6:Math.abs(metadata.mediaTime-time)<1e-6&&Math.abs(video.currentTime-time)<1e-6)){
+       clearTimeout(timer);resolve({mediaTime:metadata.mediaTime,presentedFrames:metadata.presentedFrames});
+      }else next();
+     });};next();
+    });
+   }
+   function sourcePixels(frame,data){
+    const rgb=expectedFrames[String(frame)].rgb;let maximumError=0;
+    for(let i=0;i<data.length;i++){const expected=i%4===3?255:rgb[i%4];maximumError=Math.max(maximumError,Math.abs(data[i]-expected));}
+    if(maximumError>2)throw Error('Presented pixels differ from independently decoded source frame '+frame+': '+JSON.stringify({maximumError,actual:data.slice(0,4),expected:rgb,diagnostics}));
+    return {maximumError,rgba:data.slice(0,4)};
+   }
+   async function seekDraw(frame){
+    const before=diagnostics.notifications;draw(frame);
+    // Register synchronously after draw (cache observer first), before yielding
+    // to seek/compositor events. seeked/currentTime alone are not the oracle.
+    const metadata=await presented(frame/24),data=pixels(),measurement=sourcePixels(frame,data);
+    if(!media.decodedPicture||diagnostics.notifications<=before)throw Error('Presented picture did not repaint the current paused viewer: '+JSON.stringify(diagnostics));
+    const sample={frame,...metadata,...measurement,fingerprint:fingerprint(data)};diagnostics.samples.push(sample);return {sample,data};
+   }
+   const firstSample=await seekDraw(6),secondSample=await seekDraw(12),before=diagnostics.seeks,assignmentsBefore=diagnostics.seekAssignments;
+   draw(6);if(!media.decodedPicture)throw Error('Returning to the accepted decoded picture was a cache miss');
+   await new Promise(requestAnimationFrame);
+   const reusedPixels=pixels(),first=firstSample.sample.fingerprint,second=secondSample.sample.fingerprint,reused=fingerprint(reusedPixels),identicalPixels=firstSample.data.every((value,i)=>value===reusedPixels[i]),after=diagnostics.seeks,assignmentsAfter=diagnostics.seekAssignments,stats=playback.cacheStats();
    playback.clear();const cleared=playback.cacheStats(),forwardRegistrations=registrations;
-   draw(12,true);await new Promise(resolve=>setTimeout(resolve,60));const forward=playback.cacheStats(),forwardCopies=forward.bytes,forwardCallbacks=registrations-forwardRegistrations;video.pause();playback.clear();
-   return {first,second,reused,identicalPixels,before,after,stats,cleared,forwardCopies,forwardCallbacks};
+   state.playing=true;draw(12,true);const forwardPresented=await presented(.5,true),forward=playback.cacheStats(),forwardCopies=forward.bytes,forwardCallbacks=registrations-forwardRegistrations;video.pause();state.playing=false;playback.clear();
+   const beforeGuarded=diagnostics.notifications;media.disposed=true;media.onDecodedPicture();media.disposed=false;state.media.clear();media.onDecodedPicture();state.media.set('clip',media);state.playing=true;media.onDecodedPicture();state.playing=false;state.rendered=true;media.onDecodedPicture();state.rendered=false;
+   return {first,second,reused,identicalPixels,before,after,assignmentsBefore,assignmentsAfter,stats,cleared,forwardCopies,forwardCallbacks,forwardPresented,ownershipGuardsPassed:diagnostics.notifications===beforeGuarded,diagnostics};
   };
-const evaluated=await cdp.send('Runtime.evaluate',{expression:'('+scenario.toString()+')()',awaitPromise:true,returnByValue:true},sessionId);
-  if(evaluated.exceptionDetails)throw Error(evaluated.exceptionDetails.exception?.description||evaluated.exceptionDetails.text);
-  const result=evaluated.result.value;
-  assert.notEqual(result.first,result.second,'Native decoded fixture frames must differ');assert.equal(result.reused,result.first);assert.equal(result.identicalPixels,true,'Frozen decoded pixel bytes must match their original picture');assert.equal(result.after,result.before,'Cache hit must avoid a new native decoder seek');assert(result.stats.hits>=1);assert.equal(result.cleared.bytes,0);assert.equal(result.cleared.observers,0);assert.equal(result.forwardCopies,0,'Normal forward playback must allocate no decoded snapshots');assert.equal(result.forwardCallbacks,0,'Normal forward playback must register no snapshot callbacks');assert.deepEqual(cdp.errors,[]);
+  const evaluated=await cdp.send('Runtime.evaluate',{expression:'('+scenario.toString()+')('+JSON.stringify({expectedFrames,ownerCallbackSource})+')',awaitPromise:true,returnByValue:true},sessionId);
+  if(evaluated.exceptionDetails){const partial=await cdp.send('Runtime.evaluate',{expression:'window.__cacheAcceptance',returnByValue:true},sessionId);observations=partial.result?.value;throw Error(evaluated.exceptionDetails.exception?.description||evaluated.exceptionDetails.text);}
+  const result=evaluated.result.value;observations=result;
+  assert.notEqual(result.first,result.second,'Native decoded fixture frames must differ');assert.equal(result.reused,result.first);assert.equal(result.identicalPixels,true,'Frozen decoded pixel bytes must match their original picture');assert.equal(result.after,result.before,'Cache hit must avoid a new native decoder seek');assert.equal(result.assignmentsAfter,result.assignmentsBefore,'Cache hit must avoid assigning the native source time');assert.equal(result.ownershipGuardsPassed,true);assert(result.stats.hits>=1);assert.equal(result.cleared.bytes,0);assert.equal(result.cleared.observers,0);assert.equal(result.forwardCopies,0,'Normal forward playback must allocate no decoded snapshots');assert.equal(result.forwardCallbacks,0,'Normal forward playback must register no snapshot callbacks');assert.deepEqual(cdp.errors,[]);
   const afterHash=hash(fs.readFileSync(options['--browser']));assert.equal(afterHash,browserHash,'The pinned browser executable changed during acceptance');
-  const report={schema:'cinematicum-decoded-frame-browser-v1',passed:true,synthetic_engine_test:true,native_certified:false,production_media_accepted:false,transport:'Chrome DevTools Protocol / Node22 WebSocket',browser_version:version.product,browser_sha256:browserHash,browser_sha256_after:afterHash,fixture_sha256:hash(media),source_sha256:Object.fromEntries(Object.entries(sources).map(([name,data])=>['web'+name,hash(data)])),index_sha256:hash(Buffer.from(index)),elapsed_ms:Date.now()-started,...result};
+  const report={schema:'cinematicum-decoded-frame-browser-v1',passed:true,synthetic_engine_test:true,native_certified:false,production_media_accepted:false,transport:'Chrome DevTools Protocol / Node22 WebSocket',browser_version:version.product,browser_sha256:browserHash,browser_sha256_after:afterHash,fixture_sha256:hash(media),expected_source_frames:expectedFrames,application_sha256:hash(Buffer.from(application)),owner_callback_sha256:hash(Buffer.from(ownerCallbackSource)),source_sha256:Object.fromEntries(Object.entries(sources).map(([name,data])=>['web'+name,hash(data)])),index_sha256:hash(Buffer.from(index)),elapsed_ms:Date.now()-started,...result};
   if(evidence){const screenshot=await cdp.send('Page.captureScreenshot',{format:'png',fromSurface:true},sessionId);fs.writeFileSync(path.join(evidence,'decoded-frame-cache.png'),Buffer.from(screenshot.data,'base64'));fs.writeFileSync(path.join(evidence,'report.json'),JSON.stringify(report,null,2)+'\n');}
   console.log(JSON.stringify(report));
- }catch(error){if(evidence){fs.writeFileSync(path.join(evidence,'failure.json'),JSON.stringify({passed:false,error:String(error.stack||error)},null,2)+'\n');fs.writeFileSync(path.join(evidence,'browser.stderr'),stderr);}throw error;}
+ }catch(error){if(evidence){fs.writeFileSync(path.join(evidence,'failure.json'),JSON.stringify({passed:false,error:String(error.stack||error),observations},null,2)+'\n');fs.writeFileSync(path.join(evidence,'browser.stderr'),stderr);}throw error;}
  finally{
   if(cdp){cdp.deadline=Date.now()+500;await cdp.send('Browser.close').catch(()=>{});cdp.close();}
   await stopOwnedGroup(ownedBrowserGroup);

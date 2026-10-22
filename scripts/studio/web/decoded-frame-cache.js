@@ -39,19 +39,26 @@
       }catch(error){if(surface){surface.width=1;surface.height=1;}return null;}
       this.entries.set(key,{surface,bytes});this.bytes+=bytes;return surface;
     }
-    observe(video,identity,isCurrent=()=>true){
+    observe(video,identity,isCurrent=()=>true,onFrame=()=>{}){
       if(typeof video.requestVideoFrameCallback!=='function')return;
       const previous=this.observers.get(video);
-      if(previous?.identity===identity)return;
+      if(previous?.identity===identity){previous.isCurrent=isCurrent;previous.onFrame=onFrame;return;}
       if(previous)this.unobserve(video);
-      const record={identity,id:null,source:video.currentSrc||video.src};this.observers.set(video,record);
+      const record={identity,id:null,source:video.currentSrc||video.src,isCurrent,onFrame};this.observers.set(video,record);
       const next=()=>{
         if(this.observers.get(video)!==record)return;
         try{record.id=video.requestVideoFrameCallback((now,metadata)=>{
           if(this.observers.get(video)!==record)return;
           record.id=null;
-          if(!isCurrent()||(video.currentSrc||video.src)!==record.source){this.unobserve(video);return;}
-          this.capture(identity,metadata.mediaTime,video);next();
+          if(!record.isCurrent()||(video.currentSrc||video.src)!==record.source){this.unobserve(video);return;}
+          // A queued old-frame callback can arrive after a seek has already
+          // changed currentTime. Never label that video's current pixels with
+          // an earlier presentation timestamp. Exact-time misses fail closed.
+          if(Number.isFinite(metadata.mediaTime)&&this.key(identity,video.currentTime)===this.key(identity,metadata.mediaTime))this.capture(identity,metadata.mediaTime,video);
+          // A VFR/non-grid sample can be unsuitable for exact cache lookup but
+          // still be the viewer's newly presented picture. Repaint current UI.
+          if(!video.seeking&&video.readyState>=2)record.onFrame();
+          next();
         });}catch(error){this.unobserve(video);}
       };
       next();
