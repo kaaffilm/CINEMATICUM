@@ -47,6 +47,12 @@ browser gates, with the entire declared source and manifest identity verified.
 | Signed distribution | Developer ID signing, notarization and a complete managed/bundled runtime distribution. |
 | Production playback cache | General decoded-frame/GPU caching and sustained real-media performance acceptance. |
 
+The Runtime setup catalogue now includes the existing pinned imaging and
+OpenCV tracking installers through authenticated, lock-bound owned jobs.
+Imaging cancellation also preserves its unpublished-runtime boundary. This
+closes those management integrations; the complete runtime distribution and
+signing requirements above remain open.
+
 Bounded deep/multiview EXR, SAM 2.1, TAPIR, Optiland optical prescriptions,
 Mitsuba/PBRT still rendering, typed scene processing, paired collaboration,
 waveform camera synchronization, simultaneous camera monitoring, locked
@@ -65,7 +71,7 @@ Their broader production requirements remain open; they are not wholly absent.
 | Motion graphics | Full vector document/layer model, gradients/operators, general SVG/Lottie, text animators, expressions and reusable compositions. |
 | 3D authoring | Edge tools, sculpting, texture painting, shader graphs, camera/light parenting, constraints, rigs, shape keys, geometry nodes and simulation. |
 | Reconstruction | Dense reconstruction, meshing/texturing, broader camera models and production image-set robustness. |
-| Audio | Buses/sends/returns, plugin hosting, recording/restoration/loudness workflows, surround/general output layouts, live reverse audio and pitch-preserving speed ramps. |
+| Audio | Buses/sends/returns, plugin hosting, recording/restoration/loudness workflows, surround/general output layouts and pitch-preserving speed ramps. Live source-PCM reverse, constant-speed reverse and nested reverse are implemented; broader sustained production audio acceptance remains open. |
 | RAW/HDR stills | RAW movies, spherical/cylindrical panorama projection, parallax and moving-subject seam repair, recovery of clipped/blurred reference detail and broader capture robustness. |
 | Lens correction | Automatic calibration and EXIF/profile matching; focal interpolation; database updating; ACM/TCA/vignetting/crop records; non-rectilinear Lensfun profiles; anamorphic/rational models; animated parameters; arbitrary panorama projection and greater-than-180-degree reconstruction. Actual measured radial Lensfun samples and four explicit fisheye models are now implemented within their documented capture/pixel bounds; production lens accuracy and maximum-size performance still need acceptance. |
 | Optical design and physical rendering | Non-sequential optical transport, tolerancing and production lens validation; general spectral differentiable movies and unrestricted PBRT/scene/material transport. The separately implemented Optiland and Mitsuba/PBRT workflows retain their stated limits. |

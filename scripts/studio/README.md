@@ -85,6 +85,14 @@ evidence for the earlier candidate. Its 515-test result does not certify newer
 source. The current verification record identifies current-source acceptance,
 installation, and publication independently.
 
+Runtime setup includes fixed, pinned imaging and OpenCV tracking installers
+alongside the existing Optiland, Mitsuba, SAM 2/TAPIR and COLMAP setup.
+Install and Verify use project-owned jobs and the displayed lock identity.
+Imaging setup supports cancellation of its owned commands and refuses to
+publish a newly built runtime after cancellation. Existing installations and
+unrelated files are preserved. This does not bundle FFmpeg, Blender or every
+runtime, or establish Developer ID signing and notarization.
+
 ## Source-sample audio and 16-bit masters
 
 Live audio comes from bounded PCM sample ranges decoded from the selected

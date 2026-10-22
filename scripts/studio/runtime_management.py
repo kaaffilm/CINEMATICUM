@@ -14,6 +14,10 @@ import re
 import threading
 
 RUNTIMES = {
+    "imaging": {"module":"install_imaging","label":"Color and imaging · OCIO / OpenEXR / RAW",
+        "description":"Pinned color transforms, floating-point EXR and RAW decoding with real engine verification."},
+    "tracking": {"module":"install_tracking","label":"Planar and optical-flow tracking · OpenCV",
+        "description":"Pinned projective/affine measurement and optical flow with real numerical verification."},
     "optiland": {"module":"install_ray_optics","label":"Lens design · Optiland",
         "description":"Sequential optical prescriptions, glass catalogues, real rays, aberrations, PSF and MTF."},
     "physical": {"module":"install_physical_rendering","label":"Physical rendering · Mitsuba",
@@ -29,7 +33,7 @@ _SHA = re.compile(r"[a-f0-9]{64}\Z")
 
 def _entry(runtime_id):
     if not isinstance(runtime_id,str) or runtime_id not in RUNTIMES:
-        raise ValueError("Choose the fixed optiland, physical, learned or reconstruction runtime identity.")
+        raise ValueError("Choose a fixed runtime identity from Runtime setup.")
     return RUNTIMES[runtime_id]
 
 

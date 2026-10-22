@@ -3,6 +3,7 @@ import copy
 import importlib
 import threading
 import unittest
+from unittest.mock import patch
 
 import runtime_management as runtime
 
@@ -54,6 +55,25 @@ class RuntimeManagementTests(unittest.TestCase):
             with self.assertRaisesRegex(ValueError,"Another managed"):
                 runtime.run("physical",{"operation":"check","lock_sha256":entry["lock_sha256"]})
         finally:runtime._JOB_LOCK.release()
+
+
+
+    def test_imaging_and_tracking_use_real_fixed_pinned_installers(self):
+        for ident, count in (("imaging", 4), ("tracking", 2)):
+            with self.subTest(runtime=ident):
+                entry = runtime.describe(ident)
+                self.assertTrue(entry["can_install"], entry["reason"])
+                self.assertEqual(len(entry["downloads"]), count)
+                self.assertEqual(entry["download_bytes"], sum(item["bytes"] for item in entry["downloads"]))
+                installer = runtime._installer(ident)
+                self.assertEqual(entry["lock_sha256"], installer.load_lock()[1])
+                event = threading.Event()
+                receipt = {"status": "verified", "wheel_lock_sha256": entry["lock_sha256"]}
+                with patch.object(installer, "install", return_value=receipt) as install:
+                    result = runtime.run(ident, {"operation": "check", "lock_sha256": entry["lock_sha256"]}, cancel_event=event)
+                install.assert_called_once_with(check_only=True, cancel_event=event)
+                self.assertEqual(result["runtime_id"], ident)
+                self.assertFalse(runtime._JOB_LOCK.locked())
 
 
 if __name__=="__main__":unittest.main()

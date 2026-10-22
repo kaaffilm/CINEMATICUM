@@ -137,8 +137,8 @@
     },
     {
       "path": "scripts/studio/README.md",
-      "size": 76715,
-      "sha256": "8f59c16f9be37331b7b30788f1a26dd6c24454876298ac17b5a7bce8fb404a46"
+      "size": 77227,
+      "sha256": "22d8802880f61aec1edf049ed7dc9bd76919c5740ed64e216f259174d0543e61"
     },
     {
       "path": "scripts/studio/RECOVERY_0_10.md",
@@ -192,8 +192,8 @@
     },
     {
       "path": "scripts/studio/UNFINISHED_0_13.md",
-      "size": 7993,
-      "sha256": "d6731df07b6ef65e31d6abea130d69c77f4d8020548efdd299576c36eb76042b"
+      "size": 8455,
+      "sha256": "b9a5f33fd5605a98600e77ab681b5b81f4c2e6fd19d88ef49c8a7ed166e69405"
     },
     {
       "path": "scripts/studio/UNFINISHED_0_9.md",
@@ -292,8 +292,8 @@
     },
     {
       "path": "scripts/studio/capabilities.json",
-      "size": 139040,
-      "sha256": "79739706ae8f7bf48acd34914c01a9379fa23ccc0cb14580170f5b59e02b9808"
+      "size": 140095,
+      "sha256": "c4f50202c958c9fbbe006353c074c17a11c90a85ddb2a83b18039020c53cec93"
     },
     {
       "path": "scripts/studio/collaboration.py",
@@ -397,8 +397,8 @@
     },
     {
       "path": "scripts/studio/install_imaging.py",
-      "size": 16595,
-      "sha256": "44c66f7b1916c93d9b228b230942036a54f1a3836444aeddf7f389553f5e7e76"
+      "size": 17915,
+      "sha256": "fff69d67e91fe04c6bc47fccbb1f8b2f65bb6f6f6634a2a2b3fd8b8e1c540e33"
     },
     {
       "path": "scripts/studio/install_learned_tracking.py",
@@ -907,8 +907,8 @@
     },
     {
       "path": "scripts/studio/runtime_management.py",
-      "size": 8742,
-      "sha256": "10d0a5957daa73da8055d13ec8489485e953aaddf7165df15fecdd4a40181561"
+      "size": 9140,
+      "sha256": "b81b88465af0407d5c81b9c3fd508f2eefd2e01b416b6b3a8a30c6ce87e627d9"
     },
     {
       "path": "scripts/studio/scene.py",
@@ -1197,8 +1197,8 @@
     },
     {
       "path": "scripts/studio/test_install_imaging.py",
-      "size": 8822,
-      "sha256": "0a72b2f2478a458ca0690caef6500ff30914c69b26bb37a0b5081e8866c4fa93"
+      "size": 10462,
+      "sha256": "9bcc8aa1f67b3134507d57090e687ffb8579af350a09532a5266b99266a9bdb9"
     },
     {
       "path": "scripts/studio/test_install_learned_tracking.py",
@@ -1497,8 +1497,8 @@
     },
     {
       "path": "scripts/studio/test_runtime_management.py",
-      "size": 3793,
-      "sha256": "33aeb966ee34be528f944ad2888cffa9122193af1bc68ae239d6c598cf6992b3"
+      "size": 5000,
+      "sha256": "8f37f37629ccc13e3551cf1333957ed90d5095b4794074f6c6f10b6d356fea78"
     },
     {
       "path": "scripts/studio/test_scene.py",
@@ -1582,8 +1582,8 @@
     },
     {
       "path": "scripts/studio/test_server.py",
-      "size": 29329,
-      "sha256": "9431bbea35262b2c6682092b76a1a18bf91344ba1831587f8f129b6052884737"
+      "size": 31629,
+      "sha256": "8a1225981e45b3e7c4abb1647944ebe1d1f020940dd1f659af702b0ada29e0b9"
     },
     {
       "path": "scripts/studio/test_shutdown.py",

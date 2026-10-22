@@ -12,6 +12,7 @@ interpreter paths), and no existing destination is replaced.
 """
 import argparse
 from contextlib import contextmanager
+from contextvars import ContextVar
 import fcntl
 import hashlib
 import json
@@ -23,11 +24,15 @@ import shutil
 import stat
 import subprocess
 import sys
+import tempfile
+import time
 import uuid
 from urllib.parse import urlsplit
 
 from imaging import DEFAULT_CONFIG, DEFAULT_DISPLAY, RUNTIME_REQUIREMENTS
 
+
+_CANCEL_EVENT = ContextVar("cinematicum_imaging_install_cancel", default=None)
 
 LOCK = Path(__file__).with_name("imaging-macos-arm64-py313.lock.json")
 VERSIONS_DIRECTORY = ".cinematicum-imaging-runtimes"
@@ -85,14 +90,34 @@ def _clean_env():
 
 
 def _run(command, timeout):
+    from adapters import _cancelled, _terminate_owned
+    event = _CANCEL_EVENT.get()
+    _cancelled(event)
+    process = None
     try:
-        process = subprocess.run([str(part) for part in command], capture_output=True, text=True,
-                                 env=_clean_env(), timeout=timeout, check=False)
-    except subprocess.TimeoutExpired as exc:
-        raise RuntimeError("The imaging installation command exceeded its %d-second limit." % timeout) from exc
-    if process.returncode:
-        raise RuntimeError("Imaging installation command failed: " + (process.stderr or process.stdout)[-2400:])
-    return process.stdout
+        with tempfile.TemporaryFile() as log:
+            process = subprocess.Popen([str(part) for part in command], stdin=subprocess.DEVNULL,
+                                       stdout=log, stderr=subprocess.STDOUT, env=_clean_env(),
+                                       start_new_session=True)
+            started = time.monotonic()
+            while process.poll() is None:
+                _cancelled(event)
+                if time.monotonic() - started > timeout:
+                    raise RuntimeError("The imaging installation command exceeded its %d-second limit." % timeout)
+                if event is not None:
+                    event.wait(.1)
+                else:
+                    time.sleep(.1)
+            _cancelled(event)
+            length = log.seek(0, os.SEEK_END)
+            log.seek(max(0, length - 2 * 1024 * 1024))
+            output = log.read().decode("utf-8", errors="replace")
+            if process.returncode:
+                raise RuntimeError("Imaging installation command failed: " + output[-2400:])
+            return output
+    finally:
+        if process is not None:
+            _terminate_owned(process)
 
 
 def _read_json(path, maximum=128 * 1024):
@@ -251,7 +276,7 @@ def _build_runtime(directory, python, lock):
     return probe_runtime(directory)
 
 
-def install(destination=None, python=None, check_only=False):
+def _install(destination=None, python=None, check_only=False):
     _require_host()
     lock, lock_sha = load_lock()
     destination = _destination(destination)
@@ -286,6 +311,8 @@ def install(destination=None, python=None, check_only=False):
                 os.fsync(record.fileno())
             # symlink() atomically creates a previously absent path. Unlike
             # replace()/rename(), it cannot overwrite a concurrent destination.
+            from adapters import _cancelled
+            _cancelled(_CANCEL_EVENT.get())
             os.symlink(str(Path(VERSIONS_DIRECTORY) / runtime.name), str(destination), target_is_directory=True)
             published = True
             return {"status": "installed", "runtime": str(destination), "python": str(destination / "bin/python"),
@@ -293,6 +320,16 @@ def install(destination=None, python=None, check_only=False):
         finally:
             if not published:
                 shutil.rmtree(runtime)
+
+
+def install(destination=None, python=None, check_only=False, cancel_event=None):
+    from adapters import _cancelled
+    lease = _CANCEL_EVENT.set(cancel_event)
+    try:
+        _cancelled(cancel_event)
+        return _install(destination, python, check_only)
+    finally:
+        _CANCEL_EVENT.reset(lease)
 
 
 def main():

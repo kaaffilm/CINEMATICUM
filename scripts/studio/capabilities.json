@@ -773,7 +773,7 @@
     {
       "id": "audio.mix",
       "status": "partial",
-      "scope": "Decoded waveforms, track/clip gain, balance, fades, constant retime/reverse and stereo export. Explicit source stream and any valid source-channel pair map to L/R. Live forward transport now schedules selected-source PCM and applies timeline mixing, including simultaneous layers and nested sequences; source retimes use pitch-preserving tempo derivatives. Reverse interactive audio remains muted and requires rendered playback. Repeated native capture passed the bounded current routing/overlap/nested/retime scenarios; installed-source alignment and broader session coverage remain separate gates. No full DAW, buses/send-return routing, plugin host, surround or general output layouts.",
+      "scope": "Decoded waveforms, track/clip gain, balance, fades, constant retime/reverse and stereo export. Explicit source stream and any valid source-channel pair map to L/R. Live forward and reverse transport schedules selected-source PCM and applies timeline mixing, including simultaneous layers and nested sequences; source retimes use pitch-preserving tempo derivatives. Reverse scheduling preserves stereo sample pairs and composes direction through constant-speed and nested sequences; proxy inventory refreshes retain the original audio clock. Repeated native capture passed the bounded current routing/overlap/nested/retime scenarios; installed-source alignment and broader session coverage remain separate gates. No full DAW, buses/send-return routing, plugin host, surround or general output layouts.",
       "evidence": [
         "waveform.py",
         "engine.py",
@@ -1120,12 +1120,15 @@
     {
       "id": "production.optional_imaging_runtime",
       "status": "implemented_bounded",
-      "scope": "Core standard-library server invokes a separate isolated worker. Stable Mac interpreter at ~/Library/Application Support/CINEMATICUM/Imaging/py313-v1/bin/python; NumPy 2.3.5, OpenColorIO 2.6.0, rawpy 0.27.1 and OpenEXR 3.4.15. Runtime and actual engine outputs are checked separately.",
+      "scope": "Core standard-library server invokes a separate isolated worker. Stable Mac interpreter at ~/Library/Application Support/CINEMATICUM/Imaging/py313-v1/bin/python; NumPy 2.3.5, OpenColorIO 2.6.0, rawpy 0.27.1 and OpenEXR 3.4.15. Runtime and actual engine outputs are checked separately. Runtime setup exposes the fixed installer through authenticated project-owned install/check jobs bound to the displayed immutable lock; caller paths, commands and URLs are rejected.",
       "evidence": [
         "imaging.py",
         "image_worker.py",
         "test_imaging.py",
-        "install_imaging.py"
+        "install_imaging.py",
+        "runtime_management.py",
+        "web/runtime-management-ui.js",
+        "test_runtime_management.py"
       ]
     },
     {
@@ -1215,7 +1218,7 @@
     {
       "id": "editor.multicam",
       "status": "implemented_bounded",
-      "scope": "Manual common-event and actual selected audio stream/channel synchronization for 2–16 cameras; measured constant offsets with silence/ambiguity/separated-window checks. Simultaneous original/proxy camera pictures share one timeline/PCM clock. Picture cuts and fixed-camera source-audio lock are undoable and preserve original stream/channel selection, gain/pan/fades and exact rational clocks through save/reopen/archive/nesting and rendering. A live picture cut retains one continuous PCM decoder. Source/group/rate binding rejects stale cameras and ranges, including inactive locked tracks. Live cuts remain ordinary forward constant-speed clips; reverse sound still requires rendered playback. No clock-drift correction, timecode sync or general conform.",
+      "scope": "Manual common-event and actual selected audio stream/channel synchronization for 2–16 cameras; measured constant offsets with silence/ambiguity/separated-window checks. Simultaneous original/proxy camera pictures share one timeline/PCM clock. Picture cuts and fixed-camera source-audio lock are undoable and preserve original stream/channel selection, gain/pan/fades and exact rational clocks through save/reopen/archive/nesting and rendering. A live picture cut retains one continuous PCM decoder. Source/group/rate binding rejects stale cameras and ranges, including inactive locked tracks. Live monitor cuts remain ordinary forward constant-speed clips. General timeline source audio supports reverse playback. No clock-drift correction, timecode sync or general conform.",
       "evidence": [
         "editorial.py",
         "multicam_sync.py",
@@ -1347,7 +1350,7 @@
     {
       "id": "audio.source_sample_playback",
       "status": "implemented_bounded",
-      "scope": "Owned FFmpeg derivatives preserve the chosen original container stream and selected channel pair as 48 kHz stereo float PCM. A source-sample scheduler reads bounded chunks into AudioBuffers and applies live clip/track mix without browser container decoding or a pre-rendered timeline mix. Pitch-preserving source-tempo derivatives support forward retimes, with source identity/range validation, restart epochs and resource release. Scheduling horizon is three seconds with a 128 MiB in-memory PCM bound; disk derivative cache is bounded to 16 GiB and each standard-WAV derivative to its 32-bit size limit. Reverse transport uses rendered playback.",
+      "scope": "Owned FFmpeg derivatives preserve the chosen original container stream and selected channel pair as 48 kHz stereo float PCM. A source-sample scheduler reads bounded chunks into AudioBuffers and applies live clip/track mix without browser container decoding or a pre-rendered timeline mix. Pitch-preserving source-tempo derivatives support constant-speed retimes, with source identity/range validation, restart epochs and resource release. Scheduling horizon is three seconds with a 128 MiB in-memory PCM bound; disk derivative cache is bounded to 16 GiB and each standard-WAV derivative to its 32-bit size limit. Reverse transport reads original PCM sample ranges in reverse stereo-frame order, using separate forward/reverse in-memory cache identities and signed source clocks. Positive variable-speed ramps still use rendered playback.",
       "acceptance": "Final-native-01 routing 11/11 plus overlap/nested/retimed 12/12 each passed with zero underruns. Routing captured selected-source and gain/pan/restart phases; each sequence scenario ran three repetitions. Native-03 remains earlier evidence. Broad codec/device/long-session performance is unverified; install03 full receipt, canonical launch 16/16 and final published-source reconciliation 9/9 are now passed.",
       "evidence": [
         "audio_source.py",
@@ -1359,13 +1362,17 @@
         "test_audio_routing.py",
         "test_pcm_playback.py",
         "test_audio_routing_macos.py",
-        "macos/AudioRoutingSmoke.js"
+        "macos/AudioRoutingSmoke.js",
+        "test_pcm_reverse.py",
+        "test_audio_observer_identity.py",
+        "verify_live_reverse_native.py",
+        "test_media_lifecycle.py"
       ]
     },
     {
       "id": "production.optional_tracking_runtime",
       "status": "implemented_bounded",
-      "scope": "Separate managed Python runtime for actual planar measurement, with locked NumPy 2.3.5 and opencv-python-headless 4.11.0.86 wheels, source/output checks and real feature/flow/affine/homography capability probing. The macOS ARM64 runtime is kept at ~/Library/Application Support/CINEMATICUM/Tracking/py313-v1/bin/python, outside app replacement; CINEMATICUM_TRACKING_PYTHON can select a compatible verified worker. Runtime installation alone does not establish measurement or native workflow acceptance.",
+      "scope": "Separate managed Python runtime for actual planar measurement, with locked NumPy 2.3.5 and opencv-python-headless 4.11.0.86 wheels, source/output checks and real feature/flow/affine/homography capability probing. The macOS ARM64 runtime is kept at ~/Library/Application Support/CINEMATICUM/Tracking/py313-v1/bin/python, outside app replacement; CINEMATICUM_TRACKING_PYTHON can select a compatible verified worker. Runtime installation alone does not establish measurement or native workflow acceptance. Runtime setup exposes the fixed installer through authenticated project-owned install/check jobs bound to the displayed immutable lock; caller paths, commands and URLs are rejected.",
       "evidence": [
         "install_tracking.py",
         "tracking-macos-arm64-py313.lock.json",
@@ -1375,7 +1382,10 @@
         "web/tracking-ui.js",
         "test_install_tracking.py",
         "test_planar_tracking.py",
-        "test_planar_tracking_macos.py"
+        "test_planar_tracking_macos.py",
+        "runtime_management.py",
+        "web/runtime-management-ui.js",
+        "test_runtime_management.py"
       ]
     },
     {

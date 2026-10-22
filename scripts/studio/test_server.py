@@ -69,6 +69,39 @@ class ServerTests(unittest.TestCase):
         p["clips"] = [{"id": "clip1", "asset_id": asset["id"], "start": 0, "in": 0, "duration": 24, "track": 0}]
         return p
 
+    def test_managed_imaging_and_tracking_jobs_preserve_auth_lock_and_project_ownership(self):
+        import runtime_management as runtime
+        status, _, listing = self.request("GET", "/api/runtime-management")
+        self.assertEqual(status, 200, listing)
+        entries = {entry["id"]: entry for entry in listing["runtimes"]}
+        before = (self.store.project_dir(self.p["id"]) / "project.json").read_bytes()
+        for ident in ("imaging", "tracking"):
+            with self.subTest(runtime=ident):
+                entry = entries[ident]
+                path = f"/api/projects/{self.p['id']}/runtime-management/{ident}"
+                payload = {"operation": "check", "lock_sha256": entry["lock_sha256"]}
+                self.assertEqual(self.request("POST", path, payload, token=False)[0], 403)
+                self.assertEqual(self.request("POST", path, {**payload, "destination": "/tmp/injected"})[0], 400)
+                self.assertEqual(self.request("POST", path, {**payload, "lock_sha256": "0" * 64})[0], 400)
+                installer = runtime._installer(ident)
+                result = {"status": "verified", "wheel_lock_sha256": entry["lock_sha256"]}
+                with patch.object(installer, "install", return_value=result) as install:
+                    status, _, job = self.request("POST", path, payload)
+                    self.assertEqual(status, 202, job)
+                    self.assertEqual(job["project_id"], self.p["id"])
+                    self.assertEqual(job["kind"], "runtime-setup")
+                    deadline = time.monotonic() + 3
+                    while time.monotonic() < deadline:
+                        status, _, completed = self.request("GET", "/api/jobs/" + job["id"])
+                        if completed["state"] not in ("queued", "running"):
+                            break
+                        time.sleep(.02)
+                    self.assertEqual(completed["state"], "completed", completed)
+                    self.assertEqual(completed["result"]["runtime_id"], ident)
+                    self.assertEqual(completed["result"]["lock_sha256"], entry["lock_sha256"])
+                    self.assertEqual(install.call_count, 1)
+        self.assertEqual(before, (self.store.project_dir(self.p["id"]) / "project.json").read_bytes())
+
     def test_origin_host_token_and_json_are_required(self):
         path = "/api/projects"
         for headers, token in [({}, False), ({"Origin": "https://hostile.example"}, True), ({"Host": "hostile.example"}, True), ({"Sec-Fetch-Site": "cross-site"}, True)]:

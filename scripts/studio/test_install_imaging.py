@@ -4,11 +4,15 @@ import json
 import os
 from pathlib import Path
 import subprocess
+import sys
+import threading
+import time
 import tempfile
 import unittest
 from unittest.mock import patch
 
 import install_imaging as installer
+from adapters import AdapterCancelled
 
 
 class ImagingInstallerTests(unittest.TestCase):
@@ -148,6 +152,41 @@ class ImagingInstallerTests(unittest.TestCase):
         self.assertEqual(report["checks"], dict.fromkeys(installer.PROBE_CHECKS, True))
         self.assertEqual(report["scene_linear"], "ACEScg")
         self.assertEqual(report["libraw"], "0.22.1")
+
+
+
+    def test_running_owned_install_command_is_cancellable(self):
+        event = threading.Event()
+        lease = installer._CANCEL_EVENT.set(event)
+        timer = threading.Timer(.15, event.set)
+        started = time.monotonic()
+        timer.start()
+        try:
+            with self.assertRaisesRegex(AdapterCancelled, "cancel"):
+                installer._run([sys.executable, "-c", "import time; time.sleep(15)"], 20)
+        finally:
+            installer._CANCEL_EVENT.reset(lease)
+            timer.cancel()
+            timer.join()
+        self.assertLess(time.monotonic() - started, 3)
+
+    def test_cancellation_before_publication_preserves_existing_work(self):
+        event = threading.Event()
+        sibling = self.root / "unrelated"
+        sibling.mkdir()
+        (sibling / "keep").write_text("preserved")
+        verification = {"versions": installer.RUNTIME_REQUIREMENTS.copy(),
+                        "checks": dict.fromkeys(installer.PROBE_CHECKS, True)}
+        def build(directory, python, lock):
+            event.set()
+            return verification
+        with patch.object(installer, "_build_runtime", side_effect=build):
+            with self.assertRaises(AdapterCancelled):
+                installer.install(self.destination, cancel_event=event)
+        self.assertFalse(os.path.lexists(self.destination))
+        self.assertEqual((sibling / "keep").read_text(), "preserved")
+        self.assertEqual(list((self.root / installer.VERSIONS_DIRECTORY).iterdir()), [])
+        self.assertIsNone(installer._CANCEL_EVENT.get())
 
 
 if __name__ == "__main__":
