@@ -1,0 +1,50 @@
+{
+  "scope": "Retained synthetic native acceptance captures and actual downloads",
+  "files": [
+    {
+      "path": "archive/ENGINE_TEST_retime.png",
+      "bytes": 348569,
+      "sha256": "8d9c0c9dacfd3a7367b57947a669d6da7359eb2dd3d2bc891b8ed53b304ce4b3"
+    },
+    {
+      "path": "archive/native_downloads/ENGINE_TEST_959DE1B5-C51D-4046-844F-A93043AE8296_5625c2d77a27454e959ebec6c3930b76.cinematicum.zip",
+      "bytes": 789530,
+      "sha256": "04496dff2d05d9cd32d17995d778061594970cfdd3e77842f1b39a2448d4b494"
+    },
+    {
+      "path": "archive/native_downloads/ENGINE_TEST_AFBDAA70-C493-40F0-9454-DE8C7A129EFB_727b10d2f1bb4e90a4867943ed3c39c7.mov",
+      "bytes": 180643,
+      "sha256": "a75e34e5fd82ed9eb52b1cf61789d62dbc7fdab7850d3b7985933399548446d7"
+    },
+    {
+      "path": "author/ENGINE_TEST_retime.png",
+      "bytes": 307599,
+      "sha256": "18493a75950cefe010adebe5a6c28ea1cfbcbdc713bc8022fac53897a0009ae0"
+    },
+    {
+      "path": "fixture/workspace/projects/203f02164be548c4839b7013bcc454a2/previews/2ffaf8eaca8ea6e1bf93d86786ebf19c9392129594a3a697f8dc43e601e168f5.png",
+      "bytes": 7560,
+      "sha256": "7fdb1262c05fb2fd22b79c6d5102a7c3ee1e2496f5d9259b8d5699c912f87190"
+    },
+    {
+      "path": "fixture/workspace/projects/203f02164be548c4839b7013bcc454a2/previews/74b5ce654bb690ab681e7f031709ce690975c89b84d62697978da2d4a764afd4.png",
+      "bytes": 7560,
+      "sha256": "7fdb1262c05fb2fd22b79c6d5102a7c3ee1e2496f5d9259b8d5699c912f87190"
+    },
+    {
+      "path": "fixture/workspace/projects/41cf10dd38104d7a840f533215f55728/previews/f0e1b8850853eab07c0059aeb449269009019770fe6672c1d43bda49c438a147.png",
+      "bytes": 228,
+      "sha256": "16fde26b60e771f3876f4de3735d36da3d1cf9c72c7e55d4c767d40459964cff"
+    },
+    {
+      "path": "playback/ENGINE_TEST_retime.png",
+      "bytes": 351671,
+      "sha256": "61247073887031e3df9dbab58120731561848c56e1708ff4142c28691f08e789"
+    },
+    {
+      "path": "playback/native_downloads/ENGINE_TEST_41F9C6AA-23F0-400F-BA8B-2F58F91C8C04_e28a863005dc423bb4da92d975efdcdb.mov",
+      "bytes": 180643,
+      "sha256": "a75e34e5fd82ed9eb52b1cf61789d62dbc7fdab7850d3b7985933399548446d7"
+    }
+  ]
+}

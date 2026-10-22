@@ -1,0 +1,18 @@
+{
+  "binding": {
+    "accepted_runner_sha256": "f772386b7c36db369d150c48e42dd16b550f5c80c91f77c8000129135ef73bfe",
+    "controller_binary_sha256": "cdd2bfe16006d71e685f9ddc6bb844bdf8d970b9681217702c9aaeb70833b6f8",
+    "controller_source_sha256": "e7d5dd055bd4afd8d2e5fce05d02cd2402970bccf535756889284e4f709a47a7",
+    "coordinator_sha256": "9c6842a6a6c8547f2e2af50324c290efc1613ea723d5ba0f3b2f60aef6cdc9fa",
+    "core_commit": "c9869e86b9421b7fdc083d249b1616114320f0d5",
+    "core_source_manifest_sha256": "31125bf9cef0a920bc0a5e45b2f132fdfbf4d3a5640d55cb01af372266d736d3",
+    "core_tree": "941da9dbc805788a89c610ee688cc17de08fccc4",
+    "installation_evidence_sha256": "1da36c98eeabdd91fa79a1492f5c6956c689450643e0087fd9d9641498480ef8",
+    "installed_native_sha256": "ca2a5bf65d934b87b0dfafc55392b648bda650c1c7ce76491cc5b21e20a84b39",
+    "private_baseline_sha256": "924577ef9a2ecc83335b84d6f4ebce599ad9909dd2a4ade665f529c87aa4f3f8",
+    "source_code_identity_sha256": "6141615ad83161ce8a83c94913f4e75e00d84ca8ad730a0d710524cd07bfd6dc"
+  },
+  "schema": "cinematicum-installed-readiness-phased-v2:started",
+  "started_unix": 1792671721.242608,
+  "tool": "deep"
+}

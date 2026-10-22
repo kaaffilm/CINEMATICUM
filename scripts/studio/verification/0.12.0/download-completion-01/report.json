@@ -1,0 +1,13 @@
+{
+  "actual_browser_subcases": 6,
+  "elapsed_seconds": 14.233,
+  "errors": [],
+  "failures": [],
+  "passed": true,
+  "schema": "cinematicum-0.12-download-completion-guard-v1",
+  "skipped": [],
+  "source_after_sha256": "cf8691d3b1d3a646ea6a73bdafe9829830b94c5592eb771c313aa449a70725b7",
+  "source_sha256": "cf8691d3b1d3a646ea6a73bdafe9829830b94c5592eb771c313aa449a70725b7",
+  "source_unchanged": true,
+  "tests_run": 6
+}

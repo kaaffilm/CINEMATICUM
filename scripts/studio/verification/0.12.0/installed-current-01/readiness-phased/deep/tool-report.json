@@ -1,0 +1,198 @@
+{
+  "binding": {
+    "accepted_runner_sha256": "f772386b7c36db369d150c48e42dd16b550f5c80c91f77c8000129135ef73bfe",
+    "controller_binary_sha256": "cdd2bfe16006d71e685f9ddc6bb844bdf8d970b9681217702c9aaeb70833b6f8",
+    "controller_source_sha256": "e7d5dd055bd4afd8d2e5fce05d02cd2402970bccf535756889284e4f709a47a7",
+    "coordinator_sha256": "9c6842a6a6c8547f2e2af50324c290efc1613ea723d5ba0f3b2f60aef6cdc9fa",
+    "core_commit": "c9869e86b9421b7fdc083d249b1616114320f0d5",
+    "core_source_manifest_sha256": "31125bf9cef0a920bc0a5e45b2f132fdfbf4d3a5640d55cb01af372266d736d3",
+    "core_tree": "941da9dbc805788a89c610ee688cc17de08fccc4",
+    "installation_evidence_sha256": "1da36c98eeabdd91fa79a1492f5c6956c689450643e0087fd9d9641498480ef8",
+    "installed_native_sha256": "ca2a5bf65d934b87b0dfafc55392b648bda650c1c7ce76491cc5b21e20a84b39",
+    "private_baseline_sha256": "924577ef9a2ecc83335b84d6f4ebce599ad9909dd2a4ade665f529c87aa4f3f8",
+    "source_code_identity_sha256": "6141615ad83161ce8a83c94913f4e75e00d84ca8ad730a0d710524cd07bfd6dc"
+  },
+  "bootstrap_before_quit": {
+    "active_durable_job_count": 0,
+    "default_workspace_matches": true,
+    "engine_version": "0.12.0",
+    "existing_project_count": 3,
+    "listed_durable_job_count": 7,
+    "runtime_availability_flags": {
+      "blender": true,
+      "color_pipeline": true,
+      "comfyui_available": false,
+      "ffmpeg": true,
+      "h264": true,
+      "high_depth_movie": true,
+      "imaging_available": true,
+      "master16": true,
+      "node_compositor": true,
+      "planar_tracking_available": true,
+      "prores": true
+    },
+    "token_project_names_prompts_assets_and_job_payloads_discarded": true
+  },
+  "bootstrap_runtime": {
+    "active_durable_job_count": 0,
+    "default_workspace_matches": true,
+    "engine_version": "0.12.0",
+    "existing_project_count": 3,
+    "listed_durable_job_count": 7,
+    "runtime_availability_flags": {
+      "blender": true,
+      "color_pipeline": true,
+      "comfyui_available": false,
+      "ffmpeg": true,
+      "h264": true,
+      "high_depth_movie": true,
+      "imaging_available": true,
+      "master16": true,
+      "node_compositor": true,
+      "planar_tracking_available": true,
+      "prores": true
+    },
+    "token_project_names_prompts_assets_and_job_payloads_discarded": true
+  },
+  "canonical_quit_receipt": {
+    "completed_at": 1792671724.518443,
+    "durable_jobs_at_shutdown_count": 0,
+    "ephemeral_jobs_at_shutdown_count": 0,
+    "reason": "native-quit-no-active-jobs",
+    "terminal_state_counts": {}
+  },
+  "checks": {
+    "actual_bootstrap_and_required_runtime_flags": true,
+    "actual_first_ordinary_native_quit_completed": true,
+    "actual_owned_bundled_server_default_workspace_and_loopback_listener": true,
+    "exact_new_canonical_app_launched_by_launchservices": true,
+    "existing_production_app_not_adopted": true,
+    "fresh_actual_job_free_shutdown_receipt": true,
+    "live_editor_matches_accepted_installed_bytes": true,
+    "live_lock_job_project_and_preview_guards_passed": true,
+    "native_window_present_when_observable": true,
+    "one_selected_actual_installed_default_runtime_available": true,
+    "owned_app_alive_after_actual_readiness": true,
+    "owned_bundled_server_exited": true,
+    "source_controller_and_native_pins_unchanged": true,
+    "workspace_ownership_released": true
+  },
+  "elapsed_seconds": 3.613,
+  "event_records": {
+    "native-launch.json": {
+      "mode": 384,
+      "sha256": "c80274856209d50e3e7803b79fd4c0c714abae0651e318bfddd18d5a5deb2571",
+      "size": 952
+    },
+    "native-observe-1.json": {
+      "mode": 384,
+      "sha256": "c5ceb1898ff3274ed5118c1acadab4a1c82ffa97c8f55510ba2bda6ea50f10da",
+      "size": 816
+    },
+    "native-ordinary-quit.json": {
+      "mode": 384,
+      "sha256": "a55a866fd3724a2b855bdda4f97b538e25d22335b851f8ea89a24d0f2ccf9653",
+      "size": 369
+    },
+    "native-preflight.json": {
+      "mode": 384,
+      "sha256": "c9b1ded2249ea5e4f0e2efae3bc47fa7fea900d2523184dbf8efd509b6c063d7",
+      "size": 317
+    },
+    "owned-launch.json": {
+      "mode": 384,
+      "sha256": "01fc0db315e537c1d55ca61ce6dc3bb691a400133fa7e75a69060ae9081c8470",
+      "size": 571
+    },
+    "phase-started.json": {
+      "mode": 384,
+      "sha256": "a04065c9ddc0575014e909baf34115eb1cee2c0fc55c8fec2eda725e0bb31e1f",
+      "size": 1166
+    }
+  },
+  "force_termination_used": false,
+  "installed_tool_readiness": {
+    "available": true,
+    "pbrt_available": null,
+    "response_sha256": "130ac9af9e9d944ba54f8b292e4317f51bbb80b8a0e80b66033d04d19e86617f"
+  },
+  "jobs_before_launch": {
+    "active_count": 0,
+    "record_count": 7,
+    "terminal_state_counts": {
+      "cancelled": 3,
+      "completed": 4
+    }
+  },
+  "jobs_before_quit": {
+    "active_count": 0,
+    "record_count": 7,
+    "terminal_state_counts": {
+      "cancelled": 3,
+      "completed": 4
+    }
+  },
+  "launch": {
+    "controller_exit_code": 0,
+    "controller_stderr_bytes": 0,
+    "controller_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "creates_new_instance": true,
+    "launch_mechanism": "NSWorkspace.openApplication / LaunchServices",
+    "operation": "launch",
+    "owned": {
+      "activation_policy_regular": true,
+      "bundle_id": "com.cinematicum.studio",
+      "bundle_path": "/Users/midiakiasat/Applications/CINEMATICUM Studio.app",
+      "executable_path": "/Users/midiakiasat/Applications/CINEMATICUM Studio.app/Contents/MacOS/CINEMATICUMStudio",
+      "finished_launching": false,
+      "hidden": false,
+      "launch_unix": 1792671721.319515,
+      "native_sha256": "ca2a5bf65d934b87b0dfafc55392b648bda650c1c7ce76491cc5b21e20a84b39",
+      "normal_window_count": 0,
+      "onscreen_window_count": 0,
+      "pid": 61219,
+      "running": true,
+      "window_metadata_available": true
+    },
+    "passed": true,
+    "permissions_requested": false
+  },
+  "ordinary_quit": {
+    "controller_exit_code": 0,
+    "controller_stderr_bytes": 0,
+    "controller_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "force_termination_used": false,
+    "operation": "terminate",
+    "owned_app_terminated": true,
+    "passed": true,
+    "termination_mechanism": "NSRunningApplication.terminate",
+    "termination_requested": true
+  },
+  "owned_server": {
+    "arguments_match_bundled_server_and_default_workspace": true,
+    "bundled_script_sha256": "baee0a0ab0ab697a8316fef0e59025f41de02a6274f5dbdb5b7d273315cdf9e1",
+    "command_sha256": "c42ef72901d8ff8c82f85ad19b882a968634783e055389e46715e5aeaf97b972",
+    "loopback_port": 60753,
+    "parent_pid": 61219,
+    "pid": 61252,
+    "started": "Thu Oct 22 14:22:01 2026"
+  },
+  "passed": true,
+  "permissions_requested": false,
+  "preservation_status": "pending_separate_verify_phase",
+  "preview_guard": {
+    "all_immediate_png_names_and_entry_types_counted": true,
+    "maximum_immediate_png_entries": 2,
+    "projects_inspected": 3
+  },
+  "production_code_injected": false,
+  "project_content_recorded": false,
+  "schema": "cinematicum-installed-readiness-phased-v2:tool",
+  "scope": "Actual installed default-runtime GET readiness, source-bound native launch and ordinary quit; final preservation is separate.",
+  "tool": "deep",
+  "window_observation": {
+    "normal_window_count": 1,
+    "onscreen_window_count": 1,
+    "window_metadata_available": true
+  }
+}

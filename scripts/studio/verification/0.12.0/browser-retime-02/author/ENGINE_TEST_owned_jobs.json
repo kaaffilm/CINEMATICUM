@@ -1,0 +1,13 @@
+[
+  {
+    "created_at": 1792670407.2076707,
+    "error": "Speed-ramp rendering cancelled; original media and completed exports are unchanged.",
+    "finished_at": 1792670407.3714104,
+    "id": "cc216d514c10467bb408fcb3fd00af0c",
+    "kind": "frame-preview",
+    "progress": 0,
+    "project_id": "15730b3bfe7b4d1c88447e9b38844ace",
+    "result": null,
+    "state": "cancelled"
+  }
+]

@@ -1,0 +1,107 @@
+{
+  "version": 1,
+  "id": "3ced77d5cb4e4676bf016244f6188f9d",
+  "name": "ENGINE TEST source-time ramp",
+  "fps": 24,
+  "width": 96,
+  "height": 64,
+  "assets": [
+    {
+      "id": "87a4daec950f46059ba9e9f6f49084c7",
+      "name": "ENGINE_TEST_ramp_original.mov",
+      "path": "media/87a4daec950f46059ba9e9f6f49084c7.mov",
+      "sha256": "5015826db6c51a59c256400973d9eba304ec250da603b4650f4a66b60b4e0df5",
+      "size": 782667,
+      "kind": "video",
+      "duration": 1.0,
+      "width": 96,
+      "height": 64,
+      "has_audio": true,
+      "frames": 24,
+      "codec": "h264",
+      "pixel_format": "yuv420p",
+      "color_transfer": "unknown",
+      "fps": "24/1",
+      "video_stream_index": 0,
+      "audio_stream_index": 1,
+      "audio_sample_rate": 48000,
+      "audio_channels": 2,
+      "audio_duration": 1.0,
+      "audio_streams": [
+        {
+          "index": 1,
+          "channels": 2,
+          "container_id": "0x2",
+          "sample_rate": 48000,
+          "codec": "pcm_f32le",
+          "language": "",
+          "duration": 1.0
+        },
+        {
+          "index": 2,
+          "channels": 2,
+          "container_id": "0x3",
+          "sample_rate": 48000,
+          "codec": "pcm_f32le",
+          "language": "",
+          "duration": 1.0
+        }
+      ]
+    }
+  ],
+  "clips": [
+    {
+      "id": "ramp_source",
+      "asset_id": "87a4daec950f46059ba9e9f6f49084c7",
+      "track": 0,
+      "start": 3,
+      "in": 4.0,
+      "duration": 12,
+      "volume": 0.6,
+      "audio": {
+        "stream_index": 2,
+        "channels": [
+          1,
+          0
+        ],
+        "pan": 0.25,
+        "fade_duration": 12,
+        "fade_offset": 0,
+        "fade_in": 0,
+        "fade_out": 0
+      },
+      "animation_start": 0,
+      "animation_duration": 12,
+      "animation_offset": 0,
+      "speed": 1.0,
+      "reverse": false,
+      "opacity": 1.0,
+      "x": 0.0,
+      "y": 0.0,
+      "scale": 1.0,
+      "rotation": 0.0,
+      "grade": {
+        "exposure": 0.0,
+        "contrast": 1.0,
+        "saturation": 1.0,
+        "temperature": 0.0
+      },
+      "effects": {
+        "blur": 0.0,
+        "sharpen": 0.0,
+        "vignette": false,
+        "chroma_key": ""
+      },
+      "keyframes": []
+    }
+  ],
+  "titles": [],
+  "settings": {},
+  "revision": 2,
+  "frame_rate": {
+    "numerator": 24,
+    "denominator": 1
+  },
+  "tracks": [],
+  "updated_at": "2026-10-22T11:46:34Z"
+}

@@ -1,0 +1,20 @@
+{
+  "actual_browser_subcases": 6,
+  "elapsed_seconds": 0.59,
+  "errors": [
+    "test_late_second_registration_waits_for_both_actual_files (test_retime_download_completion.DownloadCompletionTests.test_late_second_registration_waits_for_both_actual_files) (adapter='test_retime_browser.cjs')",
+    "test_late_second_registration_waits_for_both_actual_files (test_retime_download_completion.DownloadCompletionTests.test_late_second_registration_waits_for_both_actual_files) (adapter='test_otio_compositions_browser.cjs')",
+    "test_late_second_registration_waits_for_both_actual_files (test_retime_download_completion.DownloadCompletionTests.test_late_second_registration_waits_for_both_actual_files) (adapter='test_multicam_sync_browser.cjs')",
+    "test_missing_second_download_fails_under_three_second_deadline (test_retime_download_completion.DownloadCompletionTests.test_missing_second_download_fails_under_three_second_deadline) (adapter='test_retime_browser.cjs')",
+    "test_missing_second_download_fails_under_three_second_deadline (test_retime_download_completion.DownloadCompletionTests.test_missing_second_download_fails_under_three_second_deadline) (adapter='test_otio_compositions_browser.cjs')",
+    "test_missing_second_download_fails_under_three_second_deadline (test_retime_download_completion.DownloadCompletionTests.test_missing_second_download_fails_under_three_second_deadline) (adapter='test_multicam_sync_browser.cjs')"
+  ],
+  "failures": [],
+  "passed": false,
+  "schema": "cinematicum-0.12-download-completion-guard-v1",
+  "skipped": [],
+  "source_after_sha256": "cf8691d3b1d3a646ea6a73bdafe9829830b94c5592eb771c313aa449a70725b7",
+  "source_sha256": "cf8691d3b1d3a646ea6a73bdafe9829830b94c5592eb771c313aa449a70725b7",
+  "source_unchanged": true,
+  "tests_run": 6
+}

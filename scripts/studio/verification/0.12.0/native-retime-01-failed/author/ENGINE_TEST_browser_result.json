@@ -1,0 +1,18 @@
+{
+  "download_destination_policy": "explicit test evidence directory; no save panel is simulated",
+  "download_errors": [],
+  "downloads": [],
+  "elapsed_ms": 1537,
+  "expect_download": false,
+  "metrics": {},
+  "page_errors": [],
+  "passed": true,
+  "screenshot": "/Users/midiakiasat/.midia-ai/gateway-live/acceptance/cinematicum-0.12-20261022-own-061702ff/retime-native-01/author/ENGINE_TEST_retime.png",
+  "screenshot_bytes": 336247,
+  "steps": [
+    "real_speed_key_controls",
+    "one_undo_redo_applies_recipe",
+    "split_and_tail_trim_preserve_source_curve",
+    "save_switch_reopen_keeps_recipe_routing_and_gain"
+  ]
+}

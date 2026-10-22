@@ -1,0 +1,17 @@
+{
+  "app": "/Users/midiakiasat/Applications/CINEMATICUM Studio.app",
+  "backup": "/Users/midiakiasat/Applications/.CINEMATICUM-Backups.noindex/CINEMATICUM Studio-20261022T112837Z-e044b7b2.zip",
+  "elapsed": 0.23,
+  "expected_old_bundle_identity": [
+    16777230,
+    104151567,
+    "e9e19319adf0c76bf9d907e1bf3bf25f0893aa5460d0ba78388187d97a9b7a38"
+  ],
+  "installed_bundle_inventory_sha256": "1abd36bc737a2cb907b0b4d239a016619117ef33fd4ec516599b302c3080388e",
+  "installer_sha256": "8abbee4a4b94ae358eebba8ee9f3a789d2325701832392a6a1c3923e754d07df",
+  "native_sha256": "8f19b8920ebdd8cfacf7c3330ed60043fe33a22c6aed494d377ee64e080427ad",
+  "original_installer_function": "install_macos.install_staged",
+  "passed": true,
+  "schema": "cinematicum-phased-install-commit-v1",
+  "source_commit": "530ba2400571a8b67efa2d9ab28997f65920c006"
+}

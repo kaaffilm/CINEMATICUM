@@ -1,0 +1,30 @@
+{
+  "schema": "cinematicum-installed-app-controller-build-v1",
+  "compiled": true,
+  "scope": "Independent LaunchServices control only; no production source compiled or injected",
+  "source_sha256": "e7d5dd055bd4afd8d2e5fce05d02cd2402970bccf535756889284e4f709a47a7",
+  "binary_sha256": "cdd2bfe16006d71e685f9ddc6bb844bdf8d970b9681217702c9aaeb70833b6f8",
+  "command": [
+    "/usr/bin/xcrun",
+    "swiftc",
+    "-Onone",
+    "-swift-version",
+    "5",
+    "-framework",
+    "Cocoa",
+    "-framework",
+    "CoreGraphics",
+    "-target",
+    "arm64-apple-macos12.0",
+    "-module-cache-path",
+    "/Users/midiakiasat/.midia-ai/gateway-live/acceptance/cinematicum-0.11-20261022-own-025436f6/installed-controller-01/module-cache",
+    "/Users/midiakiasat/.midia-ai/gateway-live/workspaces/auto-6ababac56a092690eac868f940f91a11-next-012/scripts/studio/verification/0.12.0/tools/installed-launch-01/InstalledAppControl.swift",
+    "-o",
+    "/Users/midiakiasat/.midia-ai/gateway-live/acceptance/cinematicum-0.12-20261022-own-061702ff/installed-controller-02/cinematicum-installed-app-control"
+  ],
+  "exit_code": 0,
+  "timed_out": false,
+  "elapsed_seconds": 7.334,
+  "correction": "Unnecessary optimization removed from independent acceptance controller compilation after bounded optimized compile timeout; source and product unchanged",
+  "prior_build_receipt_sha256": "734bee6c75cf9c2b34f9f8ae95f4d46156aaaf29796179f675fa028d9114c9cc"
+}

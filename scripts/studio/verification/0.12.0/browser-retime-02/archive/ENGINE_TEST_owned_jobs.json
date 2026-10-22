@@ -1,0 +1,774 @@
+[
+  {
+    "created_at": 1792670410.9205637,
+    "error": null,
+    "finished_at": 1792670413.6771135,
+    "id": "0e7ae8e817bc44478900755ca34fa4c5",
+    "kind": "render",
+    "progress": 1,
+    "project_id": "15730b3bfe7b4d1c88447e9b38844ace",
+    "result": {
+      "alpha_mode": "opaque",
+      "color_space": "SDR Rec.709",
+      "duration": 0.625,
+      "dynamic_range": "SDR UNORM; no scene-linear HDR/ACES movie mastering",
+      "elapsed_seconds": 2.542,
+      "encoding": "h264",
+      "filename": "0e7ae8e817bc44478900755ca34fa4c5.mp4",
+      "fps": 24,
+      "frame_rate": {
+        "denominator": 1,
+        "numerator": 24
+      },
+      "frames": 15,
+      "has_audio": true,
+      "height": 64,
+      "image_precision": "standard8",
+      "issuance_status_changed": false,
+      "packet_verification": null,
+      "path": "/workspace/scratch/091f394ee5df/cinematicum-012-browser-02/fixture/workspace/projects/15730b3bfe7b4d1c88447e9b38844ace/exports/0e7ae8e817bc44478900755ca34fa4c5.mp4",
+      "pixel_format": "yuv420p",
+      "processing_bits": 8,
+      "profile": "preview",
+      "project_revision": 5,
+      "retime_reports": [
+        {
+          "absolute_audio_origin": "3",
+          "audio": {
+            "antialias": "Blackman-windowed sinc; adaptive cutoff 0.95/max(1,speed)",
+            "filter_taps": 64,
+            "mode": "varispeed",
+            "pitch_preserved": false,
+            "sample_frames": 8000
+          },
+          "clip_id": "ramp_source",
+          "frame_rate": {
+            "denominator": 1,
+            "numerator": 24
+          },
+          "nearest_source_frames": [
+            4,
+            5,
+            5,
+            6
+          ],
+          "output_frames": 4,
+          "output_samples": 8000,
+          "picture": {
+            "analysis_edge": 640,
+            "cut_fallback_frames": 0,
+            "flow_pairs": 2,
+            "interpolated_frames": 3,
+            "low_confidence_fraction": [
+              0.005533854166666667,
+              0.0029296875,
+              0.0017903645833333333
+            ],
+            "method": "optical_flow"
+          },
+          "quality": "Bounded classical dense flow; review occlusions, cuts and fine texture.",
+          "recipe": {
+            "audio": "varispeed",
+            "keys": [
+              {
+                "frame": 0,
+                "speed": 0.5
+              },
+              {
+                "frame": 12,
+                "speed": 1.5
+              }
+            ],
+            "method": "optical_flow",
+            "offset": 0,
+            "source_origin": {
+              "denominator": "1",
+              "numerator": "4"
+            },
+            "version": 1
+          },
+          "runtime_operations_executed": true,
+          "runtime_versions": {
+            "numpy": "2.3.5",
+            "opencv-python-headless": "4.11.0.86"
+          },
+          "selected_audio": {
+            "channels": [
+              1,
+              0
+            ],
+            "fade_duration": 12,
+            "fade_in": 0,
+            "fade_offset": 0,
+            "fade_out": 0,
+            "pan": 0.25,
+            "stream_index": 2
+          },
+          "source_frame_positions": [
+            4.0,
+            4.541666666666667,
+            5.166666666666667,
+            5.875
+          ],
+          "source_path": "media/1aaebfd51d7745e9b4b7596164ca3e98.mov",
+          "source_sha256": "016c24ff85a6eb52daead89b3437e9fb6e7616b68dfa643b715cf257181b11e0",
+          "source_unchanged": true,
+          "version": 1,
+          "versions": {
+            "numpy": "2.3.5",
+            "opencv-python-headless": "4.11.0.86"
+          }
+        },
+        {
+          "absolute_audio_origin": "7",
+          "audio": {
+            "antialias": "Blackman-windowed sinc; adaptive cutoff 0.95/max(1,speed)",
+            "filter_taps": 64,
+            "mode": "varispeed",
+            "pitch_preserved": false,
+            "sample_frames": 16000
+          },
+          "clip_id": "901c26c6-0313-4387-a8c9-dff97288e542",
+          "frame_rate": {
+            "denominator": 1,
+            "numerator": 24
+          },
+          "nearest_source_frames": [
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            15
+          ],
+          "output_frames": 8,
+          "output_samples": 16000,
+          "picture": {
+            "analysis_edge": 640,
+            "cut_fallback_frames": 0,
+            "flow_pairs": 8,
+            "interpolated_frames": 8,
+            "low_confidence_fraction": [
+              0.005208333333333333,
+              0.001953125,
+              0.00439453125,
+              0.014322916666666666,
+              0.012369791666666666,
+              0.013834635416666666,
+              0.007649739583333333,
+              0.011881510416666666
+            ],
+            "method": "optical_flow"
+          },
+          "quality": "Bounded classical dense flow; review occlusions, cuts and fine texture.",
+          "recipe": {
+            "audio": "varispeed",
+            "keys": [
+              {
+                "frame": 0,
+                "speed": 0.5
+              },
+              {
+                "frame": 12,
+                "speed": 1.5
+              }
+            ],
+            "method": "optical_flow",
+            "offset": 4,
+            "source_origin": {
+              "denominator": "1",
+              "numerator": "4"
+            },
+            "version": 1
+          },
+          "runtime_operations_executed": true,
+          "runtime_versions": {
+            "numpy": "2.3.5",
+            "opencv-python-headless": "4.11.0.86"
+          },
+          "selected_audio": {
+            "channels": [
+              1,
+              0
+            ],
+            "fade_duration": 12,
+            "fade_in": 0,
+            "fade_offset": 4,
+            "fade_out": 0,
+            "pan": 0.25,
+            "stream_index": 2
+          },
+          "source_frame_positions": [
+            6.666666666666667,
+            7.541666666666667,
+            8.5,
+            9.541666666666666,
+            10.666666666666666,
+            11.875,
+            13.166666666666666,
+            14.541666666666666
+          ],
+          "source_path": "media/1aaebfd51d7745e9b4b7596164ca3e98.mov",
+          "source_sha256": "016c24ff85a6eb52daead89b3437e9fb6e7616b68dfa643b715cf257181b11e0",
+          "source_unchanged": true,
+          "version": 1,
+          "versions": {
+            "numpy": "2.3.5",
+            "opencv-python-headless": "4.11.0.86"
+          }
+        }
+      ],
+      "sha256": "99554d241319d6af5993e80b274bb42a4cabfb10837ccc001dd04a3b85a35a70",
+      "size": 17439,
+      "transparent_background": false,
+      "url": "/api/projects/15730b3bfe7b4d1c88447e9b38844ace/exports/0e7ae8e817bc44478900755ca34fa4c5.mp4",
+      "width": 96
+    },
+    "state": "completed"
+  },
+  {
+    "created_at": 1792670414.3814423,
+    "error": null,
+    "finished_at": 1792670416.0888958,
+    "id": "66feb006f97045ac87722576051cd4ee",
+    "kind": "render",
+    "progress": 1,
+    "project_id": "15730b3bfe7b4d1c88447e9b38844ace",
+    "result": {
+      "alpha_mode": "opaque",
+      "color_space": "SDR Rec.709",
+      "duration": 0.625,
+      "dynamic_range": "SDR UNORM; no scene-linear HDR/ACES movie mastering",
+      "elapsed_seconds": 1.567,
+      "encoding": "prores",
+      "filename": "66feb006f97045ac87722576051cd4ee.mov",
+      "fps": 24,
+      "frame_rate": {
+        "denominator": 1,
+        "numerator": 24
+      },
+      "frames": 15,
+      "has_audio": true,
+      "height": 64,
+      "image_precision": "standard8",
+      "issuance_status_changed": false,
+      "packet_verification": null,
+      "path": "/workspace/scratch/091f394ee5df/cinematicum-012-browser-02/fixture/workspace/projects/15730b3bfe7b4d1c88447e9b38844ace/exports/66feb006f97045ac87722576051cd4ee.mov",
+      "pixel_format": "yuv422p10le",
+      "processing_bits": 8,
+      "profile": "prores",
+      "project_revision": 6,
+      "retime_reports": [
+        {
+          "absolute_audio_origin": "3",
+          "audio": {
+            "antialias": "Blackman-windowed sinc; adaptive cutoff 0.95/max(1,speed)",
+            "filter_taps": 64,
+            "mode": "varispeed",
+            "pitch_preserved": false,
+            "sample_frames": 8000
+          },
+          "clip_id": "ramp_source",
+          "frame_rate": {
+            "denominator": 1,
+            "numerator": 24
+          },
+          "nearest_source_frames": [
+            4,
+            5,
+            5,
+            6
+          ],
+          "output_frames": 4,
+          "output_samples": 8000,
+          "picture": {
+            "analysis_edge": 640,
+            "cut_fallback_frames": 0,
+            "flow_pairs": 2,
+            "interpolated_frames": 3,
+            "low_confidence_fraction": [
+              0.005533854166666667,
+              0.0029296875,
+              0.0017903645833333333
+            ],
+            "method": "optical_flow"
+          },
+          "quality": "Bounded classical dense flow; review occlusions, cuts and fine texture.",
+          "recipe": {
+            "audio": "varispeed",
+            "keys": [
+              {
+                "frame": 0,
+                "speed": 0.5
+              },
+              {
+                "frame": 12,
+                "speed": 1.5
+              }
+            ],
+            "method": "optical_flow",
+            "offset": 0,
+            "source_origin": {
+              "denominator": "1",
+              "numerator": "4"
+            },
+            "version": 1
+          },
+          "runtime_operations_executed": true,
+          "runtime_versions": {
+            "numpy": "2.3.5",
+            "opencv-python-headless": "4.11.0.86"
+          },
+          "selected_audio": {
+            "channels": [
+              1,
+              0
+            ],
+            "fade_duration": 12,
+            "fade_in": 0,
+            "fade_offset": 0,
+            "fade_out": 0,
+            "pan": 0.25,
+            "stream_index": 2
+          },
+          "source_frame_positions": [
+            4.0,
+            4.541666666666667,
+            5.166666666666667,
+            5.875
+          ],
+          "source_path": "media/1aaebfd51d7745e9b4b7596164ca3e98.mov",
+          "source_sha256": "016c24ff85a6eb52daead89b3437e9fb6e7616b68dfa643b715cf257181b11e0",
+          "source_unchanged": true,
+          "version": 1,
+          "versions": {
+            "numpy": "2.3.5",
+            "opencv-python-headless": "4.11.0.86"
+          }
+        },
+        {
+          "absolute_audio_origin": "7",
+          "audio": {
+            "antialias": "Blackman-windowed sinc; adaptive cutoff 0.95/max(1,speed)",
+            "filter_taps": 64,
+            "mode": "varispeed",
+            "pitch_preserved": false,
+            "sample_frames": 16000
+          },
+          "clip_id": "901c26c6-0313-4387-a8c9-dff97288e542",
+          "frame_rate": {
+            "denominator": 1,
+            "numerator": 24
+          },
+          "nearest_source_frames": [
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            15
+          ],
+          "output_frames": 8,
+          "output_samples": 16000,
+          "picture": {
+            "analysis_edge": 640,
+            "cut_fallback_frames": 0,
+            "flow_pairs": 8,
+            "interpolated_frames": 8,
+            "low_confidence_fraction": [
+              0.005208333333333333,
+              0.001953125,
+              0.00439453125,
+              0.014322916666666666,
+              0.012369791666666666,
+              0.013834635416666666,
+              0.007649739583333333,
+              0.011881510416666666
+            ],
+            "method": "optical_flow"
+          },
+          "quality": "Bounded classical dense flow; review occlusions, cuts and fine texture.",
+          "recipe": {
+            "audio": "varispeed",
+            "keys": [
+              {
+                "frame": 0,
+                "speed": 0.5
+              },
+              {
+                "frame": 12,
+                "speed": 1.5
+              }
+            ],
+            "method": "optical_flow",
+            "offset": 4,
+            "source_origin": {
+              "denominator": "1",
+              "numerator": "4"
+            },
+            "version": 1
+          },
+          "runtime_operations_executed": true,
+          "runtime_versions": {
+            "numpy": "2.3.5",
+            "opencv-python-headless": "4.11.0.86"
+          },
+          "selected_audio": {
+            "channels": [
+              1,
+              0
+            ],
+            "fade_duration": 12,
+            "fade_in": 0,
+            "fade_offset": 4,
+            "fade_out": 0,
+            "pan": 0.25,
+            "stream_index": 2
+          },
+          "source_frame_positions": [
+            6.666666666666667,
+            7.541666666666667,
+            8.5,
+            9.541666666666666,
+            10.666666666666666,
+            11.875,
+            13.166666666666666,
+            14.541666666666666
+          ],
+          "source_path": "media/1aaebfd51d7745e9b4b7596164ca3e98.mov",
+          "source_sha256": "016c24ff85a6eb52daead89b3437e9fb6e7616b68dfa643b715cf257181b11e0",
+          "source_unchanged": true,
+          "version": 1,
+          "versions": {
+            "numpy": "2.3.5",
+            "opencv-python-headless": "4.11.0.86"
+          }
+        }
+      ],
+      "sha256": "1cd81ce0577eb6a5bb98262187e84ff01fca221be20dd61d7da9ed518aed35fd",
+      "size": 180554,
+      "transparent_background": false,
+      "url": "/api/projects/15730b3bfe7b4d1c88447e9b38844ace/exports/66feb006f97045ac87722576051cd4ee.mov",
+      "width": 96
+    },
+    "state": "completed"
+  },
+  {
+    "created_at": 1792670419.035216,
+    "error": null,
+    "finished_at": 1792670419.0548065,
+    "id": "0e176336fbf54b748d847af746535cdd",
+    "kind": "archive-export",
+    "progress": 1,
+    "project_id": "15730b3bfe7b4d1c88447e9b38844ace",
+    "result": {
+      "filename": "0e176336fbf54b748d847af746535cdd.cinematicum.zip",
+      "files": 3,
+      "issuance_effect": "NONE",
+      "project_revision": 6,
+      "sha256": "3aee9510675f6fab6d82ecc851494c4fcf7ab25e46428473d008d975f6d6531e",
+      "size": 789830,
+      "total_bytes": 788360,
+      "url": "/api/projects/15730b3bfe7b4d1c88447e9b38844ace/exports/0e176336fbf54b748d847af746535cdd.cinematicum.zip",
+      "warnings": []
+    },
+    "state": "completed"
+  },
+  {
+    "created_at": 1792670419.2688513,
+    "error": "Speed-ramp rendering cancelled; original media and completed exports are unchanged.",
+    "finished_at": 1792670419.5261467,
+    "id": "db5bc34ea971484697a42a0b8ef352d6",
+    "kind": "frame-preview",
+    "progress": 0,
+    "project_id": "15730b3bfe7b4d1c88447e9b38844ace",
+    "result": null,
+    "state": "cancelled"
+  },
+  {
+    "created_at": 1792670419.5885289,
+    "error": null,
+    "finished_at": 1792670419.6800356,
+    "id": "c5ec9c36a89542a3aa72c17504b2ae88",
+    "kind": "archive-restore",
+    "progress": 1,
+    "project_id": "15730b3bfe7b4d1c88447e9b38844ace",
+    "result": {
+      "archive_sha256": "3aee9510675f6fab6d82ecc851494c4fcf7ab25e46428473d008d975f6d6531e",
+      "files": 3,
+      "format": "CINEMATICUM_PROJECT_ARCHIVE",
+      "issuance_effect": "NONE",
+      "name": "ENGINE TEST source-time ramp",
+      "project_id": "159faa8d76f64ef6b2a5dc6db43c9503",
+      "source_project_id": "15730b3bfe7b4d1c88447e9b38844ace",
+      "total_bytes": 788360,
+      "version": 1,
+      "warnings": []
+    },
+    "state": "completed"
+  },
+  {
+    "created_at": 1792670419.7760198,
+    "error": "Speed-ramp rendering cancelled; original media and completed exports are unchanged.",
+    "finished_at": 1792670420.116488,
+    "id": "71b1254337cb4072bcd4fab262657af6",
+    "kind": "frame-preview",
+    "progress": 0,
+    "project_id": "15730b3bfe7b4d1c88447e9b38844ace",
+    "result": null,
+    "state": "cancelled"
+  },
+  {
+    "created_at": 1792670420.2941325,
+    "error": null,
+    "finished_at": 1792670422.2428753,
+    "id": "18a92713a61d40a0bc0f9ba97fc91f6e",
+    "kind": "render",
+    "progress": 1,
+    "project_id": "159faa8d76f64ef6b2a5dc6db43c9503",
+    "result": {
+      "alpha_mode": "opaque",
+      "color_space": "SDR Rec.709",
+      "duration": 0.625,
+      "dynamic_range": "SDR UNORM; no scene-linear HDR/ACES movie mastering",
+      "elapsed_seconds": 1.769,
+      "encoding": "prores",
+      "filename": "18a92713a61d40a0bc0f9ba97fc91f6e.mov",
+      "fps": 24,
+      "frame_rate": {
+        "denominator": 1,
+        "numerator": 24
+      },
+      "frames": 15,
+      "has_audio": true,
+      "height": 64,
+      "image_precision": "standard8",
+      "issuance_status_changed": false,
+      "packet_verification": null,
+      "path": "/workspace/scratch/091f394ee5df/cinematicum-012-browser-02/fixture/workspace/projects/159faa8d76f64ef6b2a5dc6db43c9503/exports/18a92713a61d40a0bc0f9ba97fc91f6e.mov",
+      "pixel_format": "yuv422p10le",
+      "processing_bits": 8,
+      "profile": "prores",
+      "project_revision": 2,
+      "retime_reports": [
+        {
+          "absolute_audio_origin": "3",
+          "audio": {
+            "antialias": "Blackman-windowed sinc; adaptive cutoff 0.95/max(1,speed)",
+            "filter_taps": 64,
+            "mode": "varispeed",
+            "pitch_preserved": false,
+            "sample_frames": 8000
+          },
+          "clip_id": "ramp_source",
+          "frame_rate": {
+            "denominator": 1,
+            "numerator": 24
+          },
+          "nearest_source_frames": [
+            4,
+            5,
+            5,
+            6
+          ],
+          "output_frames": 4,
+          "output_samples": 8000,
+          "picture": {
+            "analysis_edge": 640,
+            "cut_fallback_frames": 0,
+            "flow_pairs": 2,
+            "interpolated_frames": 3,
+            "low_confidence_fraction": [
+              0.005533854166666667,
+              0.0029296875,
+              0.0017903645833333333
+            ],
+            "method": "optical_flow"
+          },
+          "quality": "Bounded classical dense flow; review occlusions, cuts and fine texture.",
+          "recipe": {
+            "audio": "varispeed",
+            "keys": [
+              {
+                "frame": 0,
+                "speed": 0.5
+              },
+              {
+                "frame": 12,
+                "speed": 1.5
+              }
+            ],
+            "method": "optical_flow",
+            "offset": 0,
+            "source_origin": {
+              "denominator": "1",
+              "numerator": "4"
+            },
+            "version": 1
+          },
+          "runtime_operations_executed": true,
+          "runtime_versions": {
+            "numpy": "2.3.5",
+            "opencv-python-headless": "4.11.0.86"
+          },
+          "selected_audio": {
+            "channels": [
+              1,
+              0
+            ],
+            "fade_duration": 12,
+            "fade_in": 0,
+            "fade_offset": 0,
+            "fade_out": 0,
+            "pan": 0.25,
+            "stream_index": 2
+          },
+          "source_frame_positions": [
+            4.0,
+            4.541666666666667,
+            5.166666666666667,
+            5.875
+          ],
+          "source_path": "media/1aaebfd51d7745e9b4b7596164ca3e98.mov",
+          "source_sha256": "016c24ff85a6eb52daead89b3437e9fb6e7616b68dfa643b715cf257181b11e0",
+          "source_unchanged": true,
+          "version": 1,
+          "versions": {
+            "numpy": "2.3.5",
+            "opencv-python-headless": "4.11.0.86"
+          }
+        },
+        {
+          "absolute_audio_origin": "7",
+          "audio": {
+            "antialias": "Blackman-windowed sinc; adaptive cutoff 0.95/max(1,speed)",
+            "filter_taps": 64,
+            "mode": "varispeed",
+            "pitch_preserved": false,
+            "sample_frames": 16000
+          },
+          "clip_id": "901c26c6-0313-4387-a8c9-dff97288e542",
+          "frame_rate": {
+            "denominator": 1,
+            "numerator": 24
+          },
+          "nearest_source_frames": [
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            15
+          ],
+          "output_frames": 8,
+          "output_samples": 16000,
+          "picture": {
+            "analysis_edge": 640,
+            "cut_fallback_frames": 0,
+            "flow_pairs": 8,
+            "interpolated_frames": 8,
+            "low_confidence_fraction": [
+              0.005208333333333333,
+              0.001953125,
+              0.00439453125,
+              0.014322916666666666,
+              0.012369791666666666,
+              0.013834635416666666,
+              0.007649739583333333,
+              0.011881510416666666
+            ],
+            "method": "optical_flow"
+          },
+          "quality": "Bounded classical dense flow; review occlusions, cuts and fine texture.",
+          "recipe": {
+            "audio": "varispeed",
+            "keys": [
+              {
+                "frame": 0,
+                "speed": 0.5
+              },
+              {
+                "frame": 12,
+                "speed": 1.5
+              }
+            ],
+            "method": "optical_flow",
+            "offset": 4,
+            "source_origin": {
+              "denominator": "1",
+              "numerator": "4"
+            },
+            "version": 1
+          },
+          "runtime_operations_executed": true,
+          "runtime_versions": {
+            "numpy": "2.3.5",
+            "opencv-python-headless": "4.11.0.86"
+          },
+          "selected_audio": {
+            "channels": [
+              1,
+              0
+            ],
+            "fade_duration": 12,
+            "fade_in": 0,
+            "fade_offset": 4,
+            "fade_out": 0,
+            "pan": 0.25,
+            "stream_index": 2
+          },
+          "source_frame_positions": [
+            6.666666666666667,
+            7.541666666666667,
+            8.5,
+            9.541666666666666,
+            10.666666666666666,
+            11.875,
+            13.166666666666666,
+            14.541666666666666
+          ],
+          "source_path": "media/1aaebfd51d7745e9b4b7596164ca3e98.mov",
+          "source_sha256": "016c24ff85a6eb52daead89b3437e9fb6e7616b68dfa643b715cf257181b11e0",
+          "source_unchanged": true,
+          "version": 1,
+          "versions": {
+            "numpy": "2.3.5",
+            "opencv-python-headless": "4.11.0.86"
+          }
+        }
+      ],
+      "sha256": "1cd81ce0577eb6a5bb98262187e84ff01fca221be20dd61d7da9ed518aed35fd",
+      "size": 180554,
+      "transparent_background": false,
+      "url": "/api/projects/159faa8d76f64ef6b2a5dc6db43c9503/exports/18a92713a61d40a0bc0f9ba97fc91f6e.mov",
+      "width": 96
+    },
+    "state": "completed"
+  },
+  {
+    "created_at": 1792670420.4102046,
+    "error": null,
+    "finished_at": 1792670421.9792008,
+    "id": "e93047ccae9c4d09b14d981a0d5dbc6e",
+    "kind": "frame-preview",
+    "progress": 1,
+    "project_id": "159faa8d76f64ef6b2a5dc6db43c9503",
+    "result": {
+      "frame": 0,
+      "height": 64,
+      "pipeline": "timeline-export-graph",
+      "pixel_format": "rgb24",
+      "processing_bits": 8,
+      "sha256": "aa330f00bc6a89878f78b531ff5e5841451910116ede2fdd94065c600619a75c",
+      "url": "/api/projects/159faa8d76f64ef6b2a5dc6db43c9503/previews/e67120dd2502030f64eb8cf681fe561abc592480dd212c89fcaac050e573f166.png",
+      "width": 96
+    },
+    "state": "completed"
+  }
+]

@@ -1,0 +1,175 @@
+{
+  "schema": "cinematicum-frozen-verification-summary",
+  "version": 1,
+  "collected_at_utc": "2026-10-22T11:19:29.567862+00:00",
+  "release": "0.11.0",
+  "run": "02",
+  "passed": true,
+  "exit_code": 0,
+  "exit_code_evidence": "Root collected originating exec session 58519 with final exit 0.",
+  "scope": "Complete discoverable Python/Node/media suite; native executable harnesses run separately",
+  "counts": {
+    "tests_run": 874,
+    "tests_passed": 874,
+    "failures": 0,
+    "errors": 0,
+    "expected_failures": 0,
+    "unexpected_successes": 0,
+    "allowed_skips": 0,
+    "unexpected_skips": 0
+  },
+  "timing": {
+    "unittest_seconds": 807.404,
+    "whole_gate_seconds": 961.413
+  },
+  "source": {
+    "repository": "/workspace/scratch/091f394ee5df/cinematicum-next",
+    "git_commit": "530ba2400571a8b67efa2d9ab28997f65920c006",
+    "git_tree": "4836005d8a9aed6790e596c23fa5e8b58d9d8ede",
+    "declared_file_count": 330,
+    "runner_before_inventory_sha256": "a4c94c9c4c0aafc2ab99cc74f35b7870daeae71ba353922bc75b413c01c68873",
+    "runner_after_inventory_sha256": "a4c94c9c4c0aafc2ab99cc74f35b7870daeae71ba353922bc75b413c01c68873",
+    "unchanged": true,
+    "manifest": {
+      "path": "scripts/studio/source-integrity.json",
+      "size": 58015,
+      "sha256": "141b53f435f68d325a73e2f0d930fc4acd7054b364b3336aada9f4439bd43d66"
+    },
+    "collected_binding": {
+      "git_commit_blob_matches": 331,
+      "working_file_matches_to_same_commit": 331,
+      "included": "330 declared source files and the source-integrity manifest"
+    }
+  },
+  "primary_runtime": {
+    "python": "3.12.14 (main, Aug 25 2026, 14:00:49) [Clang 22.1.3 ]",
+    "interpreter": "/workspace/scratch/091f394ee5df/cinematicum-runtimes/verification/bin/python",
+    "versions": {
+      "numpy": "2.3.5",
+      "opencolorio": "2.6.0",
+      "rawpy": "0.27.1",
+      "OpenEXR": "3.4.15",
+      "opentimelineio": "0.18.1",
+      "opencv-python-headless": "4.11.0.86"
+    },
+    "raw_fixture": {
+      "name": "ENGINE_TEST_RAW_KODAK_DC50.KDC",
+      "bytes": 92675,
+      "sha256": "37e290dbd0053f00e508d02a6b3a2a990432dad1eb74c40a52ca899f0f225ecc"
+    },
+    "allow_missing_raw": false
+  },
+  "managed_runtimes": {
+    "optiland": {
+      "destination": "/tmp/cinematicum-verification-20261022-01/optics/runtime",
+      "runtime": "/tmp/cinematicum-verification-20261022-01/optics/.cinematicum-optics-runtimes/py312-v1-d279cdb188e1466b929b079c7825e533",
+      "receipt_sha256": "14c50c21031b517bc73a99297fc48d1a250aee11cc8c84d69c818ca5496f92b7",
+      "inventory_sha256": "d42c1fe559d287a646abdee491b31707d3a39c3e90b4dbdba26227db982fe821",
+      "inventory_entries": 13460,
+      "file_bytes": 1440067591,
+      "before_after_identity_match": true
+    },
+    "physical": {
+      "destination": "/tmp/cinematicum-verification-20261022-01/physical-explicit-llvm/runtime",
+      "runtime": "/tmp/cinematicum-verification-20261022-01/physical-explicit-llvm/.cinematicum-physical-runtimes/py312-v1-7ae70e4dc2cf4907bd3d01a7f9f4e882",
+      "receipt_sha256": "b2933f8abb8236af9a598f86309b99340a75d3c51dc3215abf6880da9e17b5a6",
+      "inventory_sha256": "e6cd9b75d102cbf9f0bff0b26f25746dc3b76054fc53a63dd7ef85ceb2e2e653",
+      "inventory_entries": 2561,
+      "file_bytes": 363921315,
+      "before_after_identity_match": true
+    },
+    "learned": {
+      "destination": "/tmp/cinematicum-verification-20261022-01/learned/runtime",
+      "runtime": "/tmp/cinematicum-verification-20261022-01/learned/.cinematicum-learned-runtimes/torch28-v1-682445ef122947e2ba7727cea74ceda0",
+      "receipt_sha256": "5c32815e8133198a40cf2e265dad955bc0cc778e61f442d071ef6fc1ad490de0",
+      "inventory_sha256": "a2aa0c93a952a7b5863d774c4c3940910f18bce0d356ad43b18d600ab6330a6e",
+      "inventory_entries": 16955,
+      "file_bytes": 1382896700,
+      "before_after_identity_match": true
+    },
+    "reconstruction": {
+      "destination": "/tmp/cinematicum-verification-20261022-01/reconstruction/runtime",
+      "runtime": "/tmp/cinematicum-verification-20261022-01/reconstruction/.cinematicum-reconstruction-runtimes/py312-v1-2930d9b586fe45c78ba45b8099f868b8",
+      "receipt_sha256": "84a128ac4010e605bd9a5a81500fa3b133311f668809e8166185506d2c51e107",
+      "inventory_sha256": "07dc419caedff026f9aa09bc284158933a608f389d6629ee23e18c394cf07a88",
+      "inventory_entries": 1967,
+      "file_bytes": 289530353,
+      "before_after_identity_match": true
+    },
+    "blender": {
+      "destination": "/tmp/cinematicum-verification-20261022-01/scene-official-archive",
+      "runtime": "/tmp/cinematicum-verification-20261022-01/scene-official-archive/blender-4.5.14-linux-x64",
+      "receipt_sha256": "0718b3a13a0a757094a6a7a08e437b3d3c14d3181b5ed8338bfb64136cc93dd9",
+      "inventory_sha256": "0171b7e4db098bc851dcbe46a797f2dfd656607e6a92539cf72a254e591886fe",
+      "inventory_entries": 5652,
+      "file_bytes": 1167187759,
+      "before_after_identity_match": true
+    }
+  },
+  "managed_runtimes_unchanged": true,
+  "optional_binary_identities": {
+    "pbrt": {
+      "path": "/workspace/scratch/091f394ee5df/cinematicum-runtimes/pbrt-build/pbrt",
+      "sha256": "3b89328f0e4dcc14f6303036eb5b093a312252cfc1d6a9bbdea00b2647dedb5f",
+      "bytes": 55365800,
+      "help_sha256": "c1d8307e16a6fec99a8eaf0748533d42728ca8a5c0789b5f0e5d2aaefcc6071d"
+    },
+    "blender": {
+      "path": "/tmp/cinematicum-verification-20261022-01/scene-official-archive/blender-4.5.14-linux-x64/blender",
+      "sha256": "050c02562f81fe80ba616a80198fa02d381e60f8b61b8d39add881f4bca0d7d8",
+      "bytes": 163613240,
+      "version": "4.5.14",
+      "build": "62c1db4208e8"
+    }
+  },
+  "artifacts": {
+    "report": {
+      "path": "/workspace/scratch/091f394ee5df/cinematicum-next-frozen-verification-02.json",
+      "bytes": 135104,
+      "sha256": "d46c3a8de453269d18dcf0cb5981d2b3d83f3ceb5b4309fbf1ca5d5266a49d4c"
+    },
+    "log": {
+      "path": "/workspace/scratch/091f394ee5df/cinematicum-next-frozen-verification-02.log",
+      "bytes": 288584,
+      "sha256": "d8fbdd4a80e53021965c4afcfc659a504070ecf67bb1b7ebab716ff19f4d4efa"
+    }
+  },
+  "prior_failure": {
+    "run": "01",
+    "report": {
+      "path": "/workspace/scratch/091f394ee5df/cinematicum-next-frozen-verification-01.json",
+      "bytes": 135226,
+      "sha256": "fe3123609f213384860b6afa803e9a91d1282d098cb676cc3a6a31f7d3fa5d47"
+    },
+    "log": {
+      "path": "/workspace/scratch/091f394ee5df/cinematicum-next-frozen-verification-01.log",
+      "bytes": 289895,
+      "sha256": "d2c5ff88733b801f8abb6b064fca2141829d859b2d73216231668fd81fd9c5a9"
+    },
+    "summary_json": {
+      "path": "/workspace/scratch/091f394ee5df/cinematicum-next-frozen-verification-01-summary.json",
+      "bytes": 6849,
+      "sha256": "f71fc5539c735e01089664921d90d03f11bdf4f0d4420aa8015575cf176f9c6b"
+    },
+    "summary_markdown": {
+      "path": "/workspace/scratch/091f394ee5df/cinematicum-next-frozen-verification-01-summary.md",
+      "bytes": 2452,
+      "sha256": "3faa468faedf6074fb4239e74bffc29d31fa845be89e30439bb13727b5cbbc4b"
+    },
+    "diagnosis": "The isolated audio play() VM fixture bypassed normalizeProject() and omitted settings. Only settings:{} was added to the fixture; original audio assertions remain. No production-code change was required.",
+    "previous_failing_test": "test_audio_routing.AudioRoutingTests.test_shipped_transport_uses_audio_clock_gaps_and_cancels_pending_preparation",
+    "now_passed_in_complete_run": true
+  },
+  "collection": {
+    "source_or_runtime_mutations": false,
+    "owned_read_only_observer_session": 5448,
+    "observer_signal": "SIGTERM",
+    "observer_processes_stopped": [
+      138973
+    ]
+  },
+  "limitations": [
+    "Native executable acceptance and installed-application acceptance are separate gates, collected by the parent; this receipt does not certify them.",
+    "PBRT is recorded by its actual optional-binary identity; it is not one of the five managed before/after runtime inventories."
+  ]
+}

@@ -5,15 +5,23 @@ Reviewed 22 October 2026. [Implemented scope](FEATURES_0_12.md),
 distinguish source implementation from acceptance and release. This register
 continues the 0.11 register while retaining uncompleted requirements.
 
-## Candidate release
+## Remaining release work
 
-The 0.12 candidate must pass one frozen full suite with actual optional engines,
-actual native ramp author/playback/archive phases, exact-head CI, verified
-bundle replacement and canonical installed launch. It starts from the exact
-0.11 core `530ba2400571a8b67efa2d9ab28997f65920c006`; prior results remain bound
-to their recorded source. The current source contains the verified bounded
-retime implementation, but its original isolated test/browser results do not
-substitute for these integrated release gates.
+Core `c9869e86b9421b7fdc083d249b1616114320f0d5` passed all **895 tests**, zero
+failures/errors/skips, with unchanged source and managed runtimes. Four actual
+retime phases passed 58 outer checks. The 0.12.0/build 13 replacement passed
+five independent installation gates for 112 runtime/web files and the 117-file
+bundle, preserving the prior app and existing projects. Canonical installed
+launch passed 16/16 in 7.028 seconds. These completed gates are recorded in
+[Verification 0.12](VERIFICATION_0_12.md).
+
+All eight selected installed-runtime endpoint phases passed 14/14 each, with
+5/5 preparation and 6/6 final preservation. Their exact reports are collected
+and source-bound. The documentation/history merge has its own integrity manifest
+and explicit reconciliation to unchanged accepted runtime/test sources.
+Exact-head CI/publication remains the final release gate. The original
+893-test freeze and failed first native archive attempt remain historical
+records. No completed bounded gate changes `parity_complete: false`.
 
 ## Major systems with missing implementation
 
@@ -37,8 +45,8 @@ validation remain requirements.
 
 | Area | Remaining implementation and acceptance |
 | --- | --- |
-| Editing | Pitch-preserving variable-speed sound, broader curve duration/resolution, negative/zero-speed ramps, live timewarped nesting, slip/slide/roll of nonlinear maps, clock-drift correction and general offline/online conform. Studio 0.12 implements positive 0.25–4x ramps and actual DIS optical flow within a 240-frame, Standard8, 1280-edge bound, with rendered playback and exact-grid varispeed sound. Native/release acceptance and real-shot quality remain separate. |
-| Interchange | General AAF/XML/native formats, arbitrary OTIO schemas/plugins, non-linear or overlapping transitions, speed ramps, freeze frames and unrestricted composition depth. Constant retime/reverse, same-track overlap lanes, trimmed/nested Track/Stack compositions and linear SMPTE dissolves are implemented; integrated native/release gates remain separate. |
+| Editing | Pitch-preserving variable-speed sound, broader curve duration/resolution, negative/zero-speed ramps, live timewarped nesting, slip/slide/roll of nonlinear maps, clock-drift correction and general offline/online conform. Studio 0.12 implements positive 0.25–4x ramps and actual DIS optical flow within a 240-frame, Standard8, 1280-edge bound, with rendered playback and exact-grid varispeed sound. Bounded native acceptance passed; broader real-shot quality and production scale remain unaccepted. |
+| Interchange | General AAF/XML/native formats, arbitrary OTIO schemas/plugins, non-linear or overlapping transitions, speed ramps, freeze frames and unrestricted composition depth. Constant retime/reverse, same-track overlap lanes, trimmed/nested Track/Stack compositions and linear SMPTE dissolves are implemented; the earlier 0.11 native compositions workflow passed under its recorded source, while unrestricted third-party-editor fidelity remains unaccepted. |
 | Compositing | Nested/plugin graphs, roto hierarchy/paint, broader 3D/particle composition and production cache scheduling. The timeline RGBA graph remains limited to 32 nodes and eight additional media sources; deep still processing has its own limits. |
 | Tracking | Longer/multi-object learned workflows, broader production recovery, automatic lens/rolling-shutter estimation and real-shot coverage. Existing learned visibility and corrections do not establish universal re-identification. |
 | Color and HDR movies | HDR mastering, calibrated monitoring, RAW movies, arbitrary external OCIO configurations and general scene-linear nested/plugin/tracking composition. The retained 0.11 implementation provides bounded real OCIO/ACES Float32 movie processing and EXR/PCM masters; high16 remains SDR and Float32 previews are SDR display derivatives. |

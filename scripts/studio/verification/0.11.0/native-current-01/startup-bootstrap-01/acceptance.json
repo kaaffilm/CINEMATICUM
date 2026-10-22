@@ -1,0 +1,137 @@
+{
+  "schema": "cinematicum-startup-quit-acceptance-v1",
+  "passed": true,
+  "phase": "bootstrap",
+  "native_certified": true,
+  "engine_test_only": true,
+  "installed_app_certified": false,
+  "force_kill_used": false,
+  "checks": {
+    "actual_production_native_quit_phase": true,
+    "initial_project_preserved_exactly": true,
+    "no_work_bypassed_on_startup_quit": true,
+    "source_remained_frozen": true
+  },
+  "source_sha256": {
+    "macos/StudioApp.swift": "acf64f068cc870ed0bb4e458cb78359a830f007807a22f9bc933485aa2ae0b08",
+    "web/app.js": "e7aa7c7f55383ffe46fd95573b9cc345c880a0cea462e23fd120cb79604550d2",
+    "server.py": "f438456c5e45f944471b8b8e13454e53b7938eba8aaf1b875fb70a26a29aa0bb",
+    "engine.py": "607c9dcea0fbda2f0a5c0b64d323ecefb9043f9d9fe3ca1fd295274649db0303",
+    "startup_quit_fixture.py": "03cb6f0ad94b91c029524c227f8b0aeb6785dea06a9218228381ed7668794e35",
+    "macos/StartupQuitAcceptance.swift": "8dfdb2d5aa866349daefe81b7703435fe662731a7a09a1c1eb1f6b4d54ee0eba",
+    "build_startup_quit.py": "c5b196cf8b91e11cdf1c26ce2982de656f6b10f02595838d6c24e58ac86398e8",
+    "test_startup_quit_macos.py": "f2b16fda4d838975b21a5ed06e3d7b642f6e2f918a09a8bdd3d1c20dad3685c6",
+    "verification/0.9.1/tools/production-quit-05/QuitWorkflow.js": "d1604138407113f69afb41c0e326ac2c693ccf51f2274ed7aef6846f4c73504b"
+  },
+  "build": {
+    "schema": "cinematicum-native-startup-quit-build-v1",
+    "compiled": true,
+    "production_source_sha256": "acf64f068cc870ed0bb4e458cb78359a830f007807a22f9bc933485aa2ae0b08",
+    "unchanged_production_class_sha256": "e611e726a29caafa0db6c7e3d7db7ac1ff47f85f874f9163de5d579951f48dcb",
+    "harness_sha256": "8dfdb2d5aa866349daefe81b7703435fe662731a7a09a1c1eb1f6b4d54ee0eba",
+    "generated_source_sha256": "64f294cf8a485b27d9f0e2ae6cf2d549b18defed21663739db7dc1aea507a9e2",
+    "binary": "/Users/midiakiasat/.midia-ai/gateway-live/acceptance/cinematicum-0.11-20261022-own-025436f6/startup-quit-build-02/cinematicum-startup-quit-acceptance",
+    "binary_sha256": "738f1ed8c137bdce9f8fedbe50463ef202801510cf256f48bd16842c444795eb",
+    "command": [
+      "/usr/bin/xcrun",
+      "swiftc",
+      "-O",
+      "-swift-version",
+      "5",
+      "-framework",
+      "Cocoa",
+      "-framework",
+      "WebKit",
+      "-target",
+      "arm64-apple-macos12.0",
+      "-module-cache-path",
+      "/Users/midiakiasat/.midia-ai/gateway-live/acceptance/cinematicum-0.11-20261022-own-025436f6/startup-quit-build-02/module-cache",
+      "/Users/midiakiasat/.midia-ai/gateway-live/acceptance/cinematicum-0.11-20261022-own-025436f6/startup-quit-build-02/StartupQuitAcceptance.swift",
+      "-o",
+      "/Users/midiakiasat/.midia-ai/gateway-live/acceptance/cinematicum-0.11-20261022-own-025436f6/startup-quit-build-02/cinematicum-startup-quit-acceptance"
+    ]
+  },
+  "command": [
+    "/Users/midiakiasat/.midia-ai/gateway-live/acceptance/cinematicum-0.11-20261022-own-025436f6/startup-quit-build-02/cinematicum-startup-quit-acceptance",
+    "--python",
+    "/opt/homebrew/Cellar/python@3.13/3.13.13/Frameworks/Python.framework/Versions/3.13/bin/python3.13",
+    "--server",
+    "/Users/midiakiasat/.midia-ai/gateway-live/workspaces/auto-8f91ac5c986eed5ac689d7f8b2ff6a29-next-011/scripts/studio/startup_quit_fixture.py",
+    "--workspace",
+    "/Users/midiakiasat/.midia-ai/gateway-live/acceptance/cinematicum-0.11-20261022-own-025436f6/startup-bootstrap-01/workspace",
+    "--evidence",
+    "/Users/midiakiasat/.midia-ai/gateway-live/acceptance/cinematicum-0.11-20261022-own-025436f6/startup-bootstrap-01",
+    "--phase",
+    "bootstrap",
+    "--workflow",
+    "/Users/midiakiasat/.midia-ai/gateway-live/workspaces/auto-8f91ac5c986eed5ac689d7f8b2ff6a29-next-011/scripts/studio/verification/0.9.1/tools/production-quit-05/QuitWorkflow.js"
+  ],
+  "native": {
+    "before_ordinary_quit": {
+      "api_type": "function",
+      "document_state": "complete",
+      "project_absent": true,
+      "token_empty": true
+    },
+    "checks": {
+      "actual_local_document_at_request": true,
+      "every_quit_request_authenticated": true,
+      "expected_ordinary_quit_count": true,
+      "one_safe_quit_after_bootstrap": true,
+      "ordinary_quit_deferred_for_owned_shutdown": true,
+      "owned_server_exited_before_application": true,
+      "quit_requested_before_bootstrap_token_and_project": true,
+      "quit_stays_pending_before_barrier_release": true
+    },
+    "elapsed_seconds": 2.6950650215148926,
+    "engine_test_only": true,
+    "force_kill_used": false,
+    "ordinary_quit_requests": 1,
+    "owned_server_exit_status": 0,
+    "owned_server_pid": 98085,
+    "owned_server_still_running": false,
+    "passed": true,
+    "phase": "bootstrap",
+    "schema": "cinematicum-native-startup-quit-v1",
+    "scope": "Unchanged production class ordinary quit, save and real NSAlert decisions; isolated real server transport barriers. Installed launcher and user projects are not exercised.",
+    "state": "early-quit",
+    "transport_events": [
+      {
+        "at": 1792666192.45376,
+        "event": "barrier-entered",
+        "path": "/api/bootstrap"
+      },
+      {
+        "at": 1792666192.5083818,
+        "event": "release-command"
+      },
+      {
+        "at": 1792666192.509461,
+        "event": "barrier-released",
+        "path": "/api/bootstrap"
+      },
+      {
+        "at": 1792666192.545405,
+        "authenticated": true,
+        "decision": {
+          "cancel_active": false
+        },
+        "event": "quit-response",
+        "response": {
+          "active_jobs": [],
+          "ready": true
+        },
+        "status": 200
+      }
+    ]
+  },
+  "shutdown_receipt": {
+    "version": 1,
+    "reason": "native-quit-no-active-jobs",
+    "completed_at": 1792666192.567901,
+    "active_at_shutdown": [],
+    "terminal_jobs": []
+  },
+  "saved_project_sha256": "db73e66b3f7a8aed20f317c4cabeddb685f7d6a9f4c96bcc35a36ddbb4fd2213",
+  "elapsed_seconds": 2.835
+}

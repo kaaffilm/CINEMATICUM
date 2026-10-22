@@ -1,0 +1,11 @@
+{
+  "controller_exit_code": 0,
+  "controller_stderr_bytes": 0,
+  "controller_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "force_termination_used": false,
+  "operation": "terminate",
+  "owned_app_terminated": true,
+  "passed": true,
+  "termination_mechanism": "NSRunningApplication.terminate",
+  "termination_requested": true
+}

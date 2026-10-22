@@ -1,0 +1,62 @@
+{
+  "commit": "c9869e86b9421b7fdc083d249b1616114320f0d5",
+  "members": [
+    {
+      "bytes": 12783,
+      "path": "acceptance-summary.json",
+      "sha256": "a5487cca95c45c08f08b6998df669903ac19feccb3398db0eb6f78e8fa916e36"
+    },
+    {
+      "bytes": 669,
+      "path": "core-commit-object.txt",
+      "sha256": "60e2e2c1548051bd5c186018b685d8b50b6f1f86a5bfddb2387e7f16957eb768"
+    },
+    {
+      "bytes": 2239,
+      "path": "core-commit.json",
+      "sha256": "d0d92a5f73b641f20cee57cb3c4b228a7c4e87017688530189fed6248b7c19d4"
+    },
+    {
+      "bytes": 137335,
+      "path": "full-run01/report.json",
+      "sha256": "a48eb7cb57d1fa3c4327a822c472278ad362220fd9bad3869f579f1952bb7f6e"
+    },
+    {
+      "bytes": 3205,
+      "path": "full-run01/summary.json",
+      "sha256": "df55a2dad891f63593bccd477502f1caef6cc7363250f9294aec258c63350dd0"
+    },
+    {
+      "bytes": 294243,
+      "path": "full-run01/verification.log",
+      "sha256": "079ab5fafdd91fe95e9e1859d054a0dc0ef7e3fcc3e932b483a2ac4eac77ff9f"
+    },
+    {
+      "bytes": 137543,
+      "path": "full-run02/report.json",
+      "sha256": "c039f6629882521608427279d27b71dac0db8e9e8eb2e63c326c2be50df07d40"
+    },
+    {
+      "bytes": 3243,
+      "path": "full-run02/summary.json",
+      "sha256": "4738f1368fd1e42f33d1a4255de7051b0561629479b83f229cf10a5be82cb31c"
+    },
+    {
+      "bytes": 294823,
+      "path": "full-run02/verification.log",
+      "sha256": "1a996155b4126e344a1d67dafafccd0611ac1e8d0ff6c2d1f1b24abd9ed48020"
+    },
+    {
+      "bytes": 2877,
+      "path": "native-consistency-review.json",
+      "sha256": "28a363efd0f5c0feb43147c0aac3c86ea188ac7921d4c6596a3176e89053a5c6"
+    },
+    {
+      "bytes": 64614,
+      "path": "source-freeze.json",
+      "sha256": "83a567c65d9a84b2a174a7c9dad24db9b2a22d6062f6499ab23eafb81aca8464"
+    }
+  ],
+  "schema": "cinematicum-0.12-verification-transport-members-v1",
+  "source_sha256": "cf8691d3b1d3a646ea6a73bdafe9829830b94c5592eb771c313aa449a70725b7"
+}

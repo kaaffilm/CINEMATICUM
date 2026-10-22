@@ -1,0 +1,28 @@
+{
+  "schema": "cinematicum-owned-native-smoke-build-v1",
+  "passed": true,
+  "argv": [
+    "/usr/bin/xcrun",
+    "swiftc",
+    "-O",
+    "-swift-version",
+    "5",
+    "-framework",
+    "Cocoa",
+    "-framework",
+    "WebKit",
+    "-target",
+    "arm64-apple-macos12.0",
+    "-module-cache-path",
+    "/Users/midiakiasat/.midia-ai/gateway-live/acceptance/cinematicum-0.11-20261022-own-025436f6/startup-quit-build-02/module-cache",
+    "/Users/midiakiasat/.midia-ai/gateway-live/workspaces/auto-6ababac56a092690eac868f940f91a11-next-012/scripts/studio/macos/SmokeTest.swift",
+    "-o",
+    "/Users/midiakiasat/.midia-ai/gateway-live/acceptance/cinematicum-0.12-20261022-own-061702ff/native-smoke-build-02/cinematicum-native-smoke"
+  ],
+  "exit_code": 0,
+  "elapsed_seconds": 13.874,
+  "source_sha256": "f6b3ee4295bcefe003c2220a7ed42a3dc4208a95ce6842936b8a901048aef6cd",
+  "binary": "/Users/midiakiasat/.midia-ai/gateway-live/acceptance/cinematicum-0.12-20261022-own-061702ff/native-smoke-build-02/cinematicum-native-smoke",
+  "binary_sha256": "c6b70d236c056a6ed3eaa08ef44aaa1672ecce904f8004095b69ac2a60f3bee7",
+  "binary_bytes": 206920
+}

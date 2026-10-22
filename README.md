@@ -2,18 +2,30 @@
 
 ## CINEMATICUM Studio — editable production workspace
 
-The current **0.12 candidate** builds on the integrated 0.11 core and adds
-editable variable speed curves, actual optical-flow interpolation and exact
-source-grid varispeed sound. Source media and speed curves remain editable
-through undo, splits, edge trims, save/reopen and portable archives. Rendered
-playback and exports execute the same real source-time processing.
+Studio **0.12.0 / build 13** adds editable variable speed curves, actual dense
+optical-flow interpolation and exact source-grid varispeed sound. Undo, splits,
+edge trims, save/reopen and archives retain editable curves and original media;
+rendered playback and exports execute the same source-time processing. The
+integrated scientific, camera, Float32, OTIO, still-photography, collaboration
+and lifecycle workflows remain available within their documented bounds.
+
+Accepted core `c9869e86` passed **895/895 tests**, with no failures, errors or
+skips and unchanged source plus all five managed runtime inventories. Its four
+retime phases passed **58 outer checks**: three actual native executions and
+one fixture preparation. Independent replacement installation passed **5/5**
+for 112 runtime/web files and the complete 117-file bundle, preserving the prior
+0.11 app and 59 existing project files. Canonical installed launch passed
+**16/16 in 7.028 seconds**. All eight selected installed-runtime phases passed **14/14 each**, with
+separate **5/5 preparation** and **6/6 final preservation**. The documentation
+merge is reconciled to unchanged accepted runtime/test sources; exact-head
+CI/publication remains pending.
+
 [Implemented scope](scripts/studio/FEATURES_0_12.md),
 [verification](scripts/studio/VERIFICATION_0_12.md) and
-[remaining work](scripts/studio/UNFINISHED_0_12.md) distinguish implementation,
-source-bound test evidence and pending native/release acceptance. The earlier
-0.11 scientific, camera, Float32, OTIO, still-photography and lifecycle work is
-retained. Previous release results remain bound to their recorded source and
-do not certify this new candidate.
+[remaining work](scripts/studio/UNFINISHED_0_12.md) identify the evidence and
+limits. The earlier 893-test freeze and failed native download attempt remain
+preserved under their exact source identities. Historical 0.11 acceptance is
+recorded separately; full professional parity remains unfinished.
 
 Open the media editor with `make studio`. On macOS, `make studio-install-macos`
 builds **CINEMATICUM Studio.app** using the installed Xcode tools. CINEMATICUM owns

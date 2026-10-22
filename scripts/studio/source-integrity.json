@@ -62,8 +62,8 @@
     },
     {
       "path": "README.md",
-      "size": 17571,
-      "sha256": "048bac9f1cfcfcd63b388170bb42a8f63bc29a9fbffd58643c4156938683b85d"
+      "size": 18370,
+      "sha256": "bdc6943ee49240c08b3a5fb7d3cbf350678db7ae36518c68fd0998f62b9c3ddd"
     },
     {
       "path": "scripts/studio/CAPABILITY_AUDIT.md",
@@ -77,13 +77,13 @@
     },
     {
       "path": "scripts/studio/FEATURES_0_11.md",
-      "size": 4529,
-      "sha256": "f26e721814c4198abd5cd8a9be7065d2babc7f292c1386b08dedba3834139452"
+      "size": 5203,
+      "sha256": "1419c5a8b6e80fb2578572c8794fc3ca1e3cd9c3d84711eb4263b60dd095f226"
     },
     {
       "path": "scripts/studio/FEATURES_0_12.md",
-      "size": 3900,
-      "sha256": "5678f964be76c9fdc66a988a9297e7930ab2b6af53d8f787ecf94d30f80b053d"
+      "size": 4257,
+      "sha256": "d1f0454f748a00d328c7e4f67a082f1f9a9f8fea4515c87edc7a0a2bfd6dc737"
     },
     {
       "path": "scripts/studio/FLOAT_MOVIE_PIPELINE.md",
@@ -107,8 +107,8 @@
     },
     {
       "path": "scripts/studio/README.md",
-      "size": 73843,
-      "sha256": "61a9f0ed03193cfc93805b6cccce817990dbc02cb0285d919a3e01d3e3aa9b1f"
+      "size": 74593,
+      "sha256": "abf398faef621be6ba59767f0c7ad68acf5f76b535fc59e8c8502180cda07615"
     },
     {
       "path": "scripts/studio/RECOVERY_0_10.md",
@@ -152,13 +152,13 @@
     },
     {
       "path": "scripts/studio/UNFINISHED_0_11.md",
-      "size": 6504,
-      "sha256": "e9560cf9f6acfb2e43c597abc910af747abdcc4cd3db6fb7163480d3e400bdbd"
+      "size": 7598,
+      "sha256": "b1625ebf5e5be687c942614a096f7fd599e8ba440239c219f56c6b6c7394a785"
     },
     {
       "path": "scripts/studio/UNFINISHED_0_12.md",
-      "size": 6923,
-      "sha256": "4de46900479620f3b31ff25c2d883781dc526d5583642df99d450a91c52a5f37"
+      "size": 7581,
+      "sha256": "59ae322c84983e0244d4261763bf53ea5088ef153bcd3ebf86ac4c953e698585"
     },
     {
       "path": "scripts/studio/UNFINISHED_0_9.md",
@@ -172,13 +172,13 @@
     },
     {
       "path": "scripts/studio/VERIFICATION_0_11.md",
-      "size": 4633,
-      "sha256": "6e7ae0e39f7736a00f8cfd09f65f68d8754a86dc4ca64ab7b1fcc81dad4644b1"
+      "size": 15959,
+      "sha256": "ecfa90bb2cff77e9132ceb8293adc3cebde409b3d3545a61b858795b4db89e15"
     },
     {
       "path": "scripts/studio/VERIFICATION_0_12.md",
-      "size": 4223,
-      "sha256": "b5b93572e03ea257e107f840222b080d85500e341e4f919321a50877af990b91"
+      "size": 15967,
+      "sha256": "77ad99883f606de4ef794da827549c4905ade616b50060cb8ceedf09c078d559"
     },
     {
       "path": "scripts/studio/VERIFICATION_0_5.md",
@@ -247,8 +247,8 @@
     },
     {
       "path": "scripts/studio/capabilities.json",
-      "size": 78083,
-      "sha256": "727531a78571e1df9bd5c9ed4273237b7faf27d6fa1ea7b85898de94a7fc899d"
+      "size": 110346,
+      "sha256": "e95fc4d903a4a90f69d592994f1dafc4f5e0e41c6a27f709851b71c810a3dfa5"
     },
     {
       "path": "scripts/studio/collaboration.py",

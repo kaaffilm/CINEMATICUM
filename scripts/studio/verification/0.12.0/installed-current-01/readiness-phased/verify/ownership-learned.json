@@ -1,0 +1,10 @@
+{
+  "controller_exit_code": 0,
+  "controller_stderr_bytes": 0,
+  "controller_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "operation": "observe",
+  "owned_pid_absent": true,
+  "passed": true,
+  "running": false,
+  "termination_requested": false
+}

@@ -1,0 +1,22 @@
+{
+  "browser_version": "134.0.6998.35",
+  "completed_download_count": 0,
+  "download_errors": [],
+  "downloads": [],
+  "elapsed_ms": 2516,
+  "expect_download": false,
+  "expected_download_count": 0,
+  "h264_decoder": "probably",
+  "metrics": {},
+  "native_certified": false,
+  "page_errors": [],
+  "passed": true,
+  "screenshot": "/workspace/scratch/091f394ee5df/cinematicum-012-browser-02/author/ENGINE_TEST_retime.png",
+  "steps": [
+    "real_speed_key_controls",
+    "one_undo_redo_applies_recipe",
+    "split_and_tail_trim_preserve_source_curve",
+    "save_switch_reopen_keeps_recipe_routing_and_gain"
+  ],
+  "transport": "Chromium"
+}

@@ -7,12 +7,27 @@ continues the 0.10 register while retaining uncompleted requirements.
 
 ## Candidate release
 
-The integrated 0.11 candidate must pass one frozen full suite with actual
-optional engines, native workflow acceptance, exact-head CI, verified bundle
-replacement and canonical installed launch. The 0.10 source passed 812 tests
-locally and in CI and was installed with all source/project/backup checks,
-but its first ordinary installed quit failed. That defect is being corrected
-and tested in 0.11. Historical results are not relabeled as current passes.
+Core `530ba240` passed the complete 874-test suite with actual optional
+engines and zero failures, errors or skips. All 19 native phases passed:
+15 native executions plus four fixture preparations, reporting 235 outer
+checks and binding 138 unique production/helper source identities. The
+startup-quit correction passed all three native regression phases. Replacement
+installation passed all five independent source/bundle/backup/project/checkout
+gates for 0.11.0/build 12. Canonical installed launch passed its separate
+16/16-check gate in 8.408 seconds, including first ordinary termination and
+preservation of all 113 bundle files.
+
+All seven selected default-runtime readiness gates passed: deep 17/17 and
+six separate phases of 14/14. Preparation passed 5/5; the final 6/6 preservation
+gate confirmed the complete bundle and protected workspace remained unchanged.
+The documentation/ledger manifest is reconciled to the accepted runtime/test
+source with an explicit six-file documentation-only delta. The remaining 0.11
+release work is exact-head CI and publication. Results retain their exact source
+and receipt identities. The first 0.10 ordinary installed quit, the first 0.11
+full-suite fixture failure, initial aggregate installer timeout, and aggregate
+ray-optics deadline remain preserved as historical failed or incomplete attempts.
+The ray-optics deadline occurred after actual ordinary quit and before the
+large preservation rehash; its later phased acceptance is separate evidence.
 
 ## Major systems with missing implementation
 
@@ -36,8 +51,8 @@ validation remain requirements.
 
 | Area | Remaining implementation and acceptance |
 | --- | --- |
-| Editing | Variable speed ramps, optical-flow retiming, clock-drift correction and general offline/online conform. Simultaneous monitoring and fixed source-audio locking are implemented in the 0.11 candidate; integrated native/release acceptance remains separate. |
-| Interchange | General AAF/XML/native formats, arbitrary OTIO schemas/plugins, non-linear or overlapping transitions, speed ramps, freeze frames and unrestricted composition depth. Constant retime/reverse, same-track overlap lanes, trimmed/nested Track/Stack compositions and linear SMPTE dissolves are implemented; integrated native/release gates remain separate. |
+| Editing | Variable speed ramps, optical-flow retiming, clock-drift correction and general offline/online conform. Simultaneous monitoring and fixed source-audio locking passed the bounded 0.11 native and complete-suite gates; broader production acceptance remains separate. |
+| Interchange | General AAF/XML/native formats, arbitrary OTIO schemas/plugins, non-linear or overlapping transitions, speed ramps, freeze frames and unrestricted composition depth. Constant retime/reverse, same-track overlap lanes, trimmed/nested Track/Stack compositions and linear SMPTE dissolves passed bounded 0.11 native and complete-suite gates; unrestricted third-party fidelity remains unaccepted. |
 | Compositing | Nested/plugin graphs, roto hierarchy/paint, broader 3D/particle composition and production cache scheduling. The timeline RGBA graph remains limited to 32 nodes and eight additional media sources; deep still processing has its own limits. |
 | Tracking | Longer/multi-object learned workflows, broader production recovery, automatic lens/rolling-shutter estimation and real-shot coverage. Existing learned visibility and corrections do not establish universal re-identification. |
 | Color and HDR movies | HDR mastering, calibrated monitoring, RAW movies, arbitrary external OCIO configurations and general scene-linear nested/plugin/tracking composition. The 0.11 candidate implements bounded real OCIO/ACES Float32 movie processing and EXR/PCM masters; high16 remains SDR and Float32 previews are SDR display derivatives. |

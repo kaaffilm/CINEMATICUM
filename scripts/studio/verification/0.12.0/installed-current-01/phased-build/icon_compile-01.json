@@ -1,0 +1,23 @@
+{
+  "phase": "icon_compile",
+  "argv": [
+    "/usr/bin/xcrun",
+    "swiftc",
+    "-swift-version",
+    "5",
+    "-framework",
+    "Cocoa",
+    "-module-cache-path",
+    "/Users/midiakiasat/.midia-ai/gateway-live/acceptance/cinematicum-0.11-20261022-own-025436f6/startup-quit-build-02/module-cache",
+    "/Users/midiakiasat/.midia-ai/gateway-live/workspaces/auto-6ababac56a092690eac868f940f91a11-next-012/scripts/studio/macos/StudioIcon.swift",
+    "-o",
+    "/Users/midiakiasat/Applications/.cinematicum-build-verified-012-061702ff/draw-icon"
+  ],
+  "exit_code": 0,
+  "timed_out": false,
+  "elapsed_seconds": 5.198,
+  "stdout": "",
+  "stderr": "",
+  "output": "/Users/midiakiasat/Applications/.cinematicum-build-verified-012-061702ff/draw-icon",
+  "output_sha256": "72d17948bc5dee5c0a93b6a40f01e1e2adbac250e945ea063a8eb6487c51aeef"
+}

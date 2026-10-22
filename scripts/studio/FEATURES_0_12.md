@@ -2,10 +2,14 @@
 
 Studio 0.12 starts from the exact integrated 0.11 core
 `530ba2400571a8b67efa2d9ab28997f65920c006`, retaining its
-[implemented workflows](FEATURES_0_11.md). This candidate adds editable variable
-speed and actual optical-flow source processing. Its
-[verification](VERIFICATION_0_12.md), native acceptance and installation are
-separate gates. [Remaining requirements](UNFINISHED_0_12.md) still apply.
+[implemented workflows](FEATURES_0_11.md). Studio **0.12.0 / build 13** adds editable variable
+speed and actual optical-flow source processing. Core `c9869e86` passed all
+895 tests, four retime phases passed 58 outer checks, installation passed 5/5
+and canonical installed launch passed 16/16. The [verification record](VERIFICATION_0_12.md)
+also records all eight selected installed-runtime phases passing 14/14 each,
+with 5/5 preparation and 6/6 final preservation. Documentation/source
+reconciliation retains the accepted runtime bytes; exact-head CI/publication
+remains pending. [Remaining requirements](UNFINISHED_0_12.md) still apply.
 
 ## Authoring and source-time mapping
 
@@ -64,5 +68,5 @@ changed background clock. Slip/slide/roll involving ramps and nonlinear OTIO
 export also refuse. Changed original bytes are rejected before and after work.
 
 [RETIME.md](RETIME.md) documents the source equation, audio phase, ordinary
-controls, runtime pins and numerical acceptance. The candidate targets
+controls, runtime pins and numerical acceptance. The installed build is
 **0.12.0 / build 13** and retains `parity_complete: false`.

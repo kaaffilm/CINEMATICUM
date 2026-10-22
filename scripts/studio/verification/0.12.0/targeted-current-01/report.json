@@ -1,0 +1,19 @@
+{
+  "elapsed_seconds": 17.571,
+  "errors": [],
+  "failures": [],
+  "names": [
+    "test_retime",
+    "test_audio_routing.AudioRoutingTests.test_shipped_transport_uses_audio_clock_gaps_and_cancels_pending_preparation",
+    "test_source_integrity",
+    "test_install_macos",
+    "test_verification_runner"
+  ],
+  "passed": true,
+  "schema": "cinematicum-0.12-integrated-targeted-v1",
+  "skipped": [],
+  "source_after_sha256": "8edd16decf0dfa4cd2891bc39f1e04b776e8294354f7d108e00f2cbe4134f4f2",
+  "source_before_sha256": "8edd16decf0dfa4cd2891bc39f1e04b776e8294354f7d108e00f2cbe4134f4f2",
+  "source_unchanged": true,
+  "tests_run": 36
+}

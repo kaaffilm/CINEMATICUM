@@ -8,22 +8,33 @@ processing engines; no external editor interface is embedded or launched.
 No missing shot is replaced with filler. Exporting media has no film
 issuance effect.
 
-## Current candidate
+## Current build
 
-Studio 0.12 adds editable variable speed curves, actual dense optical-flow
+Studio **0.12.0 / build 13** adds editable speed curves, actual dense optical-flow
 interpolation and source-grid varispeed sound. Select an original timeline clip
 and open **Speed ramp & optical flow** in its inspector. Curves remain editable
 through split/edge trim, undo, save/reopen and portable archive restoration.
 Paused pictures, rendered playback and export use the actual source-time map.
-The current bounds and pitch/quality limits are in [Retiming](RETIME.md).
+The bounds and pitch/quality limits are in [Retiming](RETIME.md).
 
-This candidate starts from the integrated 0.11 core and retains simultaneous
-camera monitoring, fixed-camera sound, scene-linear Float32 OCIO/ACES movies,
-editable OTIO compositions, measured HDR photographs and planar panoramas, plus
-the earlier scientific, learned, scene and collaboration workflows. See
-[Features 0.12](FEATURES_0_12.md), [Verification 0.12](VERIFICATION_0_12.md) and
-[remaining work](UNFINISHED_0_12.md). Frozen whole-build verification, native
-WKWebView acceptance, installation and installed launch remain distinct gates.
+This build retains simultaneous cameras, fixed-camera sound, Float32 OCIO/ACES
+movies, editable OTIO compositions, measured HDR photographs and planar
+panoramas, plus the scientific, learned, scene and collaboration workflows.
+Open **Multicam**, **Interchange**, **Develop images**, **Export** or
+**Studio tools** for those workflows. See [Features 0.12](FEATURES_0_12.md),
+[Verification 0.12](VERIFICATION_0_12.md) and [remaining work](UNFINISHED_0_12.md).
+
+Core `c9869e86` passed **895/895 tests**, zero failures/errors/skips, with unchanged
+source and all five managed runtimes. Four retime phases passed **58 outer
+checks** (three native executions and one fixture preparation); actual Chromium
+acceptance separately passed 58. Replacement installation passed **5/5** for
+112 runtime/web files and all 117 bundle files while preserving the prior 0.11
+app and existing projects. Canonical installed launch passed **16/16 in 7.028
+seconds**. All eight selected installed-runtime phases passed 14/14 each, with
+5/5 preparation and 6/6 final preservation. The documentation merge is
+reconciled to unchanged accepted runtime/test sources. Exact-head CI/publication
+remains pending. Historical 0.11 records retain their original
+core and manifest; the new source does not inherit old results automatically.
 
 ## Previous upgrade
 
@@ -80,8 +91,8 @@ clip or ring. Lanczos edge overshoot and the scaler's fractional-alpha rounding
 are recorded in the precision tests; 16-bit storage does not promise 16-bit
 numerical accuracy after every transform. The path is bounded to 8,388,608
 canvas pixels and 16,777,216 transformed working pixels. This mode remains
-UNORM SDR. The separate unreleased [Float32 movie candidate](FLOAT_MOVIE_PIPELINE.md)
-adds scene-linear OCIO/ACES processing for supported timeline operations, real
+UNORM SDR. The integrated [Float32 movie pipeline](FLOAT_MOVIE_PIPELINE.md)
+provides scene-linear OCIO/ACES processing for supported timeline operations, real
 FLOAT32 EXR sequence masters with PCM audio, and display-transformed SDR previews.
 Its settings, source interpretations, export/download and archive bindings share
 the normal project workflow. HDR mastering and calibrated monitoring remain open.
