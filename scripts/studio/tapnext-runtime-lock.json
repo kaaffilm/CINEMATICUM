@@ -1,0 +1,216 @@
+{
+  "schema": "cinematicum-tapnext-runtime-lock",
+  "version": 1,
+  "runtime_version": "tapnext-cpu-v1",
+  "device": "cpu",
+  "base_runtime": {
+    "torch": "2.8.0",
+    "torchvision": "0.23.0",
+    "numpy": "2.3.5"
+  },
+  "packages": [
+    {
+      "name": "einops",
+      "version": "0.8.1",
+      "filename": "einops-0.8.1-py3-none-any.whl",
+      "url": "https://files.pythonhosted.org/packages/87/62/9773de14fe6c45c23649e98b83231fffd7b9892b6cf863251dc2afa73643/einops-0.8.1-py3-none-any.whl",
+      "sha256": "919387eb55330f5757c6bea9165c5ff5cfe63a642682ea788a6d472576d81737",
+      "size": 64359
+    }
+  ],
+  "sources": [
+    {
+      "name": "tapnet-source.tar.gz",
+      "commit": "730cda1c730877cfedbe01bf87fb1cadb78a565d",
+      "url": "https://codeload.github.com/google-deepmind/tapnet/tar.gz/730cda1c730877cfedbe01bf87fb1cadb78a565d",
+      "sha256": "0041940feae134a3391616648746ddc6b4dd15c496143a70191ccef666b00969",
+      "size": 2252491
+    }
+  ],
+  "models": {
+    "tapnext": {
+      "id": "official-bootstapnext-trecvit-b",
+      "name": "bootstapnext_ckpt.npz",
+      "url": "https://storage.googleapis.com/dm-tapnet/tapnext/bootstapnext_ckpt.npz?generation=1740582447756376",
+      "sha256": "19de6b1495555c2afb4b56e823a3f3c2fd7236eea05c53d98feab3cccd1b4a28",
+      "bytes": 776980182,
+      "license": "Apache-2.0",
+      "sha256_reference": "https://huggingface.co/api/models/google/tapnet/tree/main?recursive=true&expand=false"
+    }
+  },
+  "files": [
+    {
+      "path": "einops/__init__.py",
+      "sha256": "acacaf13ae1b60c38c5c01b811f30c4951b1805674c79d5db7cda946cc389471",
+      "size": 422
+    },
+    {
+      "path": "einops/_backends.py",
+      "sha256": "ec10222967412cbbc08abc9f8700dbc318251835bd0e1e4534c4f51114aecf19",
+      "size": 21281
+    },
+    {
+      "path": "einops/_torch_specific.py",
+      "sha256": "c8c6907aa0198412d647543e26feae4483497f344e84b6feaf328a7afa5e7d45",
+      "size": 4138
+    },
+    {
+      "path": "einops/array_api.py",
+      "sha256": "8ce6fc461c0b4bdc286ff63f7bf2ab9c147a8a140fa01d8bcb4b5fac7afefd99",
+      "size": 5247
+    },
+    {
+      "path": "einops/einops.py",
+      "sha256": "b17bc3f12585aae7f38b24092913e67c018754dd5c303bd838f36e67c2f55d05",
+      "size": 37569
+    },
+    {
+      "path": "einops/experimental/__init__.py",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    {
+      "path": "einops/experimental/indexing.py",
+      "sha256": "c8515f956dfe915ebfe4f3c953bfe3389b090425825a513874696ef60c123d7a",
+      "size": 121
+    },
+    {
+      "path": "einops/layers/__init__.py",
+      "sha256": "bc1b6702dd9a7ece1096aa5e154e1d95937106e0bd2179777e68a593ed8ecc73",
+      "size": 3747
+    },
+    {
+      "path": "einops/layers/_einmix.py",
+      "sha256": "90dc96d390441be9a2329bb5bc642a297afc38931efb1c1e4bf68c520b9eaea3",
+      "size": 11125
+    },
+    {
+      "path": "einops/layers/flax.py",
+      "sha256": "cc5cbcde048b466df570bb8a151bd9f36fc7b1e7e75cf6d1be42998752a40b52",
+      "size": 2536
+    },
+    {
+      "path": "einops/layers/keras.py",
+      "sha256": "fbb4a8d30f78a61bdff47756d318b6992781834daa54fbc0c9fa7fd57474d8d3",
+      "size": 212
+    },
+    {
+      "path": "einops/layers/oneflow.py",
+      "sha256": "6043f3cf8c5cec10d141f6fcba50f7b5ea9025d6ceeaa420ed9e0a20f5532f3f",
+      "size": 1864
+    },
+    {
+      "path": "einops/layers/paddle.py",
+      "sha256": "f1c45943c053f6f60473387ba4d3eba2e4ccff75e32edcb686ddac76f5cd1622",
+      "size": 1907
+    },
+    {
+      "path": "einops/layers/tensorflow.py",
+      "sha256": "4fdba1495c1b5d111a85cdf5011007a0de4afbbcecb92f0d44d3dd63a664d417",
+      "size": 3324
+    },
+    {
+      "path": "einops/layers/torch.py",
+      "sha256": "e74e06f7d904832edd93550f05b8fd873266664007c1584c0c537ff09fa9dc2f",
+      "size": 2399
+    },
+    {
+      "path": "einops/packing.py",
+      "sha256": "d7037dbcc6be728ab5462391fcdbb6697aa0224ac37f78fe37543e60dd3ec56a",
+      "size": 7650
+    },
+    {
+      "path": "einops/parsing.py",
+      "sha256": "c5ba9cbf045e2e244e12e7287a0676d1642210794b834bb1a3fbd8a1ecca07fe",
+      "size": 6746
+    },
+    {
+      "path": "einops/py.typed",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    {
+      "path": "einops/tests/__init__.py",
+      "sha256": "08b2821af1530b0994a14c5f6be2461d040bf5ce37ad38aa89e9d58d3d7c3e17",
+      "size": 3525
+    },
+    {
+      "path": "einops/tests/run_tests.py",
+      "sha256": "57cabbfd8f5d324b272ecaa86ea3476d1d23f1d542be8d6139e07602343cdcda",
+      "size": 2887
+    },
+    {
+      "path": "einops/tests/test_einsum.py",
+      "sha256": "79f4bbca726fc08dd515f4f3a58aee5a72988715b2c5f47375b5ec3276451d63",
+      "size": 10977
+    },
+    {
+      "path": "einops/tests/test_examples.py",
+      "sha256": "a6c77ffc258e717d89e403d7c6c151bd79692a6f728a84d012711e6c44ad3ca7",
+      "size": 11538
+    },
+    {
+      "path": "einops/tests/test_layers.py",
+      "sha256": "a1055f5371b3b17abf749577664601246a7c12e98912d3d107479183aa5a2daf",
+      "size": 18488
+    },
+    {
+      "path": "einops/tests/test_ops.py",
+      "sha256": "a258f327637893be508d2b6168e011e24e7b8f4c812a3b92ac369cec9b991da9",
+      "size": 26998
+    },
+    {
+      "path": "einops/tests/test_other.py",
+      "sha256": "6a0fe1ea8cf780c1fc324778091e505d7c3d92679811e7d4686a1b5c48078cc3",
+      "size": 11350
+    },
+    {
+      "path": "einops/tests/test_packing.py",
+      "sha256": "3dd20ebc7af52bb778179b3532d080388ac892f027889070e709db9e90f1df19",
+      "size": 10444
+    },
+    {
+      "path": "einops/tests/test_parsing.py",
+      "sha256": "5ca1487b5d059696b98131359475de62dd462aba1791423e6f5f0f6adfee41e1",
+      "size": 4389
+    },
+    {
+      "path": "tapnet/__init__.py",
+      "sha256": "b87a1590f06ea2bd5c0d69bc38646a3a7897346c40e5100257e18252b5751299",
+      "size": 79
+    },
+    {
+      "path": "tapnet/tapnext/__init__.py",
+      "sha256": "b87a1590f06ea2bd5c0d69bc38646a3a7897346c40e5100257e18252b5751299",
+      "size": 79
+    },
+    {
+      "path": "tapnet/tapnext/pscan.py",
+      "sha256": "7df34bf5e8318e81bb330ded14fc5e675e7485ea39fa9f0d77fa470f85796a2d",
+      "size": 3253
+    },
+    {
+      "path": "tapnet/tapnext/tapnext_lru_modules.py",
+      "sha256": "2a475419c2f7c67db9acdf412108fb3b025d168f60e9e087fe35d65157adf64f",
+      "size": 15889
+    },
+    {
+      "path": "tapnet/tapnext/tapnext_torch.py",
+      "sha256": "48072289b22439267b3a51eb4cde5e2f81f38c840b6c95b659d60032a07c691a",
+      "size": 11773
+    },
+    {
+      "path": "tapnet/tapnext/tapnext_torch_utils.py",
+      "sha256": "e7eb78070b00b2ff60fbac702ba7e01731a337dbe0ed2c2834b1ba806937944f",
+      "size": 13675
+    }
+  ],
+  "generated_namespaces": [
+    "tapnet/__init__.py",
+    "tapnet/tapnext/__init__.py"
+  ],
+  "references": [
+    "https://github.com/google-deepmind/tapnet/blob/730cda1c730877cfedbe01bf87fb1cadb78a565d/colabs/torch_tapnext_demo.ipynb",
+    "https://github.com/google-deepmind/tapnet/blob/730cda1c730877cfedbe01bf87fb1cadb78a565d/LICENSE"
+  ]
+}

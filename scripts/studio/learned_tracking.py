@@ -1,7 +1,7 @@
 """Owned learned masks/points, exact clip clocks and undoable application plans.
 
 This module is standard-library only. It never substitutes a geometric tracker
-for missing SAM2 or TAPIR weights. The subprocess receives conformed source
+for missing SAM2, TAPIR or TAPNext weights. The subprocess receives conformed source
 frames and publishes a verified immutable result only after successful work.
 """
 from __future__ import annotations
@@ -122,12 +122,40 @@ def _legacy_motion_digest(value, restore_correction_floats=True):
     return _digest(legacy)
 
 
+def _inference_files(backend):
+    if backend == "tapnext":
+        return Path(__file__).with_name("tapnext_worker.py"), Path(__file__).with_name("tapnext-runtime-lock.json")
+    return WORKER, LOCK
+
+
+def tapnext_capabilities(python=None):
+    from tapnext_runtime import default_destination
+    base = {"available": False, "backend": "tapnext", "device": "cpu", "max_frames": MAX_FRAMES,
+            "max_queries": MAX_POINTS, "analysis_edge": ANALYSIS_EDGE, "mps_verified": False}
+    executable = find_learned_python(python)
+    selected = Path(os.environ.get("CINEMATICUM_TAPNEXT_HOME") or default_destination()).expanduser()
+    if executable is None or not selected.is_dir():
+        return {**base, "reason": "Install the pinned TAPNext overlay through Runtime setup"}
+    try:
+        worker, _ = _inference_files("tapnext")
+        process = subprocess.run([executable, "-I", "-B", str(worker), "--capabilities"],
+                                 env=_env(), capture_output=True, text=True, timeout=25)
+        if process.returncode or len(process.stdout) > 65536:
+            raise ValueError(process.stderr.strip()[-1000:] or "TAPNext did not pass its integrity probe")
+        result = json.loads(process.stdout)
+        if not result.get("available") or set(result.get("models", {})) != {"tapnext"}:
+            raise ValueError("The actual TAPNext checkpoint is unavailable")
+        return {**base, **result}
+    except (OSError, ValueError, subprocess.TimeoutExpired) as error:
+        return {**base, "reason": str(error)}
+
+
 def validate_recipe(value):
     if not isinstance(value, dict) or type(value.get("version")) is not int or value["version"] != 1:
         raise ValueError("Learned tracking requires a version1 recipe")
     backend = value.get("backend")
-    if backend not in {"sam2", "tapir"}:
-        raise ValueError("Choose actual SAM2 segmentation or TAPIR point inference")
+    if backend not in {"sam2", "tapir", "tapnext"}:
+        raise ValueError("Choose actual SAM2 segmentation, TAPIR or TAPNext point inference")
     allowed = {"version", "backend", "frame_start", "frame_count", "prompts" if backend == "sam2" else "points"}
     if set(value) != allowed:
         raise ValueError("Learned tracking contains missing or unsupported recipe fields")
@@ -135,16 +163,16 @@ def validate_recipe(value):
     count = _number(value["frame_count"], "Analysis frame count", 1, MAX_FRAMES, True)
     result = {"version": 1, "backend": backend, "frame_start": first, "frame_count": count}
     last = first + count - 1
-    if backend == "tapir":
+    if backend in {"tapir", "tapnext"}:
         if not isinstance(value["points"], list) or not 1 <= len(value["points"]) <= MAX_POINTS:
-            raise ValueError("TAPIR accepts1–16 explicit point queries")
+            raise ValueError("Point models accept1–16 explicit point queries")
         points, seen = [], set()
         for point in value["points"]:
             if not isinstance(point, dict) or set(point) != {"id", "frame", "x", "y"}:
-                raise ValueError("TAPIR queries require id, frame, x and y")
+                raise ValueError("Point queries require id, frame, x and y")
             ident = _id(point["id"], "Query identity")
             if ident in seen:
-                raise ValueError("TAPIR query identities must be unique")
+                raise ValueError("Point query identities must be unique")
             seen.add(ident)
             points.append({"id": ident, "frame": _number(point["frame"], "Query frame", first, last, True),
                            "x": _number(point["x"], "Query X", 0, 1), "y": _number(point["y"], "Query Y", 0, 1)})
@@ -196,7 +224,7 @@ def _prepare(project, project_dir, clip_id, recipe):
     asset = next(item for item in project["assets"] if item["id"] == clip["asset_id"])
     if asset["kind"] == "image":
         if recipe.get("backend", "sam2") != "sam2":
-            raise ValueError("TAPIR video trajectories require a real video source; use SAM2 for still images")
+            raise ValueError("Learned point trajectories require a real video source; use SAM2 for still images")
         first = _number(recipe.get("frame_start", 0), "Still analysis frame", 0, clip["duration"] - 1, True)
         if recipe.get("frame_count", 1) != 1:
             raise ValueError("A still-image SAM2 analysis uses exactly one actual image frame")
@@ -404,19 +432,19 @@ def run_learned_tracking(project, project_dir, clip_id, recipe, output_dir, prog
         if progress: progress(.12)
         request = {"recipe": recipe, "frames": str(raw), "width": width, "height": height, "directory": str(work)}
         manifest = work / "request.json"; manifest.write_bytes(_bytes(request))
-        _run([executable, "-I", "-B", str(WORKER), "--request", str(manifest)], work, "inference", cancel_event, deadline, progress=progress)
+        _run([executable, "-I", "-B", str(_inference_files(recipe["backend"])[0]), "--request", str(manifest)], work, "inference", cancel_event, deadline, progress=progress)
         measured = _read_json(work / "worker-result.json", 2 * 1024 * 1024)
         if measured.get("backend") != recipe["backend"] or measured.get("frame_count") != count or measured.get("width") != width or measured.get("height") != height:
             raise ValueError("Learned inference result does not match its frozen request")
-        lock = _read_json(LOCK, 256 * 1024)
+        lock = _read_json(_inference_files(recipe["backend"])[1], 256 * 1024)
         if measured.get("checkpoint_sha256") != lock["models"][recipe["backend"]]["sha256"]:
             raise ValueError("Learned inference did not use the selected official checkpoint")
         tracks = []
-        if recipe["backend"] == "tapir":
+        if recipe["backend"] in {"tapir", "tapnext"}:
             if not isinstance(measured.get("tracks"), list) or len(measured["tracks"]) != len(recipe["points"]):
                 raise ValueError("TAPIR omitted one of its explicit queries")
             for item, query in zip(measured["tracks"], recipe["points"]):
-                track = validate_track({"version": 1, "kind": "point-track", "backend": "tapir-pytorch-panning",
+                track = validate_track({"version": 1, "kind": "point-track", "backend": "tapnext-pytorch-bootstrapped" if recipe["backend"] == "tapnext" else "tapir-pytorch-panning",
                     "coordinates": COORDINATES, "source": identity, "reference_frame": item["reference_frame"],
                     "samples": item["samples"]}, identity)
                 if item["id"] != query["id"] or len(track["samples"]) != count or track["samples"][0]["frame"] != first or track["reference_frame"] != query["frame"]:
@@ -452,7 +480,7 @@ def run_learned_tracking(project, project_dir, clip_id, recipe, output_dir, prog
                    "backend": recipe["backend"], "source": identity, "source_stream": stream,
                    "recipe": recipe, "recipe_sha256": _digest(recipe), "result_sha256": _digest(result),
                    "checkpoint_sha256": measured["checkpoint_sha256"], "runtime": measured["runtime"],
-                   "artifacts": artifacts, "semantics": "Original source is unchanged; binary SAM alpha or learned TAPIR points with explicit visibility"}
+                   "artifacts": artifacts, "semantics": "Original source is unchanged; binary SAM alpha or checkpoint-backed learned points with explicit visibility"}
         (published / "receipt.json").write_bytes(_bytes(receipt))
         _cancel(cancel_event, deadline)
         os.rename(published, output)
@@ -476,7 +504,7 @@ def _validate_result(result, project, clip, asset):
     if result.get("measurement", {}).get("backend") != recipe["backend"]:
         raise ValueError("The learned result backend does not match its frozen recipe")
     from imaging import _read_json
-    lock = _read_json(LOCK, 256 * 1024)
+    lock = _read_json(_inference_files(recipe["backend"])[1], 256 * 1024)
     if result["measurement"].get("checkpoint_sha256") != lock["models"][recipe["backend"]]["sha256"]:
         raise ValueError("The learned result lacks its exact official checkpoint identity")
     return recipe
@@ -526,9 +554,9 @@ def point_application(project, project_dir, clip_id, result, point_id, correctio
     prepared = _prepare(project, project_dir, clip_id, {"frame_start": 0, "frame_count": 1})
     project, clip, asset = prepared[:3]
     recipe = _validate_result(result, project, clip, asset)
-    if recipe["backend"] != "tapir": raise ValueError("Point stabilization requires an actual TAPIR result")
+    if recipe["backend"] not in {"tapir", "tapnext"}: raise ValueError("Point stabilization requires an actual learned point result")
     item = next((item for item in result["measurement"]["tracks"] if item["id"] == point_id), None)
-    if item is None: raise ValueError("Choose one of the measured TAPIR point identities")
+    if item is None: raise ValueError("Choose one of the measured point identities")
     track = copy.deepcopy(item["track"])
     corrections = [] if corrections is None else corrections
     if not isinstance(corrections, list) or len(corrections) > recipe["frame_count"]:
@@ -569,7 +597,7 @@ def validate_learned_bindings(value, project, clip, assets):
     assets = assets if isinstance(assets, dict) else {item["id"]: item for item in assets}
     for raw in value:
         fields = {"version", "backend", "source", "source_stream", "recipe_sha256", "result_sha256", "checkpoint_sha256", "frame_start", "frame_count", "target"}
-        if not isinstance(raw, dict) or not fields <= set(raw) or set(raw) - fields - {"invalidated"} or type(raw["version"]) is not int or raw["version"] != 1 or raw["backend"] not in {"sam2", "tapir"}:
+        if not isinstance(raw, dict) or not fields <= set(raw) or set(raw) - fields - {"invalidated"} or type(raw["version"]) is not int or raw["version"] != 1 or raw["backend"] not in {"sam2", "tapir", "tapnext"}:
             raise ValueError("Invalid learned result binding")
         clean = {key: copy.deepcopy(raw[key]) for key in fields}
         for key in ("recipe_sha256", "result_sha256", "checkpoint_sha256"): _sha(clean[key], key)
@@ -603,7 +631,7 @@ def validate_learned_bindings(value, project, clip, assets):
                     or not matte or matte.get("type") != "media_source" or matte.get("params") != expected
                     or mask.get("sha256") != target["asset_sha256"]):
                 reason = "The applied learned matte, its frame placement or its immutable media changed"
-        elif target.get("kind") == "tracking-motion" and clean["backend"] == "tapir":
+        elif target.get("kind") == "tracking-motion" and clean["backend"] in {"tapir", "tapnext"}:
             if set(target) != {"kind", "motion_sha256", "point_id"}:
                 raise ValueError("Learned point binding has unsupported target fields")
             _sha(target["motion_sha256"]); _id(target["point_id"])

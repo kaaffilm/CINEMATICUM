@@ -47,6 +47,7 @@ RUNTIME_FILES = (
     "install_ray_optics.py", "ray-optics-macos-arm64-py313.lock.json",
     "collaboration.py", "collaboration_store.py",
     "learned_tools.py", "learned_tracking.py", "learned_tracking_worker.py", "learned-runtime-lock.json",
+    "tapnext_runtime.py", "tapnext_worker.py", "install_tapnext.py", "tapnext-runtime-lock.json",
     "install_learned_tracking.py", "reconstruction.py", "reconstruction_worker.py",
     "install_reconstruction.py", "reconstruction-macos-arm64-py313.lock.json",
     "scene_processing.py", "scene_processing_worker.py", "scene_dispatch.py", "scene_dispatch_store.py",

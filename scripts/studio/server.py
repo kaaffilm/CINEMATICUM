@@ -1436,6 +1436,9 @@ class Handler(BaseHTTPRequestHandler):
         if parts == ["api", "retime-capabilities"]:
             from retime import capabilities
             return self.json(200, capabilities())
+        if parts == ["api", "tapnext-capabilities"]:
+            from learned_tracking import tapnext_capabilities
+            return self.json(200, tapnext_capabilities())
         if parts == ["api", "learned-capabilities"]:
             from learned_tracking import learned_capabilities
             return self.json(200, learned_capabilities())

@@ -40,7 +40,6 @@ browser gates, with the entire declared source and manifest identity verified.
 | System | Remaining work |
 | --- | --- |
 | AliceVision / Meshroom | Integrated image-to-dense-surface/texturing workflow and graph; the existing CPU COLMAP sparse solver is a separate bounded reconstruction workflow. |
-| TAPNext | Actual learned inference and editing integration where required independently of the implemented TAPIR engine. |
 | CameraCtrl | Actual camera-conditioned generation with measured pose/intrinsic/ray conditioning. |
 | DiffusionLight | Actual checkpoint inference and generated HDR lighting environments. |
 | Commercial services | Authenticated working Runway, Krea, OpenArt, Magnific, Artlist, Firefly, Flow, Luma, Kling, Pika, FLORA and Weave operations, with permitted output acceptance. |
@@ -48,12 +47,13 @@ browser gates, with the entire declared source and manifest identity verified.
 | Production playback cache | General decoded-frame/GPU caching and sustained real-media performance acceptance. |
 
 The Runtime setup catalogue now includes the existing pinned imaging and
-OpenCV tracking installers through authenticated, lock-bound owned jobs.
+OpenCV tracking installers and a separate official TAPNext overlay through
+authenticated, lock-bound owned jobs.
 Imaging cancellation also preserves its unpublished-runtime boundary. This
 closes those management integrations; the complete runtime distribution and
 signing requirements above remain open.
 
-Bounded deep/multiview EXR, SAM 2.1, TAPIR, Optiland optical prescriptions,
+Bounded deep/multiview EXR, SAM 2.1, TAPIR, independent TAPNext, Optiland optical prescriptions,
 Mitsuba/PBRT still rendering, typed scene processing, paired collaboration,
 waveform camera synchronization, simultaneous camera monitoring, locked
 source audio and positive variable-speed retiming are implemented systems.

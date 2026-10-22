@@ -86,12 +86,23 @@ source. The current verification record identifies current-source acceptance,
 installation, and publication independently.
 
 Runtime setup includes fixed, pinned imaging and OpenCV tracking installers
-alongside the existing Optiland, Mitsuba, SAM 2/TAPIR and COLMAP setup.
+alongside Optiland, Mitsuba, SAM 2/TAPIR, independent TAPNext and COLMAP setup.
 Install and Verify use project-owned jobs and the displayed lock identity.
 Imaging setup supports cancellation of its owned commands and refuses to
 publish a newly built runtime after cancellation. Existing installations and
 unrelated files are preserved. This does not bundle FFmpeg, Blender or every
 runtime, or establish Developer ID signing and notarization.
+
+**TAPNext** is a separate checkpoint-backed point tracker in Learned masks and
+points. Runtime setup installs its exact official source, Einops overlay and
+BootsTAPNext checkpoint beside the existing learned Torch environment; it does
+not replace the TAPIR package or weights. Choose TAPNext, load an actual clip
+frame, author point queries, run inference and apply stabilization with explicit
+corrections. Recipes, source/checkpoint bindings and ordinary Undo/Redo survive
+save/reopen and export. The CPU workflow is bounded to 16 points, 32 conformed
+frames and a 512-pixel analysis edge, with model input resized to 256 × 256.
+Before-query and outside-source samples are invisible. Synthetic readiness and
+editing checks do not establish production long-shot or occlusion recovery.
 
 ## Source-sample audio and 16-bit masters
 
@@ -1124,7 +1135,7 @@ pitch-preserving variable-speed sound, general automatic tracking
 re-identification, roto hierarchy/paint, unrestricted mesh/rig and texture editing,
 plugin hosting, general AAF/XML/native-project interchange, a full audio
 workstation and a production-scale decoded GPU playback cache. Actual SAM 2.1
-segmentation, TAPIR tracking, paired collaborative editing and measured
+segmentation, TAPIR/TAPNext point tracking, paired collaborative editing and measured
 multicamera synchronization have the explicit limits in the capability ledger.
 Nested OTIO exchange includes the documented retime, overlap and linear-dissolve
 operators; arbitrary time/transition plugins remain unsupported. Source

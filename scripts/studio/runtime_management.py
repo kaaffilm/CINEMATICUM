@@ -14,6 +14,8 @@ import re
 import threading
 
 RUNTIMES = {
+    "tapnext": {"module":"install_tapnext","label":"TAPNext · recurrent learned point tracking",
+        "description":"Independent official TAPNext checkpoint and pinned overlay; requires the learned Torch runtime and preserves SAM2/TAPIR."},
     "imaging": {"module":"install_imaging","label":"Color and imaging · OCIO / OpenEXR / RAW",
         "description":"Pinned color transforms, floating-point EXR and RAW decoding with real engine verification."},
     "tracking": {"module":"install_tracking","label":"Planar and optical-flow tracking · OpenCV",

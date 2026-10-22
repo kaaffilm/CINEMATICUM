@@ -731,15 +731,21 @@
     },
     {
       "id": "ai.tapir_tapnext",
-      "status": "partial",
-      "scope": "Actual locked TAPIR checkpoint-backed point inference, learned visibility/uncertainty, source-time bindings, explicit corrections and undoable application, up to 16 points/32 frames/512-pixel analysis edge. TAPNext remains absent; arbitrary occlusion/long-shot recovery is unverified.",
+      "status": "implemented_bounded",
+      "scope": "Independent official TAPIR and TAPNext checkpoint-backed point inference, learned visibility, source-time bindings, explicit corrections and undoable stabilization application. TAPNext uses its own hash-pinned TRecViT-B checkpoint and source/Einops overlay without modifying the working SAM2/TAPIR environment. Native model choice, canvas queries, run/apply, Undo/Redo and saved bindings use the common editor. Up to 16 points/32 frames/512-pixel analysis edge; TAPNext model input is resized to 256x256 on CPU. Before-query/outside-source samples are invisible. Synthetic readiness, edit persistence and rendered-motion gates do not establish arbitrary occlusion recovery or production long-shot quality.",
       "evidence": [
         "learned_tracking.py",
         "learned_tracking_worker.py",
         "learned-runtime-lock.json",
         "web/learned-tracking-ui.js",
         "test_learned_tracking.py",
-        "test_learned_tools.py"
+        "test_learned_tools.py",
+        "tapnext_runtime.py",
+        "tapnext_worker.py",
+        "install_tapnext.py",
+        "tapnext-runtime-lock.json",
+        "test_tapnext.py",
+        "verify_tapnext_native.py"
       ]
     },
     {

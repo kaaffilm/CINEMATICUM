@@ -1,4 +1,4 @@
-/* Actual SAM2/TAPIR editor. The bridge owns undo, save and frozen job admission. */
+/* Actual SAM2/TAPIR/TAPNext editor. The bridge owns undo, save and frozen job admission. */
 (() => {
   'use strict';
   const clone = value => JSON.parse(JSON.stringify(value));
@@ -7,7 +7,7 @@
   const finite = value => typeof value === 'number' && Number.isFinite(value);
   const unit = value => finite(value) && value >= 0 && value <= 1;
   function validateRecipe(recipe) {
-    if (!recipe || recipe.version !== 1 || !['sam2','tapir'].includes(recipe.backend) ||
+    if (!recipe || recipe.version !== 1 || !['sam2','tapir','tapnext'].includes(recipe.backend) ||
         !Number.isInteger(recipe.frame_start) || recipe.frame_start < 0 || !Number.isInteger(recipe.frame_count) ||
         recipe.frame_count < 1 || recipe.frame_count > 32) throw Error('Choose an exact range of 1–32 conformed clip frames.');
     const inside = frame => Number.isInteger(frame) && frame >= recipe.frame_start && frame < recipe.frame_start + recipe.frame_count;
@@ -57,12 +57,12 @@
     dialog.innerHTML=`<header><h2>Learned masks and point tracks</h2><button data-close>Close</button></header><div class="learned-body">
       <p data-source></p><div class="learned-grid"><section><canvas data-canvas width="512" height="288" tabindex="0" aria-label="Choose object prompts or point queries on the actual source frame"></canvas>
       <div class="learned-row"><label>Source clip frame<input data-frame type="number" min="0" step="1" value="0"></label><button data-load>Load source frame</button></div>
-      <label>Canvas action<select data-action><option value="foreground">SAM foreground point</option><option value="background">SAM background point</option><option value="box">SAM object box · drag</option><option value="query">TAPIR point query</option><option value="correction">Correct selected TAPIR point</option></select></label>
+      <label>Canvas action<select data-action><option value="foreground">SAM foreground point</option><option value="background">SAM background point</option><option value="box">SAM object box · drag</option><option value="query">Learned point query</option><option value="correction">Correct selected learned point</option></select></label>
       <p data-canvas-help>Choose a foreground point or drag a box. Add background points and prompts on later frames to correct the same object.</p>
       <div class="learned-row"><button data-remove-frame>Clear this frame’s prompts</button><button data-clear-prompts>Clear all prompts</button></div>
       <details><summary>Edit the exact prompt recipe</summary><textarea data-recipe spellcheck="false" aria-label="Learned prompt recipe JSON"></textarea><button data-read-recipe>Use edited recipe</button></details>
       <div data-result hidden><h3>Measured result</h3><img class="learned-preview" data-preview alt="Actual learned mask or point trajectory preview"><p data-measurement></p><div data-downloads></div></div>
-      </section><section><label>Model<select data-backend><option value="sam2">SAM2.1 Tiny · object segmentation</option><option value="tapir">TAPIR · learned point tracking</option></select></label>
+      </section><section><label>Model<select data-backend><option value="sam2">SAM2.1 Tiny · object segmentation</option><option value="tapir">TAPIR · learned point tracking</option><option value="tapnext">TAPNext · recurrent learned point tracking</option></select></label>
       <div class="learned-row"><label>First clip frame<input data-start type="number" min="0" step="1" value="0"></label><label>Frame count<input data-count type="number" min="1" max="32" step="1" value="10"></label></div>
       <p data-runtime>Checking the installed model checkpoints…</p><button data-save>Save prompts · undoable</button><button data-run class="learned-primary">Run learned inference</button>
       <progress data-progress hidden max="1" value="0"></progress><button data-cancel hidden>Cancel owned analysis</button>
@@ -73,20 +73,30 @@
       <div class="learned-row"><label>Apply from frame<input data-apply-start type="number" min="0" step="1"></label><label>Apply frames<input data-apply-count type="number" min="1" max="32" step="1"></label></div>
       <p>Hidden or uncertain samples remain gaps. Choose a fully visible range, or load a frame and explicitly correct its point. Corrections retain the model’s confidence and are recorded with the applied motion.</p>
       <textarea data-corrections spellcheck="false" aria-label="Explicit manually corrected point samples">[]</textarea><button data-apply-point>Apply stabilization · undoable</button></section>
-      <p>Analysis uses up to 32 source-conformed frames at a 512-pixel edge. SAM2 propagates one prompted object; TAPIR tracks up to 16 queries with learned visibility. The current managed runtime uses CPU.</p>
+      <p>Analysis uses up to 32 source-conformed frames at a 512-pixel edge. SAM2 propagates one prompted object; TAPIR and TAPNext track up to 16 queries with learned visibility. The current managed runtime uses CPU.</p>
       </section></div></div><footer><span class="learned-status" data-status role="status" aria-live="polite">Choose a source clip.</span></footer>`;
     host.append(style,dialog);
     const el=selector=>dialog.querySelector(selector),canvas=el('[data-canvas]'),ctx=canvas.getContext('2d');
     let context=null,recipe=null,sourceImage=null,sourceFrame=null,capabilities=null,busy=false,serial=0,jobId=null,result=null,resultJob=null,drag=null;
-    let selectedPoint=null,pointCorrections=new Map();
+    let selectedPoint=null,pointCorrections=new Map(),capabilitySerial=0;
     const status=(message,error=false)=>{el('[data-status]').textContent=message;el('[data-status]').classList.toggle('learned-error',error);};
     const current=()=>{const value=bridge.getContext();const project=bridge.getProject();return {context:value,project,clip:project?.clips?.find(c=>c.id===(value?.clipId||value?.clip?.id))};};
     const check=()=>{const value=current();if(!value.project||!value.clip||value.project.id!==context?.projectId||value.clip.id!==context?.clipId)throw Error('The selected project or clip changed. Reopen learned tracking for that clip.');return value;};
     const path=name=>`/api/projects/${encodeURIComponent(context.projectId)}/${name}`;
+    function modelReady(){return recipe?.backend==='tapnext'?capabilities?.tapnext?.available:capabilities?.available;}
+    async function refreshRuntime(){
+      const selected=recipe.backend,ticket=++capabilitySerial,identity=context.projectId+':'+context.clipId;
+      const result=await bridge.request(selected==='tapnext'?'/api/tapnext-capabilities':'/api/learned-capabilities');
+      if(ticket!==capabilitySerial||!dialog.open||recipe.backend!==selected||identity!==context.projectId+':'+context.clipId)return;
+      capabilities??={};
+      if(selected==='tapnext')capabilities.tapnext=result;else Object.assign(capabilities,result);
+      el('[data-runtime]').textContent=result.available?(selected==='tapnext'?'Verified independent TAPNext checkpoint ready · CPU':'Verified SAM2.1 Tiny and TAPIR checkpoints ready · CPU'):result.reason||'Install the pinned runtime for this model.';
+      controls();
+    }
     function controls() {
       for(const input of dialog.querySelectorAll('button,input,select,textarea'))input.disabled=busy;
       el('[data-cancel]').hidden=!jobId;el('[data-cancel]').disabled=!jobId;
-      el('[data-run]').disabled=busy||!capabilities?.available;
+      el('[data-run]').disabled=busy||!modelReady();
       el('[data-progress]').hidden=!busy;
     }
     function syncRecipe() {
@@ -143,7 +153,7 @@
     function showResult(response,id) {
       result=response;resultJob=id;const measured=response.measurement?.measurement;
       if(!measured)throw Error('The completed job lacks its learned measurement.');
-      el('[data-result]').hidden=false;el('[data-mask-apply]').hidden=measured.backend!=='sam2';el('[data-point-apply]').hidden=measured.backend!=='tapir';
+      el('[data-result]').hidden=false;el('[data-mask-apply]').hidden=measured.backend!=='sam2';el('[data-point-apply]').hidden=!['tapir','tapnext'].includes(measured.backend);
       el('[data-hold-label]').hidden=response.measurement.source_stream?.kind!=='image';el('[data-hold-still]').checked=false;
       const prefix=`/api/projects/${encodeURIComponent(context.projectId)}/learned/outputs/${id}/`;
       const urls=response.artifact_urls||{};
@@ -185,13 +195,13 @@
       range();if(sourceFrame<recipe.frame_start||sourceFrame>=recipe.frame_start+recipe.frame_count)throw Error('The loaded frame is outside the analysis range.');
       const action=el('[data-action]').value;
       if(action==='correction'){
-        if(!result||result.backend!=='tapir')throw Error('Run a TAPIR point query before correcting it.');
+        if(!result||result.backend!=='tapir')throw Error('Run a Learned point query before correcting it.');
         const corrections=JSON.parse(el('[data-corrections]').value);if(!Array.isArray(corrections))throw Error('Corrections must be an explicit JSON sample list.');
         const next=corrections.filter(item=>item.frame!==sourceFrame);next.push({frame:sourceFrame,x:point.x,y:point.y});next.sort((a,b)=>a.frame-b.frame);el('[data-corrections]').value=JSON.stringify(next,null,2);status(`Explicit point correction recorded at clip frame ${sourceFrame}.`);return;
       }
       if(recipe.backend==='sam2'&&['foreground','background'].includes(action)){
         const prompt=promptAt(sourceFrame);if(prompt.points.length>=32)throw Error('This frame already has 32 prompts.');prompt.points.push({...point,label:action==='foreground'?1:0});
-      }else if(recipe.backend==='tapir'&&action==='query'){
+      }else if(['tapir','tapnext'].includes(recipe.backend)&&action==='query'){
         if(recipe.points.length>=16)throw Error('This recipe already has 16 point queries.');let index=1;while(recipe.points.some(p=>p.id===`point_${index}`))index++;recipe.points.push({id:`point_${index}`,frame:sourceFrame,...point});
       }else throw Error('Choose a canvas action for the selected model.');
       el('[data-recipe]').value=JSON.stringify(recipe,null,2);draw();
@@ -211,21 +221,21 @@
       el('[data-corrections]').value=pointCorrections.get(selectedPoint)||'[]';
     });
     el('[data-cancel]').addEventListener('click',()=>cancel().catch(error=>status(error.message,true)));
-    el('[data-backend]').addEventListener('change',()=>{recipe={version:1,backend:el('[data-backend]').value,frame_start:Number(el('[data-start]').value),frame_count:Number(el('[data-count]').value),...(el('[data-backend]').value==='sam2'?{prompts:[]}:{points:[]})};result=null;resultJob=null;el('[data-result]').hidden=true;el('[data-mask-apply]').hidden=true;el('[data-point-apply]').hidden=true;syncRecipe();});
-    el('[data-read-recipe]').addEventListener('click',()=>{try{const next=validateRecipe(JSON.parse(el('[data-recipe]').value));recipe=clone(next);syncRecipe();status('Edited recipe loaded. Save it or run the actual model.');}catch(error){status(error.message,true);}});
+    el('[data-backend]').addEventListener('change',()=>{recipe={version:1,backend:el('[data-backend]').value,frame_start:Number(el('[data-start]').value),frame_count:Number(el('[data-count]').value),...(el('[data-backend]').value==='sam2'?{prompts:[]}:{points:[]})};result=null;resultJob=null;el('[data-result]').hidden=true;el('[data-mask-apply]').hidden=true;el('[data-point-apply]').hidden=true;syncRecipe();controls();refreshRuntime().catch(error=>status(error.message,true));});
+    el('[data-read-recipe]').addEventListener('click',()=>{try{const next=validateRecipe(JSON.parse(el('[data-recipe]').value));recipe=clone(next);syncRecipe();controls();refreshRuntime().catch(error=>status(error.message,true));status('Edited recipe loaded. Save it or run the actual model.');}catch(error){status(error.message,true);}});
     el('[data-remove-frame]').addEventListener('click',()=>{if(recipe.backend==='sam2')recipe.prompts=recipe.prompts.filter(p=>p.frame!==sourceFrame);else recipe.points=recipe.points.filter(p=>p.frame!==sourceFrame);syncRecipe();});
     el('[data-clear-prompts]').addEventListener('click',()=>{if(recipe.backend==='sam2')recipe.prompts=[];else recipe.points=[];syncRecipe();});
-    async function close(){const previous=jobId;++serial;jobId=null;busy=false;await cancel(previous).catch(error=>bridge.notify?.(error.message,true));dialog.close();controls();}
+    async function close(){const previous=jobId;++serial;++capabilitySerial;jobId=null;busy=false;await cancel(previous).catch(error=>bridge.notify?.(error.message,true));dialog.close();controls();}
     el('[data-close]').addEventListener('click',()=>close());dialog.addEventListener('cancel',event=>{event.preventDefault();close();});
     async function open() {
       const value=current();if(!value.project||!value.clip)throw Error('Select a picture clip before learned analysis.');
       const asset=value.project.assets?.find(a=>a.id===value.clip.asset_id);if(!['video','image'].includes(asset?.kind)||value.clip.track<0)throw Error('Learned analysis requires an owned video or image picture clip.');
       context={...value.context,projectId:value.project.id,clipId:value.clip.id};recipe=clone(value.clip.learned_recipe||{version:1,backend:'sam2',frame_start:0,frame_count:asset.kind==='image'?1:Math.min(10,value.clip.duration),prompts:[]});
-      el('[data-backend] option[value="tapir"]').disabled=asset.kind==='image';el('[data-count]').max=asset.kind==='image'?1:32;
+      for(const backend of ['tapir','tapnext'])el('[data-backend] option[value="'+backend+'"]').disabled=asset.kind==='image';el('[data-count]').max=asset.kind==='image'?1:32;
       sourceImage=null;sourceFrame=null;result=null;resultJob=null;capabilities=null;selectedPoint=null;pointCorrections=new Map();el('[data-result]').hidden=true;el('[data-mask-apply]').hidden=true;el('[data-point-apply]').hidden=true;
       el('[data-source]').textContent=`${asset.name||'Selected video'} · ${value.clip.duration} conformed clip frames`;el('[data-frame]').value=Math.min(recipe.frame_start,value.clip.duration-1);el('[data-frame]').max=value.clip.duration-1;syncRecipe();dialog.showModal();
       const ticket=++serial;busy=true;controls();
-      try{capabilities=await bridge.request('/api/learned-capabilities');if(ticket!==serial)return;el('[data-runtime]').textContent=capabilities.available?'Verified SAM2.1 Tiny and TAPIR checkpoints ready · CPU':capabilities.reason||'Install the optional learned runtime to run these models.';status(capabilities.available?'Load a source frame, then choose object prompts or point queries.':'Prompts remain editable; the actual checkpoints are required to run inference.');}
+      try{await refreshRuntime();if(ticket!==serial)return;status(modelReady()?'Load a source frame, then choose object prompts or point queries.':'Prompts remain editable; the actual checkpoints are required to run inference.');}
       catch(error){if(ticket===serial)status(error.message,true);}finally{if(ticket===serial){busy=false;controls();}}
       if(ticket===serial)await loadFrame();
     }

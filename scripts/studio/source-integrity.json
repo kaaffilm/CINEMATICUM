@@ -57,8 +57,8 @@
   "files": [
     {
       "path": ".github/workflows/studio-verification.yml",
-      "size": 12154,
-      "sha256": "d23ef75db3f80bd9f1bc400ca52d03d653ed45391360147f2ec1fa64ca1279d7"
+      "size": 12637,
+      "sha256": "fcf91b8cc8917a55664318c0175821074fd1a2dd28d20fbb07051f87084489c3"
     },
     {
       "path": "README.md",
@@ -137,8 +137,8 @@
     },
     {
       "path": "scripts/studio/README.md",
-      "size": 77227,
-      "sha256": "22d8802880f61aec1edf049ed7dc9bd76919c5740ed64e216f259174d0543e61"
+      "size": 78036,
+      "sha256": "76ea87fec6c222a78590cdcae95841cb06a497ec9e46c8846ba263b257fa1d65"
     },
     {
       "path": "scripts/studio/RECOVERY_0_10.md",
@@ -192,8 +192,8 @@
     },
     {
       "path": "scripts/studio/UNFINISHED_0_13.md",
-      "size": 8455,
-      "sha256": "b9a5f33fd5605a98600e77ab681b5b81f4c2e6fd19d88ef49c8a7ed166e69405"
+      "size": 8391,
+      "sha256": "0bd575f1205e0215f397c30cce89b92942b4b4a7e7c151fad5a2ae6f0e8da878"
     },
     {
       "path": "scripts/studio/UNFINISHED_0_9.md",
@@ -292,8 +292,8 @@
     },
     {
       "path": "scripts/studio/capabilities.json",
-      "size": 140095,
-      "sha256": "c4f50202c958c9fbbe006353c074c17a11c90a85ddb2a83b18039020c53cec93"
+      "size": 140717,
+      "sha256": "4aeb5c3fc52311e369db5dc365a20197fe2a951379e47539b767dbd3e6bf2aa6"
     },
     {
       "path": "scripts/studio/collaboration.py",
@@ -407,8 +407,8 @@
     },
     {
       "path": "scripts/studio/install_macos.py",
-      "size": 19920,
-      "sha256": "e5063ae4758f6ca51639fa5461eb713b308cfc5914102dd467d33963fa1369fd"
+      "size": 20018,
+      "sha256": "928f8a7b28e48843d69a191ccf3a2402759af2f208a16c8a7fea41643a8284e4"
     },
     {
       "path": "scripts/studio/install_physical_rendering.py",
@@ -429,6 +429,11 @@
       "path": "scripts/studio/install_scene_processing_runtime.py",
       "size": 7497,
       "sha256": "f571101b8a248361f762549b2b1e0fcee9bda6abbcc08682129e7e723353f361"
+    },
+    {
+      "path": "scripts/studio/install_tapnext.py",
+      "size": 9654,
+      "sha256": "312a23278dce91b8721c390f68803ddc50cad418ba838ae53d370adcf90caf2e"
     },
     {
       "path": "scripts/studio/install_tracking.py",
@@ -452,8 +457,8 @@
     },
     {
       "path": "scripts/studio/learned_tracking.py",
-      "size": 41386,
-      "sha256": "671a1a3ef60696cc06aa3696ad09f178cd56bf66c760ee0fe94ff4d910f20d23"
+      "size": 43217,
+      "sha256": "9d691e63e4a672769485073f1fbad50300dfbc4bd141eb2e40fb75728929c739"
     },
     {
       "path": "scripts/studio/learned_tracking_worker.py",
@@ -907,8 +912,8 @@
     },
     {
       "path": "scripts/studio/runtime_management.py",
-      "size": 9140,
-      "sha256": "b81b88465af0407d5c81b9c3fd508f2eefd2e01b416b6b3a8a30c6ce87e627d9"
+      "size": 9385,
+      "sha256": "a3396f5f08d6962c93016e1f860ef83cd7a2aa9f797b9b6960423900f99a6fdd"
     },
     {
       "path": "scripts/studio/scene.py",
@@ -952,8 +957,8 @@
     },
     {
       "path": "scripts/studio/server.py",
-      "size": 108397,
-      "sha256": "be99dad61d534ee91aa377a04a08ddf59f605373f06b79126b130dc51ec494ad"
+      "size": 108570,
+      "sha256": "5265a7dc09c0fda9df83e88b9bbca30a41ee8ab2bde196064847ca8b8a69e71f"
     },
     {
       "path": "scripts/studio/source_integrity.py",
@@ -984,6 +989,21 @@
       "path": "scripts/studio/studio_tools.py",
       "size": 17401,
       "sha256": "e578800750de9707b269b024dc86da7a4a54cc128bc9a71c6c5e3115af616013"
+    },
+    {
+      "path": "scripts/studio/tapnext-runtime-lock.json",
+      "size": 7050,
+      "sha256": "e3b46e36d734623dfe15dceb7056f623acf1ede981ee774f8c830339979c6540"
+    },
+    {
+      "path": "scripts/studio/tapnext_runtime.py",
+      "size": 4477,
+      "sha256": "79cf5e81c8b64935c7a48686cf28ae512ef21e41ae75b504e443889718f9a01e"
+    },
+    {
+      "path": "scripts/studio/tapnext_worker.py",
+      "size": 10117,
+      "sha256": "b0159758ce64c113dba407b299ff698dff615685d9ab8a6ae088abb45b80d140"
     },
     {
       "path": "scripts/studio/test_adapters.py",
@@ -1646,6 +1666,11 @@
       "sha256": "37324ef3b619cd2db512155a5ab75962a056607677873d096f488bea0bbe3208"
     },
     {
+      "path": "scripts/studio/test_tapnext.py",
+      "size": 12226,
+      "sha256": "9c52a3ac05edfb4cb13e551f335a867fcbe70d044ff7398ff5208eb56529fe45"
+    },
+    {
       "path": "scripts/studio/test_timebase.py",
       "size": 17982,
       "sha256": "2403e154889f22b4afd7a9fc45d57ed110d8a5992e6df02a93209ca60ca18986"
@@ -1731,6 +1756,11 @@
       "sha256": "8f4373d8f2578baa8729fd517b06422d07004f3fd64443f35e9aec4f89bba631"
     },
     {
+      "path": "scripts/studio/verify_tapnext_native.py",
+      "size": 10752,
+      "sha256": "0f531b4f8186abc9d50138aa88b115e2b6c89a746164a910d1ae15a00c3a6923"
+    },
+    {
       "path": "scripts/studio/waveform.py",
       "size": 11259,
       "sha256": "ca2503aa4555d2f5bb3eba47d019711e1b7cf85a2fe6c5c660e459bce0824792"
@@ -1797,8 +1827,8 @@
     },
     {
       "path": "scripts/studio/web/index.html",
-      "size": 19654,
-      "sha256": "2707509f6e8c17250e2fea625cd23fefdac9f4be693d1e9153481d0711c2c2c0"
+      "size": 19663,
+      "sha256": "0aec6a7adca23a5036702c3b762e9820bf753d45cfd881229138a5ef959e61b6"
     },
     {
       "path": "scripts/studio/web/interchange-ui.js",
@@ -1807,8 +1837,8 @@
     },
     {
       "path": "scripts/studio/web/learned-tracking-ui.js",
-      "size": 27218,
-      "sha256": "f598b1dc3bf687de18c26d6e4929452fc9ba8bbc89b66b3947f1526df2530c0b"
+      "size": 28256,
+      "sha256": "6b5c5f726b5ce1ef71b7047198bb7e52538916f2e9d48ee35cf05bbe390914d8"
     },
     {
       "path": "scripts/studio/web/managed-generation-ui.js",
