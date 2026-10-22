@@ -2,6 +2,7 @@
 from __future__ import annotations
 import copy
 import http.client
+from html.parser import HTMLParser
 import json
 import os
 from pathlib import Path
@@ -68,6 +69,33 @@ class ServerTests(unittest.TestCase):
         p = self.store.get(self.p["id"])
         p["clips"] = [{"id": "clip1", "asset_id": asset["id"], "start": 0, "in": 0, "duration": 24, "track": 0}]
         return p
+
+    def test_every_editor_script_is_served_as_exact_shipped_javascript(self):
+        sources = []
+        class ScriptSources(HTMLParser):
+            def handle_starttag(self, tag, attributes):
+                source = dict(attributes).get("src") if tag == "script" else None
+                if source:
+                    sources.append(source)
+        status, _, document = self.request("GET", "/", token=False)
+        self.assertEqual(status, 200, document)
+        parser = ScriptSources()
+        parser.feed(document.decode("utf-8"))
+        parser.close()
+        self.assertTrue(sources, "The actual editor index must declare its scripts")
+        for source in sources:
+            with self.subTest(script=source):
+                self.assertTrue(source.startswith("/") and not source.startswith("//"))
+                self.assertNotIn("..", Path(source).parts)
+                expected = (Path(__file__).parent / "web" / source[1:]).read_bytes()
+                status, headers, actual = self.request("GET", source, token=False)
+                self.assertEqual(status, 200, (source, actual))
+                self.assertEqual(headers.get("Content-Type", "").split(";", 1)[0], "text/javascript")
+                self.assertEqual(actual, expected, "HTTP must serve the exact shipped module")
+                status, headers, body = self.request("HEAD", source, token=False)
+                self.assertEqual(status, 200, source)
+                self.assertEqual(int(headers["Content-Length"]), len(expected))
+                self.assertEqual(body, b"")
 
     def test_managed_imaging_and_tracking_jobs_preserve_auth_lock_and_project_ownership(self):
         import runtime_management as runtime

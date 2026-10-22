@@ -1418,7 +1418,7 @@ class Handler(BaseHTTPRequestHandler):
             return self.json(200, inventory())
         if parts == ["api", "scene-workers"]:
             return self.json(200, self.store.scene_workers.inventory())
-        if parsed.path in {"/", "/index.html", "/app.js", "/style.css", "/editing.js", "/viewer-tools.js", "/compositor-ui.js", "/scene-editor.js", "/scene-editor.css", "/tracking-ui.js", "/interchange-ui.js", "/camera-io-ui.js", "/color-pipeline-ui.js", "/imaging-ui.js", "/deep-compositing-ui.js", "/ray-optics-ui.js", "/physical-rendering-ui.js", "/recovery-ui.js", "/production-ui.js", "/archive-ui.js", "/media-management-ui.js", "/editorial-ui.js", "/sequence-playback.js", "/managed-generation-ui.js", "/audio-routing.js", "/pcm-playback.js"}:
+        if parsed.path in {"/", "/index.html", "/app.js", "/style.css", "/editing.js", "/viewer-tools.js", "/compositor-ui.js", "/scene-editor.js", "/scene-editor.css", "/tracking-ui.js", "/interchange-ui.js", "/camera-io-ui.js", "/color-pipeline-ui.js", "/imaging-ui.js", "/deep-compositing-ui.js", "/ray-optics-ui.js", "/physical-rendering-ui.js", "/recovery-ui.js", "/production-ui.js", "/archive-ui.js", "/media-management-ui.js", "/editorial-ui.js", "/sequence-playback.js", "/decoded-frame-cache.js", "/managed-generation-ui.js", "/audio-routing.js", "/pcm-playback.js"}:
             return self.file(WEB / ("index.html" if parsed.path == "/" else parsed.path[1:]))
         if parts == ["api", "bootstrap"]:
             projects = self.store.projects()

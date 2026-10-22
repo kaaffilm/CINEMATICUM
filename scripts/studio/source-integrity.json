@@ -962,8 +962,8 @@
     },
     {
       "path": "scripts/studio/server.py",
-      "size": 108570,
-      "sha256": "5265a7dc09c0fda9df83e88b9bbca30a41ee8ab2bde196064847ca8b8a69e71f"
+      "size": 108597,
+      "sha256": "c9e65e1b78f493f72cf8c59f39e3e33f6135a38d8276e8bb7dcd3ac24dc852d3"
     },
     {
       "path": "scripts/studio/source_integrity.py",
@@ -1627,8 +1627,8 @@
     },
     {
       "path": "scripts/studio/test_server.py",
-      "size": 31629,
-      "sha256": "8a1225981e45b3e7c4abb1647944ebe1d1f020940dd1f659af702b0ada29e0b9"
+      "size": 33229,
+      "sha256": "681360a6d376a02862d750b06e64fc8b2214a5d567f5981e331870e69bd275df"
     },
     {
       "path": "scripts/studio/test_shutdown.py",
