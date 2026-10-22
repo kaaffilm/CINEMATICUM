@@ -1,0 +1,59 @@
+{
+  "schema": "cinematicum-real-lensfun-profile-import-v1",
+  "passed": true,
+  "source": {
+    "repository": "https://github.com/lensfun/lensfun",
+    "commit": "9e6deafe100a7c6f7ce019624bb8c4da20bf7c29",
+    "path": "data/db/slr-olympus.xml",
+    "url": "https://raw.githubusercontent.com/lensfun/lensfun/9e6deafe100a7c6f7ce019624bb8c4da20bf7c29/data/db/slr-olympus.xml",
+    "bytes": 116602,
+    "sha256": "f7693b6779edd8ed10d7dc23113669255bfa4987cea7db0e843f7f5f2bbbe615"
+  },
+  "calibration_count": 106,
+  "directly_usable_at_calibration_crop": 103,
+  "explicitly_rejected_by_bounded_inverse": 3,
+  "warnings": [
+    "Choose the exact measured focal length and the capture sensor crop factor. Automatic matching and focal interpolation are not applied.",
+    "Radial distortion only: TCA, vignetting, crop records and projection changes in Lensfun profiles are not applied.",
+    "The incoming graph image must represent the complete uncropped capture, without letterboxing or a changed pixel aspect."
+  ],
+  "first_accepted": {
+    "id": "ea257b1f0767fc45329a2d98",
+    "label": "Olympus Olympus Zuiko Digital ED 7-14mm f/4.0 \u00b7 7 mm \u00b7 crop 2 \u00b7 ptlens",
+    "profile": {
+      "version": 1,
+      "maker": "Olympus",
+      "lens": "Olympus Zuiko Digital ED 7-14mm f/4.0",
+      "source_sha256": "f7693b6779edd8ed10d7dc23113669255bfa4987cea7db0e843f7f5f2bbbe615",
+      "focal_mm": 7.0,
+      "calibration_crop": 2.0,
+      "calibration_aspect": 1.3333333333333333,
+      "image_crop": 2.0,
+      "center_x": 0.0,
+      "center_y": 0.0,
+      "distortion": "ptlens",
+      "coefficients": [
+        -0.013136,
+        0.015797,
+        0.0
+      ]
+    }
+  },
+  "rejected": [
+    {
+      "id": "1f57a417c097ded5d460c474",
+      "label": "Olympus Olympus Zuiko Digital ED 12-60mm f/2.8-4.0 SWD \u00b7 12 mm \u00b7 crop 2 \u00b7 ptlens",
+      "reason": "Lensfun calibration exceeds the conservative full-image radial invertibility bound (0.8). Use a smaller captured field or another calibration."
+    },
+    {
+      "id": "179787d69ea402577dac2d23",
+      "label": "Olympus Olympus Zuiko Digital ED 12-60mm f/2.8-4.0 SWD \u00b7 14 mm \u00b7 crop 2 \u00b7 ptlens",
+      "reason": "Lensfun calibration exceeds the conservative full-image radial invertibility bound (0.8). Use a smaller captured field or another calibration."
+    },
+    {
+      "id": "5a6105d3b5dbe54ba67b1208",
+      "label": "Olympus Olympus Zuiko Digital ED 14-35mm F2.0 SWD \u00b7 14 mm \u00b7 crop 2 \u00b7 ptlens",
+      "reason": "Lensfun calibration exceeds the conservative full-image radial invertibility bound (0.8). Use a smaller captured field or another calibration."
+    }
+  ]
+}

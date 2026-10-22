@@ -1,0 +1,147 @@
+{
+  "33a62b00bc27f217c6c99a8f4dcc341082860ba72144f59ab1936a49fcf24cbc": {
+    "frame": 0,
+    "identity": "33a62b00bc27f217c6c99a8f4dcc341082860ba72144f59ab1936a49fcf24cbc",
+    "project": {
+      "assets": [
+        {
+          "audio_channels": 0,
+          "audio_duration": 0.0,
+          "audio_sample_rate": 0,
+          "audio_stream_index": null,
+          "audio_streams": [],
+          "codec": "ffv1",
+          "color_transfer": "unknown",
+          "duration": 0.666,
+          "fps": "12/1",
+          "frames": 0,
+          "has_audio": false,
+          "height": 90,
+          "id": "cd1f568601f547c697756809499c8ec1",
+          "kind": "video",
+          "name": "ENGINE_TEST_lens_alpha_ramps.mkv",
+          "path": "media/cd1f568601f547c697756809499c8ec1.mkv",
+          "pixel_format": "bgra",
+          "sha256": "748ff57b5fe77c63bec7c71f07108f6e2df94477e4a05b1a4695d980163bf0d6",
+          "size": 132135,
+          "video_stream_index": 0,
+          "width": 160
+        }
+      ],
+      "clips": [
+        {
+          "animation_duration": 8,
+          "animation_offset": 0,
+          "animation_start": 0,
+          "asset_id": "cd1f568601f547c697756809499c8ec1",
+          "audio": {
+            "fade_duration": 8,
+            "fade_in": 0,
+            "fade_offset": 0,
+            "fade_out": 0,
+            "pan": 0.0
+          },
+          "compositor": {
+            "nodes": [
+              {
+                "id": "source",
+                "inputs": [],
+                "params": {},
+                "position": {
+                  "x": 42.0,
+                  "y": 62.0
+                },
+                "type": "source"
+              },
+              {
+                "id": "a7bbd6a9-5db7-4b8a-b00f-9fb6b75b1518",
+                "inputs": [
+                  "source"
+                ],
+                "params": {
+                  "cx": 0.5,
+                  "cy": 0.5,
+                  "direction": "undistort",
+                  "fx": 1.0,
+                  "fy": 1.0,
+                  "k1": 0.0,
+                  "k2": 0.0,
+                  "k3": 0.0,
+                  "model": "lensfun",
+                  "p1": 0.0,
+                  "p2": 0.0,
+                  "profile": {
+                    "calibration_aspect": 1.3333333333333333,
+                    "calibration_crop": 2.0,
+                    "center_x": 0.0,
+                    "center_y": 0.0,
+                    "coefficients": [
+                      -0.013136,
+                      0.015797,
+                      0.0
+                    ],
+                    "distortion": "ptlens",
+                    "focal_mm": 7.0,
+                    "image_crop": 2.0,
+                    "lens": "Olympus Zuiko Digital ED 7-14mm f/4.0",
+                    "maker": "Olympus",
+                    "source_sha256": "f7693b6779edd8ed10d7dc23113669255bfa4987cea7db0e843f7f5f2bbbe615",
+                    "version": 1
+                  }
+                },
+                "position": {
+                  "x": 272.0,
+                  "y": 62.0
+                },
+                "type": "lens_distortion"
+              }
+            ],
+            "output": "a7bbd6a9-5db7-4b8a-b00f-9fb6b75b1518",
+            "version": 1
+          },
+          "duration": 8,
+          "effects": {
+            "blur": 0.0,
+            "chroma_key": "",
+            "sharpen": 0.0,
+            "vignette": false
+          },
+          "grade": {
+            "contrast": 1.0,
+            "exposure": 0.0,
+            "saturation": 1.0,
+            "temperature": 0.0
+          },
+          "id": "ed88dc9b-5bfa-4dfe-b6c2-50b6f3aa5218",
+          "in": 0.0,
+          "keyframes": [],
+          "opacity": 1.0,
+          "reverse": false,
+          "rotation": 0.0,
+          "scale": 1.0,
+          "speed": 1.0,
+          "start": 0,
+          "track": 0,
+          "volume": 1.0,
+          "x": 0.0,
+          "y": 0.0
+        }
+      ],
+      "fps": 12,
+      "frame_rate": {
+        "denominator": 1,
+        "numerator": 12
+      },
+      "height": 90,
+      "id": "da7b8709e8b34b13b46e88a93112cd9a",
+      "name": "ENGINE TEST native Lensfun and fisheye",
+      "revision": 3,
+      "settings": {},
+      "titles": [],
+      "tracks": [],
+      "updated_at": "2026-10-22T13:25:36Z",
+      "version": 1,
+      "width": 160
+    }
+  }
+}

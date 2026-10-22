@@ -1,0 +1,3 @@
+{"operation": "prepare", "passed": true, "checks": 11, "elapsed_seconds": 3.061, "error": null, "native_certified": false}
+{"operation": "author", "passed": true, "checks": 30, "elapsed_seconds": 4.026, "error": null, "native_certified": false}
+{"operation": "render", "passed": true, "checks": 33, "elapsed_seconds": 5.898, "error": null, "native_certified": false}

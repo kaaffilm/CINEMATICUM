@@ -6,7 +6,10 @@ audio to the integrated 0.11 core. The accepted core passed the complete suite,
 bounded native retime acceptance, replacement installation and canonical
 installed launch. All eight selected installed-runtime phases passed, followed
 by complete preservation. The documentation/history merge is reconciled to the
-unchanged accepted runtime/test source; exact-head CI/publication remains pending.
+unchanged accepted runtime/test source. Publication `dcea8619` is now on draft
+PR #162 with final installed-source reconciliation passing 10/10. The collected
+Studio CI run 39780897825 passed all 895 tests and seven separate browser
+gates. The report's complete declared source inventory matches `dcea8619`.
 
 ## Accepted core and source identity
 
@@ -214,8 +217,49 @@ unchanged declared source files** and **112 unchanged installed runtime/web
 payloads**. The existing generator produces the separate final manifest; all
 production, tests, native helpers and CI workflow bytes remain identical to
 accepted core `c9869e86`. Historical 0.11 records retain their original bytes.
-Final exact-head CI/publication remains pending. No source test, native fixture or installed
-readiness result certifies signed/notarized distribution, arbitrary-footage
+Publication commit `dcea86196f81d6476a0f60538429b984b24c1129` is now the
+actual remote head of draft PR #162. The final
+[installed-source reconciliation](verification/0.12.0/publication-complete-01/published-installed-reconciliation.json)
+passed **10/10**, binding all 112 runtime payloads and the whole 117-file bundle
+to the publication while preserving the prior bundle archive and owner checkout.
+Its SHA-256 is
+`6496793610329fe81d32d0a27e72999c38cf21739772c05abf7beacf4292ebc7`.
+The [materialization](verification/0.12.0/publication-complete-01/publication-materialized.json),
+[push](verification/0.12.0/publication-complete-01/publication-push-result.json)
+and [PR update](verification/0.12.0/publication-complete-01/publication-pr-update.json)
+receipts retain actual source and publication identities. Initial
+[Studio CI observations](verification/0.12.0/publication-complete-01/transfer.json)
+recorded the PR and push runs in progress. The completed
+[PR run 39780897825](https://github.com/kaaffilm/CINEMATICUM/actions/runs/39780897825)
+subsequently passed **895/895 tests in 608.028 seconds**, with zero failures,
+errors or skips and unchanged source/managed runtimes. All
+[seven separate browser reports](verification/0.12.0/github-ci-39780897825/browser-summary.json)
+passed and retain `native_certified: false`.
+
+The actual [whole-build CI report](verification/0.12.0/github-ci-39780897825/frozen-whole-build-report.json)
+has SHA-256
+`8d9b5b8dadf862dda6f54b275e85b4733abacdc59c29515cd8c2abd1e722342c`.
+The [source binding](verification/0.12.0/github-ci-39780897825/source-binding-02.json)
+passed **7/7**, comparing all 343 declared file records and the manifest's own
+identity, rather than relying only on run metadata. Its complete source digest
+`47a2b6904b62f6fce4df1c982f28b483df2ca2e66c0b5c91454ba4cc25b40253`
+matches publication `dcea8619`. The complete 366-member artifact is 15,113,939
+bytes, SHA-256
+`37b4958311da499254491efa4eb95cb50e2e96ebd75d1bf7b1c019d9677c405e`;
+14 selected public text receipts and their transfer manifest are retained here.
+
+The original [collector comparison failure](verification/0.12.0/github-ci-39780897825/source-binding.json)
+is preserved. It compared the runner inventory to the declared manifest
+without adding the manifest's own path/size/hash record. The corrected
+comparison includes that extra identity; no source, expected hash, report or
+test changed. A separate
+[PR readback receipt](verification/0.12.0/github-ci-39780897825/publication-pr-ci-update.json)
+records the CI link in the still-draft PR without creating a recursive
+evidence-only release commit. These post-publication records are appended in
+the subsequent candidate without rewriting the original core evidence.
+
+No source test, native fixture or installed readiness result certifies
+signed/notarized distribution, arbitrary-footage
 optical-flow quality, sustained production performance or full professional
 parity. The [unfinished-work register](UNFINISHED_0_12.md) retains those limits.
 

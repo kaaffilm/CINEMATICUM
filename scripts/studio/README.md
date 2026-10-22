@@ -1,4 +1,4 @@
-# CINEMATICUM Studio 0.12
+# CINEMATICUM Studio 0.13
 
 A working local audiovisual editor. Media are imported into an owned project,
 edited on a frame-based timeline, previewed, and exported through real render
@@ -10,31 +10,43 @@ issuance effect.
 
 ## Current build
 
-Studio **0.12.0 / build 13** adds editable speed curves, actual dense optical-flow
-interpolation and source-grid varispeed sound. Select an original timeline clip
-and open **Speed ramp & optical flow** in its inspector. Curves remain editable
-through split/edge trim, undo, save/reopen and portable archive restoration.
-Paused pictures, rendered playback and export use the actual source-time map.
-The bounds and pitch/quality limits are in [Retiming](RETIME.md).
+Studio **0.13.0 / build 14** adds measured Lensfun radial profiles, four fisheye
+projections and bounded public Final Cut Pro XML interchange. In a compositor
+lens node, select **Lensfun profile** or **Fisheye**, import/select the measured
+profile when needed, and apply the calibration through normal undo history.
+Selected numeric data and original XML identity remain in the saved project.
+[Lens workflows](LENS_WORKFLOWS.md) describes capture geometry and model limits.
 
-This build retains simultaneous cameras, fixed-camera sound, Float32 OCIO/ACES
-movies, editable OTIO compositions, measured HDR photographs and planar
-panoramas, plus the scientific, learned, scene and collaboration workflows.
-Open **Multicam**, **Interchange**, **Develop images**, **Export** or
-**Studio tools** for those workflows. See [Features 0.12](FEATURES_0_12.md),
-[Verification 0.12](VERIFICATION_0_12.md) and [remaining work](UNFINISHED_0_12.md).
+In **Interchange**, select **Final Cut Pro XML (.fcpxml)**, choose a standalone
+1.9/1.10 document, explicitly map its resources to owned media, review and apply
+one undoable timeline replacement. Export writes public 1.10 XML for the
+admitted cut/gap/connected-lane/compound edits. Nonzero clocks and trimmed
+sequences survive save/reopen and portable archives. Unsupported operators
+refuse before applying or exporting. [FCPXML](FCPXML_INTERCHANGE.md) defines the
+measured picture grids and the external-editor limitations.
 
-Core `c9869e86` passed **895/895 tests**, zero failures/errors/skips, with unchanged
-source and all five managed runtimes. Four retime phases passed **58 outer
-checks** (three native executions and one fixture preparation); actual Chromium
-acceptance separately passed 58. Replacement installation passed **5/5** for
-112 runtime/web files and all 117 bundle files while preserving the prior 0.11
-app and existing projects. Canonical installed launch passed **16/16 in 7.028
-seconds**. All eight selected installed-runtime phases passed 14/14 each, with
-5/5 preparation and 6/6 final preservation. The documentation merge is
-reconciled to unchanged accepted runtime/test sources. Exact-head CI/publication
-remains pending. Historical 0.11 records retain their original
-core and manifest; the new source does not inherit old results automatically.
+The original lens and FCPXML feature/media/UI evidence has passed, including
+independent source-picture/sample truth and the separate Apple 1.10 DTD gate.
+The integrated candidate's native, complete-suite, installation and publication
+gates remain pending. See [Features 0.13](FEATURES_0_13.md),
+[Verification 0.13](VERIFICATION_0_13.md) and [remaining work](UNFINISHED_0_13.md).
+
+Published 0.12 `dcea8619` remains the accepted installed release. It passed 895
+complete-suite tests, 58 reported native retime checks, 5 installation checks,
+16 canonical launch checks and eight selected installed-runtime phases of 14
+checks each. Final installed-source reconciliation passed 10/10, and its actual
+published source passed all 895 CI tests and seven separate browser gates with
+complete source identity verified. The retained [0.12 record](VERIFICATION_0_12.md)
+keeps those results attached to their actual source. Current 0.13 evidence is
+recorded separately.
+
+The existing positive variable-speed curves and actual dense optical flow,
+simultaneous cameras and fixed-camera sound, Float32 OCIO/ACES movies, editable
+OTIO compositions, measured HDR photographs and planar panoramas remain
+available, alongside the scientific, learned, scene and collaboration tools.
+Open **Multicam**, **Interchange**, **Develop images**, **Export** or **Studio
+tools** for those workflows. [Retiming](RETIME.md) defines the existing speed,
+pitch and quality bounds.
 
 ## Previous upgrade
 
@@ -59,7 +71,7 @@ scene-linear EXR masters, calibrated cameras, physical materials, exact clocks,
 measured tracking and OCIO/RAW/bracket still processing remain available.
 Read the [source comparison and capability audit](CAPABILITY_AUDIT.md),
 [capability ledger](capabilities.json), and
-[current unfinished-work register](UNFINISHED_0_12.md) for implemented bounds and
+[current unfinished-work register](UNFINISHED_0_13.md) for implemented bounds and
 remaining professional gaps. [Verification 0.9](VERIFICATION_0_9.md) is historical
 evidence for the earlier candidate. Its 515-test result does not certify newer
 source. The current verification record identifies current-source acceptance,
@@ -531,9 +543,19 @@ graph accepts two lens nodes and nonidentity lens processing up to 2,073,600
 pixels, such as 1920 × 1080. A zero-coefficient lens passes the image through
 without resampling, including larger canvases. Map preparation is an owned,
 cancellable worker with a 90-second limit; the optional imaging runtime
-accelerates the same calculation. Lensfun profile lookup, fisheye/rational/
-anamorphic models, automatic calibration and animated lens parameters remain
-unimplemented.
+accelerates the same calculation.
+
+Studio 0.13 adds four explicit fisheye projections and import of
+actual Lensfun XML radial calibrations. In the node inspector, choose
+equidistant, equisolid, stereographic or orthographic, or select **Read Lensfun
+XML**, review the exact measured focal sample and capture crop factor, then
+choose **Apply selected calibration**. Profile data is embedded in the graph;
+the XML file is not needed to reopen or render the saved project. The existing
+Brown controls and project format remain compatible. See
+[Lens workflows](LENS_WORKFLOWS.md) for coordinate conventions, tested evidence
+and the pending native/release gates. Automatic profile matching, focal
+interpolation, rational/anamorphic models, chromatic/vignette correction,
+automatic calibration and animated lens parameters remain unimplemented.
 
 ## Develop still images
 

@@ -1,0 +1,26 @@
+{
+  "schema": "cinematicum-independent-fcpxml-schema-lock-v1",
+  "platform": "linux-x86_64-cpython-3.12",
+  "lxml": {
+    "version": "6.1.1",
+    "libxml2": [2, 14, 6],
+    "filename": "lxml-6.1.1-cp312-cp312-manylinux_2_26_x86_64.manylinux_2_28_x86_64.whl",
+    "url": "https://files.pythonhosted.org/packages/08/f6/af32e23e563971ffb0fb86be52bc5be5c2c118858ffc119bf6a9039b173d/lxml-6.1.1-cp312-cp312-manylinux_2_26_x86_64.manylinux_2_28_x86_64.whl",
+    "bytes": 5240367,
+    "sha256": "ebe6af670449830d6d9b752c256a983291c766a1365ba5d5460048f9e33a7818",
+    "metadata_source": "https://pypi.org/pypi/lxml/6.1.1/json"
+  },
+  "apple_document": {
+    "url": "https://developer.apple.com/documentation/professional-video-applications/document-type-definition.md",
+    "filename": "document-type-definition.md",
+    "bytes": 41495,
+    "sha256": "b4ed24c7dfbb84fb81bdb6880029f007b7784459256b9b489397d7264dc5735a"
+  },
+  "dtd": {
+    "version": "1.10",
+    "filename": "FCPXMLv1_10.dtd",
+    "bytes": 40206,
+    "sha256": "6044527401b6cc92a9d86383437794d8de801c1904b6d08409ce81720fd23f33",
+    "extraction": "The sole swift-fenced block of the exact Apple Markdown document, plus one final newline."
+  }
+}

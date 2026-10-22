@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE fcpxml>
+<fcpxml version="1.10"><resources>
+  <format id="fmt" frameDuration="1001/30000s" width="48" height="32" fieldOrder="progressive" colorSpace="1-1-1 (Rec. 709)"/>
+  <asset id="red_source" name="ENGINE TEST red" start="6006s" duration="2002/625s" hasVideo="1" hasAudio="1" format="fmt" videoSources="1" audioSources="1" audioChannels="2" audioRate="48000"><media-rep kind="original-media" src="file:///UNOPENED/ENGINE_TEST_red.mov"/></asset>
+  <asset id="blue_source" name="ENGINE TEST blue" start="8008s" duration="2002/625s" hasVideo="1" hasAudio="1" format="fmt" videoSources="1" audioSources="1" audioChannels="2" audioRate="48000"><media-rep kind="original-media" src="https://example.invalid/NEVER_FETCH/ENGINE_TEST_blue.mov"/></asset>
+  <media id="compound" name="ENGINE TEST compound"><sequence format="fmt" duration="2002/1875s" tcStart="12012/5s" tcFormat="NDF" audioLayout="stereo" audioRate="48k"><spine>
+    <asset-clip ref="red_source" name="compound picture" offset="12012/5s" start="11263252/1875s" duration="2002/1875s" srcEnable="video">
+      <video lane="1" ref="blue_source" name="compound connected picture" offset="30037007/5000s" start="6007001/750s" duration="1001/3750s"/>
+      <audio lane="-1" ref="red_source" name="compound independent audio" offset="11263252/1875s" start="11263252/1875s" duration="2002/1875s"/>
+    </asset-clip>
+  </spine></sequence></media>
+</resources><project name="ENGINE TEST rational FCPXML"><sequence format="fmt" duration="1001/750s" tcStart="18018/5s" tcFormat="NDF" audioLayout="stereo" audioRate="48k"><spine>
+  <asset-clip ref="red_source" name="primary picture" offset="18018/5s" start="22523501/3750s" duration="1001/1875s" srcEnable="video">
+    <video lane="1" ref="blue_source" name="connected picture" offset="15016001/2500s" start="12013001/1500s" duration="1001/5000s"/>
+    <audio lane="-1" ref="red_source" name="independent source audio" offset="22523501/3750s" start="22523501/3750s" duration="1001/1875s"><adjust-volume amount="-6.020599913279624dB"/></audio>
+  </asset-clip>
+  <ref-clip ref="compound" name="trimmed real compound" offset="6757751/1875s" start="18019001/7500s" duration="1001/1875s" srcEnable="all"><adjust-volume amount="-12.041199826559248dB"/></ref-clip>
+  <asset-clip ref="red_source" name="constant forward retime" offset="6758752/1875s" start="22529507/3750s" duration="1001/3750s" srcEnable="video">
+    <conform-rate scaleEnabled="0" frameSampling="nearest-neighbor"/>
+    <timeMap frameSampling="nearest-neighbor" preservesPitch="1"><timept time="22529507/3750s" value="22529507/3750s" interp="linear"/><timept time="11265254/1875s" value="7510503/1250s" interp="linear"/></timeMap>
+  </asset-clip>
+</spine></sequence></project></fcpxml>

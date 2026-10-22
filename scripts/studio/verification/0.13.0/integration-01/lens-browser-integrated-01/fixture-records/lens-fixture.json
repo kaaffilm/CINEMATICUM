@@ -1,0 +1,52 @@
+{
+  "acceptance_id": "91e08eea814147328be881a1e0d9f503",
+  "asset_id": "cd1f568601f547c697756809499c8ec1",
+  "calibration_count": 106,
+  "delivery": "h264",
+  "expected_profile": {
+    "calibration_aspect": 1.3333333333333333,
+    "calibration_crop": 2.0,
+    "center_x": 0.0,
+    "center_y": 0.0,
+    "coefficients": [
+      -0.013136,
+      0.015797,
+      0.0
+    ],
+    "distortion": "ptlens",
+    "focal_mm": 7.0,
+    "image_crop": 2.0,
+    "lens": "Olympus Zuiko Digital ED 7-14mm f/4.0",
+    "maker": "Olympus",
+    "source_sha256": "f7693b6779edd8ed10d7dc23113669255bfa4987cea7db0e843f7f5f2bbbe615",
+    "version": 1
+  },
+  "helper_identity": {
+    "sha256": "38998a75c34f4fb783190c170563ecc836afb1b133879502efbea84e41fb0572",
+    "size": 316
+  },
+  "kind": "cinematicum-owned-lens-models-v1",
+  "profile_id": "ea257b1f0767fc45329a2d98",
+  "project_id": "da7b8709e8b34b13b46e88a93112cd9a",
+  "project_name": "ENGINE TEST native Lensfun and fisheye",
+  "sentinel_id": "c5af46106e5944d98b69a8ae7bfb8fbb",
+  "sentinel_identity": {
+    "sha256": "13e08fed0c569d2e4f5f919b25df886aff7ee15793ba5d6835a3e6c71d48e777",
+    "size": 350
+  },
+  "sentinel_name": "ENGINE TEST lens sentinel",
+  "source_identity": {
+    "sha256": "748ff57b5fe77c63bec7c71f07108f6e2df94477e4a05b1a4695d980163bf0d6",
+    "size": 132135
+  },
+  "truth": {
+    "lensfun.xml": {
+      "sha256": "f7693b6779edd8ed10d7dc23113669255bfa4987cea7db0e843f7f5f2bbbe615",
+      "size": 116602
+    },
+    "source.rgba": {
+      "sha256": "274448bda14cd5bafe4ba07235077ccb7c818e2e65cc820170b5e5e6ec65d2ba",
+      "size": 460800
+    }
+  }
+}

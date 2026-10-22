@@ -1,0 +1,66 @@
+{
+  "schema": "cinematicum-ci-browser-artifact-summary-v1",
+  "passed": true,
+  "run_id": 39780897825,
+  "published_commit": "dcea86196f81d6476a0f60538429b984b24c1129",
+  "artifact_sha256": "37b4958311da499254491efa4eb95cb50e2e96ebd75d1bf7b1c019d9677c405e",
+  "reports": [
+    {
+      "path": "multicam-browser-acceptance/browser-report.json",
+      "bytes": 939,
+      "sha256": "24176367867e7ee30d2c16f2975f521b22b90260c5beead3acdc5d7ed6398f1c",
+      "passed": true,
+      "native_certified": false,
+      "scope": "Actual separate CI browser acceptance"
+    },
+    {
+      "path": "multicam-monitor-acceptance/browser-report.json",
+      "bytes": 1041,
+      "sha256": "67fdc4dc9e564533916e096c105046e926a87a09f59ceacc0f7a9c83481e625e",
+      "passed": true,
+      "native_certified": false,
+      "scope": "Actual separate CI browser acceptance"
+    },
+    {
+      "path": "float-movie-acceptance/browser-report.json",
+      "bytes": 9974,
+      "sha256": "76034d630a3dea3c9029bf5c42e35d8c400a60b49302c6343312fcdc60228881",
+      "passed": true,
+      "native_certified": false,
+      "scope": "Actual separate CI browser acceptance"
+    },
+    {
+      "path": "otio-compositions-acceptance/browser-report.json",
+      "bytes": 1044,
+      "sha256": "f0169c886a7ff7569e24c4c2016f42402632153db5d04887c8bcff83eaae0908",
+      "passed": true,
+      "native_certified": false,
+      "scope": "Actual separate CI browser acceptance"
+    },
+    {
+      "path": "retime-acceptance/browser-report.json",
+      "bytes": 1031,
+      "sha256": "66e5b19a0258ee41c2a2bc76e77ce5dad2bbbb8835bd3d8b0724eec621f7650b",
+      "passed": true,
+      "native_certified": false,
+      "scope": "Actual separate CI browser acceptance"
+    },
+    {
+      "path": "startup-quit-acceptance/report.json",
+      "bytes": 17217,
+      "sha256": "e1f768da89d91db66fc02e3e45ccb1ba035d6213f7d80431eeb43cf30b3deded",
+      "passed": true,
+      "native_certified": false,
+      "scope": "Actual separate CI browser acceptance"
+    },
+    {
+      "path": "still-photography-acceptance/browser-report.json",
+      "bytes": 1074,
+      "sha256": "733a53799ba471ea51f45a35a36339955a91f881788a136cc2183ac4f7544f15",
+      "passed": true,
+      "native_certified": false,
+      "scope": "Actual separate CI browser acceptance"
+    }
+  ],
+  "native_acceptance_claimed": false
+}

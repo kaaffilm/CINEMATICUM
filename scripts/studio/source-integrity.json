@@ -1,7 +1,7 @@
 {
   "format": 2,
   "schema": "cinematicum-source-integrity",
-  "version": "0.12.0",
+  "version": "0.13.0",
   "scope": {
     "root_files": [
       ".github/workflows/studio-verification.yml",
@@ -57,18 +57,33 @@
   "files": [
     {
       "path": ".github/workflows/studio-verification.yml",
-      "size": 8118,
-      "sha256": "769a0d3e4b1b25285e94e54f148bb9254a0e22f9ca65ea9d1e8aa5f1ac355d57"
+      "size": 12154,
+      "sha256": "d23ef75db3f80bd9f1bc400ca52d03d653ed45391360147f2ec1fa64ca1279d7"
     },
     {
       "path": "README.md",
-      "size": 18370,
-      "sha256": "bdc6943ee49240c08b3a5fb7d3cbf350678db7ae36518c68fd0998f62b9c3ddd"
+      "size": 18523,
+      "sha256": "b86de0fbf2ec432e3f288e76a70e89e1665b332bdab2a9ddfe2922d43688d05b"
     },
     {
       "path": "scripts/studio/CAPABILITY_AUDIT.md",
       "size": 59653,
       "sha256": "c765d56e0f211d8902a6da55462d0c1aa261a4ef780a4ac44eebf0e6856981cc"
+    },
+    {
+      "path": "scripts/studio/FCPXML_INTERCHANGE.md",
+      "size": 12369,
+      "sha256": "003b1abfd36bd0f1ebbc845b4c8a71c51798fb86584b6a164608d881fb009295"
+    },
+    {
+      "path": "scripts/studio/FCPXML_NATIVE_ACCEPTANCE.md",
+      "size": 7579,
+      "sha256": "edaca66fb8ace86ad3487fcb73097c46410fe819447a7ac9c5bc3d4728d725d5"
+    },
+    {
+      "path": "scripts/studio/FCPXML_SCHEMA_VALIDATION.md",
+      "size": 3717,
+      "sha256": "c4dc41bc65250d83f66b4a98ddab4853eeab66d2ef56be77ebb65f5ff4cc881d"
     },
     {
       "path": "scripts/studio/FEATURES_0_10.md",
@@ -82,13 +97,28 @@
     },
     {
       "path": "scripts/studio/FEATURES_0_12.md",
-      "size": 4257,
-      "sha256": "d1f0454f748a00d328c7e4f67a082f1f9a9f8fea4515c87edc7a0a2bfd6dc737"
+      "size": 4483,
+      "sha256": "58e36d2b70c4c622d66a84c890080e535da002c4ca814c1469f840521b807ab3"
+    },
+    {
+      "path": "scripts/studio/FEATURES_0_13.md",
+      "size": 6625,
+      "sha256": "a8d5ef03d393751dc6e8b9ed24057db7526fe6578894acb2d6f9c5837c44e8e4"
     },
     {
       "path": "scripts/studio/FLOAT_MOVIE_PIPELINE.md",
       "size": 8933,
       "sha256": "cfab0133b5c8d163bec3760cc8bcaa56a5b7bbf25511725d9a20542678721cfa"
+    },
+    {
+      "path": "scripts/studio/LENS_NATIVE_ACCEPTANCE.md",
+      "size": 8356,
+      "sha256": "c232ebe11d18c2ba98f45b224a7fe4383267e276cea0f7e36b2cf1fee416819a"
+    },
+    {
+      "path": "scripts/studio/LENS_WORKFLOWS.md",
+      "size": 12304,
+      "sha256": "053c268339ed5a91c9619c15b48b7108650997a441350af9e0f4bc3453821819"
     },
     {
       "path": "scripts/studio/MULTICAM_MONITOR.md",
@@ -107,8 +137,8 @@
     },
     {
       "path": "scripts/studio/README.md",
-      "size": 74593,
-      "sha256": "abf398faef621be6ba59767f0c7ad68acf5f76b535fc59e8c8502180cda07615"
+      "size": 75943,
+      "sha256": "8e499ce6d57056c888053bb688c124d7e150bcd3fcce1c033c61c6655262d403"
     },
     {
       "path": "scripts/studio/RECOVERY_0_10.md",
@@ -157,8 +187,13 @@
     },
     {
       "path": "scripts/studio/UNFINISHED_0_12.md",
-      "size": 7581,
-      "sha256": "59ae322c84983e0244d4261763bf53ea5088ef153bcd3ebf86ac4c953e698585"
+      "size": 7777,
+      "sha256": "7bc9e8257db858dff062531c4a09ee2aa13d98c372be766e9583dec096a03c0f"
+    },
+    {
+      "path": "scripts/studio/UNFINISHED_0_13.md",
+      "size": 7289,
+      "sha256": "cda8a67d0f5ac7f363a7f87dae8b4a03ee49ed9cbdb4f83e031a84245a70abb8"
     },
     {
       "path": "scripts/studio/UNFINISHED_0_9.md",
@@ -177,8 +212,13 @@
     },
     {
       "path": "scripts/studio/VERIFICATION_0_12.md",
-      "size": 15967,
-      "sha256": "77ad99883f606de4ef794da827549c4905ade616b50060cb8ceedf09c078d559"
+      "size": 18879,
+      "sha256": "8032d4fad7096cf32aa2da79b70463015008dd056b3faaf4846111c53eb4f090"
+    },
+    {
+      "path": "scripts/studio/VERIFICATION_0_13.md",
+      "size": 14723,
+      "sha256": "b5e702aa9f9373d9b43a14b903920a9a7181945aed61b26b7f547db18a92f685"
     },
     {
       "path": "scripts/studio/VERIFICATION_0_5.md",
@@ -231,6 +271,11 @@
       "sha256": "09a6d4bd5c7c5ccb0fc4670c0e2487b68be892f1a668a38fd9373bddc5503f51"
     },
     {
+      "path": "scripts/studio/bootstrap_fcpxml_schema_validation.py",
+      "size": 7380,
+      "sha256": "209f405a6d1ac7bd70fd79690e71c21c348e0aa086d6738e385c4c810b72e734"
+    },
+    {
       "path": "scripts/studio/bootstrap_verification_linux.py",
       "size": 18790,
       "sha256": "c1a0dcba4ca7b1357737d1c241dc3bbc37ab48336430e1a9b33a554bca6e0ee6"
@@ -247,8 +292,8 @@
     },
     {
       "path": "scripts/studio/capabilities.json",
-      "size": 110346,
-      "sha256": "e95fc4d903a4a90f69d592994f1dafc4f5e0e41c6a27f709851b71c810a3dfa5"
+      "size": 123212,
+      "sha256": "761ba1d0f67f213f69abff5fd38bb2257ee4d29584c7905e765967fd0a6d05c4"
     },
     {
       "path": "scripts/studio/collaboration.py",
@@ -267,8 +312,8 @@
     },
     {
       "path": "scripts/studio/compositor.py",
-      "size": 77989,
-      "sha256": "6f157671a97f45da51f93c27aa9b14ee68df200fc39e50bd44e19d535c2e2c29"
+      "size": 80297,
+      "sha256": "3ceaa0e1df26eb5d0d264f3eee0c3e5bffbdb0a3019621ba7449c1649667c963"
     },
     {
       "path": "scripts/studio/deep_compositing.py",
@@ -289,6 +334,21 @@
       "path": "scripts/studio/engine.py",
       "size": 96103,
       "sha256": "e52eb218c0d186328f11bcbcff3009be6481daccdfa085422df787f32e8e641e"
+    },
+    {
+      "path": "scripts/studio/fcpxml-schema-validation-linux.requirements.txt",
+      "size": 91,
+      "sha256": "602629d75035ee82c04948cc36e14af23778bd59bf591e2aac6c0027f01e6d86"
+    },
+    {
+      "path": "scripts/studio/fcpxml-schema-validation-lock.json",
+      "size": 1201,
+      "sha256": "04ae4133c7e910ee217b2641e1bc187572baf9684454cf6dc9e3c2bb9b4a6ba3"
+    },
+    {
+      "path": "scripts/studio/fcpxml.py",
+      "size": 64549,
+      "sha256": "d2eb27d14243d6d51e3d19325d09101fe9a67209231e79d92a101bfbe8b14064"
     },
     {
       "path": "scripts/studio/fetch_verification_raw.py",
@@ -347,8 +407,8 @@
     },
     {
       "path": "scripts/studio/install_macos.py",
-      "size": 19887,
-      "sha256": "04dc936cbc00eeb4c9d2fe71bbb63976c43e75a7d2c34455860981f358cfea11"
+      "size": 19920,
+      "sha256": "e5063ae4758f6ca51639fa5461eb713b308cfc5914102dd467d33963fa1369fd"
     },
     {
       "path": "scripts/studio/install_physical_rendering.py",
@@ -406,6 +466,11 @@
       "sha256": "cb9d6d706bdf40ab7af32911a1c4c8ec0ad0a66d27ac640eda6a910e9b6f585d"
     },
     {
+      "path": "scripts/studio/lens_geometry.py",
+      "size": 18401,
+      "sha256": "0b73721c600a4933a26f97e4e3351d5e941d7f635ce7495bc8402635b2761e3c"
+    },
+    {
       "path": "scripts/studio/macos/ArchiveSmoke.js",
       "size": 7419,
       "sha256": "e2797a5222bec04638dcef7eb71bec9f05741b342493690655d57197799a93ea"
@@ -446,6 +511,11 @@
       "sha256": "c04a2f038d46c48293144c3ae961f4b298110211d861875bcad552e6b1b27ed6"
     },
     {
+      "path": "scripts/studio/macos/FcpxmlSmoke.js",
+      "size": 11400,
+      "sha256": "e76dd347de1860c0865efc881f27978f37ce2356bd86e5376993d8a78c7bca14"
+    },
+    {
       "path": "scripts/studio/macos/FloatMovieSmoke.js",
       "size": 4794,
       "sha256": "53c2c1226cb76501282d02d3232301db3cd2292d5d6e6c9363fb0d5d7fa3aa9d"
@@ -479,6 +549,11 @@
       "path": "scripts/studio/macos/InterchangeSmoke.js",
       "size": 9184,
       "sha256": "64e461424fdaffe56adf627a110def5bae1756f8ebf3912e312b596685cda917"
+    },
+    {
+      "path": "scripts/studio/macos/LensModelsSmoke.js",
+      "size": 8969,
+      "sha256": "25e5109359e0978f40d97c5dad4b33a3c90736e10e1030a4c907837cb2411f8d"
     },
     {
       "path": "scripts/studio/macos/LensSmoke.js",
@@ -877,8 +952,8 @@
     },
     {
       "path": "scripts/studio/server.py",
-      "size": 106366,
-      "sha256": "baee0a0ab0ab697a8316fef0e59025f41de02a6274f5dbdb5b7d273315cdf9e1"
+      "size": 108397,
+      "sha256": "be99dad61d534ee91aa377a04a08ddf59f605373f06b79126b130dc51ec494ad"
     },
     {
       "path": "scripts/studio/source_integrity.py",
@@ -1026,6 +1101,21 @@
       "sha256": "dad3a230d7a3043d15f1ffb4ff41de7034fb0113dc2a27e63c26003b1b5ebe90"
     },
     {
+      "path": "scripts/studio/test_fcpxml.py",
+      "size": 24072,
+      "sha256": "2c633fb6d7b438ac5bd9108b6d36a715a81caf5b928c75adf23451052cd6591a"
+    },
+    {
+      "path": "scripts/studio/test_fcpxml_macos.py",
+      "size": 25861,
+      "sha256": "786d1188247e74fcddf69a0ba671705c4b5317db9a2ed22470249ff4a08f5c88"
+    },
+    {
+      "path": "scripts/studio/test_fcpxml_native_browser.cjs",
+      "size": 3478,
+      "sha256": "c6d4958f1d9bbba07a1077cb3bcf712fdf79757d329965ac42fcde8acb1f9f35"
+    },
+    {
       "path": "scripts/studio/test_float_movie.py",
       "size": 17987,
       "sha256": "f46bea2eacaed95ad0f0d681b20cef2999816322beaf8567cef7673345a0514d"
@@ -1154,6 +1244,31 @@
       "path": "scripts/studio/test_lens_compositor.py",
       "size": 27793,
       "sha256": "cfffcfc7b05208cb84359bce90a6a62e4938173bea932fddca6524189676c968"
+    },
+    {
+      "path": "scripts/studio/test_lens_geometry.py",
+      "size": 21333,
+      "sha256": "d36857873a10c4ac35d3b9b35dc6e295ff3220d59e769e1aeb7cb791f48ecd16"
+    },
+    {
+      "path": "scripts/studio/test_lens_models_browser.cjs",
+      "size": 8088,
+      "sha256": "c61bdf73761d8d3d8b54cbc604f1edddb1116d9b4034367963dc78982d97b55e"
+    },
+    {
+      "path": "scripts/studio/test_lens_models_browser.py",
+      "size": 10212,
+      "sha256": "04a92cec7dc8e81ff2fbdd8d9134c50b0b2a76b04187df0160bdc8bc155f8e3d"
+    },
+    {
+      "path": "scripts/studio/test_lens_models_macos.py",
+      "size": 22644,
+      "sha256": "8ffdd42e916d12d3efd6cced83a3521a4d360be6bab908e10763d9836d94683c"
+    },
+    {
+      "path": "scripts/studio/test_lens_models_native_browser.cjs",
+      "size": 3541,
+      "sha256": "33f046f1288ec53ca5763d6213472b0d430316e7342cee103e54269bef7e6e97"
     },
     {
       "path": "scripts/studio/test_lens_ui_macos.py",
@@ -1571,6 +1686,11 @@
       "sha256": "478c42f63e75ec605345f833e38d32b629bc6ceb66dfe3ec2cdb3ab4e46c8894"
     },
     {
+      "path": "scripts/studio/validate_fcpxml_schema.py",
+      "size": 9997,
+      "sha256": "a78649d8f4e18db23b20f60983bd85e988360902596b603bb872c5708a496170"
+    },
+    {
       "path": "scripts/studio/verification-browser-package-lock.json",
       "size": 1713,
       "sha256": "b8613d4c37b9d5b83d6723869915dec293dd9d364a9adda8907b865047047480"
@@ -1597,8 +1717,8 @@
     },
     {
       "path": "scripts/studio/web/app.js",
-      "size": 140286,
-      "sha256": "35c3780c4601520c2b918abdeeb101cddb3006c75aa9c08219d5b8a286141fd5"
+      "size": 140390,
+      "sha256": "04b80d6129722dd6c7c91e2ee9025f89461993b7be72d68e8a8c415cf2c6962b"
     },
     {
       "path": "scripts/studio/web/archive-ui.js",
@@ -1627,8 +1747,8 @@
     },
     {
       "path": "scripts/studio/web/compositor-ui.js",
-      "size": 96163,
-      "sha256": "9d030cd30a1e833fc233d39f7e14bf4d0c47c7bf245c6ed159bfb4faeb608ce8"
+      "size": 103054,
+      "sha256": "04e99eb7c04b702fbd05d535728d9537a7a899741848e8202f3d4dc64dd17298"
     },
     {
       "path": "scripts/studio/web/deep-compositing-ui.js",
@@ -1657,13 +1777,13 @@
     },
     {
       "path": "scripts/studio/web/index.html",
-      "size": 19649,
-      "sha256": "feed37bda02ac6b389339d221573ab4cc08205d4fcfd464cf92261073879ec44"
+      "size": 19654,
+      "sha256": "2707509f6e8c17250e2fea625cd23fefdac9f4be693d1e9153481d0711c2c2c0"
     },
     {
       "path": "scripts/studio/web/interchange-ui.js",
-      "size": 20586,
-      "sha256": "58bbeee0061c5b1f74dbaa89a4acded0f28991eb3f254d52fe215300632c241f"
+      "size": 24087,
+      "sha256": "e0b74c54728de48e136e1d0c40608da63785847a1fdf5c93acbd377da2df3923"
     },
     {
       "path": "scripts/studio/web/learned-tracking-ui.js",

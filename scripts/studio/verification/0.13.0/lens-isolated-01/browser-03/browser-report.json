@@ -1,0 +1,183 @@
+{
+  "schema": "cinematicum-lens-models-browser-acceptance-v1",
+  "native_certified": false,
+  "passed": true,
+  "checks": {
+    "actual_shipped_browser_controls": true,
+    "exact_upstream_calibration_saved": true,
+    "one_owned_source_and_clip": true,
+    "original_source_bytes_unchanged": true,
+    "equidistant_exact_snapshot": true,
+    "equidistant_actual_receipt": true,
+    "equidistant_independent_ray_and_alpha_pixels": true,
+    "equisolid_exact_snapshot": true,
+    "equisolid_actual_receipt": true,
+    "equisolid_independent_ray_and_alpha_pixels": true,
+    "stereographic_exact_snapshot": true,
+    "stereographic_actual_receipt": true,
+    "stereographic_independent_ray_and_alpha_pixels": true,
+    "orthographic_exact_snapshot": true,
+    "orthographic_actual_receipt": true,
+    "orthographic_independent_ray_and_alpha_pixels": true,
+    "lensfun_exact_snapshot": true,
+    "lensfun_actual_receipt": true,
+    "lensfun_independent_ray_and_alpha_pixels": true,
+    "reopened_exact_snapshot": true,
+    "reopened_actual_receipt": true,
+    "reopened_independent_ray_and_alpha_pixels": true,
+    "reopen_preserves_full_project_except_save_metadata": true,
+    "reopen_preserves_every_decoded_pixel": true,
+    "one_complete_movie_export": true,
+    "movie_receipt_and_every_frame": true,
+    "browser_plays_same_export": true,
+    "paused_picture_equals_lossless_movie": true,
+    "whole_movie_equals_separate_codec_control": true,
+    "browser_binary_unchanged": true
+  },
+  "profile_sha256": "f7693b6779edd8ed10d7dc23113669255bfa4987cea7db0e843f7f5f2bbbe615",
+  "browser_sha256": "f661a8c124888f491966c29581f33c1953c86c15d77048bc91452b66743d5f3a",
+  "ui": {
+    "passed": true,
+    "native_certified": false,
+    "transport": "Chromium",
+    "checks": {
+      "connected_lens_node": true,
+      "four_real_distinct_projection_pictures": true,
+      "exact_upstream_profile_options": true,
+      "exact_measured_sample_label": true,
+      "profile_applied": true,
+      "profile_undo_restores_fisheye": true,
+      "profile_redo_restores_calibration": true,
+      "saved_profile_reopens_in_editor": true,
+      "applied_metadata_visible": true,
+      "reopened_picture_same_pixels": true,
+      "movie_export_completed": true,
+      "movie_decodes_and_plays": true,
+      "no_page_errors": true
+    },
+    "frames": {
+      "equidistant": {
+        "url": "/api/projects/f9bb21a61ba346e3996ad4dd258d2b90/previews/3cfb2947269c52395f646b44e057ae47255c753fed30aa6af1b8e7adcc40b698.png",
+        "pixel_hash": "714328fe"
+      },
+      "equisolid": {
+        "url": "/api/projects/f9bb21a61ba346e3996ad4dd258d2b90/previews/183fb490d3a340dd35b0bd58cc07f88a536468a87e79c30f488cfe399b49c218.png",
+        "pixel_hash": "1701af02"
+      },
+      "stereographic": {
+        "url": "/api/projects/f9bb21a61ba346e3996ad4dd258d2b90/previews/2f0aee47b905a3ff93d6e35421f92d6f1ebeff944e530f656fbb3dc0fc35b2b0.png",
+        "pixel_hash": "8754e0e7"
+      },
+      "orthographic": {
+        "url": "/api/projects/f9bb21a61ba346e3996ad4dd258d2b90/previews/96c7088f16346cb303414a85f1482fb1fb33e6a4c68cfd413ecf6fdda1e22e74.png",
+        "pixel_hash": "989eb715"
+      },
+      "lensfun": {
+        "url": "/api/projects/f9bb21a61ba346e3996ad4dd258d2b90/previews/9937956dbb152e6d07167aafa4ce4b44c5800fd23f3edc4a4f61a4b7ddffe25d.png",
+        "pixel_hash": "319d83ff"
+      },
+      "reopened": {
+        "url": "/api/projects/f9bb21a61ba346e3996ad4dd258d2b90/previews/5551b5a8afcd1f1686c4cdb0ed0a99a8deefbaef15c143ddfaaafc8dd535580f.png",
+        "pixel_hash": "319d83ff"
+      }
+    },
+    "page_errors": [],
+    "lens_id": "f3b5d97a-c60a-492c-a1af-81bc2200607a",
+    "playback": {
+      "url": "/api/projects/f9bb21a61ba346e3996ad4dd258d2b90/exports/380bf79edc3942e681876d505a7e9d2a.mp4",
+      "time": 0.092921
+    },
+    "browser_version": "134.0.6998.35",
+    "elapsed_ms": 11992
+  },
+  "picture_errors": {
+    "equidistant": {
+      "mean": 0.3670986788917526,
+      "max": 1.5693502643606223
+    },
+    "equisolid": {
+      "mean": 0.36915268072054214,
+      "max": 1.5422866829364636
+    },
+    "stereographic": {
+      "mean": 0.3808880909913922,
+      "max": 1.7233207433239102
+    },
+    "orthographic": {
+      "mean": 0.41092421910991855,
+      "max": 1.589826190934616
+    },
+    "lensfun": {
+      "mean": 0.3669782628835781,
+      "max": 1.7868366421009227
+    },
+    "reopened": {
+      "mean": 0.3669782628835781,
+      "max": 1.7868366421009227
+    }
+  },
+  "media": {
+    "kind": "video",
+    "duration": 0.6666666666666666,
+    "width": 160,
+    "height": 90,
+    "has_audio": true,
+    "frames": 8,
+    "codec": "h264",
+    "pixel_format": "yuv420p",
+    "color_transfer": "bt709",
+    "fps": "12/1",
+    "video_stream_index": 0,
+    "audio_stream_index": 1,
+    "audio_sample_rate": 48000,
+    "audio_channels": 2,
+    "audio_duration": 0.6666666666666666,
+    "audio_streams": [
+      {
+        "index": 1,
+        "channels": 2,
+        "container_id": "0x2",
+        "sample_rate": 48000,
+        "codec": "aac",
+        "language": "und",
+        "duration": 0.6666666666666666
+      }
+    ],
+    "size": 24351
+  },
+  "jobs": [
+    {
+      "kind": "frame-preview",
+      "state": "completed"
+    },
+    {
+      "kind": "frame-preview",
+      "state": "completed"
+    },
+    {
+      "kind": "frame-preview",
+      "state": "completed"
+    },
+    {
+      "kind": "frame-preview",
+      "state": "completed"
+    },
+    {
+      "kind": "frame-preview",
+      "state": "completed"
+    },
+    {
+      "kind": "frame-preview",
+      "state": "completed"
+    },
+    {
+      "kind": "render",
+      "state": "completed"
+    },
+    {
+      "kind": "frame-preview",
+      "state": "completed"
+    }
+  ],
+  "elapsed_seconds": 15.38
+}

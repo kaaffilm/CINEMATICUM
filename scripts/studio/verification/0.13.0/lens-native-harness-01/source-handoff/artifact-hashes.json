@@ -1,0 +1,30 @@
+{
+  "evidence-files.json": {
+    "bytes": 16617,
+    "sha256": "403b328577a741fd8cc124fd9305e892df69e3ee4597b09a915f5f6b9d1bbefb"
+  },
+  "native-harness-evidence.tar.gz": {
+    "bytes": 2087328,
+    "sha256": "9d9d0b9cab93154659481fa7a3c23e91bbf3ade8d0c36271bf29c10f2d34531e"
+  },
+  "patch-replay.json": {
+    "bytes": 124,
+    "sha256": "0c506093f52fe66f8658776d5c8c751ad0ebdade541e89d754385380e32912ae"
+  },
+  "lens-native-acceptance.patch": {
+    "bytes": 45212,
+    "sha256": "5e2f4da1b519c382f88f502bd1b0027b91641e72d0106e15ec5fffa0bf04e0d9"
+  },
+  "lensfun-pinned-test-fixture.tar.gz": {
+    "bytes": 20673,
+    "sha256": "1f537bb60741089e28e59785ee2d776276709f87f6be6b06c85e474a1e4f8988"
+  },
+  "changed-paths.json": {
+    "bytes": 1028,
+    "sha256": "6a901bb52a7fe0371382eeade54586ca58148b7f464a2054898f83cce5503b87"
+  },
+  "tested-source-inventory.json": {
+    "bytes": 16745,
+    "sha256": "71e5d6dc29d3668d950e80c031ccaba5dc26d4ffe14ee622e5b74e4777d2be4a"
+  }
+}

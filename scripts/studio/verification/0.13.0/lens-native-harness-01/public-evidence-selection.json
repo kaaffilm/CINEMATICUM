@@ -1,0 +1,217 @@
+{
+  "schema": "cinematicum-text-evidence-selection-v1",
+  "note": "Original failure and success reports/scripts retained without rewriting; raw PNG/movie outputs remain outside Git. The portable driver does not certify native macOS.",
+  "retained_text_count": 55,
+  "omitted_raw_count": 34,
+  "raw_artifacts": [
+    {
+      "path": "portable-01/author/ENGINE_TEST_equidistant.png",
+      "bytes": 39958,
+      "sha256": "464ac5b02c7350ed708a5e219df929b5b27e6b2652fdd9546e35150b43088c4a",
+      "retained_path": "/workspace/scratch/091f394ee5df/cinematicum-lens-handoff/native-acceptance/evidence/portable-01/author/ENGINE_TEST_equidistant.png"
+    },
+    {
+      "path": "portable-01/author/ENGINE_TEST_equisolid.png",
+      "bytes": 40038,
+      "sha256": "efcc11792c5a6500f4900ea06b40d222bfa46d2e004bff36a93693c7e66af0bd",
+      "retained_path": "/workspace/scratch/091f394ee5df/cinematicum-lens-handoff/native-acceptance/evidence/portable-01/author/ENGINE_TEST_equisolid.png"
+    },
+    {
+      "path": "portable-01/author/ENGINE_TEST_lens_models.png",
+      "bytes": 234090,
+      "sha256": "7597f8946a695e047ab5287cd8be5ff48742a8fb4048131693a9840d77b6f4f2",
+      "retained_path": "/workspace/scratch/091f394ee5df/cinematicum-lens-handoff/native-acceptance/evidence/portable-01/author/ENGINE_TEST_lens_models.png"
+    },
+    {
+      "path": "portable-01/author/ENGINE_TEST_lensfun.png",
+      "bytes": 38425,
+      "sha256": "0b72c6d439143107c1faaa7421f45d63ed066afff3290f9d82b673fbdfff9c36",
+      "retained_path": "/workspace/scratch/091f394ee5df/cinematicum-lens-handoff/native-acceptance/evidence/portable-01/author/ENGINE_TEST_lensfun.png"
+    },
+    {
+      "path": "portable-01/author/ENGINE_TEST_orthographic.png",
+      "bytes": 40148,
+      "sha256": "f4b2de12e2f9cc59ec4a5fab1880aa5125aee20476a7236f33667c1ee5035082",
+      "retained_path": "/workspace/scratch/091f394ee5df/cinematicum-lens-handoff/native-acceptance/evidence/portable-01/author/ENGINE_TEST_orthographic.png"
+    },
+    {
+      "path": "portable-01/author/ENGINE_TEST_reopened.png",
+      "bytes": 38425,
+      "sha256": "0b72c6d439143107c1faaa7421f45d63ed066afff3290f9d82b673fbdfff9c36",
+      "retained_path": "/workspace/scratch/091f394ee5df/cinematicum-lens-handoff/native-acceptance/evidence/portable-01/author/ENGINE_TEST_reopened.png"
+    },
+    {
+      "path": "portable-01/author/ENGINE_TEST_stereographic.png",
+      "bytes": 39731,
+      "sha256": "dca14227d7720e54e5c8417bb7b617c81813c7f409b07e999f148ceeaa75f783",
+      "retained_path": "/workspace/scratch/091f394ee5df/cinematicum-lens-handoff/native-acceptance/evidence/portable-01/author/ENGINE_TEST_stereographic.png"
+    },
+    {
+      "path": "portable-01/render/ENGINE_TEST_lens_models.png",
+      "bytes": 273661,
+      "sha256": "41a2d7c721f074fdbf062959d4acbdd1bb2e4551ea24146a214f251e35fe5b45",
+      "retained_path": "/workspace/scratch/091f394ee5df/cinematicum-lens-handoff/native-acceptance/evidence/portable-01/render/ENGINE_TEST_lens_models.png"
+    },
+    {
+      "path": "portable-01/render/native_downloads/f43793333a594f1f9f27eb4121361e05.mp4",
+      "bytes": 24351,
+      "sha256": "9fe0a8f0b2e85785363c12049429e76cbc14d4529a3dc7a5af28a4cd67eab17b",
+      "retained_path": "/workspace/scratch/091f394ee5df/cinematicum-lens-handoff/native-acceptance/evidence/portable-01/render/native_downloads/f43793333a594f1f9f27eb4121361e05.mp4"
+    },
+    {
+      "path": "portable-02/author/ENGINE_TEST_equidistant.png",
+      "bytes": 39958,
+      "sha256": "464ac5b02c7350ed708a5e219df929b5b27e6b2652fdd9546e35150b43088c4a",
+      "retained_path": "/workspace/scratch/091f394ee5df/cinematicum-lens-handoff/native-acceptance/evidence/portable-02/author/ENGINE_TEST_equidistant.png"
+    },
+    {
+      "path": "portable-02/author/ENGINE_TEST_equisolid.png",
+      "bytes": 40038,
+      "sha256": "efcc11792c5a6500f4900ea06b40d222bfa46d2e004bff36a93693c7e66af0bd",
+      "retained_path": "/workspace/scratch/091f394ee5df/cinematicum-lens-handoff/native-acceptance/evidence/portable-02/author/ENGINE_TEST_equisolid.png"
+    },
+    {
+      "path": "portable-02/author/ENGINE_TEST_lens_models.png",
+      "bytes": 234095,
+      "sha256": "72bcf48186cb48e43d0208619956458e74f8a4c59e29a76b73979f07758f1ce2",
+      "retained_path": "/workspace/scratch/091f394ee5df/cinematicum-lens-handoff/native-acceptance/evidence/portable-02/author/ENGINE_TEST_lens_models.png"
+    },
+    {
+      "path": "portable-02/author/ENGINE_TEST_lensfun.png",
+      "bytes": 38425,
+      "sha256": "0b72c6d439143107c1faaa7421f45d63ed066afff3290f9d82b673fbdfff9c36",
+      "retained_path": "/workspace/scratch/091f394ee5df/cinematicum-lens-handoff/native-acceptance/evidence/portable-02/author/ENGINE_TEST_lensfun.png"
+    },
+    {
+      "path": "portable-02/author/ENGINE_TEST_orthographic.png",
+      "bytes": 40148,
+      "sha256": "f4b2de12e2f9cc59ec4a5fab1880aa5125aee20476a7236f33667c1ee5035082",
+      "retained_path": "/workspace/scratch/091f394ee5df/cinematicum-lens-handoff/native-acceptance/evidence/portable-02/author/ENGINE_TEST_orthographic.png"
+    },
+    {
+      "path": "portable-02/author/ENGINE_TEST_reopened.png",
+      "bytes": 38425,
+      "sha256": "0b72c6d439143107c1faaa7421f45d63ed066afff3290f9d82b673fbdfff9c36",
+      "retained_path": "/workspace/scratch/091f394ee5df/cinematicum-lens-handoff/native-acceptance/evidence/portable-02/author/ENGINE_TEST_reopened.png"
+    },
+    {
+      "path": "portable-02/author/ENGINE_TEST_stereographic.png",
+      "bytes": 39731,
+      "sha256": "dca14227d7720e54e5c8417bb7b617c81813c7f409b07e999f148ceeaa75f783",
+      "retained_path": "/workspace/scratch/091f394ee5df/cinematicum-lens-handoff/native-acceptance/evidence/portable-02/author/ENGINE_TEST_stereographic.png"
+    },
+    {
+      "path": "portable-02/render/ENGINE_TEST_lens_models.png",
+      "bytes": 273661,
+      "sha256": "41a2d7c721f074fdbf062959d4acbdd1bb2e4551ea24146a214f251e35fe5b45",
+      "retained_path": "/workspace/scratch/091f394ee5df/cinematicum-lens-handoff/native-acceptance/evidence/portable-02/render/ENGINE_TEST_lens_models.png"
+    },
+    {
+      "path": "portable-02/render/ENGINE_TEST_lensfun.png",
+      "bytes": 38425,
+      "sha256": "0b72c6d439143107c1faaa7421f45d63ed066afff3290f9d82b673fbdfff9c36",
+      "retained_path": "/workspace/scratch/091f394ee5df/cinematicum-lens-handoff/native-acceptance/evidence/portable-02/render/ENGINE_TEST_lensfun.png"
+    },
+    {
+      "path": "portable-02/render/codec-control/ENGINE_TEST_codec_control.mp4",
+      "bytes": 23334,
+      "sha256": "45150b6b3d6455d2113f04d42c5fd8b112109e5a7d41f4dd3a7ec8dc7f32b63f",
+      "retained_path": "/workspace/scratch/091f394ee5df/cinematicum-lens-handoff/native-acceptance/evidence/portable-02/render/codec-control/ENGINE_TEST_codec_control.mp4"
+    },
+    {
+      "path": "portable-02/render/codec-control/lens-b0b7cdbadc44-c53t5f6l/wx.png",
+      "bytes": 35041,
+      "sha256": "d41c24cd7ffd4fd2e77f6197399ac0e85c3973f2c3b3703f24d3769d7d17bc7a",
+      "retained_path": "/workspace/scratch/091f394ee5df/cinematicum-lens-handoff/native-acceptance/evidence/portable-02/render/codec-control/lens-b0b7cdbadc44-c53t5f6l/wx.png"
+    },
+    {
+      "path": "portable-02/render/codec-control/lens-b0b7cdbadc44-c53t5f6l/wy.png",
+      "bytes": 32890,
+      "sha256": "ae1546dd742b361793e667dd164a9c7ed320565d28a7343327ba77ad4a1872f0",
+      "retained_path": "/workspace/scratch/091f394ee5df/cinematicum-lens-handoff/native-acceptance/evidence/portable-02/render/codec-control/lens-b0b7cdbadc44-c53t5f6l/wy.png"
+    },
+    {
+      "path": "portable-02/render/codec-control/lens-b0b7cdbadc44-c53t5f6l/x0.png",
+      "bytes": 1087,
+      "sha256": "7e7c9e29194920dcd84944713f4447260eceb5250ee44fca4ef16576592999d1",
+      "retained_path": "/workspace/scratch/091f394ee5df/cinematicum-lens-handoff/native-acceptance/evidence/portable-02/render/codec-control/lens-b0b7cdbadc44-c53t5f6l/x0.png"
+    },
+    {
+      "path": "portable-02/render/codec-control/lens-b0b7cdbadc44-c53t5f6l/x1.png",
+      "bytes": 1083,
+      "sha256": "d4368dfa386992092982766c6b7cd3a212803530b7bddf387dd36f5193527f1e",
+      "retained_path": "/workspace/scratch/091f394ee5df/cinematicum-lens-handoff/native-acceptance/evidence/portable-02/render/codec-control/lens-b0b7cdbadc44-c53t5f6l/x1.png"
+    },
+    {
+      "path": "portable-02/render/codec-control/lens-b0b7cdbadc44-c53t5f6l/y0.png",
+      "bytes": 815,
+      "sha256": "72868caeeb5bbfb704450c2a1c96d5484d1466a4ec4eeeb894f43c85473a387e",
+      "retained_path": "/workspace/scratch/091f394ee5df/cinematicum-lens-handoff/native-acceptance/evidence/portable-02/render/codec-control/lens-b0b7cdbadc44-c53t5f6l/y0.png"
+    },
+    {
+      "path": "portable-02/render/codec-control/lens-b0b7cdbadc44-c53t5f6l/y1.png",
+      "bytes": 818,
+      "sha256": "d4dde102427ff5ee1edbad7df48388cc37213a3dfa6c5e3422e893281f6b28d4",
+      "retained_path": "/workspace/scratch/091f394ee5df/cinematicum-lens-handoff/native-acceptance/evidence/portable-02/render/codec-control/lens-b0b7cdbadc44-c53t5f6l/y1.png"
+    },
+    {
+      "path": "portable-02/render/native_downloads/d9b4408979064f52933fbaf569af9313.mp4",
+      "bytes": 24351,
+      "sha256": "9fe0a8f0b2e85785363c12049429e76cbc14d4529a3dc7a5af28a4cd67eab17b",
+      "retained_path": "/workspace/scratch/091f394ee5df/cinematicum-lens-handoff/native-acceptance/evidence/portable-02/render/native_downloads/d9b4408979064f52933fbaf569af9313.mp4"
+    },
+    {
+      "path": "prores-backend-01/ENGINE_TEST_actual_prores.mov",
+      "bytes": 223559,
+      "sha256": "9dd435d3d6540571485ef50271a9fbb98af48571d8795392c0a0e3d98eaeadbf",
+      "retained_path": "/workspace/scratch/091f394ee5df/cinematicum-lens-handoff/native-acceptance/evidence/prores-backend-01/ENGINE_TEST_actual_prores.mov"
+    },
+    {
+      "path": "prores-backend-01/codec-control/ENGINE_TEST_codec_control.mov",
+      "bytes": 94938,
+      "sha256": "4978658281b016c3bbbc91423b40df23e4b8816d810e5679d9463400039c0898",
+      "retained_path": "/workspace/scratch/091f394ee5df/cinematicum-lens-handoff/native-acceptance/evidence/prores-backend-01/codec-control/ENGINE_TEST_codec_control.mov"
+    },
+    {
+      "path": "prores-backend-01/codec-control/lens-b0b7cdbadc44-obloeytf/wx.png",
+      "bytes": 35041,
+      "sha256": "d41c24cd7ffd4fd2e77f6197399ac0e85c3973f2c3b3703f24d3769d7d17bc7a",
+      "retained_path": "/workspace/scratch/091f394ee5df/cinematicum-lens-handoff/native-acceptance/evidence/prores-backend-01/codec-control/lens-b0b7cdbadc44-obloeytf/wx.png"
+    },
+    {
+      "path": "prores-backend-01/codec-control/lens-b0b7cdbadc44-obloeytf/wy.png",
+      "bytes": 32890,
+      "sha256": "ae1546dd742b361793e667dd164a9c7ed320565d28a7343327ba77ad4a1872f0",
+      "retained_path": "/workspace/scratch/091f394ee5df/cinematicum-lens-handoff/native-acceptance/evidence/prores-backend-01/codec-control/lens-b0b7cdbadc44-obloeytf/wy.png"
+    },
+    {
+      "path": "prores-backend-01/codec-control/lens-b0b7cdbadc44-obloeytf/x0.png",
+      "bytes": 1087,
+      "sha256": "7e7c9e29194920dcd84944713f4447260eceb5250ee44fca4ef16576592999d1",
+      "retained_path": "/workspace/scratch/091f394ee5df/cinematicum-lens-handoff/native-acceptance/evidence/prores-backend-01/codec-control/lens-b0b7cdbadc44-obloeytf/x0.png"
+    },
+    {
+      "path": "prores-backend-01/codec-control/lens-b0b7cdbadc44-obloeytf/x1.png",
+      "bytes": 1083,
+      "sha256": "d4368dfa386992092982766c6b7cd3a212803530b7bddf387dd36f5193527f1e",
+      "retained_path": "/workspace/scratch/091f394ee5df/cinematicum-lens-handoff/native-acceptance/evidence/prores-backend-01/codec-control/lens-b0b7cdbadc44-obloeytf/x1.png"
+    },
+    {
+      "path": "prores-backend-01/codec-control/lens-b0b7cdbadc44-obloeytf/y0.png",
+      "bytes": 815,
+      "sha256": "72868caeeb5bbfb704450c2a1c96d5484d1466a4ec4eeeb894f43c85473a387e",
+      "retained_path": "/workspace/scratch/091f394ee5df/cinematicum-lens-handoff/native-acceptance/evidence/prores-backend-01/codec-control/lens-b0b7cdbadc44-obloeytf/y0.png"
+    },
+    {
+      "path": "prores-backend-01/codec-control/lens-b0b7cdbadc44-obloeytf/y1.png",
+      "bytes": 818,
+      "sha256": "d4dde102427ff5ee1edbad7df48388cc37213a3dfa6c5e3422e893281f6b28d4",
+      "retained_path": "/workspace/scratch/091f394ee5df/cinematicum-lens-handoff/native-acceptance/evidence/prores-backend-01/codec-control/lens-b0b7cdbadc44-obloeytf/y1.png"
+    }
+  ],
+  "full_archive": {
+    "path": "/workspace/scratch/091f394ee5df/cinematicum-lens-handoff/native-acceptance/native-harness-evidence.tar.gz",
+    "bytes": 2087328,
+    "sha256": "9d9d0b9cab93154659481fa7a3c23e91bbf3ade8d0c36271bf29c10f2d34531e"
+  }
+}

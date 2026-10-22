@@ -1,0 +1,31 @@
+{
+  "schema": "cinematicum-fcpxml-focused-receipt-v1",
+  "status": "passed",
+  "tests": 19,
+  "failures": 0,
+  "errors": 0,
+  "skips": 0,
+  "seconds": 7.761,
+  "source_manifest_sha256": "776f24240b45dc34c379afa3ed890f61daf934690f91603667b96678664b17a2",
+  "log": "focused-evidence/focused-tests-07.log",
+  "log_sha256": "33ac9c78174549c17f128150ccfe3ed97ae0c82a5abbbb4da51da3d4b9e3852d",
+  "command": "PYTHONPATH=scripts/studio /opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3 -m unittest test_fcpxml -v",
+  "python": "Python 3.12.14",
+  "ffmpeg": "ffmpeg version 6.1.1-3ubuntu5 Copyright (c) 2000-2023 the FFmpeg developers",
+  "scope": [
+    "independent NTSC 30000/1001 frame/sample oracle",
+    "nonzero asset/sequence origins",
+    "connected lanes and trimmed real compound",
+    "decoded reordered H264 B-frame source-clock proof",
+    "quantized source-clock refusal",
+    "floor repeats and partial-tail refusal",
+    "static transform/opacity/dB/rotation media oracles",
+    "public XML render roundtrip",
+    "repeat-import prior-origin preservation",
+    "real archive relocation and re-render"
+  ],
+  "native_acceptance": false,
+  "external_final_cut_pro_acceptance": false,
+  "independent_schema_gate": "separate lxml/official Apple1.10 DTD gate owned by acceptance_helpers",
+  "prior_results_retained": true
+}

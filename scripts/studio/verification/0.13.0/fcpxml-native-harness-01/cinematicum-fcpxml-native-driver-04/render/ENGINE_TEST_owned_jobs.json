@@ -1,0 +1,83 @@
+[
+  {
+    "created_at": 1792674412.9453547,
+    "error": null,
+    "finished_at": 1792674413.076976,
+    "id": "7ac9b6ff5a4d4474a2018956b1f10575",
+    "kind": "frame-preview",
+    "progress": 1,
+    "project_id": "4725b27ad74c4e6db9c4fb3fe831b8d9",
+    "result": {
+      "frame": 6,
+      "height": 32,
+      "pipeline": "timeline-export-graph",
+      "pixel_format": "rgb24",
+      "processing_bits": 8,
+      "sha256": "4f2921a37d1ab3c5ac070996d0200a6e70e6d08d2321cc5c75411dce21a88f19",
+      "url": "/api/projects/4725b27ad74c4e6db9c4fb3fe831b8d9/previews/74f5e4bbe8e0c1d2e6931551ef7f77892e21f2ac21119b49f693a2ffb5b56bac.png",
+      "width": 48
+    },
+    "state": "completed"
+  },
+  {
+    "created_at": 1792674413.215007,
+    "error": null,
+    "finished_at": 1792674413.6448631,
+    "id": "dda1146061bc46d88c66991445f7b4ff",
+    "kind": "render",
+    "progress": 1,
+    "project_id": "4725b27ad74c4e6db9c4fb3fe831b8d9",
+    "result": {
+      "alpha_mode": "opaque",
+      "color_space": "SDR Rec.709",
+      "duration": 1.3346666666666667,
+      "dynamic_range": "SDR UNORM; no scene-linear HDR/ACES movie mastering",
+      "elapsed_seconds": 0.269,
+      "encoding": "prores",
+      "filename": "dda1146061bc46d88c66991445f7b4ff.mov",
+      "fps": 29.97002997002997,
+      "frame_rate": {
+        "denominator": 1001,
+        "numerator": 30000
+      },
+      "frames": 40,
+      "has_audio": true,
+      "height": 32,
+      "image_precision": "standard8",
+      "issuance_status_changed": false,
+      "packet_verification": null,
+      "path": "/workspace/scratch/091f394ee5df/cinematicum-fcpxml-native-driver-04/fixture/workspace/projects/4725b27ad74c4e6db9c4fb3fe831b8d9/exports/dda1146061bc46d88c66991445f7b4ff.mov",
+      "pixel_format": "yuv422p10le",
+      "processing_bits": 8,
+      "profile": "prores",
+      "project_revision": 4,
+      "retime_reports": [],
+      "sha256": "ee63a18c22ae83ada7b7839a4ad5004cad5fe9da81a98802005438c7e6b69da1",
+      "size": 272423,
+      "transparent_background": false,
+      "url": "/api/projects/4725b27ad74c4e6db9c4fb3fe831b8d9/exports/dda1146061bc46d88c66991445f7b4ff.mov",
+      "width": 48
+    },
+    "state": "completed"
+  },
+  {
+    "created_at": 1792674413.4397485,
+    "error": null,
+    "finished_at": 1792674413.5712376,
+    "id": "ef530ffbecdc477ab407f2a3a616fe9d",
+    "kind": "frame-preview",
+    "progress": 1,
+    "project_id": "4725b27ad74c4e6db9c4fb3fe831b8d9",
+    "result": {
+      "frame": 6,
+      "height": 32,
+      "pipeline": "timeline-export-graph",
+      "pixel_format": "rgb24",
+      "processing_bits": 8,
+      "sha256": "4f2921a37d1ab3c5ac070996d0200a6e70e6d08d2321cc5c75411dce21a88f19",
+      "url": "/api/projects/4725b27ad74c4e6db9c4fb3fe831b8d9/previews/895e25c2ad9e818d6b78eb10aa148a187947d84441ddd9013f8a201cb2d67c6c.png",
+      "width": 48
+    },
+    "state": "completed"
+  }
+]

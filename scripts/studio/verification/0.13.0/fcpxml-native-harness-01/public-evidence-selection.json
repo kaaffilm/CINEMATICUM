@@ -1,0 +1,14 @@
+{
+  "schema": "cinematicum-text-evidence-selection-v1",
+  "original_handoff": "/workspace/scratch/091f394ee5df/cinematicum-fcpxml-native-handoff",
+  "retained_archive": {
+    "path": "/workspace/scratch/091f394ee5df/cinematicum-fcpxml-native-handoff/retained-evidence.tar.gz",
+    "bytes": 18421583,
+    "sha256": "b4515e080254ad90119807e64b6b6baaa2cbaa58f4b6667edd68035f3053ba5b"
+  },
+  "text_files": 186,
+  "original_files": 265,
+  "raw_media_in_git": false,
+  "original_inventory": "source-handoff/evidence-files.json",
+  "scope": "All failed attempts remain unchanged; source and final actual media identities retained. Original raw media retained outside Git in the archive."
+}

@@ -1,0 +1,143 @@
+{
+  "schema": "cinematicum-ci-publication-source-binding-v1",
+  "passed": false,
+  "checks": {
+    "reported_whole_build_pass": true,
+    "exact_published_343_file_inventory": false,
+    "exact_published_source_digest": true,
+    "all895_tests": true,
+    "no_failures_errors_skips_expected_failures": true,
+    "source_and_runtime_inventories_unchanged": true
+  },
+  "run_id": 39780897825,
+  "run_url": "https://github.com/kaaffilm/CINEMATICUM/actions/runs/39780897825",
+  "event": "pull_request",
+  "published_commit": "dcea86196f81d6476a0f60538429b984b24c1129",
+  "publication_manifest_sha256": "f0ab0513951f5c62c0d990ac8f592d361e10415a27c1eab38e402f005bf8ee73",
+  "artifact_id": 12428235438,
+  "artifact_sha256": "37b4958311da499254491efa4eb95cb50e2e96ebd75d1bf7b1c019d9677c405e",
+  "artifact_bytes": 15113939,
+  "artifact_members": 366,
+  "whole_build_report_member": "cinematicum-verification-report.json",
+  "whole_build_report_sha256": "8d9b5b8dadf862dda6f54b275e85b4733abacdc59c29515cd8c2abd1e722342c",
+  "whole_build_report_bytes": 137537,
+  "tests_run": 895,
+  "elapsed_seconds": 608.028,
+  "source_digest": "47a2b6904b62f6fce4df1c982f28b483df2ca2e66c0b5c91454ba4cc25b40253",
+  "browser_reports": [
+    {
+      "path": "multicam-browser-acceptance/browser-report.json",
+      "bytes": 939,
+      "sha256": "24176367867e7ee30d2c16f2975f521b22b90260c5beead3acdc5d7ed6398f1c",
+      "passed": true,
+      "checks": 0,
+      "keys": [
+        "native_certified",
+        "passed",
+        "phases",
+        "schema",
+        "chromium_executable_sha256",
+        "elapsed_ms",
+        "python_exit_code",
+        "error",
+        "report"
+      ]
+    },
+    {
+      "path": "multicam-monitor-acceptance/browser-report.json",
+      "bytes": 1041,
+      "sha256": "67fdc4dc9e564533916e096c105046e926a87a09f59ceacc0f7a9c83481e625e",
+      "passed": true,
+      "checks": 0,
+      "keys": [
+        "native_certified",
+        "passed",
+        "phases",
+        "schema",
+        "chromium_executable_sha256",
+        "chromium_executable_sha256_after",
+        "elapsed_ms",
+        "python_exit_code",
+        "error",
+        "report"
+      ]
+    },
+    {
+      "path": "float-movie-acceptance/browser-report.json",
+      "bytes": 9974,
+      "sha256": "76034d630a3dea3c9029bf5c42e35d8c400a60b49302c6343312fcdc60228881",
+      "passed": true,
+      "checks": 22,
+      "keys": [
+        "schema",
+        "passed",
+        "engine_test_only",
+        "native_certified",
+        "issuance_effect",
+        "elapsed_ms",
+        "chromium_sha256",
+        "checks",
+        "error",
+        "requests",
+        "page_errors"
+      ]
+    },
+    {
+      "path": "otio-compositions-acceptance/browser-report.json",
+      "bytes": 1044,
+      "sha256": "f0169c886a7ff7569e24c4c2016f42402632153db5d04887c8bcff83eaae0908",
+      "passed": true,
+      "checks": 0,
+      "keys": [
+        "native_certified",
+        "passed",
+        "phases",
+        "schema",
+        "chromium_executable_sha256",
+        "chromium_executable_sha256_after",
+        "elapsed_ms",
+        "python_exit_code",
+        "error",
+        "report"
+      ]
+    },
+    {
+      "path": "retime-acceptance/browser-report.json",
+      "bytes": 1031,
+      "sha256": "66e5b19a0258ee41c2a2bc76e77ce5dad2bbbb8835bd3d8b0724eec621f7650b",
+      "passed": true,
+      "checks": 0,
+      "keys": [
+        "native_certified",
+        "passed",
+        "phases",
+        "schema",
+        "chromium_executable_sha256",
+        "chromium_executable_sha256_after",
+        "elapsed_ms",
+        "python_exit_code",
+        "error",
+        "report"
+      ]
+    },
+    {
+      "path": "still-photography-acceptance/browser-report.json",
+      "bytes": 1074,
+      "sha256": "733a53799ba471ea51f45a35a36339955a91f881788a136cc2183ac4f7544f15",
+      "passed": true,
+      "checks": 0,
+      "keys": [
+        "native_certified",
+        "passed",
+        "phases",
+        "schema",
+        "chromium_executable_sha256",
+        "elapsed_ms",
+        "python_exit_code",
+        "error",
+        "report"
+      ]
+    }
+  ],
+  "scope": "Full CI report inventory is byte-identical to all declared published source; PR run metadata alone was not accepted as source proof."
+}

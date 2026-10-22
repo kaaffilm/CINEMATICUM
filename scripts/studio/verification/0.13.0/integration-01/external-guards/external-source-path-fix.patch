@@ -1,0 +1,75 @@
+diff --git a/scripts/studio/verification/0.13.0/tools/BINDING_SEQUENCE.md b/scripts/studio/verification/0.13.0/tools/BINDING_SEQUENCE.md
+index 8c22a24..0c603f9 100644
+--- a/scripts/studio/verification/0.13.0/tools/BINDING_SEQUENCE.md
++++ b/scripts/studio/verification/0.13.0/tools/BINDING_SEQUENCE.md
+@@ -42,3 +42,16 @@ The release sequence is:
+ The external tool handoff and its actual hash are separate acceptance artifacts.
+ This prevents a circular self-reference in which filling in a commit hash
+ changes a tracked file and invalidates the clean-HEAD build requirement.
++
++The guard test requires an explicit accepted Git checkout, independently of
++the external helper directory. After binding the external copy, run:
++
++```sh
++CINEMATICUM_ACCEPTED_SOURCE=/absolute/clean/accepted/source \
++python3 -I -B /absolute/external/tools/test_installed_readiness_phased_guards.py
++```
++
++The test checks that the supplied source actually resolves the pinned core
++commit to the pinned Git tree. Missing/relative source paths fail; the helper
++directory is never treated as an inferred source checkout. These are portable
++guard regressions and do not claim native application execution.
+diff --git a/scripts/studio/verification/0.13.0/tools/prepared-tool-identity.json b/scripts/studio/verification/0.13.0/tools/prepared-tool-identity.json
+index 398f8f4..1bd1eb8 100644
+--- a/scripts/studio/verification/0.13.0/tools/prepared-tool-identity.json
++++ b/scripts/studio/verification/0.13.0/tools/prepared-tool-identity.json
+@@ -52,9 +52,10 @@
+     {
+       "path": "test_installed_readiness_phased_guards.py",
+       "accepted_0_12_sha256": "4212221fb032b3c6c964a83718e30c49ec5ad38b166de7331d0528467ada0710",
+-      "prepared_0_13_sha256": "4212221fb032b3c6c964a83718e30c49ec5ad38b166de7331d0528467ada0710",
+-      "bytes": 7705,
+-      "unchanged": true
++      "prepared_0_13_sha256": "5132e6e2cf7b0e0adf70105b9c88bc6687a6d65476a7ae5d3683cd91bfb907c5",
++      "bytes": 7970,
++      "unchanged": false,
++      "change": "Require explicit CINEMATICUM_ACCEPTED_SOURCE for actual Git-tree guard so copied tests do not infer the checkout from their external directory."
+     }
+   ],
+   "native_execution_performed": false,
+@@ -65,5 +66,6 @@
+   },
+   "controller_compile_required": false,
+   "controller_build_report": "verification/0.13.0/native-build/controller-build-01.json",
+-  "controller_build_report_sha256": "71a35e6351e7a930da0767efa73a9e3ddf404ebf496b12bbf514c4c740db6462"
++  "controller_build_report_sha256": "71a35e6351e7a930da0767efa73a9e3ddf404ebf496b12bbf514c4c740db6462",
++  "guard_test_source_path_change": "Require explicit CINEMATICUM_ACCEPTED_SOURCE for actual Git-tree guard so copied tests do not infer the checkout from their external directory."
+ }
+diff --git a/scripts/studio/verification/0.13.0/tools/test_installed_readiness_phased_guards.py b/scripts/studio/verification/0.13.0/tools/test_installed_readiness_phased_guards.py
+index 30ccacb..1cac83a 100644
+--- a/scripts/studio/verification/0.13.0/tools/test_installed_readiness_phased_guards.py
++++ b/scripts/studio/verification/0.13.0/tools/test_installed_readiness_phased_guards.py
+@@ -1,6 +1,7 @@
+ """Portable guard tests only; these do not simulate/claim any Mac acceptance."""
+ import copy
+ import importlib.util
++import os
+ from pathlib import Path
+ import tempfile
+ import subprocess
+@@ -104,10 +105,14 @@ class Guards(unittest.TestCase):
+             with self.subTest(variant=i),self.assertRaises(ValueError):phased.validate_retime_readiness(v)
+ 
+     def test_core_requires_exact_accepted_commit_and_actual_git_tree(self):
++        value = os.environ.get('CINEMATICUM_ACCEPTED_SOURCE')
++        if not value or not Path(value).is_absolute():
++            raise ValueError('Set CINEMATICUM_ACCEPTED_SOURCE to the explicit absolute accepted Git source checkout')
++        source = Path(value)
+         self.assertEqual(phased.validate_core_commit(phased.CORE),phased.CORE)
+         for value in (None,'pending','HEAD','0'*40,'530ba2400571a8b67efa2d9ab28997f65920c006'):
+             with self.subTest(value=value),self.assertRaises(ValueError):phased.validate_core_commit(value)
+-        phased.assert_core_tree(accepted,BASE.parents[4],phased.CORE)
++        phased.assert_core_tree(accepted,source,phased.CORE)
+         with tempfile.TemporaryDirectory(dir=BASE) as temp:
+             subprocess.run(['git','init','--quiet',temp],check=True,capture_output=True)
+             with self.assertRaises(ValueError):phased.assert_core_tree(accepted,Path(temp),phased.CORE)

@@ -1,0 +1,12 @@
+{
+  "command": [
+    "/tmp/cinematicum-fcpxml-schema-bootstrap-20261022-01/runtime/bin/python",
+    "-I",
+    "-B",
+    "-m",
+    "pip",
+    "check"
+  ],
+  "exit_code": 0,
+  "elapsed_seconds": 0.961
+}

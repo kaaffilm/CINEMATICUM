@@ -1,0 +1,30 @@
+{
+  "native_certified": false,
+  "passed": true,
+  "phases": [
+    {
+      "checks": 11,
+      "elapsed_seconds": 2.213,
+      "error": null,
+      "native_certified": false,
+      "operation": "prepare",
+      "passed": true
+    },
+    {
+      "checks": 30,
+      "elapsed_seconds": 3.652,
+      "error": null,
+      "native_certified": false,
+      "operation": "author",
+      "passed": true
+    },
+    {
+      "checks": 33,
+      "elapsed_seconds": 5.336,
+      "error": null,
+      "native_certified": false,
+      "operation": "render",
+      "passed": true
+    }
+  ]
+}

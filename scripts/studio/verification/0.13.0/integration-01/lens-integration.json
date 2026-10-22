@@ -1,0 +1,45 @@
+{
+  "all_0_12_acceptance_and_history_retained": true,
+  "base_commit": "dcea86196f81d6476a0f60538429b984b24c1129",
+  "base_source_manifest_sha256": "f0ab0513951f5c62c0d990ac8f592d361e10415a27c1eab38e402f005bf8ee73",
+  "base_tree": "bcc211cff651a3773ae09823758e3add0d8e2e96",
+  "capability_records_merged": [
+    "optics.brown_math",
+    "optics.calibrated_warp",
+    "optics.lensfun_profiles",
+    "optics.fisheye_warp"
+  ],
+  "excluded_raw_media_files": 16,
+  "lens_base_tree": "941da9dbc805788a89c610ee688cc17de08fccc4",
+  "lens_patch_sha256": "adb9c225c4562bd142e1f5722eb88c96918908fa64aa8807437d51253322cbb7",
+  "manual_merges": [
+    "scripts/studio/README.md",
+    "scripts/studio/capabilities.json"
+  ],
+  "original_text_evidence_files": 27,
+  "pending": [
+    "Lens native acceptance extension",
+    "FCPXML feature and actual acceptance",
+    "Integrated version/docs/CI reconciliation",
+    "Frozen full verification and actual native release gates"
+  ],
+  "product_and_test_after_hashes_match_lens_handoff": true,
+  "schema": "cinematicum-0.13-lens-integration-v1",
+  "source_manifest_not_regenerated": true,
+  "source_paths": [
+    "scripts/studio/LENS_WORKFLOWS.md",
+    "scripts/studio/compositor.py",
+    "scripts/studio/install_macos.py",
+    "scripts/studio/lens_geometry.py",
+    "scripts/studio/server.py",
+    "scripts/studio/test_lens_geometry.py",
+    "scripts/studio/test_lens_models_browser.cjs",
+    "scripts/studio/test_lens_models_browser.py",
+    "scripts/studio/web/app.js",
+    "scripts/studio/web/compositor-ui.js",
+    "scripts/studio/capabilities.json",
+    "scripts/studio/README.md"
+  ],
+  "version_not_bumped_until_all_features_ready": true,
+  "whole_suite_not_started": true
+}

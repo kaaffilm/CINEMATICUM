@@ -1,0 +1,22 @@
+[
+  {
+    "created_at": 1792674410.9814498,
+    "error": null,
+    "finished_at": 1792674411.1399336,
+    "id": "fc25d2c4c2b243e9bf992d9386baa7f9",
+    "kind": "frame-preview",
+    "progress": 1,
+    "project_id": "4725b27ad74c4e6db9c4fb3fe831b8d9",
+    "result": {
+      "frame": 0,
+      "height": 32,
+      "pipeline": "timeline-export-graph",
+      "pixel_format": "rgb24",
+      "processing_bits": 8,
+      "sha256": "11c8a962076bba83af43b3c3f8da2b6e8ecd04906aa148a8229d1f115e36a2c7",
+      "url": "/api/projects/4725b27ad74c4e6db9c4fb3fe831b8d9/previews/6203337d4aa05456a584093f39b5e449661b60b71e4de66f5b175329766e268e.png",
+      "width": 48
+    },
+    "state": "completed"
+  }
+]

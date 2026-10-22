@@ -1,0 +1,623 @@
+{
+  "result": {
+    "path": "/workspace/scratch/091f394ee5df/cinematicum-fcpxml-native-driver-06/fixture/workspace/projects/9a9a42e1f8e3495b81b86c44dff9193e/exports/8e8954d7b436465f917a85d64230ccad.mov",
+    "sha256": "ee63a18c22ae83ada7b7839a4ad5004cad5fe9da81a98802005438c7e6b69da1",
+    "duration": 1.3346666666666667,
+    "width": 48,
+    "height": 32,
+    "fps": 29.97002997002997,
+    "frame_rate": {
+      "numerator": 30000,
+      "denominator": 1001
+    },
+    "frames": 40,
+    "size": 272423,
+    "profile": "prores",
+    "color_space": "SDR Rec.709",
+    "image_precision": "standard8",
+    "processing_bits": 8,
+    "pixel_format": "yuv422p10le",
+    "encoding": "prores",
+    "alpha_mode": "opaque",
+    "transparent_background": false,
+    "dynamic_range": "SDR UNORM; no scene-linear HDR/ACES movie mastering",
+    "packet_verification": null,
+    "retime_reports": [],
+    "elapsed_seconds": 0.254,
+    "has_audio": true,
+    "issuance_status_changed": false,
+    "url": "/api/projects/9a9a42e1f8e3495b81b86c44dff9193e/exports/8e8954d7b436465f917a85d64230ccad.mov",
+    "filename": "8e8954d7b436465f917a85d64230ccad.mov",
+    "project_revision": 4
+  },
+  "snapshot": {
+    "version": 1,
+    "id": "9a9a42e1f8e3495b81b86c44dff9193e",
+    "name": "ENGINE TEST rational FCPXML",
+    "width": 48,
+    "height": 32,
+    "assets": [
+      {
+        "id": "abe62b21366847d396148f02ddd8f2ae",
+        "name": "ENGINE TEST red.mov",
+        "path": "media/abe62b21366847d396148f02ddd8f2ae.mov",
+        "sha256": "ea6e2213ccc89745e39123ee148255f4ab9a2657ca8b18a1ca73efe703f915f7",
+        "size": 643279,
+        "kind": "video",
+        "duration": 3.2032,
+        "width": 48,
+        "height": 32,
+        "has_audio": true,
+        "frames": 96,
+        "codec": "qtrle",
+        "pixel_format": "rgb24",
+        "color_transfer": "unknown",
+        "fps": "30000/1001",
+        "video_stream_index": 0,
+        "audio_stream_index": 1,
+        "audio_sample_rate": 48000,
+        "audio_channels": 2,
+        "audio_duration": 3.2,
+        "audio_streams": [
+          {
+            "index": 1,
+            "channels": 2,
+            "container_id": "0x2",
+            "sample_rate": 48000,
+            "codec": "pcm_s16le",
+            "language": "",
+            "duration": 3.2
+          }
+        ]
+      },
+      {
+        "id": "bd7e4179fec64a59b37751690b2fae5d",
+        "name": "ENGINE TEST blue.mov",
+        "path": "media/bd7e4179fec64a59b37751690b2fae5d.mov",
+        "sha256": "01a2518a2786e063fdfef550946f1a31f90469dd3c42b0478731425e3dcb3c36",
+        "size": 643279,
+        "kind": "video",
+        "duration": 3.2032,
+        "width": 48,
+        "height": 32,
+        "has_audio": true,
+        "frames": 96,
+        "codec": "qtrle",
+        "pixel_format": "rgb24",
+        "color_transfer": "unknown",
+        "fps": "30000/1001",
+        "video_stream_index": 0,
+        "audio_stream_index": 1,
+        "audio_sample_rate": 48000,
+        "audio_channels": 2,
+        "audio_duration": 3.2,
+        "audio_streams": [
+          {
+            "index": 1,
+            "channels": 2,
+            "container_id": "0x2",
+            "sample_rate": 48000,
+            "codec": "pcm_s16le",
+            "language": "",
+            "duration": 3.2
+          }
+        ]
+      }
+    ],
+    "clips": [
+      {
+        "id": "2639357d746b43488aa0c429b1a0aa98",
+        "asset_id": "abe62b21366847d396148f02ddd8f2ae",
+        "start": 0,
+        "duration": 16,
+        "in": 8.0,
+        "speed": 1.0,
+        "reverse": false,
+        "fcpxml": {
+          "document_sha256": "c0654f0e5582479eb307e04baeafd926aa350319f6db8b494a8a7a1df7317769",
+          "resource_id": "red_source",
+          "source_start": "6006s",
+          "media_reference": "file:///UNOPENED/ENGINE_TEST_red.mov",
+          "source_sha256": "ea6e2213ccc89745e39123ee148255f4ab9a2657ca8b18a1ca73efe703f915f7"
+        },
+        "volume": 0.0,
+        "track": 0,
+        "animation_start": 0,
+        "animation_duration": 16,
+        "animation_offset": 0,
+        "opacity": 1.0,
+        "x": 0.0,
+        "y": 0.0,
+        "scale": 1.0,
+        "rotation": 0.0,
+        "audio": {
+          "fade_duration": 16,
+          "fade_offset": 0,
+          "fade_in": 0,
+          "fade_out": 0,
+          "pan": 0.0
+        },
+        "grade": {
+          "exposure": 0.0,
+          "contrast": 1.0,
+          "saturation": 1.0,
+          "temperature": 0.0
+        },
+        "effects": {
+          "blur": 0.0,
+          "sharpen": 0.0,
+          "vignette": false,
+          "chroma_key": ""
+        },
+        "keyframes": []
+      },
+      {
+        "id": "431ac3272917431f9d5eb4a27ec13846",
+        "asset_id": "bd7e4179fec64a59b37751690b2fae5d",
+        "start": 4,
+        "duration": 6,
+        "in": 20.0,
+        "speed": 1.0,
+        "reverse": false,
+        "fcpxml": {
+          "document_sha256": "c0654f0e5582479eb307e04baeafd926aa350319f6db8b494a8a7a1df7317769",
+          "resource_id": "blue_source",
+          "source_start": "8008s",
+          "media_reference": "https://example.invalid/NEVER_FETCH/ENGINE_TEST_blue.mov",
+          "source_sha256": "01a2518a2786e063fdfef550946f1a31f90469dd3c42b0478731425e3dcb3c36"
+        },
+        "volume": 0.0,
+        "track": 1,
+        "animation_start": 0,
+        "animation_duration": 6,
+        "animation_offset": 0,
+        "opacity": 1.0,
+        "x": 0.0,
+        "y": 0.0,
+        "scale": 1.0,
+        "rotation": 0.0,
+        "audio": {
+          "fade_duration": 6,
+          "fade_offset": 0,
+          "fade_in": 0,
+          "fade_out": 0,
+          "pan": 0.0
+        },
+        "grade": {
+          "exposure": 0.0,
+          "contrast": 1.0,
+          "saturation": 1.0,
+          "temperature": 0.0
+        },
+        "effects": {
+          "blur": 0.0,
+          "sharpen": 0.0,
+          "vignette": false,
+          "chroma_key": ""
+        },
+        "keyframes": []
+      },
+      {
+        "id": "29bb9a6aa59f4e77a6c864b43cc293f7",
+        "asset_id": "abe62b21366847d396148f02ddd8f2ae",
+        "start": 0,
+        "duration": 16,
+        "in": 8.0,
+        "speed": 1.0,
+        "reverse": false,
+        "volume": 0.5,
+        "fcpxml": {
+          "document_sha256": "c0654f0e5582479eb307e04baeafd926aa350319f6db8b494a8a7a1df7317769",
+          "resource_id": "red_source",
+          "source_start": "6006s",
+          "media_reference": "file:///UNOPENED/ENGINE_TEST_red.mov",
+          "source_sha256": "ea6e2213ccc89745e39123ee148255f4ab9a2657ca8b18a1ca73efe703f915f7"
+        },
+        "track": -1,
+        "animation_start": 0,
+        "animation_duration": 16,
+        "animation_offset": 0,
+        "opacity": 1.0,
+        "x": 0.0,
+        "y": 0.0,
+        "scale": 1.0,
+        "rotation": 0.0,
+        "audio": {
+          "fade_duration": 16,
+          "fade_offset": 0,
+          "fade_in": 0,
+          "fade_out": 0,
+          "pan": 0.0
+        },
+        "grade": {
+          "exposure": 0.0,
+          "contrast": 1.0,
+          "saturation": 1.0,
+          "temperature": 0.0
+        },
+        "effects": {
+          "blur": 0.0,
+          "sharpen": 0.0,
+          "vignette": false,
+          "chroma_key": ""
+        },
+        "keyframes": []
+      },
+      {
+        "id": "39900a3d0f5c410984a848070af79b0a",
+        "sequence_id": "a088fea5da844550b08624d4259b517c",
+        "start": 16,
+        "duration": 16,
+        "in": 4.0,
+        "speed": 1.0,
+        "reverse": false,
+        "volume": 0.25,
+        "fcpxml": {
+          "document_sha256": "c0654f0e5582479eb307e04baeafd926aa350319f6db8b494a8a7a1df7317769",
+          "resource_id": "compound",
+          "source_start": "12012/5s"
+        },
+        "track": 0,
+        "animation_start": 0,
+        "animation_duration": 16,
+        "animation_offset": 0,
+        "opacity": 1.0,
+        "x": 0.0,
+        "y": 0.0,
+        "scale": 1.0,
+        "rotation": 0.0,
+        "audio": {
+          "fade_duration": 16,
+          "fade_offset": 0,
+          "fade_in": 0,
+          "fade_out": 0,
+          "pan": 0.0
+        },
+        "grade": {
+          "exposure": 0.0,
+          "contrast": 1.0,
+          "saturation": 1.0,
+          "temperature": 0.0
+        },
+        "effects": {
+          "blur": 0.0,
+          "sharpen": 0.0,
+          "vignette": false,
+          "chroma_key": ""
+        },
+        "keyframes": []
+      },
+      {
+        "id": "53ca54d297d049e2957936d18ae2a218",
+        "asset_id": "abe62b21366847d396148f02ddd8f2ae",
+        "start": 32,
+        "duration": 8,
+        "in": 56.0,
+        "speed": 2.0,
+        "reverse": false,
+        "fcpxml": {
+          "document_sha256": "c0654f0e5582479eb307e04baeafd926aa350319f6db8b494a8a7a1df7317769",
+          "resource_id": "red_source",
+          "source_start": "6006s",
+          "media_reference": "file:///UNOPENED/ENGINE_TEST_red.mov",
+          "source_sha256": "ea6e2213ccc89745e39123ee148255f4ab9a2657ca8b18a1ca73efe703f915f7"
+        },
+        "volume": 0.0,
+        "track": 0,
+        "animation_start": 0,
+        "animation_duration": 8,
+        "animation_offset": 0,
+        "opacity": 1.0,
+        "x": 0.0,
+        "y": 0.0,
+        "scale": 1.0,
+        "rotation": 0.0,
+        "audio": {
+          "fade_duration": 8,
+          "fade_offset": 0,
+          "fade_in": 0,
+          "fade_out": 0,
+          "pan": 0.0
+        },
+        "grade": {
+          "exposure": 0.0,
+          "contrast": 1.0,
+          "saturation": 1.0,
+          "temperature": 0.0
+        },
+        "effects": {
+          "blur": 0.0,
+          "sharpen": 0.0,
+          "vignette": false,
+          "chroma_key": ""
+        },
+        "keyframes": []
+      }
+    ],
+    "titles": [],
+    "settings": {
+      "fcpxml": {
+        "version": 1,
+        "document_sha256": "c0654f0e5582479eb307e04baeafd926aa350319f6db8b494a8a7a1df7317769",
+        "sequence_origins": {
+          "a088fea5da844550b08624d4259b517c": {
+            "tcStart": "12012/5s",
+            "tcFormat": "NDF"
+          },
+          "e5565ad1c7fa48ed882a8c29db195849": {
+            "tcStart": "18018/5s",
+            "tcFormat": "NDF"
+          }
+        },
+        "source_version": "1.10",
+        "connected_relationships": "independent_native_lanes"
+      },
+      "timecode_mode": "ndf"
+    },
+    "revision": 4,
+    "frame_rate": {
+      "numerator": 30000,
+      "denominator": 1001
+    },
+    "fps": 29.97002997002997,
+    "tracks": [
+      {
+        "id": -1,
+        "name": "FCPXML A1",
+        "mute": false,
+        "solo": false,
+        "locked": false,
+        "gain": 1.0
+      },
+      {
+        "id": 0,
+        "name": "FCPXML V1",
+        "mute": false,
+        "solo": false,
+        "locked": false,
+        "gain": 1.0
+      },
+      {
+        "id": 1,
+        "name": "FCPXML V2",
+        "mute": false,
+        "solo": false,
+        "locked": false,
+        "gain": 1.0
+      }
+    ],
+    "updated_at": "2026-10-22T13:15:19Z",
+    "sequence_id": "e5565ad1c7fa48ed882a8c29db195849",
+    "sequence_name": "ENGINE TEST rational FCPXML",
+    "captions": [],
+    "sequence_duration": 40,
+    "caption_style": {},
+    "sequences": [
+      {
+        "id": "main",
+        "name": "Main sequence",
+        "clips": [
+          {
+            "id": "original_cut",
+            "asset_id": "abe62b21366847d396148f02ddd8f2ae",
+            "track": 0,
+            "start": 0,
+            "in": 0.0,
+            "duration": 8,
+            "animation_start": 0,
+            "animation_duration": 8,
+            "animation_offset": 0,
+            "speed": 1.0,
+            "reverse": false,
+            "volume": 1.0,
+            "opacity": 1.0,
+            "x": 0.0,
+            "y": 0.0,
+            "scale": 1.0,
+            "rotation": 0.0,
+            "audio": {
+              "fade_duration": 8,
+              "fade_offset": 0,
+              "fade_in": 0,
+              "fade_out": 0,
+              "pan": 0.0
+            },
+            "grade": {
+              "exposure": 0.0,
+              "contrast": 1.0,
+              "saturation": 1.0,
+              "temperature": 0.0
+            },
+            "effects": {
+              "blur": 0.0,
+              "sharpen": 0.0,
+              "vignette": false,
+              "chroma_key": ""
+            },
+            "keyframes": []
+          }
+        ],
+        "titles": [],
+        "tracks": [],
+        "captions": [],
+        "caption_style": {},
+        "sequence_duration": 0
+      },
+      {
+        "id": "a088fea5da844550b08624d4259b517c",
+        "name": "ENGINE TEST compound",
+        "clips": [
+          {
+            "id": "c0ed6c8b75144ca6a703be0463f96814",
+            "asset_id": "abe62b21366847d396148f02ddd8f2ae",
+            "start": 0,
+            "duration": 32,
+            "in": 32.0,
+            "speed": 1.0,
+            "reverse": false,
+            "fcpxml": {
+              "document_sha256": "c0654f0e5582479eb307e04baeafd926aa350319f6db8b494a8a7a1df7317769",
+              "resource_id": "red_source",
+              "source_start": "6006s",
+              "media_reference": "file:///UNOPENED/ENGINE_TEST_red.mov",
+              "source_sha256": "ea6e2213ccc89745e39123ee148255f4ab9a2657ca8b18a1ca73efe703f915f7"
+            },
+            "volume": 0.0,
+            "track": 0,
+            "animation_start": 0,
+            "animation_duration": 32,
+            "animation_offset": 0,
+            "opacity": 1.0,
+            "x": 0.0,
+            "y": 0.0,
+            "scale": 1.0,
+            "rotation": 0.0,
+            "audio": {
+              "fade_duration": 32,
+              "fade_offset": 0,
+              "fade_in": 0,
+              "fade_out": 0,
+              "pan": 0.0
+            },
+            "grade": {
+              "exposure": 0.0,
+              "contrast": 1.0,
+              "saturation": 1.0,
+              "temperature": 0.0
+            },
+            "effects": {
+              "blur": 0.0,
+              "sharpen": 0.0,
+              "vignette": false,
+              "chroma_key": ""
+            },
+            "keyframes": []
+          },
+          {
+            "id": "f6770a6004544646b55075d611931667",
+            "asset_id": "bd7e4179fec64a59b37751690b2fae5d",
+            "start": 10,
+            "duration": 8,
+            "in": 40.0,
+            "speed": 1.0,
+            "reverse": false,
+            "fcpxml": {
+              "document_sha256": "c0654f0e5582479eb307e04baeafd926aa350319f6db8b494a8a7a1df7317769",
+              "resource_id": "blue_source",
+              "source_start": "8008s",
+              "media_reference": "https://example.invalid/NEVER_FETCH/ENGINE_TEST_blue.mov",
+              "source_sha256": "01a2518a2786e063fdfef550946f1a31f90469dd3c42b0478731425e3dcb3c36"
+            },
+            "volume": 0.0,
+            "track": 1,
+            "animation_start": 0,
+            "animation_duration": 8,
+            "animation_offset": 0,
+            "opacity": 1.0,
+            "x": 0.0,
+            "y": 0.0,
+            "scale": 1.0,
+            "rotation": 0.0,
+            "audio": {
+              "fade_duration": 8,
+              "fade_offset": 0,
+              "fade_in": 0,
+              "fade_out": 0,
+              "pan": 0.0
+            },
+            "grade": {
+              "exposure": 0.0,
+              "contrast": 1.0,
+              "saturation": 1.0,
+              "temperature": 0.0
+            },
+            "effects": {
+              "blur": 0.0,
+              "sharpen": 0.0,
+              "vignette": false,
+              "chroma_key": ""
+            },
+            "keyframes": []
+          },
+          {
+            "id": "e6c66cec3ad14789a3c29227339aa5a9",
+            "asset_id": "abe62b21366847d396148f02ddd8f2ae",
+            "start": 0,
+            "duration": 32,
+            "in": 32.0,
+            "speed": 1.0,
+            "reverse": false,
+            "fcpxml": {
+              "document_sha256": "c0654f0e5582479eb307e04baeafd926aa350319f6db8b494a8a7a1df7317769",
+              "resource_id": "red_source",
+              "source_start": "6006s",
+              "media_reference": "file:///UNOPENED/ENGINE_TEST_red.mov",
+              "source_sha256": "ea6e2213ccc89745e39123ee148255f4ab9a2657ca8b18a1ca73efe703f915f7"
+            },
+            "track": -1,
+            "animation_start": 0,
+            "animation_duration": 32,
+            "animation_offset": 0,
+            "volume": 1.0,
+            "opacity": 1.0,
+            "x": 0.0,
+            "y": 0.0,
+            "scale": 1.0,
+            "rotation": 0.0,
+            "audio": {
+              "fade_duration": 32,
+              "fade_offset": 0,
+              "fade_in": 0,
+              "fade_out": 0,
+              "pan": 0.0
+            },
+            "grade": {
+              "exposure": 0.0,
+              "contrast": 1.0,
+              "saturation": 1.0,
+              "temperature": 0.0
+            },
+            "effects": {
+              "blur": 0.0,
+              "sharpen": 0.0,
+              "vignette": false,
+              "chroma_key": ""
+            },
+            "keyframes": []
+          }
+        ],
+        "titles": [],
+        "tracks": [
+          {
+            "id": -1,
+            "name": "FCPXML A1",
+            "mute": false,
+            "solo": false,
+            "locked": false,
+            "gain": 1.0
+          },
+          {
+            "id": 0,
+            "name": "FCPXML V1",
+            "mute": false,
+            "solo": false,
+            "locked": false,
+            "gain": 1.0
+          },
+          {
+            "id": 1,
+            "name": "FCPXML V2",
+            "mute": false,
+            "solo": false,
+            "locked": false,
+            "gain": 1.0
+          }
+        ],
+        "captions": [],
+        "caption_style": {},
+        "sequence_duration": 32
+      }
+    ]
+  },
+  "issuance_effect": "NONE"
+}

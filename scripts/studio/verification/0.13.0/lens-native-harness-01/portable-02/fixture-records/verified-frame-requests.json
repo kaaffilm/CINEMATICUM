@@ -1,0 +1,949 @@
+{
+  "099a1863c6d39ad773a3a99a6e3e5bf9d971463cd7f275fde6e8ac77a62f3790": {
+    "frame": 0,
+    "identity": "099a1863c6d39ad773a3a99a6e3e5bf9d971463cd7f275fde6e8ac77a62f3790",
+    "project": {
+      "assets": [
+        {
+          "audio_channels": 0,
+          "audio_duration": 0.0,
+          "audio_sample_rate": 0,
+          "audio_stream_index": null,
+          "audio_streams": [],
+          "codec": "ffv1",
+          "color_transfer": "unknown",
+          "duration": 0.666,
+          "fps": "12/1",
+          "frames": 0,
+          "has_audio": false,
+          "height": 90,
+          "id": "a6c88b4edaa2489b9225e87f0592d646",
+          "kind": "video",
+          "name": "ENGINE_TEST_lens_alpha_ramps.mkv",
+          "path": "media/a6c88b4edaa2489b9225e87f0592d646.mkv",
+          "pixel_format": "bgra",
+          "sha256": "6914f55c98ccaa148fc64aefe1cd322861692756dde9994b86754cc51b59d3e2",
+          "size": 132135,
+          "video_stream_index": 0,
+          "width": 160
+        }
+      ],
+      "clips": [
+        {
+          "animation_duration": 8,
+          "animation_offset": 0,
+          "animation_start": 0,
+          "asset_id": "a6c88b4edaa2489b9225e87f0592d646",
+          "audio": {
+            "fade_duration": 8,
+            "fade_in": 0,
+            "fade_offset": 0,
+            "fade_out": 0,
+            "pan": 0.0
+          },
+          "compositor": {
+            "nodes": [
+              {
+                "id": "source",
+                "inputs": [],
+                "params": {},
+                "position": {
+                  "x": 42.0,
+                  "y": 62.0
+                },
+                "type": "source"
+              },
+              {
+                "id": "53c956e9-dd91-458d-b7a4-bf15356813f3",
+                "inputs": [
+                  "source"
+                ],
+                "params": {
+                  "cx": 0.5,
+                  "cy": 0.5,
+                  "direction": "undistort",
+                  "fx": 0.55,
+                  "fy": 0.72,
+                  "k1": 0.0,
+                  "k2": 0.0,
+                  "k3": 0.0,
+                  "model": "fisheye",
+                  "p1": 0.0,
+                  "p2": 0.0,
+                  "projection": "equidistant"
+                },
+                "position": {
+                  "x": 272.0,
+                  "y": 62.0
+                },
+                "type": "lens_distortion"
+              }
+            ],
+            "output": "53c956e9-dd91-458d-b7a4-bf15356813f3",
+            "version": 1
+          },
+          "duration": 8,
+          "effects": {
+            "blur": 0.0,
+            "chroma_key": "",
+            "sharpen": 0.0,
+            "vignette": false
+          },
+          "grade": {
+            "contrast": 1.0,
+            "exposure": 0.0,
+            "saturation": 1.0,
+            "temperature": 0.0
+          },
+          "id": "4d4b92ab-db02-49da-a203-babc462344fb",
+          "in": 0.0,
+          "keyframes": [],
+          "opacity": 1.0,
+          "reverse": false,
+          "rotation": 0.0,
+          "scale": 1.0,
+          "speed": 1.0,
+          "start": 0,
+          "track": 0,
+          "volume": 1.0,
+          "x": 0.0,
+          "y": 0.0
+        }
+      ],
+      "fps": 12,
+      "frame_rate": {
+        "denominator": 1,
+        "numerator": 12
+      },
+      "height": 90,
+      "id": "ec0d3b4fb271400c919c6257dbbddac7",
+      "name": "ENGINE TEST native Lensfun and fisheye",
+      "revision": 1,
+      "settings": {},
+      "titles": [],
+      "tracks": [],
+      "updated_at": "2026-10-22T12:44:03Z",
+      "version": 1,
+      "width": 160
+    }
+  },
+  "4c82569a02c086db085a5a28cc17b7f30f5fe1fd1b90e51daf1fead6c403f354": {
+    "frame": 0,
+    "identity": "4c82569a02c086db085a5a28cc17b7f30f5fe1fd1b90e51daf1fead6c403f354",
+    "project": {
+      "assets": [
+        {
+          "audio_channels": 0,
+          "audio_duration": 0.0,
+          "audio_sample_rate": 0,
+          "audio_stream_index": null,
+          "audio_streams": [],
+          "codec": "ffv1",
+          "color_transfer": "unknown",
+          "duration": 0.666,
+          "fps": "12/1",
+          "frames": 0,
+          "has_audio": false,
+          "height": 90,
+          "id": "a6c88b4edaa2489b9225e87f0592d646",
+          "kind": "video",
+          "name": "ENGINE_TEST_lens_alpha_ramps.mkv",
+          "path": "media/a6c88b4edaa2489b9225e87f0592d646.mkv",
+          "pixel_format": "bgra",
+          "sha256": "6914f55c98ccaa148fc64aefe1cd322861692756dde9994b86754cc51b59d3e2",
+          "size": 132135,
+          "video_stream_index": 0,
+          "width": 160
+        }
+      ],
+      "clips": [
+        {
+          "animation_duration": 8,
+          "animation_offset": 0,
+          "animation_start": 0,
+          "asset_id": "a6c88b4edaa2489b9225e87f0592d646",
+          "audio": {
+            "fade_duration": 8,
+            "fade_in": 0,
+            "fade_offset": 0,
+            "fade_out": 0,
+            "pan": 0.0
+          },
+          "compositor": {
+            "nodes": [
+              {
+                "id": "source",
+                "inputs": [],
+                "params": {},
+                "position": {
+                  "x": 42.0,
+                  "y": 62.0
+                },
+                "type": "source"
+              },
+              {
+                "id": "53c956e9-dd91-458d-b7a4-bf15356813f3",
+                "inputs": [
+                  "source"
+                ],
+                "params": {
+                  "cx": 0.5,
+                  "cy": 0.5,
+                  "direction": "undistort",
+                  "fx": 1.0,
+                  "fy": 1.0,
+                  "k1": 0.0,
+                  "k2": 0.0,
+                  "k3": 0.0,
+                  "model": "lensfun",
+                  "p1": 0.0,
+                  "p2": 0.0,
+                  "profile": {
+                    "calibration_aspect": 1.3333333333333333,
+                    "calibration_crop": 2.0,
+                    "center_x": 0.0,
+                    "center_y": 0.0,
+                    "coefficients": [
+                      -0.013136,
+                      0.015797,
+                      0.0
+                    ],
+                    "distortion": "ptlens",
+                    "focal_mm": 7.0,
+                    "image_crop": 2.0,
+                    "lens": "Olympus Zuiko Digital ED 7-14mm f/4.0",
+                    "maker": "Olympus",
+                    "source_sha256": "f7693b6779edd8ed10d7dc23113669255bfa4987cea7db0e843f7f5f2bbbe615",
+                    "version": 1
+                  }
+                },
+                "position": {
+                  "x": 272.0,
+                  "y": 62.0
+                },
+                "type": "lens_distortion"
+              }
+            ],
+            "output": "53c956e9-dd91-458d-b7a4-bf15356813f3",
+            "version": 1
+          },
+          "duration": 8,
+          "effects": {
+            "blur": 0.0,
+            "chroma_key": "",
+            "sharpen": 0.0,
+            "vignette": false
+          },
+          "grade": {
+            "contrast": 1.0,
+            "exposure": 0.0,
+            "saturation": 1.0,
+            "temperature": 0.0
+          },
+          "id": "4d4b92ab-db02-49da-a203-babc462344fb",
+          "in": 0.0,
+          "keyframes": [],
+          "opacity": 1.0,
+          "reverse": false,
+          "rotation": 0.0,
+          "scale": 1.0,
+          "speed": 1.0,
+          "start": 0,
+          "track": 0,
+          "volume": 1.0,
+          "x": 0.0,
+          "y": 0.0
+        }
+      ],
+      "fps": 12,
+      "frame_rate": {
+        "denominator": 1,
+        "numerator": 12
+      },
+      "height": 90,
+      "id": "ec0d3b4fb271400c919c6257dbbddac7",
+      "name": "ENGINE TEST native Lensfun and fisheye",
+      "revision": 2,
+      "settings": {},
+      "titles": [],
+      "tracks": [],
+      "updated_at": "2026-10-22T12:44:08Z",
+      "version": 1,
+      "width": 160
+    }
+  },
+  "708fb5e7bf64e5d7afc784d1f060ec404119927e923c82a71020ef75791052a7": {
+    "frame": 0,
+    "identity": "708fb5e7bf64e5d7afc784d1f060ec404119927e923c82a71020ef75791052a7",
+    "project": {
+      "assets": [
+        {
+          "audio_channels": 0,
+          "audio_duration": 0.0,
+          "audio_sample_rate": 0,
+          "audio_stream_index": null,
+          "audio_streams": [],
+          "codec": "ffv1",
+          "color_transfer": "unknown",
+          "duration": 0.666,
+          "fps": "12/1",
+          "frames": 0,
+          "has_audio": false,
+          "height": 90,
+          "id": "a6c88b4edaa2489b9225e87f0592d646",
+          "kind": "video",
+          "name": "ENGINE_TEST_lens_alpha_ramps.mkv",
+          "path": "media/a6c88b4edaa2489b9225e87f0592d646.mkv",
+          "pixel_format": "bgra",
+          "sha256": "6914f55c98ccaa148fc64aefe1cd322861692756dde9994b86754cc51b59d3e2",
+          "size": 132135,
+          "video_stream_index": 0,
+          "width": 160
+        }
+      ],
+      "clips": [
+        {
+          "animation_duration": 8,
+          "animation_offset": 0,
+          "animation_start": 0,
+          "asset_id": "a6c88b4edaa2489b9225e87f0592d646",
+          "audio": {
+            "fade_duration": 8,
+            "fade_in": 0,
+            "fade_offset": 0,
+            "fade_out": 0,
+            "pan": 0.0
+          },
+          "compositor": {
+            "nodes": [
+              {
+                "id": "source",
+                "inputs": [],
+                "params": {},
+                "position": {
+                  "x": 42.0,
+                  "y": 62.0
+                },
+                "type": "source"
+              },
+              {
+                "id": "53c956e9-dd91-458d-b7a4-bf15356813f3",
+                "inputs": [
+                  "source"
+                ],
+                "params": {
+                  "cx": 0.5,
+                  "cy": 0.5,
+                  "direction": "undistort",
+                  "fx": 0.55,
+                  "fy": 0.72,
+                  "k1": 0.0,
+                  "k2": 0.0,
+                  "k3": 0.0,
+                  "model": "fisheye",
+                  "p1": 0.0,
+                  "p2": 0.0,
+                  "projection": "orthographic"
+                },
+                "position": {
+                  "x": 272.0,
+                  "y": 62.0
+                },
+                "type": "lens_distortion"
+              }
+            ],
+            "output": "53c956e9-dd91-458d-b7a4-bf15356813f3",
+            "version": 1
+          },
+          "duration": 8,
+          "effects": {
+            "blur": 0.0,
+            "chroma_key": "",
+            "sharpen": 0.0,
+            "vignette": false
+          },
+          "grade": {
+            "contrast": 1.0,
+            "exposure": 0.0,
+            "saturation": 1.0,
+            "temperature": 0.0
+          },
+          "id": "4d4b92ab-db02-49da-a203-babc462344fb",
+          "in": 0.0,
+          "keyframes": [],
+          "opacity": 1.0,
+          "reverse": false,
+          "rotation": 0.0,
+          "scale": 1.0,
+          "speed": 1.0,
+          "start": 0,
+          "track": 0,
+          "volume": 1.0,
+          "x": 0.0,
+          "y": 0.0
+        }
+      ],
+      "fps": 12,
+      "frame_rate": {
+        "denominator": 1,
+        "numerator": 12
+      },
+      "height": 90,
+      "id": "ec0d3b4fb271400c919c6257dbbddac7",
+      "name": "ENGINE TEST native Lensfun and fisheye",
+      "revision": 1,
+      "settings": {},
+      "titles": [],
+      "tracks": [],
+      "updated_at": "2026-10-22T12:44:03Z",
+      "version": 1,
+      "width": 160
+    }
+  },
+  "879143d4ef00a5ded23a0b228f6c7960111d271e99d7138e7f32d73979baa9b3": {
+    "frame": 0,
+    "identity": "879143d4ef00a5ded23a0b228f6c7960111d271e99d7138e7f32d73979baa9b3",
+    "project": {
+      "assets": [
+        {
+          "audio_channels": 0,
+          "audio_duration": 0.0,
+          "audio_sample_rate": 0,
+          "audio_stream_index": null,
+          "audio_streams": [],
+          "codec": "ffv1",
+          "color_transfer": "unknown",
+          "duration": 0.666,
+          "fps": "12/1",
+          "frames": 0,
+          "has_audio": false,
+          "height": 90,
+          "id": "a6c88b4edaa2489b9225e87f0592d646",
+          "kind": "video",
+          "name": "ENGINE_TEST_lens_alpha_ramps.mkv",
+          "path": "media/a6c88b4edaa2489b9225e87f0592d646.mkv",
+          "pixel_format": "bgra",
+          "sha256": "6914f55c98ccaa148fc64aefe1cd322861692756dde9994b86754cc51b59d3e2",
+          "size": 132135,
+          "video_stream_index": 0,
+          "width": 160
+        }
+      ],
+      "clips": [
+        {
+          "animation_duration": 8,
+          "animation_offset": 0,
+          "animation_start": 0,
+          "asset_id": "a6c88b4edaa2489b9225e87f0592d646",
+          "audio": {
+            "fade_duration": 8,
+            "fade_in": 0,
+            "fade_offset": 0,
+            "fade_out": 0,
+            "pan": 0.0
+          },
+          "compositor": {
+            "nodes": [
+              {
+                "id": "source",
+                "inputs": [],
+                "params": {},
+                "position": {
+                  "x": 42.0,
+                  "y": 62.0
+                },
+                "type": "source"
+              },
+              {
+                "id": "53c956e9-dd91-458d-b7a4-bf15356813f3",
+                "inputs": [
+                  "source"
+                ],
+                "params": {
+                  "cx": 0.5,
+                  "cy": 0.5,
+                  "direction": "undistort",
+                  "fx": 0.55,
+                  "fy": 0.72,
+                  "k1": 0.0,
+                  "k2": 0.0,
+                  "k3": 0.0,
+                  "model": "fisheye",
+                  "p1": 0.0,
+                  "p2": 0.0,
+                  "projection": "stereographic"
+                },
+                "position": {
+                  "x": 272.0,
+                  "y": 62.0
+                },
+                "type": "lens_distortion"
+              }
+            ],
+            "output": "53c956e9-dd91-458d-b7a4-bf15356813f3",
+            "version": 1
+          },
+          "duration": 8,
+          "effects": {
+            "blur": 0.0,
+            "chroma_key": "",
+            "sharpen": 0.0,
+            "vignette": false
+          },
+          "grade": {
+            "contrast": 1.0,
+            "exposure": 0.0,
+            "saturation": 1.0,
+            "temperature": 0.0
+          },
+          "id": "4d4b92ab-db02-49da-a203-babc462344fb",
+          "in": 0.0,
+          "keyframes": [],
+          "opacity": 1.0,
+          "reverse": false,
+          "rotation": 0.0,
+          "scale": 1.0,
+          "speed": 1.0,
+          "start": 0,
+          "track": 0,
+          "volume": 1.0,
+          "x": 0.0,
+          "y": 0.0
+        }
+      ],
+      "fps": 12,
+      "frame_rate": {
+        "denominator": 1,
+        "numerator": 12
+      },
+      "height": 90,
+      "id": "ec0d3b4fb271400c919c6257dbbddac7",
+      "name": "ENGINE TEST native Lensfun and fisheye",
+      "revision": 1,
+      "settings": {},
+      "titles": [],
+      "tracks": [],
+      "updated_at": "2026-10-22T12:44:03Z",
+      "version": 1,
+      "width": 160
+    }
+  },
+  "963958e19791a38a5da31b887bd7d9c9c22a1e7eba5271633de17c48350da4c4": {
+    "frame": 0,
+    "identity": "963958e19791a38a5da31b887bd7d9c9c22a1e7eba5271633de17c48350da4c4",
+    "project": {
+      "assets": [
+        {
+          "audio_channels": 0,
+          "audio_duration": 0.0,
+          "audio_sample_rate": 0,
+          "audio_stream_index": null,
+          "audio_streams": [],
+          "codec": "ffv1",
+          "color_transfer": "unknown",
+          "duration": 0.666,
+          "fps": "12/1",
+          "frames": 0,
+          "has_audio": false,
+          "height": 90,
+          "id": "a6c88b4edaa2489b9225e87f0592d646",
+          "kind": "video",
+          "name": "ENGINE_TEST_lens_alpha_ramps.mkv",
+          "path": "media/a6c88b4edaa2489b9225e87f0592d646.mkv",
+          "pixel_format": "bgra",
+          "sha256": "6914f55c98ccaa148fc64aefe1cd322861692756dde9994b86754cc51b59d3e2",
+          "size": 132135,
+          "video_stream_index": 0,
+          "width": 160
+        }
+      ],
+      "clips": [
+        {
+          "animation_duration": 8,
+          "animation_offset": 0,
+          "animation_start": 0,
+          "asset_id": "a6c88b4edaa2489b9225e87f0592d646",
+          "audio": {
+            "fade_duration": 8,
+            "fade_in": 0,
+            "fade_offset": 0,
+            "fade_out": 0,
+            "pan": 0.0
+          },
+          "compositor": {
+            "nodes": [
+              {
+                "id": "source",
+                "inputs": [],
+                "params": {},
+                "position": {
+                  "x": 42.0,
+                  "y": 62.0
+                },
+                "type": "source"
+              },
+              {
+                "id": "53c956e9-dd91-458d-b7a4-bf15356813f3",
+                "inputs": [
+                  "source"
+                ],
+                "params": {
+                  "cx": 0.5,
+                  "cy": 0.5,
+                  "direction": "undistort",
+                  "fx": 0.55,
+                  "fy": 0.72,
+                  "k1": 0.0,
+                  "k2": 0.0,
+                  "k3": 0.0,
+                  "model": "fisheye",
+                  "p1": 0.0,
+                  "p2": 0.0,
+                  "projection": "equisolid"
+                },
+                "position": {
+                  "x": 272.0,
+                  "y": 62.0
+                },
+                "type": "lens_distortion"
+              }
+            ],
+            "output": "53c956e9-dd91-458d-b7a4-bf15356813f3",
+            "version": 1
+          },
+          "duration": 8,
+          "effects": {
+            "blur": 0.0,
+            "chroma_key": "",
+            "sharpen": 0.0,
+            "vignette": false
+          },
+          "grade": {
+            "contrast": 1.0,
+            "exposure": 0.0,
+            "saturation": 1.0,
+            "temperature": 0.0
+          },
+          "id": "4d4b92ab-db02-49da-a203-babc462344fb",
+          "in": 0.0,
+          "keyframes": [],
+          "opacity": 1.0,
+          "reverse": false,
+          "rotation": 0.0,
+          "scale": 1.0,
+          "speed": 1.0,
+          "start": 0,
+          "track": 0,
+          "volume": 1.0,
+          "x": 0.0,
+          "y": 0.0
+        }
+      ],
+      "fps": 12,
+      "frame_rate": {
+        "denominator": 1,
+        "numerator": 12
+      },
+      "height": 90,
+      "id": "ec0d3b4fb271400c919c6257dbbddac7",
+      "name": "ENGINE TEST native Lensfun and fisheye",
+      "revision": 1,
+      "settings": {},
+      "titles": [],
+      "tracks": [],
+      "updated_at": "2026-10-22T12:44:03Z",
+      "version": 1,
+      "width": 160
+    }
+  },
+  "af69b457e07e5c0842569181afb22c744a77dcee25a116b883c02bc188f896c6": {
+    "frame": 0,
+    "identity": "af69b457e07e5c0842569181afb22c744a77dcee25a116b883c02bc188f896c6",
+    "project": {
+      "assets": [
+        {
+          "audio_channels": 0,
+          "audio_duration": 0.0,
+          "audio_sample_rate": 0,
+          "audio_stream_index": null,
+          "audio_streams": [],
+          "codec": "ffv1",
+          "color_transfer": "unknown",
+          "duration": 0.666,
+          "fps": "12/1",
+          "frames": 0,
+          "has_audio": false,
+          "height": 90,
+          "id": "a6c88b4edaa2489b9225e87f0592d646",
+          "kind": "video",
+          "name": "ENGINE_TEST_lens_alpha_ramps.mkv",
+          "path": "media/a6c88b4edaa2489b9225e87f0592d646.mkv",
+          "pixel_format": "bgra",
+          "sha256": "6914f55c98ccaa148fc64aefe1cd322861692756dde9994b86754cc51b59d3e2",
+          "size": 132135,
+          "video_stream_index": 0,
+          "width": 160
+        }
+      ],
+      "clips": [
+        {
+          "animation_duration": 8,
+          "animation_offset": 0,
+          "animation_start": 0,
+          "asset_id": "a6c88b4edaa2489b9225e87f0592d646",
+          "audio": {
+            "fade_duration": 8,
+            "fade_in": 0,
+            "fade_offset": 0,
+            "fade_out": 0,
+            "pan": 0.0
+          },
+          "compositor": {
+            "nodes": [
+              {
+                "id": "source",
+                "inputs": [],
+                "params": {},
+                "position": {
+                  "x": 42.0,
+                  "y": 62.0
+                },
+                "type": "source"
+              },
+              {
+                "id": "53c956e9-dd91-458d-b7a4-bf15356813f3",
+                "inputs": [
+                  "source"
+                ],
+                "params": {
+                  "cx": 0.5,
+                  "cy": 0.5,
+                  "direction": "undistort",
+                  "fx": 1.0,
+                  "fy": 1.0,
+                  "k1": 0.0,
+                  "k2": 0.0,
+                  "k3": 0.0,
+                  "model": "lensfun",
+                  "p1": 0.0,
+                  "p2": 0.0,
+                  "profile": {
+                    "calibration_aspect": 1.3333333333333333,
+                    "calibration_crop": 2.0,
+                    "center_x": 0.0,
+                    "center_y": 0.0,
+                    "coefficients": [
+                      -0.013136,
+                      0.015797,
+                      0.0
+                    ],
+                    "distortion": "ptlens",
+                    "focal_mm": 7.0,
+                    "image_crop": 2.0,
+                    "lens": "Olympus Zuiko Digital ED 7-14mm f/4.0",
+                    "maker": "Olympus",
+                    "source_sha256": "f7693b6779edd8ed10d7dc23113669255bfa4987cea7db0e843f7f5f2bbbe615",
+                    "version": 1
+                  }
+                },
+                "position": {
+                  "x": 272.0,
+                  "y": 62.0
+                },
+                "type": "lens_distortion"
+              }
+            ],
+            "output": "53c956e9-dd91-458d-b7a4-bf15356813f3",
+            "version": 1
+          },
+          "duration": 8,
+          "effects": {
+            "blur": 0.0,
+            "chroma_key": "",
+            "sharpen": 0.0,
+            "vignette": false
+          },
+          "grade": {
+            "contrast": 1.0,
+            "exposure": 0.0,
+            "saturation": 1.0,
+            "temperature": 0.0
+          },
+          "id": "4d4b92ab-db02-49da-a203-babc462344fb",
+          "in": 0.0,
+          "keyframes": [],
+          "opacity": 1.0,
+          "reverse": false,
+          "rotation": 0.0,
+          "scale": 1.0,
+          "speed": 1.0,
+          "start": 0,
+          "track": 0,
+          "volume": 1.0,
+          "x": 0.0,
+          "y": 0.0
+        }
+      ],
+      "fps": 12,
+      "frame_rate": {
+        "denominator": 1,
+        "numerator": 12
+      },
+      "height": 90,
+      "id": "ec0d3b4fb271400c919c6257dbbddac7",
+      "name": "ENGINE TEST native Lensfun and fisheye",
+      "revision": 3,
+      "settings": {},
+      "titles": [],
+      "tracks": [],
+      "updated_at": "2026-10-22T12:44:11Z",
+      "version": 1,
+      "width": 160
+    }
+  },
+  "c1ea8f48a203a2d4865ff59895b51ec1c7d832be691c7c7c7d90337593cb3928": {
+    "frame": 0,
+    "identity": "c1ea8f48a203a2d4865ff59895b51ec1c7d832be691c7c7c7d90337593cb3928",
+    "project": {
+      "assets": [
+        {
+          "audio_channels": 0,
+          "audio_duration": 0.0,
+          "audio_sample_rate": 0,
+          "audio_stream_index": null,
+          "audio_streams": [],
+          "codec": "ffv1",
+          "color_transfer": "unknown",
+          "duration": 0.666,
+          "fps": "12/1",
+          "frames": 0,
+          "has_audio": false,
+          "height": 90,
+          "id": "a6c88b4edaa2489b9225e87f0592d646",
+          "kind": "video",
+          "name": "ENGINE_TEST_lens_alpha_ramps.mkv",
+          "path": "media/a6c88b4edaa2489b9225e87f0592d646.mkv",
+          "pixel_format": "bgra",
+          "sha256": "6914f55c98ccaa148fc64aefe1cd322861692756dde9994b86754cc51b59d3e2",
+          "size": 132135,
+          "video_stream_index": 0,
+          "width": 160
+        }
+      ],
+      "clips": [
+        {
+          "animation_duration": 8,
+          "animation_offset": 0,
+          "animation_start": 0,
+          "asset_id": "a6c88b4edaa2489b9225e87f0592d646",
+          "audio": {
+            "fade_duration": 8,
+            "fade_in": 0,
+            "fade_offset": 0,
+            "fade_out": 0,
+            "pan": 0.0
+          },
+          "compositor": {
+            "nodes": [
+              {
+                "id": "source",
+                "inputs": [],
+                "params": {},
+                "position": {
+                  "x": 42.0,
+                  "y": 62.0
+                },
+                "type": "source"
+              },
+              {
+                "id": "53c956e9-dd91-458d-b7a4-bf15356813f3",
+                "inputs": [
+                  "source"
+                ],
+                "params": {
+                  "cx": 0.5,
+                  "cy": 0.5,
+                  "direction": "undistort",
+                  "fx": 1.0,
+                  "fy": 1.0,
+                  "k1": 0.0,
+                  "k2": 0.0,
+                  "k3": 0.0,
+                  "model": "lensfun",
+                  "p1": 0.0,
+                  "p2": 0.0,
+                  "profile": {
+                    "calibration_aspect": 1.3333333333333333,
+                    "calibration_crop": 2.0,
+                    "center_x": 0.0,
+                    "center_y": 0.0,
+                    "coefficients": [
+                      -0.013136,
+                      0.015797,
+                      0.0
+                    ],
+                    "distortion": "ptlens",
+                    "focal_mm": 7.0,
+                    "image_crop": 2.0,
+                    "lens": "Olympus Zuiko Digital ED 7-14mm f/4.0",
+                    "maker": "Olympus",
+                    "source_sha256": "f7693b6779edd8ed10d7dc23113669255bfa4987cea7db0e843f7f5f2bbbe615",
+                    "version": 1
+                  }
+                },
+                "position": {
+                  "x": 272.0,
+                  "y": 62.0
+                },
+                "type": "lens_distortion"
+              }
+            ],
+            "output": "53c956e9-dd91-458d-b7a4-bf15356813f3",
+            "version": 1
+          },
+          "duration": 8,
+          "effects": {
+            "blur": 0.0,
+            "chroma_key": "",
+            "sharpen": 0.0,
+            "vignette": false
+          },
+          "grade": {
+            "contrast": 1.0,
+            "exposure": 0.0,
+            "saturation": 1.0,
+            "temperature": 0.0
+          },
+          "id": "4d4b92ab-db02-49da-a203-babc462344fb",
+          "in": 0.0,
+          "keyframes": [],
+          "opacity": 1.0,
+          "reverse": false,
+          "rotation": 0.0,
+          "scale": 1.0,
+          "speed": 1.0,
+          "start": 0,
+          "track": 0,
+          "volume": 1.0,
+          "x": 0.0,
+          "y": 0.0
+        }
+      ],
+      "fps": 12,
+      "frame_rate": {
+        "denominator": 1,
+        "numerator": 12
+      },
+      "height": 90,
+      "id": "ec0d3b4fb271400c919c6257dbbddac7",
+      "name": "ENGINE TEST native Lensfun and fisheye",
+      "revision": 1,
+      "settings": {},
+      "titles": [],
+      "tracks": [],
+      "updated_at": "2026-10-22T12:44:03Z",
+      "version": 1,
+      "width": 160
+    }
+  }
+}

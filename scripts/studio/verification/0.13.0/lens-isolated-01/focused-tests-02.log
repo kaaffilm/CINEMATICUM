@@ -1,0 +1,83 @@
+test_all_fisheye_models_and_lensfun_models_match_independent_ray_oracle (test_lens_geometry.LensGeometryTests.test_all_fisheye_models_and_lensfun_models_match_independent_ray_oracle) ... ok
+test_decoded_movie_alpha_and_picture_match_independent_oracle (test_lens_geometry.LensGeometryTests.test_decoded_movie_alpha_and_picture_match_independent_oracle) ... ok
+test_exact_optical_centers_and_behind_plane_coverage (test_lens_geometry.LensGeometryTests.test_exact_optical_centers_and_behind_plane_coverage) ... ok
+test_scalar_and_numpy_numeric_maps_agree_with_quantization (test_lens_geometry.LensGeometryTests.test_scalar_and_numpy_numeric_maps_agree_with_quantization) ... ok
+test_actual_xml_exact_samples_hash_and_explicit_scope (test_lens_geometry.LensImportAndSchemaTests.test_actual_xml_exact_samples_hash_and_explicit_scope) ... ok
+test_brown_schema_identity_and_new_model_resolution_guards (test_lens_geometry.LensImportAndSchemaTests.test_brown_schema_identity_and_new_model_resolution_guards) ... ok
+test_no_external_xml_entities_paths_or_unsupported_model_coercion (test_lens_geometry.LensImportAndSchemaTests.test_no_external_xml_entities_paths_or_unsupported_model_coercion) ... ok
+test_shipped_javascript_and_backend_validation_agree (test_lens_geometry.LensImportAndSchemaTests.test_shipped_javascript_and_backend_validation_agree) ... ok
+test_version_one_calibration_attributes_and_portrait_aspect (test_lens_geometry.LensImportAndSchemaTests.test_version_one_calibration_attributes_and_portrait_aspect) ... ok
+test_guarded_http_import_does_not_mutate_project_and_profile_saves_reopens (test_lens_geometry.LensProjectWorkflowTests.test_guarded_http_import_does_not_mutate_project_and_profile_saves_reopens) ... ok
+test_data_only_requests_and_exclusive_output_directory (test_lens_compositor.LensMapWorkerTests.test_data_only_requests_and_exclusive_output_directory) ... ok
+test_isolated_worker_runs_without_third_party_modules_and_bounds_json (test_lens_compositor.LensMapWorkerTests.test_isolated_worker_runs_without_third_party_modules_and_bounds_json) ... FAIL
+test_numeric_maps_receipts_and_subpixel_accuracy (test_lens_compositor.LensMapWorkerTests.test_numeric_maps_receipts_and_subpixel_accuracy) ... ok
+test_numpy_accelerator_matches_standard_library_maps (test_lens_compositor.LensMapWorkerTests.test_numpy_accelerator_matches_standard_library_maps) ... ok
+test_actual_engine_lens_media_split_map_dedup_and_paused_export_match (test_lens_compositor.LensRenderedPixelTests.test_actual_engine_lens_media_split_map_dedup_and_paused_export_match) ... ERROR
+test_both_directions_match_independent_premultiplied_bilinear_pixels (test_lens_compositor.LensRenderedPixelTests.test_both_directions_match_independent_premultiplied_bilinear_pixels) ... ok
+test_high_frequency_alpha_movie_matches_complete_sequence_codec_control (test_lens_compositor.LensRenderedPixelTests.test_high_frequency_alpha_movie_matches_complete_sequence_codec_control) ... ERROR
+test_lens_identity_is_exact_and_trim_preserves_upstream_animation (test_lens_compositor.LensRenderedPixelTests.test_lens_identity_is_exact_and_trim_preserves_upstream_animation) ... ok
+test_transparent_hidden_red_does_not_bleed_into_green_edges (test_lens_compositor.LensRenderedPixelTests.test_transparent_hidden_red_does_not_bleed_into_green_edges) ... ok
+test_exact_map_label_set_and_alias_rejection (test_lens_compositor.LensValidationTests.test_exact_map_label_set_and_alias_rejection) ... ok
+test_full_canvas_inverse_matches_separate_newton_solver (test_lens_compositor.LensValidationTests.test_full_canvas_inverse_matches_separate_newton_solver) ... ok
+test_identity_unused_and_resolution_bounds (test_lens_compositor.LensValidationTests.test_identity_unused_and_resolution_bounds) ... ok
+test_shipped_javascript_rejects_unsupported_calibrations_and_matches_bound (test_lens_compositor.LensValidationTests.test_shipped_javascript_rejects_unsupported_calibrations_and_matches_bound) ... ok
+test_static_bounded_schema_and_independent_certificate (test_lens_compositor.LensValidationTests.test_static_bounded_schema_and_independent_certificate) ... ok
+
+======================================================================
+ERROR: test_actual_engine_lens_media_split_map_dedup_and_paused_export_match (test_lens_compositor.LensRenderedPixelTests.test_actual_engine_lens_media_split_map_dedup_and_paused_export_match)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/scratch/091f394ee5df/cinematicum-lens-candidate/scripts/studio/test_lens_compositor.py", line 401, in test_actual_engine_lens_media_split_map_dedup_and_paused_export_match
+    before=root/"before.png";render_frame(project,root,12,before)
+                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/scratch/091f394ee5df/cinematicum-lens-candidate/scripts/studio/frame_preview.py", line 51, in render_frame
+    inputs, graph, _ = _graph(picture, project_dir, scratch, cancel_event=cancel_event)
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/scratch/091f394ee5df/cinematicum-lens-candidate/scripts/studio/engine.py", line 1015, in _graph
+    prepared_lenses[signature] = prepare_lens_maps(
+                                 ^^^^^^^^^^^^^^^^^^
+  File "/workspace/scratch/091f394ee5df/cinematicum-lens-candidate/scripts/studio/lens_assets.py", line 76, in prepare_lens_maps
+    raise ValueError("Calibrated lens preparation failed: " + detail[-2000:])
+ValueError: Calibrated lens preparation failed: Traceback (most recent call last):
+  File "/workspace/scratch/091f394ee5df/cinematicum-lens-candidate/scripts/studio/compositor.py", line 28, in <module>
+    import lens_geometry
+ModuleNotFoundError: No module named 'lens_geometry'
+
+
+======================================================================
+ERROR: test_high_frequency_alpha_movie_matches_complete_sequence_codec_control (test_lens_compositor.LensRenderedPixelTests.test_high_frequency_alpha_movie_matches_complete_sequence_codec_control)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/scratch/091f394ee5df/cinematicum-lens-candidate/scripts/studio/test_lens_compositor.py", line 444, in test_high_frequency_alpha_movie_matches_complete_sequence_codec_control
+    render_frame(project,root,6,paused);engine.render_project(project,root,movie,"h264")
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/scratch/091f394ee5df/cinematicum-lens-candidate/scripts/studio/frame_preview.py", line 51, in render_frame
+    inputs, graph, _ = _graph(picture, project_dir, scratch, cancel_event=cancel_event)
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/scratch/091f394ee5df/cinematicum-lens-candidate/scripts/studio/engine.py", line 1015, in _graph
+    prepared_lenses[signature] = prepare_lens_maps(
+                                 ^^^^^^^^^^^^^^^^^^
+  File "/workspace/scratch/091f394ee5df/cinematicum-lens-candidate/scripts/studio/lens_assets.py", line 76, in prepare_lens_maps
+    raise ValueError("Calibrated lens preparation failed: " + detail[-2000:])
+ValueError: Calibrated lens preparation failed: Traceback (most recent call last):
+  File "/workspace/scratch/091f394ee5df/cinematicum-lens-candidate/scripts/studio/compositor.py", line 28, in <module>
+    import lens_geometry
+ModuleNotFoundError: No module named 'lens_geometry'
+
+
+======================================================================
+FAIL: test_isolated_worker_runs_without_third_party_modules_and_bounds_json (test_lens_compositor.LensMapWorkerTests.test_isolated_worker_runs_without_third_party_modules_and_bounds_json)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/scratch/091f394ee5df/cinematicum-lens-candidate/scripts/studio/test_lens_compositor.py", line 327, in test_isolated_worker_runs_without_third_party_modules_and_bounds_json
+    self.assertEqual(result.returncode,0,result.stderr)
+AssertionError: 1 != 0 : Traceback (most recent call last):
+  File "/workspace/scratch/091f394ee5df/cinematicum-lens-candidate/scripts/studio/compositor.py", line 28, in <module>
+    import lens_geometry
+ModuleNotFoundError: No module named 'lens_geometry'
+
+
+----------------------------------------------------------------------
+Ran 24 tests in 5.600s
+
+FAILED (failures=1, errors=2)

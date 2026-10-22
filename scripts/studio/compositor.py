@@ -22,6 +22,20 @@ import sys
 import zlib
 
 
+if __package__:
+    from . import lens_geometry
+elif __name__ == "__main__":
+    # The owned map worker runs with -I (and is also checked with -S). Load
+    # the bundled sibling by its source path, without admitting ambient
+    # PYTHONPATH or the current working directory into the isolated process.
+    import importlib.util
+    _lens_spec = importlib.util.spec_from_file_location("cinematicum_lens_geometry", Path(__file__).with_name("lens_geometry.py"))
+    lens_geometry = importlib.util.module_from_spec(_lens_spec)
+    _lens_spec.loader.exec_module(lens_geometry)
+else:
+    import lens_geometry
+
+
 MAX_NODES = 32
 MAX_MEDIA_SOURCES = 8
 MAX_LENS_NODES = 2
@@ -153,6 +167,10 @@ def lens_domain(params):
     projected inverse iteration a contraction. No grid sampling is used to
     claim that unsampled image regions cannot fold.
     """
+    if params.get("model") == "lensfun":
+        return lens_geometry.profile_domain(params["profile"])
+    if params.get("model") == "fisheye":
+        return {"model": "fisheye", "q": 0., "iterations": 0}
     x0,x1 = -params["cx"]/params["fx"], (1-params["cx"])/params["fx"]
     y0,y1 = -params["cy"]/params["fy"], (1-params["cy"])/params["fy"]
     radius = math.hypot(max(abs(x0),abs(x1)), max(abs(y0),abs(y1)))
@@ -184,6 +202,8 @@ def lens_sample_point(params, x, y, width, height):
 
 def _lens_sampler(params, width, height):
     """Prepare a dependency-free reference sampler with one certificate."""
+    if params.get("model") in {"lensfun", "fisheye"}:
+        return lens_geometry.sampler(params, width, height)
     domain = lens_domain(params)
     def delta(a,b):
         r2=a*a+b*b;radial=r2*(params["k1"]+r2*(params["k2"]+r2*params["k3"]))
@@ -352,7 +372,7 @@ def validate_graph(graph, width=None, height=None, *, animation_duration=None, a
             raise ValueError(f"Compositor {kind} requires {INPUT_COUNTS[kind]} image input(s).")
         inputs = [_identifier(value) for value in inputs]
         params = raw.get("params", {})
-        extra = ({"direction"} if kind == "lens_distortion"
+        extra = ({"direction", "model", "projection", "profile"} if kind == "lens_distortion"
                  else {"asset_id", "source_in", "duration", "offset", "outside"} if kind == "media_source"
                  else {"color"} if kind == "chroma_key" else {"shape", "invert", "points", "bezier"} if kind == "mask"
                  else {"invert"} if kind == "alpha_mask"
@@ -366,6 +386,7 @@ def validate_graph(graph, width=None, height=None, *, animation_duration=None, a
             if not isinstance(direction,str) or direction not in {"undistort","distort"}:
                 raise ValueError("Calibrated lens direction must be undistort or distort.")
             clean["direction"]=direction
+            clean = lens_geometry.validate_advanced(params, clean)
             lens_domain(clean)
         if kind == "media_source":
             clean = {"asset_id": _identifier(params.get("asset_id")),
@@ -461,7 +482,7 @@ def validate_graph(graph, width=None, height=None, *, animation_duration=None, a
     _walk(by_id, by_id)  # Invalid disconnected nodes must not hide cycles.
     active = _walk(by_id, [output])
     if width is not None and height is not None and width*height>MAX_LENS_PIXELS and any(
-            by_id[key]["type"]=="lens_distortion" and any(by_id[key]["params"][name] for name in LENS_COEFFICIENTS)
+            by_id[key]["type"]=="lens_distortion" and lens_geometry.active(by_id[key]["params"])
             for key in active):
         raise ValueError("Calibrated lens processing supports at most 2,073,600 pixels per graph canvas (1920 × 1080).")
     working_images = sum(5 if by_id[key]["type"] == "merge" and by_id[key]["params"]["mode"] != "normal"
@@ -513,7 +534,7 @@ def lens_nodes(graph, *, active_only=True):
     nodes = {node["id"]: node for node in graph["nodes"]}
     active = set(_walk(nodes, [graph["output"]])) if active_only else set(nodes)
     return [node for node in graph["nodes"] if node["type"] == "lens_distortion"
-            and node["id"] in active and any(node["params"][name] for name in LENS_COEFFICIENTS)]
+            and node["id"] in active and lens_geometry.active(node["params"])]
 
 
 def validate_media_sources(graph, assets, fps):
@@ -639,6 +660,9 @@ def _lens_rows_numpy(params, width, height, np):
     Strips bound memory independently of image height. The scalar fallback
     above and this accelerator are compared against a separate Newton oracle.
     """
+    if params.get("model") in {"lensfun", "fisheye"}:
+        yield from _lens_rows_advanced_numpy(params, width, height, np)
+        return
     p, d = params, lens_domain(params)
     xs = (np.arange(width, dtype=np.float64)[None, :] / width - p["cx"]) / p["fx"]
     def delta(a, b):
@@ -681,6 +705,29 @@ def _lens_rows_numpy(params, width, height, np):
             raw = values.astype(">u2").tobytes()
             stride = len(raw) // rows
             result[name] = b"".join(b"\0" + raw[i*stride:(i+1)*stride] for i in range(rows))
+        yield result
+
+
+def _lens_rows_advanced_numpy(params, width, height, np):
+    xs = np.arange(width, dtype=np.float64)[None, :]
+    for first in range(0, height, 32):
+        rows = min(32, height - first)
+        ys = np.arange(first, first + rows, dtype=np.float64)[:, None]
+        u, v, valid = lens_geometry.coordinates_numpy(params, xs, ys, width, height, np)
+        x0, y0 = np.floor(u).astype(np.uint16), np.floor(v).astype(np.uint16)
+        arrays = {"x0": x0, "x1": np.minimum(x0 + 1, width - 1), "y0": y0, "y1": np.minimum(y0 + 1, height - 1),
+                  "wx": np.rint((u - x0) * 65535).astype(np.uint16), "wy": np.rint((v - y0) * 65535).astype(np.uint16)}
+        result = {}
+        for name, values in arrays.items():
+            if name in {"wx", "wy"}:
+                fraction = np.where(valid, values, 0)
+                values = np.full((rows, width, 4), 65535, dtype=np.uint16)
+                values[:, :, 3] = fraction
+            else:
+                values = np.where(valid, values, 65535)
+            raw = values.astype(">u2").tobytes()
+            stride = len(raw) // rows
+            result[name] = b"".join(b"\0" + raw[i * stride:(i + 1) * stride] for i in range(rows))
         yield result
 
 
@@ -1012,7 +1059,7 @@ def compile_graph(graph, input_label, prefix, *, fps=24, frame_offset=0,
             or any(value.startswith(prefix + "n") for value in external_labels.values())):
         raise ValueError("Compositor external stream labels must be valid, distinct internal inputs.")
     required_lenses = {ident for ident in order if nodes[ident]["type"] == "lens_distortion"
-                       and any(nodes[ident]["params"][name] for name in LENS_COEFFICIENTS)}
+                       and lens_geometry.active(nodes[ident]["params"])}
     lens_labels = {} if lens_labels is None else lens_labels
     if (not isinstance(lens_labels, dict) or set(lens_labels) != required_lenses
             or any(not isinstance(labels, dict) or set(labels) != set(LENS_MAP_NAMES)
@@ -1100,7 +1147,7 @@ def compile_graph(graph, input_label, prefix, *, fps=24, frame_offset=0,
             chain += [f"trim=start_frame={window}:end_frame={window + frame_count}", "setpts=PTS-STARTPTS", "format=" + rgba_format]
             filters.append(f"[{external_labels[ident]}]" + ",".join(chain) + f"[{output}]")
         elif kind == "lens_distortion":
-            if not any(params[name] for name in LENS_COEFFICIENTS):
+            if not lens_geometry.active(params):
                 filters.append(f"[{incoming[0]}]null[{output}]")
             else:
                 # Four nearest remaps select the exact bilinear corners. Two

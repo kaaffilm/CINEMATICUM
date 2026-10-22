@@ -1,0 +1,65 @@
+{
+  "browser_version": "134.0.6998.35",
+  "checks": {
+    "actual_profile_apply": true,
+    "calibration_capture_crop_explicit": true,
+    "connected_lens_node": true,
+    "exact_measured_upstream_sample": true,
+    "four_distinct_actual_fisheye_pictures": true,
+    "one_redo_restores_profile": true,
+    "one_undo_restores_fisheye": true,
+    "owned_real_frame_path": true,
+    "reopened_picture_identical": true,
+    "saved_profile_reopens_in_editor": true,
+    "static_calibration_has_no_unsupported_animation": true
+  },
+  "completed_download_count": 0,
+  "download_errors": [],
+  "downloads": [],
+  "elapsed_ms": 6224,
+  "expect_download": false,
+  "expected_download_count": 0,
+  "frames": {
+    "equidistant": {
+      "frame": 0,
+      "pixel_hash": "714328fe",
+      "url": "/api/projects/f233f96a86b44d83b3cc3262b7a2bbcd/previews/95518205b8e8f90da31c7103eb16eae4abcbddc08df873a73e77fb0a1a55d439.png"
+    },
+    "equisolid": {
+      "frame": 0,
+      "pixel_hash": "1701af02",
+      "url": "/api/projects/f233f96a86b44d83b3cc3262b7a2bbcd/previews/e3d4182cfb61c834be0d529e855253415f3acf3b4ef9477dc5d681c0a8d83db4.png"
+    },
+    "lensfun": {
+      "frame": 0,
+      "pixel_hash": "319d83ff",
+      "url": "/api/projects/f233f96a86b44d83b3cc3262b7a2bbcd/previews/d1470c10d52058bc563c7722402aaf2b5de33f1ff9c6e1f1c99a16d2e9adc612.png"
+    },
+    "orthographic": {
+      "frame": 0,
+      "pixel_hash": "989eb715",
+      "url": "/api/projects/f233f96a86b44d83b3cc3262b7a2bbcd/previews/e9ba800c0224303cad45dfe647d5ca58828249dee5d1904b0d1be4511e6a99d3.png"
+    },
+    "reopened": {
+      "frame": 0,
+      "pixel_hash": "319d83ff",
+      "url": "/api/projects/f233f96a86b44d83b3cc3262b7a2bbcd/previews/2fc33cef1cce5a4c9d509f9bf381a0ff3a6445f86d07335edc982ff709c2393a.png"
+    },
+    "stereographic": {
+      "frame": 0,
+      "pixel_hash": "8754e0e7",
+      "url": "/api/projects/f233f96a86b44d83b3cc3262b7a2bbcd/previews/af12c42def8a0f0cafacd73d78c4b74f5e99030af6d29ecf6e603086adda8e7d.png"
+    }
+  },
+  "h264_decoder": "probably",
+  "metrics": {
+    "lens_id": "e23e9be3-0e99-4ae6-acb3-59f5336f8aa1"
+  },
+  "native_certified": false,
+  "page_errors": [],
+  "passed": true,
+  "physical_open_panel_asserted": false,
+  "physical_save_panel_asserted": false,
+  "screenshot": "/workspace/scratch/091f394ee5df/cinematicum-lens-native-driver-01/author/ENGINE_TEST_lens_models.png",
+  "transport": "Chromium"
+}

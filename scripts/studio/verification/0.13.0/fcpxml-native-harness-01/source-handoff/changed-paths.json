@@ -1,0 +1,39 @@
+{
+  "feature_base": "c9869e86b9421b7fdc083d249b1616114320f0d5",
+  "integration_target_base": "dcea86196f81d6476a0f60538429b984b24c1129",
+  "paths": [
+    {
+      "after": {
+        "sha256": "786d1188247e74fcddf69a0ba671705c4b5317db9a2ed22470249ff4a08f5c88",
+        "size": 25861
+      },
+      "before": null,
+      "path": "scripts/studio/test_fcpxml_macos.py"
+    },
+    {
+      "after": {
+        "sha256": "c6d4958f1d9bbba07a1077cb3bcf712fdf79757d329965ac42fcde8acb1f9f35",
+        "size": 3478
+      },
+      "before": null,
+      "path": "scripts/studio/test_fcpxml_native_browser.cjs"
+    },
+    {
+      "after": {
+        "sha256": "e76dd347de1860c0865efc881f27978f37ce2356bd86e5376993d8a78c7bca14",
+        "size": 11400
+      },
+      "before": null,
+      "path": "scripts/studio/macos/FcpxmlSmoke.js"
+    },
+    {
+      "after": {
+        "sha256": "edaca66fb8ace86ad3487fcb73097c46410fe819447a7ac9c5bc3d4728d725d5",
+        "size": 7579
+      },
+      "before": null,
+      "path": "scripts/studio/FCPXML_NATIVE_ACCEPTANCE.md"
+    }
+  ],
+  "schema": "cinematicum-new-file-patch-inventory-v1"
+}

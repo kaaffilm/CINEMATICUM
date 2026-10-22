@@ -1,0 +1,41 @@
+{
+  "native_certified": false,
+  "passed": true,
+  "phases": [
+    {
+      "checks": 6,
+      "elapsed_seconds": 0.573,
+      "error": null,
+      "operation": "prepare",
+      "passed": true
+    },
+    {
+      "checks": 14,
+      "elapsed_seconds": 2.015,
+      "error": null,
+      "operation": "author",
+      "passed": true
+    },
+    {
+      "checks": 19,
+      "elapsed_seconds": 6.196,
+      "error": null,
+      "operation": "playback",
+      "passed": true
+    },
+    {
+      "checks": 19,
+      "elapsed_seconds": 4.284,
+      "error": null,
+      "operation": "archive",
+      "passed": true
+    }
+  ],
+  "schema": "cinematicum-actual-speed-ramp-chromium-acceptance-v1",
+  "chromium_executable_sha256": "f661a8c124888f491966c29581f33c1953c86c15d77048bc91452b66743d5f3a",
+  "chromium_executable_sha256_after": "f661a8c124888f491966c29581f33c1953c86c15d77048bc91452b66743d5f3a",
+  "elapsed_ms": 13415,
+  "python_exit_code": 0,
+  "error": null,
+  "report": "/home/runner/work/_temp/retime-acceptance/browser-report.json"
+}

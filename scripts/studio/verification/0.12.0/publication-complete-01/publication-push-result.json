@@ -1,0 +1,20 @@
+{
+  "schema": "cinematicum-reviewed-publication-push-v1",
+  "old": "a031a04e19007f7bac252c1f5b0f8d66db15371a",
+  "commit": "dcea86196f81d6476a0f60538429b984b24c1129",
+  "branch": "midia/cinematicum-functional-media-workbench-656cfb38",
+  "ancestor_verified": true,
+  "expected_remote_explicit": true,
+  "argv": [
+    "git",
+    "push",
+    "--porcelain",
+    "--force-with-lease=refs/heads/midia/cinematicum-functional-media-workbench-656cfb38:a031a04e19007f7bac252c1f5b0f8d66db15371a",
+    "origin",
+    "dcea86196f81d6476a0f60538429b984b24c1129:refs/heads/midia/cinematicum-functional-media-workbench-656cfb38"
+  ],
+  "exit_code": 0,
+  "stdout": "To https://github.com/kaaffilm/CINEMATICUM.git\n \tdcea86196f81d6476a0f60538429b984b24c1129:refs/heads/midia/cinematicum-functional-media-workbench-656cfb38\ta031a04..dcea861\nDone\n",
+  "stderr": "",
+  "elapsed_seconds": 4.321
+}

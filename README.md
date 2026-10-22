@@ -2,30 +2,32 @@
 
 ## CINEMATICUM Studio — editable production workspace
 
-Studio **0.12.0 / build 13** adds editable variable speed curves, actual dense
-optical-flow interpolation and exact source-grid varispeed sound. Undo, splits,
-edge trims, save/reopen and archives retain editable curves and original media;
-rendered playback and exports execute the same source-time processing. The
-integrated scientific, camera, Float32, OTIO, still-photography, collaboration
-and lifecycle workflows remain available within their documented bounds.
+Studio **0.13.0 / build 14** is the integrated candidate for measured Lensfun
+radial profiles, four explicit fisheye projections and bounded public Final Cut
+Pro XML interchange. Lens edits retain selected numeric calibration and source
+identity. FCPXML review maps owned media, preserves rational timeline/source
+clocks and real trimmed compounds, and applies one undoable native edit. Both
+workflows preserve save/reopen and existing portable project archives.
 
-Accepted core `c9869e86` passed **895/895 tests**, with no failures, errors or
-skips and unchanged source plus all five managed runtime inventories. Its four
-retime phases passed **58 outer checks**: three actual native executions and
-one fixture preparation. Independent replacement installation passed **5/5**
-for 112 runtime/web files and the complete 117-file bundle, preserving the prior
-0.11 app and 59 existing project files. Canonical installed launch passed
-**16/16 in 7.028 seconds**. All eight selected installed-runtime phases passed **14/14 each**, with
-separate **5/5 preparation** and **6/6 final preservation**. The documentation
-merge is reconciled to unchanged accepted runtime/test sources; exact-head
-CI/publication remains pending.
+The new source retains the editable variable-speed/optical-flow, simultaneous
+camera, fixed-source audio, Float32, OTIO, scientific, still-photography and
+collaboration workflows. Its first exact-source native and complete-suite
+gates, replacement installation and publication are pending. The original lens
+and FCPXML focused/media/UI evidence and independent Apple DTD validation are
+recorded in [Features 0.13](scripts/studio/FEATURES_0_13.md),
+[Verification 0.13](scripts/studio/VERIFICATION_0_13.md) and
+[remaining work](scripts/studio/UNFINISHED_0_13.md).
 
-[Implemented scope](scripts/studio/FEATURES_0_12.md),
-[verification](scripts/studio/VERIFICATION_0_12.md) and
-[remaining work](scripts/studio/UNFINISHED_0_12.md) identify the evidence and
-limits. The earlier 893-test freeze and failed native download attempt remain
-preserved under their exact source identities. Historical 0.11 acceptance is
-recorded separately; full professional parity remains unfinished.
+Published **0.12** commit `dcea8619` remains the accepted installed release.
+Its core passed **895/895 tests**, its native retime phases passed 58 reported
+outer checks, installation passed 5/5, canonical launch passed 16/16 and all
+eight selected installed-runtime phases passed 14/14. Final installed-source
+reconciliation passed 10/10. Its actual published source also passed all 895 CI
+tests and seven separate browser gates with complete source identity verified.
+Those historical results retain their exact source and do not certify this
+changed candidate. [Verification 0.12](scripts/studio/VERIFICATION_0_12.md)
+retains the complete records, including earlier failed attempts. Full
+professional parity and accepted-film issuance remain unfinished.
 
 Open the media editor with `make studio`. On macOS, `make studio-install-macos`
 builds **CINEMATICUM Studio.app** using the installed Xcode tools. CINEMATICUM owns
@@ -117,8 +119,8 @@ historical compiler/replay records keep their separate scope.
 
 Start with [the Studio guide](scripts/studio/README.md),
 [the source comparison and capability audit](scripts/studio/CAPABILITY_AUDIT.md),
-[the current verification record](scripts/studio/VERIFICATION_0_9_1.md), and
-[the current unfinished-work register](scripts/studio/UNFINISHED_0_9.md). These
+[the current verification record](scripts/studio/VERIFICATION_0_13.md), and
+[the current unfinished-work register](scripts/studio/UNFINISHED_0_13.md). These
 records separate source implementation, executed acceptance and deployment.
 Run `make studio-doctor` to inspect installed engines or `make studio-test` for
 application/media tests. Film footage must be imported or actually generated;

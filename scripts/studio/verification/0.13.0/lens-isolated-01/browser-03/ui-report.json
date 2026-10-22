@@ -1,0 +1,54 @@
+{
+  "passed": true,
+  "native_certified": false,
+  "transport": "Chromium",
+  "checks": {
+    "connected_lens_node": true,
+    "four_real_distinct_projection_pictures": true,
+    "exact_upstream_profile_options": true,
+    "exact_measured_sample_label": true,
+    "profile_applied": true,
+    "profile_undo_restores_fisheye": true,
+    "profile_redo_restores_calibration": true,
+    "saved_profile_reopens_in_editor": true,
+    "applied_metadata_visible": true,
+    "reopened_picture_same_pixels": true,
+    "movie_export_completed": true,
+    "movie_decodes_and_plays": true,
+    "no_page_errors": true
+  },
+  "frames": {
+    "equidistant": {
+      "url": "/api/projects/f9bb21a61ba346e3996ad4dd258d2b90/previews/3cfb2947269c52395f646b44e057ae47255c753fed30aa6af1b8e7adcc40b698.png",
+      "pixel_hash": "714328fe"
+    },
+    "equisolid": {
+      "url": "/api/projects/f9bb21a61ba346e3996ad4dd258d2b90/previews/183fb490d3a340dd35b0bd58cc07f88a536468a87e79c30f488cfe399b49c218.png",
+      "pixel_hash": "1701af02"
+    },
+    "stereographic": {
+      "url": "/api/projects/f9bb21a61ba346e3996ad4dd258d2b90/previews/2f0aee47b905a3ff93d6e35421f92d6f1ebeff944e530f656fbb3dc0fc35b2b0.png",
+      "pixel_hash": "8754e0e7"
+    },
+    "orthographic": {
+      "url": "/api/projects/f9bb21a61ba346e3996ad4dd258d2b90/previews/96c7088f16346cb303414a85f1482fb1fb33e6a4c68cfd413ecf6fdda1e22e74.png",
+      "pixel_hash": "989eb715"
+    },
+    "lensfun": {
+      "url": "/api/projects/f9bb21a61ba346e3996ad4dd258d2b90/previews/9937956dbb152e6d07167aafa4ce4b44c5800fd23f3edc4a4f61a4b7ddffe25d.png",
+      "pixel_hash": "319d83ff"
+    },
+    "reopened": {
+      "url": "/api/projects/f9bb21a61ba346e3996ad4dd258d2b90/previews/5551b5a8afcd1f1686c4cdb0ed0a99a8deefbaef15c143ddfaaafc8dd535580f.png",
+      "pixel_hash": "319d83ff"
+    }
+  },
+  "page_errors": [],
+  "lens_id": "f3b5d97a-c60a-492c-a1af-81bc2200607a",
+  "playback": {
+    "url": "/api/projects/f9bb21a61ba346e3996ad4dd258d2b90/exports/380bf79edc3942e681876d505a7e9d2a.mp4",
+    "time": 0.092921
+  },
+  "browser_version": "134.0.6998.35",
+  "elapsed_ms": 11992
+}

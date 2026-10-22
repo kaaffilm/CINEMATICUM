@@ -1,0 +1,6 @@
+test_real_archive_relocation_preserves_source_clocks_nested_edits_and_media (test_fcpxml.FCPXMLTests.test_real_archive_relocation_preserves_source_clocks_nested_edits_and_media) ... ok
+
+----------------------------------------------------------------------
+Ran 1 test in 2.469s
+
+OK

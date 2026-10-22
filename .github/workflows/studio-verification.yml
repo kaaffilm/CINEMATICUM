@@ -19,6 +19,8 @@ jobs:
     timeout-minutes: 60
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
@@ -119,6 +121,52 @@ jobs:
             --python "$RUNNER_TEMP/cinematicum-runtimes/verification/bin/python" \
             --browser "$CINEMATICUM_BROWSER" \
             --evidence "$RUNNER_TEMP/still-photography-acceptance"
+      - name: Prepare the exact upstream Lensfun test profile outside application runtimes
+        run: |
+          python3 -I -B - <<'PY'
+          import hashlib, json, os, shutil, urllib.request
+          from pathlib import Path
+          root = Path(os.environ["RUNNER_TEMP"]) / "cinematicum-test-fixtures" / "lensfun"
+          root.mkdir(parents=True, exist_ok=False)
+          url = "https://raw.githubusercontent.com/lensfun/lensfun/9e6deafe100a7c6f7ce019624bb8c4da20bf7c29/data/db/slr-olympus.xml"
+          size = 116602
+          expected = "f7693b6779edd8ed10d7dc23113669255bfa4987cea7db0e843f7f5f2bbbe615"
+          with urllib.request.urlopen(url, timeout=30) as response:
+              data = response.read(size + 1)
+          if len(data) != size or hashlib.sha256(data).hexdigest() != expected:
+              raise ValueError("Lensfun test profile differs from its pinned upstream bytes")
+          with (root / "slr-olympus.xml").open("xb") as stream:
+              stream.write(data)
+          notices = Path("scripts/studio/verification/0.13.0/lens-isolated-01/upstream-notices")
+          for name in ("COPYING.CC_BY-SA_3.0", "README.md", "source.json"):
+              shutil.copyfile(notices / name, root / name)
+          (root / "fixture-receipt.json").write_text(json.dumps({"url": url, "bytes": size,
+              "sha256": expected, "license": "CC-BY-SA-3.0", "scope": "Test-only; not an installed lens database"}, indent=2) + "\n")
+          PY
+      - name: Accept Lensfun and fisheye controls, persisted source and actual movie download
+        run: |
+          node scripts/studio/test_lens_models_native_browser.cjs \
+            --python "$RUNNER_TEMP/cinematicum-runtimes/verification/bin/python" \
+            --browser "$CINEMATICUM_BROWSER" \
+            --profile "$RUNNER_TEMP/cinematicum-test-fixtures/lensfun/slr-olympus.xml" \
+            --evidence "$RUNNER_TEMP/lens-models-acceptance"
+      - name: Prepare independent pinned Apple FCPXML schema validation
+        run: |
+          python3 -I -B scripts/studio/bootstrap_fcpxml_schema_validation.py \
+            --root "$RUNNER_TEMP/fcpxml-schema-validator"
+      - name: Accept public FCPXML review, apply, undo, reopen and exact movie audio
+        run: |
+          node scripts/studio/test_fcpxml_native_browser.cjs \
+            --python "$RUNNER_TEMP/cinematicum-runtimes/verification/bin/python" \
+            --browser "$CINEMATICUM_BROWSER" \
+            --evidence "$RUNNER_TEMP/fcpxml-acceptance"
+      - name: Validate actual hand-authored and downloaded XML with the official Apple DTD
+        run: |
+          "$RUNNER_TEMP/fcpxml-schema-validator/runtime/bin/python" -I -B scripts/studio/validate_fcpxml_schema.py \
+            --dtd "$RUNNER_TEMP/fcpxml-schema-validator/FCPXMLv1_10.dtd" \
+            --hand-fixture "$RUNNER_TEMP/fcpxml-acceptance/prepare/ENGINE_TEST_input.fcpxml" \
+            --export "$RUNNER_TEMP/fcpxml-acceptance/author/ENGINE_TEST_exported.fcpxml" \
+            --report "$RUNNER_TEMP/fcpxml-schema-report.json"
       - name: Preserve verification receipts
         if: always()
         uses: actions/upload-artifact@v4
@@ -149,4 +197,18 @@ jobs:
             ${{ runner.temp }}/startup-quit-acceptance/**/*.png
             ${{ runner.temp }}/still-photography-acceptance/**/*.json
             ${{ runner.temp }}/still-photography-acceptance/**/*.png
+            ${{ runner.temp }}/cinematicum-test-fixtures/lensfun/fixture-receipt.json
+            ${{ runner.temp }}/lens-models-acceptance/**/*.json
+            ${{ runner.temp }}/lens-models-acceptance/**/*.png
+            ${{ runner.temp }}/lens-models-acceptance/driver.stdout
+            ${{ runner.temp }}/lens-models-acceptance/driver.stderr
+            ${{ runner.temp }}/fcpxml-schema-validator/*.json
+            ${{ runner.temp }}/fcpxml-schema-validator/*.stdout
+            ${{ runner.temp }}/fcpxml-schema-validator/*.stderr
+            ${{ runner.temp }}/fcpxml-schema-report.json
+            ${{ runner.temp }}/fcpxml-acceptance/**/*.json
+            ${{ runner.temp }}/fcpxml-acceptance/**/*.png
+            ${{ runner.temp }}/fcpxml-acceptance/**/*.fcpxml
+            ${{ runner.temp }}/fcpxml-acceptance/driver.stdout
+            ${{ runner.temp }}/fcpxml-acceptance/driver.stderr
           if-no-files-found: warn

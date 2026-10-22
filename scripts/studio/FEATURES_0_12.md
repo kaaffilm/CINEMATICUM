@@ -8,8 +8,12 @@ speed and actual optical-flow source processing. Core `c9869e86` passed all
 and canonical installed launch passed 16/16. The [verification record](VERIFICATION_0_12.md)
 also records all eight selected installed-runtime phases passing 14/14 each,
 with 5/5 preparation and 6/6 final preservation. Documentation/source
-reconciliation retains the accepted runtime bytes; exact-head CI/publication
-remains pending. [Remaining requirements](UNFINISHED_0_12.md) still apply.
+reconciliation retains the accepted runtime bytes. Publication `dcea8619` is
+now on draft PR #162 and its final installed-source reconciliation passed 10/10.
+The actual published source also passed 895/895 CI tests and all seven
+separate browser gates; its entire declared source inventory was reconciled
+to `dcea8619`.
+[Remaining requirements](UNFINISHED_0_12.md) still apply.
 
 ## Authoring and source-time mapping
 

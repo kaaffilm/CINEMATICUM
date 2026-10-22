@@ -1,0 +1,50 @@
+{
+  "actual_movie": {
+    "sha256": "9dd435d3d6540571485ef50271a9fbb98af48571d8795392c0a0e3d98eaeadbf",
+    "size": 223559
+  },
+  "checks": {
+    "actual_export_receipt_hash": true,
+    "all_eight_frames_decode": true,
+    "original_source_unchanged": true,
+    "separate_codec_control_exact": true
+  },
+  "codec_control_movie": {
+    "sha256": "4978658281b016c3bbbc91423b40df23e4b8816d810e5679d9463400039c0898",
+    "size": 94938
+  },
+  "elapsed_seconds": 3.342,
+  "metadata": {
+    "audio_channels": 2,
+    "audio_duration": 0.6666666666666666,
+    "audio_sample_rate": 48000,
+    "audio_stream_index": 1,
+    "audio_streams": [
+      {
+        "channels": 2,
+        "codec": "pcm_s16le",
+        "container_id": "0x2",
+        "duration": 0.6666666666666666,
+        "index": 1,
+        "language": "",
+        "sample_rate": 48000
+      }
+    ],
+    "codec": "prores",
+    "color_transfer": "bt709",
+    "duration": 0.6666666666666666,
+    "fps": "12/1",
+    "frames": 8,
+    "has_audio": true,
+    "height": 90,
+    "kind": "video",
+    "pixel_format": "yuv422p10le",
+    "size": 223559,
+    "video_stream_index": 0,
+    "width": 160
+  },
+  "native_certified": false,
+  "passed": true,
+  "schema": "cinematicum-native-lens-prores-codec-control-v1",
+  "scope": "Actual ProRes encode/decode and numeric picture-control branch; native WKWebView ProRes decoder not executed."
+}

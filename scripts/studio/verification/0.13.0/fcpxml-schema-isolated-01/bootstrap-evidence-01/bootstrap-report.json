@@ -1,0 +1,63 @@
+{
+  "schema": "cinematicum-independent-fcpxml-validator-bootstrap-v1",
+  "passed": true,
+  "scope": "Separate test-only XML validation runtime; application/shared runtimes unchanged.",
+  "lock_sha256": "04ae4133c7e910ee217b2641e1bc187572baf9684454cf6dc9e3c2bb9b4a6ba3",
+  "bootstrap_sha256": "209f405a6d1ac7bd70fd79690e71c21c348e0aa086d6738e385c4c810b72e734",
+  "python": "/tmp/cinematicum-fcpxml-schema-bootstrap-20261022-01/runtime/bin/python",
+  "runtime": {
+    "lxml": "6.1.1",
+    "lxml_version": [
+      6,
+      1,
+      1,
+      0
+    ],
+    "libxml2": [
+      2,
+      14,
+      6
+    ],
+    "libxml2_compiled": [
+      2,
+      14,
+      6
+    ],
+    "python": "3.12.14",
+    "module": "/tmp/cinematicum-fcpxml-schema-bootstrap-20261022-01/runtime/lib/python3.12/site-packages/lxml/etree.cpython-312-x86_64-linux-gnu.so",
+    "module_identity": {
+      "bytes": 5276528,
+      "sha256": "d7597a0fec22576416028238ff20a65f90d97ab6f96f65fe3a620780855add48"
+    }
+  },
+  "wheel": {
+    "version": "6.1.1",
+    "libxml2": [
+      2,
+      14,
+      6
+    ],
+    "filename": "lxml-6.1.1-cp312-cp312-manylinux_2_26_x86_64.manylinux_2_28_x86_64.whl",
+    "url": "https://files.pythonhosted.org/packages/08/f6/af32e23e563971ffb0fb86be52bc5be5c2c118858ffc119bf6a9039b173d/lxml-6.1.1-cp312-cp312-manylinux_2_26_x86_64.manylinux_2_28_x86_64.whl",
+    "bytes": 5240367,
+    "sha256": "ebe6af670449830d6d9b752c256a983291c766a1365ba5d5460048f9e33a7818",
+    "metadata_source": "https://pypi.org/pypi/lxml/6.1.1/json"
+  },
+  "apple_document": {
+    "url": "https://developer.apple.com/documentation/professional-video-applications/document-type-definition.md",
+    "filename": "document-type-definition.md",
+    "bytes": 41495,
+    "sha256": "b4ed24c7dfbb84fb81bdb6880029f007b7784459256b9b489397d7264dc5735a"
+  },
+  "dtd": {
+    "version": "1.10",
+    "filename": "FCPXMLv1_10.dtd",
+    "bytes": 40206,
+    "sha256": "6044527401b6cc92a9d86383437794d8de801c1904b6d08409ce81720fd23f33",
+    "extraction": "The sole swift-fenced block of the exact Apple Markdown document, plus one final newline.",
+    "path": "/tmp/cinematicum-fcpxml-schema-bootstrap-20261022-01/FCPXMLv1_10.dtd"
+  },
+  "requirements_sha256": "602629d75035ee82c04948cc36e14af23778bd59bf591e2aac6c0027f01e6d86",
+  "pip_report_sha256": "d1af7234f8cee01d956a9782d22109556b411cf46a6660726a431925e40f0f94",
+  "elapsed_seconds": 6.569
+}

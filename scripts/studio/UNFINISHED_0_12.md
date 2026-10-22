@@ -19,9 +19,12 @@ All eight selected installed-runtime endpoint phases passed 14/14 each, with
 5/5 preparation and 6/6 final preservation. Their exact reports are collected
 and source-bound. The documentation/history merge has its own integrity manifest
 and explicit reconciliation to unchanged accepted runtime/test sources.
-Exact-head CI/publication remains the final release gate. The original
-893-test freeze and failed first native archive attempt remain historical
-records. No completed bounded gate changes `parity_complete: false`.
+Publication `dcea8619` is now on draft PR #162 and its final installed-source
+reconciliation passed 10/10. Actual Studio CI passed all 895 tests and seven
+separate browser gates; all declared source bytes and the manifest identity
+match the publication. The original 893-test freeze and failed first
+native archive attempt remain historical records. No completed bounded gate
+changes `parity_complete: false`.
 
 ## Major systems with missing implementation
 

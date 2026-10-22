@@ -1,0 +1,112 @@
+{
+  "complete_original_archive": {
+    "bytes": 1213083,
+    "path": "/workspace/scratch/091f394ee5df/cinematicum-lens-handoff/lens-evidence.tar.gz",
+    "sha256": "5c46c2e78d12fc3a4d3ee24250213c2749bb93b8e24f0d8f26e5c874c774da98"
+  },
+  "isolated_evidence_source": "cinematicum-lens-candidate",
+  "raw_media": [
+    {
+      "bytes": 195668,
+      "path": "scripts/studio/verification/0.13.0/lens-isolated-01/browser-01/ENGINE_TEST_lens_controls.png",
+      "retained_source_path": "/workspace/scratch/091f394ee5df/cinematicum-lens-candidate/scripts/studio/verification/0.13.0/lens-isolated-01/browser-01/ENGINE_TEST_lens_controls.png",
+      "sha256": "77fde360236f0d8bdabaef64e21fcac97ea2c101d04beb3458584c063119eca6"
+    },
+    {
+      "bytes": 39958,
+      "path": "scripts/studio/verification/0.13.0/lens-isolated-01/browser-02/ENGINE_TEST_equidistant.png",
+      "retained_source_path": "/workspace/scratch/091f394ee5df/cinematicum-lens-candidate/scripts/studio/verification/0.13.0/lens-isolated-01/browser-02/ENGINE_TEST_equidistant.png",
+      "sha256": "464ac5b02c7350ed708a5e219df929b5b27e6b2652fdd9546e35150b43088c4a"
+    },
+    {
+      "bytes": 40038,
+      "path": "scripts/studio/verification/0.13.0/lens-isolated-01/browser-02/ENGINE_TEST_equisolid.png",
+      "retained_source_path": "/workspace/scratch/091f394ee5df/cinematicum-lens-candidate/scripts/studio/verification/0.13.0/lens-isolated-01/browser-02/ENGINE_TEST_equisolid.png",
+      "sha256": "efcc11792c5a6500f4900ea06b40d222bfa46d2e004bff36a93693c7e66af0bd"
+    },
+    {
+      "bytes": 233258,
+      "path": "scripts/studio/verification/0.13.0/lens-isolated-01/browser-02/ENGINE_TEST_lens_controls.png",
+      "retained_source_path": "/workspace/scratch/091f394ee5df/cinematicum-lens-candidate/scripts/studio/verification/0.13.0/lens-isolated-01/browser-02/ENGINE_TEST_lens_controls.png",
+      "sha256": "aa262f80fe6ba77b18b0d5e9a9fdb78c1f44400eb4f51bf6ec38df50f6723711"
+    },
+    {
+      "bytes": 38425,
+      "path": "scripts/studio/verification/0.13.0/lens-isolated-01/browser-02/ENGINE_TEST_lensfun.png",
+      "retained_source_path": "/workspace/scratch/091f394ee5df/cinematicum-lens-candidate/scripts/studio/verification/0.13.0/lens-isolated-01/browser-02/ENGINE_TEST_lensfun.png",
+      "sha256": "0b72c6d439143107c1faaa7421f45d63ed066afff3290f9d82b673fbdfff9c36"
+    },
+    {
+      "bytes": 40148,
+      "path": "scripts/studio/verification/0.13.0/lens-isolated-01/browser-02/ENGINE_TEST_orthographic.png",
+      "retained_source_path": "/workspace/scratch/091f394ee5df/cinematicum-lens-candidate/scripts/studio/verification/0.13.0/lens-isolated-01/browser-02/ENGINE_TEST_orthographic.png",
+      "sha256": "f4b2de12e2f9cc59ec4a5fab1880aa5125aee20476a7236f33667c1ee5035082"
+    },
+    {
+      "bytes": 38425,
+      "path": "scripts/studio/verification/0.13.0/lens-isolated-01/browser-02/ENGINE_TEST_reopened.png",
+      "retained_source_path": "/workspace/scratch/091f394ee5df/cinematicum-lens-candidate/scripts/studio/verification/0.13.0/lens-isolated-01/browser-02/ENGINE_TEST_reopened.png",
+      "sha256": "0b72c6d439143107c1faaa7421f45d63ed066afff3290f9d82b673fbdfff9c36"
+    },
+    {
+      "bytes": 39731,
+      "path": "scripts/studio/verification/0.13.0/lens-isolated-01/browser-02/ENGINE_TEST_stereographic.png",
+      "retained_source_path": "/workspace/scratch/091f394ee5df/cinematicum-lens-candidate/scripts/studio/verification/0.13.0/lens-isolated-01/browser-02/ENGINE_TEST_stereographic.png",
+      "sha256": "dca14227d7720e54e5c8417bb7b617c81813c7f409b07e999f148ceeaa75f783"
+    },
+    {
+      "bytes": 39958,
+      "path": "scripts/studio/verification/0.13.0/lens-isolated-01/browser-03/ENGINE_TEST_equidistant.png",
+      "retained_source_path": "/workspace/scratch/091f394ee5df/cinematicum-lens-candidate/scripts/studio/verification/0.13.0/lens-isolated-01/browser-03/ENGINE_TEST_equidistant.png",
+      "sha256": "464ac5b02c7350ed708a5e219df929b5b27e6b2652fdd9546e35150b43088c4a"
+    },
+    {
+      "bytes": 40038,
+      "path": "scripts/studio/verification/0.13.0/lens-isolated-01/browser-03/ENGINE_TEST_equisolid.png",
+      "retained_source_path": "/workspace/scratch/091f394ee5df/cinematicum-lens-candidate/scripts/studio/verification/0.13.0/lens-isolated-01/browser-03/ENGINE_TEST_equisolid.png",
+      "sha256": "efcc11792c5a6500f4900ea06b40d222bfa46d2e004bff36a93693c7e66af0bd"
+    },
+    {
+      "bytes": 271627,
+      "path": "scripts/studio/verification/0.13.0/lens-isolated-01/browser-03/ENGINE_TEST_lens_controls.png",
+      "retained_source_path": "/workspace/scratch/091f394ee5df/cinematicum-lens-candidate/scripts/studio/verification/0.13.0/lens-isolated-01/browser-03/ENGINE_TEST_lens_controls.png",
+      "sha256": "3d1c13391ca1717d8ce67ae61085d2ed14447441f440e90d6fab7d2829a76345"
+    },
+    {
+      "bytes": 38425,
+      "path": "scripts/studio/verification/0.13.0/lens-isolated-01/browser-03/ENGINE_TEST_lensfun.png",
+      "retained_source_path": "/workspace/scratch/091f394ee5df/cinematicum-lens-candidate/scripts/studio/verification/0.13.0/lens-isolated-01/browser-03/ENGINE_TEST_lensfun.png",
+      "sha256": "0b72c6d439143107c1faaa7421f45d63ed066afff3290f9d82b673fbdfff9c36"
+    },
+    {
+      "bytes": 24351,
+      "path": "scripts/studio/verification/0.13.0/lens-isolated-01/browser-03/ENGINE_TEST_lensfun_movie.mp4",
+      "retained_source_path": "/workspace/scratch/091f394ee5df/cinematicum-lens-candidate/scripts/studio/verification/0.13.0/lens-isolated-01/browser-03/ENGINE_TEST_lensfun_movie.mp4",
+      "sha256": "9fe0a8f0b2e85785363c12049429e76cbc14d4529a3dc7a5af28a4cd67eab17b"
+    },
+    {
+      "bytes": 40148,
+      "path": "scripts/studio/verification/0.13.0/lens-isolated-01/browser-03/ENGINE_TEST_orthographic.png",
+      "retained_source_path": "/workspace/scratch/091f394ee5df/cinematicum-lens-candidate/scripts/studio/verification/0.13.0/lens-isolated-01/browser-03/ENGINE_TEST_orthographic.png",
+      "sha256": "f4b2de12e2f9cc59ec4a5fab1880aa5125aee20476a7236f33667c1ee5035082"
+    },
+    {
+      "bytes": 38425,
+      "path": "scripts/studio/verification/0.13.0/lens-isolated-01/browser-03/ENGINE_TEST_reopened.png",
+      "retained_source_path": "/workspace/scratch/091f394ee5df/cinematicum-lens-candidate/scripts/studio/verification/0.13.0/lens-isolated-01/browser-03/ENGINE_TEST_reopened.png",
+      "sha256": "0b72c6d439143107c1faaa7421f45d63ed066afff3290f9d82b673fbdfff9c36"
+    },
+    {
+      "bytes": 39731,
+      "path": "scripts/studio/verification/0.13.0/lens-isolated-01/browser-03/ENGINE_TEST_stereographic.png",
+      "retained_source_path": "/workspace/scratch/091f394ee5df/cinematicum-lens-candidate/scripts/studio/verification/0.13.0/lens-isolated-01/browser-03/ENGINE_TEST_stereographic.png",
+      "sha256": "dca14227d7720e54e5c8417bb7b617c81813c7f409b07e999f148ceeaa75f783"
+    }
+  ],
+  "raw_media_files_excluded_from_git": 16,
+  "schema": "cinematicum-lens-public-evidence-selection-v1",
+  "scope": "Original isolated source acceptance; not acceptance of the integrated 0.13 candidate.",
+  "source_baseline_tree": "941da9dbc805788a89c610ee688cc17de08fccc4",
+  "source_patch_sha256": "adb9c225c4562bd142e1f5722eb88c96918908fa64aa8807437d51253322cbb7",
+  "text_files_in_git": 27
+}

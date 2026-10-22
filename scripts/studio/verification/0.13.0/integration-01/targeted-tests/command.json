@@ -1,0 +1,13 @@
+{
+  "command": [
+    "/workspace/scratch/091f394ee5df/cinematicum-runtimes/verification/bin/python",
+    "-I",
+    "-B",
+    "-c",
+    "import sys,json,time,unittest,hashlib\nfrom pathlib import Path\nsys.path.insert(0,sys.argv[1]);out=Path(sys.argv[2])\nmodules=['test_fcpxml','test_lens_compositor','test_lens_geometry','test_interchange','test_install_macos']\npaths=['fcpxml.py','server.py','install_macos.py','lens_geometry.py','compositor.py','web/app.js','web/compositor-ui.js','web/interchange-ui.js','web/index.html']\ndef inventory():return {p:hashlib.sha256((Path(sys.argv[1])/p).read_bytes()).hexdigest() for p in paths}\nbefore=inventory();began=time.monotonic();suite=unittest.defaultTestLoader.loadTestsFromNames(modules);result=unittest.TextTestRunner(verbosity=2).run(suite);after=inventory()\nreport={'schema':'cinematicum-targeted-integration-v1','modules':modules,'tests':result.testsRun,'failures':len(result.failures),'errors':len(result.errors),'skips':len(result.skipped),'elapsed_seconds':round(time.monotonic()-began,3),'passed':result.wasSuccessful() and not result.skipped and before==after,'source_before':before,'source_after':after,'source_unchanged':before==after}\n(out/'report.json').write_text(json.dumps(report,indent=2)+'\\n');print(json.dumps(report));raise SystemExit(0 if report['passed'] else 1)\n",
+    "/workspace/scratch/091f394ee5df/cinematicum-013-candidate/scripts/studio",
+    "/workspace/scratch/091f394ee5df/cinematicum-013-integration/targeted-integration-01"
+  ],
+  "source": "0.13 integrated product before provisional commit",
+  "broad_frozen_suite": false
+}

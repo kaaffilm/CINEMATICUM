@@ -1,0 +1,36 @@
+{
+  "schema": "cinematicum-phased-native-lens-driver-check-v1",
+  "native_certified": false,
+  "passed": true,
+  "phases": [
+    {
+      "checks": 10,
+      "elapsed_seconds": 0.444,
+      "error": null,
+      "native_certified": false,
+      "operation": "prepare",
+      "passed": true
+    },
+    {
+      "checks": 41,
+      "elapsed_seconds": 6.933,
+      "error": null,
+      "native_certified": false,
+      "operation": "author",
+      "passed": true
+    },
+    {
+      "checks": 24,
+      "elapsed_seconds": 4.241,
+      "error": null,
+      "native_certified": false,
+      "operation": "render",
+      "passed": true
+    }
+  ],
+  "browser_sha256": "f661a8c124888f491966c29581f33c1953c86c15d77048bc91452b66743d5f3a",
+  "browser_sha256_after": "f661a8c124888f491966c29581f33c1953c86c15d77048bc91452b66743d5f3a",
+  "elapsed_ms": 12628,
+  "python_exit_code": 0,
+  "error": null
+}

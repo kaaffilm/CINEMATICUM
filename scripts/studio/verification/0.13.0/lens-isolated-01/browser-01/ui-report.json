@@ -1,0 +1,15 @@
+{
+  "passed": false,
+  "native_certified": false,
+  "transport": "Chromium",
+  "checks": {},
+  "frames": {},
+  "page_errors": [],
+  "error": "page.waitForFunction: EvalError: Refused to evaluate a string as JavaScript because 'unsafe-eval' is not an allowed source of script in the following Content Security Policy directive: \"script-src 'self'\".\n\n    at eval (<anonymous>)\n    at predicate (eval at evaluate (:234:30), <anonymous>:11:37)\n    at next (eval at evaluate (:234:30), <anonymous>:32:31)\n    at main (/workspace/scratch/091f394ee5df/cinematicum-lens-candidate/scripts/studio/test_lens_models_browser.cjs:37:16)",
+  "ui": {
+    "toast": "",
+    "frame": "",
+    "job": ""
+  },
+  "elapsed_ms": 1277
+}

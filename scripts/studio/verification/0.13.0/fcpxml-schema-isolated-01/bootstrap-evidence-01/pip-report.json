@@ -1,0 +1,102 @@
+{
+  "version": "1",
+  "pip_version": "25.0.1",
+  "install": [
+    {
+      "download_info": {
+        "url": "file:///tmp/cinematicum-fcpxml-schema-bootstrap-20261022-01/downloads/lxml-6.1.1-cp312-cp312-manylinux_2_26_x86_64.manylinux_2_28_x86_64.whl",
+        "archive_info": {
+          "hash": "sha256=ebe6af670449830d6d9b752c256a983291c766a1365ba5d5460048f9e33a7818",
+          "hashes": {
+            "sha256": "ebe6af670449830d6d9b752c256a983291c766a1365ba5d5460048f9e33a7818"
+          }
+        }
+      },
+      "is_direct": false,
+      "is_yanked": false,
+      "requested": true,
+      "metadata": {
+        "metadata_version": "2.4",
+        "name": "lxml",
+        "version": "6.1.1",
+        "dynamic": [
+          "author",
+          "author-email",
+          "classifier",
+          "description",
+          "home-page",
+          "license",
+          "license-file",
+          "maintainer",
+          "maintainer-email",
+          "project-url",
+          "provides-extra",
+          "requires-python",
+          "summary"
+        ],
+        "summary": "Powerful and Pythonic XML processing library combining libxml2/libxslt with the ElementTree API.",
+        "description": "lxml is a Pythonic, mature binding for the libxml2 and libxslt libraries.\nIt provides safe and convenient access to these libraries using the\nElementTree API.\n\nIt extends the ElementTree API significantly to offer support for XPath,\nRelaxNG, XML Schema, XSLT, C14N and much more.\n\nTo contact the project, go to the `project home page <https://lxml.de/>`_\nor see our bug tracker at https://launchpad.net/lxml\n\nIn case you want to use the current in-development version of lxml,\nyou can get it from the github repository at\nhttps://github.com/lxml/lxml .  Note that this requires Cython to\nbuild the sources, see the build instructions on the project home page.\n\n\nAfter an official release of a new stable series, bug fixes may become available at\nhttps://github.com/lxml/lxml/tree/lxml-6.1 .\nRunning ``pip install https://github.com/lxml/lxml/archive/refs/heads/lxml-6.1.tar.gz``\nwill install the unreleased branch state as soon as a maintenance branch has been established.\nNote that this requires Cython to be installed at an appropriate version for the build.\n\n6.1.1 (2026-05-18)\n==================\n\nBugs fixed\n----------\n\n* The known link attributes in ``lxml.html.defs.link_attrs`` were missing ``xlink:href``,\n  which can be used for URL bypass attacks in embedded SVG/MathML/etc. content.\n  https://github.com/fedora-python/lxml_html_clean/security/advisories/GHSA-4jhm-jv67-739f\n\n* The Linux wheels use a patched libxslt 1.1.43, fixing CVE-2025-7424 and CVE-2025-11731.\n\n* The Windows wheels use libxslt 1.1.45, fixing CVE-2025-7424 and CVE-2025-11731.\n\n\n",
+        "home_page": "https://lxml.de/",
+        "author": "lxml dev team",
+        "author_email": "lxml@lxml.de",
+        "maintainer": "lxml dev team",
+        "maintainer_email": "lxml@lxml.de",
+        "license": "BSD-3-Clause",
+        "license_file": [
+          "LICENSE.txt",
+          "LICENSES.txt"
+        ],
+        "classifier": [
+          "Development Status :: 5 - Production/Stable",
+          "Intended Audience :: Developers",
+          "Intended Audience :: Information Technology",
+          "Programming Language :: Cython",
+          "Programming Language :: Python :: 3",
+          "Programming Language :: Python :: 3.8",
+          "Programming Language :: Python :: 3.9",
+          "Programming Language :: Python :: 3.10",
+          "Programming Language :: Python :: 3.11",
+          "Programming Language :: Python :: 3.12",
+          "Programming Language :: Python :: 3.13",
+          "Programming Language :: Python :: 3.14",
+          "Programming Language :: C",
+          "Operating System :: OS Independent",
+          "Topic :: Text Processing :: Markup :: HTML",
+          "Topic :: Text Processing :: Markup :: XML",
+          "Topic :: Software Development :: Libraries :: Python Modules"
+        ],
+        "requires_dist": [
+          "cssselect>=0.7; extra == \"cssselect\"",
+          "html5lib; extra == \"html5\"",
+          "BeautifulSoup4; extra == \"htmlsoup\"",
+          "lxml_html_clean; extra == \"html-clean\""
+        ],
+        "requires_python": ">=3.8",
+        "project_url": [
+          "Source, https://github.com/lxml/lxml",
+          "Bug Tracker, https://bugs.launchpad.net/lxml"
+        ],
+        "provides_extra": [
+          "source",
+          "cssselect",
+          "html5",
+          "htmlsoup",
+          "html-clean"
+        ]
+      }
+    }
+  ],
+  "environment": {
+    "implementation_name": "cpython",
+    "implementation_version": "3.12.14",
+    "os_name": "posix",
+    "platform_machine": "x86_64",
+    "platform_release": "6.18.55",
+    "platform_system": "Linux",
+    "platform_version": "#1 SMP Wed Oct 14 19:45:18 UTC 2026",
+    "python_full_version": "3.12.14",
+    "platform_python_implementation": "CPython",
+    "python_version": "3.12",
+    "sys_platform": "linux"
+  }
+}

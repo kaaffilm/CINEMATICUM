@@ -1,0 +1,138 @@
+{
+  "schema": "cinematicum-lens-models-browser-acceptance-v1",
+  "native_certified": false,
+  "passed": false,
+  "checks": {
+    "actual_shipped_browser_controls": false,
+    "exact_upstream_calibration_saved": true,
+    "one_owned_source_and_clip": true,
+    "original_source_bytes_unchanged": true,
+    "equidistant_exact_snapshot": true,
+    "equidistant_actual_receipt": true,
+    "equidistant_independent_ray_and_alpha_pixels": true,
+    "equisolid_exact_snapshot": true,
+    "equisolid_actual_receipt": true,
+    "equisolid_independent_ray_and_alpha_pixels": true,
+    "stereographic_exact_snapshot": true,
+    "stereographic_actual_receipt": true,
+    "stereographic_independent_ray_and_alpha_pixels": true,
+    "orthographic_exact_snapshot": true,
+    "orthographic_actual_receipt": true,
+    "orthographic_independent_ray_and_alpha_pixels": true,
+    "lensfun_exact_snapshot": true,
+    "lensfun_actual_receipt": true,
+    "lensfun_independent_ray_and_alpha_pixels": true,
+    "reopened_exact_snapshot": true,
+    "reopened_actual_receipt": true,
+    "reopened_independent_ray_and_alpha_pixels": true,
+    "one_complete_movie_export": false,
+    "browser_binary_unchanged": true
+  },
+  "profile_sha256": "f7693b6779edd8ed10d7dc23113669255bfa4987cea7db0e843f7f5f2bbbe615",
+  "browser_sha256": "f661a8c124888f491966c29581f33c1953c86c15d77048bc91452b66743d5f3a",
+  "ui": {
+    "passed": false,
+    "native_certified": false,
+    "transport": "Chromium",
+    "checks": {
+      "connected_lens_node": true,
+      "four_real_distinct_projection_pictures": true,
+      "exact_upstream_profile_options": true,
+      "exact_measured_sample_label": true,
+      "profile_applied": true,
+      "profile_undo_restores_fisheye": true,
+      "profile_redo_restores_calibration": true,
+      "saved_profile_reopens_in_editor": true,
+      "applied_metadata_visible": true,
+      "reopened_picture_same_identity": false
+    },
+    "frames": {
+      "equidistant": {
+        "url": "/api/projects/1f5801da91b44038a6eba10c1b815fe5/previews/3f596f12934ee9fc71deb05923f3ed3d021b65448e0e575250891fb70029029b.png",
+        "pixel_hash": "714328fe"
+      },
+      "equisolid": {
+        "url": "/api/projects/1f5801da91b44038a6eba10c1b815fe5/previews/be7848abb0a577a983a1ec7943cddb73efb8c354066fc7f6b43126e2c0b23a74.png",
+        "pixel_hash": "1701af02"
+      },
+      "stereographic": {
+        "url": "/api/projects/1f5801da91b44038a6eba10c1b815fe5/previews/6f0b9619c793a76325224e4559087e589a850ca61fffea1cb55157cf5ab71759.png",
+        "pixel_hash": "8754e0e7"
+      },
+      "orthographic": {
+        "url": "/api/projects/1f5801da91b44038a6eba10c1b815fe5/previews/306cd99dfd6f79e48a46a3b86fb4b1196a259df7702c4dbfec83980ab0e2e921.png",
+        "pixel_hash": "989eb715"
+      },
+      "lensfun": {
+        "url": "/api/projects/1f5801da91b44038a6eba10c1b815fe5/previews/ca26bd3d7c9703017b131cfb449d47b416ffdb69099a58e9af057323dfd35548.png",
+        "pixel_hash": "319d83ff"
+      },
+      "reopened": {
+        "url": "/api/projects/1f5801da91b44038a6eba10c1b815fe5/previews/a450c0a640bae470eae16467c9b503546cb50185f7ad2118c35098366d610374.png",
+        "pixel_hash": "319d83ff"
+      }
+    },
+    "page_errors": [],
+    "lens_id": "1a412787-768b-44e6-9617-56f434e069b4",
+    "error": "AssertionError [ERR_ASSERTION]: reopened_picture_same_identity\n    at record (/workspace/scratch/091f394ee5df/cinematicum-lens-candidate/scripts/studio/test_lens_models_browser.cjs:13:57)\n    at main (/workspace/scratch/091f394ee5df/cinematicum-lens-candidate/scripts/studio/test_lens_models_browser.cjs:76:5)",
+    "ui": {
+      "toast": "Source preview cannot decode ENGINE_TEST_alpha_ramps.mkv. Try Render preview.",
+      "frame": "Rendered frame 0 \u00b7 export graph",
+      "job": ""
+    },
+    "elapsed_ms": 7421
+  },
+  "picture_errors": {
+    "equidistant": {
+      "mean": 0.3670986788917526,
+      "max": 1.5693502643606223
+    },
+    "equisolid": {
+      "mean": 0.36915268072054214,
+      "max": 1.5422866829364636
+    },
+    "stereographic": {
+      "mean": 0.3808880909913922,
+      "max": 1.7233207433239102
+    },
+    "orthographic": {
+      "mean": 0.41092421910991855,
+      "max": 1.589826190934616
+    },
+    "lensfun": {
+      "mean": 0.3669782628835781,
+      "max": 1.7868366421009227
+    },
+    "reopened": {
+      "mean": 0.3669782628835781,
+      "max": 1.7868366421009227
+    }
+  },
+  "jobs": [
+    {
+      "kind": "frame-preview",
+      "state": "completed"
+    },
+    {
+      "kind": "frame-preview",
+      "state": "completed"
+    },
+    {
+      "kind": "frame-preview",
+      "state": "completed"
+    },
+    {
+      "kind": "frame-preview",
+      "state": "completed"
+    },
+    {
+      "kind": "frame-preview",
+      "state": "completed"
+    },
+    {
+      "kind": "frame-preview",
+      "state": "completed"
+    }
+  ],
+  "elapsed_seconds": 9.44
+}

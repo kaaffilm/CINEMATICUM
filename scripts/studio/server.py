@@ -45,7 +45,7 @@ from color_pipeline import import_cube, list_luts
 import recovery
 from collaboration import CollaborationError
 
-VERSION = "0.12.0"
+VERSION = "0.13.0"
 MAX_UPLOAD = 8 * 1024 * 1024 * 1024
 MAX_JSON = 8 * 1024 * 1024
 IDENTIFIER = re.compile(r"^[a-f0-9]{32}$")
@@ -790,17 +790,45 @@ class Store:
             return {"installation": result, "status": planar_capabilities()}
         return self.submit(project_id, "tracking-setup", work)
 
-    def interchange(self, project_id, payload, importing=False):
+    def interchange(self, project_id, payload, importing=False, inspecting=False):
         from interchange import export_otio, import_otio
+        from fcpxml import export_fcpxml, import_fcpxml, inspect_fcpxml
+        format_name = payload.get("format", "otio")
+        if not isinstance(format_name, str) or format_name not in {"otio", "fcpxml"}:
+            raise ValueError("Timeline interchange format must be otio or fcpxml.")
         project = self.analysis_snapshot(project_id, payload)
         directory = self.project_dir(project_id)
+        if inspecting:
+            if format_name != "fcpxml":
+                raise ValueError("XML reference inspection requires the fcpxml format.")
+            return inspect_fcpxml(payload.get("document"))
         if importing:
-            return import_otio(payload.get("document"), project, directory, payload.get("asset_map"))
-        result = export_otio(project, directory)
-        output = directory / "exports" / (uuid.uuid4().hex + ".otio")
-        atomic_json(output, result["document"])
+            importer = import_fcpxml if format_name == "fcpxml" else import_otio
+            return importer(payload.get("document"), project, directory, payload.get("asset_map"))
+        result = (export_fcpxml if format_name == "fcpxml" else export_otio)(project, directory)
+        output = directory / "exports" / (uuid.uuid4().hex + "." + format_name)
+        if format_name == "fcpxml":
+            output.parent.mkdir(parents=True, exist_ok=True)
+            temporary = None
+            try:
+                with tempfile.NamedTemporaryFile(mode="w", encoding="utf-8", dir=str(output.parent), delete=False) as stream:
+                    temporary = Path(stream.name)
+                    stream.write(result["document"])
+                    stream.flush()
+                    os.fsync(stream.fileno())
+                os.replace(temporary, output)
+                directory_fd = os.open(str(output.parent), os.O_RDONLY | getattr(os, "O_DIRECTORY", 0))
+                try:
+                    os.fsync(directory_fd)
+                finally:
+                    os.close(directory_fd)
+            finally:
+                if temporary is not None:
+                    temporary.unlink(missing_ok=True)
+        else:
+            atomic_json(output, result["document"])
         return {"url": f"/api/projects/{project_id}/exports/{output.name}", "filename": output.name,
-                "warnings": result.get("warnings", []), "sha256": digest_file(output)}
+                "format": format_name, "warnings": result.get("warnings", []), "sha256": digest_file(output)}
 
     def waveform(self, project_id, asset_id, bins, stream_index=None, channels=None):
         asset, path = self.asset(project_id, asset_id)
@@ -1506,9 +1534,9 @@ class Handler(BaseHTTPRequestHandler):
                     raise ValueError("Invalid frame preview filename")
                 return self.file(self.store.project_dir(project_id) / "previews" / parts[4])
             if len(parts) == 5 and parts[3] == "exports":
-                if not re.fullmatch(r"[a-f0-9]{32}(\.(mp4|mov|mkv|json|blend|otio|zip|srt|vtt|cinematicum\.zip)|-shot-plan\.json)", parts[4]):
+                if not re.fullmatch(r"[a-f0-9]{32}(\.(mp4|mov|mkv|json|blend|otio|fcpxml|zip|srt|vtt|cinematicum\.zip)|-shot-plan\.json)", parts[4]):
                     raise ValueError("Invalid export filename")
-                return self.file(self.store.project_dir(project_id) / "exports" / parts[4], download=parts[4].endswith((".blend", ".otio", ".mkv", ".zip", ".srt", ".vtt", "-shot-plan.json")) or "download" in parse_qs(parsed.query))
+                return self.file(self.store.project_dir(project_id) / "exports" / parts[4], download=parts[4].endswith((".blend", ".otio", ".fcpxml", ".mkv", ".zip", ".srt", ".vtt", "-shot-plan.json")) or "download" in parse_qs(parsed.query))
             if len(parts) == 5 and parts[3] == "analysis":
                 if not re.fullmatch(r"[a-f0-9]{32}\.(png|json)", parts[4]):
                     raise ValueError("Invalid analysis filename")
@@ -1558,6 +1586,12 @@ class Handler(BaseHTTPRequestHandler):
             if self.command != "POST" or len(parts) != 4:
                 raise FileNotFoundError("Route does not exist")
             action = parts[3]
+            if action == "lensfun-import":
+                from lens_geometry import parse_lensfun_xml
+                payload = self.body(768 * 1024)
+                if not isinstance(payload, dict) or set(payload) != {"text"}:
+                    raise ValueError("Lensfun import accepts the selected XML text only.")
+                return self.json(200, parse_lensfun_xml(payload["text"]))
             if action == "checkpoint":
                 return self.json(200, self.store.checkpoint(project_id, self.body()))
             if action == "recovery":
@@ -1758,8 +1792,8 @@ class Handler(BaseHTTPRequestHandler):
                 return self.json(202, self.store.tracking_setup(project_id, payload))
             if action in {"tracking-motion", "tracking-validate"}:
                 return self.json(200, self.store.tracking_plan(project_id, payload, motion=action == "tracking-motion"))
-            if action in {"interchange-export", "interchange-import"}:
-                return self.json(200, self.store.interchange(project_id, payload, importing=action == "interchange-import"))
+            if action in {"interchange-export", "interchange-import", "interchange-inspect"}:
+                return self.json(200, self.store.interchange(project_id, payload, importing=action == "interchange-import", inspecting=action == "interchange-inspect"))
             if action == "automate":
                 return self.json(200, self.store.automate(project_id, payload))
         raise FileNotFoundError("Route does not exist")

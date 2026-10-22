@@ -1,0 +1,122 @@
+[
+  {
+    "created_at": 1792673045.4126048,
+    "error": null,
+    "finished_at": 1792673045.742735,
+    "id": "306491a2ecad4e188350462ac5660218",
+    "kind": "frame-preview",
+    "progress": 1,
+    "project_id": "ec0d3b4fb271400c919c6257dbbddac7",
+    "result": {
+      "frame": 0,
+      "height": 90,
+      "pipeline": "timeline-export-graph",
+      "pixel_format": "rgb24",
+      "processing_bits": 8,
+      "sha256": "464ac5b02c7350ed708a5e219df929b5b27e6b2652fdd9546e35150b43088c4a",
+      "url": "/api/projects/ec0d3b4fb271400c919c6257dbbddac7/previews/099a1863c6d39ad773a3a99a6e3e5bf9d971463cd7f275fde6e8ac77a62f3790.png",
+      "width": 160
+    },
+    "state": "completed"
+  },
+  {
+    "created_at": 1792673046.0767481,
+    "error": null,
+    "finished_at": 1792673046.4134476,
+    "id": "6a8c88042ca84abfa49a9cc2674bc466",
+    "kind": "frame-preview",
+    "progress": 1,
+    "project_id": "ec0d3b4fb271400c919c6257dbbddac7",
+    "result": {
+      "frame": 0,
+      "height": 90,
+      "pipeline": "timeline-export-graph",
+      "pixel_format": "rgb24",
+      "processing_bits": 8,
+      "sha256": "efcc11792c5a6500f4900ea06b40d222bfa46d2e004bff36a93693c7e66af0bd",
+      "url": "/api/projects/ec0d3b4fb271400c919c6257dbbddac7/previews/963958e19791a38a5da31b887bd7d9c9c22a1e7eba5271633de17c48350da4c4.png",
+      "width": 160
+    },
+    "state": "completed"
+  },
+  {
+    "created_at": 1792673046.775189,
+    "error": null,
+    "finished_at": 1792673047.0517056,
+    "id": "405d5a548ada4e778bf599c3840cad59",
+    "kind": "frame-preview",
+    "progress": 1,
+    "project_id": "ec0d3b4fb271400c919c6257dbbddac7",
+    "result": {
+      "frame": 0,
+      "height": 90,
+      "pipeline": "timeline-export-graph",
+      "pixel_format": "rgb24",
+      "processing_bits": 8,
+      "sha256": "dca14227d7720e54e5c8417bb7b617c81813c7f409b07e999f148ceeaa75f783",
+      "url": "/api/projects/ec0d3b4fb271400c919c6257dbbddac7/previews/879143d4ef00a5ded23a0b228f6c7960111d271e99d7138e7f32d73979baa9b3.png",
+      "width": 160
+    },
+    "state": "completed"
+  },
+  {
+    "created_at": 1792673047.4280045,
+    "error": null,
+    "finished_at": 1792673047.7055526,
+    "id": "a78e046f6c804ae697f3fb6a558052a4",
+    "kind": "frame-preview",
+    "progress": 1,
+    "project_id": "ec0d3b4fb271400c919c6257dbbddac7",
+    "result": {
+      "frame": 0,
+      "height": 90,
+      "pipeline": "timeline-export-graph",
+      "pixel_format": "rgb24",
+      "processing_bits": 8,
+      "sha256": "f4b2de12e2f9cc59ec4a5fab1880aa5125aee20476a7236f33667c1ee5035082",
+      "url": "/api/projects/ec0d3b4fb271400c919c6257dbbddac7/previews/708fb5e7bf64e5d7afc784d1f060ec404119927e923c82a71020ef75791052a7.png",
+      "width": 160
+    },
+    "state": "completed"
+  },
+  {
+    "created_at": 1792673048.1155024,
+    "error": null,
+    "finished_at": 1792673048.4531436,
+    "id": "1fab9761d5cb43dcad229d4a7c7e05ee",
+    "kind": "frame-preview",
+    "progress": 1,
+    "project_id": "ec0d3b4fb271400c919c6257dbbddac7",
+    "result": {
+      "frame": 0,
+      "height": 90,
+      "pipeline": "timeline-export-graph",
+      "pixel_format": "rgb24",
+      "processing_bits": 8,
+      "sha256": "0b72c6d439143107c1faaa7421f45d63ed066afff3290f9d82b673fbdfff9c36",
+      "url": "/api/projects/ec0d3b4fb271400c919c6257dbbddac7/previews/c1ea8f48a203a2d4865ff59895b51ec1c7d832be691c7c7c7d90337593cb3928.png",
+      "width": 160
+    },
+    "state": "completed"
+  },
+  {
+    "created_at": 1792673048.9195457,
+    "error": null,
+    "finished_at": 1792673049.2402267,
+    "id": "3be4e1f79ce74636960408af490a1b52",
+    "kind": "frame-preview",
+    "progress": 1,
+    "project_id": "ec0d3b4fb271400c919c6257dbbddac7",
+    "result": {
+      "frame": 0,
+      "height": 90,
+      "pipeline": "timeline-export-graph",
+      "pixel_format": "rgb24",
+      "processing_bits": 8,
+      "sha256": "0b72c6d439143107c1faaa7421f45d63ed066afff3290f9d82b673fbdfff9c36",
+      "url": "/api/projects/ec0d3b4fb271400c919c6257dbbddac7/previews/4c82569a02c086db085a5a28cc17b7f30f5fe1fd1b90e51daf1fead6c403f354.png",
+      "width": 160
+    },
+    "state": "completed"
+  }
+]

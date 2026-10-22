@@ -1,0 +1,14 @@
+test_actual_ntsc_frames_nested_trim_forward_map_and_every_pcm_sample (test_fcpxml.FCPXMLTests.test_actual_ntsc_frames_nested_trim_forward_map_and_every_pcm_sample) ... ok
+test_exact_time_wire_and_no_rounding (test_fcpxml.FCPXMLTests.test_exact_time_wire_and_no_rounding) ... ok
+test_export_rejects_untranslated_live_edits (test_fcpxml.FCPXMLTests.test_export_rejects_untranslated_live_edits) ... ok
+test_independent_import_timing_compound_and_source_identity (test_fcpxml.FCPXMLTests.test_independent_import_timing_compound_and_source_identity) ... ok
+test_inspection_is_opaque_and_explicit_relink_required (test_fcpxml.FCPXMLTests.test_inspection_is_opaque_and_explicit_relink_required) ... ok
+test_original_sequences_and_unsaved_project_are_preserved (test_fcpxml.FCPXMLTests.test_original_sequences_and_unsaved_project_are_preserved) ... ok
+test_public_roundtrip_exact_media_and_real_nested_structure (test_fcpxml.FCPXMLTests.test_public_roundtrip_exact_media_and_real_nested_structure) ... ok
+test_unsupported_negative_smooth_sampling_mismatch_and_effects_rejected (test_fcpxml.FCPXMLTests.test_unsupported_negative_smooth_sampling_mismatch_and_effects_rejected) ... ok
+test_xml_entities_external_dtd_processing_and_path_traversal_rejected (test_fcpxml.FCPXMLTests.test_xml_entities_external_dtd_processing_and_path_traversal_rejected) ... ok
+
+----------------------------------------------------------------------
+Ran 9 tests in 1.800s
+
+OK

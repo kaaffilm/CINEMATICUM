@@ -1,0 +1,52 @@
+{
+  "passed": false,
+  "native_certified": false,
+  "transport": "Chromium",
+  "checks": {
+    "connected_lens_node": true,
+    "four_real_distinct_projection_pictures": true,
+    "exact_upstream_profile_options": true,
+    "exact_measured_sample_label": true,
+    "profile_applied": true,
+    "profile_undo_restores_fisheye": true,
+    "profile_redo_restores_calibration": true,
+    "saved_profile_reopens_in_editor": true,
+    "applied_metadata_visible": true,
+    "reopened_picture_same_identity": false
+  },
+  "frames": {
+    "equidistant": {
+      "url": "/api/projects/1f5801da91b44038a6eba10c1b815fe5/previews/3f596f12934ee9fc71deb05923f3ed3d021b65448e0e575250891fb70029029b.png",
+      "pixel_hash": "714328fe"
+    },
+    "equisolid": {
+      "url": "/api/projects/1f5801da91b44038a6eba10c1b815fe5/previews/be7848abb0a577a983a1ec7943cddb73efb8c354066fc7f6b43126e2c0b23a74.png",
+      "pixel_hash": "1701af02"
+    },
+    "stereographic": {
+      "url": "/api/projects/1f5801da91b44038a6eba10c1b815fe5/previews/6f0b9619c793a76325224e4559087e589a850ca61fffea1cb55157cf5ab71759.png",
+      "pixel_hash": "8754e0e7"
+    },
+    "orthographic": {
+      "url": "/api/projects/1f5801da91b44038a6eba10c1b815fe5/previews/306cd99dfd6f79e48a46a3b86fb4b1196a259df7702c4dbfec83980ab0e2e921.png",
+      "pixel_hash": "989eb715"
+    },
+    "lensfun": {
+      "url": "/api/projects/1f5801da91b44038a6eba10c1b815fe5/previews/ca26bd3d7c9703017b131cfb449d47b416ffdb69099a58e9af057323dfd35548.png",
+      "pixel_hash": "319d83ff"
+    },
+    "reopened": {
+      "url": "/api/projects/1f5801da91b44038a6eba10c1b815fe5/previews/a450c0a640bae470eae16467c9b503546cb50185f7ad2118c35098366d610374.png",
+      "pixel_hash": "319d83ff"
+    }
+  },
+  "page_errors": [],
+  "lens_id": "1a412787-768b-44e6-9617-56f434e069b4",
+  "error": "AssertionError [ERR_ASSERTION]: reopened_picture_same_identity\n    at record (/workspace/scratch/091f394ee5df/cinematicum-lens-candidate/scripts/studio/test_lens_models_browser.cjs:13:57)\n    at main (/workspace/scratch/091f394ee5df/cinematicum-lens-candidate/scripts/studio/test_lens_models_browser.cjs:76:5)",
+  "ui": {
+    "toast": "Source preview cannot decode ENGINE_TEST_alpha_ramps.mkv. Try Render preview.",
+    "frame": "Rendered frame 0 · export graph",
+    "job": ""
+  },
+  "elapsed_ms": 7421
+}

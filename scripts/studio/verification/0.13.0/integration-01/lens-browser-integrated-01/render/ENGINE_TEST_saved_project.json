@@ -1,0 +1,141 @@
+{
+  "version": 1,
+  "id": "da7b8709e8b34b13b46e88a93112cd9a",
+  "name": "ENGINE TEST native Lensfun and fisheye",
+  "fps": 12,
+  "width": 160,
+  "height": 90,
+  "assets": [
+    {
+      "id": "cd1f568601f547c697756809499c8ec1",
+      "name": "ENGINE_TEST_lens_alpha_ramps.mkv",
+      "path": "media/cd1f568601f547c697756809499c8ec1.mkv",
+      "sha256": "748ff57b5fe77c63bec7c71f07108f6e2df94477e4a05b1a4695d980163bf0d6",
+      "size": 132135,
+      "kind": "video",
+      "duration": 0.666,
+      "width": 160,
+      "height": 90,
+      "has_audio": false,
+      "frames": 0,
+      "codec": "ffv1",
+      "pixel_format": "bgra",
+      "color_transfer": "unknown",
+      "fps": "12/1",
+      "video_stream_index": 0,
+      "audio_stream_index": null,
+      "audio_sample_rate": 0,
+      "audio_channels": 0,
+      "audio_duration": 0.0,
+      "audio_streams": []
+    }
+  ],
+  "clips": [
+    {
+      "id": "ed88dc9b-5bfa-4dfe-b6c2-50b6f3aa5218",
+      "asset_id": "cd1f568601f547c697756809499c8ec1",
+      "track": 0,
+      "start": 0,
+      "in": 0.0,
+      "duration": 8,
+      "volume": 1.0,
+      "speed": 1.0,
+      "reverse": false,
+      "audio": {
+        "fade_in": 0,
+        "fade_out": 0,
+        "pan": 0.0,
+        "fade_duration": 8,
+        "fade_offset": 0
+      },
+      "opacity": 1.0,
+      "x": 0.0,
+      "y": 0.0,
+      "scale": 1.0,
+      "rotation": 0.0,
+      "grade": {
+        "exposure": 0.0,
+        "contrast": 1.0,
+        "saturation": 1.0,
+        "temperature": 0.0
+      },
+      "effects": {
+        "blur": 0.0,
+        "sharpen": 0.0,
+        "vignette": false,
+        "chroma_key": ""
+      },
+      "keyframes": [],
+      "compositor": {
+        "version": 1,
+        "nodes": [
+          {
+            "id": "source",
+            "type": "source",
+            "inputs": [],
+            "params": {},
+            "position": {
+              "x": 42.0,
+              "y": 62.0
+            }
+          },
+          {
+            "id": "a7bbd6a9-5db7-4b8a-b00f-9fb6b75b1518",
+            "type": "lens_distortion",
+            "inputs": [
+              "source"
+            ],
+            "params": {
+              "fx": 1.0,
+              "fy": 1.0,
+              "cx": 0.5,
+              "cy": 0.5,
+              "k1": 0.0,
+              "k2": 0.0,
+              "k3": 0.0,
+              "p1": 0.0,
+              "p2": 0.0,
+              "direction": "undistort",
+              "model": "lensfun",
+              "profile": {
+                "version": 1,
+                "maker": "Olympus",
+                "lens": "Olympus Zuiko Digital ED 7-14mm f/4.0",
+                "source_sha256": "f7693b6779edd8ed10d7dc23113669255bfa4987cea7db0e843f7f5f2bbbe615",
+                "focal_mm": 7.0,
+                "calibration_crop": 2.0,
+                "calibration_aspect": 1.3333333333333333,
+                "image_crop": 2.0,
+                "center_x": 0.0,
+                "center_y": 0.0,
+                "distortion": "ptlens",
+                "coefficients": [
+                  -0.013136,
+                  0.015797,
+                  0.0
+                ]
+              }
+            },
+            "position": {
+              "x": 272.0,
+              "y": 62.0
+            }
+          }
+        ],
+        "output": "a7bbd6a9-5db7-4b8a-b00f-9fb6b75b1518"
+      },
+      "animation_start": 0,
+      "animation_duration": 8,
+      "animation_offset": 0
+    }
+  ],
+  "titles": [],
+  "settings": {},
+  "revision": 3,
+  "frame_rate": {
+    "numerator": 12,
+    "denominator": 1
+  },
+  "tracks": [],
+  "updated_at": "2026-10-22T13:25:36Z"
+}

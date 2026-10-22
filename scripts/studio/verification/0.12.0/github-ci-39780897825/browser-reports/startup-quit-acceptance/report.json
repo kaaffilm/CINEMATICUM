@@ -1,0 +1,576 @@
+{
+  "schema": "cinematicum-startup-quit-browser-v1",
+  "passed": true,
+  "scope": "Actual Chromium page, real production HTTP authentication/save/admission, explicit transport barriers and actual FFmpeg worker. Native AppKit is not certified.",
+  "native_certified": false,
+  "engine_test_only": true,
+  "force_kill_used": false,
+  "elapsed_seconds": 10.893,
+  "browser": {
+    "executable": "/home/runner/work/_temp/cinematicum-runtimes/browser-runtime/chrome-linux64/chrome",
+    "version": "134.0.6998.35",
+    "playwright_version": "1.51.1"
+  },
+  "legacy_reproduction": {
+    "requested": false,
+    "status": "not-requested"
+  },
+  "content_security_policies": [
+    {
+      "case": "await-real-bootstrap",
+      "policy": "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' blob: data:; media-src 'self' blob:; connect-src 'self'; frame-ancestors 'none'; base-uri 'none'; form-action 'self'"
+    },
+    {
+      "case": "save-before-quit",
+      "policy": "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' blob: data:; media-src 'self' blob:; connect-src 'self'; frame-ancestors 'none'; base-uri 'none'; form-action 'self'"
+    },
+    {
+      "case": "save-conflict-protection",
+      "policy": "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' blob: data:; media-src 'self' blob:; connect-src 'self'; frame-ancestors 'none'; base-uri 'none'; form-action 'self'"
+    },
+    {
+      "case": "bootstrap-failure-protection",
+      "policy": "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' blob: data:; media-src 'self' blob:; connect-src 'self'; frame-ancestors 'none'; base-uri 'none'; form-action 'self'"
+    },
+    {
+      "case": "actual-worker-protection",
+      "policy": "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' blob: data:; media-src 'self' blob:; connect-src 'self'; frame-ancestors 'none'; base-uri 'none'; form-action 'self'"
+    }
+  ],
+  "source_sha256": {
+    "macos/StudioApp.swift": "acf64f068cc870ed0bb4e458cb78359a830f007807a22f9bc933485aa2ae0b08",
+    "web/app.js": "35c3780c4601520c2b918abdeeb101cddb3006c75aa9c08219d5b8a286141fd5",
+    "server.py": "baee0a0ab0ab697a8316fef0e59025f41de02a6274f5dbdb5b7d273315cdf9e1",
+    "startup_quit_fixture.py": "03cb6f0ad94b91c029524c227f8b0aeb6785dea06a9218228381ed7668794e35",
+    "test_startup_quit_browser.cjs": "70aabcd8d96f9b6c8ad7720890626620e7828ede0d38cd232bea6ea3a26b9cfa"
+  },
+  "baseline_sha256": null,
+  "checks": [
+    {
+      "name": "new-quit-requested-before-token",
+      "passed": true,
+      "detail": {
+        "token": "",
+        "project": null
+      }
+    },
+    {
+      "name": "no-premature-quit-request",
+      "passed": true,
+      "detail": []
+    },
+    {
+      "name": "pending-quit-resumes-after-real-bootstrap",
+      "passed": true,
+      "detail": {
+        "ok": true,
+        "value": {
+          "ready": true,
+          "active_jobs": []
+        }
+      }
+    },
+    {
+      "name": "exactly-one-authenticated-quit-after-bootstrap",
+      "passed": true,
+      "detail": [
+        {
+          "event": "quit-response",
+          "at": 1792674203.9557743,
+          "status": 200,
+          "authenticated": true,
+          "decision": {
+            "cancel_active": false
+          },
+          "response": {
+            "ready": true,
+            "active_jobs": []
+          }
+        }
+      ]
+    },
+    {
+      "name": "await-real-bootstrap-graceful-fixture-exit",
+      "passed": true,
+      "detail": 0
+    },
+    {
+      "name": "startup-no-job-quit-reason-preserved",
+      "passed": true,
+      "detail": {
+        "version": 1,
+        "reason": "native-quit-no-active-jobs",
+        "completed_at": 1792674203.9989653,
+        "active_at_shutdown": [],
+        "terminal_jobs": []
+      }
+    },
+    {
+      "name": "ambiguous-active-job-decision-refused",
+      "passed": true,
+      "detail": "Quit requires an explicit active-work decision."
+    },
+    {
+      "name": "save-before-quit-ordinary-unsaved-edit",
+      "passed": true
+    },
+    {
+      "name": "quit-waits-for-actual-dirty-save",
+      "passed": true
+    },
+    {
+      "name": "successful-save-permits-quit",
+      "passed": true,
+      "detail": {
+        "ok": true,
+        "value": {
+          "ready": true,
+          "active_jobs": []
+        }
+      }
+    },
+    {
+      "name": "ordinary-edit-durably-saved-before-quit",
+      "passed": true,
+      "detail": {
+        "image_precision": "high16",
+        "transparent_background": true
+      }
+    },
+    {
+      "name": "actual-save-response-precedes-quit-response",
+      "passed": true,
+      "detail": [
+        {
+          "event": "save-response",
+          "at": 1792674205.2139344,
+          "status": 200,
+          "revision": 2
+        },
+        {
+          "event": "quit-response",
+          "at": 1792674205.2205222,
+          "status": 200,
+          "authenticated": true,
+          "decision": {
+            "cancel_active": false
+          },
+          "response": {
+            "ready": true,
+            "active_jobs": []
+          }
+        }
+      ]
+    },
+    {
+      "name": "save-before-quit-graceful-fixture-exit",
+      "passed": true,
+      "detail": 0
+    },
+    {
+      "name": "save-conflict-protection-ordinary-unsaved-edit",
+      "passed": true
+    },
+    {
+      "name": "actual-concurrent-revision-created",
+      "passed": true,
+      "detail": "{\"version\": 1, \"id\": \"2f59c7d836b746a8b53905a6fb8b768a\", \"name\": \"ENGINE TEST concurrent saved revision\", \"fps\": 12, \"width\": 640, \"height\": 360, \"assets\": [], \"clips\": [], \"titles\": [], \"settings\": {}, \"revision\": 2, \"frame_rate\": {\"numerator\": 12, \"denominator\": 1}, \"tracks\": [], \"updated_at\": \"2026-10-22T13:03:26Z\"}"
+    },
+    {
+      "name": "real-save-conflict-blocks-quit",
+      "passed": true,
+      "detail": {
+        "ok": false,
+        "error": "Project was changed in another window. Reopen it before saving.",
+        "status": 409,
+        "dirty": true
+      }
+    },
+    {
+      "name": "conflicting-saved-work-preserved",
+      "passed": true,
+      "detail": {}
+    },
+    {
+      "name": "failed-save-keeps-workspace-admission-open",
+      "passed": true,
+      "detail": 201
+    },
+    {
+      "name": "save-conflict-protection-graceful-fixture-exit",
+      "passed": true,
+      "detail": 0
+    },
+    {
+      "name": "failed-bootstrap-does-not-approve-quit",
+      "passed": true,
+      "detail": {
+        "ok": false,
+        "error": "Editor startup did not complete: ENGINE TEST controlled transport failure"
+      }
+    },
+    {
+      "name": "bootstrap-failure-protection-graceful-fixture-exit",
+      "passed": true,
+      "detail": 0
+    },
+    {
+      "name": "actual-ffmpeg-work-progressed",
+      "passed": true,
+      "detail": {
+        "id": "13ac1daeb8c34d0da65d7af636bb8bcf",
+        "kind": "render",
+        "state": "running",
+        "progress": 0.02083325
+      }
+    },
+    {
+      "name": "actual-worker-protection-ordinary-unsaved-edit",
+      "passed": true
+    },
+    {
+      "name": "active-worker-requires-explicit-choice",
+      "passed": true,
+      "detail": {
+        "ready": false,
+        "active_jobs": [
+          {
+            "id": "13ac1daeb8c34d0da65d7af636bb8bcf",
+            "kind": "render",
+            "state": "running"
+          }
+        ]
+      }
+    },
+    {
+      "name": "declined-quit-keeps-real-worker-running",
+      "passed": true,
+      "detail": {
+        "id": "13ac1daeb8c34d0da65d7af636bb8bcf",
+        "project_id": "a48ba571803f40e5b970b8466dd05d17",
+        "kind": "render",
+        "state": "running",
+        "progress": 0.02083325,
+        "created_at": 1792674208.9893036,
+        "error": null,
+        "result": null
+      }
+    },
+    {
+      "name": "dirty-save-happens-before-active-job-choice",
+      "passed": true
+    },
+    {
+      "name": "explicit-cancel-accepted",
+      "passed": true,
+      "detail": {
+        "ready": true,
+        "active_jobs": [
+          {
+            "id": "13ac1daeb8c34d0da65d7af636bb8bcf",
+            "kind": "render",
+            "state": "running"
+          }
+        ]
+      }
+    },
+    {
+      "name": "actual-worker-protection-graceful-fixture-exit",
+      "passed": true,
+      "detail": 0
+    },
+    {
+      "name": "confirmed-quit-settles-actual-cancellation",
+      "passed": true,
+      "detail": {
+        "exit": {
+          "version": 1,
+          "reason": "native-user-confirmed-job-cancellation",
+          "completed_at": 1792674213.5757384,
+          "active_at_shutdown": [
+            {
+              "id": "13ac1daeb8c34d0da65d7af636bb8bcf",
+              "kind": "render",
+              "state": "running"
+            }
+          ],
+          "terminal_jobs": [
+            {
+              "id": "13ac1daeb8c34d0da65d7af636bb8bcf",
+              "state": "cancelled",
+              "error": "Render cancelled; source media and completed exports are unchanged."
+            }
+          ]
+        },
+        "state": "cancelled"
+      }
+    },
+    {
+      "name": "actual-source-media-preserved",
+      "passed": true
+    },
+    {
+      "name": "no-unhandled-page-errors",
+      "passed": true,
+      "detail": []
+    },
+    {
+      "name": "production-csp-preserved",
+      "passed": true,
+      "detail": [
+        {
+          "case": "await-real-bootstrap",
+          "policy": "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' blob: data:; media-src 'self' blob:; connect-src 'self'; frame-ancestors 'none'; base-uri 'none'; form-action 'self'"
+        },
+        {
+          "case": "save-before-quit",
+          "policy": "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' blob: data:; media-src 'self' blob:; connect-src 'self'; frame-ancestors 'none'; base-uri 'none'; form-action 'self'"
+        },
+        {
+          "case": "save-conflict-protection",
+          "policy": "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' blob: data:; media-src 'self' blob:; connect-src 'self'; frame-ancestors 'none'; base-uri 'none'; form-action 'self'"
+        },
+        {
+          "case": "bootstrap-failure-protection",
+          "policy": "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' blob: data:; media-src 'self' blob:; connect-src 'self'; frame-ancestors 'none'; base-uri 'none'; form-action 'self'"
+        },
+        {
+          "case": "actual-worker-protection",
+          "policy": "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' blob: data:; media-src 'self' blob:; connect-src 'self'; frame-ancestors 'none'; base-uri 'none'; form-action 'self'"
+        }
+      ]
+    }
+  ],
+  "cases": [
+    {
+      "name": "await-real-bootstrap",
+      "phase": "bootstrap",
+      "baseline": false,
+      "source_root": "/home/runner/work/CINEMATICUM/CINEMATICUM/scripts/studio",
+      "fixture": {
+        "project_id": "c11ed6b1af9149c28788c2196b6a08a2",
+        "phase": "bootstrap",
+        "engine_test_only": true,
+        "url": "http://127.0.0.1:46769"
+      },
+      "events": [
+        {
+          "event": "barrier-entered",
+          "at": 1792674203.9241939,
+          "path": "/api/bootstrap"
+        },
+        {
+          "event": "release-command",
+          "at": 1792674203.933801
+        },
+        {
+          "event": "barrier-released",
+          "at": 1792674203.9341161,
+          "path": "/api/bootstrap"
+        },
+        {
+          "event": "quit-response",
+          "at": 1792674203.9557743,
+          "status": 200,
+          "authenticated": true,
+          "decision": {
+            "cancel_active": false
+          },
+          "response": {
+            "ready": true,
+            "active_jobs": []
+          }
+        }
+      ],
+      "exit": {
+        "version": 1,
+        "reason": "native-quit-no-active-jobs",
+        "completed_at": 1792674203.9989653,
+        "active_at_shutdown": [],
+        "terminal_jobs": []
+      }
+    },
+    {
+      "name": "save-before-quit",
+      "phase": "normal",
+      "baseline": false,
+      "source_root": "/home/runner/work/CINEMATICUM/CINEMATICUM/scripts/studio",
+      "fixture": {
+        "project_id": "b3137c8cf5764acc9100e841b5472096",
+        "phase": "normal",
+        "engine_test_only": true,
+        "url": "http://127.0.0.1:42461"
+      },
+      "events": [
+        {
+          "event": "save-response",
+          "at": 1792674205.2139344,
+          "status": 200,
+          "revision": 2
+        },
+        {
+          "event": "quit-response",
+          "at": 1792674205.2205222,
+          "status": 200,
+          "authenticated": true,
+          "decision": {
+            "cancel_active": false
+          },
+          "response": {
+            "ready": true,
+            "active_jobs": []
+          }
+        }
+      ],
+      "exit": {
+        "version": 1,
+        "reason": "native-quit-no-active-jobs",
+        "completed_at": 1792674205.2399273,
+        "active_at_shutdown": [],
+        "terminal_jobs": []
+      }
+    },
+    {
+      "name": "save-conflict-protection",
+      "phase": "normal",
+      "baseline": false,
+      "source_root": "/home/runner/work/CINEMATICUM/CINEMATICUM/scripts/studio",
+      "fixture": {
+        "project_id": "2f59c7d836b746a8b53905a6fb8b768a",
+        "phase": "normal",
+        "engine_test_only": true,
+        "url": "http://127.0.0.1:39007"
+      },
+      "events": [
+        {
+          "event": "save-response",
+          "at": 1792674206.497803,
+          "status": 200,
+          "revision": 2
+        },
+        {
+          "event": "save-response",
+          "at": 1792674206.50396,
+          "status": 409,
+          "revision": null
+        }
+      ],
+      "exit": {
+        "version": 1,
+        "reason": "ENGINE_TEST-cleanup",
+        "completed_at": 1792674206.5428405,
+        "active_at_shutdown": [],
+        "terminal_jobs": []
+      }
+    },
+    {
+      "name": "bootstrap-failure-protection",
+      "phase": "normal",
+      "baseline": false,
+      "source_root": "/home/runner/work/CINEMATICUM/CINEMATICUM/scripts/studio",
+      "fixture": {
+        "project_id": "af6e0d5da8e740a6af55e66bfb484500",
+        "phase": "normal",
+        "engine_test_only": true,
+        "url": "http://127.0.0.1:33967"
+      },
+      "events": [],
+      "exit": {
+        "version": 1,
+        "reason": "ENGINE_TEST-cleanup",
+        "completed_at": 1792674207.5804067,
+        "active_at_shutdown": [],
+        "terminal_jobs": []
+      }
+    },
+    {
+      "name": "actual-worker-protection",
+      "phase": "protection",
+      "baseline": false,
+      "source_root": "/home/runner/work/CINEMATICUM/CINEMATICUM/scripts/studio",
+      "fixture": {
+        "project_id": "a48ba571803f40e5b970b8466dd05d17",
+        "phase": "protection",
+        "engine_test_only": true,
+        "source": {
+          "asset_id": "9985179f0e844b848484cc9ddb8572f8",
+          "path": "media/9985179f0e844b848484cc9ddb8572f8.png",
+          "sha256": "fa0a10755f964a5348f182a541f365f28c2aa39e236ad805837aa71213627cfb"
+        },
+        "url": "http://127.0.0.1:45821"
+      },
+      "events": [
+        {
+          "event": "save-response",
+          "at": 1792674208.9821148,
+          "status": 200,
+          "revision": 3
+        },
+        {
+          "event": "save-response",
+          "at": 1792674211.9486406,
+          "status": 200,
+          "revision": 4
+        },
+        {
+          "event": "quit-response",
+          "at": 1792674211.957432,
+          "status": 200,
+          "authenticated": true,
+          "decision": {
+            "cancel_active": false
+          },
+          "response": {
+            "ready": false,
+            "active_jobs": [
+              {
+                "id": "13ac1daeb8c34d0da65d7af636bb8bcf",
+                "kind": "render",
+                "state": "running"
+              }
+            ]
+          }
+        },
+        {
+          "event": "quit-response",
+          "at": 1792674211.966178,
+          "status": 200,
+          "authenticated": true,
+          "decision": {
+            "cancel_active": true
+          },
+          "response": {
+            "ready": true,
+            "active_jobs": [
+              {
+                "id": "13ac1daeb8c34d0da65d7af636bb8bcf",
+                "kind": "render",
+                "state": "running"
+              }
+            ]
+          }
+        }
+      ],
+      "exit": {
+        "version": 1,
+        "reason": "native-user-confirmed-job-cancellation",
+        "completed_at": 1792674213.5757384,
+        "active_at_shutdown": [
+          {
+            "id": "13ac1daeb8c34d0da65d7af636bb8bcf",
+            "kind": "render",
+            "state": "running"
+          }
+        ],
+        "terminal_jobs": [
+          {
+            "id": "13ac1daeb8c34d0da65d7af636bb8bcf",
+            "state": "cancelled",
+            "error": "Render cancelled; source media and completed exports are unchanged."
+          }
+        ]
+      }
+    }
+  ],
+  "page_errors": []
+}

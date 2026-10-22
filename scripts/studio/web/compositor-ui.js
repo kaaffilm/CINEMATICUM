@@ -20,7 +20,7 @@
     source: {name:'Source',inputs:[],color:'#6d9fac',defaults:{},description:'The selected clip, trimmed and fitted to the graph canvas. Add Project media sources to composite other footage with it.'},
     media_source: {name:'Project media',inputs:[],color:'#71b4ab',defaults:{asset_id:'',source_in:0,duration:1,offset:0,outside:'transparent'},description:'Read another project video or image into this graph. Source timing uses the preserved animation frames; trims and splits keep the same composite timing. This node contributes picture only.'},
     alpha_mask: {name:'Alpha mask',inputs:['Image','Mask alpha'],color:'#cfad76',defaults:{invert:false},description:'Multiply image transparency by the second image’s alpha, or its inverse. Straight image colors remain unchanged. This accepts a learned segmentation matte or any project alpha source.'},
-    lens_distortion: {name:'Calibrated lens',inputs:['Image'],color:'#83b9b8',defaults:{direction:'undistort',fx:1,fy:1,cx:.5,cy:.5,k1:0,k2:0,k3:0,p1:0,p2:0},description:'Correct or reproduce five-term Brown-Conrady lens distortion using calibrated focal lengths and principal point. The actual pixels are resampled with transparency-aware bilinear filtering.',fields:[['fx','FX / image width',.1,20,.001],['fy','FY / image height',.1,20,.001],['cx','Principal X / width',-2,3,.001],['cy','Principal Y / height',-2,3,.001],['k1','Radial k1',-1,1,.001],['k2','Radial k2',-1,1,.001],['k3','Radial k3',-1,1,.001],['p1','Tangential p1',-.2,.2,.0001],['p2','Tangential p2',-.2,.2,.0001]]},
+    lens_distortion: {name:'Calibrated lens',inputs:['Image'],color:'#83b9b8',defaults:{direction:'undistort',fx:1,fy:1,cx:.5,cy:.5,k1:0,k2:0,k3:0,p1:0,p2:0},description:'Correct calibrated Brown or Lensfun radial distortion, or convert an explicit fisheye projection. The actual pixels use transparency-aware bilinear filtering.',fields:[['fx','FX / image width',.1,20,.001],['fy','FY / image height',.1,20,.001],['cx','Principal X / width',-2,3,.001],['cy','Principal Y / height',-2,3,.001],['k1','Radial k1',-1,1,.001],['k2','Radial k2',-1,1,.001],['k3','Radial k3',-1,1,.001],['p1','Tangential p1',-.2,.2,.0001],['p2','Tangential p2',-.2,.2,.0001]]},
     grade: {name:'Color grade',inputs:['Image'],color:'#bc9bd3',defaults:{exposure:0,contrast:1,saturation:1,temperature:0},description:'Correct this branch before combining it with other branches.',fields:[['exposure','Exposure · stops',-3,3,.05],['contrast','Contrast',0,3,.05],['saturation','Saturation',0,3,.05],['temperature','Temperature',-1,1,.02]]},
     curves: {name:'Color curves',inputs:['Image'],color:'#bc9bd3',defaults:{master:copy(IDENTITY),red:copy(IDENTITY),green:copy(IDENTITY),blue:copy(IDENTITY)},description:'Shape the master tone curve and individual RGB channels. Channel curves are applied before the master curve.'},
     blur: {name:'Gaussian blur',inputs:['Image'],color:'#82a4ce',defaults:{sigma:2},description:'Blur the image while retaining its existing transparency.',fields:[['sigma','Radius',0,30,.1]]},
@@ -46,7 +46,7 @@
       if (!node || typeof node!=='object'||Array.isArray(node)||Object.keys(node).some(name=>!['id','type','inputs','params','position','animation','tracking_source','mask_input','mask_invert'].includes(name))||typeof node.id !== 'string' || !/^[A-Za-z0-9_-]{1,128}$/.test(node.id)|| nodes.has(node.id)) return 'Every node needs a unique bounded ID and supported fields.';
       if (!Object.hasOwn(definitions,node.type)) return 'This graph contains an unsupported node.';
       if (!Array.isArray(node.inputs) || node.inputs.length !== definitions[node.type].inputs.length) return `${definitions[node.type].name} has the wrong number of inputs.`;
-      if(node.params!==undefined&&(!node.params||typeof node.params!=='object'||Array.isArray(node.params)||Object.keys(node.params).some(name=>!Object.hasOwn(definitions[node.type].defaults,name))))return 'This node contains unsupported parameters.';
+      if(node.params!==undefined&&(!node.params||typeof node.params!=='object'||Array.isArray(node.params)||Object.keys(node.params).some(name=>!Object.hasOwn(definitions[node.type].defaults,name)&&!(node.type==='lens_distortion'&&['model','projection','profile'].includes(name)))))return 'This node contains unsupported parameters.';
       if(node.position!==undefined&&(!node.position||typeof node.position!=='object'||Array.isArray(node.position)||Object.keys(node.position).sort().join(',')!=='x,y'||!Object.values(node.position).every(v=>typeof v==='number'&&Number.isFinite(v)&&Math.abs(v)<=100000)))return 'Node positions require finite x/y coordinates.';
       const p={...definitions[node.type].defaults,...node.params};
       if(node.type==='media_source'){
@@ -60,8 +60,7 @@
       if(node.type==='lens_distortion'){
         if(node.params!==undefined&&(!node.params||typeof node.params!=='object'||Array.isArray(node.params)))return 'Lens calibration must contain named numeric parameters.';
         if(!['undistort','distort'].includes(p.direction))return 'Choose lens correction or lens distortion.';
-        if(lensBound(p)>.45+1e-12)return 'These lens coefficients exceed the full-image invertibility limit. Reduce coefficients or use a narrower calibrated field.';
-        if(node.params&&Object.keys(node.params).some(name=>!Object.hasOwn(definitions.lens_distortion.defaults,name)))return 'Lens nodes accept calibrated numeric intrinsics, Brown coefficients and direction only.';
+        const lensError=validateLensModel(p);if(lensError)return lensError;
       }
       if(node.type==='curves')for(const channel of CURVE_CHANNELS){const points=p[channel];if(!validPoints(points,2,12)||points[0][0]!==0||points.at(-1)[0]!==1||points.some((point,i)=>i&&point[0]-points[i-1][0]<1/255-1e-9))return 'Curve points need distinct, increasing inputs from 0 to 1.';}
       if(node.type==='mask'&&(!['ellipse','rectangle','polygon','bezier'].includes(p.shape)||typeof p.invert!=='boolean'||!validPolygon(p.points)||!validBezier(p.bezier)))return 'Masks require valid polygon vertices, boolean inversion, and a Bezier path of 2–32 anchors with finite handles/feather.';
@@ -143,6 +142,39 @@
     const radius=Math.hypot(Math.max(Math.abs(p.cx/p.fx),Math.abs((1-p.cx)/p.fx)),Math.max(Math.abs(p.cy/p.fy),Math.abs((1-p.cy)/p.fy))),r2=radius*radius;
     return 3*Math.abs(p.k1)*r2+5*Math.abs(p.k2)*r2*r2+7*Math.abs(p.k3)*r2*r2*r2+8*radius*(Math.abs(p.p1)+Math.abs(p.p2));
   }
+  const LENS_PROJECTIONS={equidistant:'Equidistant',equisolid:'Equisolid angle',stereographic:'Stereographic',orthographic:'Orthographic'};
+  const PROFILE_KEYS=['version','maker','lens','source_sha256','focal_mm','calibration_crop','calibration_aspect','image_crop','center_x','center_y','distortion','coefficients'].sort();
+  function lensProfileBound(p){
+    const v=p.coefficients,d=1-(p.distortion==='poly3'?v[0]:v.reduce((a,b)=>a+b,0));
+    if(p.distortion!=='poly5'&&d<.1)return Infinity;
+    const c=p.distortion==='poly3'?[0,v[0]/d**3,0,0]:p.distortion==='poly5'?[0,v[0],0,v[1]]:[v[2]/d**2,v[1]/d**3,v[0]/d**4,0];
+    const radius=p.calibration_crop/p.image_crop*Math.hypot(p.calibration_aspect,1)*(1+Math.abs(p.center_x)+Math.abs(p.center_y));
+    return c.reduce((sum,value,i)=>sum+(i+2)*Math.abs(value)*radius**(i+1),0);
+  }
+  function validateLensProfile(p){
+    if(!p||typeof p!=='object'||Array.isArray(p)||Object.keys(p).sort().join(',')!==PROFILE_KEYS.join(',')||p.version!==1)return 'Choose a supported Lensfun version 1 calibration.';
+    for(const [key,limit]of [['maker',160],['lens',256]])if(typeof p[key]!=='string'||!p[key].length||p[key].length>limit||/[\u0000-\u001f]/.test(p[key]))return 'Lensfun maker and model must contain bounded printable names.';
+    if(typeof p.source_sha256!=='string'||! /^[a-f0-9]{64}$/.test(p.source_sha256))return 'Lensfun requires its source XML SHA-256 identity.';
+    for(const [key,min,max]of [['focal_mm',.1,2000],['calibration_crop',.1,100],['calibration_aspect',1,4],['image_crop',.1,100],['center_x',-.5,.5],['center_y',-.5,.5]])if(typeof p[key]!=='number'||!Number.isFinite(p[key])||p[key]<min||p[key]>max)return 'Lensfun sensor and calibration values exceed their supported bounds.';
+    if(p.image_crop+1e-10<p.calibration_crop)return 'The capture crop factor must be at least the calibration crop factor; extrapolation is unsupported.';
+    const count={poly3:1,poly5:2,ptlens:3}[p.distortion];
+    if(typeof p.distortion!=='string'||!count||!Array.isArray(p.coefficients)||p.coefficients.length!==count||!p.coefficients.every(v=>typeof v==='number'&&Number.isFinite(v)&&Math.abs(v)<=1))return 'Lensfun needs poly3, poly5 or PTLens coefficients with the correct count.';
+    if(lensProfileBound(p)>.8+1e-12)return 'This calibration exceeds the full-image inverse bound (0.8). Use a smaller captured field or another calibration.';
+    return '';
+  }
+  function validateLensModel(p){
+    const model=p.model===undefined?'brown':p.model;
+    if(!['brown','fisheye','lensfun'].includes(model))return 'Choose Brown, a fisheye projection, or Lensfun.';
+    if(model==='brown'){
+      if(Object.hasOwn(p,'projection')||Object.hasOwn(p,'profile'))return 'Brown cannot also contain a fisheye projection or Lensfun profile.';
+      return lensBound(p)>.45+1e-12?'These Brown coefficients exceed the full-image invertibility limit. Reduce coefficients or use a narrower calibrated field.':'';
+    }
+    if(['k1','k2','k3','p1','p2'].some(key=>p[key]!==0))return 'Apply Brown coefficients in a separate lens node.';
+    if(model==='fisheye')return typeof p.projection==='string'&&Object.hasOwn(LENS_PROJECTIONS,p.projection)&&!Object.hasOwn(p,'profile')?'':'Choose one explicit fisheye projection without a Lensfun profile.';
+    if(Object.hasOwn(p,'projection')||['fx','fy','cx','cy'].some(key=>p[key]!==definitions.lens_distortion.defaults[key]))return 'Lensfun uses its recorded sensor crop and optical center; manual intrinsics remain at defaults.';
+    return validateLensProfile(p.profile);
+  }
+  const lensActive=p=>p.model==='fisheye'||(p.model==='lensfun'?p.profile.coefficients.some(v=>v!==0):['k1','k2','k3','p1','p2'].some(key=>p[key]));
   function splitBezier(points,index,t=.5){
     if(!validBezier(points)||!Number.isInteger(index)||index<0||index>=points.length||points.length>=32||!(t>0&&t<1))throw Error('Choose a Bezier segment inside a path of fewer than 32 anchors.');
     const out=copy(points),a=out[index],b=out[(index+1)%out.length],mix=(p,q)=>p.map((v,i)=>v+(q[i]-v)*t);
@@ -236,7 +268,7 @@
   }
   function mount(host, bridge = {}) {
     let graph = freshGraph(), context = {}, selected = 'source', inspector = null, pending = null, drag = null;
-    let zoom = 1, pan = {x:0,y:0}, destroyed = false, positions = new Map();
+    let zoom = 1, pan = {x:0,y:0}, destroyed = false, positions = new Map(), lensCatalog = null, lensChoice = '';
     let curveChannel='master',curvePoint=0,polygonPoint=0,bezierPoint=0,bezierHandle=0,bezierDrag=null,editorDrag=null,animationChannel=null;
     host.classList.add('compositor-editor');
     host.innerHTML = `<div class="compositor-toolbar"><span class="compositor-title">NODE COMPOSITOR</span><select data-graph-add-type aria-label="Node type to add">${Object.entries(definitions).filter(([type])=>type!=='source').map(([type,definition])=>`<option value="${type}">${definition.name}</option>`).join('')}</select><button data-graph-action="add" class="small" title="Add after the selected node">＋ Add</button><button data-graph-action="masked" class="quiet small" title="Create a grade, feathered mask, and merge branch">Masked correction</button><button data-graph-action="load-graph" class="quiet small">Import graph</button><button data-graph-action="save-graph" class="quiet small">Save graph</button><span class="compositor-toolbar-spacer"></span><button data-graph-action="fit" class="quiet small" title="Fit all nodes">Fit</button><button data-graph-action="preview" class="small">Render preview ↗</button></div><div class="compositor-stage" tabindex="0" aria-label="Node graph. Drag nodes, or connect an output port to an input port."><div class="compositor-world"><svg class="compositor-wires" aria-hidden="true"></svg><div class="compositor-nodes"></div></div><div class="compositor-empty" hidden><strong>Select a picture clip.</strong><span>Import a video or image, add it to the timeline, then select its clip.</span><button data-graph-action="import" class="small">Import media</button></div><div class="compositor-connection-hint" hidden></div></div><div class="compositor-footer"><span data-graph-status>Source → output</span><span>Drag background to pan · ⌘/Ctrl + wheel to zoom</span><label>Output <select data-graph-output aria-label="Compositor output node"></select></label></div>`;
@@ -267,7 +299,7 @@
       const p={...definitions[node.type].defaults,...node.params};
       if(node.type==='source')return context.sourceLabel||'Selected clip';
       if(node.type==='media_source')return `${getMedia(p.asset_id)?.name||'Missing media'} · ${p.offset}–${p.offset+p.duration-1}f · ${p.outside}`;
-      if(node.type==='lens_distortion')return `${p.direction==='undistort'?'Correct':'Reproduce'} · k1 ${p.k1.toFixed(3)} · k2 ${p.k2.toFixed(3)}`;
+      if(node.type==='lens_distortion')return p.model==='lensfun'?`Lensfun · ${p.profile.distortion} · ${p.profile.focal_mm} mm`:p.model==='fisheye'?`${LENS_PROJECTIONS[p.projection]} → ${p.direction==='undistort'?'rectilinear':'fisheye'}`:`${p.direction==='undistort'?'Correct':'Reproduce'} · k1 ${p.k1.toFixed(3)} · k2 ${p.k2.toFixed(3)}`;
       if(node.type==='grade')return `${number(p.exposure).toFixed(2)} EV · sat ${number(p.saturation).toFixed(2)}`;
       if(node.type==='curves')return `Master + RGB · ${CURVE_CHANNELS.reduce((sum,name)=>sum+(p[name]?.length||2),0)} points`;
       if(node.type==='blur')return `Radius ${number(p.sigma).toFixed(1)}`;
@@ -303,7 +335,7 @@
       if(pixels>0){
         const byId=new Map(next.nodes.map(node=>[node.id,node])),active=new Set();function visit(id){if(active.has(id))return;active.add(id);dependencies(byId.get(id)).forEach(visit);}visit(next.output);
         const nodes=next.nodes.filter(node=>active.has(node.id));
-        if(pixels>2073600&&nodes.some(node=>node.type==='lens_distortion'&&['k1','k2','k3','p1','p2'].some(name=>node.params[name]))){notify('Calibrated lens processing supports up to 2,073,600 pixels (1920 × 1080) per graph canvas.',true);return false;}
+        if(pixels>2073600&&nodes.some(node=>node.type==='lens_distortion'&&lensActive(node.params))){notify('Calibrated lens processing supports up to 2,073,600 pixels (1920 × 1080) per graph canvas.',true);return false;}
         const images=nodes.reduce((sum,node)=>sum+(node.type==='merge'&&(node.params.mode||'normal')!=='normal'?5:node.type==='lens_distortion'?22:node.type==='alpha_mask'?6:node.type==='curves'?2:1)+(node.mask_input?10:0),0);
         if(pixels*images>268435456){notify('This graph exceeds its working-image budget. Reduce graph complexity or project resolution.',true);return false;}
       }
@@ -490,16 +522,37 @@
       const fy=.5/Math.tan(camera.fov*Math.PI/360),fx=fy*height/width*number(camera.focal_ratio,1);
       return {fx,fy,cx:.5+number(camera.shift_x),cy:.5-number(camera.shift_y)};
     }
+    function currentLensCatalog(){return lensCatalog&&lensCatalog.key===context.key&&lensCatalog.node===selected&&lensCatalog.graph===JSON.stringify(graph)?lensCatalog:null;}
+    async function readLensFile(file){
+      if(!file||destroyed)return;
+      const key=context.key,node=selected,identity=JSON.stringify(graph);
+      const current=()=>!destroyed&&context.key===key&&selected===node&&JSON.stringify(graph)===identity;
+      try{
+        if(file.size>512*1024||!/\.xml$/i.test(file.name))throw Error('Choose a Lensfun XML file no larger than 512 KiB.');
+        if(!bridge.onLensImport)throw Error('Lensfun import is unavailable. Reopen the application.');
+        const bytes=await file.arrayBuffer();if(bytes.byteLength!==file.size)throw Error('The profile file changed while it was read.');
+        const text=new TextDecoder('utf-8',{fatal:true,ignoreBOM:true}).decode(bytes);
+        if(!current())throw Error('The selected clip or graph changed. Choose the profile again.');
+        const result=await bridge.onLensImport({text});
+        if(!current())throw Error('The selected clip or graph changed. Choose the profile again.');
+        if(!Array.isArray(result?.calibrations)||!result.calibrations.length||result.calibrations.length>2048)throw Error('No supported Lensfun calibrations were returned.');
+        lensCatalog={key,node,graph:identity,...copy(result)};lensChoice=lensCatalog.calibrations[0].id;
+        renderInspector();notify('Choose the measured focal sample and capture crop factor, then apply the calibration.');
+      }catch(error){notify(error.message,true);}
+    }
     function lensEditor(node){
-      const p=node.params,width=number(context.graphWidth),height=number(context.graphHeight),fields=definitions.lens_distortion.fields;
+      const p={...definitions.lens_distortion.defaults,...node.params},width=number(context.graphWidth),height=number(context.graphHeight),fields=definitions.lens_distortion.fields;
       const field=name=>{const [,title,min,max,step]=fields.find(item=>item[0]===name);return `<label>${title}<input type="number" data-node-param="${name}" value="${p[name]}" min="${min}" max="${max}" step="${step}"></label>`;};
-      return `<div class="inspector-section node-lens-editor"><label>Operation<select data-node-param="direction"><option value="undistort" ${p.direction==='undistort'?'selected':''}>Undistort captured footage</option><option value="distort" ${p.direction==='distort'?'selected':''}>Reproduce calibrated distortion</option></select></label><h3>CAMERA INTRINSICS</h3><div class="field-row">${field('fx')}${field('fy')}</div><div class="field-row">${field('cx')}${field('cy')}</div><p class="note">${width&&height?`This ${width} × ${height} graph uses FX ${(p.fx*width).toFixed(2)}, FY ${(p.fy*height).toFixed(2)}, CX ${(p.cx*width).toFixed(2)}, CY ${(p.cy*height).toFixed(2)} pixels.`:'Intrinsics are normalized by their image axis.'} Pixel centers start at 0; Y points down.</p><button class="quiet full" data-node-action="lens-camera" ${sceneLens()?'':'disabled'}>Copy base scene camera intrinsics</button><p class="note">Requires a scene camera with matching image aspect. Distortion coefficients remain explicitly authored.</p><h3>BROWN DISTORTION</h3><div class="field-row">${field('k1')}${field('k2')}</div>${field('k3')}<div class="field-row">${field('p1')}${field('p2')}</div><p class="note">Positive radial coefficients model pincushion distortion; negative values model barrel distortion. These are Brown coefficients, not Lensfun profile parameters.</p><button class="quiet full" data-node-action="lens-reset">Reset distortion coefficients</button><p class="note">Static calibration · transparent outside image · bilinear sampling. Full-image inverse bound ${lensBound(p).toFixed(3)} / 0.450. Processing limit: 2,073,600 pixels per graph canvas. Maps are prepared once per calibration; rendering is not guaranteed in real time.</p></div>`;
+      const model=p.model||'brown',choice=model==='fisheye'?p.projection:model,catalog=currentLensCatalog(),sample=catalog?.calibrations.find(c=>c.id===lensChoice);
+      const selection=`<label>Lens model<select data-lens-model><option value="brown" ${choice==='brown'?'selected':''}>Brown calibration</option>${Object.entries(LENS_PROJECTIONS).map(([value,name])=>`<option value="${value}" ${choice===value?'selected':''}>${name} fisheye</option>`).join('')}${model==='lensfun'?'<option value="lensfun" selected disabled>Imported Lensfun calibration</option>':''}</select></label>`;
+      const operation=`<label>Operation<select data-node-param="direction"><option value="undistort" ${p.direction==='undistort'?'selected':''}>Correct to rectilinear</option><option value="distort" ${p.direction==='distort'?'selected':''}>Reproduce source lens</option></select></label>`;
+      const intrinsics=`<h3>CAMERA INTRINSICS</h3><div class="field-row">${field('fx')}${field('fy')}</div><div class="field-row">${field('cx')}${field('cy')}</div><p class="note">${width&&height?`${width} × ${height} graph · FX ${(p.fx*width).toFixed(2)}, FY ${(p.fy*height).toFixed(2)}, CX ${(p.cx*width).toFixed(2)}, CY ${(p.cy*height).toFixed(2)} pixels.`:'Intrinsics are normalized by their image axis.'} Pixel centers start at 0; Y points down.</p><button class="quiet full" data-node-action="lens-camera" ${sceneLens()?'':'disabled'}>Copy base scene camera intrinsics</button>`;
+      const brown=`<h3>BROWN DISTORTION</h3><div class="field-row">${field('k1')}${field('k2')}</div>${field('k3')}<div class="field-row">${field('p1')}${field('p2')}</div><p class="note">Brown coefficients use camera-normalized coordinates. Inverse bound ${lensBound(p).toFixed(3)} / 0.450.</p><button class="quiet full" data-node-action="lens-reset">Reset distortion coefficients</button>`;
+      const stored=model==='lensfun'?`<h3>APPLIED LENSFUN SAMPLE</h3><p>${escape(p.profile.maker)} ${escape(p.profile.lens)}<br>${p.profile.focal_mm} mm · ${escape(p.profile.distortion)} · capture crop ${p.profile.image_crop}</p><p class="note">Calibration crop ${p.profile.calibration_crop} · aspect ${p.profile.calibration_aspect}. Inverse bound ${lensProfileBound(p.profile).toFixed(3)} / 0.800. Profile data is saved in this graph.</p><label>Capture crop factor<input data-lens-crop type="number" min="${p.profile.calibration_crop}" max="100" step=".001" value="${p.profile.image_crop}"></label>`:'';
+      const importUI=`<h3>LENSFUN PROFILE</h3><label>Read Lensfun XML<input type="file" data-lensfun-file accept=".xml,application/xml,text/xml"></label>${catalog?`<label>Exact measured focal sample<select data-lensfun-choice>${catalog.calibrations.map(c=>`<option value="${escape(c.id)}" ${c.id===lensChoice?'selected':''}>${escape(c.label)}</option>`).join('')}</select></label><label>Capture crop factor<input data-lensfun-crop type="number" min="${sample?.profile.calibration_crop||.1}" max="100" step=".001" value="${sample?.profile.calibration_crop||1}"></label><button class="quiet full" data-node-action="lensfun-apply">Apply selected calibration</button>${(catalog.warnings||[]).map(message=>`<p class="note">${escape(message)}</p>`).join('')}`:'<p class="note">Import poly3, poly5 or PTLens radial calibration. Select an exact focal sample; camera matching, interpolation, TCA and vignetting are not automatic.</p>'}`;
+      return `<div class="inspector-section node-lens-editor">${selection}${operation}${model==='lensfun'?stored:intrinsics+(model==='brown'?brown:`<p class="note">${escape(LENS_PROJECTIONS[p.projection])} projection. Correct maps fisheye capture to rectilinear; reproduce maps rectilinear into fisheye. Rays outside the front hemisphere become transparent. The same focal lengths and center define both images.</p>`)}${importUI}<p class="note">Static calibration · transparent outside image · alpha-aware bilinear sampling. Maximum 2,073,600 pixels per graph canvas. Use the complete uncropped capture without letterboxing.</p></div>`;
     }
-    function mediaSourceEditor(node){
-      const p=node.params,item=getMedia(p.asset_id),items=listMedia(),sample=mediaFrameAt(node,currentFrame()),issue=sourceIssue(node);
-      const available=mediaFrames(item),maximumIn=item?.kind==='image'?0:Math.max(0,available-1),maximumDuration=Math.max(1,available-p.source_in);
-      return `<div class="inspector-section node-media-source"><h3>PROJECT MEDIA SOURCE</h3><label>Media asset<select data-node-media-field="asset_id" aria-label="Source media asset">${!item?`<option value="${escape(p.asset_id)}">Missing media</option>`:''}${items.map(media=>`<option value="${escape(media.id)}" ${media.id===p.asset_id?'selected':''}>${escape(media.name||media.id)} · ${media.kind}</option>`).join('')}</select></label><button class="quiet full" data-node-action="import-media">Import another media file</button>${item?.thumbnailUrl?`<img src="${escape(item.thumbnailUrl)}" alt="Selected project source" style="display:block;width:100%;max-height:120px;object-fit:contain;margin-top:12px;background:#10141c">`:''}<p class="note">${item?`${item.width} × ${item.height} · ${item.kind==='image'?'still image':available+' project frames'}`:'Media unavailable'}. The source is fitted inside the clip’s graph canvas with transparent margins.</p><div class="field-row"><label>Source in · frames<input type="number" data-node-media-field="source_in" min="0" max="${maximumIn}" step="1" value="${p.source_in}" ${item?.kind==='image'?'disabled':''}></label><label>Duration · frames<input type="number" data-node-media-field="duration" min="1" max="${maximumDuration}" step="1" value="${p.duration}"></label></div><label>Start in animation · frames<input type="number" data-node-media-field="offset" min="${-MAX_FRAME}" max="${MAX_FRAME-p.duration}" step="1" value="${p.offset}"></label><label>Outside selected range<select data-node-media-field="outside" aria-label="Outside source range"><option value="transparent" ${p.outside==='transparent'?'selected':''}>Transparent</option><option value="hold" ${p.outside==='hold'?'selected':''}>Hold first / last selected frame</option></select></label><p class="note" data-node-media-sample>Animation frame ${currentFrame()} → ${sample===null?'transparent':`source frame ${sample}`}. Active ${p.offset}–${p.offset+p.duration-1} inclusive.</p>${issue?`<p class="note" role="alert">${escape(issue)}</p>`:''}<p class="note">Add a Merge node with this source selected, or connect its output to another node. Clip retiming affects the clip source; this source keeps its own range. Its audio stays on the timeline.</p></div>`;
-    }
+
     function renderInspector(element=inspector) {
       if(element!==inspector){if(inspector){inspector.removeEventListener('input',inspectorInput);inspector.removeEventListener('change',inspectorChange);inspector.removeEventListener('click',inspectorClick);inspector.removeEventListener('keydown',onKey);inspector.removeEventListener('pointerdown',inspectorPointerDown);inspector.removeEventListener('dblclick',inspectorDoubleClick);}inspector=element;if(inspector){inspector.addEventListener('input',inspectorInput);inspector.addEventListener('change',inspectorChange);inspector.addEventListener('click',inspectorClick);inspector.addEventListener('keydown',onKey);inspector.addEventListener('pointerdown',inspectorPointerDown);inspector.addEventListener('dblclick',inspectorDoubleClick);}}
       if(!inspector)return;
@@ -608,6 +661,18 @@
     }
     function inspectorChange(event) {
       const input=event.target,node=nodeById(selected);if(!node)return;
+      if(input.hasAttribute('data-lensfun-file')){readLensFile(input.files?.[0]);return;}
+      if(input.hasAttribute('data-lensfun-choice')){const catalog=currentLensCatalog();if(catalog?.calibrations.some(c=>c.id===input.value)){lensChoice=input.value;renderInspector();}return;}
+      if(input.hasAttribute('data-lensfun-crop'))return;
+      if(input.hasAttribute('data-lens-crop')){const next=copy(graph),target=next.nodes.find(n=>n.id===node.id);if(target.params.model==='lensfun'){target.params.profile.image_crop=Number(input.value);if(!commit(next))renderInspector();}return;}
+      if(input.hasAttribute('data-lens-model')){
+        const mode=input.value;if(mode!=='brown'&&!Object.hasOwn(LENS_PROJECTIONS,mode))return;
+        const next=copy(graph),target=next.nodes.find(n=>n.id===node.id),p=target.params;
+        target.params={...copy(definitions.lens_distortion.defaults),direction:p.direction};
+        if(p.model!=='lensfun')for(const key of ['fx','fy','cx','cy'])target.params[key]=p[key];
+        if(mode!=='brown')Object.assign(target.params,{model:'fisheye',projection:mode});
+        delete target.animation;if(!commit(next))renderInspector();return;
+      }
       if(input.hasAttribute('data-node-effect-mask')){const next=copy(graph),target=next.nodes.find(n=>n.id===node.id);if(input.value){if(wouldCycle(graph,input.value,node.id)){notify('That mask connection would create a cycle.',true);renderInspector();return;}target.mask_input=input.value;target.mask_invert??=false;}else{delete target.mask_input;delete target.mask_invert;}commit(next);return;}
       if(input.hasAttribute('data-node-mask-invert')){const next=copy(graph);next.nodes.find(n=>n.id===node.id).mask_invert=input.checked;commit(next);return;}
       if(input.hasAttribute('data-bezier-selection')){bezierPoint=Number(input.value);renderInspector();return;}
@@ -660,8 +725,15 @@
         target.params??={};target.params[animationChannel]=value;delete target.animation[animationChannel];if(!Object.keys(target.animation).length)delete target.animation;commit(next);return;
       }
       const action=event.target.closest('[data-node-action]')?.dataset.nodeAction;
+      if(action==='lensfun-apply'){
+        const catalog=currentLensCatalog(),sample=catalog?.calibrations.find(c=>c.id===lensChoice);if(!sample)return;
+        const profile=copy(sample.profile);profile.image_crop=Number(inspector.querySelector('[data-lensfun-crop]').value);
+        const next=copy(graph),target=next.nodes.find(n=>n.id===selected);if(target?.type!=='lens_distortion')return;
+        target.params={...copy(definitions.lens_distortion.defaults),direction:target.params.direction,model:'lensfun',profile};delete target.animation;
+        if(commit(next))notify('Lensfun calibration applied. Undo restores the previous lens model.');return;
+      }
       if(action?.startsWith('bezier-')){bezierAction(action);return;}
-      if(action==='delete')deleteNode();else if(action==='duplicate')duplicateNode();else if(action==='import-media')bridge.onImport?.();else if(action==='lens-camera'||action==='lens-reset'){const next=copy(graph),target=next.nodes.find(node=>node.id===selected);if(target?.type!=='lens_distortion')return;if(action==='lens-camera'){const intrinsics=sceneLens();if(!intrinsics){notify('Use a scene camera with the same image aspect before copying intrinsics.',true);return;}Object.assign(target.params,intrinsics);}else for(const name of ['k1','k2','k3','p1','p2'])target.params[name]=0;if(!commit(next))renderInspector();}else if(action==='output'){const next=copy(graph);next.output=selected;commit(next);}else if(action)editPointAction(action);
+      if(action==='delete')deleteNode();else if(action==='duplicate')duplicateNode();else if(action==='import-media')bridge.onImport?.();else if(action==='lens-camera'||action==='lens-reset'){const next=copy(graph),target=next.nodes.find(node=>node.id===selected);if(target?.type!=='lens_distortion'||target.params.model==='lensfun')return;if(action==='lens-camera'){const intrinsics=sceneLens();if(!intrinsics){notify('Use a scene camera with the same image aspect before copying intrinsics.',true);return;}Object.assign(target.params,intrinsics);}else for(const name of ['k1','k2','k3','p1','p2'])target.params[name]=0;if(!commit(next))renderInspector();}else if(action==='output'){const next=copy(graph);next.output=selected;commit(next);}else if(action)editPointAction(action);
     }
     function localPoint(event) {const rect=stage.getBoundingClientRect();return {x:(event.clientX-rect.left-pan.x)/zoom,y:(event.clientY-rect.top-pan.y)/zoom};}
     function onPointerDown(event) {
@@ -718,5 +790,5 @@
       destroy(){destroyed=true;editorDrag=null;bezierDrag=null;resize.disconnect();host.removeEventListener('click',onClick);host.removeEventListener('change',onChange);host.removeEventListener('keydown',onKey);stage.removeEventListener('pointerdown',onPointerDown);stage.removeEventListener('wheel',onWheel);window.removeEventListener('pointermove',onPointerMove);window.removeEventListener('pointerup',onPointerUp);window.removeEventListener('pointercancel',onPointerCancel);if(inspector){inspector.removeEventListener('input',inspectorInput);inspector.removeEventListener('change',inspectorChange);inspector.removeEventListener('click',inspectorClick);inspector.removeEventListener('keydown',onKey);inspector.removeEventListener('pointerdown',inspectorPointerDown);inspector.removeEventListener('dblclick',inspectorDoubleClick);}host.innerHTML='';}
     };
   }
-  window.CinematicumCompositor = {mount,validate,wouldCycle,defaultGraph:freshGraph,nodeTypes:copy(definitions),curveValue,animationValue,paramsAt,animationFields,mediaFrameAt,lensBound,validBezier,splitBezier,parseSvgPath,svgDocument,parseSvgDocument};
+  window.CinematicumCompositor = {mount,validate,wouldCycle,defaultGraph:freshGraph,nodeTypes:copy(definitions),curveValue,animationValue,paramsAt,animationFields,mediaFrameAt,lensBound,lensProfileBound,validateLensProfile,validBezier,splitBezier,parseSvgPath,svgDocument,parseSvgDocument};
 })();
