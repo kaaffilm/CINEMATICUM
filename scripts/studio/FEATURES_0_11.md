@@ -71,12 +71,21 @@ HDR movie monitoring or mastering.
 
 ## Native lifecycle
 
-The installed 0.10 acceptance exposed a startup quit defect. The 0.11 candidate
-now waits for document/bootstrap readiness before the existing save and
-active-job decision. Its native acceptance exercises the actual production class,
-ordinary termination, dirty-save and explicit Keep Working / Cancel Jobs and
-Quit decisions. The failed 0.10 attempt remains in the historical record.
+The installed 0.10 acceptance exposed a startup quit defect. The 0.11 runtime
+waits for document/bootstrap readiness before the existing save and active-job
+decision. All three native regression phases passed using the actual production
+class: app-script startup, authenticated bootstrap, and dirty-save/active-job
+protection with Keep Working / Cancel Jobs and Quit decisions. The failed 0.10
+attempt remains in the historical record. Canonical installed launch later
+passed its separate 16/16-check gate in 8.408 seconds, including first ordinary
+termination and preservation of all 113 bundle files.
 
+Core `530ba240` passed the complete 874-test gate and all 19 collected native
+phases. The replacement installation of **0.11.0 / build 12** passed all five
+independent preservation/source/bundle gates. All seven selected default
+runtimes passed installed readiness: deep 17/17 plus six phases of 14/14,
+with 5/5 preparation and 6/6 final preservation checks. Exact-head CI and
+publication remain pending in [the verification record](VERIFICATION_0_11.md).
 The candidate targets **0.11.0 / build 12**. The capability ledger retains
 `parity_complete: false` until the whole requested scope is implemented and
 accepted; a passing local build alone does not change that scope.

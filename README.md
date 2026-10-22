@@ -9,10 +9,21 @@ Float32 OCIO/ACES movies, editable OTIO compositions and measured HDR/panorama
 photographs. [Implemented scope](scripts/studio/FEATURES_0_11.md),
 [verification](scripts/studio/VERIFICATION_0_11.md) and
 [remaining work](scripts/studio/UNFINISHED_0_11.md) distinguish current source
-from passed acceptance and installation. The published 0.10 base passed 812
-tests locally and in CI and is installed, while its first startup-quit failure
-is being corrected in this candidate. Historical 0.9.1 acceptance remains
-bound to its recorded source.
+from passed acceptance and installation. Accepted core
+`530ba2400571a8b67efa2d9ab28997f65920c006` passed **874/874 tests** with no
+failures, errors or skips. Its **19 native phases** passed: 15 native executions
+and four fixture preparations, with 235 reported outer checks bound to 138
+unique production/helper source files. Replacement installation passed all
+five independent gates for 108 runtime/web files and the complete 113-file
+0.11.0/build 12 bundle, preserving the prior app and existing projects.
+Canonical installed launch passed **16/16 checks in 8.408 seconds**, including
+its first ordinary termination. All seven selected default-runtime readiness
+gates passed: deep 17/17 and six further phases of 14/14, followed by a
+6/6 complete preservation check. Exact-head CI/publication remains pending.
+The startup-quit correction passed its three native regression phases; the
+older 0.10 failed installed-quit attempt remains preserved. Documentation-only
+follow-up manifests and CI identities are recorded separately from this tested
+core. Historical 0.9.1 acceptance remains bound to its recorded source.
 
 Open the media editor with `make studio`. On macOS, `make studio-install-macos`
 builds **CINEMATICUM Studio.app** using the installed Xcode tools. CINEMATICUM owns
@@ -63,6 +74,8 @@ also passed inference and native playback; its generation harness took 928.394
 seconds. This is one bounded longer case. Production quality and sustained
 operation remain unverified; the earlier ordinary termination's cause is unknown.
 
+### Historical 0.9.1 acceptance
+
 The 0.9.1 candidate replaces browser-decoded live sound with a source-sample
 scheduler and adds measured affine/projective planar motion, stabilization,
 image corner pinning, 16-bit UNORM SDR movie processing, and a lossless FFV1
@@ -104,8 +117,8 @@ historical compiler/replay records keep their separate scope.
 
 Start with [the Studio guide](scripts/studio/README.md),
 [the source comparison and capability audit](scripts/studio/CAPABILITY_AUDIT.md),
-[the current verification record](scripts/studio/VERIFICATION_0_9_1.md), and
-[the current unfinished-work register](scripts/studio/UNFINISHED_0_9.md). These
+[the current verification record](scripts/studio/VERIFICATION_0_11.md), and
+[the current unfinished-work register](scripts/studio/UNFINISHED_0_11.md). These
 records separate source implementation, executed acceptance and deployment.
 Run `make studio-doctor` to inspect installed engines or `make studio-test` for
 application/media tests. Film footage must be imported or actually generated;

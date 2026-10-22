@@ -19,8 +19,17 @@ multicamera synchronization. Open **Studio tools** for scientific workflows,
 **Multicam** for camera monitoring, **Interchange** for OTIO, **Develop images**
 for still photography and **Export** for movie processing. See
 [Features 0.11](FEATURES_0_11.md), [Verification 0.11](VERIFICATION_0_11.md) and
-[remaining work](UNFINISHED_0_11.md). Frozen verification, native acceptance,
-installation and installed launch are independent release gates.
+[remaining work](UNFINISHED_0_11.md). Core `530ba240` passed **874/874 tests**
+with no failures, errors or skips. Its 19 native phases passed, comprising
+15 native executions and four fixture preparations with 235 reported outer
+checks. The 0.11.0/build 12 replacement passed five independent installation
+gates: 108 runtime/web files and all 113 bundle files were reconciled while
+preserving the previous app and existing projects. Canonical installed launch
+passed 16/16 checks in 8.408 seconds, including its first ordinary termination.
+All seven selected default-runtime readiness gates passed: deep 17/17 and
+six phases of 14/14, with separate 5/5 preparation and 6/6 final preservation
+checks. Exact-head CI/publication remains pending. The verification record
+separates the tested core from the reconciled documentation-only manifest.
 
 ## Previous upgrade
 
@@ -45,7 +54,7 @@ scene-linear EXR masters, calibrated cameras, physical materials, exact clocks,
 measured tracking and OCIO/RAW/bracket still processing remain available.
 Read the [source comparison and capability audit](CAPABILITY_AUDIT.md),
 [capability ledger](capabilities.json), and
-[current unfinished-work register](UNFINISHED_0_10.md) for implemented bounds and
+[current unfinished-work register](UNFINISHED_0_11.md) for implemented bounds and
 remaining professional gaps. [Verification 0.9](VERIFICATION_0_9.md) is historical
 evidence for the earlier candidate. Its 515-test result does not certify newer
 source. The current verification record identifies current-source acceptance,
@@ -77,7 +86,7 @@ clip or ring. Lanczos edge overshoot and the scaler's fractional-alpha rounding
 are recorded in the precision tests; 16-bit storage does not promise 16-bit
 numerical accuracy after every transform. The path is bounded to 8,388,608
 canvas pixels and 16,777,216 transformed working pixels. This mode remains
-UNORM SDR. The separate unreleased [Float32 movie candidate](FLOAT_MOVIE_PIPELINE.md)
+UNORM SDR. The separate [0.11 Float32 movie pipeline](FLOAT_MOVIE_PIPELINE.md)
 adds scene-linear OCIO/ACES processing for supported timeline operations, real
 FLOAT32 EXR sequence masters with PCM audio, and display-transformed SDR previews.
 Its settings, source interpretations, export/download and archive bindings share
@@ -171,7 +180,7 @@ owned media jobs. The app still requires installed Python, FFmpeg, and any
 optional engines; the installer does not bundle them or create a signed,
 notarized distribution.
 
-Install-03 passed in 16.515 seconds; its full private receipt is now collected
+**Historical 0.9.1 installation:** Install-03 passed in 16.515 seconds; its full private receipt is collected
 and hash-verified. It verified the frozen 189-file source, 62 runtime files,
 67 bundle files and all 57 protected workspace files. Both the original 59-file
 app archive and later 70-file archive are preserved. Canonical launch-02 passed

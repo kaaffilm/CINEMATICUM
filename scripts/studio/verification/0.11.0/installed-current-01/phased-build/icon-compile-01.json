@@ -1,0 +1,28 @@
+{
+  "phase": "icon_compile",
+  "source_commit": "530ba2400571a8b67efa2d9ab28997f65920c006",
+  "argv": [
+    "/usr/bin/xcrun",
+    "swiftc",
+    "-swift-version",
+    "5",
+    "-framework",
+    "Cocoa",
+    "-module-cache-path",
+    "/Users/midiakiasat/Applications/.cinematicum-build-kqt8bj6r/module-cache",
+    "/Users/midiakiasat/.midia-ai/gateway-live/workspaces/auto-8f91ac5c986eed5ac689d7f8b2ff6a29-next-011/scripts/studio/macos/StudioIcon.swift",
+    "-o",
+    "/Users/midiakiasat/Applications/.cinematicum-build-kqt8bj6r/draw-icon.reverified-01"
+  ],
+  "compiler": "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc",
+  "compiler_sha256": "2ed38571e92c0283091838c1649e27650ad9c99950288e883c7b2dc6c4ce89fb",
+  "source_sha256": "9be90f8566a606a664f012926c1e85f99a44b277c616fd597d51df1760a9a49b",
+  "exit_code": 0,
+  "timed_out": false,
+  "elapsed": 2.091,
+  "stdout": "",
+  "stderr": "",
+  "output": "/Users/midiakiasat/Applications/.cinematicum-build-kqt8bj6r/draw-icon.reverified-01",
+  "output_sha256": "e94a5b50f2f77bbe797ac225faf894012f736b01c0acc97e137a57989719b4e3",
+  "output_bytes": 88792
+}

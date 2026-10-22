@@ -1,0 +1,34 @@
+{
+  "schema": "cinematicum-installed-readiness-helper-delivery-v1",
+  "helper": {
+    "path": "/workspace/scratch/091f394ee5df/run_installed_readiness_phased.py",
+    "bytes": 34503,
+    "sha256": "b03000ba02c8dc0595c19e5fc92646b6af1048d372e5175b60a0a0f152060aff"
+  },
+  "portable_guard_tests": {
+    "path": "/workspace/scratch/091f394ee5df/test_installed_readiness_phased_guards.py",
+    "sha256": "c5763431d000190a30151baf17d0f548f02d6770f921c8f540539c7e07f4d366",
+    "tests_run": 4,
+    "passed": 4,
+    "failures": 0,
+    "errors": 0,
+    "elapsed_seconds": 0.014,
+    "scope": "Actual filesystem symlink/type/preservation guards and pure receipt validation only; no native readiness result was simulated."
+  },
+  "accepted_launch_helper_sha256": "c04cec086822f82cf83613becb30499ced73cadf7632049dfd843fd4bdc81636",
+  "accepted_controller_source_sha256": "a1860e77c595eab45a14e3c767f28342c0911019862bf817e2b5b8b17dbe0f76",
+  "installed_native_sha256": "8f19b8920ebdd8cfacf7c3330ed60043fe33a22c6aed494d377ee64e080427ad",
+  "native_execution_performed": false,
+  "production_source_changed": false,
+  "monkeypatched_functions_or_classes": false,
+  "configuration": "The accepted launch helper NATIVE_SHA is configured exactly as its existing CLI main() does. No function, class, path or control API is replaced.",
+  "tool_phases": [
+    "ray-optics",
+    "physical-rendering",
+    "learned",
+    "reconstruction",
+    "scene-processing",
+    "multicam-sync"
+  ],
+  "required_final_gate": "No aggregate acceptance until verify has checked all six actual tool receipts/event identities and performed full bundle/protected-workspace preservation comparison."
+}

@@ -3,23 +3,265 @@
   "build": "0.11.0",
   "reviewed_on": "2026-10-22",
   "parity_complete": false,
-  "evidence_note": "The 0.11 candidate integrates simultaneous cameras, fixed-source audio, scene-linear Float32 OCIO/ACES movies, OTIO retime/nested/dissolve exchange, measured HDR/panorama stills and guarded startup quit. Feature receipts distinguish source-bound browser/numeric acceptance from native Mac and installed application acceptance. Base a031a04 passed 812 tests locally and in exact-head CI and its 0.10 installation passed all independent source/bundle/backup/project/checkout gates; its first installed ordinary quit exceeded its deadline and remains a failed historical launch gate. Current combined full regression, native phases, installation and exact-head CI have separate release receipts. No full professional parity, production quality or accepted-film issuance is implied.",
+  "evidence_note": "Core 530ba2400571a8b67efa2d9ab28997f65920c006 integrates simultaneous cameras, fixed-source audio, scene-linear Float32 OCIO/ACES movies, OTIO retime/nested/dissolve exchange, measured HDR/panorama stills and guarded startup quit. Its frozen 330-file source passed all 874 tests with zero failures/errors/skips; all five managed runtime inventories were unchanged. Nineteen native phases passed (15 native executions and four fixture preparations, 235 reported outer checks, 138 unique bound production/helper source files). Replacement installation passed all five independent gates for the 108-file runtime/web inventory and complete 113-file 0.11.0/build 12 bundle. Canonical installed launch passed 16/16 checks in 8.408 seconds, including first ordinary termination and preservation of all 113 bundle files. All seven selected installed default runtimes passed: deep 17/17, six further phases totaling 84/84, separate preparation 5/5 and final preservation 6/6. The six-file documentation-only delta is reconciled to unchanged runtime/test sources. Exact-head CI/publication remains pending. Historical failed attempts are retained. No full professional parity, production quality or accepted-film issuance is implied.",
   "release_acceptance": {
-    "status": "integration_acceptance_in_progress",
+    "status": "installed_launched_and_runtime_readiness_passed_ci_publication_pending",
     "version": "0.11.0",
     "build": 12,
     "base_commit": "a031a04e19007f7bac252c1f5b0f8d66db15371a",
     "frozen_regression": {
-      "status": "pending_integrated_source_freeze"
+      "status": "passed",
+      "tests": 874,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "expected_failures": 0,
+      "unexpected_successes": 0,
+      "unittest_seconds": 807.404,
+      "elapsed_seconds": 961.413,
+      "source_files": 330,
+      "source_unchanged": true,
+      "managed_runtimes_unchanged": true,
+      "source_commit": "530ba2400571a8b67efa2d9ab28997f65920c006",
+      "source_tree": "4836005d8a9aed6790e596c23fa5e8b58d9d8ede",
+      "source_manifest_sha256": "141b53f435f68d325a73e2f0d930fc4acd7054b364b3336aada9f4439bd43d66",
+      "source_inventory_sha256": "a4c94c9c4c0aafc2ab99cc74f35b7870daeae71ba353922bc75b413c01c68873",
+      "report": "verification/0.11.0/whole-build-current-02/report.json",
+      "report_sha256": "d46c3a8de453269d18dcf0cb5981d2b3d83f3ceb5b4309fbf1ca5d5266a49d4c",
+      "log": "verification/0.11.0/whole-build-current-02/verification.log",
+      "log_sha256": "d8fbdd4a80e53021965c4afcfc659a504070ecf67bb1b7ebab716ff19f4d4efa",
+      "summary": "verification/0.11.0/whole-build-current-02/summary.json",
+      "summary_sha256": "4d5e90a775abdff944f8371c15705a2bc9193ad9a70ba0031cddf0bffb4a5140",
+      "prior_failed_run_retained": "verification/0.11.0/whole-build-current-01-failed/summary.json",
+      "prior_failure_resolution": "Only the isolated audio VM fixture gained settings:{}; production code and all existing audio assertions were preserved. The original test passed inside the second complete run.",
+      "scope": "Complete discoverable Python/Node/media suite with actual pinned optional engines and genuine camera RAW. Native Mac acceptance, installed launch and GitHub CI are separate."
     },
-    "native_gates": {},
+    "native_gates": {
+      "status": "passed_bounded",
+      "phase_count": 19,
+      "native_execution_phases": 15,
+      "fixture_preparation_phases": 4,
+      "reported_outer_checks": 235,
+      "outer_check_scope": "Includes repeated source-identity and cleanup checks; not 235 distinct feature tests.",
+      "unique_bound_source_files": 138,
+      "source_hash_comparisons": 1917,
+      "all_bound_source_bytes_match_accepted_core": true,
+      "source_binding": "verification/0.11.0/native-current-01/source-binding.json",
+      "source_binding_sha256": "c722fafcdc53735d3d9ac753413ad8694abaf6e418ab2eca88d822d42c69fe54",
+      "groups": [
+        {
+          "workflow": "startup_quit",
+          "phases": 3,
+          "native_executions": 3,
+          "fixture_preparations": 0,
+          "outer_checks": 16
+        },
+        {
+          "workflow": "multicam_monitor",
+          "phases": 4,
+          "native_executions": 3,
+          "fixture_preparations": 1,
+          "outer_checks": 58
+        },
+        {
+          "workflow": "float32_movie",
+          "phases": 3,
+          "native_executions": 2,
+          "fixture_preparations": 1,
+          "outer_checks": 28
+        },
+        {
+          "workflow": "otio_compositions",
+          "phases": 4,
+          "native_executions": 3,
+          "fixture_preparations": 1,
+          "outer_checks": 63
+        },
+        {
+          "workflow": "still_photography",
+          "phases": 5,
+          "native_executions": 4,
+          "fixture_preparations": 1,
+          "outer_checks": 70
+        }
+      ],
+      "scope": "Actual native production controls/workers and source-bound download/output acceptance. Fixture preparation is separately counted. Physical input, arbitrary save-chooser behavior, canonical installed launcher, HDR monitoring and production quality are not certified by these phases."
+    },
     "installation": {
-      "status": "pending"
+      "status": "passed",
+      "version": "0.11.0",
+      "build": 12,
+      "source_commit": "530ba2400571a8b67efa2d9ab28997f65920c006",
+      "source_manifest_sha256": "141b53f435f68d325a73e2f0d930fc4acd7054b364b3336aada9f4439bd43d66",
+      "runtime_files": 108,
+      "bundle_files": 113,
+      "independent_gates": 5,
+      "previous_bundle_files_preserved": 105,
+      "existing_project_files_preserved": 59,
+      "existing_project_bytes_preserved": 2858334502,
+      "source_and_original_checkout_preserved": true,
+      "native_executable_sha256": "8f19b8920ebdd8cfacf7c3330ed60043fe33a22c6aed494d377ee64e080427ad",
+      "independent_after_receipt_sha256": "7ecf56cdb747a0ded253a35acfa601a1cd64d60d247e206f4101db31dafabbc3",
+      "installer_receipt_sha256": "dec23b7bddf9e7a5c407beffc608bb29b415042ae59da316dcd49e08d715d693",
+      "backup_filename": "CINEMATICUM Studio-20261022T112837Z-e044b7b2.zip",
+      "summary": "verification/0.11.0/installed-current-01/installation-summary.json",
+      "signed_or_notarized": false,
+      "phased_build": "After a preserved aggregate 18-second timeout with the old app intact, fresh main/icon compilation and icon generation succeeded in separate foreground calls; unchanged install_staged performed the protected replacement. All actual exit-zero proofs and source/staging identities are retained.",
+      "summary_sha256": "435083d8abed2cb8134a169aa51addbddc113872a89ef48ca249da8740c1a93b",
+      "source_code_identity_sha256": "56d854dec688dbf25857cc154c6cfe819d934af147483da6a1d3967447a99345"
     },
     "installed_launch": {
-      "status": "pending_startup_quit_correction"
+      "status": "passed_bounded",
+      "checks_passed": 16,
+      "checks_total": 16,
+      "elapsed_seconds": 8.408,
+      "bundle_files_preserved": 113,
+      "first_ordinary_termination_passed": true,
+      "force_quit_used": false,
+      "production_code_injected": false,
+      "protected_project_and_cache_files_preserved": true,
+      "report": "verification/0.11.0/installed-current-01/launch/installed-launch-report.json",
+      "scope": "Actual LaunchServices launch, accepted installed bundle/native executable, bundled server/default workspace/runtime flags/live editor identities, native window, first ordinary NSRunningApplication termination, server exit, workspace lock release and fresh no-active-jobs shutdown receipt. Selected default runtime-readiness phases are separate.",
+      "report_sha256": "d0549b8ad8a9d09209f08ba9a2bbc103ed31821946c845baf55850f61828515d"
     },
-    "parity_complete": false
+    "parity_complete": false,
+    "accepted_core_commit": "530ba2400571a8b67efa2d9ab28997f65920c006",
+    "accepted_core_tree": "4836005d8a9aed6790e596c23fa5e8b58d9d8ede",
+    "accepted_core_source_manifest_sha256": "141b53f435f68d325a73e2f0d930fc4acd7054b364b3336aada9f4439bd43d66",
+    "github_ci": {
+      "status": "pending",
+      "scope": "Requires the exact final published 0.11 commit. Earlier 0.10/0.9 GitHub results do not certify this source."
+    },
+    "documentation_followup": {
+      "status": "reconciled_documentation_only",
+      "accepted_core_commit": "530ba2400571a8b67efa2d9ab28997f65920c006",
+      "accepted_core_source_manifest_sha256": "141b53f435f68d325a73e2f0d930fc4acd7054b364b3336aada9f4439bd43d66",
+      "changed_declared_paths": [
+        "README.md",
+        "scripts/studio/README.md",
+        "scripts/studio/FEATURES_0_11.md",
+        "scripts/studio/VERIFICATION_0_11.md",
+        "scripts/studio/UNFINISHED_0_11.md",
+        "scripts/studio/capabilities.json"
+      ],
+      "unchanged_declared_source_files": 324,
+      "unchanged_runtime_web_payloads": 108,
+      "report": "verification/0.11.0/documentation-release-01/source-reconciliation.json",
+      "scope": "The existing generator reconciles a six-file documentation/ledger delta and regenerates the manifest. All production/test/native/CI bytes remain unchanged. The original 874-test receipt retains the core manifest; final publication and exact-head CI are separate pending gates."
+    },
+    "selected_runtime_readiness": {
+      "status": "passed_bounded",
+      "expected_tool_phases": 7,
+      "completed_tool_phases": 7,
+      "deep": {
+        "status": "passed_bounded",
+        "report": "verification/0.11.0/installed-current-01/tools/deep/installed-launch-report.json",
+        "report_sha256": "368927c69415ea3043786a8d89f12276ab87c01151d7e4e66f4b442a0e2c8174",
+        "checks_passed": 17,
+        "checks_total": 17,
+        "elapsed_seconds": 9.627
+      },
+      "six_phase_checks_passed": 84,
+      "six_phase_checks_total": 84,
+      "phases": [
+        {
+          "tool": "ray-optics",
+          "status": "passed_bounded",
+          "report": "verification/0.11.0/installed-current-01/readiness-phased/ray-optics/tool-report.json",
+          "report_sha256": "7f2e0937c9037e2a47d85b091dc0143698603769c85d2848c70ec6a9c39bce15",
+          "checks_passed": 14,
+          "checks_total": 14,
+          "elapsed_seconds": 17.63
+        },
+        {
+          "tool": "physical-rendering",
+          "status": "passed_bounded",
+          "report": "verification/0.11.0/installed-current-01/readiness-phased/physical-rendering/tool-report.json",
+          "report_sha256": "cc0d1ba5119fe36e9bcd2f179ea77db5a5302fa94e3bdf7d0797c5b11e040cf3",
+          "checks_passed": 14,
+          "checks_total": 14,
+          "elapsed_seconds": 4.682
+        },
+        {
+          "tool": "learned",
+          "status": "passed_bounded",
+          "report": "verification/0.11.0/installed-current-01/readiness-phased/learned/tool-report.json",
+          "report_sha256": "2008a6fcbc9f67de7222767e808b81a6230d6012177325c2908446422c321f02",
+          "checks_passed": 14,
+          "checks_total": 14,
+          "elapsed_seconds": 7.302
+        },
+        {
+          "tool": "reconstruction",
+          "status": "passed_bounded",
+          "report": "verification/0.11.0/installed-current-01/readiness-phased/reconstruction/tool-report.json",
+          "report_sha256": "5bae93d808551b684d8bdf1dc5769ff33efb77169ae369a3afac4aa0b2388df0",
+          "checks_passed": 14,
+          "checks_total": 14,
+          "elapsed_seconds": 5.767
+        },
+        {
+          "tool": "scene-processing",
+          "status": "passed_bounded",
+          "report": "verification/0.11.0/installed-current-01/readiness-phased/scene-processing/tool-report.json",
+          "report_sha256": "e8e61f0148486b365ca250b8280fe5e458f1495ae83c9c5f6da9f0fff36fed02",
+          "checks_passed": 14,
+          "checks_total": 14,
+          "elapsed_seconds": 3.32
+        },
+        {
+          "tool": "multicam-sync",
+          "status": "passed_bounded",
+          "report": "verification/0.11.0/installed-current-01/readiness-phased/multicam-sync/tool-report.json",
+          "report_sha256": "8f4881d5e994ae582d3ea77325d821a82ec53f47d8aab88d53f4f81271da91fa",
+          "checks_passed": 14,
+          "checks_total": 14,
+          "elapsed_seconds": 4.15
+        }
+      ],
+      "preparation": {
+        "status": "passed",
+        "report": "verification/0.11.0/installed-current-01/readiness-phased/prepare-report.json",
+        "report_sha256": "82b720268cc7360346247f1fae8650e77ab3a40e3311a070dceae19262b78e6a",
+        "checks_passed": 5,
+        "checks_total": 5,
+        "elapsed_seconds": 5.095
+      },
+      "final_preservation": {
+        "status": "passed",
+        "report": "verification/0.11.0/installed-current-01/readiness-phased/verify/readiness-verification-report.json",
+        "report_sha256": "9e78972299a6294b7d71da7339de5000a80a16e5238b3228b2db7a9b0e2e0317",
+        "checks_passed": 6,
+        "checks_total": 6,
+        "elapsed_seconds": 4.346,
+        "bundle_files_preserved": 113,
+        "protected_workspace_files": 57,
+        "protected_workspace_bytes": 2858334304,
+        "protected_workspace_inventory_sha256": "f3e2a94dd77fa0c4e8299121803952b91c613d13c69f7eb4b0267fb4087b860b",
+        "missing_files": 0,
+        "changed_files": 0,
+        "unexpected_added_files": 0,
+        "added_derivatives": 0,
+        "all_owned_instances_exited": true,
+        "no_active_jobs_or_workspace_owner": true
+      },
+      "source_binding": {
+        "accepted_runner_sha256": "c04cec086822f82cf83613becb30499ced73cadf7632049dfd843fd4bdc81636",
+        "controller_binary_sha256": "a5c5b080a5a8b3c8a1915cbb765b7468392523d53ea88ccfbc2ae71dd6ead128",
+        "controller_source_sha256": "a1860e77c595eab45a14e3c767f28342c0911019862bf817e2b5b8b17dbe0f76",
+        "coordinator_sha256": "b03000ba02c8dc0595c19e5fc92646b6af1048d372e5175b60a0a0f152060aff",
+        "core_commit": "530ba2400571a8b67efa2d9ab28997f65920c006",
+        "core_source_manifest_sha256": "141b53f435f68d325a73e2f0d930fc4acd7054b364b3336aada9f4439bd43d66",
+        "installation_evidence_sha256": "7ecf56cdb747a0ded253a35acfa601a1cd64d60d247e206f4101db31dafabbc3",
+        "installed_native_sha256": "8f19b8920ebdd8cfacf7c3330ed60043fe33a22c6aed494d377ee64e080427ad",
+        "private_baseline_sha256": "4523ed60d97c121802f4b1d0c201079f809b32a9f912e63311e873470e9964f9",
+        "source_code_identity_sha256": "56d854dec688dbf25857cc154c6cfe819d934af147483da6a1d3967447a99345"
+      },
+      "public_phased_receipt_files": 52,
+      "private_baseline_published": false,
+      "failed_aggregate_retained": "verification/0.11.0/installed-current-01/failed-aggregate-ray-optics/",
+      "scope": "Actual installed default-runtime capability GETs with owned canonical launch, exact live editor, ordinary quit and final full preservation. Deep is an earlier separate gate; six selected phases retain 14 checks each. This does not add production-quality inference or render acceptance."
+    }
   },
   "unfinished_work": "UNFINISHED_0_11.md",
   "capabilities": [
@@ -68,8 +310,10 @@
         "test_otio_compositions_macos.py",
         "test_otio_compositions_browser.cjs",
         "macos/OtioCompositionsSmoke.js",
-        "OTIO_INTERCHANGE.md"
-      ]
+        "OTIO_INTERCHANGE.md",
+        "VERIFICATION_0_11.md"
+      ],
+      "acceptance": "Integrated core 530ba240 passed all 874 tests. Four native OTIO phases passed 63 reported outer checks (three native executions and one fixture preparation), including authoring, processed dissolve render and archive replay; unrestricted third-party-editor fidelity is not implied. See VERIFICATION_0_11.md."
     },
     {
       "id": "composite.graph",
@@ -186,7 +430,7 @@
     {
       "id": "color.scene_linear_hdr",
       "status": "partial",
-      "scope": "Separate OCIO/RAW/bracket still processing and Cycles frame sequences remain available. The unreleased float32 movie candidate adds actual pinned ACES 2.1 / OCIO input, working, linear EXR output and SDR display transforms across bounded clip transforms/source-over, exposure, raster titles and the stereo mixer. FLOAT32 RGBA EXR sequence + PCM32 audio ZIP masters preserve negative/superwhite values and alpha. No HDR mastering, calibrated monitoring, RAW movie input, live nested/graph/tracking float processing or production-scale acceptance.",
+      "scope": "Separate OCIO/RAW/bracket still processing and Cycles frame sequences remain available. The 0.11 float32 movie pipeline adds actual pinned ACES 2.1 / OCIO input, working, linear EXR output and SDR display transforms across bounded clip transforms/source-over, exposure, raster titles and the stereo mixer. FLOAT32 RGBA EXR sequence + PCM32 audio ZIP masters preserve negative/superwhite values and alpha. No HDR mastering, calibrated monitoring, RAW movie input, live nested/graph/tracking float processing or production-scale acceptance.",
       "evidence": [
         "color_pipeline.py",
         "imaging.py",
@@ -548,9 +792,10 @@
         "test_still_photography_ui.py",
         "test_still_photography_browser.cjs",
         "macos/StillPhotographySmoke.js",
-        "STILL_PHOTOGRAPHY.md"
+        "STILL_PHOTOGRAPHY.md",
+        "VERIFICATION_0_11.md"
       ],
-      "acceptance": "Isolated 13-test numeric gate and 70-check shared-control browser gate passed; integrated native and release receipts are separate. The existing high16 SDR delivery produced a real 24-frame FFV1 gbrap16le download with zero first/last RGBA error against the independently requested paused graph."
+      "acceptance": "The 13 numeric tests passed inside the complete 874-test core gate. The combined still-photography native workflow passed five phases and 70 reported outer checks (four native executions and one fixture preparation): actual import, HDR controls, measured response/motion masks, panorama, delivery and archive replay. The real 24-frame FFV1 gbrap16le download preserved zero first/last RGBA error against the independently requested paused graph. See VERIFICATION_0_11.md; these 70 checks are shared with panorama and are not counted twice."
     },
     {
       "id": "lighting.diffusionlight",
@@ -561,13 +806,14 @@
     {
       "id": "production.single_native_app",
       "status": "implemented_bounded",
-      "scope": "Own native app and local service; installer archives previous bundles, supports rollback, preserves external projects and embeds runtime/native identities. Five explicit -B worker launches fix canonical-launch bytecode mutation. Install03 independent verification, canonical launch02 and final published-source reconciliation have passed. Production quit and scoped chooser Save/public-action Cancel passed separately with unchanged production methods. External FFmpeg/Blender/optional runtimes and absent signing/notarization still limit distribution.",
+      "scope": "Own native app and local service; installer archives previous bundles, supports rollback, preserves external projects and embeds runtime/native identities. Explicit -B worker launches suppress app-bundle bytecode mutation. Startup termination waits for document/bootstrap readiness before dirty-save and active-job decisions. External FFmpeg/Blender/optional runtimes and absent signing/notarization still limit distribution.",
       "evidence": [
         "install_macos.py",
         "macos/StudioIcon.swift",
-        "test_install_macos.py"
+        "test_install_macos.py",
+        "VERIFICATION_0_11.md"
       ],
-      "acceptance": "Install03 passed all 5 gates in 16.515 seconds; full 54,245-byte private after-receipt is collected/hash-verified. It verifies 189 operative hashes, 62 runtime files, 67 bundle files, 70 archived prior files and all 57 protected files / 2,858,327,758 bytes; original 59-file archive remains preserved. Canonical launch02 passed 16/16 in 5.361 seconds and final reconciliation 9/9 binds published 81827cf to unchanged runtime/bundle/native mappings. Production quit passed 21/21 independent + 10/10 native; chooser04 passed 22/22 independent + 9/9 native using AppKit Return Save/public NSSavePanel.cancel. Physical input/full chooser pixels/arbitrary paths/existing-file replacement and installed-app editing/export remain outside those scopes."
+      "acceptance": "Core 530ba240 passed 874 tests and three native startup/protection phases with 16 outer checks. Its 0.11.0/build 12 replacement passed all five independent gates for 108 runtime/web files and the complete 113-file bundle, preserving the 105-file prior app and 59 project files/2,858,334,502 bytes. Canonical installed launch/first ordinary quit passed 16/16 in 8.408 seconds, preserving all 113 bundle files. All seven selected installed default runtimes passed (deep 17/17 plus six phases of 14/14, preparation 5/5 and final preservation 6/6); exact-head CI/publication remains pending. Historical 0.9.1 installation/chooser/quit receipts and the failed first 0.10 installed quit remain in their explicit historical release records."
     },
     {
       "id": "editor.slip_slide_roll",
@@ -786,9 +1032,10 @@
         "test_multicam_monitor_macos.py",
         "macos/MulticamMonitorSmoke.js",
         "MULTICAM_MONITOR.md",
-        "test_float_movie_multicam.py"
+        "test_float_movie_multicam.py",
+        "VERIFICATION_0_11.md"
       ],
-      "acceptance": "15 actual-media cases, affected regression and 58 actual-browser checks passed in the isolated candidate; the integrated monitor also passed 58 checks. Actual integrated WKWebView acceptance and whole-build release gates are recorded separately."
+      "acceptance": "Integrated core 530ba240 passed all 874 tests. Four native monitor phases passed 58 reported outer checks (three native executions and one fixture preparation), with simultaneous decoded pictures, one continuous source PCM voice across a camera cut, save/reopen, render and download. Browser evidence remains separately recorded; production-scale sessions and live reverse audio remain unaccepted. See VERIFICATION_0_11.md."
     },
     {
       "id": "editor.captions",
@@ -879,7 +1126,7 @@
     {
       "id": "color.high16_sdr_movie",
       "status": "implemented_bounded",
-      "scope": "Opt-in 16-bit unsigned normalized RGBA processing across the movie graph, alpha-aware transforms/source-over, 16-bit paused-frame PNG and lossless FFV1 gbrap16le master with alpha. Canvas limit 8,388,608 pixels and transformed working-image limit 16,777,216 pixels; narrower graph/warp limits still apply. Precision and transparent-background settings persist with the project. Decoded numeric regression checks distinguish 1,024 source values and exercise fractional alpha, hidden color and transformed composition. This high16 mode remains clamped display-referred SDR; scene-linear processing is provided separately by the unreleased float32 movie mode. Neither mode provides HDR mastering or calibrated high-bit-depth display.",
+      "scope": "Opt-in 16-bit unsigned normalized RGBA processing across the movie graph, alpha-aware transforms/source-over, 16-bit paused-frame PNG and lossless FFV1 gbrap16le master with alpha. Canvas limit 8,388,608 pixels and transformed working-image limit 16,777,216 pixels; narrower graph/warp limits still apply. Precision and transparent-background settings persist with the project. Decoded numeric regression checks distinguish 1,024 source values and exercise fractional alpha, hidden color and transformed composition. This high16 mode remains clamped display-referred SDR; scene-linear processing is provided separately by the separately implemented 0.11 float32 movie mode. Neither mode provides HDR mastering or calibrated high-bit-depth display.",
       "acceptance": "Final-extended-01 passed 21/21 in 2.153 seconds after exact-fixture selection corrected its earlier bootstrap failure. Saved precision, transformed alpha, processed frames, export controls and actual 63,252-byte WKDownload passed. Production download-03 subsequently verified real default-destination NSSavePanel Save, exact bytes, independent decode and alpha; aggregate remained failed because synthetic Escape did not cancel. Actual download04 subsequently passed 22/22 independent + 9/9 native in 9.470 seconds through AppKit Return Save and public NSSavePanel.cancel, preserving the completed master and leaving no cancelled destination/partial. Physical input and full remote chooser visual/navigation coverage remain uncertified. HDR, calibrated display, unrestricted chooser navigation/existing-file replacement and production scale remain unaccepted.",
       "evidence": [
         "engine.py",
@@ -943,8 +1190,8 @@
     {
       "id": "color.float32_scene_linear_movie",
       "status": "implemented_bounded",
-      "scope": "Unreleased candidate: actual NumPy float32 associated-alpha bilinear transforms/source-over and animated multitrack media; real OCIO/ACES input/working/output/display processing; linear exposure, raster title fades, existing stereo mixer, constant retime/reverse, 16-bit SDR paused frames and SDR H.264/ProRes derivatives. Lossless FLOAT32 EXR+PCM32 master ZIP, source/config/code/snapshot/artifact hashes, cancellation, owned jobs/download and portable archive dependency closure. Canvas 8,388,608 pixels, source 16,777,216 pixels, 14,400 frames, 16 GiB source, 32 GiB package. Unsupported operations refuse explicitly. No HDR monitoring, calibrated display, RAW movie input or production-scale validation.",
-      "acceptance": "See VERIFICATION_FLOAT32.md and its frozen source manifest. Candidate Linux actual-media and Chromium evidence is separate from native installation and Mac acceptance. No film issuance is asserted.",
+      "scope": "The 0.11 pipeline provides actual NumPy float32 associated-alpha bilinear transforms/source-over and animated multitrack media; real OCIO/ACES input/working/output/display processing; linear exposure, raster title fades, existing stereo mixer, constant retime/reverse, 16-bit SDR paused frames and SDR H.264/ProRes derivatives. Lossless FLOAT32 EXR+PCM32 master ZIP, source/config/code/snapshot/artifact hashes, cancellation, owned jobs/download and portable archive dependency closure. Canvas 8,388,608 pixels, source 16,777,216 pixels, 14,400 frames, 16 GiB source, 32 GiB package. Unsupported operations refuse explicitly. No HDR monitoring, calibrated display, RAW movie input or production-scale validation.",
+      "acceptance": "Integrated core 530ba240 passed all 874 tests. Three native Float32 phases passed 28 reported outer checks (two native executions and one fixture preparation), including shipped authoring controls and real downloaded EXR/audio/config/source artifacts. The 0.11 replacement installation passed; canonical installed launch passed 16/16; all seven selected installed default-runtime readiness gates and final preservation passed; exact-head CI/publication remains pending. VERIFICATION_FLOAT32.md preserves the earlier isolated candidate; VERIFICATION_0_11.md records integrated acceptance. No HDR monitoring or film issuance is asserted.",
       "evidence": [
         "float_movie.py",
         "float_movie_worker.py",
@@ -958,7 +1205,8 @@
         "test_float_movie_ui_macos.py",
         "macos/FloatMovieSmoke.js",
         "FLOAT_MOVIE_PIPELINE.md",
-        "VERIFICATION_FLOAT32.md"
+        "VERIFICATION_FLOAT32.md",
+        "VERIFICATION_0_11.md"
       ]
     },
     {
@@ -976,9 +1224,10 @@
         "test_still_photography_ui.py",
         "test_still_photography_browser.cjs",
         "macos/StillPhotographySmoke.js",
-        "STILL_PHOTOGRAPHY.md"
+        "STILL_PHOTOGRAPHY.md",
+        "VERIFICATION_0_11.md"
       ],
-      "acceptance": "Isolated real-control browser acceptance measured a maximum 1.081-pixel geometry error and 0.00007892 median linear-pixel error for its independent fixture; installed and native acceptance remain separately recorded."
+      "acceptance": "The combined HDR/panorama native workflow passed five phases and 70 reported outer checks, shared with color.hdr_merge. Integrated core 530ba240 passed all 874 tests. Independent fixture geometry/pixel oracles, actual processing controls, undo/save/reopen, downloads and archive preservation passed within documented bounds. The isolated browser measured 1.081-pixel maximum geometry error and 0.00007892 median linear-pixel error; this does not establish arbitrary-scene or production-scale robustness. See VERIFICATION_0_11.md."
     }
   ],
   "historical_release_acceptance_0_9_1": {
@@ -1157,14 +1406,15 @@
       "scope": "Historical published base only; not the worker-corrected follow-up."
     }
   },
-  "unreleased_float32_candidate": {
+  "historical_isolated_float32_candidate": {
     "source_isolated_from": "0.10.0 release freeze",
     "verification": "VERIFICATION_FLOAT32.md",
     "installed": false,
     "native_certified": false,
     "hdr_monitoring": false,
     "calibrated_display": false,
-    "issuance_effect": "NONE"
+    "issuance_effect": "NONE",
+    "scope": "Historical isolated pre-integration Float32 candidate only. Current integrated native/installation acceptance is recorded under release_acceptance and color.float32_scene_linear_movie."
   },
   "historical_release_acceptance_0_10_0": {
     "status": "installed_source_verified_launch_gate_failed",

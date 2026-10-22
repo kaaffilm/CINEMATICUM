@@ -1,0 +1,15 @@
+{
+  "activation_policy_regular": true,
+  "bundle_id": "com.cinematicum.studio",
+  "bundle_path": "/Users/midiakiasat/Applications/CINEMATICUM Studio.app",
+  "executable_path": "/Users/midiakiasat/Applications/CINEMATICUM Studio.app/Contents/MacOS/CINEMATICUMStudio",
+  "finished_launching": false,
+  "hidden": false,
+  "launch_unix": 1792670556.614785,
+  "native_sha256": "8f19b8920ebdd8cfacf7c3330ed60043fe33a22c6aed494d377ee64e080427ad",
+  "normal_window_count": 0,
+  "onscreen_window_count": 0,
+  "pid": 68423,
+  "running": true,
+  "window_metadata_available": true
+}

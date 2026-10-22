@@ -1,0 +1,19 @@
+{
+  "schema": "cinematicum-phased-build-preparation-v1",
+  "source_commit": "530ba2400571a8b67efa2d9ab28997f65920c006",
+  "before_sha256": "facc43b4699db17bc65aecdb0fb1a9a1506841355ea317b8c43b650950681b1b",
+  "source_code_identity_sha256": "56d854dec688dbf25857cc154c6cfe819d934af147483da6a1d3967447a99345",
+  "source_integrity_sha256": "141b53f435f68d325a73e2f0d930fc4acd7054b364b3336aada9f4439bd43d66",
+  "original_bundle_identity": [
+    16777230,
+    104151567,
+    "e9e19319adf0c76bf9d907e1bf3bf25f0893aa5460d0ba78388187d97a9b7a38"
+  ],
+  "work": "/Users/midiakiasat/Applications/.cinematicum-build-verified-011-025436f6",
+  "staged": "/Users/midiakiasat/Applications/.cinematicum-build-verified-011-025436f6/CINEMATICUM Studio.app",
+  "original_staging_preserved": "/Users/midiakiasat/Applications/.cinematicum-build-kqt8bj6r",
+  "runtime_files": 108,
+  "native_binary_sha256": "8f19b8920ebdd8cfacf7c3330ed60043fe33a22c6aed494d377ee64e080427ad",
+  "icon_tool_sha256": "e94a5b50f2f77bbe797ac225faf894012f736b01c0acc97e137a57989719b4e3",
+  "source_manifest_sha256": "77b2e5c182c582d83091c1f47a55813bc4e5db5d98bb38fd3e7b8e4c6d964d6d"
+}

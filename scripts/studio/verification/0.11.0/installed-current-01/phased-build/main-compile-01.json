@@ -1,0 +1,33 @@
+{
+  "phase": "main_compile",
+  "source_commit": "530ba2400571a8b67efa2d9ab28997f65920c006",
+  "argv": [
+    "/usr/bin/xcrun",
+    "swiftc",
+    "-O",
+    "-swift-version",
+    "5",
+    "-framework",
+    "Cocoa",
+    "-framework",
+    "WebKit",
+    "-target",
+    "arm64-apple-macos12.0",
+    "-module-cache-path",
+    "/Users/midiakiasat/Applications/.cinematicum-build-kqt8bj6r/module-cache",
+    "/Users/midiakiasat/.midia-ai/gateway-live/workspaces/auto-8f91ac5c986eed5ac689d7f8b2ff6a29-next-011/scripts/studio/macos/StudioApp.swift",
+    "-o",
+    "/Users/midiakiasat/Applications/.cinematicum-build-kqt8bj6r/CINEMATICUMStudio.reverified-01"
+  ],
+  "compiler": "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc",
+  "compiler_sha256": "2ed38571e92c0283091838c1649e27650ad9c99950288e883c7b2dc6c4ce89fb",
+  "source_sha256": "acf64f068cc870ed0bb4e458cb78359a830f007807a22f9bc933485aa2ae0b08",
+  "exit_code": 0,
+  "timed_out": false,
+  "elapsed": 7.818,
+  "stdout": "",
+  "stderr": "",
+  "output": "/Users/midiakiasat/Applications/.cinematicum-build-kqt8bj6r/CINEMATICUMStudio.reverified-01",
+  "output_sha256": "8f19b8920ebdd8cfacf7c3330ed60043fe33a22c6aed494d377ee64e080427ad",
+  "output_bytes": 226416
+}
