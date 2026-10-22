@@ -108,18 +108,23 @@ return await(async()=>{
     const result=original.call(this,media,audioContext,clip,asset,notify,options),spec=expected.get(clip.id);
     if(!spec||!audioContext)return result;
     context=audioContext;let voice=voices.get(clip.id);
+    if(voice&&voice.media!==media){
+     if(!voice.media.el.paused||voice.media.el.pcmState?.scheduled_chunks!==0)throw Error('The same authored voice changed decoder during playback');
+     if(voice.connected){voice.media.source.disconnect(processor);voice.media.audioGate.disconnect(processor);}
+     voice=null;
+    }
     if(!voice){voice={media,spec,route:result,connected:false,drift:0,observations:0};voices.set(clip.id,voice);}
-    if(voice.media!==media)throw Error('The same authored voice changed decoder during playback');
-    voice.route=result;
+    voice.route=result;voice.lastOptions={...options};voice.lastIdentity={disposed:media.disposed,request_url:media.requestUrl,owner:media.ownerClipId,nested:media.nested};
     if(!loading)loading=context.audioWorklet.addModule('/ENGINE_TEST_audio_probe_worklet.js').then(()=>{ready=true;attach();});
     attach();
     if(result.ready&&!media.el.paused&&context.currentTime>runStart+.5){
      voice.drift=Math.max(voice.drift,Math.abs(media.el.currentTime-options.sourceTime));voice.observations++;
+     if(voice.firstSourceTime==null)voice.firstSourceTime=media.el.currentTime;voice.lastSourceTime=media.el.currentTime;
     }
     return result;
    };
    for(let iteration=0;iteration<AUDIO_ROUTING_TEST.repetitions;iteration++){
-    captured=null;armed=false;for(const voice of voices.values()){voice.drift=0;voice.observations=0;}
+    captured=null;armed=false;for(const voice of voices.values()){voice.drift=0;voice.observations=0;voice.firstSourceTime=null;voice.lastSourceTime=null;}
     click('#jump-start');runStart=context?.currentTime||0;click('#play-button');
     await until(()=>{
      if(!processor||voices.size!==expected.size||[...voices.values()].some(voice=>!voice.connected||!voice.route?.ready||voice.media.el.paused))return false;
@@ -127,15 +132,17 @@ return await(async()=>{
      if(clock?.waiting||!Number.isFinite(clock?.frame)||clock.frame<AUDIO_ROUTING_TEST.capture_frame)return false;
      if(!armed){armed=true;processor.port.postMessage({action:'capture',start_frame:Math.ceil(context.currentTime*context.sampleRate)+2048,sample_count:32768});}
      return Boolean(captured);
-    },'Repeated '+AUDIO_ROUTING_TEST.scenario+' live mix was not captured',12000);
+    },'Repeated '+AUDIO_ROUTING_TEST.scenario+' live mix was not captured',4000);
     const current={iteration:iteration+1,pcm:measured(captured.samples[1],captured.sample_rate),raw_pcm:measured(captured.samples[0],captured.sample_rate),calibration:measured(captured.samples[2],captured.sample_rate),
      window:{start_frame:captured.start_frame,end_frame:captured.end_frame,sample_rate:captured.sample_rate,render_thread:true},voices:[]};
     for(const [clipId,voice]of voices){
      const {media,spec,route}=voice,manifest=route.manifest;
-     current.voices.push({clip_id:clipId,route,decoder:{...media.el.pcmState},clock_drift_seconds:voice.drift,observations:voice.observations,current_time:media.el.currentTime,request_url:media.requestUrl});
+     current.voices.push({clip_id:clipId,route,decoder:{...media.el.pcmState},clock_drift_seconds:voice.drift,observations:voice.observations,first_source_time:voice.firstSourceTime,last_source_time:voice.lastSourceTime,reverse:media.el.reverse,current_time:media.el.currentTime,request_url:media.requestUrl});
      if(!manifest||route.binding!=='decoded-source-pcm'||manifest.source_sha256!==AUDIO_ROUTING_TEST.source_sha256||manifest.asset_id!==AUDIO_ROUTING_TEST.asset_id||
         route.stream_index!==spec.stream_index||JSON.stringify(route.channel_map)!==JSON.stringify(spec.channels)||manifest.source_time_scale!==spec.playback_rate||manifest.playback_rate!==spec.playback_rate)throw Error('A sequence voice lost its selected-source or combined-speed identity');
      if(media.el.pcmState?.kind!=='scheduled-source-pcm'||!media.el.pcmState.scheduled_chunks||media.el.pcmState.underruns)throw Error('Repeated sequence playback underrun');
+     if(Boolean(spec.reverse)!==Boolean(media.el.reverse))throw Error('A source voice lost its composed reverse direction');
+     if(spec.reverse&&!(voice.lastSourceTime<voice.firstSourceTime-.02))throw Error('Reverse source time did not decrease while transport advanced');
      if(voice.observations<3||voice.drift>.08)throw Error('A sequence voice drifted from the shared timeline clock');
     }
     report.metrics.runs.push(current);
@@ -147,7 +154,7 @@ return await(async()=>{
    }
    click('#save-project');await until(()=>$('#save-state').textContent==='SAVED LOCALLY','Sequence playback project did not save');
    report.steps.push('native_save_after_repeated_playback');report.passed=true;
-  }catch(error){report.error=error.message;report.toast=$('#toast')?.textContent;report.metrics.routes=[...voices].map(([clip_id,voice])=>({clip_id,route:voice.route,decoder:{...voice.media.el.pcmState},clock_drift_seconds:voice.drift}));}
+  }catch(error){report.error=error.message;report.toast=$('#toast')?.textContent;report.metrics.routes=[...voices].map(([clip_id,voice])=>({clip_id,route:voice.route,decoder:{...voice.media.el.pcmState},clock_drift_seconds:voice.drift,options:voice.lastOptions,identity:voice.lastIdentity,paused:voice.media.el.paused,current_time:voice.media.el.currentTime}));report.metrics.transport={label:$('#play-button')?.getAttribute('aria-label'),clock:window.CinematicumSequencePlayback.clock()};}
   finally{
    if(original)window.CinematicumAudioRouting.ensure=original;
    if($('#play-button')?.getAttribute('aria-label')==='Pause timeline')$('#play-button').click();

@@ -79,7 +79,7 @@
     return clip.in+(clip.reverse?(clip.duration-1-local)*speed:local*speed);
   }
   function audioGain(project,clip,local) {
-    if(!active(project,clip.track)||clip.reverse)return 0;
+    if(!active(project,clip.track))return 0;
     const a=clip.audio||{},fadeIn=a.fade_in||0,fadeOut=a.fade_out||0,at=local+(a.fade_offset??0),end=a.fade_duration??clip.duration;
     const fade=Math.min(1,fadeIn?Math.max(0,at)/fadeIn:1,fadeOut?Math.max(0,end-at)/fadeOut:1);
     return curve(clip,'volume',local)*(track(project,clip.track).gain??1)*fade;

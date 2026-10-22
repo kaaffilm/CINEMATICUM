@@ -60,20 +60,20 @@
           if(sound&&playing)media.audioSyncKey=syncKey;
         }
         if(!playing)media.audioSyncKey=null;
-        const routing=sound&&!backwards?ensureAudio(media,clip,asset,{playbackRate:rate,sourceTime:seek}):null,audible=sound&&!backwards&&routing?.ready!==false;
+        const routing=sound?ensureAudio(media,clip,asset,{playbackRate:rate,sourceTime:seek,reverse:backwards}):null,audible=sound&&routing?.ready!==false;
         const muted=media.source?false:!audible;
         if(el.muted!==muted)el.muted=muted;
         if(media.stereo)media.stereo.gain.value=(media.audioRoute?.channels??asset.audio_channels)===1?Math.SQRT1_2:1;
-        if(media.gain){if(el.volume!==1)el.volume=1;media.gain.gain.value=!audible||backwards?0:clipGain;media.left.gain.value=clipLeft;media.right.gain.value=clipRight;}
-        else{const volume=Math.max(0,Math.min(1,!audible||backwards?0:clipGain));if(el.volume!==volume)el.volume=volume;}
-        if(sound&&!backwards){
+        if(media.gain){if(el.volume!==1)el.volume=1;media.gain.gain.value=!audible?0:clipGain;media.left.gain.value=clipLeft;media.right.gain.value=clipRight;}
+        else{const volume=Math.max(0,Math.min(1,!audible?0:clipGain));if(el.volume!==volume)el.volume=volume;}
+        if(sound){
           const waiting=routing?.state==='pending'||(audible&&!el.error&&(el.readyState<2||el.seeking));
           if(waiting)pending=true;
           // A fade beginning at zero still needs the same clock from its first
-          // sample. Track mute/solo and reverse already exclude inactive sound.
-          if(playing&&audible)clocks.push({key,el,frame:audioFrame,sourceTime:seek,rate,fps:project.fps});
+          // sample. Track mute/solo already exclude inactive sound.
+          if(playing&&audible)clocks.push({key,el,frame:audioFrame,sourceTime:seek,rate:backwards?-rate:rate,fps:project.fps});
         }
-        const canPlay=!backwards&&(!sound||audible);decoders.push({media,sound,canPlay});
+        const canPlay=sound?audible:!backwards;decoders.push({media,sound,canPlay});
         if(playing&&canPlay&&!buffering){if(el.paused&&!el.ended)el.play().catch(()=>{});}else if(!el.paused)el.pause();
       }
       return media;

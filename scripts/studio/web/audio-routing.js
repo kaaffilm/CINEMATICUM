@@ -11,7 +11,7 @@
     if(!value||typeof value.request!=='function'||typeof value.getProject!=='function')throw Error('Source audio needs the local project service.');
     service=value;
   }
-  function sourceChoice(clip,asset,playbackRate){
+  function sourceChoice(clip,asset,playbackRate,reverse){
     const project=service?.getProject(),streams=Array.isArray(asset.audio_streams)&&asset.audio_streams.length?asset.audio_streams:
       asset.has_audio?[{index:asset.audio_stream_index,channels:asset.audio_channels}]:[];
     const index=clip.audio?.stream_index??asset.audio_stream_index,stream=streams.find(item=>item.index===index);
@@ -21,8 +21,8 @@
     if(!Number.isInteger(index)||index<0||!Number.isInteger(channels)||channels<1||channels>32)return {error:'Live audio supports inspected source streams with 1–32 channels. Use a rendered preview for this source.'};
     if(map!==null&&(!Array.isArray(map)||map.length!==2||map.some(value=>!Number.isInteger(value)||value<0||value>=channels)))return {error:'The selected source channel mapping is outside this audio stream.'};
     if(!Number.isFinite(playbackRate)||playbackRate<.01||playbackRate>64)return {error:'Live source audio supports combined speeds from 0.01 to 64. Use Render preview for this nested retime.'};
-    const result={projectId:project.id,assetId:asset.id,sha256:asset.sha256,index,channels,map:map?.slice()??null,duration:asset.duration,playbackRate};
-    result.key=JSON.stringify([result.projectId,result.assetId,result.sha256,index,result.map,playbackRate]);
+    const result={projectId:project.id,assetId:asset.id,sha256:asset.sha256,index,channels,map:map?.slice()??null,duration:asset.duration,playbackRate,reverse:Boolean(reverse)};
+    result.key=JSON.stringify([result.projectId,result.assetId,result.sha256,index,result.map,playbackRate,result.reverse]);
     return result;
   }
   function validateManifest(value,choice){
@@ -137,19 +137,19 @@
           route.decoderTimer=null;if(!route.disposed&&media.el.readyState<2){route.error='The decoded source audio did not load. Audio is muted; use Render preview.';refresh(route);}
         },10000);
         if(typeof media.el.loadSource!=='function')throw Error('The owned PCM transport is unavailable.');
-        media.el.loadSource(route.context,media.source,manifest,route.sourceTime);
+        media.el.loadSource(route.context,media.source,manifest,route.sourceTime,{reverse:choice.reverse});
       }
       if(media.el.error)throw Error(media.el.error.message||'The lossless audio decoder failed.');
       if(media.el.readyState<2||media.el.seeking)return status(route,'pending','Loading decoded source audio.',details(route));
       clearDecoderTimer(route);return status(route,'ready','',details(route));
     }catch(error){route.error='Live source audio failed: '+String(error.message||error)+' Audio is muted; use Render preview.';return status(route,'unsupported',route.error);}
   }
-  function ensure(media,context,clip,asset,notify,{prepare=true,playbackRate=clip.speed??1,sourceTime=0}={}){
+  function ensure(media,context,clip,asset,notify,{prepare=true,playbackRate=clip.speed??1,sourceTime=0,reverse=Boolean(clip.reverse)}={}){
     if(!media||media.kind==='image'||!asset.has_audio)return {state:'silent',ready:false,message:''};
     if(!context)return {state:'pending',ready:false,message:'Start playback to enable source audio.'};
     let route=routes.get(media.el);
     if(route&&route.context!==context)return status(route,'unsupported','The source belongs to another audio context. Reopen the project before playing audio.');
-    const choice=sourceChoice(clip,asset,playbackRate);
+    const choice=sourceChoice(clip,asset,playbackRate,reverse);
     if(!route){
       route={media,context,choice,notify,prepare:false,listeners:[],disposed:false,entry:null,manifest:null,loadedKey:null,decoderTimer:null};
       routes.set(media.el,route);liveRoutes.add(route);

@@ -66,6 +66,7 @@ assert.strictEqual(sound.el.src,sound.url);
 // Nested instances own separate active resources and are evicted after edits.
 state.revision=7;const nested=sandbox.mediaFor({...c,id:'parent/'+c.id},b);nested.nested=true;nested.revision=7;
 sandbox.pruneMedia(new Set(['parent/'+c.id]));assert.equal(state.media.get('parent/'+c.id),nested);
+state.project.clips.push({id:'parent',sequence_id:'child',start:0,duration:24});sandbox.pruneMedia();assert.strictEqual(state.media.get('parent/'+c.id),nested);
 state.revision=8;sandbox.pruneMedia(new Set(['parent/'+c.id]));assert.equal(nested.el.src,'');assert(!state.media.has('parent/'+c.id));
 sandbox.clearMedia();assert.equal(state.media.size,0);assert(nodes.every(n=>n.src===''&&n.events.size===0&&n.loads===1));
 assert.strictEqual(sound.el.src,'');assert(sound.el.paused);assert.strictEqual(sound.el.chunks.size,0);assert.strictEqual(sound.el.nodes.size,0);

@@ -12,7 +12,7 @@ from engine import probe_media
 
 @unittest.skipUnless(shutil.which('node'), 'Node required')
 class AudioRoutingTests(unittest.TestCase):
-    def test_nested_audio_clock_converts_combined_rates_and_retains_reverse_preview_mute(self):
+    def test_nested_audio_clock_converts_combined_rates_and_signed_reverse_clock(self):
         script=r"""
 const fs=require('fs'),vm=require('vm'),assert=require('assert'),root=JSON.parse(fs.readFileSync(0,'utf8')).root;
 const context=()=>({setTransform(){},clearRect(){},save(){},restore(){},translate(){},rotate(){},drawImage(){}});
@@ -21,11 +21,12 @@ const api=sandbox.window.CinematicumSequencePlayback,media={kind:'audio',el:{dur
 const childClip={id:'sound',asset_id:'a',start:0,in:4,duration:40,speed:2,track:-1,volume:1};
 const parent={id:'nest',sequence_id:'child',start:10,in:2,duration:20,speed:1.5,track:0,volume:1};
 const project={width:96,height:64,fps:24,sequence_id:'main',assets:[{id:'a',kind:'audio',has_audio:true,audio_channels:2}],clips:[parent],titles:[],tracks:[],sequences:[{id:'child',clips:[childClip],titles:[],tracks:[]}]};
-const args={project,frame:14,audioFrame:14.25,transportEpoch:0,context:context(),width:96,height:64,mediaFor:()=>media,playing:true,activeIds:new Set(),revision:0,ensureAudio:()=>({ready:true})};
+let routingOptions;
+const args={project,frame:14,audioFrame:14.25,transportEpoch:0,context:context(),width:96,height:64,mediaFor:()=>media,playing:true,activeIds:new Set(),revision:0,ensureAudio:(_m,_c,_a,options)=>{routingOptions=options;return {ready:true};}};
 api.draw(args);assert(Math.abs(media.el.currentTime-20.75/24)<1e-12);assert.strictEqual(media.el.playbackRate,3);assert(Math.abs(api.clock().frame-14.25)<1e-12);
 media.el.currentTime+=1/24;assert(Math.abs(api.clock().frame-(14.25+1/3))<1e-12);
-parent.reverse=true;childClip.reverse=true;args.transportEpoch++;api.draw(args);assert(Math.abs(media.el.currentTime-32.75/24)<1e-12);assert.strictEqual(media.gain.gain.value,0,'Reversed ancestors retain the disclosed live-preview mute');assert(Math.abs(api.clock().frame-14.25)<1e-12);
-childClip.reverse=false;args.transportEpoch++;api.draw(args);assert.strictEqual(media.gain.gain.value,0);assert.strictEqual(api.clock(),null,'A net reverse clip remains silent in live preview');
+parent.reverse=true;childClip.reverse=true;args.transportEpoch++;api.draw(args);assert(Math.abs(media.el.currentTime-32.75/24)<1e-12);assert.strictEqual(media.gain.gain.value,1);assert.strictEqual(routingOptions.reverse,false,'Two reversals restore forward source order');assert(Math.abs(api.clock().frame-14.25)<1e-12);
+childClip.reverse=false;args.transportEpoch++;api.draw(args);assert.strictEqual(media.gain.gain.value,1);assert.strictEqual(routingOptions.reverse,true);assert(Math.abs(api.clock().frame-14.25)<1e-12);media.el.currentTime-=1/24;assert(Math.abs(api.clock().frame-(14.25+1/3))<1e-12,'A decreasing source clock advances the reverse timeline');
 """
         result=subprocess.run([shutil.which('node'),'-e',script],input=json.dumps({'root':str(Path(__file__).parent/'web')}),
                               capture_output=True,text=True,timeout=10)

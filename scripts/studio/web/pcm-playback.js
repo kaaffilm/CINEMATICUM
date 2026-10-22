@@ -22,18 +22,22 @@
     }finally{const next=waiters.shift();if(next)next();else activeRequests--;}
   }
   function acquire(decoder,index){
-    const {context,manifest}=decoder;let pool=pools.get(context);if(!pool){pool=new Map();pools.set(context,pool);}
-    const key=manifest.url+'|'+manifest.sha256+'|'+index;let entry=pool.get(key);
+    const {context,manifest,reverse}=decoder;let pool=pools.get(context);if(!pool){pool=new Map();pools.set(context,pool);}
+    const key=manifest.url+'|'+manifest.sha256+'|'+Boolean(reverse)+'|'+index;let entry=pool.get(key);
     if(entry?.error){forget(entry);entry=null;}
     if(!entry){
       const start=index*CHUNK,count=Math.min(CHUNK,manifest.frames-start),bytes=count*8;reserve(bytes);
       entry={key,pool,bytes,index,start,count,refs:new Set(),buffer:null,error:null,disposed:false};pool.set(key,entry);entries.add(entry);
-      const first=manifest.data_offset+start*8;
+      // Virtual chunks always advance; reverse voices read bounded original
+      // ranges from the end and reverse stereo frames without swapping channels.
+      const originalStart=reverse?manifest.frames-start-count:start;
+      const first=manifest.data_offset+originalStart*8;
       entry.promise=fetchRange(manifest.url,first,first+bytes-1,manifest.byte_size,manifest.sha256).then(raw=>{
         if(entry.disposed)return;
         const view=new DataView(raw),buffer=context.createBuffer(2,count,RATE),left=buffer.getChannelData(0),right=buffer.getChannelData(1);
         for(let i=0;i<count;i++){
-          const l=view.getFloat32(i*8,true),r=view.getFloat32(i*8+4,true);
+          const sample=reverse?count-1-i:i;
+          const l=view.getFloat32(sample*8,true),r=view.getFloat32(sample*8+4,true);
           if(!Number.isFinite(l)||!Number.isFinite(r))throw Error('The original source contains non-finite audio samples.');
           left[i]=l;right[i]=r;
         }
@@ -44,7 +48,7 @@
   }
   class Decoder{
     constructor(){
-      this.listeners=new Map();this.chunks=new Map();this.nodes=new Set();this.context=null;this.output=null;this.manifest=null;
+      this.listeners=new Map();this.chunks=new Map();this.nodes=new Set();this.context=null;this.output=null;this.manifest=null;this.reverse=false;
       this.paused=true;this.seeking=false;this.ended=false;this.readyState=0;this.networkState=0;this.error=null;
       this.volume=1;this.muted=false;this.playbackRate=1;this.preservesPitch=true;this.crossOrigin='anonymous';this.isConnected=false;
       this._position=0;this._anchor=0;this._when=0;this._scheduled=0;this._timer=null;this._generation=0;this._ranges=[];this._rangeStart=0;
@@ -60,22 +64,29 @@
       if(this.paused||!this.context)return this._position;
       return Math.max(this._anchor,Math.min(this.manifest.frames,this._scheduled,this._anchor+(this.context.currentTime-this._when)*RATE));
     }
-    get currentTime(){return this.frame()/RATE*(this.manifest?.source_time_scale||1);}
+    get currentTime(){
+      const elapsed=this.frame()/RATE*(this.manifest?.source_time_scale||1);
+      return this.reverse?this.duration-elapsed:elapsed;
+    }
+    positionFor(value){
+      const frame=Math.round(Math.max(0,Math.min(this.duration,value))/this.manifest.source_time_scale*RATE);
+      return this.reverse?this.manifest.frames-frame:frame;
+    }
     set currentTime(value){
       if(!this.manifest||!Number.isFinite(value))return;
-      const target=Math.round(Math.max(0,Math.min(this.duration,value))/this.manifest.source_time_scale*RATE);
+      const target=this.positionFor(value);
       if(target===Math.round(this.frame()))return;
       this.pause();this._position=target;this.ended=target>=this.manifest.frames;this.seeking=true;this.readyState=1;this.emit('seeking');this.update();
     }
     get played(){
       const ranges=this._ranges.map(range=>range.slice()),end=this.currentTime;
-      if(!this.paused&&end>this._rangeStart)ranges.push([this._rangeStart,end]);
+      if(!this.paused&&end!==this._rangeStart)ranges.push([Math.min(this._rangeStart,end),Math.max(this._rangeStart,end)]);
       const merged=[];for(const range of ranges.sort((a,b)=>a[0]-b[0])){const last=merged.at(-1);if(last&&range[0]<=last[1]+1/RATE)last[1]=Math.max(last[1],range[1]);else merged.push(range);}
       return {length:merged.length,start:index=>merged[index][0],end:index=>merged[index][1]};
     }
-    loadSource(context,output,manifest,sourceTime=0){
-      this.clear();this.context=context;this.output=output;this.manifest=manifest;this.networkState=2;this.readyState=1;
-      this._position=Math.round(Math.max(0,Math.min(manifest.duration,sourceTime/manifest.source_time_scale))*RATE);this.ended=this._position>=manifest.frames;
+    loadSource(context,output,manifest,sourceTime=0,{reverse=false}={}){
+      this.clear();this.context=context;this.output=output;this.manifest=manifest;this.reverse=Boolean(reverse);this.networkState=2;this.readyState=1;
+      this._position=this.positionFor(sourceTime);this.ended=this._position>=manifest.frames;
       this.emit('loadedmetadata');this.update();
     }
     fail(message){
@@ -148,14 +159,14 @@
     pause(){
       if(this.paused)return;
       const end=this.currentTime;this._position=Math.round(this.frame());this.paused=true;
-      if(end>this._rangeStart)this._ranges.push([this._rangeStart,end]);
+      if(end!==this._rangeStart)this._ranges.push([Math.min(this._rangeStart,end),Math.max(this._rangeStart,end)]);
       if(this._timer!==null)clearTimeout(this._timer);this._timer=null;
       for(const node of this.nodes){node.onended=null;try{node.stop();node.disconnect();}catch(error){}}this.nodes.clear();this.emit('pause');
     }
     clear(){
       this.pause();this._generation++;
       for(const entry of this.chunks.values())entry.refs.delete(this);this.chunks.clear();
-      this.manifest=null;this._position=0;this._ranges=[];this.ended=false;this.seeking=false;this.error=null;this.readyState=0;this.networkState=0;
+      this.manifest=null;this.reverse=false;this._position=0;this._ranges=[];this.ended=false;this.seeking=false;this.error=null;this.readyState=0;this.networkState=0;
     }
     removeAttribute(name){if(name==='src')this.clear();}
     load(){}

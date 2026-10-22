@@ -136,7 +136,7 @@ def run_sequence(binary, output, scenario, repetitions=3):
             'fixture':'SYNTHETIC ENGINE TEST — NOT A FILM','checks':{}}
     store=server=thread=None;started=time.monotonic()
     try:
-        if scenario not in ('overlap','nested','retimed') or not 2<=repetitions<=10:
+        if scenario not in ('overlap','nested','retimed','reverse','reverse_retimed','nested_reverse') or not 2<=repetitions<=10:
             raise ValueError('Use overlap, nested or retimed and 2–10 repetitions.')
         workspace=output/'ENGINE_TEST_sequence_audio_workspace'
         if workspace.exists():raise ValueError('Use a fresh output folder for native audio acceptance.')
@@ -149,7 +149,7 @@ def run_sequence(binary, output, scenario, repetitions=3):
         store=Store(workspace);project=store.new_project({'name':'ENGINE TEST '+scenario+' live audio','width':96,'height':64,'fps':24})
         asset=store.admit(project['id'],source,'ENGINE TEST sequence audio.mov',{'fixture':'ENGINE TEST'})
         source=store.asset(project['id'],asset['id'])[1]
-        project=store.get(project['id']);first,second=asset['audio_streams'];speed=1.5 if scenario=='retimed' else 1
+        project=store.get(project['id']);first,second=asset['audio_streams'];speed=1.5 if scenario in ('retimed','reverse_retimed') else 1
         clip={'id':'primary','asset_id':asset['id'],'start':0,'in':12,'duration':96,'track':0,'speed':speed,
               'audio':{'stream_index':second['index'],'channels':[1,0]}}
         routes=[{'clip_id':'primary','stream_index':second['index'],'channels':[1,0],'playback_rate':speed,'scales':[1,1]}]
@@ -159,7 +159,7 @@ def run_sequence(binary, output, scenario, repetitions=3):
             project['clips'].append({'id':'overlap','asset_id':asset['id'],'start':24,'in':12,'duration':72,'track':-1,
                                      'volume':.7,'audio':{'stream_index':first['index'],'channels':[0,1],'pan':-.2}})
             routes.append({'clip_id':'overlap','stream_index':first['index'],'channels':[0,1],'playback_rate':1,'scales':[.7,.56]})
-        elif scenario=='nested':
+        elif scenario in ('nested','nested_reverse'):
             # Parent and child gain/pan products must survive recursive audio
             # traversal, including a nonzero parent and source in point.
             clip.update(duration=144,volume=.9,audio={**clip['audio'],'pan':-.2})
@@ -169,6 +169,11 @@ def run_sequence(binary, output, scenario, repetitions=3):
                 clips=[{'id':'nested_parent','sequence_id':'child','start':0,'in':12,'duration':96,
                         'track':0,'volume':.8,'audio':{'pan':.25}}])
             routes[0]['scales']=[.75*.8*.8*.9*.75,.75*.8*.8*.9*.8]
+        if scenario in ('reverse','reverse_retimed'):
+            clip['reverse']=True
+        elif scenario=='nested_reverse':
+            project['clips'][0]['reverse']=True
+        if 'reverse' in scenario: routes[0]['reverse']=True
         store.save(project['id'],project)
         authored=validate_project(store.get(project['id']),store.project_dir(project['id']))
         frequency_values=(220,330,440,660,990)
@@ -199,7 +204,7 @@ def run_sequence(binary, output, scenario, repetitions=3):
         script=output/'ENGINE_TEST_sequence_audio.js';script.write_text('const AUDIO_ROUTING_TEST='+json.dumps(test)+';\n'+Path(__file__).with_name('macos').joinpath('AudioRoutingSmoke.js').read_text())
         screenshot=output/'ENGINE_TEST_sequence_audio.png';server=Server(0,store);server.RequestHandlerClass=AudioProbeHandler
         thread=threading.Thread(target=server.serve_forever,kwargs={'poll_interval':.05},daemon=True);thread.start()
-        timeout=12+repetitions*8
+        timeout=12 if 'reverse' in scenario else 12+repetitions*8
         process=subprocess.run([str(Path(binary).resolve()),'--url','http://127.0.0.1:'+str(server.server_port),
                                 '--output',str(screenshot),'--script',str(script),'--timeout',str(timeout)],
                                capture_output=True,text=True,timeout=timeout+3)
@@ -220,6 +225,7 @@ def run_sequence(binary, output, scenario, repetitions=3):
         checks['every_actual_source_mix_matches_independent_pcm']=bool(runs) and all(matches(run.get('raw_pcm',{}),raw_oracle) for run in runs)
         voices=[voice for run in runs for voice in run.get('voices',[])]
         checks['all_voices_observed_each_run']=len(voices)==repetitions*len(routes)
+        checks['reverse_voice_source_clock_decreases']=not ('reverse' in scenario) or (bool(voices) and all(voice.get('reverse') is True and voice.get('last_source_time',999)<voice.get('first_source_time',0)-.02 for voice in voices))
         checks['zero_native_underruns']=bool(voices) and all(voice.get('decoder',{}).get('underruns')==0 for voice in voices)
         checks['shared_clock_drift_below_80ms']=bool(voices) and all(voice.get('observations',0)>=3 and voice.get('clock_drift_seconds',999)<.08 for voice in voices)
         identities=[]
@@ -249,7 +255,7 @@ def run_sequence(binary, output, scenario, repetitions=3):
 
 
 if __name__=='__main__':
-    parser=argparse.ArgumentParser(description=__doc__);parser.add_argument('--binary',type=Path);parser.add_argument('--output',required=True,type=Path);parser.add_argument('--stream',choices=('first','second'),default='second');parser.add_argument('--codec',choices=('pcm_s16le','aac'),default='pcm_s16le');parser.add_argument('--container',choices=('mov','wav'),default='mov');parser.add_argument('--scenario',choices=('routing','overlap','nested','retimed','all'),default='routing');parser.add_argument('--repetitions',type=int,default=3);args=parser.parse_args()
+    parser=argparse.ArgumentParser(description=__doc__);parser.add_argument('--binary',type=Path);parser.add_argument('--output',required=True,type=Path);parser.add_argument('--stream',choices=('first','second'),default='second');parser.add_argument('--codec',choices=('pcm_s16le','aac'),default='pcm_s16le');parser.add_argument('--container',choices=('mov','wav'),default='mov');parser.add_argument('--scenario',choices=('routing','overlap','nested','retimed','reverse','reverse_retimed','nested_reverse','all'),default='routing');parser.add_argument('--repetitions',type=int,default=3);args=parser.parse_args()
     if sys.platform!='darwin':print(json.dumps({'status':'skipped','reason':'macOS WKWebView required'}));raise SystemExit(0)
     if not args.binary or not args.binary.is_file():parser.error('Supply the compiled macos/SmokeTest.swift helper with --binary.')
     if args.scenario=='routing':result=run(args.binary,args.output,args.stream,args.codec,args.container)

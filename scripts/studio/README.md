@@ -93,7 +93,9 @@ included in the source receipt; the native scheduler applies the clip/track
 gain and pan on a shared playback clock. Overlapping clips and live nested
 sequences retain independent source clocks. A late range stops at the last
 scheduled sample and buffers again instead of shifting late audio against an
-advancing picture clock. Reverse audio still requires Render preview. This
+advancing picture clock. Reverse playback schedules original stereo sample
+frames in reverse order, including constant-speed and nested sequence edits.
+Picture proxy refreshes retain the original-source audio transport. This
 stereo mixer does not add buses, audio plugins or surround output.
 
 In **Export**, choose **High 16-bit SDR** under Movie processing. This setting
@@ -302,12 +304,12 @@ motion in that same edit; ordinary authored channels remain.
 Source audio waveforms come from decoded 48 kHz stereo PCM with real minimum,
 maximum and RMS samples, cached by source identity. The Audio workspace has
 track names, gain, mute, solo and lock. Export processes pitch-preserving tempo,
-reversed audio, sample-based fades, stereo balance and animated volume. Reverse
-audio and multichannel downmix should be reviewed with rendered playback.
-Current native audio acceptance remains open: the second audio stream of a MOV
-has intermittently produced silence. An earlier capture of 32,768 samples
-passed, but a fresh current run returned zeros; the fix is still under review.
-Successful waveform/export checks do not establish reliable live playback.
+reversed audio, sample-based fades, stereo balance and animated volume. Live
+reverse, constant-speed reverse and nested reverse use the selected original
+stream and channel mapping. Native fixture acceptance measures actual WebAudio
+PCM against independent decoding, repeated starts, source-clock direction and
+underruns. These synthetic fixtures do not establish sustained production-media
+performance or complete audio-production facilities.
 
 Clip position, scale, rotation, opacity and volume can be keyframed, with linear,
 hold, ease-in, ease-out and smooth ease-in/out interpolation. Each property uses

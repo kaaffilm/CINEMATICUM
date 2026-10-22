@@ -137,8 +137,8 @@
     },
     {
       "path": "scripts/studio/README.md",
-      "size": 76582,
-      "sha256": "a4f09b97d07e11b37d75c9c583171375a29b738326ba9732ca326d09f8847457"
+      "size": 76715,
+      "sha256": "8f59c16f9be37331b7b30788f1a26dd6c24454876298ac17b5a7bce8fb404a46"
     },
     {
       "path": "scripts/studio/RECOVERY_0_10.md",
@@ -482,8 +482,8 @@
     },
     {
       "path": "scripts/studio/macos/AudioRoutingSmoke.js",
-      "size": 19459,
-      "sha256": "db8ab5e1c150fe15bb001e3319626f213371a844a3932d0d1cb64953cf5b4435"
+      "size": 20633,
+      "sha256": "d80d3228e375567e70b8632da62927839d236f29abcb9c9a504b83da1a1fc78d"
     },
     {
       "path": "scripts/studio/macos/CameraImportSmoke.js",
@@ -1001,14 +1001,19 @@
       "sha256": "86e2270b0f9875fc2ffe0f9cee7d208ed198642e4026b60ca3bb24a6f2c66534"
     },
     {
+      "path": "scripts/studio/test_audio_observer_identity.py",
+      "size": 1929,
+      "sha256": "b4a00a93fed09549220fdb0a74d2f37dd7305933965e4d3689c8ad89b60cb3c5"
+    },
+    {
       "path": "scripts/studio/test_audio_routing.py",
-      "size": 29616,
-      "sha256": "152bfdcff640d111fca590576a3b68b270016dfc9f398917fdb47c421b7490e9"
+      "size": 29855,
+      "sha256": "ee3bf37a6eb27f7a52c40891d8251b1433198807cb78308dd2b0a8b5627520ca"
     },
     {
       "path": "scripts/studio/test_audio_routing_macos.py",
-      "size": 21897,
-      "sha256": "02c5be858ae4d84d5ec2a9e4177c46572169b69e3b06c9d6db80aab3ffa0ad7d"
+      "size": 22533,
+      "sha256": "a2c2fad18c2b19ad550a98d3c172a51502cc9052dff55364c3cec2fd32c93e1c"
     },
     {
       "path": "scripts/studio/test_audio_source.py",
@@ -1282,8 +1287,8 @@
     },
     {
       "path": "scripts/studio/test_media_lifecycle.py",
-      "size": 8671,
-      "sha256": "4fb7950ab066d1dd2d7d7c4bb78a686ac2014d91074b1d360262e748d4ddfa55"
+      "size": 8832,
+      "sha256": "8fcd60a56325e756fef8638145395eb2124983cb0d28793a2bb3d1a491eb9f69"
     },
     {
       "path": "scripts/studio/test_media_management.py",
@@ -1374,6 +1379,11 @@
       "path": "scripts/studio/test_pcm_playback.py",
       "size": 11811,
       "sha256": "ead27459fe839cbf55e2c4d28c047416c092945ef17a2b9d4a03edbda9cbf152"
+    },
+    {
+      "path": "scripts/studio/test_pcm_reverse.py",
+      "size": 4851,
+      "sha256": "4fd325b755c736b6a2642fa88ff0d5498333372d941a6a09c06950296bef5ff6"
     },
     {
       "path": "scripts/studio/test_physical_rendering.py",
@@ -1716,14 +1726,19 @@
       "sha256": "d290eb22bc554f6d2ee85632673aa338f4839d0e71e8a57cad77654082249658"
     },
     {
+      "path": "scripts/studio/verify_live_reverse_native.py",
+      "size": 2551,
+      "sha256": "8f4373d8f2578baa8729fd517b06422d07004f3fd64443f35e9aec4f89bba631"
+    },
+    {
       "path": "scripts/studio/waveform.py",
       "size": 11259,
       "sha256": "ca2503aa4555d2f5bb3eba47d019711e1b7cf85a2fe6c5c660e459bce0824792"
     },
     {
       "path": "scripts/studio/web/app.js",
-      "size": 140776,
-      "sha256": "3dfe66f694a70c43e12f09e1a67b5a36c1b08cc2a9fee246c30ad21cf5d9bbe2"
+      "size": 141017,
+      "sha256": "29236c0d5f8941d507c36e39dee95d17a5f039199b48c64b5dee5df524caa767"
     },
     {
       "path": "scripts/studio/web/archive-ui.js",
@@ -1732,8 +1747,8 @@
     },
     {
       "path": "scripts/studio/web/audio-routing.js",
-      "size": 14158,
-      "sha256": "3cd78859882264f78204f1bab6e5c53e8346b1956a7594101357bb7e131002c8"
+      "size": 14269,
+      "sha256": "00e704f5b4de94bd5841a5c77b0ce6dfb85306de9ce86c556dc4e57f3e741657"
     },
     {
       "path": "scripts/studio/web/camera-io-ui.js",
@@ -1762,8 +1777,8 @@
     },
     {
       "path": "scripts/studio/web/editing.js",
-      "size": 10691,
-      "sha256": "b4a2a988b20982ada77c54d7e5340795b7fd5ed5c0b35fa53cd3fb962ab7052b"
+      "size": 10677,
+      "sha256": "2a0560c90278ca46e5d14d2804fb424c62b38988d7e2e3366af8d723dc6d03b9"
     },
     {
       "path": "scripts/studio/web/editorial-ui.js",
@@ -1817,8 +1832,8 @@
     },
     {
       "path": "scripts/studio/web/pcm-playback.js",
-      "size": 10998,
-      "sha256": "85aae75a9ee044e0ba048617e2963adbc189c4c1900f9a874651bcb1ac0c149d"
+      "size": 11633,
+      "sha256": "a5079eb1f09a1e5dfbf10c227e411b13d239937c4319876296a97868369f1618"
     },
     {
       "path": "scripts/studio/web/physical-rendering-ui.js",
@@ -1877,8 +1892,8 @@
     },
     {
       "path": "scripts/studio/web/sequence-playback.js",
-      "size": 13224,
-      "sha256": "ab01741442ca91ab37ee8c88d749977954c61c6b77621120fc6ef8e0b761d17b"
+      "size": 13188,
+      "sha256": "e45da3621cceddf1df7656824165a0a1adc7efb6550663a2486a75505a74ecf2"
     },
     {
       "path": "scripts/studio/web/style.css",
