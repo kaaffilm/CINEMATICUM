@@ -1321,6 +1321,11 @@
       "sha256": "2c9e2bf189d1371140dd03b45a1e37fef54ce82b18c8c55777a987024c1570c9"
     },
     {
+      "path": "scripts/studio/test_multicam_click_clock.py",
+      "size": 1996,
+      "sha256": "934d0abdddc5e35ec7b2ee87fa1e899e6b63c7660fd07fab318a4d5487732ffc"
+    },
+    {
       "path": "scripts/studio/test_multicam_monitor.py",
       "size": 19469,
       "sha256": "237df6f6ba6ca24621269973990e7ecc89dcbc7ab5f6664920ab254b71850462"
@@ -1717,8 +1722,8 @@
     },
     {
       "path": "scripts/studio/web/app.js",
-      "size": 140390,
-      "sha256": "04b80d6129722dd6c7c91e2ee9025f89461993b7be72d68e8a8c415cf2c6962b"
+      "size": 140776,
+      "sha256": "3dfe66f694a70c43e12f09e1a67b5a36c1b08cc2a9fee246c30ad21cf5d9bbe2"
     },
     {
       "path": "scripts/studio/web/archive-ui.js",

@@ -1105,7 +1105,14 @@ function openMulticamMonitor(){
   const selected=selectedItem();if(!selected?.multicam){toast('Select a multicamera timeline clip to open its monitor.',true);return;}
   multicamMonitor??=window.CinematicumMulticam.mount(document.body,{
     request:api,getProject:()=>clone(state.project),getContext:()=>({projectId:state.project.id,revision:state.revision}),
-    getFrame:()=>state.playing?playbackAudioFrame:state.frame,isPlaying:()=>state.playing,play,stop,save:()=>saveProject(),
+    getFrame:()=>{
+      if(!state.playing)return state.frame;
+      // Sample the source clock in the input event. requestAnimationFrame can
+      // be delayed while audio continues, so its cached playhead is not the
+      // click-time edit position.
+      const clock=window.CinematicumSequencePlayback.clock();
+      return clock&&!clock.waiting&&Number.isFinite(clock.frame)?Math.max(playbackAudioFrame,clock.frame):playbackAudioFrame;
+    },isPlaying:()=>state.playing,play,stop,save:()=>saveProject(),
     seek:frame=>{stop();setFrame(frame);},notify:toast,playbackUrl:(asset,url)=>mediaEditor?.playbackUrl(asset,url)||url,
     onApply:(candidate,expected)=>{
       if(projectOperationBlocked()||state.project.id!==expected.projectId||state.revision!==expected.revision)return false;
