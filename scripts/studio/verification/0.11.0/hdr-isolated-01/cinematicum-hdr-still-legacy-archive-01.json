@@ -1,0 +1,18 @@
+{
+  "elapsed_seconds": 5.114,
+  "errors": 0,
+  "failures": 0,
+  "passed": true,
+  "schema": "cinematicum-focused-legacy-archive-regression-v1",
+  "skips": 0,
+  "source": {
+    "image_worker.py": "8148cc186fc9e2578f2d506771f55f41d88b02942007ef3d4bfe7f6be2151d35",
+    "imaging.py": "eb7be72d4eb9a200969ae12f8064dd1018ca586e37caedaf0e147729ce743e1f",
+    "project_archive.py": "60316677f92a9abdee5c3b1615905e57d132f861d25411f7b986b5f04072815e",
+    "still_photo_worker.py": "a07812382b3a523354d4f62c197f896d2933f69ad79817cf94761e6f5ea524e0",
+    "still_photography.py": "204eb80064a878c183e1bcae0840678ced1961f4c500d51a83b97c499c3338bf",
+    "test_project_archive.py": "7dd9ee829339ad1953c7f53755b6244701a70c05c0359fcc396b1a76b1588df4"
+  },
+  "test": "test_project_archive.ProjectArchiveTests.test_actual_ocio_artifacts_and_recipe_survive_relocation",
+  "tests": 1
+}

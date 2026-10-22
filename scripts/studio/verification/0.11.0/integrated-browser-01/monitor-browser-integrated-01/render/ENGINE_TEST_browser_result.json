@@ -1,0 +1,62 @@
+{
+  "browser_version": "134.0.6998.35",
+  "download_errors": [],
+  "downloads": [
+    {
+      "path": "/tmp/cinematicum-next-verification-20261022-01/monitor-browser-integrated-01/render/native_downloads/c3e4c2ad4d6444af9c338c742f98de5e.mov",
+      "state": "completed",
+      "suggested_filename": "c3e4c2ad4d6444af9c338c742f98de5e.mov",
+      "url": "http://127.0.0.1:41517/api/projects/881ef080839c4b12b37ff46ee37b38a2/exports/c3e4c2ad4d6444af9c338c742f98de5e.mov?download=1"
+    }
+  ],
+  "elapsed_ms": 1495,
+  "expect_download": true,
+  "h264_decoder": "probably",
+  "metrics": {
+    "cut_frame": 32,
+    "download_href": "/api/projects/881ef080839c4b12b37ff46ee37b38a2/exports/c3e4c2ad4d6444af9c338c742f98de5e.mov?download=1",
+    "download_name": "c3e4c2ad4d6444af9c338c742f98de5e.mov",
+    "reopened_angles": [
+      {
+        "angle_id": "96212afb016c46008cff289629a9791a",
+        "decoded_source_frame": 44,
+        "expected_source_frame": 44,
+        "muted": true,
+        "paused": true,
+        "pixel": [
+          239,
+          12,
+          7
+        ],
+        "ready": true,
+        "src": "/api/projects/881ef080839c4b12b37ff46ee37b38a2/media/b519607e481542cb9cf071069550be80",
+        "time": 1.833433
+      },
+      {
+        "angle_id": "dd5bb52e0d4d4cb99960aaf8f8aad984",
+        "decoded_source_frame": 56,
+        "expected_source_frame": 56,
+        "muted": true,
+        "paused": true,
+        "pixel": [
+          9,
+          12,
+          239
+        ],
+        "ready": true,
+        "src": "/api/projects/881ef080839c4b12b37ff46ee37b38a2/media/0df68455c29745e59b8d59048fc95414",
+        "time": 2.333433
+      }
+    ]
+  },
+  "native_certified": false,
+  "operation": "render",
+  "page_errors": [],
+  "passed": true,
+  "screenshot": "/tmp/cinematicum-next-verification-20261022-01/monitor-browser-integrated-01/render/ENGINE_TEST_multicam_monitor.png",
+  "steps": [
+    "saved_camera_cut_audio_lock_and_simultaneous_clocks_reopen",
+    "actual_prores_pcm_render_and_download"
+  ],
+  "transport": "Chromium"
+}

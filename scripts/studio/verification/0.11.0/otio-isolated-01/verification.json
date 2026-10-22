@@ -1,0 +1,194 @@
+{
+  "schema": "cinematicum-otio-candidate-verification-v1",
+  "passed_distinct_affected_tests": 86,
+  "affected_suite": {
+    "modules": [
+      "test_interchange",
+      "test_editorial",
+      "test_otio_compositions",
+      "test_timeline_audio",
+      "test_audio_routing",
+      "test_audio_source",
+      "test_sequence_playback",
+      "test_install_macos"
+    ],
+    "sandbox_run": {
+      "tests": 86,
+      "passed": 85,
+      "errors": 1,
+      "seconds": 76.452,
+      "reason": "Existing audio-source HTTP test cannot create a loopback socket in the default sandbox: EPERM."
+    },
+    "host_retry": {
+      "tests": 1,
+      "passed": 1,
+      "seconds": 1.209,
+      "test": "test_audio_source.AudioSourceTests.test_http_contract_dedup_ranges_and_independent_render_queue",
+      "source_unchanged": true
+    }
+  },
+  "browser": {
+    "native_certified": false,
+    "passed": true,
+    "phases": [
+      {
+        "checks": 7,
+        "elapsed_seconds": 2.739,
+        "error": null,
+        "operation": "prepare",
+        "passed": true
+      },
+      {
+        "checks": 17,
+        "elapsed_seconds": 3.381,
+        "error": null,
+        "operation": "author",
+        "passed": true
+      },
+      {
+        "checks": 19,
+        "elapsed_seconds": 4.242,
+        "error": null,
+        "operation": "render",
+        "passed": true
+      },
+      {
+        "checks": 20,
+        "elapsed_seconds": 5.085,
+        "error": null,
+        "operation": "archive",
+        "passed": true
+      }
+    ],
+    "schema": "cinematicum-actual-otio-composition-chromium-acceptance-v1",
+    "chromium_executable_sha256": "f661a8c124888f491966c29581f33c1953c86c15d77048bc91452b66743d5f3a",
+    "chromium_executable_sha256_after": "f661a8c124888f491966c29581f33c1953c86c15d77048bc91452b66743d5f3a",
+    "elapsed_ms": 16290,
+    "python_exit_code": 0,
+    "error": null,
+    "report": "/workspace/scratch/091f394ee5df/otio-composition-acceptance-05/browser-report.json"
+  },
+  "browser_total_checks": 63,
+  "native_certified": false,
+  "versions": {
+    "python": "3.12.14 (main, Aug 25 2026, 14:00:49) [Clang 22.1.3 ]",
+    "numpy": "2.3.5",
+    "opentimelineio": "0.18.1"
+  },
+  "python_executable": "/workspace/scratch/091f394ee5df/cinematicum-runtimes/verification/bin/python",
+  "independent_movie": {
+    "dissolve_rgb_max_error": 4.0,
+    "frames": 28,
+    "max_pcm_lsb_error": 0,
+    "pure_picture_sources_correct": true,
+    "sample_frames": 56000,
+    "source_counters": [
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      16,
+      17,
+      18,
+      19,
+      20,
+      21,
+      22,
+      23,
+      24,
+      25,
+      26,
+      27,
+      28,
+      29,
+      30,
+      31,
+      39,
+      38,
+      37,
+      36,
+      35,
+      34
+    ]
+  },
+  "independent_archive_movie": {
+    "dissolve_rgb_max_error": 4.0,
+    "frames": 28,
+    "max_pcm_lsb_error": 0,
+    "pure_picture_sources_correct": true,
+    "sample_frames": 56000,
+    "source_counters": [
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      16,
+      17,
+      18,
+      19,
+      20,
+      21,
+      22,
+      23,
+      24,
+      25,
+      26,
+      27,
+      28,
+      29,
+      30,
+      31,
+      39,
+      38,
+      37,
+      36,
+      35,
+      34
+    ]
+  },
+  "prior_failures_preserved": [
+    "/workspace/scratch/091f394ee5df/otio-composition-acceptance-01",
+    "/workspace/scratch/091f394ee5df/otio-composition-acceptance-02",
+    "/workspace/scratch/091f394ee5df/otio-composition-acceptance-03",
+    "/workspace/scratch/091f394ee5df/otio-composition-acceptance-04"
+  ],
+  "source_manifest": "source-manifest.json",
+  "receipt_files": {
+    "archive-report.json": {
+      "bytes": 35550,
+      "sha256": "a7414630551040b8af43966bf6866ff2d8c0bea3ff3a52b4e0dc2577c77720d3"
+    },
+    "author-report.json": {
+      "bytes": 34374,
+      "sha256": "c000ca806b7694feaff64093fec5270efdff509274e2adc86c2d248f3a08b6da"
+    },
+    "browser-report.json": {
+      "bytes": 1056,
+      "sha256": "6967379a9300fa6689222bea1e99544846f40cb60babe849363a125c58f2aca9"
+    },
+    "otio-affected-regression-02.log": {
+      "bytes": 16685,
+      "sha256": "067c659c51eca2a99be3a6142c6e03ff29d4433108df3abd3524c69d8366bf80"
+    },
+    "otio-audio-http-host-01.log": {
+      "bytes": 263,
+      "sha256": "05dd8e3ca1112f60be5b4a84cbbfb288bfbc7ce5a4b389ee4e2de8393348a6f5"
+    },
+    "prepare-report.json": {
+      "bytes": 32211,
+      "sha256": "1b47eea05a942bdf41d637f767768e8b42b39d094f455e5800dc70eb351155cd"
+    },
+    "render-report.json": {
+      "bytes": 34857,
+      "sha256": "508f9138a9c0feec891b1697e4b476b982264cbc12f42050744b84ecbcd8801d"
+    },
+    "source-inventory.json": {
+      "bytes": 14787,
+      "sha256": "657e11aa67bc34dc085ae6bdecf4418f57a419b4abbfe923376ca0756edf8551"
+    }
+  }
+}

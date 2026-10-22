@@ -54,11 +54,45 @@ initial isolated direct-file harness invocation lacked the sibling-module
 import path and exited before testing; explicit source-path invocation fixed
 that launch error. Historical failed attempts are not relabeled as passes.
 
-## Open release gates
+## Frozen full regression and CI
 
-The current combined frozen full suite, exact-head CI, verified replacement
-installation and actual
-installed launch/source reconciliation must complete before this candidate is
-accepted. Current capability/source records identify these gates explicitly.
-No report here asserts full professional-system parity or completed film
-issuance. [Remaining work](UNFINISHED_0_10.md) defines those separate obligations.
+The exact published source `a031a04e19007f7bac252c1f5b0f8d66db15371a`
+passed **812 tests** locally with zero failures, errors, skips or expected
+failures. Source and all managed runtime inventories remained unchanged. The
+complete gate took 834.087 seconds; its report SHA-256 is
+`697b5977e365161b5843dc396cf854597c81f338fe5b6970856d8a22745571f6`.
+The report and log are in `verification/0.10.0/whole-build-current-02/`.
+
+Exact-head [CI run 39757512895](https://github.com/kaaffilm/CINEMATICUM/actions/runs/39757512895)
+also passed all 812 tests with no skips, unchanged source and runtimes, actual
+optional engines and the multicamera browser gate. The CI verifier took
+535.482 seconds. The independently downloaded artifact matches GitHub's
+SHA-256 `60f0ad36f7c916a7a083ec6b6f9a6e5079f2fb3114d34d3551b3b7037901766a`;
+its report SHA-256 is `de45703e8864615b92990da282c4e5e9931984af029093bcc475afa6145fe7e3`.
+The retained metadata is `verification/0.10.0/ci-current-01/ci-summary.json`.
+
+The initial local preflight failed before test discovery when the workspace
+synchronizer introduced temporary files inside a managed runtime. The strict
+inventory guard refused that candidate. Clean isolated runtimes outside the
+synchronized workspace passed full before/after verification. The initial
+failed record remains in `whole-build-preflight-01`; it is not counted as a pass.
+
+## Installation and the remaining launch defect
+
+The actual 0.10.0/build 11 application was built and installed from unchanged
+a031 source in 7.910 seconds. All **100 copied runtime files** match their
+source bytes and modes. Independent source, installed bundle, installer/backup,
+existing projects and original checkout gates all passed. The prior 67-file
+bundle is recoverable from its verified backup. All 59 existing project files,
+**2,858,334,503 bytes**, were preserved. Public hashes and counts are in
+`verification/0.10.0/installed-current-01/installation-summary.json`; raw
+independent receipts remain on the Mac. This is an unsigned development bundle.
+
+The canonical installed launch verified LaunchServices identity, the real
+bundled server, default workspace, editor HTTP bytes and a native window.
+However, the first ordinary quit request did not finish within its 15-second
+deadline. A second ordinary cleanup quit succeeded; no force termination was
+used, and all protected project and bundle bytes remained unchanged. **That
+launch run remains failed.** The startup-quit correction and its regression
+acceptance belong to the next candidate. No full professional-system parity or
+accepted film issuance follows from these records.

@@ -2,13 +2,17 @@
 
 ## CINEMATICUM Studio — editable production workspace
 
-The current **0.10 candidate** preserves the recovered scientific authoring,
-learned tracking, reconstruction, scene-processing, collaboration and waveform
-synchronization implementations. [Implemented scope](scripts/studio/FEATURES_0_10.md),
-[verification](scripts/studio/VERIFICATION_0_10.md) and
-[remaining work](scripts/studio/UNFINISHED_0_10.md) identify the actual bounds
-and independent release gates. Earlier acceptance below belongs to its pinned
-0.9.1 source; it does not certify this newer candidate.
+The current **0.11 candidate** retains scientific authoring, learned tracking,
+reconstruction, scene processing, collaboration and measured synchronization,
+and integrates simultaneous cameras, locked source audio, scene-linear
+Float32 OCIO/ACES movies, editable OTIO compositions and measured HDR/panorama
+photographs. [Implemented scope](scripts/studio/FEATURES_0_11.md),
+[verification](scripts/studio/VERIFICATION_0_11.md) and
+[remaining work](scripts/studio/UNFINISHED_0_11.md) distinguish current source
+from passed acceptance and installation. The published 0.10 base passed 812
+tests locally and in CI and is installed, while its first startup-quit failure
+is being corrected in this candidate. Historical 0.9.1 acceptance remains
+bound to its recorded source.
 
 Open the media editor with `make studio`. On macOS, `make studio-install-macos`
 builds **CINEMATICUM Studio.app** using the installed Xcode tools. CINEMATICUM owns
@@ -37,8 +41,11 @@ compositing, calibrated fSpy/COLMAP cameras, physical lens/material controls and
 H.264/ProRes export. Authored Cycles scenes retain editable `.blend` files and
 scene-linear float EXR sequences with optional render passes. The Develop
 workspace performs real OCIO transforms, camera RAW still development and merges
-pre-aligned brackets through an optional imaging runtime. Movie editing remains SDR;
-RAW-movie and HDR finishing are not implemented.
+exposure brackets through optional imaging/tracking runtimes, including measured
+alignment, camera response, reference motion masks and planar panoramas. The
+[Float32 movie pipeline](scripts/studio/FLOAT_MOVIE_PIPELINE.md) adds bounded
+scene-linear OCIO/ACES timeline processing and EXR+PCM master packages. Standard
+and High16 processing remain SDR; RAW-movie and HDR finishing are not implemented.
 
 Recovery checkpoints, saved-version history, portable project archive/restore
 and production shot-plan binding/assembly remain part of the same app. Managed

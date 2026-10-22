@@ -1,4 +1,4 @@
-# CINEMATICUM Studio 0.10
+# CINEMATICUM Studio 0.11
 
 A working local audiovisual editor. Media are imported into an owned project,
 edited on a frame-based timeline, previewed, and exported through real render
@@ -10,13 +10,17 @@ issuance effect.
 
 ## Current candidate
 
-Studio 0.10 adds deep/multiview EXR, checkpoint-backed SAM 2.1 and TAPIR, optical
-design, Mitsuba/PBRT physical still rendering, CPU COLMAP reconstruction, typed
-scene processing, paired collaboration and waveform multicamera synchronization.
-Open **Studio tools** for scientific authoring and **Runtime setup** for managed
-engines. See [Features 0.10](FEATURES_0_10.md), [Verification 0.10](VERIFICATION_0_10.md)
-and [remaining work](UNFINISHED_0_10.md). This recovered candidate still has
-separate whole-build, installation and installed-launch gates.
+Studio 0.11 adds simultaneous camera monitoring, fixed-camera source sound,
+bounded scene-linear Float32 OCIO/ACES movies, editable OTIO retime/dissolve
+compositions, measured HDR photographs and planar panoramas. It retains 0.10 deep/multiview
+EXR, checkpoint-backed SAM 2.1 and TAPIR, optical design, Mitsuba/PBRT still
+rendering, CPU COLMAP, typed scene processing, paired collaboration and measured
+multicamera synchronization. Open **Studio tools** for scientific workflows,
+**Multicam** for camera monitoring, **Interchange** for OTIO, **Develop images**
+for still photography and **Export** for movie processing. See
+[Features 0.11](FEATURES_0_11.md), [Verification 0.11](VERIFICATION_0_11.md) and
+[remaining work](UNFINISHED_0_11.md). Frozen verification, native acceptance,
+installation and installed launch are independent release gates.
 
 ## Previous upgrade
 
@@ -60,7 +64,7 @@ stereo mixer does not add buses, audio plugins or surround output.
 
 In **Export**, choose **High 16-bit SDR** under Movie processing. This setting
 also enables the processed 16-bit paused image. Select **Transparent background
-for the 16-bit master** when an alpha channel is required, then export
+for the master** when an alpha channel is required, then export
 **16-bit lossless master · MKV**. The actual movie uses FFV1 planar 16-bit RGB
 plus straight alpha and PCM audio. The native download link transfers the
 completed master; Render preview provides browser playback. H.264 and ProRes
@@ -72,9 +76,12 @@ fixture. Filtering, association/unassociation and bounded grades can round,
 clip or ring. Lanczos edge overshoot and the scaler's fractional-alpha rounding
 are recorded in the precision tests; 16-bit storage does not promise 16-bit
 numerical accuracy after every transform. The path is bounded to 8,388,608
-canvas pixels and 16,777,216 transformed working pixels. It remains UNORM SDR,
-with no scene-linear floating-point timeline, whole-movie ACES/OCIO management,
-HDR mastering or calibrated output monitoring.
+canvas pixels and 16,777,216 transformed working pixels. This mode remains
+UNORM SDR. The separate unreleased [Float32 movie candidate](FLOAT_MOVIE_PIPELINE.md)
+adds scene-linear OCIO/ACES processing for supported timeline operations, real
+FLOAT32 EXR sequence masters with PCM audio, and display-transformed SDR previews.
+Its settings, source interpretations, export/download and archive bindings share
+the normal project workflow. HDR mastering and calibrated monitoring remain open.
 
 ## Recover edits and move projects
 
@@ -302,11 +309,14 @@ for the complete processed nested picture and sound.
 offset containing the same event in each angle, measured in project-rate frames,
 then choose **Create cut at playhead**. The available cut ends with the shortest
 remaining angle. Select its timeline clip, put the playhead at the cut, and choose an angle button. The new
-segment preserves synchronization and follows that camera's audio; authored
-gain, balance and fade envelopes remain. This is manual event/frame
-synchronization. Automatic audio/timecode sync and a simultaneous multicamera
-monitor are not implemented. Angle switching must precede retiming, tracking or
-node compositing of that multicamera clip. A project holds up to 64 groups.
+segment preserves synchronization and either follows that camera's audio or
+retains the group's explicitly locked sound camera, stream and channel pair;
+authored gain, balance and fade envelopes remain. [Measured source-audio
+synchronization](MULTICAM_SYNC.md) estimates constant offsets, and the
+[simultaneous monitor](MULTICAM_MONITOR.md) shares the timeline's source-PCM
+clock. Timecode synchronization and clock-drift correction remain unsupported.
+Live angle switching must precede retiming, tracking or node compositing of
+that multicamera clip. A project holds up to 64 groups.
 
 **Captions** imports plain UTF-8 SRT or WebVTT, adds a cue at the playhead, and
 edits start/end frames and text. **Apply caption edit** applies the complete cue
@@ -528,13 +538,23 @@ algorithm must be supported by the actual file and runtime. LibRaw produces
 linear 16-bit RGB; subsequent color transforms and the retained master use float
 precision.
 
-**Merge exposure brackets** combines 2–16 already aligned photographs of a static
-scene using explicit shutter times and a declared sRGB, Rec.709 or linear
-response. Captures must share aperture and ISO. This is radiance merging for a
-known response; image alignment, ghost removal and response-curve estimation
-remain unimplemented.
+**Merge exposure brackets** combines 2–16 photographs using explicit shutter
+times, fixed aperture/ISO/white balance, and a known sRGB/Rec.709/linear response
+or measured inverse RGB response. Choose already aligned, measured translation
+or planar perspective, then optionally retain the reference photograph inside
+measured motion regions. The motion mask can be viewed and downloaded; clipped,
+blurred or noisy reference detail remains. Measured response needs three
+distinct shutter times spanning at least two stops.
 
-Every successful job retains `linear.exr`, `display.png` and `receipt.json`.
+**Stitch planar panorama** measures connected overlaps between 2–8 static,
+textured photographs, optionally matches their exposure, and feathers linear
+pixels. Uncovered regions remain transparent. Spherical/cylindrical projection,
+parallax repair and moving-subject seams remain unsupported. Both enhanced
+workflows require the installed Tracking runtime in addition to Imaging.
+[STILL_PHOTOGRAPHY.md](STILL_PHOTOGRAPHY.md) records capture and pixel limits.
+
+Every successful job retains `linear.exr`, `display.png` and `receipt.json`;
+reference motion replacement also preserves its hashed `motion.png` mask.
 The ZIP-compressed float32 RGBA EXR preserves negative and above-one scene
 values with explicit alpha semantics. The separate 16-bit sRGB display PNG is
 admitted into the normal media bin for editing. The receipt binds the actual
@@ -543,10 +563,10 @@ file and completed outputs are immutable; changing development settings creates
 a new result.
 
 Imported EXR stills require a single RGB/RGBA part and an explicit source color
-space when its metadata is insufficient. Develop them before adding their
-display result to the SDR timeline. Deep/multipart/arbitrary-channel EXR,
-floating-point movie compositing, HDR mastering and a RAW timeline are not
-provided by this still-image path.
+space when its metadata is insufficient. Develop their display result for the
+SDR timeline, or select the separate Float32 movie mode for direct scene-linear
+RGB(A) EXR clips. Deep/multipart/arbitrary-channel movie graphs, HDR mastering
+and a RAW timeline are not provided by the still-image path.
 
 Limits are 512 MiB per RAW source, 128 RAW sources per project, 67,108,864 sensor
 pixels before unpacking, 33,554,432 output pixels and 16,384 pixels per image
@@ -605,33 +625,46 @@ A pure timeline move remaps the dependent pin when the source clocks still
 match. This avoids silently applying a measured homography to different source
 content. Source files are rehashed again before rendering.
 
-## Exchange cut timelines
+## Exchange timelines and compositions
 
 Click **Interchange** in the timeline toolbar. Export creates an actual `.otio`
-JSON file containing picture/audio tracks, cuts, gaps, references and rational
-timing. Media is referenced, not embedded. Embedded video audio is represented
+JSON file containing picture/audio tracks, cuts, gaps, nested compositions,
+constant retime/reverse, ordered overlap lanes and linear SMPTE dissolves with
+rational timing. Media is referenced, not embedded. Embedded video audio is represented
 on companion audio tracks. Color, masks, tracking, titles, mixer state and other
 CINEMATICUM authoring data remain private namespaced metadata; other editors
-receive unprocessed cuts. Warnings identify these differences.
+receive source media with public timing and transition operators. Warnings
+identify authoring properties that do not travel as public effects.
 
 Import a `.otio` file, explicitly map its references to existing imported media
 when no verified content hash matches, then **Review timeline**. The preview
 reports the candidate's tracks, clips, rate and warnings. **Replace timeline**
 applies it with one undo checkpoint; saving remains separate. The importer never
 opens external paths/URLs from a document. A changed source edit invalidates
-stale private metadata. Bounded nested `Stack`/`Track` exchange preserves cuts,
-trimmed nested source ranges, companion picture/audio roles and explicit/trailing
-or all-gap durations. Public-only imports create editable sequences; existing
+stale private metadata. Bounded nested `Stack`/`Track` exchange preserves trimmed
+Tracks and the top-level Stack, companion picture/audio roles, disabled items,
+composition padding, and explicit/trailing or all-gap durations. Public-only
+imports create editable sequences; existing
 destination sequences remain. An unchanged CINEMATICUM roundtrip also restores
 all active/inactive sequence authoring only after byte-identity and regenerated
 public-timing/structure checks.
 
-Nested cut exchange uses the shared project clock and sequence bounds. Export
-rejects retime/reverse, same-track overlaps and transitions. Trimmed OTIO Tracks
-or a trimmed top-level Stack, disabled nested sequences/clips and general plugin
-schemas require explicit conversion. Effects, captions and mixer gains remain
+Constant `LinearTimeWarp` uses output duration and the lower bound of the consumed
+source window. Signed speeds from 0.25× to 4× are supported; a negative scalar
+reverses that conformed window. Check the receiving editor's time-effect
+convention. Same-track overlaps become ordered parallel lanes, preserving the
+picture stack and additive source audio. `SMPTE_Dissolve` becomes an editable
+sequence operator with measured source handles, premultiplied RGBA mixing and
+complementary audio fades. It survives undo, save, reopen and project archives.
+
+Nested exchange uses the shared rational project clock and existing sequence
+bounds. Unsupported transition types, overlapping transitions, missing media
+handles, freeze frames, speed ramps, multiple timewarps and general plugin
+schemas are rejected explicitly. Effects, captions and mixer gains remain
 private metadata rather than portable OTIO effects. AAF, Premiere XML and Resolve
 project translation are unsupported. The request/document size limit is 8 MiB.
+See [OTIO_INTERCHANGE.md](OTIO_INTERCHANGE.md) for precise conventions, limits,
+independent media checks and bounded native acceptance commands.
 
 
 ## Create and render 3D scenes
@@ -977,14 +1010,14 @@ foreign browser origins and invalid Host headers. Supported routes:
 | `GET /api/projects/{id}/imaging-catalog` | List actual builtin OCIO config spaces and display views |
 | `GET /api/projects/{id}/imaging-sources` | List preserved original RAW sources |
 | `POST /api/projects/{id}/imaging-raw-import?name=...` | Preserve and inspect a selected original RAW file |
-| `POST /api/projects/{id}/imaging-render` | Queue actual OCIO/RAW/bracket processing and admit its display image |
+| `POST /api/projects/{id}/imaging-render` | Queue actual OCIO/RAW/HDR/panorama processing and admit its display image |
 | `GET /api/projects/{id}/imaging/outputs/{job}/{filename}` | Download the float master, display image or receipt |
 | `POST /api/projects/{id}/tracking-frame` | Decode the actual conformed seed image |
 | `POST /api/projects/{id}/tracking` | Measure point motion and retain its JSON receipt |
 | `POST /api/projects/{id}/tracking-validate` | Validate imported point samples against the current source |
 | `POST /api/projects/{id}/tracking-motion` | Plan independent stabilization without saving |
 | `GET /api/projects/{id}/analysis/{job}.png` or `.json` | Read measured analysis output |
-| `POST /api/projects/{id}/interchange-export` | Write a bounded OTIO cut document |
+| `POST /api/projects/{id}/interchange-export` | Write bounded OTIO cuts, retimes, overlap lanes and editable nested/dissolve compositions |
 | `POST /api/projects/{id}/interchange-import` | Return an unsaved validated timeline candidate |
 | `POST /api/projects/{id}/automate` | Apply an atomic editing recipe |
 | `POST /api/projects/{id}/checkpoint` | Preserve a revision-bound unsaved editor draft |
@@ -1012,13 +1045,17 @@ preview. Scope values are display-referred SDR RGB, not reference HDR scopes.
 
 The optional still-image worker provides actual OCIO/ACES transforms and float
 EXR masters; authored Cycles scenes can also export float EXR sequences and
-passes. Those features do not extend float processing across the movie
-timeline. This implementation still lacks HDR finishing, RAW-movie editing,
-automatic multicamera synchronization, optical-flow retiming, automatic
-tracking re-identification, neural segmentation, roto hierarchy/paint, unrestricted mesh/rig and
-texture editing, plugin hosting, general AAF/XML/native-project interchange,
-a full audio workstation, collaborative editing and a production-grade decoded
-GPU playback cache. Nested OTIO exchange is bounded to the documented cut subset. Source
+passes. The separate [Float32 movie candidate](FLOAT_MOVIE_PIPELINE.md) extends
+OCIO scene-linear processing across its documented bounded movie operations.
+This implementation still lacks HDR finishing, RAW-movie editing,
+variable speed ramps, optical-flow retiming, general automatic tracking
+re-identification, roto hierarchy/paint, unrestricted mesh/rig and texture editing,
+plugin hosting, general AAF/XML/native-project interchange, a full audio
+workstation and a production-scale decoded GPU playback cache. Actual SAM 2.1
+segmentation, TAPIR tracking, paired collaborative editing and measured
+multicamera synchronization have the explicit limits in the capability ledger.
+Nested OTIO exchange includes the documented retime, overlap and linear-dissolve
+operators; arbitrary time/transition plugins remain unsupported. Source
 formats that a browser cannot decode can still render through FFmpeg; use an
 encoded preview to review them. ProRes is an export format and may require an
 external player on some browsers.

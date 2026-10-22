@@ -213,6 +213,12 @@ def _asset_identities(value):
 def export_otio(project, project_dir):
     """Return {document, warnings}; media remains in the existing project."""
     p = _validated_project(project, project_dir)
+    if __package__:
+        from .otio_compositions import needs_export, export_compositions
+    else:
+        from otio_compositions import needs_export, export_compositions
+    if needs_export(p):
+        return export_compositions(p, project_dir)
     if any(clip.get("sequence_id") for clip in p["clips"]):
         if __package__:
             from .sequence_interchange import export_nested
@@ -367,6 +373,12 @@ def import_otio(document, project, project_dir, asset_map=None):
 def _import_otio(document, project, project_dir, asset_map):
     doc = _json_copy(document)
     _object(doc, {"Timeline.1"}, "top-level OTIO object")
+    if __package__:
+        from .otio_compositions import needs_import, import_compositions
+    else:
+        from otio_compositions import needs_import, import_compositions
+    if needs_import(doc):
+        return import_compositions(doc, project, project_dir, asset_map)
     if __package__:
         from .sequence_interchange import has_nested, import_nested
     else:

@@ -1,0 +1,178 @@
+{
+  "acceptance_id": "003abce3dfb14095b38ccf7fb6ab7c8b",
+  "gamma_rgb": [
+    2.0,
+    2.200000047683716,
+    2.4000000953674316
+  ],
+  "photographs": [
+    {
+      "exposure_time": 0.04,
+      "identity": {
+        "sha256": "257ee4f9fa4bd88c30e0b6bbfc3e9ea6f9493f8ebc9507e744e321a7b4a69837",
+        "size": 383157
+      },
+      "name": "ENGINE_TEST_HDR_1.png",
+      "role": "hdr",
+      "source_to_reference": [
+        [
+          1,
+          0,
+          7
+        ],
+        [
+          0,
+          1,
+          -4
+        ],
+        [
+          0,
+          0,
+          1
+        ]
+      ]
+    },
+    {
+      "exposure_time": 0.16,
+      "identity": {
+        "sha256": "fd2b057f53c9c5f829e0b57dbebc5fa8f3b8b049958a69ef6c54f8fab09d56cb",
+        "size": 390763
+      },
+      "name": "ENGINE_TEST_HDR_2.png",
+      "role": "hdr",
+      "source_to_reference": [
+        [
+          1.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          1.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          1.0
+        ]
+      ]
+    },
+    {
+      "exposure_time": 0.64,
+      "identity": {
+        "sha256": "96936b85f26e499f71a171e24a0d9f35afccab10a3deffc9d3d29b11b64e9a93",
+        "size": 298968
+      },
+      "name": "ENGINE_TEST_HDR_3.png",
+      "role": "hdr",
+      "source_to_reference": [
+        [
+          1,
+          0,
+          -6
+        ],
+        [
+          0,
+          1,
+          5
+        ],
+        [
+          0,
+          0,
+          1
+        ]
+      ]
+    },
+    {
+      "identity": {
+        "sha256": "42dbc527c336a8a12135bc01ef04d10571c61c410a465bb2c5c1414a7aa3f253",
+        "size": 234310
+      },
+      "name": "ENGINE_TEST_PANORAMA_1.png",
+      "role": "panorama",
+      "source_to_reference": [
+        [
+          1,
+          0,
+          0
+        ],
+        [
+          0,
+          1,
+          0
+        ],
+        [
+          0,
+          0,
+          1
+        ]
+      ]
+    },
+    {
+      "identity": {
+        "sha256": "6b96c5c1c20959931a738e6b3d967c4b6b85125702cf56578a6d65d49a8ed164",
+        "size": 239446
+      },
+      "name": "ENGINE_TEST_PANORAMA_2.png",
+      "role": "panorama",
+      "source_to_reference": [
+        [
+          1,
+          0,
+          160
+        ],
+        [
+          0,
+          1,
+          0
+        ],
+        [
+          0,
+          0,
+          1
+        ]
+      ]
+    },
+    {
+      "identity": {
+        "sha256": "23c4a024e6995c3ddc07388316b4cbc67ad6d0d641b54a3f2dfb6d3a127faf28",
+        "size": 261767
+      },
+      "name": "ENGINE_TEST_PANORAMA_3.png",
+      "role": "panorama",
+      "source_to_reference": [
+        [
+          1,
+          0,
+          320
+        ],
+        [
+          0,
+          1,
+          0
+        ],
+        [
+          0,
+          0,
+          1
+        ]
+      ]
+    }
+  ],
+  "project_id": "7af28f7f63cc4ff08b73aed703d64b3f",
+  "project_name": "ENGINE TEST HDR and panorama",
+  "schema": "cinematicum-owned-still-photography-acceptance-v1",
+  "sentinel_id": "bb1867c7110045f1879e84c7547aa7bb",
+  "sentinel_name": "ENGINE TEST photograph sentinel",
+  "truth": {
+    "hdr-reference.npy": {
+      "sha256": "095f5ebd1376e1c5fda213a671ad60063d430ad6cc2506a925547f2d9c725c23",
+      "size": 737408
+    },
+    "panorama-world.npy": {
+      "sha256": "ac70abcee99491eeed393318c85c34aa57eb17bcf62e042ca25a415386fd97d9",
+      "size": 1689728
+    }
+  }
+}

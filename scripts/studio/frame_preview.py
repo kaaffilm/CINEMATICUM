@@ -19,13 +19,16 @@ from engine import _executable, _graph, RenderCancelled, validate_project
 
 
 def preview_identity(project, frame):
-    signature = {"pipeline": 12, "project": project, "frame": frame}
+    signature = {"pipeline": 13, "project": project, "frame": frame}
     return hashlib.sha256(json.dumps(signature, sort_keys=True, separators=(",", ":"),
                                     allow_nan=False).encode()).hexdigest()
 
 
 def render_frame(project, project_dir, frame, output, cancel_event=None, timeout=45):
     p = validate_project(project, project_dir)
+    if p.get("settings", {}).get("image_precision") == "float32":
+        from float_movie import render_float
+        return render_float(p, project_dir, output, "frame", cancel_event=cancel_event, frame=frame, timeout=timeout)
     high = p.get("settings", {}).get("image_precision", "standard8") == "high16"
     duration = max([c["start"] + c["duration"] for c in p["clips"]] +
                    [t["start"] + t["duration"] for t in p["titles"]] +

@@ -14,10 +14,12 @@ import uuid
 
 if __package__:
     from .timebase import project_rate, format_timecode, parse_timecode
+    from .multicam import set_audio_lock, monitor_plan, group_for, verify_sources
 else:
     from timebase import project_rate, format_timecode, parse_timecode
+    from multicam import set_audio_lock, monitor_plan, group_for, verify_sources
 
-SEQUENCE_FIELDS = ('clips', 'titles', 'tracks', 'captions', 'caption_style', 'sequence_duration')
+SEQUENCE_FIELDS = ('clips', 'titles', 'tracks', 'captions', 'caption_style', 'sequence_duration', 'otio_dissolve')
 MAX_SEQUENCES = 64
 MAX_DEPTH = 8
 MAX_EXPANDED_CLIPS = 1024
@@ -60,6 +62,8 @@ def sequence_duration(sequence):
 def snapshot_sequence(project):
     value = {'id': project.get('sequence_id', 'main'), 'name': project.get('sequence_name', 'Main sequence')}
     for field in SEQUENCE_FIELDS:
+        if field == 'otio_dissolve' and field not in project:
+            continue
         value[field] = copy.deepcopy(project.get(field, 0 if field == 'sequence_duration' else {} if field == 'caption_style' else []))
     return value
 
@@ -134,6 +138,9 @@ def sequence_project(project, sequence):
     value['sequence_id'] = sequence['id']
     value['sequence_name'] = sequence['name']
     for field in SEQUENCE_FIELDS:
+        if field == 'otio_dissolve' and field not in sequence:
+            value.pop(field, None)
+            continue
         value[field] = copy.deepcopy(sequence.get(field, 0 if field == 'sequence_duration' else {} if field == 'caption_style' else []))
     return value
 
@@ -149,6 +156,37 @@ def sequence_asset(project, ident, views=None):
             'width': project['width'], 'height': project['height'], 'duration': float(rate.seconds_for_frames(frames)),
             'frames': frames, 'has_audio': True, 'audio_channels': 2, 'audio_sample_rate': 48000,
             'audio_stream_index': 'aout', 'video_stream_index': 'vout', 'audio_duration': float(rate.seconds_for_frames(frames))}
+
+
+def validate_dissolve(project):
+    """A converted OTIO dissolve is an explicit two-operand composition.
+
+    Sources remain editable in their own sequences. Its operator cannot silently
+    turn into a different mix after an accidental move, crop, mute or third layer.
+    """
+    if 'otio_dissolve' not in project:
+        return
+    value = project['otio_dissolve']
+    if not isinstance(value, dict) or set(value) != {'version', 'in_offset', 'out_offset'} or value['version'] != 1:
+        raise ValueError('Invalid OTIO dissolve composition.')
+    inside = _integer(value['in_offset'], 'Dissolve in offset')
+    outside = _integer(value['out_offset'], 'Dissolve out offset')
+    duration = inside + outside
+    if not duration or sequence_duration(project) != duration or len(project['clips']) != 2 or project['titles'] or project.get('captions'):
+        raise ValueError('An OTIO dissolve needs exactly two operands and its original duration.')
+    for index, clip in enumerate(project['clips']):
+        expected = {'track': index, 'start': 0, 'in': 0, 'duration': duration, 'speed': 1, 'reverse': False,
+                    'opacity': 1, 'x': 0, 'y': 0, 'scale': 1, 'rotation': 0, 'volume': 1}
+        if not clip.get('sequence_id') or any(clip.get(key) != item for key, item in expected.items()):
+            raise ValueError('Dissolve operands must be full-duration nested sequences. Edit their source sequences instead.')
+        if clip['keyframes'] or any(clip.get(key) for key in ('tracking', 'planar_motion', 'compositor', 'color_pipeline')) or any(clip['effects'].values()) or clip['grade'] != {'exposure': 0, 'contrast': 1, 'saturation': 1, 'temperature': 0}:
+            raise ValueError('Apply effects inside a dissolve source sequence, before the linear mix.')
+        audio = clip['audio']
+        if any(audio.get(key, 0) != item for key, item in {'fade_in': duration if index else 0,
+                'fade_out': 0 if index else duration, 'fade_duration': duration, 'fade_offset': 0, 'pan': 0}.items()) or audio.get('channels') is not None or audio.get('stream_index') is not None:
+            raise ValueError('Dissolve audio uses complementary linear fades; edit routing inside the source sequence.')
+    if any(t['id'] not in (0, 1) or t['mute'] or t['solo'] or t['gain'] != 1 for t in project['tracks']):
+        raise ValueError('Dissolve operator tracks cannot change the prescribed two-source mix.')
 
 
 def validate_captions(captions, rate, maximum):
@@ -245,12 +283,22 @@ def _locked(project):
         raise ValueError('Unlock the affected timeline tracks before changing its structure.')
 
 
+def _locked_multicam(project, group_id):
+    for sequence in [project, *project.get('sequences', [])]:
+        tracks = {track['id'] for track in sequence.get('tracks', []) if track.get('locked')}
+        if any(clip.get('multicam', {}).get('group_id') == group_id and clip['track'] in tracks for clip in sequence.get('clips', [])):
+            raise ValueError('Unlock every affected camera track before changing this group\'s shared sound.')
+
+
 def _switch(project, ident):
     views = sequence_views(project)
     if ident not in views:
         raise ValueError('Unknown sequence.')
     active = views.pop(ident)
     for field in SEQUENCE_FIELDS:
+        if field == 'otio_dissolve' and field not in active:
+            project.pop(field, None)
+            continue
         project[field] = copy.deepcopy(active.get(field, 0 if field == 'sequence_duration' else {} if field == 'caption_style' else []))
     project['sequence_id'], project['sequence_name'] = ident, active['name']
     project['sequences'] = list(views.values())
@@ -373,6 +421,21 @@ def apply_action(project, action, values, project_dir):
         first = sources[0]
         p['clips'].append({'id': uuid.uuid4().hex, 'asset_id': first['asset_id'], 'track': _integer(values.get('track', 0), 'Track', 0, 15),
             'start': start, 'duration': duration, 'in': first['in'], 'multicam': {'group_id': group['id'], 'angle_id': first['id']}})
+    elif action in ('multicam_audio_lock', 'multicam_monitor'):
+        clip = next((c for c in p['clips'] if c['id'] == values.get('clip_id')), None)
+        if not clip:
+            raise ValueError('Select a multicamera clip.')
+        if action == 'multicam_monitor':
+            if set(values) - {'clip_id', 'frame'}:
+                raise ValueError('The monitor accepts one clip and playhead frame.')
+            group, _ = group_for(p, clip)
+            if group:
+                verify_sources(p, project_dir, group)
+            return {'monitor': monitor_plan(p, clip, values.get('frame')), 'action': action}
+        group, _ = group_for(p, clip)
+        if group:
+            _locked_multicam(p, group['id'])
+        set_audio_lock(p, clip, values)
     elif action == 'multicam_cut':
         _locked(p)
         clip = next((c for c in p['clips'] if c['id'] == values.get('clip_id')), None)
@@ -412,6 +475,15 @@ def apply_action(project, action, values, project_dir):
             raise ValueError('Select a clip to map its source audio.')
         if any(t.get('locked') and t['id'] == clip['track'] for t in p.get('tracks', [])):
             raise ValueError('Unlock the selected track before editing source audio.')
+        group, _ = group_for(p, clip)
+        if group and group.get('audio_lock'):
+            _locked_multicam(p, group['id'])
+            locked_angle = next(a for a in group['angles'] if a['id'] == group['audio_lock']['angle_id'])
+            locked_asset = next(a for a in p['assets'] if a['id'] == locked_angle['asset_id'])
+            set_audio_lock(p, clip, {'clip_id': clip['id'], 'angle_id': group['audio_lock']['angle_id'],
+                                   'stream_index': values.get('stream_index') if values.get('stream_index') is not None else locked_asset['audio_stream_index'],
+                                   'channels': values.get('channels')})
+            return {'project': validate_project(p, project_dir), 'action': action, 'sequence': p.get('sequence_id', 'main')}
         audio = clip.setdefault('audio', {})
         if values.get('stream_index') is None:
             audio.pop('stream_index', None)

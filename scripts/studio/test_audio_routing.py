@@ -35,7 +35,7 @@ childClip.reverse=false;args.transportEpoch++;api.draw(args);assert.strictEqual(
         script=r"""
 const fs=require('fs'),vm=require('vm'),assert=require('assert'),path=JSON.parse(fs.readFileSync(0,'utf8')).path;
 const source=fs.readFileSync(path,'utf8');let now=0,callback=null,clock={waiting:true,frame:0},resumeResolve;
-const widget={textContent:'',label:'',setAttribute(key,value){this.label=value;}},state={project:{id:'project',fps:24},frame:0,rendered:false,playing:false,media:new Map()};
+const widget={textContent:'',label:'',setAttribute(key,value){this.label=value;}},state={project:{id:'project',fps:24,settings:{}},frame:0,rendered:false,playing:false,media:new Map()};
 const context={state:'running',resume:()=>Promise.resolve()};
 const sandbox={state,$:()=>widget,audioContext:context,playbackAudioFrame:0,playbackEpoch:0,playbackRequest:0,playbackPreparing:false,playbackAudioUnavailable:false,
  playbackFrame:0,playbackOrigin:0,animation:null,frameViewer:{hide(){},invalidate(){}},performance:{now:()=>now},durationFrames:()=>96,

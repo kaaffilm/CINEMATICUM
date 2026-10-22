@@ -27,9 +27,9 @@ STUDIO = Path(__file__).resolve().parent
 PBRT_COMMIT = "b4ce9687e6c695f5582997c61b0c66cf064bdb4a"
 PBRT_URL = "https://github.com/mmp/pbrt-v4.git"
 IMATH_COMMIT = "c0396a055a01bc537d32f435aee11a9b7ed6f0b5"
-CHROMIUM_URL = "https://playwright.download.prss.microsoft.com/dbazure/download/playwright/builds/chromium/1161/chromium-linux.zip"
-CHROMIUM_SHA256 = "25db802cce762a2c5c082b115671b8c37f8ef87c2d08e367d216d56e955e2496"
-CHROMIUM_BYTES = 172886340
+CHROMIUM_URL = "https://storage.googleapis.com/chrome-for-testing-public/134.0.6998.35/linux64/chrome-linux64.zip"
+CHROMIUM_SHA256 = "7c11f4cb9620df17582509184106cef56a06b7ac37bc08c12d84a6fb367abc41"
+CHROMIUM_BYTES = 168951132
 BUILD_REQUIREMENTS = """cmake==3.31.10 --hash=sha256:3c17bb24dba15f8ecc3fd706afe04264410ef88796f4115c119327c961d5dc57 --hash=sha256:2f766bb46367e5e0559fa33184653754bce044583a06014dcaebf8e6dff8a1f1
 ninja==1.13.0 --hash=sha256:fb46acf6b93b8dd0322adc3a4945452a4e774b75b91293bafcc7b7f8e6517dfa
 """
@@ -231,7 +231,7 @@ def install_browser(root):
         destination.write_bytes(data)
     run(["npm", "ci", "--prefix", driver, "--ignore-scripts", "--no-audit", "--no-fund"],
         log=root / "browser-driver-install.log")
-    archive = root / "chromium-1161-linux.zip"
+    archive = root / "chrome-for-testing-134.0.6998.35-linux64.zip"
     if not archive.exists():
         with urllib.request.urlopen(CHROMIUM_URL, timeout=45) as response, archive.open("xb") as stream:
             total = 0
@@ -256,7 +256,7 @@ def install_browser(root):
             raise ValueError("Chromium archive exceeds its extraction bounds")
         for item in members:
             relative = PurePosixPath(item.filename)
-            if relative.is_absolute() or ".." in relative.parts or not relative.parts or relative.parts[0] != "chrome-linux":
+            if relative.is_absolute() or ".." in relative.parts or not relative.parts or relative.parts[0] != "chrome-linux64":
                 raise ValueError("Chromium archive path is unsafe")
             path = destination.joinpath(*relative.parts)
             if item.is_dir():
@@ -270,12 +270,12 @@ def install_browser(root):
                 shutil.copyfileobj(source, target, 1024 * 1024)
             path.chmod(mode or 0o644)
             records[item.filename] = {"bytes": path.stat().st_size, "sha256": digest(path), "mode": path.stat().st_mode & 0o777}
-    version = run([destination / "chrome-linux/chrome", "--version"], timeout=15).strip()
-    if version != "Chromium 134.0.6998.35":
-        raise ValueError("Independent Chromium runtime has a different version")
+    version = run([destination / "chrome-linux64/chrome", "--version"], timeout=15).strip()
+    if version != "Google Chrome for Testing 134.0.6998.35":
+        raise ValueError("Independent Chrome for Testing runtime has a different version")
     save(root / "browser-runtime-receipt.json", {"schema": "cinematicum-ci-browser-v1", "url": CHROMIUM_URL,
         "archive_sha256": CHROMIUM_SHA256, "archive_bytes": CHROMIUM_BYTES, "version": version, "files": records})
-    print("Accepted hash-pinned independent Chromium browser fixture", flush=True)
+    print("Accepted hash-pinned Chrome for Testing browser fixture with actual camera decoding", flush=True)
 
 
 def environment(root):
@@ -288,7 +288,7 @@ def environment(root):
         "CINEMATICUM_LEARNED_PYTHON": str(root / "learned/runtime/bin/python"),
         "CINEMATICUM_RAW_TEST_FILE": str(root / "ENGINE_TEST_RAW_KODAK_DC50.KDC"),
         "CINEMATICUM_PBRT": str(root / "pbrt-build/pbrt"),
-        "CINEMATICUM_BROWSER": str(root / "browser-runtime/chrome-linux/chrome"),
+        "CINEMATICUM_BROWSER": str(root / "browser-runtime/chrome-linux64/chrome"),
         "NODE_PATH": str(root / "browser-driver/node_modules")}
     candidates = [Path("/usr/lib/x86_64-linux-gnu/libLLVM.so.20.1")]
     candidates += [Path(f"/usr/lib/llvm-{version}/lib/libLLVM.so") for version in (20, 19, 18, 17, 16, 15)]

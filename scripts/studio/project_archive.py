@@ -112,7 +112,7 @@ def _allowed(value):
         name = Path(parts[2])
         return name.suffix in {".raw", ".json"} and bool(_SHA.fullmatch(name.stem))
     if len(parts) == 4 and parts[:2] == ["imaging", "outputs"]:
-        return bool(_ID.fullmatch(parts[2])) and parts[3] in {"display.png", "linear.exr", "receipt.json"}
+        return bool(_ID.fullmatch(parts[2])) and parts[3] in {"display.png", "linear.exr", "receipt.json", "motion.png"}
     if len(parts) == 4 and parts[:2] == ["multicam-sync", "outputs"]:
         from multicam_sync import ARTIFACT_NAMES
         return bool(_ID.fullmatch(parts[2])) and parts[3] in ARTIFACT_NAMES
@@ -390,6 +390,32 @@ def _collect(project, project_dir, cancel_event=None):
     if settings.get("scene") is not None:
         settings["scene"] = validate_scene(settings["scene"], width=p["width"], height=p["height"])
 
+    # Float movie exports retain their immutable snapshot, OCIO configuration,
+    # all EXR frames and sample-exact mix. Bind the preserved ZIP and sources;
+    # restore never extracts or executes its nested OCIO package.
+    from float_movie import verify_master_package
+    for relative in _scan(root, "exports", ".json"):
+        document, _ = _read_owned(root, relative)
+        result = document.get("result", {}) if isinstance(document, dict) else {}
+        if not isinstance(result, dict) or result.get("profile") != "master32":
+            continue
+        name = result.get("filename")
+        if not isinstance(name, str) or name != Path(relative).stem + ".zip" or not _ID.fullmatch(Path(name).stem):
+            raise ValueError("A float movie master has an invalid owned filename.")
+        snapshot = document.get("snapshot")
+        _portable_json(snapshot)
+        with _open_owned(root, "exports/" + name) as package:
+            master = verify_master_package(package, snapshot, cancel_event)
+        if result.get("project_sha256") != master["project_sha256"] or result.get("sources") != master["sources"]:
+            raise ValueError("A float movie export receipt differs from its verified master.")
+        for source in master["sources"]:
+            add(source["path"], "admitted-media", source["sha256"], source["size"])
+        portable = {"result": {key: result[key] for key in ("profile", "filename", "sha256", "size", "project_sha256", "sources", "image_precision", "processing_bits") if key in result},
+                    "snapshot": snapshot, "issuance_effect": "NONE"}
+        _portable_json(portable)
+        add("exports/" + name, "float-movie-master", result.get("sha256"), result.get("size"))
+        add(relative, "float-movie-receipt", data=_json_bytes(portable))
+
     # The owned LUT palette and RAW-source browser are project state even when
     # no current clip/recipe uses one of their entries.
     for lut in list_luts(root):
@@ -429,6 +455,9 @@ def _collect(project, project_dir, cancel_event=None):
             raise ValueError("An imaging receipt is missing its source SHA-256 identity.")
         add(prefix + "receipt.json", "imaging-receipt", provenance.get("receipt_sha256"), data=payload)
         artifacts = receipt.get("artifacts", {})
+        expected_artifacts = {"linear", "display"} | ({"motion"} if recipe["operation"] == "hdr_merge" and recipe.get("deghost") == "reference" else set())
+        if not isinstance(artifacts, dict) or set(artifacts) != expected_artifacts:
+            raise ValueError("An imaging receipt has an unexpected artifact set.")
         for key, name in (("display", "display.png"), ("linear", "linear.exr")):
             descriptor = artifacts.get(key, {}) if isinstance(artifacts, dict) else {}
             if not isinstance(descriptor, dict) or descriptor.get("filename") != name:
@@ -437,9 +466,15 @@ def _collect(project, project_dir, cancel_event=None):
             if descriptor.get("sha256") != expected:
                 raise ValueError("An imaging master or display does not match asset provenance.")
             add(prefix + name, "imaging-" + key, expected, descriptor.get("size"))
+        if "motion" in expected_artifacts:
+            mask = artifacts["motion"]
+            if not isinstance(mask, dict) or mask.get("filename") != "motion.png":
+                raise ValueError("An HDR motion mask has no immutable receipt identity.")
+            add(prefix + "motion.png", "imaging-motion", mask.get("sha256"), mask.get("size"))
         inputs = receipt.get("inputs")
         expected_ids = ([recipe["source_id"]] if recipe["operation"] == "raw" else [recipe["asset_id"]]
-                        if recipe["operation"] == "ocio" else [b["asset_id"] for b in recipe["brackets"]])
+                        if recipe["operation"] == "ocio" else recipe["images"] if recipe["operation"] == "panorama"
+                        else [b["asset_id"] for b in recipe["brackets"]])
         if not isinstance(inputs, list) or len(inputs) != len(expected_ids):
             raise ValueError("An imaging receipt has incomplete original input references.")
         for source, ident in zip(inputs, expected_ids):

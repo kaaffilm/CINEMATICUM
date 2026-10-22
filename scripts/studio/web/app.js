@@ -13,8 +13,8 @@ let playbackAudioFrame=0,playbackEpoch=0,playbackRequest=0,playbackPreparing=fal
 let compositorEditor=null, trackingEditor=null, interchangeEditor=null, colorPipelineEditor=null, imagingEditor=null, cameraImporter=null, sceneEditor=null, sceneProjectId='', generationReadiness=null, readinessRequest=0;
 const editing=window.CinematicumEditing;
 const TRACK_WIDTH=128;
-let frameViewer=null, recoveryEditor=null, productionEditor=null, archiveEditor=null, mediaEditor=null, editorialEditor=null, multicamSyncEditor=null, generationEditor=null;
-let learnedEditor=null, collaborationEditor=null, runtimeEditor=null;
+let frameViewer=null, recoveryEditor=null, productionEditor=null, archiveEditor=null, mediaEditor=null, editorialEditor=null, multicamSyncEditor=null, multicamMonitor=null, generationEditor=null;
+let learnedEditor=null, collaborationEditor=null, runtimeEditor=null, floatMovieEditor=null;
 const authoringEditors=new Map();
 const waveforms=new Map(),waveformPending=new Set(),waveformQueue=[];let waveformActive=0;
 const canvas = $('#preview-canvas');
@@ -123,12 +123,12 @@ function pruneMedia(activeIds=null) {
     for(const [id,m]of state.media)if(!m.nested&&m.ownerClipId&&activeIds.has(m.ownerClipId))activeIds.add(id);
   }
   const clips=new Map((state.project?.clips||[]).map(c=>[c.id,c]));
-  for(const [id,m]of state.media){if(m.nested){const asset=assetById(m.assetId);if(!activeIds.has(id)||m.revision!==state.revision||!asset||asset.path!==m.path)releaseMedia(id);continue;}const clip=clips.get(m.ownerClipId||id),asset=clip&&assetById(clip.asset_id);if(!clip||!asset||m.assetId!==asset.id||m.path!==asset.path)releaseMedia(id);}
+  for(const [id,m]of state.media){if(m.nested){const asset=assetById(m.assetId);if(!activeIds.has(id)||m.revision!==state.revision||!asset||asset.path!==m.path)releaseMedia(id);continue;}const clip=clips.get(m.ownerClipId||id),pictureAsset=clip&&assetById(clip.asset_id),asset=m.kind==='audio'&&clip?(window.CinematicumMulticam?.resolveAudio(state.project,clip,pictureAsset)?.asset||pictureAsset):pictureAsset;if(!clip||!asset||m.assetId!==asset.id||m.path!==asset.path)releaseMedia(id);}
   // Keep at most twelve inactive decoders warm; active layers are never evicted.
   const inactive=[...state.media.keys()].filter(id=>!activeIds.has(id));
   for(const id of inactive.slice(0,Math.max(0,inactive.length-12)))releaseMedia(id);
 }
-function adoptProject(p) {stop();clearMedia();generationReadiness=null;readinessRequest++;state.project=normalizeProject(p);state.selected=null;state.selectedAsset=null;state.frame=0;state.dirty=false;state.history=[];state.future=[];state.revision=0;state.workflowPath=state.project.settings.comfy_workflow_path||'';state.lastRenderUrl='';switchPreview(false);$('#rendered-preview').disabled=true;canvas.width=state.project.width;canvas.height=state.project.height;canvas.style.aspectRatio=`${state.project.width}/${state.project.height}`;$('#save-state').textContent='LOCAL PROJECT';$('#save-state').classList.remove('dirty');renderAll();frameViewer?.invalidate();recoveryEditor?.reset();mediaEditor?.reset();collaborationEditor?.reset();}
+function adoptProject(p) {stop();clearMedia();generationReadiness=null;readinessRequest++;state.project=normalizeProject(p);state.selected=null;state.selectedAsset=null;state.frame=0;state.dirty=false;state.history=[];state.future=[];state.revision=0;state.workflowPath=state.project.settings.comfy_workflow_path||'';state.lastRenderUrl='';switchPreview(false);$('#rendered-preview').disabled=true;canvas.width=state.project.width;canvas.height=state.project.height;canvas.style.aspectRatio=`${state.project.width}/${state.project.height}`;$('#save-state').textContent='LOCAL PROJECT';$('#save-state').classList.remove('dirty');renderAll();frameViewer?.invalidate();recoveryEditor?.reset();mediaEditor?.reset();multicamMonitor?.reset();collaborationEditor?.reset();}
 function renderProjectList() {const found=state.projects.some(p=>p.id===state.project.id);if(!found)state.projects.push({id:state.project.id,name:state.project.name});$('#project-select').innerHTML=state.projects.map(p=>`<option value="${esc(p.id)}">${esc(p.id===state.project.id?state.project.name:p.name)}</option>`).join('');$('#project-select').value=state.project.id;}
 function renderAll() {renderProjectList();renderMedia();renderTimeline();renderInspector();updateTransport();renderCapabilities();drawPreview();$('#viewer-project').textContent=state.project.name;$('#project-format').textContent=`${state.project.width} × ${state.project.height}   /   ${rateLabel()}`;}
 function renderCapabilities() {const ff=Boolean(state.capabilities.ffmpeg?.available??state.capabilities.ffmpeg);$('#generate-center').textContent=state.capabilities.comfyui?.available?'Generate a shot':'Set up video generation';$('#empty-engine-note').textContent=state.capabilities.comfyui?.available?'YOUR MEDIA · YOUR SCENE · CONNECTED VIDEO ENGINE':'CREATE WITH YOUR MEDIA OR 3D · VIDEO GENERATION REQUIRES SETUP';$('#preview-render').disabled=!ff;$('#export-button').disabled=!ff;$('#preview-render').title=ff?'Render exact timeline preview':'FFmpeg is not installed';$$('[data-export]').forEach(b=>{b.disabled=!ff||state.capabilities[b.dataset.export]===false;b.title=b.disabled?'This encoder is not available in the installed FFmpeg':'';});}
@@ -144,10 +144,11 @@ function defaultClip(a,start=durationFrames(),track=a.kind==='audio'?-1:0) {
   // Develop's display image has already passed through its OCIO view. Decode
   // only its sRGB transfer for the timeline's Rec.709 output; do not run the
   // scene view or tone mapping again.
-  if(['cinematicum-imaging','cinematicum-deep-compositing','cinematicum-physical-rendering'].includes(a.provenance?.type)&&a.provenance?.version===1&&a.provenance?.display_encoding==='sRGB')clip.color_pipeline={version:1,enabled:true,input_transfer:'srgb',input_primaries:'rec709'};
+  if(state.project.settings.image_precision==='float32')clip.float_input_space=a.provenance?.display_encoding==='sRGB'?'sRGB Encoded Rec.709 (sRGB)':a.imaging_source?.color_space||(a.path?.toLowerCase().endsWith('.exr')?'ACEScg':state.project.settings.float_color?.default_input_space||'Camera Rec.709');
+  else if(['cinematicum-imaging','cinematicum-deep-compositing','cinematicum-physical-rendering'].includes(a.provenance?.type)&&a.provenance?.version===1&&a.provenance?.display_encoding==='sRGB')clip.color_pipeline={version:1,enabled:true,input_transfer:'srgb',input_primaries:'rec709'};
   return clip;
 }
-function addAsset(id,start,track) {const a=assetById(id);if(!a)return;if(a.path?.toLowerCase().endsWith('.exr')){state.selectedAsset=id;openImaging('ocio');return;}const destination=track??(a.kind==='audio'?-1:0);if(editing.track(state.project,destination).locked){toast('Unlock the destination track before adding media.');return;}if(a.kind==='scene'){state.selectedAsset=id;setMode('3d');openBlendDialog();return;}const c=defaultClip(a,start??durationFrames(),destination);mutate(()=>{state.project.clips.push(c);state.selected={type:'clip',id:c.id};state.frame=c.start;},{inspector:true});switchPreview(false);}
+function addAsset(id,start,track) {const a=assetById(id);if(!a)return;if(a.path?.toLowerCase().endsWith('.exr')&&state.project.settings.image_precision!=='float32'){state.selectedAsset=id;openImaging('ocio');return;}const destination=track??(a.kind==='audio'?-1:0);if(editing.track(state.project,destination).locked){toast('Unlock the destination track before adding media.');return;}if(a.kind==='scene'){state.selectedAsset=id;setMode('3d');openBlendDialog();return;}const c=defaultClip(a,start??durationFrames(),destination);mutate(()=>{state.project.clips.push(c);state.selected={type:'clip',id:c.id};state.frame=c.start;},{inspector:true});switchPreview(false);}
 function select(type,id) {state.selected={type,id};state.selectedAsset=null;renderTimeline();renderInspector();updateTransport();}
 function addTitle() {const title={id:uid(),text:'Your title',start:state.frame,duration:Math.round(state.project.fps*3),x:0,y:.32,size:Math.round(state.project.height*.065),color:'#ffffff',fade:Math.round(state.project.fps*.25)};mutate(()=>{state.project.titles.push(title);state.selected={type:'title',id:title.id};},{inspector:true});switchPreview(false);}
 function deleteSelected() {if(!selectedItem()||selectionLocked())return;mutate(()=>{const key=state.selected.type==='title'?'titles':'clips';state.project[key]=state.project[key].filter(c=>c.id!==state.selected.id);state.selected=null;},{inspector:true});}
@@ -530,6 +531,11 @@ function renderInspector() {
   if(c.caption_id){el.innerHTML=`<div class="inspector-name">Caption</div><p class="note">${esc(c.text)}</p><p class="note">${fmt(c.start)} → ${fmt(c.start+c.duration)}</p><button class="full" data-action="captions">Edit cue and caption appearance</button>`;return;}
   const timing=`<div class="inspector-section"><h3>TIMING · FRAMES</h3><div class="field-row">${field('Timeline start','start',c.start)}${state.selected.type==='clip'&&a?.kind!=='image'?field('Source in','in',c.in,{step:.01}):''}</div><div class="field-row">${field('Duration','duration',c.duration,{min:1})}<label>Timeline end<input readonly value="${c.start+c.duration}" title="Exclusive end frame"></label></div><p class="note">${fmt(c.start)} → ${fmt(c.start+c.duration)} · ${rateLabel()}</p></div>`;
   if(state.selected.type==='title'){el.innerHTML=`<div class="inspector-name">Title</div><div class="inspector-section"><label>Text<textarea data-field="text" maxlength="2000">${esc(c.text)}</textarea></label><div class="field-row">${field('Size (px)','size',c.size,{min:6,max:500})}${field('Fade (frames)','fade',c.fade,{min:0,max:Math.floor(c.duration/2)})}</div><div class="color-control"><label>Text color</label><input type="color" data-field="color" value="${esc(c.color)}"></div>${range('Horizontal position','x',c.x,-1,1)}${range('Vertical position','y',c.y,-1,1)}</div>${timing}<div class="inspector-actions"><button data-action="duplicate">Duplicate</button><button data-action="delete">Delete</button></div>`;return;}
+  if(state.mode==='color'&&state.project.settings.image_precision==='float32'){
+    if(c.track<0||a?.kind==='audio'){el.innerHTML='<p class="note">Select a picture clip to change its color.</p>';return;}
+    const color={...window.CinematicumFloatMovie.defaults,...state.project.settings.float_color};
+    el.innerHTML=`<div class="inspector-name">${esc(a?.name||'Missing media')}</div><div class="inspector-section"><h3>SCENE-LINEAR FLOAT32</h3><p class="note">${esc(c.float_input_space||color.default_input_space)} → ${esc(color.working_space)}</p><button class="full" data-action="float-color">Input, working space & display view</button>${range('Exposure · stops','grade.exposure',c.grade?.exposure??0,-3,3)}</div><div class="inspector-actions"><button data-action="reset-color">Reset primary correction</button><button data-action="preview">Render preview</button></div><p class="note">Exposure multiplies scene-linear light. The paused viewer and scopes use the selected SDR display view. Float32 v1 does not apply SDR contrast, saturation, white-balance or LUT controls.</p>`;return;
+  }
   const top=`<div class="inspector-name">${esc(a?.name||'Missing media')}</div><div class="inspector-meta">${a?.width?`${a.width} × ${a.height} · `:''}${a?.kind||'media'} · ${(c.duration/state.project.fps).toFixed(2)}s</div>${a?.kind==='video'&&c.track>=0?'<button class="full tracking-open" data-action="track">Track motion'+(c.tracking||c.planar_motion?.mode==='stabilize'?' · stabilized':'')+'</button>':''}${c.planar_motion?.invalidated?'<p class="engine-note" data-planar-stale role="alert">Stale planar motion: '+esc(c.planar_motion.invalidated)+' Remeasure or remove this motion before export.</p>':''}${c.planar_motion?'<button class="full" data-action="clear-planar">Remove planar '+(c.planar_motion.mode==='corner_pin'?'corner pin':'stabilization')+'</button>':''}`;
   if(state.mode==='color'){if(c.track<0||a?.kind==='audio'){el.innerHTML=`${top}<p class="note">Select a picture clip to change its color.</p>`;return;}const g=c.grade||{};el.innerHTML=`${top}<div class="inspector-section"><h3>COLOR PIPELINE</h3><button class="full" data-action="color-pipeline">Input transform, white balance & LUT</button><p class="note">${c.color_pipeline?.enabled?esc(c.color_pipeline.input_transfer+' / '+c.color_pipeline.input_primaries)+(c.color_pipeline.lut?' · LUT applied':''):'Rec.709 SDR · no input transform'}</p></div><div class="inspector-section"><h3>PRIMARY CORRECTION</h3>${range('Exposure · stops','grade.exposure',g.exposure??0,-3,3)}${range('Contrast','grade.contrast',g.contrast??1,0,3)}${range('Saturation','grade.saturation',g.saturation??1,0,3)}${range('Temperature','grade.temperature',g.temperature??0,-1,1)}</div><div class="inspector-actions"><button data-action="reset-color">Reset primary correction</button><button data-action="preview">Render preview</button></div><p class="note">The viewer renders the current frame through the export graph. The scopes measure that rendered image.</p>`;return;}
   if(state.mode==='composite'){const e=c.effects||{},pose=transformAt(c,state.frame-c.start);el.innerHTML=`${top}<div id="node-inspector" class="node-inspector"></div><details class="clip-transform-details"><summary>Clip placement & motion</summary><div class="inspector-section"><h3>TRANSFORM & MOTION</h3>${range('Horizontal position','x',pose.x,-2,2)}${range('Vertical position','y',pose.y,-2,2)}${range('Scale','scale',pose.scale,.02,4)}${range('Rotation · degrees','rotation',pose.rotation||0,-360,360,1)}${range('Opacity','opacity',pose.opacity,0,1)}<button data-action="keyframe" class="full" style="margin-top:14px">◇ Set pose & gain keyframe</button><div class="keyframe-list">${visibleKeys(c).map(k=>`<span class="keyframe-chip"><button data-jump-key="${k.frame}">${k.frame-(c.animation_offset??0)}f</button><select aria-label="Interpolation after frame ${k.frame}" data-key-easing="${k.frame}">${Object.keys(editing.easings).map(mode=>`<option value="${mode}" ${(k.interpolation||'linear')===mode?'selected':''}>${mode.replaceAll('_',' ')}</option>`).join('')}</select> <button data-remove-key="${k.frame}" aria-label="Delete keyframe at frame ${k.frame}">×</button></span>`).join('')}</div><p class="note">Keyframes animate position, scale, rotation, opacity, and gain. With keyframes present, changing a slider writes one at the playhead.</p></div><div class="inspector-section"><h3>EFFECTS</h3>${range('Blur','effects.blur',e.blur||0,0,30,.1)}${range('Sharpen','effects.sharpen',e.sharpen||0,0,3,.05)}<label class="check-field"><input type="checkbox" data-field="effects.vignette" ${e.vignette?'checked':''}> Vignette</label><div class="color-control"><label class="check-field"><input type="checkbox" id="chroma-enabled" ${e.chroma_key?'checked':''}> Chroma key</label><input id="chroma-color" type="color" value="${esc(e.chroma_key||'#00ff00')}" aria-label="Chroma key color"></div></div><div class="inspector-actions"><button data-action="reset-transform">Reset transform</button><button data-action="preview">Render preview</button></div><p class="note">Render preview evaluates chroma key, sharpening, vignette, and the complete composite.</p></details>`;compositorEditor?.renderInspector($('#node-inspector'));return;}
@@ -634,9 +640,10 @@ function renderTimeline() {
     const controls=title?'':`<div class="track-controls">${[['mute','M','Mute'],['solo','S','Solo'],['locked','L','Lock']].map(([key,label,hint])=>`<button data-track-control="${key}" data-track-id="${track.id}" class="${track[key]?'active':''}" aria-pressed="${Boolean(track[key])}" title="${hint} ${esc(track.name)}">${label}</button>`).join('')}</div>`;
     return `<div class="track-row ${track.mute?'muted-track':''} ${track.locked?'locked-track':''}" data-track="${track.id}"><div class="track-label"><strong title="${esc(track.name)}">${esc(track.name)}</strong>${controls}</div><div class="track-lane" data-track="${track.id}" style="width:${width}px;flex:none">${items.map(c=>{
       const a=title?null:sourceFor(c),selected=state.selected?.id===c.id;
-      const wave=a?.has_audio&&a.kind!=='sequence'?waveforms.get(waveformKey(a,c)):null;
-      if(a?.has_audio&&a.kind!=='sequence')ensureWaveform(a,c);
-      const path=wave?editing.envelopePath(wave,c,state.project):'';
+      const sound=!title&&a?.kind!=='sequence'?(window.CinematicumMulticam?.resolveAudio(state.project,c,a)||{asset:a,clip:c}):{asset:a,clip:c};
+      const wave=sound.asset?.has_audio&&sound.asset.kind!=='sequence'?waveforms.get(waveformKey(sound.asset,sound.clip)):null;
+      if(sound.asset?.has_audio&&sound.asset.kind!=='sequence')ensureWaveform(sound.asset,sound.clip);
+      const path=wave?editing.envelopePath(wave,sound.clip,state.project):'';
       const keys=visibleKeys(c).map(k=>`<i class="clip-key" style="left:${(k.frame-(c.animation_offset??0))/c.duration*100}%" title="Keyframe ${k.frame-(c.animation_offset??0)}"></i>`).join('');
       return `<div class="timeline-clip ${title?'title':c.track<0?'audio':''} ${selected?'selected':''}" data-clip="${esc(c.id)}" data-type="${title?'title':'clip'}" style="left:${c.start/state.project.fps*state.zoom}px;width:${Math.max(3,c.duration/state.project.fps*state.zoom)}px" tabindex="0" aria-label="${esc(title?c.text:a?.name||'Missing media')}; ${fmt(c.start)} to ${fmt(c.start+c.duration)}">${a&&['video','image'].includes(a.kind)&&c.track>=0?`<span class="clip-image" style="background-image:url('${thumbnailUrl(a)}')"></span>`:''}${path?`<svg class="clip-waveform" viewBox="0 0 100 100" preserveAspectRatio="none" aria-label="Decoded source audio waveform"><path d="${path}"></path></svg>`:''}<span class="clip-name">${c.reverse?'◀ ':''}${esc(title?c.text:a?.name||'Missing media')}${c.speed&&c.speed!==1?' · '+c.speed+'×':''}</span>${keys}<span class="clip-edge left" data-edge="left"></span><span class="clip-edge right" data-edge="right"></span></div>`;
     }).join('')}</div></div>`;
@@ -703,6 +710,7 @@ function drawPreview() {
   if(!state.project||state.rendered)return;
   const p=state.project,W=p.width,H=p.height,activeIds=new Set();
   ctx.save();ctx.setTransform(1,0,0,1,0,0);ctx.fillStyle='#000';ctx.fillRect(0,0,W,H);
+  if(p.settings.image_precision==='float32'){ctx.restore();return;}
   window.CinematicumSequencePlayback.draw({project:p,frame:state.frame,audioFrame:state.playing?playbackAudioFrame:state.frame,transportEpoch:playbackEpoch,context:ctx,width:W,height:H,mediaFor,ensureAudio,playing:state.playing,activeIds,revision:state.revision});
   for(const [id,m]of state.media)if(!activeIds.has(id)&&m.kind!=='image'&&!m.el.paused)m.el.pause();
   pruneMedia(activeIds);ctx.restore();
@@ -711,6 +719,7 @@ function stop() {state.playing=false;playbackPreparing=false;playbackRequest++;p
 async function play() {
   frameViewer?.hide();
   if(state.rendered){const v=$('#render-video');if(v.paused)await v.play();else v.pause();return;}
+  if(state.project.settings.image_precision==='float32'){toast('Rendering the color-managed float preview for playback.');await startRender('preview');return;}
   if(state.playing||playbackPreparing){stop();return;}if(!durationFrames())return;
   const request=++playbackRequest,projectId=state.project.id;playbackPreparing=true;
   $('#play-button').textContent='…';$('#play-button').setAttribute('aria-label','Cancel playback preparation');
@@ -754,7 +763,7 @@ async function startRender(profile) {
   if(state.job&&['queued','running'].includes(String(state.job.state).toLowerCase())){toast('Wait for the current job or cancel it first.');return;}
   if(!durationFrames()){toast('Add clips or a title to the timeline first.');return;}
   const projectId=beginProjectOperation();stop();$('#export-dialog').close();
-  try{const saved=await saveProject(false);const snapshot=saved?normalizeProject(saved):clone(state.project);if(snapshot.id!==projectId)throw Error('The project changed before the render could be submitted.');const job=await api(`${projectPath(projectId)}/render`,{method:'POST',body:{profile,project:snapshot}});trackJob(job,profile==='preview'?'Rendering preview':profile==='master16'?'Exporting 16-bit master':profile==='prores'?'Exporting ProRes':'Exporting H.264','render',projectId);}catch(e){toast(e.message,true,9000);}finally{endProjectOperation();}
+  try{const saved=await saveProject(false);const snapshot=saved?normalizeProject(saved):clone(state.project);if(snapshot.id!==projectId)throw Error('The project changed before the render could be submitted.');const job=await api(`${projectPath(projectId)}/render`,{method:'POST',body:{profile,project:snapshot}});trackJob(job,profile==='preview'?'Rendering preview':profile==='master32'?'Exporting float EXR movie':profile==='master16'?'Exporting 16-bit master':profile==='prores'?'Exporting ProRes':'Exporting H.264','render',projectId);}catch(e){toast(e.message,true,9000);}finally{endProjectOperation();}
 }
 async function startGenerate() {
   if(projectOperationBlocked())return;
@@ -825,7 +834,7 @@ async function cancelOwnedJob() {
   }catch(error){if(state.job===owned)toast(error.message,true);}
   finally{if(state.job?.id===owned.id)$('#cancel-job').disabled=false;}
 }
-async function finishJob(job) {const r=job.result||{},url=r.url||r.download_url,master16=job.kind==='render'&&(r.profile==='master16'||/\.mkv(?:$|[?#])/i.test(url||'')),prores=job.kind==='render'&&(r.profile==='prores'||/\.mov(?:$|[?#])/i.test(url||'')),downloadMaster=master16||prores;$('#job-label').textContent=job.kind==='render'?(master16?'16-bit master complete':prores?'ProRes export complete':'Render complete'):'Media ready';$('#job-detail').textContent=downloadMaster?`Download ${master16?'MKV':'MOV'} · use Render preview for playback`:r.width?`${r.width} × ${r.height} · ${Number(r.duration||r.duration_seconds||0).toFixed(2)}s`:'Finished and saved locally';$('#job-progress').value=100;$('#job-indicator').className='job-indicator';$('#cancel-job').hidden=true;$('#close-job').hidden=false;
+async function finishJob(job) {const r=job.result||{},url=r.url||r.download_url,master32=job.kind==='render'&&r.profile==='master32',master16=job.kind==='render'&&(r.profile==='master16'||/\.mkv(?:$|[?#])/i.test(url||'')),prores=job.kind==='render'&&(r.profile==='prores'||/\.mov(?:$|[?#])/i.test(url||'')),downloadMaster=master32||master16||prores;$('#job-label').textContent=job.kind==='render'?(master32?'Float EXR master complete':master16?'16-bit master complete':prores?'ProRes export complete':'Render complete'):'Media ready';$('#job-detail').textContent=downloadMaster?`Download ${master32?'EXR + audio ZIP':master16?'MKV':'MOV'} · use Render preview for playback`:r.width?`${r.width} × ${r.height} · ${Number(r.duration||r.duration_seconds||0).toFixed(2)}s`:'Finished and saved locally';$('#job-progress').value=100;$('#job-indicator').className='job-indicator';$('#cancel-job').hidden=true;$('#close-job').hidden=false;
   if(job.kind==='scene-modeling'){$('#job-label').textContent='Mesh evaluated';$('#job-detail').textContent='Geometry ready for the current scene';return;}
   if(job.kind==='generation-setup'||job.kind==='generation-start'){$('#job-label').textContent=job.kind==='generation-setup'?'Local generation installed':'Local generation running';$('#job-detail').textContent=job.kind==='generation-setup'?'Open Local generation setup to start the engine.':'Ready to validate the project workflow.';return;}
   if(job.kind==='archive-export'){
@@ -884,7 +893,21 @@ function timelineMove(e) {
 
 function timelineUp() {const d=state.drag;if(!d)return;state.drag=null;if(d.scrub){renderInspector();frameViewer?.invalidate();}if(d.moved){state.history.push(d.snapshot);if(state.history.length>80)state.history.shift();state.future=[];changed({inspector:true});}}
 function fitTimeline() {state.zoom=clamp(($('#timeline-scroll').clientWidth-TRACK_WIDTH-40)/Math.max(5,durationFrames()/state.project.fps+1),12,160);$('#timeline-zoom').value=state.zoom;renderTimeline();}
-async function bootstrap() {try{recoveryEditor??=window.CinematicumRecovery.mount({request:api,notify:toast,button:$('#recovery-button'),status:$('#recovery-state'),getContext:()=>({project:state.project,revision:state.revision,dirty:state.dirty,saving:Boolean(state.savePromise),blocked:state.navigating||state.editBusy||state.projectOps>0}),onRecover:(project,expected)=>{if(state.project.id!==expected.projectId||state.revision!==expected.revision||state.project.revision!==expected.savedRevision||project.revision!==state.project.revision)throw Error('The project changed. Reopen it before recovering this version.');stop();mutate(()=>{state.project=normalizeProject(project);state.selected=null;clearMedia();canvas.width=state.project.width;canvas.height=state.project.height;canvas.style.aspectRatio=`${state.project.width}/${state.project.height}`;state.workflowPath=state.project.settings.comfy_workflow_path||'';generationReadiness=null;readinessRequest++;},{inspector:true,bin:true});renderAll();}});const b=await api('/api/bootstrap');state.token=b.token;state.projects=b.projects||[];state.capabilities=b.capabilities||{};if(!b.project)throw Error('The server did not provide a project.');adoptProject(b.project);const active=(b.jobs||[]).find(j=>j.project_id===state.project.id&&j.kind!=='frame-preview'&&['queued','running'].includes(j.state));if(active)trackJob(active,active.kind==='render'?'Rendering timeline':active.kind==='blender'?'Rendering Blender scene':active.kind==='scene'?'Rendering your 3D scene':'Generating media',active.kind||'render');if(!state.capabilities.ffmpeg)toast('Install FFmpeg and ffprobe to render media, then check engines.',true,8000);}catch(e){toast(`Could not open CINEMATICUM: ${e.message}`,true,30000);$('#preview-note').textContent='Server connection failed';}}
+// Native quit may arrive after the document loads but before its authenticated
+// bootstrap completes. Wait for that exact operation; never send an empty-token
+// quit request or infer that an uninitialized editor has no work to preserve.
+async function prepareNativeQuit(cancelActive) {
+  if(typeof cancelActive!=='boolean')throw Error('Quit requires an explicit active-work decision.');
+  const startup=await editorBootstrap;
+  if(!startup.ready)throw Error('Editor startup did not complete: '+startup.error);
+  if(state.savePromise)await state.savePromise;
+  if(state.navigating||state.editBusy||state.projectOps>0)throw Error('Wait for the current project operation before closing.');
+  if(state.dirty)await saveProject(false);
+  if(state.dirty||state.savePromise||state.navigating||state.editBusy||state.projectOps>0)throw Error('The project changed while saving. Keep the editor open to finish saving.');
+  return await api('/api/prepare-quit',{method:'POST',body:{cancel_active:cancelActive}});
+}
+
+async function bootstrap() {try{recoveryEditor??=window.CinematicumRecovery.mount({request:api,notify:toast,button:$('#recovery-button'),status:$('#recovery-state'),getContext:()=>({project:state.project,revision:state.revision,dirty:state.dirty,saving:Boolean(state.savePromise),blocked:state.navigating||state.editBusy||state.projectOps>0}),onRecover:(project,expected)=>{if(state.project.id!==expected.projectId||state.revision!==expected.revision||state.project.revision!==expected.savedRevision||project.revision!==state.project.revision)throw Error('The project changed. Reopen it before recovering this version.');stop();mutate(()=>{state.project=normalizeProject(project);state.selected=null;clearMedia();canvas.width=state.project.width;canvas.height=state.project.height;canvas.style.aspectRatio=`${state.project.width}/${state.project.height}`;state.workflowPath=state.project.settings.comfy_workflow_path||'';generationReadiness=null;readinessRequest++;},{inspector:true,bin:true});renderAll();}});const b=await api('/api/bootstrap');state.token=b.token;state.projects=b.projects||[];state.capabilities=b.capabilities||{};if(!b.project)throw Error('The server did not provide a project.');adoptProject(b.project);const active=(b.jobs||[]).find(j=>j.project_id===state.project.id&&j.kind!=='frame-preview'&&['queued','running'].includes(j.state));if(active)trackJob(active,active.kind==='render'?'Rendering timeline':active.kind==='blender'?'Rendering Blender scene':active.kind==='scene'?'Rendering your 3D scene':'Generating media',active.kind||'render');if(!state.capabilities.ffmpeg)toast('Install FFmpeg and ffprobe to render media, then check engines.',true,8000);return {ready:true};}catch(e){toast(`Could not open CINEMATICUM: ${e.message}`,true,30000);$('#preview-note').textContent='Server connection failed';return {ready:false,error:e.message};}}
 
 // UI actions use the authenticated Studio API; sharing requires explicit pairing.
 for(const id of ['import-button','import-footer','import-center'])$('#'+id).addEventListener('click',()=>$('#media-input').click());
@@ -928,6 +951,7 @@ $('#inspector').addEventListener('click',e=>{
   else if(action==='track')openTracking();
   else if(action==='clear-planar'){if(!selectedItem()||selectionLocked())return;stop();mutate(()=>{delete selectedItem().planar_motion;},{inspector:true});}
   else if(action==='color-pipeline')openColorPipeline();
+  else if(action==='float-color'){syncExportProcessing();$('#export-dialog').showModal();}
   else if(action==='reset-color')mutate(()=>{selectedItem().grade={exposure:0,contrast:1,saturation:1,temperature:0};},{inspector:true});
   else if(action==='reset-transform')mutate(()=>{const c=selectedItem(),soundKeys=(c.keyframes||[]).filter(k=>k.volume!==undefined).map(k=>({frame:k.frame,volume:k.volume,interpolation:k.interpolation||'linear'}));Object.assign(c,{x:0,y:0,scale:1,rotation:0,opacity:1,keyframes:soundKeys});},{inspector:true});
   else if(action==='keyframe'){
@@ -977,17 +1001,22 @@ $('#trim-edit-delta').addEventListener('input',updateTrimEdit);
 $('#trim-edit-form').addEventListener('submit',applyTrimEdit);
 $('#interchange-button').addEventListener('click',openInterchange);
 function syncExportProcessing() {
-  const high=state.project.settings.image_precision==='high16';
-  $('#movie-precision').value=high?'high16':'standard8';
-  $('#movie-precision').disabled=state.capabilities.high_depth_movie===false;
-  $('#movie-transparent').checked=high&&Boolean(state.project.settings.transparent_background);
-  $('#movie-transparent').disabled=!high;
+  const high=state.project.settings.image_precision==='high16',floating=state.project.settings.image_precision==='float32';
+  $('#movie-precision').value=floating?'float32':high?'high16':'standard8';
+  $('#movie-precision').disabled=false;
+  $('#movie-precision option[value=high16]').disabled=state.capabilities.high_depth_movie===false;
+  $('#movie-transparent').checked=(high||floating)&&Boolean(state.project.settings.transparent_background);
+  $('#movie-transparent').disabled=!high&&!floating;
   const master=$('[data-export=master16]');master.disabled=!high||state.capabilities.master16===false;
   master.title=!high?'Choose High 16-bit SDR processing first.':state.capabilities.master16===false?'The installed media engine does not support this profile.':'';
+  $('[data-export=master32]').disabled=!floating;
+  $('#movie-precision-note').textContent=floating?'EXR sequence masters retain float32 RGB and alpha. H.264 and ProRes are SDR display derivatives.':'The 16-bit path retains source precision through supported effects. H.264 and ProRes use their delivery bit depth.';
+  floatMovieEditor??=window.CinematicumFloatMovie.mount($('#float-movie-controls'),{request:api,getProject:()=>state.project,toast,edit:change=>{if(projectOperationBlocked())return;stop();mutate(()=>change(state.project));}});
+  floatMovieEditor.render();
   $('#export-summary').textContent=`${state.project.width} × ${state.project.height} · ${rateLabel()} · ${fmt(durationFrames())}`;
 }
-$('#movie-precision').addEventListener('change',()=>{if(projectOperationBlocked())return;stop();mutate(()=>{state.project.settings.image_precision=$('#movie-precision').value;if(state.project.settings.image_precision!=='high16')state.project.settings.transparent_background=false;});syncExportProcessing();});
-$('#movie-transparent').addEventListener('change',()=>{if(projectOperationBlocked())return;stop();mutate(()=>{state.project.settings.transparent_background=$('#movie-transparent').checked&&state.project.settings.image_precision==='high16';});syncExportProcessing();});
+$('#movie-precision').addEventListener('change',()=>{if(projectOperationBlocked())return;stop();mutate(()=>{state.project.settings.image_precision=$('#movie-precision').value;if(!['high16','float32'].includes(state.project.settings.image_precision))state.project.settings.transparent_background=false;if(state.project.settings.image_precision==='float32')state.project.settings.float_color={...window.CinematicumFloatMovie.defaults,...state.project.settings.float_color};});syncExportProcessing();});
+$('#movie-transparent').addEventListener('change',()=>{if(projectOperationBlocked())return;stop();mutate(()=>{state.project.settings.transparent_background=$('#movie-transparent').checked&&['high16','float32'].includes(state.project.settings.image_precision);});syncExportProcessing();});
 $('#export-button').addEventListener('click',()=>{syncExportProcessing();$('#export-dialog').showModal();});$('#close-export').addEventListener('click',()=>$('#export-dialog').close());$$('[data-export]').forEach(b=>b.addEventListener('click',()=>startRender(b.dataset.export)));
 $('#retry-job').addEventListener('click',()=>{const job=state.job;if(job?.pollingPaused)trackJob(job,job.label,job.kind,job.projectId);});
 $('#cancel-job').addEventListener('click',cancelOwnedJob);$('#close-job').addEventListener('click',()=>{$('#job-bar').hidden=true;});$('#view-job').addEventListener('click',()=>switchPreview(true));
@@ -1038,6 +1067,7 @@ function openEditorial(tab='sequences'){
     request:api,getProject:()=>clone(state.project),getContext:()=>({projectId:state.project.id,revision:state.revision}),
     getFrame:()=>state.frame,getSelectedClip:()=>state.selected?.type==='clip'?selectedItem():null,onSeek:setFrame,notify:toast,
     onAutoSync:()=>{editorialEditor.close();openMulticamSync();},
+    onMonitor:()=>{editorialEditor.close();openMulticamMonitor();},
     onApply:(candidate,expected)=>{
       if(projectOperationBlocked()||state.project.id!==expected.projectId||state.revision!==expected.revision)return false;
       const inventory=state.project.assets,savedRevision=state.project.revision;
@@ -1045,6 +1075,21 @@ function openEditorial(tab='sequences'){
     }
   });editorialEditor.open(tab);
 }
+function openMulticamMonitor(){
+  if(projectOperationBlocked())return;
+  const selected=selectedItem();if(!selected?.multicam){toast('Select a multicamera timeline clip to open its monitor.',true);return;}
+  multicamMonitor??=window.CinematicumMulticam.mount(document.body,{
+    request:api,getProject:()=>clone(state.project),getContext:()=>({projectId:state.project.id,revision:state.revision}),
+    getFrame:()=>state.playing?playbackAudioFrame:state.frame,isPlaying:()=>state.playing,play,stop,save:()=>saveProject(),
+    seek:frame=>{stop();setFrame(frame);},notify:toast,playbackUrl:(asset,url)=>mediaEditor?.playbackUrl(asset,url)||url,
+    onApply:(candidate,expected)=>{
+      if(projectOperationBlocked()||state.project.id!==expected.projectId||state.revision!==expected.revision)return false;
+      const inventory=state.project.assets,savedRevision=state.project.revision;
+      mutate(()=>{state.project=normalizeProject(candidate);state.project.assets=inventory;state.project.revision=savedRevision;state.selected=null;state.selectedAsset=null;},{inspector:true,bin:true});return true;
+    }
+  });void multicamMonitor.open(selected);
+}
+window.CinematicumMulticam.configure(message=>toast(message,true,9000));
 function openMulticamSync(){
   if(projectOperationBlocked())return;stop();
   multicamSyncEditor??=window.CinematicumMulticamSync.mount(document.body,{
@@ -1067,7 +1112,7 @@ mediaEditor=window.CinematicumMediaManagement.mount({button:$('#media-management
 });
 
 initializeCollaboration();
-bootstrap();
+const editorBootstrap=bootstrap();
 
 // Track and keyframe authoring use the same project history as every clip edit.
 $('#add-video-track').addEventListener('click',()=>addTrack(false));

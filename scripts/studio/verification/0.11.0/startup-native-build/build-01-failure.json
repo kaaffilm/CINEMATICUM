@@ -1,0 +1,9 @@
+{
+  "schema": "cinematicum-native-startup-quit-build-failure-v1",
+  "compiled": false,
+  "production_source_sha256": "acf64f068cc870ed0bb4e458cb78359a830f007807a22f9bc933485aa2ae0b08",
+  "harness_sha256": "88e5c057e2b13e5c3bc078b867fe56c7682a38bcffbe02174cc78fd428d17c5f",
+  "error": "Swift rejects the .025 floating-point literal; corrected to 0.025 in the acceptance harness.",
+  "production_source_changed": false,
+  "raw_evidence": "/Users/midiakiasat/.midia-ai/gateway-live/acceptance/cinematicum-0.11-20261022-own-025436f6/startup-quit-build-01/compiler.stderr"
+}

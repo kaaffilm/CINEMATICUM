@@ -106,3 +106,4 @@
 .timeline-toolbar{height:auto;min-height:43px;flex-wrap:wrap;row-gap:6px;padding-top:7px;padding-bottom:7px}.timeline-tools{flex-wrap:wrap;row-gap:5px;min-width:0}.timeline-options{margin-left:auto}.media-management-dialog{width:min(640px,90vw)}.media-management-dialog progress{width:100%;margin-top:16px}
 
 .export-processing {display:grid;gap:10px;padding:16px 0;border-bottom:1px solid var(--line,#30343d);margin-bottom:12px}.export-processing select {width:100%;padding:8px}.export-processing .check {display:flex;align-items:center;gap:8px}.export-processing p {margin:0}
+.export-choice{gap:16px;white-space:normal}.export-choice>span:first-child{min-width:0;overflow-wrap:anywhere}.export-choice>span:last-child{flex:none}

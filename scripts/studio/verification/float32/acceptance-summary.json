@@ -1,0 +1,187 @@
+{
+  "schema": "cinematicum-float32-candidate-acceptance-v1",
+  "engine_test_only": true,
+  "native_certified": false,
+  "installed": false,
+  "issuance_effect": "NONE",
+  "code_patch": {
+    "path": "/workspace/scratch/091f394ee5df/cinematicum-float-review.patch",
+    "sha256": "8ef500068be903d417c4c8d4f13964ac92b6230393df8d97a16d9632fe669f8e",
+    "size": 181414
+  },
+  "frozen_regression": {
+    "passed": true,
+    "tests": 95,
+    "failures": 0,
+    "errors": 0,
+    "skips": 0,
+    "elapsed_seconds": 74.107,
+    "record": "scripts/studio/verification/float32/frozen-tests.json"
+  },
+  "browser": {
+    "passed": true,
+    "checks": 22,
+    "elapsed_seconds": 10.945,
+    "record": "scripts/studio/verification/float32/browser/browser-report.json"
+  },
+  "native_coordinator_replay": {
+    "transport": "Chromium",
+    "native_certified": false,
+    "passed": true,
+    "phases": [
+      {
+        "phase": "prepare",
+        "checks": 3,
+        "ui_checks": 0,
+        "elapsed_seconds": 1.316
+      },
+      {
+        "phase": "author",
+        "checks": 9,
+        "ui_checks": 8,
+        "elapsed_seconds": 5.009
+      },
+      {
+        "phase": "render",
+        "checks": 16,
+        "ui_checks": 5,
+        "elapsed_seconds": 5.134
+      }
+    ]
+  },
+  "limits": {
+    "canvas_pixels": 8388608,
+    "source_pixels": 16777216,
+    "frames": 14400,
+    "source_bytes": 17179869184,
+    "package_bytes": 34359738368,
+    "reverse_buffer_bytes": 536870912,
+    "still_cache_bytes": 134217728,
+    "export_seconds": 1800,
+    "paused_frame_seconds": 45
+  },
+  "files": [
+    {
+      "path": "scripts/studio/verification/float32/browser/ENGINE_TEST_float32_master.zip",
+      "sha256": "2cbd4a24c42fdcd3c45101963cb10634bda3d696a38e53a443eaee5ce80d521d",
+      "size": 471004
+    },
+    {
+      "path": "scripts/studio/verification/float32/browser/browser-report.json",
+      "sha256": "45ff731aa0c382f7243645d9461f73f896a69c1510cb36639ddda9e64d6740eb",
+      "size": 11395
+    },
+    {
+      "path": "scripts/studio/verification/float32/browser/completed-job.json",
+      "sha256": "9b6fe0261da0ee8f53c207dcae72dac5773b2f6361eeab4aa347cbbf1f803796",
+      "size": 2954
+    },
+    {
+      "path": "scripts/studio/verification/float32/browser/download-verification.json",
+      "sha256": "2874d1db32338267567b40efef514e44a92da6a047501f20eae72d56b6ad903c",
+      "size": 646
+    },
+    {
+      "path": "scripts/studio/verification/float32/browser/float-export-controls.png",
+      "sha256": "cb96c1576dfae4bcf755a5a38d31f4a70cbaee7d5038f146e7a5e1f3dae95e8b",
+      "size": 174061
+    },
+    {
+      "path": "scripts/studio/verification/float32/browser/float-master-download.png",
+      "sha256": "cc151d0a638764c22288d8333688f57df337a704a620b0cba73adf5c813f50a8",
+      "size": 87598
+    },
+    {
+      "path": "scripts/studio/verification/float32/browser/float-paused-preview.png",
+      "sha256": "06a6030b4054d051a203b6845f0091941832517079122b570f8950be074e70cd",
+      "size": 75065
+    },
+    {
+      "path": "scripts/studio/verification/float32/browser/saved-after-render.json",
+      "sha256": "cdef524bf3df3ab66a17e448a73e81c1d5de2f0f04f33ebfc002b0e84bb13041",
+      "size": 4641
+    },
+    {
+      "path": "scripts/studio/verification/float32/browser/saved-before-reopen.json",
+      "sha256": "65cfabcb4a5b6d2b40bc5dc30e3bf8aba82e6fafcbab1937395a3014d1b5d691",
+      "size": 4641
+    },
+    {
+      "path": "scripts/studio/verification/float32/frozen-tests.json",
+      "sha256": "a072bff124b34d410d432d24dfc1013b86e731a26b1b562426c7d4de6ab2c35d",
+      "size": 2226
+    },
+    {
+      "path": "scripts/studio/verification/float32/frozen-tests.log",
+      "sha256": "767b9c7c5a602fb8712ada5760710e8ef38166a7f92e3eb06d7b52c75b89db83",
+      "size": 15918
+    },
+    {
+      "path": "scripts/studio/verification/float32/javascript-syntax.json",
+      "sha256": "1e2729222e599e83c8ebcc4e219215a22fdd67446f264f6fd9e36170b8665466",
+      "size": 810
+    },
+    {
+      "path": "scripts/studio/verification/float32/ui-coordinator/author/ENGINE_TEST_float_ui.png",
+      "sha256": "a8728e28ba681cfb6ba349e2258b5bdc66c551539b274cd0a6e1e455e940613c",
+      "size": 126135
+    },
+    {
+      "path": "scripts/studio/verification/float32/ui-coordinator/author/ENGINE_TEST_float_ui_report.json",
+      "sha256": "33d3d587197817d3403236df2f0a8dad8a66db698dcafd1ac4216ced62a7cf82",
+      "size": 3429
+    },
+    {
+      "path": "scripts/studio/verification/float32/ui-coordinator/author/processed-frame.png",
+      "sha256": "1d7b6914d76e69a0a4314141dd433b3b1d640f2fc2bea93da7de130e19803ca8",
+      "size": 505
+    },
+    {
+      "path": "scripts/studio/verification/float32/ui-coordinator/author/saved-project.json",
+      "sha256": "5e097a804a84424c1c544a32afb400ac733caeaa8c49ee2f9241b331597d4972",
+      "size": 4476
+    },
+    {
+      "path": "scripts/studio/verification/float32/ui-coordinator/phase-summary.json",
+      "sha256": "aba33377842e29f57eccd94137bbd3ad8cd5b58d74f76d49cb83a9e6943e0216",
+      "size": 628
+    },
+    {
+      "path": "scripts/studio/verification/float32/ui-coordinator/prepare/ENGINE_TEST_float_ui_report.json",
+      "sha256": "ea12c2979958819823d2e95dcd06ce22d9a01ff78bec75677957615a38af8d4d",
+      "size": 1979
+    },
+    {
+      "path": "scripts/studio/verification/float32/ui-coordinator/render/ENGINE_TEST_float_ui.png",
+      "sha256": "d772902b101416321347815bbb5484fe9839e491f0da12f7fb099b95e84a77eb",
+      "size": 135606
+    },
+    {
+      "path": "scripts/studio/verification/float32/ui-coordinator/render/ENGINE_TEST_float_ui_report.json",
+      "sha256": "4022e45a79a4cc7f6267a33f94b237617998aeb187876042a4de9146ba217eb6",
+      "size": 6700
+    },
+    {
+      "path": "scripts/studio/verification/float32/ui-coordinator/render/downloaded-frame.exr",
+      "sha256": "81f0a0455a1a3743294c97fd7236c0a97bd8998b5e303769b923063e19ac7c94",
+      "size": 3452
+    },
+    {
+      "path": "scripts/studio/verification/float32/ui-coordinator/render/master-manifest.json",
+      "sha256": "eab3c9d1521a0a4f40f7538c8fb975d57b79eb2886206f3a25defa64eea9bbea",
+      "size": 8378
+    },
+    {
+      "path": "scripts/studio/verification/float32/ui-coordinator/render/saved-project.json",
+      "sha256": "9a031e6b176c3eb7e539b36310c24f8b6e1ed65fe7dec9c4e23c051c6364bf96",
+      "size": 4476
+    }
+  ],
+  "remaining_gates": [
+    "Combined Float32 plus multicamera integration regression",
+    "Actual WKWebView/WKDownload acceptance on Mac",
+    "New whole-build freeze and CI",
+    "Verified installation and installed launch",
+    "Production-scale performance; HDR mastering and calibrated output are not implemented"
+  ]
+}

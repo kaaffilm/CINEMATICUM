@@ -330,12 +330,14 @@ class InterchangeTests(unittest.TestCase):
             with self.subTest(schema=schema), self.assertRaises(ValueError):
                 import_otio(doc, p, self.root, self.mapping())
 
-    def test_export_rejects_overlap_retime_and_reverse(self):
+    def test_overlap_retime_and_reverse_roundtrip_public_operators(self):
         for change in ({"speed": 2}, {"reverse": True}, {"start": 20}):
             p = self.project()
             p["clips"][1].update(change)
-            with self.subTest(change=change), self.assertRaises(ValueError):
-                export_otio(p, self.root)
+            with self.subTest(change=change):
+                p = validate_project(p, self.root)
+                document = export_otio(p, self.root)['document']
+                self.assertEqual(import_otio(document, p, self.root)['project'], p)
 
     def test_untrusted_paths_unknown_assets_fractional_cuts_and_nonfinite_values_refuse(self):
         p = self.project()

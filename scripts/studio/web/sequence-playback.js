@@ -23,7 +23,7 @@
   }
   function draw({project,frame,audioFrame=frame,transportEpoch=0,context,width,height,mediaFor,ensureAudio,playing,activeIds,revision}){
     const edit=window.CinematicumEditing,assets=new Map(project.assets.map(a=>[a.id,a]));
-    const clocks=[],decoders=[];let pending=false;
+    const clocks=[],decoders=[],lockedVoices=new Set();let pending=false;
     if(!playing||buffering?.epoch!==transportEpoch)buffering=null;
     const sequences=new Map([[project.sequence_id||'main',project],...(project.sequences||[]).map(s=>[s.id,s])]);
     function surface(depth){
@@ -106,14 +106,25 @@
             const media=sourceMedia(clip,key,asset,edit.sourceFrame(clip,at),rate,backwards,!separateSound&&audioActive,clipGain,clipLeft,clipRight,Boolean(prefix),Boolean(prefix)),el=media.el;
             if(media.kind==='image'?el.complete&&el.naturalWidth:el.readyState>=2){picture=el;aw=asset.width||el.videoWidth||el.naturalWidth;ah=asset.height||el.videoHeight||el.naturalHeight;}
           }
-          if(audioActive&&asset.has_audio&&(separateSound||asset.kind==='audio'||!pictureActive)){
-            const audioKey=asset.kind==='video'?key+'/sound':key;
-            sourceMedia(clip,audioKey,asset.kind==='video'?{...asset,kind:'audio'}:asset,soundFrame,rate,backwards,true,clipGain,clipLeft,clipRight,Boolean(prefix));
+          const resolved=window.CinematicumMulticam?.resolveAudio(project,clip,asset)||{clip,asset};
+          const soundClip=resolved.clip,soundAsset=resolved.asset;
+          if(audioActive&&soundAsset?.has_audio&&(separateSound||asset.kind==='audio'||!pictureActive)){
+            const origin=resolved.clockOrigin;
+            let audioKey=resolved.group?(prefix?prefix+'/':'')+'multicam-sound/'+resolved.group.id+'/'+clip.track+'/'+origin+'/'+rate+'/'+backwards:(asset.kind==='video'?key+'/sound':key);
+            // Distinct overlapping instances still mix independently. Consecutive
+            // picture cuts reuse the continuous locked-source PCM voice.
+            if(resolved.group){if(lockedVoices.has(audioKey))audioKey+='/'+clip.id;lockedVoices.add(audioKey);}
+            sourceMedia(soundClip,audioKey,{...soundAsset,kind:'audio'},audioSourceFrame(soundClip,audioAt),rate,backwards,true,clipGain,clipLeft,clipRight,Boolean(prefix));
           }
         }
         if(!pictureActive||!picture||!aw||!ah)continue;
         const motion=asset?edit.trackingOffset(clip,local,scope,asset,pose):{x:0,y:0},fit=Math.min(W/aw,H/ah)*pose.scale,g=clip.grade||{},effects=clip.effects||{};
-        target.save();target.globalAlpha=Math.max(0,Math.min(1,pose.opacity));
+        target.save();
+        const dissolve=sequence.otio_dissolve,weight=dissolve?Math.max(0,Math.min(1,Math.floor(at)/(dissolve.in_offset+dissolve.out_offset))):1;
+        target.globalAlpha=Math.max(0,Math.min(1,pose.opacity*(dissolve?(clip.track===0?1-weight:weight):1)));
+        // Canvas 'lighter' adds associated color and alpha. The two operands
+        // of an OTIO dissolve sum to one coverage weight on a clear surface.
+        if(dissolve)target.globalCompositeOperation='lighter';
         target.translate(W/2+(pose.x+motion.x)*W,H/2+(pose.y+motion.y)*H);target.rotate(pose.rotation*Math.PI/180);
         target.filter=`brightness(${2**(g.exposure||0)}) contrast(${g.contrast??1}) saturate(${g.saturation??1}) blur(${(effects.blur||0)*W/project.width}px)`;
         try{target.drawImage(picture,-aw*fit/2,-ah*fit/2,aw*fit,ah*fit);}catch(error){}

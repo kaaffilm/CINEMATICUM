@@ -33,6 +33,7 @@ RAW_SUFFIXES = frozenset({".3fr", ".arw", ".cr2", ".cr3", ".crw", ".dng", ".erf"
                           ".pef", ".raf", ".raw", ".rw2", ".rwl", ".srw", ".x3f"})
 IMAGE_SUFFIXES = frozenset({".png", ".jpg", ".jpeg", ".webp", ".tif", ".tiff", ".bmp", ".exr"})
 ARTIFACT_NAMES = frozenset({"linear.exr", "display.png", "receipt.json"})
+PHOTOGRAPH_ARTIFACT_NAMES = frozenset({"motion.png"})
 _ID = re.compile(r"[A-Za-z0-9_-]{1,80}\Z")
 _SHA = re.compile(r"[0-9a-f]{64}\Z")
 
@@ -174,6 +175,11 @@ def imaging_capabilities(python=None):
         result["ffmpeg"] = bool(ffmpeg and ffprobe)
         if not result["ffmpeg"]:
             result.update(available=False, operations=[], reason="FFmpeg and ffprobe are required for imaging output.")
+        if result.get("available"):
+            from still_photography import capabilities
+            result["photographs"] = capabilities()
+            if result["photographs"].get("available"):
+                result["operations"].append("panorama")
         return {**base, **result}
     except (ValueError, OSError) as exc:
         return {**base, "reason": str(exc)}
@@ -209,7 +215,8 @@ def validate_imaging_recipe(value):
     operation = recipe.get("operation")
     extra = {"ocio": {"asset_id", "input_space"},
              "raw": {"source_id", "demosaic", "half_size", "white_balance", "user_wb", "highlight"},
-             "hdr_merge": {"brackets", "input_transfer"}}
+             "hdr_merge": {"brackets", "input_transfer", "alignment", "reference_asset_id", "deghost", "ghost_threshold_stops"},
+             "panorama": {"images", "input_transfer", "reference_asset_id", "projection", "exposure_compensation"}}
     if not isinstance(operation, str) or operation not in extra or set(recipe) - common - extra[operation]:
         raise ValueError("The imaging recipe contains an unsupported operation or property.")
     if recipe.get("version") != 1 or isinstance(recipe.get("version"), bool):
@@ -241,10 +248,10 @@ def validate_imaging_recipe(value):
         if not isinstance(wb, list) or len(wb) != 4:
             raise ValueError("Custom RAW white balance requires four R/G/B/G multipliers.")
         recipe["user_wb"] = [_number(v, "RAW white balance multiplier", .01, 32) for v in wb]
-    else:
+    elif operation == "hdr_merge":
         brackets = recipe.get("brackets")
         if not isinstance(brackets, list) or not 2 <= len(brackets) <= MAX_BRACKETS:
-            raise ValueError("HDR merging requires 2–16 aligned still images.")
+            raise ValueError("HDR merging requires 2–16 still photographs.")
         ids, times = set(), set()
         for entry in brackets:
             if not isinstance(entry, dict) or set(entry) != {"asset_id", "exposure_time"}:
@@ -258,9 +265,46 @@ def validate_imaging_recipe(value):
         if len(times) < 2:
             raise ValueError("HDR merging requires at least two different exposure times.")
         recipe["input_transfer"] = recipe.get("input_transfer", "srgb")
-        if not isinstance(recipe["input_transfer"], str) or recipe["input_transfer"] not in {"srgb", "rec709", "linear"}:
-            raise ValueError("HDR input transfer must be srgb, rec709, or linear.")
+        if not isinstance(recipe["input_transfer"], str) or recipe["input_transfer"] not in {"srgb", "rec709", "linear", "measured"}:
+            raise ValueError("HDR input transfer must be srgb, rec709, linear, or measured.")
+        if recipe["input_transfer"] == "measured" and (len(times) < 3 or max(times) / min(times) < 4):
+            raise ValueError("Measured camera response needs at least three distinct shutter times spanning two stops.")
+        for key, default, allowed in (("alignment", "none", {"none", "translation", "homography"}),
+                                      ("deghost", "none", {"none", "reference"})):
+            recipe[key] = recipe.get(key, default)
+            if not isinstance(recipe[key], str) or recipe[key] not in allowed:
+                raise ValueError("Unsupported HDR " + key + ".")
+        recipe["ghost_threshold_stops"] = _number(recipe.get("ghost_threshold_stops", .5), "Motion threshold in stops", .1, 4)
+        default_reference = sorted(brackets, key=lambda entry: entry["exposure_time"])[len(brackets) // 2]["asset_id"]
+        recipe["reference_asset_id"] = _identity(recipe.get("reference_asset_id", default_reference), "Reference photograph")
+        if recipe["reference_asset_id"] not in ids:
+            raise ValueError("The reference photograph must be one of the selected brackets.")
+    else:
+        images = recipe.get("images")
+        if not isinstance(images, list) or not 2 <= len(images) <= 8:
+            raise ValueError("A planar panorama requires 2–8 still photographs.")
+        for ident in images:
+            _identity(ident, "Panorama photograph")
+        if len(set(images)) != len(images):
+            raise ValueError("Panorama photographs must be distinct.")
+        recipe["input_transfer"] = recipe.get("input_transfer", "srgb")
+        if recipe["input_transfer"] not in ("srgb", "rec709", "linear"):
+            raise ValueError("Panorama input transfer must be srgb, rec709, or linear.")
+        recipe["projection"] = recipe.get("projection", "planar")
+        if recipe["projection"] != "planar":
+            raise ValueError("This panorama workflow supports a measured planar projection.")
+        recipe["reference_asset_id"] = _identity(recipe.get("reference_asset_id", images[0]), "Reference photograph")
+        if recipe["reference_asset_id"] not in images:
+            raise ValueError("The reference photograph must be selected for the panorama.")
+        recipe["exposure_compensation"] = recipe.get("exposure_compensation", False)
+        if not isinstance(recipe["exposure_compensation"], bool):
+            raise ValueError("Panorama exposure compensation must be true or false.")
     return recipe
+
+
+def expected_artifact_names(recipe):
+    return ARTIFACT_NAMES | (PHOTOGRAPH_ARTIFACT_NAMES if recipe["operation"] == "hdr_merge"
+                            and recipe.get("deghost") == "reference" else frozenset())
 
 
 def _raw_descriptor(project_dir, source_id, verify=True):
@@ -417,9 +461,14 @@ def run_imaging(project, project_dir, recipe, output_dir, progress=None, cancel_
     elif recipe["operation"] == "ocio":
         inputs = [_asset_input(project, root, recipe["asset_id"])]
     else:
-        inputs = [_asset_input(project, root, entry["asset_id"]) for entry in recipe["brackets"]]
+        identifiers = recipe["images"] if recipe["operation"] == "panorama" else [entry["asset_id"] for entry in recipe["brackets"]]
+        inputs = [_asset_input(project, root, ident) for ident in identifiers]
         if len({entry["sha256"] for entry in inputs}) != len(inputs):
-            raise ValueError("HDR brackets cannot repeat identical image content.")
+            raise ValueError("Photograph sources cannot repeat identical image content.")
+    from still_photography import needed, capabilities
+    geometry = capabilities() if needed(recipe) else None
+    if geometry is not None and not geometry.get("available"):
+        raise ValueError(geometry["reason"])
     ffmpeg, ffprobe = shutil.which("ffmpeg"), shutil.which("ffprobe")
     if not ffmpeg or not ffprobe:
         raise ValueError("FFmpeg and ffprobe are required for imaging processing.")
@@ -428,6 +477,8 @@ def run_imaging(project, project_dir, recipe, output_dir, progress=None, cancel_
         scratch = Path(scratch_name)
         request = {"command": "render", "project_dir": str(root), "output_dir": str(scratch),
                    "recipe": recipe, "inputs": inputs, "ffmpeg": ffmpeg, "ffprobe": ffprobe}
+        if geometry is not None:
+            request["photograph_python"] = geometry["python"]
         log_path = scratch / "worker-result.json"
         error_path = scratch / "worker-stderr.log"
         process = None
@@ -468,14 +519,19 @@ def run_imaging(project, project_dir, recipe, output_dir, progress=None, cancel_
         if process.returncode or result.get("error"):
             raise RuntimeError(result.get("error", "The imaging worker failed."))
         generated = scratch / "result"
-        if generated.is_symlink() or not generated.is_dir() or {p.name for p in generated.iterdir()} != ARTIFACT_NAMES:
+        if generated.is_symlink() or not generated.is_dir() or {p.name for p in generated.iterdir()} != expected_artifact_names(recipe):
             raise RuntimeError("The imaging worker did not produce the required bounded artifacts.")
         artifacts = {}
-        for key, filename in (("display", "display.png"), ("linear", "linear.exr"), ("receipt", "receipt.json")):
+        artifact_files = [("display", "display.png"), ("linear", "linear.exr"), ("receipt", "receipt.json")]
+        if "motion.png" in expected_artifact_names(recipe):
+            artifact_files.append(("motion", "motion.png"))
+        for key, filename in artifact_files:
             digest, size = _hash_file(generated / filename, 1024 * 1024 * 1024)
             artifacts[key] = {"filename": filename, "sha256": digest, "size": size}
         receipt = _read_json(generated / "receipt.json")
-        for key in ("display", "linear"):
+        if set(receipt.get("artifacts", {})) != set(artifacts) - {"receipt"}:
+            raise RuntimeError("The imaging receipt contains an unexpected artifact set.")
+        for key in set(artifacts) - {"receipt"}:
             if receipt.get("artifacts", {}).get(key) != artifacts[key]:
                 raise RuntimeError("An imaging output does not match its receipt.")
         if receipt.get("recipe") != recipe or receipt.get("inputs") != inputs:

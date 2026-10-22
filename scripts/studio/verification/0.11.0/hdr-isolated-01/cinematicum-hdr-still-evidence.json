@@ -1,0 +1,198 @@
+{
+  "actual_measurements": {
+    "deliver": {
+      "codec": "ffv1",
+      "first_last_max_16bit_rgba_errors": [
+        0.0,
+        0.0
+      ],
+      "frames": 24,
+      "pixel_format": "gbrap16le"
+    },
+    "hdr": {
+      "geometric_error_max_pixels": 0.1632193666943364,
+      "linear_max": 73.46643829345703,
+      "median_relative_radiance_error": 0.0023072658619264657,
+      "motion_region_relative_error": 0.0021669935778561014,
+      "response_p95_residual_stops": 0.06100889995647128,
+      "shape": [
+        192,
+        320,
+        4
+      ],
+      "transparent_pixels": 5914
+    },
+    "panorama": {
+      "exposure_gains": [
+        [
+          1.0,
+          1.0,
+          1.0
+        ],
+        [
+          1.9992021322250366,
+          1.99920654296875,
+          1.9991931915283203
+        ],
+        [
+          0.999194324016571,
+          0.999196469783783,
+          0.9991872310638428
+        ]
+      ],
+      "geometric_error_max_pixels": 1.0807272907685723,
+      "linear_max": 0.776045024394989,
+      "median_linear_pixel_error": 7.891654968261719e-05,
+      "shape": [
+        193,
+        640,
+        4
+      ],
+      "transparent_pixels": 1477
+    }
+  },
+  "affected_regression": {
+    "distinct_tests_passed": 27,
+    "explicit_ok_lines_in_initial_log": 26,
+    "final_legacy_archive_check": {
+      "bytes": 865,
+      "path": "/workspace/scratch/091f394ee5df/cinematicum-hdr-still-legacy-archive-01.json",
+      "sha256": "4ee8c8eb8aa5698ecc18aca7eae70a0b0c39cecee692b307303981cabed9784f"
+    },
+    "initial_log": {
+      "bytes": 4540,
+      "path": "/workspace/scratch/091f394ee5df/cinematicum-hdr-still-regression-01.log",
+      "sha256": "b1435e5a578d89cc18b5aa482a61e2af25c288138efdd0fdd7234191949cc9f8"
+    },
+    "note": "Initial process exited zero, but its captured log ends before the final archive result. Only its 26 explicit OK records are counted; the final distinct archive test was recollected independently and passed without skips."
+  },
+  "base_commit": "a031a04e19007f7bac252c1f5b0f8d66db15371a",
+  "base_manifest": {
+    "bytes": 124111,
+    "path": "/workspace/scratch/091f394ee5df/cinematicum-hdr-still-base-manifest.json",
+    "sha256": "d584e7e7e81b4c1517a186aab6c5fadcbcb925e177afa693bf3d6ce10a3c6d83"
+  },
+  "browser_gate": {
+    "checks_failed": 0,
+    "checks_passed": 70,
+    "chromium_executable_sha256": "f661a8c124888f491966c29581f33c1953c86c15d77048bc91452b66743d5f3a",
+    "elapsed_ms": 39586,
+    "phases": [
+      {
+        "checks": 7,
+        "elapsed_seconds": 1.159,
+        "error": null,
+        "operation": "prepare",
+        "passed": true
+      },
+      {
+        "checks": 8,
+        "elapsed_seconds": 5.194,
+        "error": null,
+        "operation": "import",
+        "passed": true
+      },
+      {
+        "checks": 21,
+        "elapsed_seconds": 8.704,
+        "error": null,
+        "operation": "hdr",
+        "passed": true
+      },
+      {
+        "checks": 19,
+        "elapsed_seconds": 12.14,
+        "error": null,
+        "operation": "panorama",
+        "passed": true
+      },
+      {
+        "checks": 15,
+        "elapsed_seconds": 11.881,
+        "error": null,
+        "operation": "deliver",
+        "passed": true
+      }
+    ],
+    "report": {
+      "bytes": 1087,
+      "path": "/workspace/scratch/091f394ee5df/cinematicum-hdr-still-browser-06/browser-report.json",
+      "sha256": "cab09782e834f73807765ef2474f2a300f8eff6fce2649f11a0e9a72c4ad53cb"
+    },
+    "source_files": 111,
+    "source_inventory": {
+      "bytes": 14778,
+      "path": "/workspace/scratch/091f394ee5df/cinematicum-hdr-still-browser-06/source-inventory.json",
+      "sha256": "814d2c1493481119abfaf7b51b53efdc258380df3a57927cc4ac9d6f597a0105"
+    }
+  },
+  "candidate_ready_for_combined_freeze": true,
+  "change_manifest": {
+    "bytes": 4471,
+    "path": "/workspace/scratch/091f394ee5df/cinematicum-hdr-still-change-manifest.json",
+    "sha256": "09f553a2303e95c3cc8a56a159b61bce3b63412f6c82162a275c53bf8bffc43f"
+  },
+  "focused_numeric_gate": {
+    "elapsed_seconds": 31.407,
+    "log": {
+      "bytes": 2577,
+      "path": "/workspace/scratch/091f394ee5df/cinematicum-hdr-still-numeric-01.log",
+      "sha256": "8942494af68f3f59b020342514183e2127bb425a0e44c1dbd70cd4f6e01d18e7"
+    },
+    "passed": 13,
+    "skips": 0,
+    "tests": 13
+  },
+  "limits": {
+    "analysis_edge": 1536,
+    "delivery": "32-bit scene-linear RGBA EXR and 16-bit sRGB display PNG; motion mask preserved separately. The movie acceptance certifies the existing 16-bit SDR path only.",
+    "geometry_child_timeout_seconds": 240,
+    "hdr_brackets": [
+      2,
+      16
+    ],
+    "max_output_edge": 16384,
+    "max_output_pixels": 33554432,
+    "max_source_pixels": 8388608,
+    "max_total_source_pixels": 25165824,
+    "measured_response": "256-level per-channel relative inverse response, normalized at code128, with measured residuals; fixed aperture, ISO and white balance required",
+    "minimum_source_dimension": 32,
+    "motion": "Reference-based replacement only; clipped reference detail, blur and noise remain; no occluded reconstruction",
+    "owned_image_job_timeout_seconds": 300,
+    "panorama": "Planar homography only; connected textured static overlap, linear feathering, optional measured per-channel exposure gain; no spherical/cylindrical projection, parallax or moving-subject seam repair",
+    "panorama_images": [
+      2,
+      8
+    ]
+  },
+  "native_certified": false,
+  "patch": {
+    "bytes": 149711,
+    "path": "/workspace/scratch/091f394ee5df/cinematicum-hdr-still-candidate.patch",
+    "sha256": "64707af5981f3aafdc6d398bc39b8003b76b8ed0ab7a871d71f0db4da60f4b00"
+  },
+  "preserved_failed_attempts": [
+    "/workspace/scratch/091f394ee5df/cinematicum-hdr-still-browser-01",
+    "/workspace/scratch/091f394ee5df/cinematicum-hdr-still-browser-02",
+    "/workspace/scratch/091f394ee5df/cinematicum-hdr-still-browser-03",
+    "/workspace/scratch/091f394ee5df/cinematicum-hdr-still-browser-04",
+    "/workspace/scratch/091f394ee5df/cinematicum-hdr-still-browser-05"
+  ],
+  "required_next_acceptance": "Integrate into combined 0.11 source, regenerate source manifest, run one frozen whole suite and the native five-phase helper. This isolated browser gate does not certify native macOS or installation.",
+  "runtime_versions": {
+    "browser": "Chrome for Testing 134.0.6998.35",
+    "geometry": {
+      "numpy": "2.3.5",
+      "opencv": "4.11.0",
+      "python": "3.12.14"
+    },
+    "imaging": {
+      "OpenEXR": "3.4.15",
+      "numpy": "2.3.5",
+      "opencolorio": "2.6.0",
+      "python": "3.12.14"
+    },
+    "playwright": "1.51.1"
+  },
+  "schema": "cinematicum-isolated-still-photography-evidence-v1"
+}

@@ -45,7 +45,7 @@ from color_pipeline import import_cube, list_luts
 import recovery
 from collaboration import CollaborationError
 
-VERSION = "0.10.0"
+VERSION = "0.11.0"
 MAX_UPLOAD = 8 * 1024 * 1024 * 1024
 MAX_JSON = 8 * 1024 * 1024
 IDENTIFIER = re.compile(r"^[a-f0-9]{32}$")
@@ -564,7 +564,7 @@ class Store:
 
     def render(self, project_id, payload):
         profile = payload.get("profile", "h264")
-        if profile not in {"preview", "h264", "prores", "master16"}:
+        if profile not in {"preview", "h264", "prores", "master16", "master32"}:
             raise ValueError("Unknown export profile")
         project = payload.get("project", self.get(project_id))
         p = copy.deepcopy(project)
@@ -576,12 +576,14 @@ class Store:
             p = normalized
         if profile == "master16" and p.get("settings", {}).get("image_precision", "standard8") != "high16":
             raise ValueError("Select 16-bit SDR movie processing before exporting a 16-bit master.")
+        if profile == "master32" and p.get("settings", {}).get("image_precision") != "float32":
+            raise ValueError("Select Scene-linear Float32 processing before exporting the EXR movie master.")
         if not p.get("clips") and not p.get("titles") and not p.get("sequence_duration"):
             raise ValueError("Add media to the timeline before rendering")
         snapshot = copy.deepcopy(p)
 
         def work(job_id, progress, event):
-            suffix = ".mov" if profile == "prores" else ".mkv" if profile == "master16" else ".mp4"
+            suffix = ".zip" if profile == "master32" else ".mov" if profile == "prores" else ".mkv" if profile == "master16" else ".mp4"
             output = directory / "exports" / (job_id + suffix)
             report = render_project(snapshot, directory, output, profile=profile, progress=progress, cancel_event=event)
             if event.is_set():
@@ -721,6 +723,8 @@ class Store:
             result.update(asset=asset, url=f"/api/projects/{project_id}/media/{asset['id']}",
                           exr_url=base + "/linear.exr", receipt_url=base + "/receipt.json",
                           display_url=base + "/display.png")
+            if "motion" in result["artifacts"]:
+                result["motion_url"] = base + "/motion.png"
             return result
         return self.submit(project_id, "imaging", work, {"recipe": recipe})
 
@@ -1379,7 +1383,7 @@ class Handler(BaseHTTPRequestHandler):
     def dispatch_get(self):
         parsed = urlparse(self.path)
         parts = unquote(parsed.path).strip("/").split("/")
-        if parsed.path in {"/learned-tracking-ui.js", "/collaboration-ui.js", "/runtime-management-ui.js", "/reconstruction-ui.js", "/scene-processing-ui.js", "/multicam-sync-ui.js"}:
+        if parsed.path in {"/learned-tracking-ui.js", "/collaboration-ui.js", "/runtime-management-ui.js", "/reconstruction-ui.js", "/scene-processing-ui.js", "/multicam-sync-ui.js", "/multicam-monitor.js", "/float-movie-ui.js"}:
             return self.file(WEB / parsed.path[1:])
         if parts == ["api", "runtime-management"]:
             from runtime_management import inventory
@@ -1398,6 +1402,9 @@ class Handler(BaseHTTPRequestHandler):
         if parts == ["api", "imaging-capabilities"]:
             from imaging import imaging_capabilities
             return self.json(200, imaging_capabilities())
+        if parts == ["api", "float-movie-capabilities"]:
+            from float_movie import capabilities
+            return self.json(200, capabilities())
         if parts == ["api", "learned-capabilities"]:
             from learned_tracking import learned_capabilities
             return self.json(200, learned_capabilities())
@@ -1462,7 +1469,7 @@ class Handler(BaseHTTPRequestHandler):
                 path, identity = artifact(self.store.project_dir(project_id), parts[5], parts[6])
                 return self.file(path, download=True, etag=identity["sha256"])
             if len(parts) == 7 and parts[3:5] == ["imaging", "outputs"]:
-                if not IDENTIFIER.fullmatch(parts[5]) or parts[6] not in {"linear.exr", "display.png", "receipt.json"}:
+                if not IDENTIFIER.fullmatch(parts[5]) or parts[6] not in {"linear.exr", "display.png", "receipt.json", "motion.png"}:
                     raise ValueError("Invalid image processing artifact")
                 root = self.store.project_dir(project_id) / "imaging" / "outputs"
                 path = root / parts[5] / parts[6]
@@ -1804,7 +1811,7 @@ def main(argv=None):
     parser.add_argument("--comfy-url", default=os.environ.get("COMFYUI_URL", "http://127.0.0.1:8188"))
     parser.add_argument("--doctor", action="store_true", help="Report installed engines without starting the editor")
     parser.add_argument("--render", metavar="PROJECT_ID", help="Render a saved project without opening the editor")
-    parser.add_argument("--profile", choices=["preview", "h264", "prores", "master16"], default="h264")
+    parser.add_argument("--profile", choices=["preview", "h264", "prores", "master16", "master32"], default="h264")
     args = parser.parse_args(argv)
     try:
         store = Store(args.workspace, args.comfy_url)

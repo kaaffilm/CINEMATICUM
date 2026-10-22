@@ -442,7 +442,8 @@ def render(request):
         if not isinstance(executable, str) or not Path(executable).is_absolute() or not os.access(executable, os.X_OK):
             raise ValueError("The worker requires resolved installed image codec executables.")
     inputs = request.get("inputs")
-    expected = len(recipe["brackets"]) if recipe["operation"] == "hdr_merge" else 1
+    expected = (len(recipe["brackets"]) if recipe["operation"] == "hdr_merge" else
+                len(recipe["images"]) if recipe["operation"] == "panorama" else 1)
     if not isinstance(inputs, list) or len(inputs) != expected:
         raise ValueError("The imaging inputs do not match the recipe.")
     def progress(value):
@@ -457,7 +458,8 @@ def render(request):
             if descriptor.get("source_id") != recipe["source_id"] or descriptor["path"] != "imaging/sources/" + recipe["source_id"] + ".raw":
                 raise ValueError("The RAW source does not match its immutable recipe reference.")
         else:
-            expected_id = recipe["asset_id"] if recipe["operation"] == "ocio" else recipe["brackets"][index]["asset_id"]
+            expected_id = (recipe["asset_id"] if recipe["operation"] == "ocio" else
+                           recipe["images"][index] if recipe["operation"] == "panorama" else recipe["brackets"][index]["asset_id"])
             if not descriptor["path"].startswith("media/") or descriptor.get("asset_id") != expected_id:
                 raise ValueError("Image inputs must match admitted project media references.")
         staging = scratch / ("source-%02d" % index + source.suffix)
@@ -470,7 +472,8 @@ def render(request):
     config = _config(ocio, recipe["config"])
     scene_space = config.getRoleColorSpace("scene_linear")
     linear709 = config.getColorSpace("lin_rec709").getName()
-    alpha, details = None, {}
+    alpha, details, motion = None, {}, None
+    from still_photography import needed, process_images
     if recipe["operation"] == "ocio":
         rgba, details = decode_image(paths[0], ffmpeg, ffprobe, np)
         alpha = rgba[..., 3].copy()
@@ -478,6 +481,11 @@ def render(request):
         del rgba
     elif recipe["operation"] == "raw":
         rgb, details = develop_raw(paths[0], recipe, rawpy, np)
+        rgb = apply_ocio(rgb, config, linear709, scene_space, np)
+    elif needed(recipe):
+        images = (decode_image(path, ffmpeg, ffprobe, np)[0] for path in paths)
+        rgb, alpha, details, motion = process_images(images, recipe, scratch,
+            request.get("photograph_python"), np, progress=progress)
         rgb = apply_ocio(rgb, config, linear709, scene_space, np)
     else:
         order = sorted(range(len(paths)), key=lambda index: recipe["brackets"][index]["exposure_time"])
@@ -502,9 +510,15 @@ def render(request):
     display_stats = _stats(displayed, np)
     del rgb
     write_png16(output / "display.png", np.dstack((displayed, alpha)), np)
+    if motion is not None:
+        mask = motion.astype(np.float32) / 255
+        write_png16(output / "motion.png", np.dstack((mask, mask, mask, alpha)), np)
     progress(.9)
     artifacts = {}
-    for key, filename in (("linear", "linear.exr"), ("display", "display.png")):
+    artifact_files = [("linear", "linear.exr"), ("display", "display.png")]
+    if motion is not None:
+        artifact_files.append(("motion", "motion.png"))
+    for key, filename in artifact_files:
         digest, size = _hash_file(output / filename)
         artifacts[key] = {"filename": filename, "sha256": digest, "size": size}
     versions = {"python": sys.version.split()[0], "numpy": np.__version__, "opencolorio": ocio.__version__,

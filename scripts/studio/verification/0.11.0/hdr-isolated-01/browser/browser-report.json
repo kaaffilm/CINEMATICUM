@@ -1,0 +1,47 @@
+{
+  "native_certified": false,
+  "passed": true,
+  "phases": [
+    {
+      "checks": 7,
+      "elapsed_seconds": 1.159,
+      "error": null,
+      "operation": "prepare",
+      "passed": true
+    },
+    {
+      "checks": 8,
+      "elapsed_seconds": 5.194,
+      "error": null,
+      "operation": "import",
+      "passed": true
+    },
+    {
+      "checks": 21,
+      "elapsed_seconds": 8.704,
+      "error": null,
+      "operation": "hdr",
+      "passed": true
+    },
+    {
+      "checks": 19,
+      "elapsed_seconds": 12.14,
+      "error": null,
+      "operation": "panorama",
+      "passed": true
+    },
+    {
+      "checks": 15,
+      "elapsed_seconds": 11.881,
+      "error": null,
+      "operation": "deliver",
+      "passed": true
+    }
+  ],
+  "schema": "cinematicum-actual-still-photography-browser-acceptance-v1",
+  "chromium_executable_sha256": "f661a8c124888f491966c29581f33c1953c86c15d77048bc91452b66743d5f3a",
+  "elapsed_ms": 39586,
+  "python_exit_code": 0,
+  "error": null,
+  "report": "/workspace/scratch/091f394ee5df/cinematicum-hdr-still-browser-06/browser-report.json"
+}

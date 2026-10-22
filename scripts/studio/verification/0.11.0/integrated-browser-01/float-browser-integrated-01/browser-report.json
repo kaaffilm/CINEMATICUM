@@ -1,0 +1,21 @@
+{
+  "schema": "cinematicum-float32-browser-acceptance-v1",
+  "passed": false,
+  "engine_test_only": true,
+  "native_certified": false,
+  "issuance_effect": "NONE",
+  "elapsed_ms": 2086,
+  "chromium_sha256": "f661a8c124888f491966c29581f33c1953c86c15d77048bc91452b66743d5f3a",
+  "checks": [
+    {
+      "name": "owned-loopback-fixture",
+      "passed": true,
+      "detail": "http://127.0.0.1:37997"
+    }
+  ],
+  "error": "page.waitForFunction: EvalError: Refused to evaluate a string as JavaScript because 'unsafe-eval' is not an allowed source of script in the following Content Security Policy directive: \"script-src 'self'\".\n\n    at eval (<anonymous>)\n    at predicate (eval at evaluate (:234:30), <anonymous>:11:37)\n    at next (eval at evaluate (:234:30), <anonymous>:32:31)\n    at run (/workspace/scratch/091f394ee5df/cinematicum-next/scripts/studio/test_float_movie_browser.cjs:67:86)\n    at async /workspace/scratch/091f394ee5df/cinematicum-next/scripts/studio/test_float_movie_browser.cjs:140:7",
+  "requests": [],
+  "page_errors": [
+    "EvalError: Refused to evaluate a string as JavaScript because 'unsafe-eval' is not an allowed source of script in the following Content Security Policy directive: \"script-src 'self'\".\n"
+  ]
+}

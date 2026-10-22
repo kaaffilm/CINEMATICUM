@@ -1,0 +1,79 @@
+{
+  "id": "b18eaa846e274931b975b6d006f83214",
+  "project_id": "b19ea09d8a134fe5890b3505438718e4",
+  "kind": "render",
+  "state": "completed",
+  "progress": 1,
+  "created_at": 1792663024.4775512,
+  "error": null,
+  "result": {
+    "encoding": "OpenEXR ZIP FLOAT32 + PCM float32 WAV",
+    "pixel_format": "float32 RGBA",
+    "alpha_mode": "premultiplied",
+    "artifacts": 7,
+    "audio": {
+      "sample_rate": 48000,
+      "channels": 2,
+      "samples": 48000,
+      "encoding": "pcm_f32le"
+    },
+    "width": 32,
+    "height": 24,
+    "fps": 4,
+    "frame_rate": {
+      "numerator": 4,
+      "denominator": 1
+    },
+    "frames": 4,
+    "duration": 1,
+    "processing_bits": 32,
+    "image_precision": "float32",
+    "profile": "master32",
+    "color": {
+      "config": "studio-config-v5.0.0_aces-v2.1_ocio-v2.6",
+      "config_cache_id": "7a622835835238d8456c47cab01b2c3b:6001c324468d497f99aa06d3014798d8",
+      "config_sha256": "1748717664d82dd7a53f01e23d0692d2444049ac7d7f5c08d19618cec48506bf",
+      "default_input_space": "Linear Rec.709 (sRGB)",
+      "display": "sRGB - Display",
+      "display_encoding": "sRGB",
+      "display_processor": "53face6a-f4b6-1c6a-b0af-5088d6ed6ab8",
+      "float_storage": "OpenEXR FLOAT32 RGBA, ZIP compression, associated alpha",
+      "input_processors": {
+        "ACEScg": "99aa06d3-0147-98d8-6001-c324468d497f",
+        "Linear Rec.709 (sRGB)": "e6dbcae1-37ae-e24a-65c6-6f79bf329187"
+      },
+      "ocio_version": "2.6.0",
+      "output_processor": "c0edb850-1654-d77a-ea28-db2f3af46a66",
+      "output_space": "ACES2065-1",
+      "version": 1,
+      "view": "ACES 2.0 - SDR 100 nits (Rec.709)",
+      "working_space": "ACEScg"
+    },
+    "sources": [
+      {
+        "asset_id": "e0684e74f5554cd38e944a33acf16a35",
+        "path": "media/e0684e74f5554cd38e944a33acf16a35.mkv",
+        "sha256": "c8d0e3504552d6954e97cf307936f2735abaf2e712e0b6068ff0e1557a5a58d7",
+        "size": 97875
+      },
+      {
+        "asset_id": "b480fb8d37424143b9cbe982af01f6ab",
+        "path": "media/b480fb8d37424143b9cbe982af01f6ab.exr",
+        "sha256": "1ddc5c148d6bf8ce092553456d1a9eb06b7b8604d6295b865df5ef49db67a526",
+        "size": 947
+      }
+    ],
+    "project_sha256": "26a1a861fb8bcb7cf19c677a7daab24c129294fd20864cde95583c608d223104",
+    "dynamic_range": "Scene-linear float EXR; SDR display derivatives",
+    "hdr_monitoring": false,
+    "calibrated_display": false,
+    "issuance_effect": "NONE",
+    "path": "/workspace/scratch/091f394ee5df/cinematicum-float-browser-04/workspace/projects/b19ea09d8a134fe5890b3505438718e4/exports/b18eaa846e274931b975b6d006f83214.zip",
+    "sha256": "2cbd4a24c42fdcd3c45101963cb10634bda3d696a38e53a443eaee5ce80d521d",
+    "size": 471004,
+    "url": "/api/projects/b19ea09d8a134fe5890b3505438718e4/exports/b18eaa846e274931b975b6d006f83214.zip",
+    "filename": "b18eaa846e274931b975b6d006f83214.zip",
+    "project_revision": 4
+  },
+  "finished_at": 1792663025.3664706
+}

@@ -1,0 +1,64 @@
+{
+  "schema": "cinematicum-exact-head-ci-evidence-v1",
+  "run": {
+    "id": 39757512895,
+    "head_sha": "a031a04e19007f7bac252c1f5b0f8d66db15371a",
+    "status": "completed",
+    "conclusion": "success",
+    "html_url": "https://github.com/kaaffilm/CINEMATICUM/actions/runs/39757512895",
+    "created_at": "2026-10-22T09:42:37Z",
+    "updated_at": "2026-10-22T10:04:07Z",
+    "event": "pull_request"
+  },
+  "artifacts": [
+    {
+      "id": 12417248450,
+      "name": "studio-verification-receipts",
+      "size_in_bytes": 1161421,
+      "digest": "sha256:60f0ad36f7c916a7a083ec6b6f9a6e5079f2fb3114d34d3551b3b7037901766a",
+      "expired": false,
+      "created_at": "2026-10-22T10:03:53Z"
+    }
+  ],
+  "verification": {
+    "artifact_zip_sha256": "60f0ad36f7c916a7a083ec6b6f9a6e5079f2fb3114d34d3551b3b7037901766a",
+    "artifact_zip_bytes": 1161421,
+    "report_sha256": "de45703e8864615b92990da282c4e5e9931984af029093bcc475afa6145fe7e3",
+    "report_bytes": 127354,
+    "report_keys": [
+      "schema",
+      "version",
+      "passed",
+      "scope",
+      "source",
+      "runtime",
+      "managed_runtimes_before",
+      "optional_runtimes",
+      "tests_run",
+      "failures",
+      "errors",
+      "expected_failures",
+      "unexpected_successes",
+      "allowed_skips",
+      "unexpected_skips",
+      "managed_runtimes_after",
+      "managed_runtimes_unchanged",
+      "source_unchanged",
+      "source_after_sha256",
+      "elapsed_seconds"
+    ],
+    "outcome": {
+      "passed": true,
+      "tests_run": 812,
+      "failures": [],
+      "errors": [],
+      "expected_failures": [],
+      "allowed_skips": [],
+      "unexpected_skips": [],
+      "managed_runtimes_unchanged": true,
+      "source_unchanged": true,
+      "elapsed_seconds": 535.482
+    }
+  },
+  "receipt_note": "Full downloaded artifact and verification report are retained in the native execution workspace; the recorded ZIP SHA-256 matches GitHub's artifact digest."
+}

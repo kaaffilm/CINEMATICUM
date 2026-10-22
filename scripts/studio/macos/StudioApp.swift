@@ -15,6 +15,8 @@ final class StudioAppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate
     private var pendingOutput = ""
     private var recentOutput = ""
     private var quitting = false
+    private var editorDocumentReady = false
+    private var quitPreparationStarted = false
     private var repliedToQuit = false
     private var fatalErrorShown = false
     private var activeDownloads: [ObjectIdentifier: WKDownload] = [:]
@@ -211,18 +213,32 @@ final class StudioAppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate
         decisionHandler(attachment || !navigationResponse.canShowMIMEType ? .download : .allow)
     }
 
+    func webView(_ webView: WKWebView, didCommit navigation: WKNavigation!) {
+        editorDocumentReady = false
+    }
+
     func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
-        if !quitting && isLocal(webView.url) { showBusy(nil) }
+        guard isLocal(webView.url) else { return }
+        editorDocumentReady = true
+        if quitting { prepareEditorQuit() }
+        else { showBusy(nil) }
     }
 
     func webView(_ webView: WKWebView, didFailProvisionalNavigation navigation: WKNavigation!, withError error: Error) {
-        if (error as NSError).code != NSURLErrorCancelled && !quitting {
-            fatal("Could not open the local editor: \(error.localizedDescription)")
+        if (error as NSError).code != NSURLErrorCancelled {
+            if quitting { cancelQuit("The editor could not finish loading to save or check active work.\n\n\(error.localizedDescription)") }
+            else { fatal("Could not open the local editor: \(error.localizedDescription)") }
         }
     }
 
+    func webView(_ webView: WKWebView, didFail navigation: WKNavigation!, withError error: Error) {
+        self.webView(webView, didFailProvisionalNavigation: navigation, withError: error)
+    }
+
     func webViewWebContentProcessDidTerminate(_ webView: WKWebView) {
-        if !quitting { fatal("The editor view stopped. Reopen CINEMATICUM Studio to recover saved projects.") }
+        editorDocumentReady = false
+        if quitting { cancelQuit("The editor view stopped before saving or checking active work. The media engine is still open.") }
+        else { fatal("The editor view stopped. Reopen CINEMATICUM Studio to recover saved projects.") }
     }
 
     func webView(_ webView: WKWebView, createWebViewWith configuration: WKWebViewConfiguration,
@@ -358,32 +374,42 @@ final class StudioAppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate
         if quitting { return .terminateLater }
         quitting = true
         showBusy("Saving and closing…")
-        if isLocal(webView.url) && !fatalErrorShown {
-            webView.callAsyncJavaScript(
-                "if (typeof state !== 'undefined' && state.dirty && typeof saveProject === 'function') { await saveProject(false); } return await api('/api/prepare-quit', {method:'POST', body:{cancel_active:false}});",
-                arguments: [:], in: nil, in: .page
-            ) { [weak self] result in
-                guard let self = self, !self.repliedToQuit else { return }
-                switch result {
-                case .success(let value):
-                    guard let response = value as? [String: Any], let ready = response["ready"] as? Bool else {
-                        self.cancelQuit("The media engine did not confirm whether work is still running.")
-                        return
-                    }
-                    if ready { self.stopOwnedServer() }
-                    else { self.confirmActiveJobQuit((response["active_jobs"] as? [[String: Any]])?.count ?? 1) }
-                case .failure(let error):
-                    self.cancelQuit("The editor is still open because saving or checking active work failed.\n\n\(error.localizedDescription)")
-                }
-            }
+        if serverURL != nil && !fatalErrorShown {
+            // A local URL precedes deferred script loading and API bootstrap.
+            // didFinish resumes this request once the actual document exists;
+            // prepareNativeQuit then awaits the actual bootstrap response.
+            if editorDocumentReady { prepareEditorQuit() }
         } else {
             stopOwnedServer()
         }
         return .terminateLater
     }
 
+    private func prepareEditorQuit() {
+        guard quitting, editorDocumentReady, !quitPreparationStarted else { return }
+        quitPreparationStarted = true
+        webView.callAsyncJavaScript(
+            "return await prepareNativeQuit(false);",
+            arguments: [:], in: nil, in: .page
+        ) { [weak self] result in
+            guard let self = self, self.quitting, !self.repliedToQuit else { return }
+            switch result {
+            case .success(let value):
+                guard let response = value as? [String: Any], let ready = response["ready"] as? Bool else {
+                    self.cancelQuit("The media engine did not confirm whether work is still running.")
+                    return
+                }
+                if ready { self.stopOwnedServer() }
+                else { self.confirmActiveJobQuit((response["active_jobs"] as? [[String: Any]])?.count ?? 1) }
+            case .failure(let error):
+                self.cancelQuit("The editor is still open because saving or checking active work failed.\n\n\(error.localizedDescription)")
+            }
+        }
+    }
+
     private func cancelQuit(_ message: String? = nil) {
         quitting = false
+        quitPreparationStarted = false
         showBusy(nil)
         NSApp.reply(toApplicationShouldTerminate: false)
         if let message = message { showError(message) }
@@ -398,7 +424,7 @@ final class StudioAppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate
             guard let self = self else { return }
             guard answer == .alertSecondButtonReturn else { self.cancelQuit(); return }
             self.webView.callAsyncJavaScript(
-                "return await api('/api/prepare-quit', {method:'POST', body:{cancel_active:true}});",
+                "return await prepareNativeQuit(true);",
                 arguments: [:], in: nil, in: .page
             ) { [weak self] result in
                 guard let self = self else { return }

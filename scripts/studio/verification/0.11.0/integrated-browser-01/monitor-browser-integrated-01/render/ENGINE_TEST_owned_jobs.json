@@ -1,0 +1,42 @@
+[
+  {
+    "created_at": 1792663452.9878135,
+    "error": null,
+    "finished_at": 1792663453.423903,
+    "id": "c3e4c2ad4d6444af9c338c742f98de5e",
+    "kind": "render",
+    "progress": 1,
+    "project_id": "881ef080839c4b12b37ff46ee37b38a2",
+    "result": {
+      "alpha_mode": "opaque",
+      "color_space": "SDR Rec.709",
+      "duration": 5.0,
+      "dynamic_range": "SDR UNORM; no scene-linear HDR/ACES movie mastering",
+      "elapsed_seconds": 0.236,
+      "encoding": "prores",
+      "filename": "c3e4c2ad4d6444af9c338c742f98de5e.mov",
+      "fps": 24,
+      "frame_rate": {
+        "denominator": 1,
+        "numerator": 24
+      },
+      "frames": 120,
+      "has_audio": true,
+      "height": 64,
+      "image_precision": "standard8",
+      "issuance_status_changed": false,
+      "packet_verification": null,
+      "path": "/tmp/cinematicum-next-verification-20261022-01/monitor-browser-integrated-01/fixture/workspace/projects/881ef080839c4b12b37ff46ee37b38a2/exports/c3e4c2ad4d6444af9c338c742f98de5e.mov",
+      "pixel_format": "yuv422p10le",
+      "processing_bits": 8,
+      "profile": "prores",
+      "project_revision": 10,
+      "sha256": "c679440537b3d8efb064b1e33cc3d03bc8846e37bed4e7903f8d829285fa76bd",
+      "size": 1034662,
+      "transparent_background": false,
+      "url": "/api/projects/881ef080839c4b12b37ff46ee37b38a2/exports/c3e4c2ad4d6444af9c338c742f98de5e.mov",
+      "width": 96
+    },
+    "state": "completed"
+  }
+]

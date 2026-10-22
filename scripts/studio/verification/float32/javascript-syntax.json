@@ -1,0 +1,29 @@
+{
+  "passed": true,
+  "checks": [
+    {
+      "path": "scripts/studio/web/app.js",
+      "passed": true,
+      "sha256": "600be72675b518ae27cf201fe0e6e22888355eee6ba1738cf33bc54cc929c60e",
+      "error": null
+    },
+    {
+      "path": "scripts/studio/web/float-movie-ui.js",
+      "passed": true,
+      "sha256": "521c0d85a7c68ed4448593fc65b31cd213fd567327381902c4f6f6618ed1dccd",
+      "error": null
+    },
+    {
+      "path": "scripts/studio/test_float_movie_browser.cjs",
+      "passed": true,
+      "sha256": "efb59bcb447ee048a0713cc3ac80ab11e97b69cecb02dababce1a4a6d85c8453",
+      "error": null
+    },
+    {
+      "path": "scripts/studio/macos/FloatMovieSmoke.js",
+      "passed": true,
+      "sha256": "53c2c1226cb76501282d02d3232301db3cd2292d5d6e6c9363fb0d5d7fa3aa9d",
+      "error": null
+    }
+  ]
+}

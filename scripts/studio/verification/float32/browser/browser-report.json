@@ -1,0 +1,409 @@
+{
+  "schema": "cinematicum-float32-browser-acceptance-v1",
+  "passed": true,
+  "engine_test_only": true,
+  "native_certified": false,
+  "issuance_effect": "NONE",
+  "elapsed_ms": 10945,
+  "chromium_sha256": "efb2bece6f2f5bc00dc270162d2241c86d509ca4f4297b1eb0f5cd8894d050be",
+  "checks": [
+    {
+      "name": "owned-loopback-fixture",
+      "passed": true,
+      "detail": "http://127.0.0.1:43845"
+    },
+    {
+      "name": "standard-mode-before-edit",
+      "passed": true
+    },
+    {
+      "name": "actual-ocio-catalog",
+      "passed": true
+    },
+    {
+      "name": "working-space-undo",
+      "passed": true
+    },
+    {
+      "name": "working-space-redo",
+      "passed": true
+    },
+    {
+      "name": "explicit-sdr-display-view",
+      "passed": true,
+      "detail": "ACES 2.0 - SDR 100 nits (Rec.709)"
+    },
+    {
+      "name": "both-source-interpretations-editable",
+      "passed": true
+    },
+    {
+      "name": "exr-explicit-source-space",
+      "passed": true
+    },
+    {
+      "name": "source-space-undo",
+      "passed": true
+    },
+    {
+      "name": "source-space-redo",
+      "passed": true
+    },
+    {
+      "name": "saved-float-state",
+      "passed": true,
+      "detail": {
+        "image_precision": "float32",
+        "float_color": {
+          "version": 1,
+          "config": "studio-config-v5.0.0_aces-v2.1_ocio-v2.6",
+          "working_space": "ACEScg",
+          "output_space": "ACES2065-1",
+          "default_input_space": "Linear Rec.709 (sRGB)",
+          "display": "sRGB - Display",
+          "view": "ACES 2.0 - SDR 100 nits (Rec.709)"
+        },
+        "transparent_background": true
+      }
+    },
+    {
+      "name": "real-multitrack-media",
+      "passed": true,
+      "detail": [
+        {
+          "id": "ENGINE_TEST_picture",
+          "track": 0,
+          "start": 0,
+          "duration": 4
+        },
+        {
+          "id": "fa847ec0-a58d-4c47-afd8-42a6a73cb327",
+          "track": 1,
+          "start": 0,
+          "duration": 4
+        }
+      ]
+    },
+    {
+      "name": "reopened-processing-and-color",
+      "passed": true
+    },
+    {
+      "name": "master-profile-gates",
+      "passed": true
+    },
+    {
+      "name": "actual-processed-preview",
+      "passed": true
+    },
+    {
+      "name": "owned-master-download-name",
+      "passed": true,
+      "detail": "b18eaa846e274931b975b6d006f83214.zip"
+    },
+    {
+      "name": "browser-download-completed",
+      "passed": true
+    },
+    {
+      "name": "download-exact-receipt-bytes",
+      "passed": true,
+      "detail": {
+        "sha256": "2cbd4a24c42fdcd3c45101963cb10634bda3d696a38e53a443eaee5ce80d521d",
+        "size": 471004,
+        "url": "/api/projects/b19ea09d8a134fe5890b3505438718e4/exports/b18eaa846e274931b975b6d006f83214.zip?download=1"
+      }
+    },
+    {
+      "name": "zip-is-not-a-video-preview",
+      "passed": true
+    },
+    {
+      "name": "independent-downloaded-media-verification",
+      "passed": true,
+      "detail": "{\"passed\": true, \"frames\": 4, \"sources\": [{\"asset_id\": \"e0684e74f5554cd38e944a33acf16a35\", \"path\": \"media/e0684e74f5554cd38e944a33acf16a35.mkv\", \"sha256\": \"c8d0e3504552d6954e97cf307936f2735abaf2e712e0b6068ff0e1557a5a58d7\", \"size\": 97875}, {\"asset_id\": \"b480fb8d37424143b9cbe982af01f6ab\", \"path\": \"media/b480fb8d37424143b9cbe982af01f6ab.exr\", \"sha256\": \"1ddc5c148d6bf8ce092553456d1a9eb06b7b8604d6295b865df5ef49db67a526\", \"size\": 947}], \"audio\": {\"channels\": 2, \"encoding\": \"pcm_f32le\", \"sample_rate\": 48000, \"samples\": 48000}, \"output_space\": \"ACES2065-1\", \"minimum\": 0.34659308195114136, \"maximum\": 1.6473585367202759, \"issuance_effect\": \"NONE\"}\n"
+    },
+    {
+      "name": "no-browser-script-errors",
+      "passed": true,
+      "detail": []
+    },
+    {
+      "name": "no-external-requests",
+      "passed": true,
+      "detail": []
+    }
+  ],
+  "error": null,
+  "requests": [
+    {
+      "url": "/api/bootstrap",
+      "status": 200
+    },
+    {
+      "url": "/api/projects/b19ea09d8a134fe5890b3505438718e4/collaboration",
+      "status": 200
+    },
+    {
+      "url": "/api/projects/b19ea09d8a134fe5890b3505438718e4/recovery",
+      "status": 200
+    },
+    {
+      "url": "/api/projects/b19ea09d8a134fe5890b3505438718e4/media-inventory",
+      "status": 200
+    },
+    {
+      "url": "/api/projects/b19ea09d8a134fe5890b3505438718e4/media/e0684e74f5554cd38e944a33acf16a35",
+      "status": 206
+    },
+    {
+      "url": "/api/projects/b19ea09d8a134fe5890b3505438718e4/thumbnail/b480fb8d37424143b9cbe982af01f6ab",
+      "status": 200
+    },
+    {
+      "url": "/api/projects/b19ea09d8a134fe5890b3505438718e4/thumbnail/e0684e74f5554cd38e944a33acf16a35",
+      "status": 200
+    },
+    {
+      "url": "/api/projects/b19ea09d8a134fe5890b3505438718e4/waveform/e0684e74f5554cd38e944a33acf16a35",
+      "status": 200
+    },
+    {
+      "url": "/api/float-movie-capabilities",
+      "status": 200
+    },
+    {
+      "url": "/api/projects/b19ea09d8a134fe5890b3505438718e4/frame-preview",
+      "status": 202
+    },
+    {
+      "url": "/api/jobs/01c5e13c1a24432993b9252c47b00386",
+      "status": 200
+    },
+    {
+      "url": "/api/jobs/01c5e13c1a24432993b9252c47b00386",
+      "status": 200
+    },
+    {
+      "url": "/api/projects/b19ea09d8a134fe5890b3505438718e4/checkpoint",
+      "status": 200
+    },
+    {
+      "url": "/api/jobs/01c5e13c1a24432993b9252c47b00386",
+      "status": 200
+    },
+    {
+      "url": "/api/jobs/01c5e13c1a24432993b9252c47b00386",
+      "status": 200
+    },
+    {
+      "url": "/api/jobs/01c5e13c1a24432993b9252c47b00386/cancel",
+      "status": 200
+    },
+    {
+      "url": "/api/projects/b19ea09d8a134fe5890b3505438718e4/thumbnail/e0684e74f5554cd38e944a33acf16a35",
+      "status": 200
+    },
+    {
+      "url": "/api/projects/b19ea09d8a134fe5890b3505438718e4/thumbnail/b480fb8d37424143b9cbe982af01f6ab",
+      "status": 200
+    },
+    {
+      "url": "/api/projects/b19ea09d8a134fe5890b3505438718e4/frame-preview",
+      "status": 202
+    },
+    {
+      "url": "/api/jobs/44e003b32b21437092304c0c90d9600b",
+      "status": 200
+    },
+    {
+      "url": "/api/jobs/44e003b32b21437092304c0c90d9600b",
+      "status": 200
+    },
+    {
+      "url": "/api/jobs/44e003b32b21437092304c0c90d9600b/cancel",
+      "status": 200
+    },
+    {
+      "url": "/api/projects/b19ea09d8a134fe5890b3505438718e4/thumbnail/e0684e74f5554cd38e944a33acf16a35",
+      "status": 200
+    },
+    {
+      "url": "/api/projects/b19ea09d8a134fe5890b3505438718e4/thumbnail/b480fb8d37424143b9cbe982af01f6ab",
+      "status": 200
+    },
+    {
+      "url": "/api/projects/b19ea09d8a134fe5890b3505438718e4/thumbnail/b480fb8d37424143b9cbe982af01f6ab",
+      "status": 200
+    },
+    {
+      "url": "/api/projects/b19ea09d8a134fe5890b3505438718e4/thumbnail/e0684e74f5554cd38e944a33acf16a35",
+      "status": 200
+    },
+    {
+      "url": "/api/projects/b19ea09d8a134fe5890b3505438718e4/thumbnail/b480fb8d37424143b9cbe982af01f6ab",
+      "status": 200
+    },
+    {
+      "url": "/api/projects/b19ea09d8a134fe5890b3505438718e4/frame-preview",
+      "status": 202
+    },
+    {
+      "url": "/api/projects/b19ea09d8a134fe5890b3505438718e4/thumbnail/e0684e74f5554cd38e944a33acf16a35",
+      "status": 200
+    },
+    {
+      "url": "/api/projects/b19ea09d8a134fe5890b3505438718e4/thumbnail/b480fb8d37424143b9cbe982af01f6ab",
+      "status": 200
+    },
+    {
+      "url": "/api/jobs/25998423e85448a08f25a6ce7286fc14/cancel",
+      "status": 200
+    },
+    {
+      "url": "/api/projects/b19ea09d8a134fe5890b3505438718e4",
+      "status": 200
+    },
+    {
+      "url": "/api/projects/b19ea09d8a134fe5890b3505438718e4/frame-preview",
+      "status": 202
+    },
+    {
+      "url": "/api/projects/b19ea09d8a134fe5890b3505438718e4/recovery",
+      "status": 200
+    },
+    {
+      "url": "/api/jobs/76ef0be40a84479f92b2d4f9e96b8c57",
+      "status": 200
+    },
+    {
+      "url": "/api/bootstrap",
+      "status": 200
+    },
+    {
+      "url": "/api/projects/b19ea09d8a134fe5890b3505438718e4/collaboration",
+      "status": 200
+    },
+    {
+      "url": "/api/projects/b19ea09d8a134fe5890b3505438718e4/recovery",
+      "status": 200
+    },
+    {
+      "url": "/api/projects/b19ea09d8a134fe5890b3505438718e4/thumbnail/e0684e74f5554cd38e944a33acf16a35",
+      "status": 200
+    },
+    {
+      "url": "/api/projects/b19ea09d8a134fe5890b3505438718e4/thumbnail/b480fb8d37424143b9cbe982af01f6ab",
+      "status": 200
+    },
+    {
+      "url": "/api/projects/b19ea09d8a134fe5890b3505438718e4/waveform/e0684e74f5554cd38e944a33acf16a35",
+      "status": 200
+    },
+    {
+      "url": "/api/projects/b19ea09d8a134fe5890b3505438718e4/media-inventory",
+      "status": 200
+    },
+    {
+      "url": "/api/projects/b19ea09d8a134fe5890b3505438718e4/frame-preview",
+      "status": 202
+    },
+    {
+      "url": "/api/jobs/ed6694a5dcc84b71817d2f6c97ad14c2",
+      "status": 200
+    },
+    {
+      "url": "/api/jobs/ed6694a5dcc84b71817d2f6c97ad14c2",
+      "status": 200
+    },
+    {
+      "url": "/api/float-movie-capabilities",
+      "status": 200
+    },
+    {
+      "url": "/api/jobs/ed6694a5dcc84b71817d2f6c97ad14c2",
+      "status": 200
+    },
+    {
+      "url": "/api/jobs/ed6694a5dcc84b71817d2f6c97ad14c2",
+      "status": 200
+    },
+    {
+      "url": "/api/jobs/ed6694a5dcc84b71817d2f6c97ad14c2",
+      "status": 200
+    },
+    {
+      "url": "/api/jobs/ed6694a5dcc84b71817d2f6c97ad14c2",
+      "status": 200
+    },
+    {
+      "url": "/api/projects/b19ea09d8a134fe5890b3505438718e4/previews/736c81b9b930f74194e2fbcbe16c0b91fb11050a6dccd95e1c160286045e7a8a.png",
+      "status": 200
+    },
+    {
+      "url": "/api/projects/b19ea09d8a134fe5890b3505438718e4/previews/736c81b9b930f74194e2fbcbe16c0b91fb11050a6dccd95e1c160286045e7a8a.png",
+      "status": 200
+    },
+    {
+      "url": "/api/projects/b19ea09d8a134fe5890b3505438718e4",
+      "status": 200
+    },
+    {
+      "url": "/api/projects/b19ea09d8a134fe5890b3505438718e4/recovery",
+      "status": 200
+    },
+    {
+      "url": "/api/projects/b19ea09d8a134fe5890b3505438718e4/render",
+      "status": 202
+    },
+    {
+      "url": "/api/jobs/b18eaa846e274931b975b6d006f83214",
+      "status": 200
+    },
+    {
+      "url": "/api/projects/b19ea09d8a134fe5890b3505438718e4/frame-preview",
+      "status": 202
+    },
+    {
+      "url": "/api/jobs/b3a8630485fc49c9b09151d0e4632917",
+      "status": 200
+    },
+    {
+      "url": "/api/jobs/b3a8630485fc49c9b09151d0e4632917",
+      "status": 200
+    },
+    {
+      "url": "/api/jobs/b18eaa846e274931b975b6d006f83214",
+      "status": 200
+    },
+    {
+      "url": "/api/jobs/b3a8630485fc49c9b09151d0e4632917",
+      "status": 200
+    },
+    {
+      "url": "/api/jobs/b3a8630485fc49c9b09151d0e4632917",
+      "status": 200
+    },
+    {
+      "url": "/api/jobs/b18eaa846e274931b975b6d006f83214",
+      "status": 200
+    },
+    {
+      "url": "/api/jobs/b3a8630485fc49c9b09151d0e4632917",
+      "status": 200
+    },
+    {
+      "url": "/api/projects/b19ea09d8a134fe5890b3505438718e4/previews/4ef184a4c9215e1bc4d6778869048734887c414a3a5fa02c256748892402e321.png",
+      "status": 200
+    },
+    {
+      "url": "/api/projects/b19ea09d8a134fe5890b3505438718e4/previews/4ef184a4c9215e1bc4d6778869048734887c414a3a5fa02c256748892402e321.png",
+      "status": 200
+    },
+    {
+      "url": "/api/jobs/b18eaa846e274931b975b6d006f83214",
+      "status": 200
+    }
+  ],
+  "page_errors": []
+}

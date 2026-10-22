@@ -1,0 +1,184 @@
+{
+  "schema": "cinematicum-isolated-source-patch-v1",
+  "base_commit": "a031a04e19007f7bac252c1f5b0f8d66db15371a",
+  "isolated_baseline_commit": "acb51ed56580c82acb606f37458e3e1ca0f8491e",
+  "candidate_root": "/workspace/scratch/091f394ee5df/cinematicum-otio-candidate",
+  "files": [
+    {
+      "path": "scripts/studio/OTIO_INTERCHANGE.md",
+      "base": null,
+      "candidate": {
+        "bytes": 9948,
+        "sha256": "538ef29ba6235a30dde1664e05fe76a46118fdd64ffa011c8ce0b6c1b350bdbd"
+      }
+    },
+    {
+      "path": "scripts/studio/README.md",
+      "base": {
+        "git_blob_sha1": "85becf6a6d78be2224da021eaa7930b16b940e6c",
+        "bytes": 69796,
+        "sha256": "54f03f5741d13c96d374139148db70b027c0299c1c088fe7ecdf3deb0f47388f"
+      },
+      "candidate": {
+        "bytes": 70698,
+        "sha256": "d2b4e874d150ac0bee3baa8d8144d8ec1ceb10db761fcc8a4d082382a2963d61"
+      }
+    },
+    {
+      "path": "scripts/studio/capabilities.json",
+      "base": {
+        "git_blob_sha1": "9b26fa976f2428fc074d00f130cada2612549ac5",
+        "bytes": 66390,
+        "sha256": "5c254d2179be56826094856ca4dc9ad6f922a7513f4e12b24d9d0513e8eec108"
+      },
+      "candidate": {
+        "bytes": 66873,
+        "sha256": "48c18b58a56f025ed6a7dc39bd7c994981af075e4bab068c0e4aa0ace82add75"
+      }
+    },
+    {
+      "path": "scripts/studio/editorial.py",
+      "base": {
+        "git_blob_sha1": "6f9e28c02a2357ee00e35c9f2e0f37af1ce848d2",
+        "bytes": 21784,
+        "sha256": "c1d5d24c4c0b13f6a22c0ecbbde701f86e5e77afa20525fc51ed60d5a337aa3a"
+      },
+      "candidate": {
+        "bytes": 24554,
+        "sha256": "7dc456cdc9e458bb00ad3b5eebb3ac3f111b348268a638c5dbe11ebd06a19fa9"
+      }
+    },
+    {
+      "path": "scripts/studio/engine.py",
+      "base": {
+        "git_blob_sha1": "241ba96e18e20994bcc5eb93f6bd23806c5139e6",
+        "bytes": 89822,
+        "sha256": "7e8fdd91ef340e80de7af93392aaeea5fbd152f9f19a6a4267b4bd681644771c"
+      },
+      "candidate": {
+        "bytes": 92597,
+        "sha256": "25a49d162b9ea9823ac3b599b65abc25dfce19659768238ffd21478bf0dddbc5"
+      }
+    },
+    {
+      "path": "scripts/studio/install_macos.py",
+      "base": {
+        "git_blob_sha1": "7b0a072c07871ac1b4621b636353c49ae60ee7ae",
+        "bytes": 19719,
+        "sha256": "d2b3d1b9715eb100cd6a3216bee2b790f4956008d960cf93241c18cfb19df3f8"
+      },
+      "candidate": {
+        "bytes": 19743,
+        "sha256": "3494e55623cdc95384eb8a4342bceb1ece3be1c433ff789234ae4963af6b368e"
+      }
+    },
+    {
+      "path": "scripts/studio/interchange.py",
+      "base": {
+        "git_blob_sha1": "6d66e781fe40948f2b5ea0e14d8aa2a39feb3c85",
+        "bytes": 34584,
+        "sha256": "f3e7eafc2ac8a7d2f2b4f5b0783bf487bc7194277c2e9c5f1e6b710a78ac276e"
+      },
+      "candidate": {
+        "bytes": 35108,
+        "sha256": "4caa275c02fb4b3aef4c809d97a5fb6b349345fe6628ae816b80e0462a0b7d1d"
+      }
+    },
+    {
+      "path": "scripts/studio/macos/OtioCompositionsSmoke.js",
+      "base": null,
+      "candidate": {
+        "bytes": 11252,
+        "sha256": "b3213ca720ffdc5440717d250f744d52f92f929803a59ff58e4f043f75e5199b"
+      }
+    },
+    {
+      "path": "scripts/studio/otio_compositions.py",
+      "base": null,
+      "candidate": {
+        "bytes": 34498,
+        "sha256": "ea51c513caf6a6fa60290ce3ca3c26d381983146afdfd9d1440e8d9494666a2b"
+      }
+    },
+    {
+      "path": "scripts/studio/test_interchange.py",
+      "base": {
+        "git_blob_sha1": "5ea28e99892a273a62670121214d5ff1074206a0",
+        "bytes": 28954,
+        "sha256": "9793af0f7c840e47f8177a610eceb2aa934ab9cc0ce45c7ec89b9daec91b87be"
+      },
+      "candidate": {
+        "bytes": 29093,
+        "sha256": "548990f68a9899a4fb56a64b3ccd23f963fa20833a3b341b57d182a238a626cb"
+      }
+    },
+    {
+      "path": "scripts/studio/test_otio_compositions.py",
+      "base": null,
+      "candidate": {
+        "bytes": 18203,
+        "sha256": "d5cf4492ab7776aa824490e4f9f42ff93d1370096e6addf90d3ceddb5e42b8c0"
+      }
+    },
+    {
+      "path": "scripts/studio/test_otio_compositions_browser.cjs",
+      "base": null,
+      "candidate": {
+        "bytes": 8033,
+        "sha256": "4412a951ffbf16a89101680e253aef1560b9966f4792067c35897b34b44e86d7"
+      }
+    },
+    {
+      "path": "scripts/studio/test_otio_compositions_macos.py",
+      "base": null,
+      "candidate": {
+        "bytes": 21798,
+        "sha256": "2b63e40357baf3c5eb27f5a439ea17c707b1c2d910406071e91bb2733eaa09ea"
+      }
+    },
+    {
+      "path": "scripts/studio/web/index.html",
+      "base": {
+        "git_blob_sha1": "c197a3b242eee67683f6f18be00333b941363f17",
+        "bytes": 19123,
+        "sha256": "458b227373bcb99a273c82e21052cfe1af02e78fe864b92ceb514717653d970c"
+      },
+      "candidate": {
+        "bytes": 19135,
+        "sha256": "515c72a80b1e266c7896356ae4dfbc9e015a3582d56863c656d1014e01b75a6c"
+      }
+    },
+    {
+      "path": "scripts/studio/web/interchange-ui.js",
+      "base": {
+        "git_blob_sha1": "2b3e5cd91344341e9f2e5c9dbfa42e20edeadcec",
+        "bytes": 20373,
+        "sha256": "a61b3c6abe7d73b659dc4a153a6c868bcfaa8b4e924cad915b3518da580ac3ec"
+      },
+      "candidate": {
+        "bytes": 20586,
+        "sha256": "58bbeee0061c5b1f74dbaa89a4acded0f28991eb3f254d52fe215300632c241f"
+      }
+    },
+    {
+      "path": "scripts/studio/web/sequence-playback.js",
+      "base": {
+        "git_blob_sha1": "82b1e17c53c87e5d98755d357f134f0863e56cab",
+        "bytes": 12147,
+        "sha256": "4828da4ec0eba70b5f3356395b17022ee77077632d8dbdbf47cf740f6e7f4ab6"
+      },
+      "candidate": {
+        "bytes": 12566,
+        "sha256": "cf4d930127cbd814edffc4e121771f76ba6afb30508f0ea6deab190efc8a74d7"
+      }
+    }
+  ],
+  "patch": {
+    "path": "/workspace/scratch/091f394ee5df/otio-interchange-delivery/otio-composition-interchange.patch",
+    "bytes": 148729,
+    "sha256": "2878482e05d7317a21621a92cd296dffaaf58d4fb0e9e14c3f58b1d257fb3dad"
+  },
+  "base_git_blob_identity_verified": true,
+  "reverse_apply_check_passed": true,
+  "native_certified": false
+}

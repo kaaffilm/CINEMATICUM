@@ -83,6 +83,36 @@ jobs:
             --python "$RUNNER_TEMP/cinematicum-runtimes/verification/bin/python" \
             --browser "$CINEMATICUM_BROWSER" \
             --evidence "$RUNNER_TEMP/multicam-browser-acceptance"
+      - name: Accept simultaneous camera monitoring and continuous locked source audio
+        run: |
+          node scripts/studio/test_multicam_monitor_browser.cjs \
+            --python "$RUNNER_TEMP/cinematicum-runtimes/verification/bin/python" \
+            --browser "$CINEMATICUM_BROWSER" \
+            --evidence "$RUNNER_TEMP/multicam-monitor-acceptance"
+      - name: Accept scene-linear Float32 editing, actual EXR master and download
+        run: |
+          node scripts/studio/test_float_movie_browser.cjs \
+            --python "$RUNNER_TEMP/cinematicum-runtimes/verification/bin/python" \
+            --browser "$CINEMATICUM_BROWSER" \
+            --evidence "$RUNNER_TEMP/float-movie-acceptance"
+      - name: Accept OTIO retiming, nested dissolves, source audio and archive restore
+        run: |
+          node scripts/studio/test_otio_compositions_browser.cjs \
+            --python "$RUNNER_TEMP/cinematicum-runtimes/verification/bin/python" \
+            --browser "$CINEMATICUM_BROWSER" \
+            --evidence "$RUNNER_TEMP/otio-compositions-acceptance"
+      - name: Accept authenticated startup quit, saved edits and active render protection
+        run: |
+          node scripts/studio/test_startup_quit_browser.cjs \
+            --python "$RUNNER_TEMP/cinematicum-runtimes/verification/bin/python" \
+            --browser "$CINEMATICUM_BROWSER" \
+            --evidence "$RUNNER_TEMP/startup-quit-acceptance"
+      - name: Accept measured HDR photographs, panoramas, lossless delivery and archive restore
+        run: |
+          node scripts/studio/test_still_photography_browser.cjs \
+            --python "$RUNNER_TEMP/cinematicum-runtimes/verification/bin/python" \
+            --browser "$CINEMATICUM_BROWSER" \
+            --evidence "$RUNNER_TEMP/still-photography-acceptance"
       - name: Preserve verification receipts
         if: always()
         uses: actions/upload-artifact@v4
@@ -99,4 +129,14 @@ jobs:
             ${{ runner.temp }}/cinematicum-runtimes/*.log
             ${{ runner.temp }}/multicam-browser-acceptance/**/*.json
             ${{ runner.temp }}/multicam-browser-acceptance/**/*.png
+            ${{ runner.temp }}/multicam-monitor-acceptance/**/*.json
+            ${{ runner.temp }}/multicam-monitor-acceptance/**/*.png
+            ${{ runner.temp }}/float-movie-acceptance/**/*.json
+            ${{ runner.temp }}/float-movie-acceptance/**/*.png
+            ${{ runner.temp }}/otio-compositions-acceptance/**/*.json
+            ${{ runner.temp }}/otio-compositions-acceptance/**/*.png
+            ${{ runner.temp }}/startup-quit-acceptance/**/*.json
+            ${{ runner.temp }}/startup-quit-acceptance/**/*.png
+            ${{ runner.temp }}/still-photography-acceptance/**/*.json
+            ${{ runner.temp }}/still-photography-acceptance/**/*.png
           if-no-files-found: warn

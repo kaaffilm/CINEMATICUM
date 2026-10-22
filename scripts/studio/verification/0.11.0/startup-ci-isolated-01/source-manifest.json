@@ -1,0 +1,38 @@
+{
+  "schema": "cinematicum-startup-quit-ci-follow-on-v1",
+  "files": [
+    {
+      "path": "scripts/studio/test_startup_quit_browser.cjs",
+      "base_sha256": "952289f60346a0f6fd59e64af2e26e98b6a6955510d5d67e13991bd7d73cd3de",
+      "sha256": "70aabcd8d96f9b6c8ad7720890626620e7828ede0d38cd232bea6ea3a26b9cfa",
+      "bytes": 15595
+    }
+  ],
+  "patch": {
+    "path": "/workspace/scratch/091f394ee5df/cinematicum-startup-quit-ci.patch",
+    "sha256": "200d2cbb58c3f691da14ee83936584d7736d707c473be210c3d6f1e0af598811",
+    "bytes": 8680,
+    "applies_cleanly_to_parent_next": true
+  },
+  "verification": {
+    "report": "/workspace/scratch/091f394ee5df/cinematicum-startup-quit-cft-ci-02/report.json",
+    "report_sha256": "e4a4920ba4f1b95019ff3f934a09453b19630c6ce835e57c82d8172ef86f2fa7",
+    "passed": true,
+    "checks": 32,
+    "elapsed_seconds": 21.206,
+    "browser": {
+      "executable": "/workspace/scratch/091f394ee5df/cinematicum-runtimes/chrome-for-testing-134.0.6998.35/chrome-linux64/chrome",
+      "version": "134.0.6998.35",
+      "playwright_version": "1.51.1"
+    },
+    "browser_sha256": "f661a8c124888f491966c29581f33c1953c86c15d77048bc91452b66743d5f3a",
+    "legacy_reproduction": {
+      "requested": false,
+      "status": "not-requested"
+    },
+    "actual_product_csp_preserved": true
+  },
+  "previous_39_check_evidence_and_all_other_candidate_files_unchanged": true,
+  "ci_command": "node scripts/studio/test_startup_quit_browser.cjs --python \"$RUNNER_TEMP/cinematicum-runtimes/verification/bin/python\" --browser \"$CINEMATICUM_BROWSER\" --evidence \"$RUNNER_TEMP/startup-quit-acceptance\"",
+  "ci_environment": "Existing bootstrap_verification_linux.py base stage provides NODE_PATH pointing to its pinned Playwright 1.51.1 driver."
+}

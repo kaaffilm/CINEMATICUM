@@ -31,6 +31,7 @@ if __package__:
     from .lens_assets import prepare_lens_maps
     from .roto_assets import prepare_roto_mask
     from .timebase import parse_rate, project_rate
+    from .multicam import validate_lock, resolve_audio, verify_sources as verify_multicam_sources
     from .tracking import validate_motion
     from .color_pipeline import validate_pipeline, compile_pipeline
     from .media_orientation import still_display_info
@@ -41,6 +42,7 @@ else:
     from lens_assets import prepare_lens_maps
     from roto_assets import prepare_roto_mask
     from timebase import parse_rate, project_rate
+    from multicam import validate_lock, resolve_audio, verify_sources as verify_multicam_sources
     from tracking import validate_motion
     from color_pipeline import validate_pipeline, compile_pipeline
     from media_orientation import still_display_info
@@ -259,12 +261,12 @@ def _validate_single_project(project, project_dir, sequence_assets=None):
     if not isinstance(settings, dict):
         raise ValueError("Project settings must be an object.")
     precision = settings.get("image_precision", "standard8")
-    if not isinstance(precision, str) or precision not in {"standard8", "high16"}:
-        raise ValueError("Image precision must be standard8 or high16.")
+    if not isinstance(precision, str) or precision not in {"standard8", "high16", "float32"}:
+        raise ValueError("Image precision must be standard8, high16 or float32.")
     if not isinstance(settings.get("transparent_background", False), bool):
         raise ValueError("Transparent background must be true or false.")
-    if settings.get("transparent_background") and precision != "high16":
-        raise ValueError("A transparent movie background requires High 16-bit processing.")
+    if settings.get("transparent_background") and precision not in {"high16", "float32"}:
+        raise ValueError("A transparent movie background requires High 16-bit or Float32 processing.")
     if precision == "high16" and width * height > 8_388_608:
         raise ValueError("High 16-bit movies support at most 8,388,608 canvas pixels (up to 3840 × 2160).")
     for key, limit in (("assets", 512), ("clips", 256), ("titles", 128)):
@@ -459,13 +461,13 @@ def _validate_single_project(project, project_dir, sequence_assets=None):
                                              animation_duration=c["animation_duration"],
                                              animation_start=c["animation_start"], precision=precision)
             validate_media_sources(c["compositor"], assets, fps)
-        if Path(a["path"]).suffix.lower() == ".exr":
+        if Path(a["path"]).suffix.lower() == ".exr" and precision != "float32":
             raise ValueError("Develop this EXR through OCIO before adding its display image to the timeline. The float original stays preserved.")
         if c.get("color_pipeline") is not None:
             if c["track"] < 0 or a["kind"] == "audio":
                 raise ValueError("Color pipelines belong to picture clips on video tracks.")
             c["color_pipeline"] = validate_pipeline(c["color_pipeline"], project_dir)
-        if a["kind"] != "audio" and a.get("color_transfer") in {"smpte2084", "arib-std-b67"}:
+        if precision != "float32" and a["kind"] != "audio" and a.get("color_transfer") in {"smpte2084", "arib-std-b67"}:
             raise ValueError("HDR PQ/HLG media needs an explicit SDR conversion. This workspace renders SDR Rec.709.")
         if "learned_recipe" in c or "learned_bindings" in c:
             if __package__:
@@ -554,9 +556,14 @@ def _validate_single_project(project, project_dir, sequence_assets=None):
             format_timecode(0, rate, drop_frame=True)
     if __package__:
         from .studio_tools import validate_authoring_documents
+        from .float_movie import validate_float_project
+        from .editorial import validate_dissolve
     else:
         from studio_tools import validate_authoring_documents
-    return validate_authoring_documents(p, project_dir)
+        from float_movie import validate_float_project
+        from editorial import validate_dissolve
+    validate_dissolve(p)
+    return validate_authoring_documents(validate_float_project(p), project_dir)
 
 
 def validate_project(project, project_dir):
@@ -635,6 +642,7 @@ def validate_project(project, project_dir):
         from multicam_sync import validate_group_synchronization
     for group in groups:
         validate_group_synchronization(group, media, project_rate(result))
+        validate_lock(result, group, media)
     group_map = {group["id"]: group for group in groups}
     for value in normalized.values():
         for clip in value["clips"]:
@@ -647,10 +655,16 @@ def validate_project(project, project_dir):
             angle = next((angle for angle in (group or {}).get("angles", []) if angle["id"] == multicam.get("angle_id")), None)
             if not angle or angle["asset_id"] != clip.get("asset_id"):
                 raise ValueError("A multicamera clip must retain its selected angle's source identity.")
+            resolve_audio(result, clip, media)
     return result
 
 
 def get_capabilities():
+    if __package__:
+        from .imaging import find_imaging_python
+    else:
+        from imaging import find_imaging_python
+    float_configured = bool(find_imaging_python())
     ffmpeg, ffprobe = shutil.which("ffmpeg"), shutil.which("ffprobe")
     filters, encoders = set(), set()
     if ffmpeg:
@@ -670,7 +684,9 @@ def get_capabilities():
             "prores": "prores_ks" in encoders, "color_space": "SDR Rec.709",
             "master16": "ffv1" in encoders and HIGH16_FILTERS <= filters,
             "high_depth_movie": HIGH16_FILTERS <= filters,
-            "image_precisions": ["standard8", "high16"] if HIGH16_FILTERS <= filters else ["standard8"],
+            "image_precisions": (["standard8", "high16"] if HIGH16_FILTERS <= filters else ["standard8"]) + (["float32"] if float_configured else []),
+            "float_movie_runtime_configured": float_configured,
+            "float_movie_capabilities_url": "/api/float-movie-capabilities",
             "keyframes": list(ANIMATED_PROPERTIES), "interpolations": sorted(INTERPOLATIONS),
             "retime": all(name in filters for name in ("reverse", "areverse", "atempo")),
             "audio_mixer": all(name in filters for name in ("aeval", "afade", "pan", "amix")),
@@ -713,11 +729,11 @@ def _curve(clip, key, fps, variable="t", *, frame_variable=None, include_base=Tr
     return f"if(lt({variable},{_decimal(points[0][0])}),{_decimal(points[0][1])},{expression})"
 
 
-def _fade_curve(clip, fps):
+def _fade_curve(clip, fps, audio_origin=0):
     """Sample-accurate linear fade envelope in its original frame domain."""
     audio = clip["audio"]
     rate = parse_rate(fps)
-    position = _audio_frame_coordinate(clip, rate, audio["fade_offset"])
+    position = _audio_frame_coordinate(clip, rate, audio["fade_offset"], audio_origin)
     factors = ["1"]
     if audio["fade_in"]:
         factors.append(f"max(0,{position}/{audio['fade_in']})")
@@ -729,10 +745,10 @@ def _fade_curve(clip, fps):
     return expression
 
 
-def _audio_frame_coordinate(clip, rate, offset):
+def _audio_frame_coordinate(clip, rate, offset, audio_origin=0):
     """Evaluate the preserved domain on the same sample grid on both sides of a cut."""
-    origin = rate.samples_for_frames(clip["start"] - offset)
-    local_offset = rate.samples_for_frames(clip["start"]) - origin
+    origin = rate.samples_for_frames(audio_origin + clip["start"] - offset)
+    local_offset = rate.samples_for_frames(audio_origin + clip["start"]) - origin
     return f"((n+{local_offset})*{rate.numerator}/({rate.denominator}*48000))"
 
 
@@ -804,7 +820,22 @@ def _quote_filter_path(path):
     return str(path).replace("\\", "\\\\").replace(":", "\\:").replace("'", "'\\''")
 
 
-def _graph(project, project_dir, temp_dir, cancel_event=None, _context=None, _namespace=""):
+def _dissolve_picture(filters, before, after, output, duration, high):
+    """Linear premultiplied RGBA mix; alpha ramps must not use source-over.
+
+    FFmpeg blend's N starts at one. The first transition frame is weight zero
+    and the cut after its N-frame interval is weight one. The 16-bit internal
+    mix also prevents repeated 8-bit alpha quantization for ordinary output.
+    """
+    for name, source in (("before", before), ("after", after)):
+        filters.append(f"[{source}]format=gbrap16le," + high16_associate() + f"[{output}{name}]")
+    weight = f"clip((N-1)/{duration},0,1)"
+    filters.append(f"[{output}before][{output}after]blend=all_expr='floor(A*(1-({weight}))+B*({weight})+0.5)':"
+                   "shortest=1:repeatlast=0," + high16_unassociate() +
+                   f",format={'gbrap16le' if high else 'rgba'}[{output}]")
+
+
+def _graph(project, project_dir, temp_dir, cancel_event=None, _context=None, _namespace="", _audio_origin=0):
     if __package__:
         from .editorial import sequence_views, sequence_project, sequence_asset
     else:
@@ -837,9 +868,10 @@ def _graph(project, project_dir, temp_dir, cancel_event=None, _context=None, _na
         raise ValueError("Add footage, audio or a title before rendering.")
     duration = float(rate.seconds_for_frames(frames))
     assets = {a["id"]: a for a in project["assets"]}
-    background = "black@0" if _namespace or project.get("settings", {}).get("transparent_background") else "black"
+    background = "black@0" if _namespace or project.get("otio_dissolve") or project.get("settings", {}).get("transparent_background") else "black"
     filters = [f"color=c={background}:s={width}x{height}:r={rate.ffmpeg},format={rgba_format},trim=end_frame={frames}[canvas0]"]
-    filters += [f"anullsrc=r=48000:cl=stereo,atrim=end_sample={rate.samples_for_frames(frames)}[silence]"]
+    audio_frames = rate.sample_span(_audio_origin, frames)
+    filters += [f"anullsrc=r=48000:cl=stereo,atrim=end_sample={audio_frames}[silence]"]
     inputs, audio, canvas = [], ["[silence]"], "canvas0"
     prepared_lenses = {}
 
@@ -870,8 +902,14 @@ def _graph(project, project_dir, temp_dir, cancel_event=None, _context=None, _na
             child_dir = Path(temp_dir) / input_index
             child_dir.mkdir()
             child_project = sequence_project(_context["root"], _context["views"][clip["sequence_id"]])
+            # A forward, normal-speed nested edit shares the parent's absolute
+            # 48 kHz grid. Local rounding alone can add a silent sample or shift
+            # a dissolve handle at 29.97/59.94 fps. Retimed instances render on
+            # their own source clock before the existing tempo operation.
+            child_audio_origin = (_audio_origin + clip["start"] - Fraction(str(clip["in"]))
+                                  if clip["speed"] == 1 and not clip["reverse"] else 0)
             child_inputs, child_graph, _ = _graph(child_project, project_dir, child_dir, cancel_event,
-                                                _context=_context, _namespace=input_index)
+                                                _context=_context, _namespace=input_index, _audio_origin=child_audio_origin)
             inputs.extend(child_inputs)
             filters.append(child_graph)
         else:
@@ -1102,21 +1140,33 @@ def _graph(project, project_dir, temp_dir, cancel_event=None, _context=None, _na
                           f"tpad=start={clip['start']}:stop={frames-clip['start']-clip['duration']}:color=black@0",
                           f"trim=end_frame={frames}", "setpts=N"]
                 filters.append(f"[{stream}]" + ",".join(chain) + f"[picture{index}]")
-                high16_source_over(filters, canvas, f"picture{index}", next_canvas)
+                if project.get("otio_dissolve") and index == 1:
+                    _dissolve_picture(filters, canvas, f"picture{index}", next_canvas, frames, high=True)
+                else:
+                    high16_source_over(filters, canvas, f"picture{index}", next_canvas)
             else:
-                filters += [f"[{canvas}][picture{index}]overlay=x='(W-w)/2+W*({x})':y='(H-h)/2+H*({y})':"
-                            f"enable='gte(t*{rate.expression},{clip['start']}-0.0000001)*lt(t*{rate.expression},{clip['start']+clip['duration']}-0.0000001)':eof_action=pass:repeatlast=0:format=auto[{next_canvas}]"]
+                if project.get("otio_dissolve") and index == 1:
+                    _dissolve_picture(filters, canvas, f"picture{index}", next_canvas, frames, high=False)
+                else:
+                    filters += [f"[{canvas}][picture{index}]overlay=x='(W-w)/2+W*({x})':y='(H-h)/2+H*({y})':"
+                                f"enable='gte(t*{rate.expression},{clip['start']}-0.0000001)*lt(t*{rate.expression},{clip['start']+clip['duration']}-0.0000001)':eof_action=pass:repeatlast=0:format=auto[{next_canvas}]"]
             canvas = next_canvas
         track_gain = track_state(project, clip["track"])[1]
         largest_volume = max([clip["volume"]] + [k["volume"] for k in clip["keyframes"] if "volume" in k])
-        if asset["has_audio"] and largest_volume > 0 and track_gain > 0:
-            delay = rate.samples_for_frames(clip["start"])
-            samples = rate.sample_span(clip["start"], clip["duration"])
+        sound_clip, sound_asset = (clip, asset) if nested else resolve_audio(project, clip, assets)
+        sound_input = input_index
+        if sound_asset["id"] != asset["id"]:
+            sound_input = add_input(sound_asset)
+        if sound_asset["has_audio"] and largest_volume > 0 and track_gain > 0:
+            absolute_start = _audio_origin + clip["start"]
+            absolute_delay = rate.samples_for_frames(absolute_start)
+            delay = absolute_delay - rate.samples_for_frames(_audio_origin)
+            samples = rate.sample_span(absolute_start, clip["duration"])
             speed = Fraction(str(clip["speed"]))
             # Place every cut on the absolute project sample grid. Independent
             # duration rounding would add/drop a sample at many 29.97/59.94 cuts.
-            phase = delay - rate.seconds_for_frames(clip["start"]) * 48000
-            source_position = rate.seconds_for_frames(clip["in"]) * 48000
+            phase = absolute_delay - rate.seconds_for_frames(absolute_start) * 48000
+            source_position = rate.seconds_for_frames(sound_clip["in"]) * 48000
             source_samples = round(samples * speed)
             if clip["reverse"]:
                 source_end = round(source_position + rate.seconds_for_frames(clip["duration"] * speed) * 48000 - phase * speed)
@@ -1125,7 +1175,7 @@ def _graph(project, project_dir, temp_dir, cancel_event=None, _context=None, _na
                 source_begin = round(source_position + phase * speed)
                 source_end = source_begin + source_samples
             source_begin = max(0, source_begin)
-            mapping = clip["audio"].get("channels")
+            mapping = sound_clip["audio"].get("channels")
             channel_map = [f"pan=stereo|c0=c{mapping[0]}|c1=c{mapping[1]}"] if mapping is not None else []
             chain = ["asetpts=PTS-STARTPTS", "aresample=48000"] + channel_map + ["aformat=sample_fmts=fltp:channel_layouts=stereo",
                      f"atrim=start_sample={source_begin}:end_sample={source_end}", "asetpts=PTS-STARTPTS"]
@@ -1137,10 +1187,10 @@ def _graph(project, project_dir, temp_dir, cancel_event=None, _context=None, _na
             chain.extend([f"apad=whole_len={samples}", f"atrim=end_sample={samples}", "asetpts=PTS-STARTPTS"])
             audio_settings = clip["audio"]
             if any("volume" in key for key in clip["keyframes"]) or audio_settings["fade_in"] or audio_settings["fade_out"]:
-                coordinate = _audio_frame_coordinate(clip, rate, clip.get("animation_offset", 0))
+                coordinate = _audio_frame_coordinate(clip, rate, clip.get("animation_offset", 0), _audio_origin)
                 gain = f"({_curve(clip, 'volume', rate, frame_variable=coordinate)})*{_decimal(track_gain)}"
                 if audio_settings["fade_in"] or audio_settings["fade_out"]:
-                    gain += f"*({_fade_curve(clip, rate)})"
+                    gain += f"*({_fade_curve(clip, rate, _audio_origin)})"
                 chain.append(f"aeval=exprs='val(0)*({gain})|val(1)*({gain})':channel_layout=stereo")
             else:
                 chain.append(f"volume={_decimal(clip['volume'] * track_gain)}")
@@ -1149,7 +1199,7 @@ def _graph(project, project_dir, temp_dir, cancel_event=None, _context=None, _na
                 right = min(1, 1 + audio_settings["pan"])
                 chain.append(f"pan=stereo|c0={_decimal(left)}*c0|c1={_decimal(right)}*c1")
             chain.append(f"adelay={delay}S:all=1")
-            audio_stream = f"{input_index}_aout" if nested else f"{input_index}:{clip['audio'].get('stream_index', asset['audio_stream_index'])}"
+            audio_stream = f"{input_index}_aout" if nested else f"{sound_input}:{sound_clip['audio'].get('stream_index', sound_asset['audio_stream_index'])}"
             filters += [f"[{audio_stream}]" + ",".join(chain) + f"[audio{index}]"]
             audio.append(f"[audio{index}]")
         elif nested:
@@ -1206,11 +1256,18 @@ def _graph(project, project_dir, temp_dir, cancel_event=None, _context=None, _na
         else:
             filters.append(f"[{canvas}]{draw}[{output}]")
         canvas = output
+    if project.get("otio_dissolve") and not _namespace and not project.get("settings", {}).get("transparent_background"):
+        filters.append(f"color=c=black:s={width}x{height}:r={rate.ffmpeg},format={rgba_format},trim=end_frame={frames}[dissolvebackground]")
+        if high:
+            high16_source_over(filters, "dissolvebackground", canvas, "dissolveopaque")
+        else:
+            filters.append(f"[dissolvebackground][{canvas}]overlay=eof_action=pass:repeatlast=0:format=auto[dissolveopaque]")
+        canvas = "dissolveopaque"
     display = ",format=gbrap16le" if high else "" if _namespace else ",scale=out_color_matrix=bt709:out_range=tv"
     filters += [f"[{canvas}]trim=end_frame={frames},setpts=PTS-STARTPTS{display}[vout]"]
     limiter = "" if _namespace else "alimiter=limit=0.98:level=false:latency=true,"
     filters += ["".join(audio) + f"amix=inputs={len(audio)}:duration=longest:normalize=0,"
-                + limiter + f"atrim=end_sample={rate.samples_for_frames(frames)},asetpts=PTS-STARTPTS[aout]"]
+                + limiter + f"atrim=end_sample={audio_frames},asetpts=PTS-STARTPTS[aout]"]
     graph = ";\n".join(filters)
     if _namespace:
         # Input stream selectors and already-qualified descendants remain global.
@@ -1279,9 +1336,18 @@ def render_project(project, project_dir, output_path, profile="h264", progress=N
     progress receives a fraction from 0 to 1. Cancellation terminates only this
     subprocess. H.264 exports contain stereo 48 kHz AAC; ProRes uses PCM audio.
     """
-    if profile not in {"preview", "h264", "prores", "master16"}:
+    if profile not in {"preview", "h264", "prores", "master16", "master32"}:
         raise ValueError("Unknown render profile.")
     p = validate_project(project, project_dir)
+    verify_multicam_sources(p, project_dir)
+    if p.get("settings", {}).get("image_precision") == "float32":
+        if __package__:
+            from .float_movie import render_float
+        else:
+            from float_movie import render_float
+        return render_float(p, project_dir, output_path, profile, progress, cancel_event)
+    if profile == "master32":
+        raise ValueError("Select Scene-linear Float32 processing before exporting an EXR movie master.")
     if __package__:
         from .planar_tracking import assert_planar_export_ready
         from .learned_tracking import assert_learned_export_ready
