@@ -1,0 +1,30 @@
+{
+  "schema": "cinematicum-exact-core-object-transfer-v1",
+  "passed": true,
+  "commit": "cdd15816c228fe4133fbb3ce6d90978333d699e6",
+  "tree": "a62ce29a8af68b38d14820c45fc42e1266762e34",
+  "paths": 463,
+  "unique_git_blobs": 384,
+  "all_bytes_and_objects_verified": true,
+  "source_files_materialized": false,
+  "state": "/Users/midiakiasat/.midia-ai/gateway-live/acceptance/cinematicum-0.13-20261022-own-e980f36e/core-materialize-01",
+  "packet_sha256": "4ad09edb7d789a9a99b6ee12c65f1fc60af54abd75e69dd21ff5056a2bb41d08",
+  "archives": [
+    {
+      "name": "publication-packet",
+      "parts": 2,
+      "bytes": 28824,
+      "sha256": "39ac93c3e25dc5eab9fe9bbca776585fa40f6be92737fdd7aecc29113995d1fb",
+      "json_bytes": 144414,
+      "prefix": "core-packet"
+    },
+    {
+      "name": "all-changed-blobs",
+      "parts": 28,
+      "bytes": 639284,
+      "sha256": "50f9da623d174b3deb674f71dc86cf2f6970944dc85abff9b3fe4c775550566a",
+      "json_bytes": 6985787,
+      "prefix": "core-blobs"
+    }
+  ]
+}

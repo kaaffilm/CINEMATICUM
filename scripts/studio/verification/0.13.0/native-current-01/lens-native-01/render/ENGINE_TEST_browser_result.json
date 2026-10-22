@@ -1,0 +1,46 @@
+{
+  "checks": {
+    "actual_export_decoder_and_clock_advance": true,
+    "export_belongs_to_owned_project": true,
+    "owned_real_frame_path": true,
+    "reopened_measured_profile": true
+  },
+  "completed_download_count": 1,
+  "download_destination_policy": "explicit test evidence directory; no save panel is simulated",
+  "download_errors": [],
+  "downloads": [
+    {
+      "bytes": 223540,
+      "path": "/Users/midiakiasat/.midia-ai/gateway-live/acceptance/cinematicum-0.13-20261022-own-e980f36e/lens-native-01/render/native_downloads/ENGINE_TEST_E3403FB9-5332-4284-95B8-DD4B3D867889_f25399f2d555415f80b72cc8c0828a2d.mov",
+      "state": "completed",
+      "suggested_filename": "f25399f2d555415f80b72cc8c0828a2d.mov",
+      "url": "http://127.0.0.1:51975/api/projects/62d2a0bd06544062bf1ca5ede41154cd/exports/f25399f2d555415f80b72cc8c0828a2d.mov?download=1"
+    }
+  ],
+  "elapsed_ms": 2433,
+  "expect_download": true,
+  "expected_download_count": 1,
+  "frames": {
+    "lensfun": {
+      "frame": 0,
+      "pixel_hash": "989ac2ee",
+      "url": "/api/projects/62d2a0bd06544062bf1ca5ede41154cd/previews/60433a59cd1fb0aeef32761623dfbfb10fb7fadd7e09bcd32181224d9d3caf5b.png"
+    }
+  },
+  "metrics": {
+    "delivery": "prores",
+    "lens_id": "e28b3a9d-070f-436d-8bf2-d9d97a17b72e",
+    "movie_href": "/api/projects/62d2a0bd06544062bf1ca5ede41154cd/exports/f25399f2d555415f80b72cc8c0828a2d.mov?download=1",
+    "playback": {
+      "mechanism": "test-owned native video element; product ProRes transport is not asserted",
+      "time": 0.07329541665967554,
+      "url": "/api/projects/62d2a0bd06544062bf1ca5ede41154cd/exports/f25399f2d555415f80b72cc8c0828a2d.mov"
+    }
+  },
+  "page_errors": [],
+  "passed": true,
+  "physical_open_panel_asserted": false,
+  "physical_save_panel_asserted": false,
+  "screenshot": "/Users/midiakiasat/.midia-ai/gateway-live/acceptance/cinematicum-0.13-20261022-own-e980f36e/lens-native-01/render/ENGINE_TEST_lens_models.png",
+  "screenshot_bytes": 673771
+}

@@ -2,7 +2,7 @@
 
 ## CINEMATICUM Studio — editable production workspace
 
-Studio **0.13.0 / build 14** is the integrated candidate for measured Lensfun
+Studio **0.13.0 / build 14** provides measured Lensfun
 radial profiles, four explicit fisheye projections and bounded public Final Cut
 Pro XML interchange. Lens edits retain selected numeric calibration and source
 identity. FCPXML review maps owned media, preserves rational timeline/source
@@ -11,21 +11,27 @@ workflows preserve save/reopen and existing portable project archives.
 
 The new source retains the editable variable-speed/optical-flow, simultaneous
 camera, fixed-source audio, Float32, OTIO, scientific, still-photography and
-collaboration workflows. Its first exact-source native and complete-suite
-gates, replacement installation and publication are pending. The original lens
-and FCPXML focused/media/UI evidence and independent Apple DTD validation are
-recorded in [Features 0.13](scripts/studio/FEATURES_0_13.md),
+collaboration workflows. Accepted core `cdd15816` passed the one complete
+**925-test** run with no failures/errors/skips and unchanged source/runtimes.
+Six actual Mac phases passed **150 outer checks**: four native author/render
+executions and two fixture preparations. The actual native FCPXML input and
+export also passed the separate pinned Apple 1.10 DTD gate. The actual
+replacement installation passed 5/5 for 114 runtime/web and 119 bundle files;
+canonical launch passed 16/16, all eight installed-runtime phases passed 14/14,
+and final preservation passed 6/6. [PR #162](https://github.com/kaaffilm/CINEMATICUM/pull/162)
+records the exact publication and its post-publication CI outcome. Original focused/browser evidence
+and the exact new integrated acceptance are recorded in [Features 0.13](scripts/studio/FEATURES_0_13.md),
 [Verification 0.13](scripts/studio/VERIFICATION_0_13.md) and
 [remaining work](scripts/studio/UNFINISHED_0_13.md).
 
-Published **0.12** commit `dcea8619` remains the accepted installed release.
+Published **0.12** commit `dcea8619` is the preserved previous release.
 Its core passed **895/895 tests**, its native retime phases passed 58 reported
 outer checks, installation passed 5/5, canonical launch passed 16/16 and all
 eight selected installed-runtime phases passed 14/14. Final installed-source
 reconciliation passed 10/10. Its actual published source also passed all 895 CI
 tests and seven separate browser gates with complete source identity verified.
-Those historical results retain their exact source and do not certify this
-changed candidate. [Verification 0.12](scripts/studio/VERIFICATION_0_12.md)
+Those historical results retain their exact source; the 0.13 gates above
+certify its accepted core separately. [Verification 0.12](scripts/studio/VERIFICATION_0_12.md)
 retains the complete records, including earlier failed attempts. Full
 professional parity and accepted-film issuance remain unfinished.
 

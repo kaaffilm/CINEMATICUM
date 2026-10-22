@@ -1,20 +1,32 @@
 # CINEMATICUM 0.13: remaining work
 
-This register describes the isolated 0.13 integration candidate and preserves
+This register describes the accepted 0.13 feature/core scope and preserves
 the requirements remaining after the published 0.12 release. See the
 [implemented scope](FEATURES_0_13.md), [verification record](VERIFICATION_0_13.md)
 and [capability ledger](capabilities.json). `parity_complete` remains false.
 
-## Candidate completion and release
+## Release completion
 
-Lensfun radial profiles and the four fisheye projections are integrated with
-their actual original focused/browser evidence and bounded native helpers.
-The bounded FCPXML interchange implementation and its independent schema,
-real-media and shared-UI acceptance are also integrated. The final combined
-source still needs actual native acceptance, one frozen complete suite, verified replacement
-installation preserving projects and the previous bundle, canonical launch,
-selected installed-runtime readiness, source reconciliation and exact-head
-publication/CI. Earlier release results do not certify changed source.
+Lensfun radial profiles, four fisheye projections and bounded FCPXML
+interchange passed the actual integrated Mac author/render workflows and their
+independent media/schema checks. All 925 complete-suite tests passed against
+one frozen core with no failures/errors/skips and unchanged source/runtimes.
+Six actual Mac phases passed 150 outer checks (four native executions and two
+fixture preparations); the exact Mac XML input/export also passed the separate
+pinned Apple 1.10 DTD gate. Those gates are complete.
+
+Actual replacement installation passed 5/5 for the complete 119-file bundle
+and 114 runtime/web files, preserving the prior 0.12 bundle and all 59 existing
+project files (2,858,334,501 bytes). Canonical launch passed 16/16; all eight
+selected installed runtime endpoints passed 14/14 with 5/5 preparation and
+6/6 final preservation. Those installation/readiness gates are complete.
+
+This evidence publication reconciles the six documentation/ledger changes to
+unchanged accepted product/test/native/CI files. Exact-head CI is a
+post-publication gate: [PR #162](https://github.com/kaaffilm/CINEMATICUM/pull/162)
+and its current run/artifact record the actual published-head result. This
+source record does not predict its own later CI outcome. Full professional
+parity and accepted-film requirements below remain unfinished.
 
 The published 0.12 release already passed its 895-test complete run, actual
 native retiming, installation, launch, selected runtime readiness and final

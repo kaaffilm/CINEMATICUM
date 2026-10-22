@@ -1,0 +1,38 @@
+{
+  "schema": "cinematicum-owned-native-phase-command-v1",
+  "passed": true,
+  "exit_code": 0,
+  "timed_out": false,
+  "elapsed_seconds": 1.014,
+  "foreground_deadline_seconds": 18,
+  "owned_process_group": 86376,
+  "phase_source_sha256": "e34558bc58aa7bcbb7987507b0764236ab5d6ac1b98b0e17d58587d3b33d8dc1",
+  "stdout_sha256": "a696d1f5e29aa0d8ef7783b72164de39aca69ae97ea6aa9624c3b04b18f20d5e",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "inner": {
+    "native": {
+      "passed": true,
+      "operation": "prepare",
+      "elapsed_seconds": 0.689,
+      "error": null,
+      "native_certified": false,
+      "checks": {
+        "exact_frozen_runtime_web_acceptance_source": true,
+        "retained_input_xml_matches_exact_fixture_bytes": true,
+        "two_actual_lossless_picture_and_stereo_pcm_sources": true,
+        "hand_authored_public_xml_and_independent_40_frame_pcm_truth": true,
+        "existing_cut_has_no_preauthored_import": true,
+        "sentinel_project_unchanged": true,
+        "all_original_owned_source_bytes_unchanged": true,
+        "native_helper_binary_unchanged": true,
+        "all_owned_jobs_terminal": true,
+        "foreground_phase_within18_seconds": true,
+        "runtime_web_acceptance_source_unchanged": true
+      }
+    },
+    "source_commit": "cdd15816c228fe4133fbb3ce6d90978333d699e6",
+    "source_tree": "a62ce29a8af68b38d14820c45fc42e1266762e34",
+    "source_manifest_sha256": "21034979d805cdf680c255720f6311319f3fc22c2b405dbd43294a5485d09f8d"
+  },
+  "error_output": null
+}

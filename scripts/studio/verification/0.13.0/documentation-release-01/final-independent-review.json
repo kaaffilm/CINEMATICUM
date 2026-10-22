@@ -1,0 +1,124 @@
+{
+  "schema": "cinematicum-0.13-final-release-claims-review-v1",
+  "reviewer": "verification_runtime",
+  "reviewed_at_utc": "2026-10-22T14:29:50.355462+00:00",
+  "passed": true,
+  "remaining_concrete_findings": [],
+  "scope": "Bounded read-only six-document/ledger claim, local-link and exact accepted-source reconciliation. No product edits, tests, native/remote operations or new acceptance executions.",
+  "accepted_core": {
+    "commit": "cdd15816c228fe4133fbb3ce6d90978333d699e6",
+    "tree": "a62ce29a8af68b38d14820c45fc42e1266762e34",
+    "manifest_sha256": "21034979d805cdf680c255720f6311319f3fc22c2b405dbd43294a5485d09f8d",
+    "full_source_sha256": "a40f5ead75fc240128030d4c438a8395751fc52f26f2446ceff48de9bcb97fd9"
+  },
+  "documentation_source": {
+    "manifest": {
+      "path": "/workspace/scratch/091f394ee5df/cinematicum-013-release-docs/scripts/studio/source-integrity.json",
+      "bytes": 64366,
+      "sha256": "d20fe41bd5153bb0fe186720c7c74d94fbc220d221f8babf9a1d50c5e52074fe"
+    },
+    "full_source_sha256_independently_recomputed": "40bd88258b90b7442c3b91d8f1725ac397ecc30b30762146f31a20b2711cb0c5",
+    "declared_files": 367,
+    "changed_documentation_files": 6,
+    "unchanged_files_independently_compared": 361,
+    "installed_runtime_payloads_bound": 114,
+    "native_swift_sources_bound": 4,
+    "reconciliation": {
+      "path": "/workspace/scratch/091f394ee5df/cinematicum-013-release-docs/scripts/studio/verification/0.13.0/documentation-release-01/source-reconciliation.json",
+      "bytes": 87584,
+      "sha256": "ef11b6f66581a681e545568b902a67fc35a72ab5276f1de4fde37cdd2da314ba"
+    }
+  },
+  "reviewed_documents": [
+    {
+      "path": "/workspace/scratch/091f394ee5df/cinematicum-013-release-docs/README.md",
+      "bytes": 19055,
+      "sha256": "93df778d5160d06f217c1f21692fd030159f3ce1466a1d69cc3c81de8d2d8ab9"
+    },
+    {
+      "path": "/workspace/scratch/091f394ee5df/cinematicum-013-release-docs/scripts/studio/README.md",
+      "bytes": 76582,
+      "sha256": "a4f09b97d07e11b37d75c9c583171375a29b738326ba9732ca326d09f8847457"
+    },
+    {
+      "path": "/workspace/scratch/091f394ee5df/cinematicum-013-release-docs/scripts/studio/FEATURES_0_13.md",
+      "bytes": 7544,
+      "sha256": "151d4c613b02e43058e322b4d7a73080da0d7e0d21d9ed1b818160ef8ac07b44"
+    },
+    {
+      "path": "/workspace/scratch/091f394ee5df/cinematicum-013-release-docs/scripts/studio/VERIFICATION_0_13.md",
+      "bytes": 27909,
+      "sha256": "f601b4822a6bb6af357f66fe21635f84fc9d1e9f3708413970315a978419d400"
+    },
+    {
+      "path": "/workspace/scratch/091f394ee5df/cinematicum-013-release-docs/scripts/studio/UNFINISHED_0_13.md",
+      "bytes": 7993,
+      "sha256": "d6731df07b6ef65e31d6abea130d69c77f4d8020548efdd299576c36eb76042b"
+    },
+    {
+      "path": "/workspace/scratch/091f394ee5df/cinematicum-013-release-docs/scripts/studio/capabilities.json",
+      "bytes": 139040,
+      "sha256": "79739706ae8f7bf48acd34914c01a9379fa23ccc0cb14580170f5b59e02b9808"
+    }
+  ],
+  "corrected_findings": [
+    {
+      "id": "original_checkout_scope",
+      "was": "Unqualified entire original owner checkout remained unchanged",
+      "now": "Explicitly Makefile bytes/mode, HEAD and Git-status snapshot; no inspection of every owner file",
+      "status": "closed"
+    },
+    {
+      "id": "lensfun_current_status",
+      "was": "The accepted Lensfun/fisheye models were called next-candidate",
+      "now": "Explicit accepted Studio0.13 workflows",
+      "status": "closed"
+    },
+    {
+      "id": "float32_historical_release",
+      "was": "VERIFICATION_0_12 described as current core and installed gates",
+      "now": "0.12 historical gates and 0.13 current accepted gates named separately",
+      "status": "closed"
+    }
+  ],
+  "claims_verified": {
+    "full_suite_tests": 925,
+    "full_suite_failures_errors_skips": 0,
+    "native_outer_checks": 150,
+    "native_nested_ui_checks": 36,
+    "native_executions": 4,
+    "fixture_preparations": 2,
+    "installation_gates": 5,
+    "installed_runtime_files": 114,
+    "whole_bundle_files": 119,
+    "canonical_launch_checks": 16,
+    "readiness_prepare_checks": 5,
+    "readiness_tool_checks": 112,
+    "readiness_final_checks": 6,
+    "installation_protected_files": 59,
+    "installation_protected_bytes": 2858334501,
+    "launch_readiness_protected_files": 57,
+    "launch_readiness_protected_bytes": 2858334304,
+    "parity_complete": false,
+    "external_final_cut_pro_accepted": false,
+    "future_exact_head_ci_claimed_passed": false
+  },
+  "references": {
+    "local_markdown_links": 96,
+    "distinct_current_ledger_paths": 43,
+    "all_resolve": true,
+    "original_full_suite_and_native_summary_copies_byte_identical": true,
+    "historical_acceptance_objects_semantically_unchanged": true
+  },
+  "installed_evidence_review": {
+    "path": "/workspace/scratch/091f394ee5df/cinematicum-013-release-review/INSTALLED_EVIDENCE_REVIEW.json",
+    "bytes": 29559,
+    "sha256": "6c11d26bcf438036d2012a73e901cfc20ed3470069da344b8915a49a5e114433"
+  },
+  "publication_status": "Final local commit/remote publication and exact-head CI are still separate owner gates. This review certifies the identified local text/source bytes only.",
+  "unchanged_pr_body": {
+    "path": "/workspace/scratch/091f394ee5df/cinematicum-013-release-review/PR_BODY_DRAFT.md",
+    "bytes": 13568,
+    "sha256": "9bcdd909fd7d7fc6cbba233b0954853a48a5f8480844169677da6f4500c4a569"
+  }
+}

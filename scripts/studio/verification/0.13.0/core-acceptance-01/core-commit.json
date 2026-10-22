@@ -1,0 +1,23 @@
+{
+  "schema": "cinematicum-0.13-exact-provisional-core-v1",
+  "commit": "cdd15816c228fe4133fbb3ce6d90978333d699e6",
+  "tree": "a62ce29a8af68b38d14820c45fc42e1266762e34",
+  "parents": [
+    "dcea86196f81d6476a0f60538429b984b24c1129"
+  ],
+  "author_name": "midiakiasat",
+  "author_email": "midiakiasat@users.noreply.github.com",
+  "author_date": "2026-10-22T06:31:44-07:00",
+  "committer_name": "midiakiasat",
+  "committer_email": "midiakiasat@users.noreply.github.com",
+  "committer_date": "2026-10-22T06:36:56-07:00",
+  "message": "Add bounded lens profiles and FCPXML workflows for Studio 0.13\n\nIntegrate measured Lensfun radial samples, four fisheye projections and public standalone FCPXML interchange with exact owned-media clocks and explicit unsupported-operation refusals. Preserve native editing history, media and portable archives. Add bounded shared native coordinators, independent frame/sample and Apple DTD gates, and exact-head CI checkout. The integrated short suite and browser gates pass; actual Mac, complete frozen-suite and installation acceptance remain separate pending gates.\n\n",
+  "raw_commit_base64": "dHJlZSBhNjJjZTI5YThhZjY4YjM4ZDE0ODIwYzQ1ZmM0MmUxMjY2NzYyZTM0CnBhcmVudCBkY2VhODYxOTZmODFkNjQ3NmEwZjYwNTM4NDI5Yjk4NGIyNGMxMTI5CmF1dGhvciBtaWRpYWtpYXNhdCA8bWlkaWFraWFzYXRAdXNlcnMubm9yZXBseS5naXRodWIuY29tPiAxNzkyNjc1OTA0IC0wNzAwCmNvbW1pdHRlciBtaWRpYWtpYXNhdCA8bWlkaWFraWFzYXRAdXNlcnMubm9yZXBseS5naXRodWIuY29tPiAxNzkyNjc2MjE2IC0wNzAwCgpBZGQgYm91bmRlZCBsZW5zIHByb2ZpbGVzIGFuZCBGQ1BYTUwgd29ya2Zsb3dzIGZvciBTdHVkaW8gMC4xMwoKSW50ZWdyYXRlIG1lYXN1cmVkIExlbnNmdW4gcmFkaWFsIHNhbXBsZXMsIGZvdXIgZmlzaGV5ZSBwcm9qZWN0aW9ucyBhbmQgcHVibGljIHN0YW5kYWxvbmUgRkNQWE1MIGludGVyY2hhbmdlIHdpdGggZXhhY3Qgb3duZWQtbWVkaWEgY2xvY2tzIGFuZCBleHBsaWNpdCB1bnN1cHBvcnRlZC1vcGVyYXRpb24gcmVmdXNhbHMuIFByZXNlcnZlIG5hdGl2ZSBlZGl0aW5nIGhpc3RvcnksIG1lZGlhIGFuZCBwb3J0YWJsZSBhcmNoaXZlcy4gQWRkIGJvdW5kZWQgc2hhcmVkIG5hdGl2ZSBjb29yZGluYXRvcnMsIGluZGVwZW5kZW50IGZyYW1lL3NhbXBsZSBhbmQgQXBwbGUgRFREIGdhdGVzLCBhbmQgZXhhY3QtaGVhZCBDSSBjaGVja291dC4gVGhlIGludGVncmF0ZWQgc2hvcnQgc3VpdGUgYW5kIGJyb3dzZXIgZ2F0ZXMgcGFzczsgYWN0dWFsIE1hYywgY29tcGxldGUgZnJvemVuLXN1aXRlIGFuZCBpbnN0YWxsYXRpb24gYWNjZXB0YW5jZSByZW1haW4gc2VwYXJhdGUgcGVuZGluZyBnYXRlcy4K",
+  "raw_commit_bytes": 816,
+  "raw_commit_sha256": "a3f643f897b558940b6baeb230d310713807ce77f2a5954b977d6961440bbf5b",
+  "source_manifest_sha256": "21034979d805cdf680c255720f6311319f3fc22c2b405dbd43294a5485d09f8d",
+  "source_sha256": "a40f5ead75fc240128030d4c438a8395751fc52f26f2446ceff48de9bcb97fd9",
+  "source_unchanged_after_commit": true,
+  "tracked_worktree_and_index_clean": true,
+  "external_push_performed": false
+}

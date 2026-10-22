@@ -25,13 +25,21 @@ sequences survive save/reopen and portable archives. Unsupported operators
 refuse before applying or exporting. [FCPXML](FCPXML_INTERCHANGE.md) defines the
 measured picture grids and the external-editor limitations.
 
-The original lens and FCPXML feature/media/UI evidence has passed, including
-independent source-picture/sample truth and the separate Apple 1.10 DTD gate.
-The integrated candidate's native, complete-suite, installation and publication
-gates remain pending. See [Features 0.13](FEATURES_0_13.md),
+Accepted core `cdd15816` passed all **925 complete-suite tests**, with no
+failures/errors/skips and unchanged source and all five managed runtimes.
+The actual Mac lens and FCPXML phases passed **150 outer checks** across four
+native author/render executions and two fixture preparations. The FCPXML movie
+matched every one of 40 numbered pictures and all 64,064 stereo sample frames
+with zero PCM error. The exact Mac input/export also passed the separate pinned
+Apple 1.10 DTD gate. Actual replacement installation passed 5/5 for all 114
+runtime/web and 119 bundle files, preserving prior 0.12 and 59 existing project
+files (2,858,334,501 bytes). Canonical launch passed 16/16; all eight installed
+runtime phases passed 14/14, with 6/6 final preservation. The exact publication
+and post-publication CI outcome are recorded in
+[PR #162](https://github.com/kaaffilm/CINEMATICUM/pull/162). See [Features 0.13](FEATURES_0_13.md),
 [Verification 0.13](VERIFICATION_0_13.md) and [remaining work](UNFINISHED_0_13.md).
 
-Published 0.12 `dcea8619` remains the accepted installed release. It passed 895
+Published 0.12 `dcea8619` is the preserved previous release. It passed 895
 complete-suite tests, 58 reported native retime checks, 5 installation checks,
 16 canonical launch checks and eight selected installed-runtime phases of 14
 checks each. Final installed-source reconciliation passed 10/10, and its actual
@@ -553,7 +561,7 @@ choose **Apply selected calibration**. Profile data is embedded in the graph;
 the XML file is not needed to reopen or render the saved project. The existing
 Brown controls and project format remain compatible. See
 [Lens workflows](LENS_WORKFLOWS.md) for coordinate conventions, tested evidence
-and the pending native/release gates. Automatic profile matching, focal
+and the actual integrated native/media acceptance. Automatic profile matching, focal
 interpolation, rational/anamorphic models, chromatic/vignette correction,
 automatic calibration and animated lens parameters remain unimplemented.
 

@@ -62,8 +62,8 @@
     },
     {
       "path": "README.md",
-      "size": 18523,
-      "sha256": "b86de0fbf2ec432e3f288e76a70e89e1665b332bdab2a9ddfe2922d43688d05b"
+      "size": 19055,
+      "sha256": "93df778d5160d06f217c1f21692fd030159f3ce1466a1d69cc3c81de8d2d8ab9"
     },
     {
       "path": "scripts/studio/CAPABILITY_AUDIT.md",
@@ -102,8 +102,8 @@
     },
     {
       "path": "scripts/studio/FEATURES_0_13.md",
-      "size": 6625,
-      "sha256": "a8d5ef03d393751dc6e8b9ed24057db7526fe6578894acb2d6f9c5837c44e8e4"
+      "size": 7544,
+      "sha256": "151d4c613b02e43058e322b4d7a73080da0d7e0d21d9ed1b818160ef8ac07b44"
     },
     {
       "path": "scripts/studio/FLOAT_MOVIE_PIPELINE.md",
@@ -137,8 +137,8 @@
     },
     {
       "path": "scripts/studio/README.md",
-      "size": 75943,
-      "sha256": "8e499ce6d57056c888053bb688c124d7e150bcd3fcce1c033c61c6655262d403"
+      "size": 76582,
+      "sha256": "a4f09b97d07e11b37d75c9c583171375a29b738326ba9732ca326d09f8847457"
     },
     {
       "path": "scripts/studio/RECOVERY_0_10.md",
@@ -192,8 +192,8 @@
     },
     {
       "path": "scripts/studio/UNFINISHED_0_13.md",
-      "size": 7289,
-      "sha256": "cda8a67d0f5ac7f363a7f87dae8b4a03ee49ed9cbdb4f83e031a84245a70abb8"
+      "size": 7993,
+      "sha256": "d6731df07b6ef65e31d6abea130d69c77f4d8020548efdd299576c36eb76042b"
     },
     {
       "path": "scripts/studio/UNFINISHED_0_9.md",
@@ -217,8 +217,8 @@
     },
     {
       "path": "scripts/studio/VERIFICATION_0_13.md",
-      "size": 14723,
-      "sha256": "b5e702aa9f9373d9b43a14b903920a9a7181945aed61b26b7f547db18a92f685"
+      "size": 27909,
+      "sha256": "f601b4822a6bb6af357f66fe21635f84fc9d1e9f3708413970315a978419d400"
     },
     {
       "path": "scripts/studio/VERIFICATION_0_5.md",
@@ -292,8 +292,8 @@
     },
     {
       "path": "scripts/studio/capabilities.json",
-      "size": 123212,
-      "sha256": "761ba1d0f67f213f69abff5fd38bb2257ee4d29584c7905e765967fd0a6d05c4"
+      "size": 139040,
+      "sha256": "79739706ae8f7bf48acd34914c01a9379fa23ccc0cb14580170f5b59e02b9808"
     },
     {
       "path": "scripts/studio/collaboration.py",

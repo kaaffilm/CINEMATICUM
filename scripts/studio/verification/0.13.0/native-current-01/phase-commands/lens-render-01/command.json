@@ -1,0 +1,51 @@
+{
+  "schema": "cinematicum-owned-native-phase-command-v1",
+  "passed": true,
+  "exit_code": 0,
+  "timed_out": false,
+  "elapsed_seconds": 4.585,
+  "foreground_deadline_seconds": 18,
+  "owned_process_group": 85818,
+  "phase_source_sha256": "7de923fd8675ae2a2e375112ee1e0982d224590f4f11c1dd1b69e1f8941b4f49",
+  "stdout_sha256": "5309605a91fed6d5a610fd5bb8746764c5dde8fab50add057aaffe049e8521fa",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "inner": {
+    "native": {
+      "passed": true,
+      "operation": "render",
+      "elapsed_seconds": 3.944,
+      "error": null,
+      "native_certified": true,
+      "checks": {
+        "exact_frozen_runtime_web_acceptance_source": true,
+        "actual_shipped_controls_succeeded": true,
+        "no_browser_or_download_errors": true,
+        "all_declared_ui_checks_passed": true,
+        "exact_upstream_profile_saved": true,
+        "one_owned_source_clip_and_connected_lens": true,
+        "lensfun_actual_render_snapshot": true,
+        "lensfun_receipt_hash": true,
+        "lensfun_verified_live_or_cached_snapshot": true,
+        "lensfun_independent_ray_and_alpha_pixels": true,
+        "required_actual_frames_observed": true,
+        "actual_download_matches_export_bytes": true,
+        "every_exported_frame_decodes": true,
+        "native_decoder_plays_exact_export": true,
+        "paused_frame_equals_lossless_movie": true,
+        "every_movie_frame_matches_separate_codec_control": true,
+        "render_preserves_original_editable_graph": true,
+        "actual_native_screenshot": true,
+        "sentinel_project_unchanged": true,
+        "original_owned_source_bytes_unchanged": true,
+        "native_helper_binary_unchanged": true,
+        "all_owned_jobs_terminal": true,
+        "foreground_phase_within18_seconds": true,
+        "runtime_web_acceptance_source_unchanged": true
+      }
+    },
+    "source_commit": "cdd15816c228fe4133fbb3ce6d90978333d699e6",
+    "source_tree": "a62ce29a8af68b38d14820c45fc42e1266762e34",
+    "source_manifest_sha256": "21034979d805cdf680c255720f6311319f3fc22c2b405dbd43294a5485d09f8d"
+  },
+  "error_output": null
+}

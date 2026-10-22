@@ -1,0 +1,135 @@
+{
+  "schema": "cinematicum-0.13-release-doc-claim-review-v1",
+  "created_at_utc": "2026-10-22T14:12:41.244767+00:00",
+  "reviewer": "verification_runtime",
+  "result": "no_concrete_count_source_scope_or_evidence_path_discrepancy_found",
+  "scope": "Exactly six current documentation/ledger deltas against the completed core925 suite and150outer native-check evidence; installed/publication fields remain pending for a separate final review.",
+  "source_edits": false,
+  "tests_run": false,
+  "native_or_remote_calls": false,
+  "core_commit": "cdd15816c228fe4133fbb3ce6d90978333d699e6",
+  "core_tree": "a62ce29a8af68b38d14820c45fc42e1266762e34",
+  "source_manifest_sha256": "21034979d805cdf680c255720f6311319f3fc22c2b405dbd43294a5485d09f8d",
+  "reviewed_files": [
+    {
+      "path": "/workspace/scratch/091f394ee5df/cinematicum-013-release-docs/README.md",
+      "bytes": 18772,
+      "sha256": "91846e180a1db5f5674e4ada53a95820446673f7ce76cb92432188936359b2e6"
+    },
+    {
+      "path": "/workspace/scratch/091f394ee5df/cinematicum-013-release-docs/scripts/studio/README.md",
+      "bytes": 76243,
+      "sha256": "471efea1c29a84250da2dc50047340c5849d9b95a811ed3eb8f7452154e25d99"
+    },
+    {
+      "path": "/workspace/scratch/091f394ee5df/cinematicum-013-release-docs/scripts/studio/FEATURES_0_13.md",
+      "bytes": 7287,
+      "sha256": "bfbc1cb2d8ef9ae28c06c2aa23fd70ab7888d8a6ac758c61e9a7f87cd97ac3e8"
+    },
+    {
+      "path": "/workspace/scratch/091f394ee5df/cinematicum-013-release-docs/scripts/studio/VERIFICATION_0_13.md",
+      "bytes": 20155,
+      "sha256": "5b4aee2567be125c5bfea9988bff4252de7fd7e9f4b32c30ac6f478fe5fa7d76"
+    },
+    {
+      "path": "/workspace/scratch/091f394ee5df/cinematicum-013-release-docs/scripts/studio/UNFINISHED_0_13.md",
+      "bytes": 7433,
+      "sha256": "f85ef74b1b3a01d2d72a9d4fa06c8b10dc5781b074dc082948ba7747f880569e"
+    },
+    {
+      "path": "/workspace/scratch/091f394ee5df/cinematicum-013-release-docs/scripts/studio/capabilities.json",
+      "bytes": 128621,
+      "sha256": "4fabc1d36def12e4ea42991f84733fd710713a78b33a781a2e8d09c4b267d8c4"
+    }
+  ],
+  "primary_evidence": [
+    {
+      "path": "/workspace/scratch/091f394ee5df/cinematicum-013-verification-01/report.json",
+      "bytes": 142197,
+      "sha256": "85a2d15cb8f08c839e9ff4f6416173779c4989ca7551b99b3c84edc86d559745"
+    },
+    {
+      "path": "/workspace/scratch/091f394ee5df/cinematicum-013-verification-01/verification.log",
+      "bytes": 304416,
+      "sha256": "99d9714c6f25b50c69233d05cecc22505999348b9806284164556ef64b5cc6c8"
+    },
+    {
+      "path": "/workspace/scratch/091f394ee5df/cinematicum-013-verification-01/summary.json",
+      "bytes": 3479,
+      "sha256": "9017da8c387e09e9b2d7cff5c63560bbcea59df8d728a006ae0020a8d94aad01"
+    },
+    {
+      "path": "/workspace/scratch/091f394ee5df/cinematicum-013-handoff/native-consistency-review.json",
+      "bytes": 6150,
+      "sha256": "cf4c74f7089bceacc898a7e3b42f69129a086253b2367ba7e09f564b1906ea04"
+    },
+    {
+      "path": "/workspace/scratch/091f394ee5df/cinematicum-013-handoff/native-fcpxml-schema-01.json",
+      "bytes": 2546,
+      "sha256": "d9460aa6fcb02353bb846940256b31e34d2feef430424876346781e452104be2"
+    }
+  ],
+  "claims_reconciled": {
+    "full_tests": 925,
+    "failures_errors_expected_unexpected_skips": 0,
+    "unittest_seconds": 928.953,
+    "runner_seconds": 1106.158,
+    "declared_source_files": 367,
+    "source_and_five_managed_runtime_inventories_unchanged": true,
+    "actual_base_runtime_versions": {
+      "Python": "3.12.14",
+      "numpy": "2.3.5",
+      "opentimelineio": "0.18.1",
+      "OpenEXR": "3.4.15",
+      "opencolorio": "2.6.0",
+      "opencv-python-headless": "4.11.0.86",
+      "rawpy": "0.27.1"
+    },
+    "native_outer_checks": 150,
+    "nested_ui_checks_not_added_to_outer": 36,
+    "actual_native_executions": 4,
+    "fixture_preparations": 2,
+    "lens_outer": [
+      10,
+      41,
+      24
+    ],
+    "fcpxml_outer": [
+      11,
+      30,
+      34
+    ],
+    "native_phase_seconds_sum": 17.151,
+    "native_source_inventory_entries": [
+      127,
+      126
+    ],
+    "exact_native_record_files": 95,
+    "phase_artifact_bindings": 48,
+    "raw_media_identity_records": 50,
+    "independent_fcpxml_picture_identities": 40,
+    "independent_fcpxml_stereo_sample_frames": 64064,
+    "max_pcm_lsb_error": 0,
+    "max_source_color_error_8bit_codes": 3,
+    "native_xml_schema_scope": "Exact Mac-prepared/downloaded artifacts, independent Linux lxml6.1.1/libxml2 2.14.6, Apple1.10 DTD only"
+  },
+  "reference_review": {
+    "scoped_document_links": 42,
+    "missing_document_links": 0,
+    "scoped_current_release_ledger_paths": 26,
+    "missing_ledger_paths": 0,
+    "copied_report_log_summary_native_review_and_schema_byte_identical": true
+  },
+  "honest_boundaries_preserved": [
+    "Replacement installation, canonical launch, installed-runtime readiness and final publication/CI remain pending.",
+    "Historical accepted0.12 results are not relabelled as925-test0.13 outcomes.",
+    "Fixture preparations retain native_certified:false and UI assertions are not added to outer checks.",
+    "Native ProRes decoder probes are explicitly test-owned; no ordinary product ProRes preview claim.",
+    "Physical open/save panels, speaker listening and external Final Cut Pro host acceptance remain unclaimed.",
+    "No separate1.9 DTD acceptance claimed.",
+    "AliceVision/Meshroom,TAPNext,CameraCtrl,DiffusionLight,commercial providers,decoded-frame/GPU cache and signed distribution remain incomplete.",
+    "Broader professional workflow/production-scale and actual THE LAST RENDER/issuance requirements remain open; parity_complete:false."
+  ],
+  "findings": [],
+  "remaining_review": "Review actual installed/readiness/publication fields and their exact evidence after the release owner supplies them. This receipt does not certify those pending outcomes."
+}

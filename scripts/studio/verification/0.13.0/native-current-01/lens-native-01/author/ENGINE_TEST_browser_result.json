@@ -1,0 +1,63 @@
+{
+  "checks": {
+    "actual_profile_apply": true,
+    "calibration_capture_crop_explicit": true,
+    "connected_lens_node": true,
+    "exact_measured_upstream_sample": true,
+    "four_distinct_actual_fisheye_pictures": true,
+    "one_redo_restores_profile": true,
+    "one_undo_restores_fisheye": true,
+    "owned_real_frame_path": true,
+    "reopened_picture_identical": true,
+    "saved_profile_reopens_in_editor": true,
+    "static_calibration_has_no_unsupported_animation": true
+  },
+  "completed_download_count": 0,
+  "download_destination_policy": "explicit test evidence directory; no save panel is simulated",
+  "download_errors": [],
+  "downloads": [],
+  "elapsed_ms": 5310,
+  "expect_download": false,
+  "expected_download_count": 0,
+  "frames": {
+    "equidistant": {
+      "frame": 0,
+      "pixel_hash": "66e1cf11",
+      "url": "/api/projects/62d2a0bd06544062bf1ca5ede41154cd/previews/b760f32ed44c0628913c2b7b3da96a16e214627f4464c288b1307953ff136988.png"
+    },
+    "equisolid": {
+      "frame": 0,
+      "pixel_hash": "8edb231",
+      "url": "/api/projects/62d2a0bd06544062bf1ca5ede41154cd/previews/3fe00e142a9e7a02f8be594a4198702db68536d5b3d19fadae3ea7617f9c0743.png"
+    },
+    "lensfun": {
+      "frame": 0,
+      "pixel_hash": "989ac2ee",
+      "url": "/api/projects/62d2a0bd06544062bf1ca5ede41154cd/previews/ed0dc00f4d040daf1612e2df962c028f2b423031a30b96f9a8dea9aecdd9193e.png"
+    },
+    "orthographic": {
+      "frame": 0,
+      "pixel_hash": "da44d5d9",
+      "url": "/api/projects/62d2a0bd06544062bf1ca5ede41154cd/previews/ed30a2c0db2612dc7868b400c7196298bc4d3d91f307b1e75a59c22c3191da09.png"
+    },
+    "reopened": {
+      "frame": 0,
+      "pixel_hash": "989ac2ee",
+      "url": "/api/projects/62d2a0bd06544062bf1ca5ede41154cd/previews/60433a59cd1fb0aeef32761623dfbfb10fb7fadd7e09bcd32181224d9d3caf5b.png"
+    },
+    "stereographic": {
+      "frame": 0,
+      "pixel_hash": "25456e4b",
+      "url": "/api/projects/62d2a0bd06544062bf1ca5ede41154cd/previews/d1901a4f2bc5d252d451adb937bc070917139eb16cca0764651c10bdd7cf585a.png"
+    }
+  },
+  "metrics": {
+    "lens_id": "e28b3a9d-070f-436d-8bf2-d9d97a17b72e"
+  },
+  "page_errors": [],
+  "passed": true,
+  "physical_open_panel_asserted": false,
+  "physical_save_panel_asserted": false,
+  "screenshot": "/Users/midiakiasat/.midia-ai/gateway-live/acceptance/cinematicum-0.13-20261022-own-e980f36e/lens-native-01/author/ENGINE_TEST_lens_models.png",
+  "screenshot_bytes": 638209
+}

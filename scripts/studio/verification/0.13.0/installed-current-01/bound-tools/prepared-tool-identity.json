@@ -1,0 +1,71 @@
+{
+  "schema": "cinematicum-prepared-installed-acceptance-v1",
+  "status": "prepared_fail_closed_pending_actual_core_and_native_identity",
+  "version": "0.13.0",
+  "build": "14",
+  "source_base_commit": "dcea86196f81d6476a0f60538429b984b24c1129",
+  "method_changes": false,
+  "changes": "Version/build expectations and matching diagnostics only, including the two Swift exactBundle constants. All launch/ownership/termination/preservation methods remain unchanged. Readiness source and native application pins remain deliberately unset until actual accepted source/build records exist.",
+  "controller_source_and_builder_unchanged": false,
+  "pending_pins": [
+    "CORE",
+    "CORE_TREE",
+    "CORE_MANIFEST",
+    "NATIVE_SHA"
+  ],
+  "files": [
+    {
+      "path": "verify_installation.py",
+      "accepted_0_12_sha256": "9a711eca00d8fdfd7bbe55ae83623cf2c14ea1277b4fadf5357850208065bf21",
+      "prepared_0_13_sha256": "3f26640384062533c605386a0f62c61965a7175b423f61e50b09a47ce6a26a6e",
+      "bytes": 26793,
+      "unchanged": false
+    },
+    {
+      "path": "installed-launch-01/build_installed_launch.py",
+      "accepted_0_12_sha256": "1e16113c3993be5cb0a7d706c95da7ae5318c1f10695c67b170b5c60285c6122",
+      "prepared_0_13_sha256": "1e16113c3993be5cb0a7d706c95da7ae5318c1f10695c67b170b5c60285c6122",
+      "bytes": 2220,
+      "unchanged": true
+    },
+    {
+      "path": "installed-launch-01/InstalledAppControl.swift",
+      "accepted_0_12_sha256": "e7d5dd055bd4afd8d2e5fce05d02cd2402970bccf535756889284e4f709a47a7",
+      "prepared_0_13_sha256": "242ce3defae2a0d6f3466fb5a937776106081178cdbd40b16f55108a2fcf77e8",
+      "bytes": 11041,
+      "unchanged": false
+    },
+    {
+      "path": "installed-launch-01/run_installed_launch.py",
+      "accepted_0_12_sha256": "f772386b7c36db369d150c48e42dd16b550f5c80c91f77c8000129135ef73bfe",
+      "prepared_0_13_sha256": "96d5bb0c904108454ae4aa38c5f2abd586abcf9355f6ee404cae06268898a757",
+      "bytes": 34079,
+      "unchanged": false
+    },
+    {
+      "path": "run_installed_readiness_phased.py",
+      "accepted_0_12_sha256": "9c6842a6a6c8547f2e2af50324c290efc1613ea723d5ba0f3b2f60aef6cdc9fa",
+      "prepared_0_13_sha256": "4a9e19cd07837a5e2376aa0a407416f83dda6af16babeccf066cf0ebba20b0d7",
+      "bytes": 38464,
+      "unchanged": false
+    },
+    {
+      "path": "test_installed_readiness_phased_guards.py",
+      "accepted_0_12_sha256": "4212221fb032b3c6c964a83718e30c49ec5ad38b166de7331d0528467ada0710",
+      "prepared_0_13_sha256": "5132e6e2cf7b0e0adf70105b9c88bc6687a6d65476a7ae5d3683cd91bfb907c5",
+      "bytes": 7970,
+      "unchanged": false,
+      "change": "Require explicit CINEMATICUM_ACCEPTED_SOURCE for actual Git-tree guard so copied tests do not infer the checkout from their external directory."
+    }
+  ],
+  "native_execution_performed": false,
+  "controller_methods_and_builder_unchanged": true,
+  "controller_constants_updated": {
+    "version": "0.13.0",
+    "build": "14"
+  },
+  "controller_compile_required": false,
+  "controller_build_report": "verification/0.13.0/native-build/controller-build-01.json",
+  "controller_build_report_sha256": "71a35e6351e7a930da0767efa73a9e3ddf404ebf496b12bbf514c4c740db6462",
+  "guard_test_source_path_change": "Require explicit CINEMATICUM_ACCEPTED_SOURCE for actual Git-tree guard so copied tests do not infer the checkout from their external directory."
+}

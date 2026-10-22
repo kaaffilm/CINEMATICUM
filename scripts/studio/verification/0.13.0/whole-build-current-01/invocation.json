@@ -1,0 +1,15 @@
+{
+  "core": "cdd15816c228fe4133fbb3ce6d90978333d699e6",
+  "tree": "a62ce29a8af68b38d14820c45fc42e1266762e34",
+  "command": [
+    "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+    "/workspace/scratch/091f394ee5df/cinematicum-013-integration/run-013-studio-verification.py",
+    "--report",
+    "/workspace/scratch/091f394ee5df/cinematicum-013-verification-01/report.json",
+    "--log",
+    "/workspace/scratch/091f394ee5df/cinematicum-013-verification-01/verification.log"
+  ],
+  "launcher_sha256": "3c1f9d4af72fae0ad6b9a391d74579e6ad298cd6a567040b77f29a57734ea09e",
+  "native_schema_report_sha256": "d9460aa6fcb02353bb846940256b31e34d2feef430424876346781e452104be2",
+  "scope": "One complete strict frozen run after all six actual native phases and independent actual-native XML schema gate passed"
+}

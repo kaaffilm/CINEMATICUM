@@ -1,13 +1,18 @@
 # CINEMATICUM Studio 0.13: lens workflows and interchange
 
-This isolated candidate starts from the published 0.12 source
-`dcea86196f81d6476a0f60538429b984b24c1129`. It retains the accepted
-[0.12 retiming and production workflows](FEATURES_0_12.md). The candidate is
-prepared for its first frozen integration gate; the complete regression, actual native
-acceptance, replacement installation and publication are separate gates.
-The [verification record](VERIFICATION_0_13.md) identifies which results belong
-to the original isolated feature source. Full professional parity remains
-unfinished.
+Studio 0.13 starts from published 0.12 source
+`dcea86196f81d6476a0f60538429b984b24c1129` and retains its accepted
+[retiming and production workflows](FEATURES_0_12.md). Frozen core `cdd15816`
+passed all **925 tests** with zero failures/errors/skips and unchanged source
+and managed engines. Six actual Mac phases passed **150 outer checks**, with
+four native UI executions and two fixture preparations. Actual replacement
+installation passed 5/5 for 114 runtime/web and 119 bundle files; canonical
+launch passed 16/16 and all eight installed runtime phases passed 14/14.
+Final preservation passed 6/6. Exact publication and its subsequent CI outcome
+are recorded through [PR #162](https://github.com/kaaffilm/CINEMATICUM/pull/162).
+The [verification record](VERIFICATION_0_13.md) preserves the integrated
+identities alongside original isolated evidence. Full professional parity
+remains unfinished.
 
 ## Measured Lensfun radial profiles
 
@@ -58,10 +63,13 @@ silently flatten that limitation.
 The original feature source passed 25 focused tests and actual Chromium
 authoring/export acceptance. Independent physical-millimetre/Newton and 3D-ray
 oracles checked the rendered pixels, including high16 values and alpha.
-The additional native coordinator and script passed through Chromium in
-three bounded phases with 10/41/24 outer checks; this result retains
-`native_certified: false`. Actual macOS execution and the complete integrated
-0.13 source gate remain pending.
+The shared coordinator first passed through Chromium in three bounded phases
+with 10/41/24 outer checks; that original result retains `native_certified: false`.
+It subsequently passed the same 10/41/24 checks on the exact integrated Mac
+core: one fixture preparation and two actual native UI executions, including
+all eight delivered movie pictures and a clearly labelled native ProRes
+decoder probe. The complete 925-test core gate also passed. These shared lens
+checks are not counted again for each supported projection/profile.
 
 [LENS_WORKFLOWS.md](LENS_WORKFLOWS.md) describes the mathematical conventions,
 supported profile fields and acceptance limits.
@@ -104,11 +112,15 @@ application or export.
 The isolated implementation passed 19 focused tests. Independent real-media
 oracles checked every one of 40 numbered pictures and all 64,064 stereo sample
 frames, including a relocated archive. The shared native coordinator passed
-74 outer checks and 20 UI checks in Chromium; actual Mac execution remains a
-separate gate. Its hand-authored input and completed actual export also pass
-the independently provisioned official Apple 1.10 DTD validator. This proves
-the admitted XML grammar and Studio behavior; it does not certify interchange
-inside Final Cut Pro, unrestricted XML, AAF or native Final Cut libraries.
+74 outer checks and 20 UI checks in Chromium. Actual Mac acceptance then
+passed 11/30/34 outer checks across preparation/author/render (75 total, with
+21 nested UI assertions), including the extra actual advancing ProRes decoder
+probe. Every numbered picture and stereo sample frame again matched the
+independent expected output. The exact Mac hand input and completed XML
+download passed the independently provisioned Apple 1.10 DTD validator on
+Linux. This proves the admitted XML grammar and Studio behavior; it does not
+certify interchange inside Final Cut Pro, physical chooser/speaker interaction,
+unrestricted XML, AAF or native Final Cut libraries.
 
 [FCPXML_INTERCHANGE.md](FCPXML_INTERCHANGE.md) defines the supported operators,
 retime admission and explicit refusals. [FCPXML_SCHEMA_VALIDATION.md](FCPXML_SCHEMA_VALIDATION.md)

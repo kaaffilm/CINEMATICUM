@@ -1,0 +1,32 @@
+{
+  "schema": "cinematicum-installed-app-controller-build-v1",
+  "compiled": true,
+  "scope": "Independent LaunchServices control only; no production source compiled or injected",
+  "version_guard": "0.13.0",
+  "build_guard": "14",
+  "source_sha256": "242ce3defae2a0d6f3466fb5a937776106081178cdbd40b16f55108a2fcf77e8",
+  "binary_sha256": "514babe113c42ae6f666b29ab0b934d878cbc50cf7d9053086fea60a72877101",
+  "command": [
+    "/usr/bin/xcrun",
+    "swiftc",
+    "-Onone",
+    "-swift-version",
+    "5",
+    "-framework",
+    "Cocoa",
+    "-framework",
+    "CoreGraphics",
+    "-target",
+    "arm64-apple-macos12.0",
+    "-module-cache-path",
+    "/Users/midiakiasat/.midia-ai/gateway-live/acceptance/cinematicum-0.11-20261022-own-025436f6/installed-controller-01/module-cache",
+    "/Users/midiakiasat/.midia-ai/gateway-live/acceptance/cinematicum-0.13-20261022-own-e980f36e/installed-controller-01/InstalledAppControl.swift",
+    "-o",
+    "/Users/midiakiasat/.midia-ai/gateway-live/acceptance/cinematicum-0.13-20261022-own-e980f36e/installed-controller-01/cinematicum-installed-app-control"
+  ],
+  "exit_code": 0,
+  "timed_out": false,
+  "elapsed_seconds": 1.555,
+  "source_transfer_sha256": "f4f11bfdb996d9efaac1aa891518e72956752aeeec6cd6b435fcde2361472353",
+  "prior_pattern": "Successful actual 0.12 bounded -Onone controller build; only source version and build constants changed"
+}

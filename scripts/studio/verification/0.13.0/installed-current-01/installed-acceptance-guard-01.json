@@ -1,0 +1,17 @@
+{
+  "schema": "cinematicum-external-acceptance-guard-execution-v1",
+  "passed": true,
+  "argv": [
+    "/Users/midiakiasat/Library/Application Support/CINEMATICUM/Tracking/py313-v1/bin/python",
+    "-B",
+    "/Users/midiakiasat/.midia-ai/gateway-live/acceptance/cinematicum-0.13-20261022-own-e980f36e/installed-acceptance-tools/test_installed_readiness_phased_guards.py"
+  ],
+  "source_commit": "cdd15816c228fe4133fbb3ce6d90978333d699e6",
+  "bound_helper_sha256": "a9c6feadfe85b263dd3010f8cd1815e753450048bc12c48b6788891fd9f65391",
+  "explicit_accepted_source": "/Users/midiakiasat/.midia-ai/gateway-live/workspaces/auto-ffd5bd15ebd1cc0813d35a31f6e27ced-next-013",
+  "elapsed_seconds": 0.224,
+  "exit_code": 0,
+  "stdout": "",
+  "stderr": "test_core_requires_exact_accepted_commit_and_actual_git_tree (__main__.Guards.test_core_requires_exact_accepted_commit_and_actual_git_tree) ... ok\ntest_existing_cache_change_and_unknown_new_file_fail_but_exact_new_derivative_passes (__main__.Guards.test_existing_cache_change_and_unknown_new_file_fail_but_exact_new_derivative_passes) ... ok\ntest_names_only_inspects_types_and_refuses_symlink_and_environment_files (__main__.Guards.test_names_only_inspects_types_and_refuses_symlink_and_environment_files) ... ok\ntest_nofollow_metadata_reader_rejects_leaf_and_ancestor_symlinks (__main__.Guards.test_nofollow_metadata_reader_rejects_leaf_and_ancestor_symlinks) ... ok\ntest_phase_validation_refuses_missing_guard_rebound_source_failure_force_and_unsupported_tool (__main__.Guards.test_phase_validation_refuses_missing_guard_rebound_source_failure_force_and_unsupported_tool) ... ok\ntest_retime_requires_pinned_actual_probe_fields_and_finite_numeric_tolerance (__main__.Guards.test_retime_requires_pinned_actual_probe_fields_and_finite_numeric_tolerance) ... ok\n\n----------------------------------------------------------------------\nRan 6 tests in 0.060s\n\nOK\n",
+  "native_acceptance_claimed": false
+}

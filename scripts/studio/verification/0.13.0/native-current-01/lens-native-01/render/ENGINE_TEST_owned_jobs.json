@@ -1,0 +1,82 @@
+[
+  {
+    "created_at": 1792676532.497374,
+    "error": null,
+    "finished_at": 1792676532.4984589,
+    "id": "8a5299fd7cdc499899048014370e0b54",
+    "kind": "frame-preview",
+    "progress": 1,
+    "project_id": "62d2a0bd06544062bf1ca5ede41154cd",
+    "result": {
+      "cached": true,
+      "frame": 0,
+      "height": 90,
+      "pipeline": "timeline-export-graph",
+      "sha256": "0db822a7bb804b69887130ee05189dc547f218f1987e00c9381a49ed8be3e7bc",
+      "url": "/api/projects/62d2a0bd06544062bf1ca5ede41154cd/previews/60433a59cd1fb0aeef32761623dfbfb10fb7fadd7e09bcd32181224d9d3caf5b.png",
+      "width": 160
+    },
+    "state": "completed"
+  },
+  {
+    "created_at": 1792676532.549579,
+    "error": null,
+    "finished_at": 1792676532.927905,
+    "id": "f25399f2d555415f80b72cc8c0828a2d",
+    "kind": "render",
+    "progress": 1,
+    "project_id": "62d2a0bd06544062bf1ca5ede41154cd",
+    "result": {
+      "alpha_mode": "opaque",
+      "color_space": "SDR Rec.709",
+      "duration": 0.6666666666666666,
+      "dynamic_range": "SDR UNORM; no scene-linear HDR/ACES movie mastering",
+      "elapsed_seconds": 0.304,
+      "encoding": "prores",
+      "filename": "f25399f2d555415f80b72cc8c0828a2d.mov",
+      "fps": 12,
+      "frame_rate": {
+        "denominator": 1,
+        "numerator": 12
+      },
+      "frames": 8,
+      "has_audio": true,
+      "height": 90,
+      "image_precision": "standard8",
+      "issuance_status_changed": false,
+      "packet_verification": null,
+      "path": "/Users/midiakiasat/.midia-ai/gateway-live/acceptance/cinematicum-0.13-20261022-own-e980f36e/lens-native-01/fixture/workspace/projects/62d2a0bd06544062bf1ca5ede41154cd/exports/f25399f2d555415f80b72cc8c0828a2d.mov",
+      "pixel_format": "yuv422p10le",
+      "processing_bits": 8,
+      "profile": "prores",
+      "project_revision": 3,
+      "retime_reports": [],
+      "sha256": "11b4f638c715e00e370b294e98423282cb4004f23076fdf59c74dc6f2b49c94e",
+      "size": 223540,
+      "transparent_background": false,
+      "url": "/api/projects/62d2a0bd06544062bf1ca5ede41154cd/exports/f25399f2d555415f80b72cc8c0828a2d.mov",
+      "width": 160
+    },
+    "state": "completed"
+  },
+  {
+    "created_at": 1792676532.790928,
+    "error": null,
+    "finished_at": 1792676533.0792341,
+    "id": "cf269e357a1449e6896390002df98982",
+    "kind": "frame-preview",
+    "progress": 1,
+    "project_id": "62d2a0bd06544062bf1ca5ede41154cd",
+    "result": {
+      "frame": 0,
+      "height": 90,
+      "pipeline": "timeline-export-graph",
+      "pixel_format": "rgb24",
+      "processing_bits": 8,
+      "sha256": "0db822a7bb804b69887130ee05189dc547f218f1987e00c9381a49ed8be3e7bc",
+      "url": "/api/projects/62d2a0bd06544062bf1ca5ede41154cd/previews/b439a94113dae776ec70cce2ef7c8cb0a6651b01fbb6289f67138ddff25596dd.png",
+      "width": 160
+    },
+    "state": "completed"
+  }
+]
