@@ -98,7 +98,7 @@
       $('[data-track-point-settings]').hidden=isPlanar;$('[data-track-reset-plane]').hidden=!isPlanar;
       $('[data-track-pin-controls]').hidden=!isPlanar;$('[data-track-mask]').hidden=isPlanar;
       $('[data-track-setup]').hidden=!isPlanar||Boolean(planarRuntime?.available);
-      $('[data-track-count]').max=isPlanar?240:480;
+      $('[data-track-count]').max=isPlanar?960:480;
       $('[data-track-run]').disabled=busy||!seed||(isPlanar?(quad.length!==4||!planarRuntime?.available):!point);
       $('[data-track-stabilize]').disabled=busy||!complete;
       $('[data-track-mask]').disabled=busy||!complete||isPlanar;
@@ -106,7 +106,7 @@
       $('[data-track-clear]').disabled=busy||!(context?.clip?.tracking||context?.clip?.planar_motion);
       $('[data-track-cancel]').hidden=!busy||!jobId;$('[data-track-progress]').hidden=!busy;
       $('[data-track-instructions]').textContent=isPlanar?'Click four corners clockwise: top left, top right, bottom right, bottom left. Use one textured plane. Arrow keys refine the last corner. Cyan paths show measured corners.':'Click a distinctive feature. The cyan path shows measured positions. Missing matches remain gaps.';
-      $('[data-track-limit]').textContent=isPlanar?'Affine/projective measurement uses actual feature flow and geometric fitting, up to 240 conformed clip frames at a 640-pixel analysis edge. Lost support remains a gap; automatic re-identification is not implemented. Corner pins use an imported image.':'Template matching measures translation. Repeated patterns, occlusion, rotation, or scaling can lose the feature. Inspect the path before applying. Stabilization preserves your manual motion; the mask follows the point without identifying an object.';
+      $('[data-track-limit]').textContent=isPlanar?'Affine/projective measurement uses actual feature flow and geometric fitting, up to 960 conformed clip frames at up to a 1280-pixel analysis edge. Longer ranges use a smaller analysis image to bound memory and temporary storage. Lost support remains a gap; automatic re-identification is not implemented. Corner pins use an imported image.':'Template matching measures translation. Repeated patterns, occlusion, rotation, or scaling can lose the feature. Inspect the path before applying. Stabilization preserves your manual motion; the mask follows the point without identifying an object.';
       const stale=(context?.project?.clips||[]).filter(clip=>clip.planar_motion?.invalidated&&(clip.id===context.clip.id||clip.planar_motion.source?.source?.clip_id===context.clip.id));
       $('[data-track-stale]').hidden=!stale.length;
       $('[data-track-stale]').textContent=stale.length?'Stale planar motion. '+stale.map(clip=>clip.planar_motion.invalidated).join(' ')+' Remeasure or remove it before export.':'';
@@ -129,7 +129,7 @@
       else if(point) {const x=point.x*canvas.width,y=point.y*canvas.height,r=Number($('[data-track-radius]').value)||12;ctx.strokeStyle='#ffffff';ctx.strokeRect(x-r,y-r,r*2,r*2);ctx.beginPath();ctx.moveTo(x-5,y);ctx.lineTo(x+5,y);ctx.moveTo(x,y-5);ctx.lineTo(x,y+5);ctx.stroke();}
     }
     function settings(seedOnly=false) {
-      const first=Number($('[data-track-start]').value),count=Number($('[data-track-count]').value),maximum=planar()?240:480;
+      const first=Number($('[data-track-start]').value),count=Number($('[data-track-count]').value),maximum=planar()?960:480;
       if(!Number.isInteger(first)||!Number.isInteger(count)||first<0||count<1||count>maximum||first+count>context.clip.duration)throw Error(`Choose a range of 1–${maximum} frames inside this clip.`);
       const value={mode:model(),frame_start:first,frame_count:count};
       if(planar()) {if(!seedOnly&&quad.length!==4)throw Error('Choose all four plane corners.');value.quad=clone(quad);}
@@ -213,7 +213,7 @@
     });
     function resetSelection(){seed=null;track=null;point=null;quad=[];sourceImage=null;$('[data-track-download]').hidden=true;draw();controls();status('Load the starting frame for this range.');}
     for(const name of ['start','count'])$(`[data-track-${name}]`).addEventListener('change',resetSelection);
-    $('[data-track-model]').onchange=()=>{if(planar())$('[data-track-count]').value=Math.min(240,Number($('[data-track-count]').value));resetSelection();loadSeed();};
+    $('[data-track-model]').onchange=()=>{$('[data-track-count]').value=Math.min(planar()?960:480,Number($('[data-track-count]').value));resetSelection();loadSeed();};
     $('[data-track-reset-plane]').onclick=()=>{quad=[];track=null;$('[data-track-download]').hidden=true;draw();controls();status('Choose the top-left corner of a textured plane.');};
     $('[data-track-image]').onchange=controls;
     $('[data-track-pin]').onclick=()=>apply('corner-pin');

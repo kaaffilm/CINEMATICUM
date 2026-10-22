@@ -57,8 +57,8 @@
   "files": [
     {
       "path": ".github/workflows/studio-verification.yml",
-      "size": 12637,
-      "sha256": "fcf91b8cc8917a55664318c0175821074fd1a2dd28d20fbb07051f87084489c3"
+      "size": 13145,
+      "sha256": "4f0f2be60f3c675a91c716ca188efcc4c1c9809cc1b003fcb23cb28e46f391f7"
     },
     {
       "path": "README.md",
@@ -111,6 +111,11 @@
       "sha256": "cfab0133b5c8d163bec3760cc8bcaa56a5b7bbf25511725d9a20542678721cfa"
     },
     {
+      "path": "scripts/studio/INCREMENTAL_ACCEPTANCE_2026_10_22.md",
+      "size": 1733,
+      "sha256": "641cfa7a0a5253d23f88af71756338d258d35d0a5dd8facabf0811e33a2dbd64"
+    },
+    {
       "path": "scripts/studio/LENS_NATIVE_ACCEPTANCE.md",
       "size": 8356,
       "sha256": "c232ebe11d18c2ba98f45b224a7fe4383267e276cea0f7e36b2cf1fee416819a"
@@ -152,8 +157,8 @@
     },
     {
       "path": "scripts/studio/RETIME.md",
-      "size": 14714,
-      "sha256": "1c4b8cc9d7f516ec5e6088a7e71315949b25622ccf0ef8321eee3a835b331290"
+      "size": 14917,
+      "sha256": "b643eb8f5b0b29f1b7b578b7760579c53a9e2de6d4c6d6b8b400c58694169780"
     },
     {
       "path": "scripts/studio/SCENE_PROCESSING_V1.md",
@@ -192,8 +197,8 @@
     },
     {
       "path": "scripts/studio/UNFINISHED_0_13.md",
-      "size": 8391,
-      "sha256": "0bd575f1205e0215f397c30cce89b92942b4b4a7e7c151fad5a2ae6f0e8da878"
+      "size": 8734,
+      "sha256": "6de85e5a7c1e081977b470c51d47ef1c874b0918d35d6215b88cc678a03cde02"
     },
     {
       "path": "scripts/studio/UNFINISHED_0_9.md",
@@ -292,8 +297,8 @@
     },
     {
       "path": "scripts/studio/capabilities.json",
-      "size": 140717,
-      "sha256": "4aeb5c3fc52311e369db5dc365a20197fe2a951379e47539b767dbd3e6bf2aa6"
+      "size": 142509,
+      "sha256": "0b9ae4cb2d23a75c9d1d8bd8406d19b7fb0353b88d27e3a7bd257d6773635cc4"
     },
     {
       "path": "scripts/studio/collaboration.py",
@@ -532,8 +537,8 @@
     },
     {
       "path": "scripts/studio/macos/GenerationInferenceSmoke.js",
-      "size": 6539,
-      "sha256": "f18b1967ae0e69b2350f783f2e82b270c96ad365446d6af5dd275e37fe207d7e"
+      "size": 6664,
+      "sha256": "bd6e1bec25e118b9b448a0bfc236e0eceff2177e530ae30dd060f02c4d2ff239"
     },
     {
       "path": "scripts/studio/macos/GenerationSmoke.js",
@@ -772,13 +777,13 @@
     },
     {
       "path": "scripts/studio/planar_tracking.py",
-      "size": 20066,
-      "sha256": "6fdc54760ea51b42e1a304725fafbd1057ed37b3dd5114c78e66bfa302a1c792"
+      "size": 20645,
+      "sha256": "72b1d49ad5ac61956b3bb7d92cf8e2fe708d5dc7ee20c68a2afa5aba0a882f90"
     },
     {
       "path": "scripts/studio/planar_worker.py",
-      "size": 9136,
-      "sha256": "65f95d2d7910e40bf095c8cd8bb456afc3e134a9d43e84a9050f62ed2520e2a7"
+      "size": 9353,
+      "sha256": "11648a5b96e20428a56e084623cdf8cf6fcdc39b97e77aeff069756c1bf1a442"
     },
     {
       "path": "scripts/studio/production.py",
@@ -792,8 +797,8 @@
     },
     {
       "path": "scripts/studio/projective_warp.py",
-      "size": 10300,
-      "sha256": "d5ebe0a65b2756c49a6c2b05c43b8d242e5d63dec5d30ade8c81aa8ac64aa53a"
+      "size": 11856,
+      "sha256": "d5daba05ea2254065256068dbdf384e051440259562620ced7202f6a6b5d15bc"
     },
     {
       "path": "scripts/studio/ray-optics-linux-x86_64-py312.lock.json",
@@ -887,13 +892,13 @@
     },
     {
       "path": "scripts/studio/retime.py",
-      "size": 22553,
-      "sha256": "a8158c3dafcdac2d9a95f360bb3efab856a3008fa187372ee25e7daa02cb142c"
+      "size": 23794,
+      "sha256": "46c5da52eed2756f0fc9c2a8680a31f6baac85eb2fb1f891e16c59a75cb6133c"
     },
     {
       "path": "scripts/studio/retime_worker.py",
-      "size": 9270,
-      "sha256": "a3981dc1823b5142eea04f8b42b93075c95186efc9c7a166e06cd76ece31cce6"
+      "size": 13325,
+      "sha256": "fd58df1d052c29d196bbfb23eb05d303fbea8b7c6d125b7ed6deada37b67f1d8"
     },
     {
       "path": "scripts/studio/roto.py",
@@ -1096,6 +1101,16 @@
       "sha256": "110240b732c31609fa00743f07e1db76f3568f7fdb360be5cec9cf3e63d0bbf6"
     },
     {
+      "path": "scripts/studio/test_decoded_frame_cache.cjs",
+      "size": 6690,
+      "sha256": "b7c1518e14e1ba7aca94e83370313645022ba4e6642081473fa22ef6582fe6a6"
+    },
+    {
+      "path": "scripts/studio/test_decoded_frame_cache_browser.cjs",
+      "size": 15144,
+      "sha256": "504873517d6fb89a4de2c786d575b52c00d708b98547778e607eab55fbc1cbb7"
+    },
+    {
       "path": "scripts/studio/test_deep_compositing.py",
       "size": 25208,
       "sha256": "15ec7ae062a2f9028d97ca7144159e8a10265a3213e4d0c2d93a73edc17edda6"
@@ -1182,8 +1197,8 @@
     },
     {
       "path": "scripts/studio/test_generation_inference_macos.py",
-      "size": 8426,
-      "sha256": "be23937e0cf5a17f9cc4886284d00d82f19065f85df66c4133c51613bacc713f"
+      "size": 9038,
+      "sha256": "41f63c44a45b7bbb82adb67b2c76ec34f69cee1158c83afb61706b138c376335"
     },
     {
       "path": "scripts/studio/test_generation_readiness.py",
@@ -1421,9 +1436,19 @@
       "sha256": "4aa377dd1585263dcfbbcddb543036d7b36e9f5f76985aef6704c84d7958e45c"
     },
     {
+      "path": "scripts/studio/test_pitch_retime.py",
+      "size": 10912,
+      "sha256": "deeac8ecd34105674392ef099704bd8de5248e66288e5f42b03b295545339fca"
+    },
+    {
+      "path": "scripts/studio/test_planar_scale.py",
+      "size": 5520,
+      "sha256": "022ce14d2bcdb5367ba13298687efa520fedec0916b12696131d7c50f3b392c0"
+    },
+    {
       "path": "scripts/studio/test_planar_tracking.py",
-      "size": 20497,
-      "sha256": "aeb549a35c196b27c04ab261082b6d471fa1deeee39d30534df39e99683bf5d4"
+      "size": 22941,
+      "sha256": "06e8230b15ea3a7c6d3483aaacbb8bcb3cc93298fee388b61b0fba638dccf7a7"
     },
     {
       "path": "scripts/studio/test_planar_tracking_macos.py",
@@ -1722,8 +1747,8 @@
     },
     {
       "path": "scripts/studio/tracking.py",
-      "size": 20236,
-      "sha256": "478c42f63e75ec605345f833e38d32b629bc6ceb66dfe3ec2cdb3ab4e46c8894"
+      "size": 20603,
+      "sha256": "ef55561cac02640b8d6147712034d39a17119d05560215a8f79e6d5f288a6c19"
     },
     {
       "path": "scripts/studio/validate_fcpxml_schema.py",
@@ -1767,8 +1792,8 @@
     },
     {
       "path": "scripts/studio/web/app.js",
-      "size": 141017,
-      "sha256": "29236c0d5f8941d507c36e39dee95d17a5f039199b48c64b5dee5df524caa767"
+      "size": 141069,
+      "sha256": "eca6b3ce708a68370a17abd9d07d64db49b1cfda412aa20ddd932ad109152de0"
     },
     {
       "path": "scripts/studio/web/archive-ui.js",
@@ -1801,6 +1826,11 @@
       "sha256": "04e99eb7c04b702fbd05d535728d9537a7a899741848e8202f3d4dc64dd17298"
     },
     {
+      "path": "scripts/studio/web/decoded-frame-cache.js",
+      "size": 4312,
+      "sha256": "e28bd391c5f714de95cb645e130025038a154cb96967925eee608c6793634951"
+    },
+    {
       "path": "scripts/studio/web/deep-compositing-ui.js",
       "size": 25642,
       "sha256": "a8dacfa6436be3491cb5fe2cd8d9ceab95d9ec7718ef65f383db8aeee65b0d9e"
@@ -1827,8 +1857,8 @@
     },
     {
       "path": "scripts/studio/web/index.html",
-      "size": 19663,
-      "sha256": "0aec6a7adca23a5036702c3b762e9820bf753d45cfd881229138a5ef959e61b6"
+      "size": 19717,
+      "sha256": "bec711456342fabbe815da5577cb3b7e21ef11c79af93270dfddd580a2228813"
     },
     {
       "path": "scripts/studio/web/interchange-ui.js",
@@ -1892,13 +1922,13 @@
     },
     {
       "path": "scripts/studio/web/retime-model.js",
-      "size": 8862,
-      "sha256": "05d9ff44128e4817abacd405d4ff326f750d312c0223ee82c2b4b5dc83ee8613"
+      "size": 8879,
+      "sha256": "5914cc22ca24bc5a066eab39f93a1f81c25aab63d3cb282e1e299060431aea17"
     },
     {
       "path": "scripts/studio/web/retime-ui.js",
-      "size": 15207,
-      "sha256": "7472eb6021f57f9df5a937da49dd6afb6e6bc58c5d90d2b6dc344016fd64bd31"
+      "size": 15472,
+      "sha256": "e776f78a9e657503d3e38df7ad02c2c6c17b900c71d8889546f9a37711262e61"
     },
     {
       "path": "scripts/studio/web/runtime-management-ui.js",
@@ -1922,8 +1952,8 @@
     },
     {
       "path": "scripts/studio/web/sequence-playback.js",
-      "size": 13188,
-      "sha256": "e45da3621cceddf1df7656824165a0a1adc7efb6550663a2486a75505a74ecf2"
+      "size": 14512,
+      "sha256": "b44a4b8a8f327e63f784849872313bbb68a745dd3172e5d73f70549fbf4baabc"
     },
     {
       "path": "scripts/studio/web/style.css",
@@ -1932,8 +1962,8 @@
     },
     {
       "path": "scripts/studio/web/tracking-ui.js",
-      "size": 25701,
-      "sha256": "038aec934aca1e2bce3dfb62341ac7f673cb8152a5690ee130c3970e8e100013"
+      "size": 25791,
+      "sha256": "21f04e6bcc0f52baa4a8ba2c9ebd8fbebe23e8ea84f014c859c6c154a2e4b5ef"
     },
     {
       "path": "scripts/studio/web/viewer-tools.js",

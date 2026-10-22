@@ -97,9 +97,12 @@ clip clears only its already-applied stream/channel selection and resets its
 source in/speed; it retains the authored mix controls. This preserves the
 absolute sample grid through splits and forward normal-speed nested trims.
 
-Varispeed deliberately changes pitch with speed. Pitch-preserving ramps are
-unsupported. The filter is a bounded practical anti-aliasing implementation,
-not a general audio workstation or a quality guarantee for arbitrary material.
+Varispeed deliberately changes pitch with speed. The optional Preserve pitch
+mode uses stereo-linked 2048-sample/256-hop phase-vocoder windows at the
+analytic variable source clock. A curve-wide synthesis lattice retains exact
+samples across fractional-origin splits/trims. Finite windows can soften
+transients; review rendered speech and music. This is bounded processing,
+with no production-quality guarantee for arbitrary material.
 Mute emits the exact same number of zero samples. Constant retimes continue to
 use the existing pitch-preserving source-tempo path.
 

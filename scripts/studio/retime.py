@@ -41,8 +41,8 @@ def number(value, label, low, high, integer=False):
 def validate_recipe(value, duration):
     if not isinstance(value, dict) or set(value) != {'version','method','audio','offset','keys','source_origin'} or type(value['version']) is not int or value['version'] != 1:
         raise ValueError('A speed ramp needs an explicit version, method, audio mode, source origin, offset and keys.')
-    if value['method'] not in ('nearest','optical_flow') or value['audio'] not in ('varispeed','mute'):
-        raise ValueError('Choose nearest/optical-flow picture and varispeed/muted audio.')
+    if value['method'] not in ('nearest','optical_flow') or value['audio'] not in ('varispeed','pitch_preserve','mute'):
+        raise ValueError('Choose nearest/optical-flow picture and varispeed, pitch-preserving or muted audio.')
     keys = value['keys']
     if not isinstance(keys, list) or not 2 <= len(keys) <= MAX_KEYS:
         raise ValueError('A speed ramp needs 2–32 ordered speed keys.')
@@ -317,13 +317,31 @@ def prepare(project, clip, asset, project_dir, directory, *, audio_origin=0, can
             raise ValueError('The requested original picture handles did not decode completely.')
     absolute=Fraction(str(audio_origin))+clip['start'];samples=rate.sample_span(absolute,clip['duration'])
     phase=Fraction(rate.samples_for_frames(absolute))-rate.seconds_for_frames(absolute)*48000
+    # A canonical sample lattice for the complete retained curve makes the
+    # spectral state identical on either side of a split, including fractional
+    # sequence origins. Render its prefix and publish only this clip's interval.
+    curve_sample=Fraction(recipe['offset'])*48000/rate.fraction+phase
+    audio_grid_start=math.floor(curve_sample+Fraction(1,2))
+    audio_grid_phase=curve_sample-audio_grid_start
     audio_first=audio_count=0
-    if asset['has_audio'] and recipe['audio']=='varispeed':
+    if asset['has_audio'] and recipe['audio']!='mute':
         selected=clip['audio'].get('stream_index',asset['audio_stream_index']);stream=next(s for s in asset['audio_streams'] if s['index']==selected)
-        low=source_position(clip,phase*rate.fraction/48000)
-        high=source_position(clip,(samples-1+phase)*rate.fraction/48000)
-        audio_first=max(0,math.floor(float(rate.seconds_for_frames(low)*48000))-32)
-        audio_end=min(round(stream['duration']*48000),math.ceil(float(rate.seconds_for_frames(high)*48000))+33)
+        if recipe['audio']=='pitch_preserve':
+            # The 2048-sample analysis window needs real handles around every
+            # mapped center. Prefix analysis starts at the same curve position
+            # for whole, trimmed and split clips; missing media tails are zero.
+            first_local=(audio_grid_phase-1024)*rate.fraction/48000
+            last_local=(audio_grid_start+samples+1280+audio_grid_phase)*rate.fraction/48000
+            low=source_position(clip,first_local-recipe['offset'])
+            high=source_position(clip,last_local-recipe['offset'])
+            padding=1026
+        else:
+            low=source_position(clip,phase*rate.fraction/48000)
+            high=source_position(clip,(samples-1+phase)*rate.fraction/48000)
+            padding=32
+        audio_first=max(0,math.floor(float(rate.seconds_for_frames(low)*48000))-padding)
+        audio_end=min(round(stream['duration']*48000),math.ceil(float(rate.seconds_for_frames(high)*48000))+padding+1)
+        audio_end=max(audio_first,audio_end)
         audio_count=audio_end-audio_first
         channels=clip['audio'].get('channels');mapping=[f"pan=stereo|c0=c{channels[0]}|c1=c{channels[1]}"] if channels is not None else []
         chain=','.join(['asetpts=PTS-STARTPTS','aresample=48000',*mapping,'aformat=sample_fmts=fltp:channel_layouts=stereo',f'atrim=start_sample={audio_first}:end_sample={audio_end}','asetpts=PTS-STARTPTS'])
@@ -332,7 +350,8 @@ def prepare(project, clip, asset, project_dir, directory, *, audio_origin=0, can
             raise ValueError('The selected source audio handles did not decode completely.')
     request={'version':1,'width':width,'height':height,'video':asset['kind']=='video','source_first':first,'source_count':last-first+1,
         'positions':positions,'nearest_frames':nearest,'recipe':recipe,'source_origin':float(Fraction(int(recipe['source_origin']['numerator']),int(recipe['source_origin']['denominator']))),'duration':clip['duration'],'fps':rate.as_dict(),
-        'samples':samples,'sample_phase':float(phase),'audio_first':audio_first,'audio_count':audio_count}
+        'samples':samples,'sample_phase':float(phase),'audio_first':audio_first,'audio_count':audio_count,
+        'audio_grid_start':audio_grid_start,'audio_grid_phase':float(audio_grid_phase)}
     manifest=root/'request.json';manifest.write_text(json.dumps(request,allow_nan=False))
     _run([runtime['python'],'-I','-B',WORKER,'--request',manifest],root,'source-retime',cancel_event,deadline,root/'worker.json')
     result=json.loads((root/'worker.json').read_text())

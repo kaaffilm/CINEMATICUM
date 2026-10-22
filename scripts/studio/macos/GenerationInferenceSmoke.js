@@ -27,9 +27,10 @@ return await (async () => {
     const frames = Number(parameters.get('acceptance_frames') || '17');
     const projectId = parameters.get('acceptance_project');
     require(Number.isInteger(repeats) && repeats >= 1 && repeats <= 3, 'Invalid acceptance repetition count');
-    require(frames === 17 || frames === 33, 'Invalid acceptance frame count');
+    require(Number.isInteger(frames) && [17, 33, 49, 65, 81].includes(frames), 'Invalid acceptance frame count');
     require(projectId, 'The intended generation project was not specified');
-    const perTakeDeadline = frames === 17 ? 1200 : 2400;
+    // Observer only: the application retains its own bounded engine deadline.
+    const perTakeDeadline = 1200 * ((frames - 1) / 16);
     await until(() => $('#project-select') && !$('#project-select').disabled
       && [...$('#project-select').options].some(option => option.value === projectId), 'Intended generation project was not listed');
     input('#project-select', projectId);
@@ -43,10 +44,10 @@ return await (async () => {
       && Number($('[data-generation-length]').value) === 17 && Number($('[data-generation-steps]').value) === 20
       && Number($('[data-generation-fps]').value) === 16 && Number($('[data-generation-cfg]').value) === 6,
       'Normal generation defaults changed');
-    if (frames === 33) {
+    if (frames !== 17) {
       input('[data-generation-length]', frames);
       require(Number($('[data-generation-length]').value) === frames, 'Longer frame count was not entered');
-      steps.push('requested_33_frames_through_native_length_input');
+      steps.push('requested_' + frames + '_frames_through_native_length_input');
     }
     click('[data-generation-workflow]');
     await until(() => $('[data-generation-workflow-status]')?.textContent.includes('saved'), 'Requested workflow was not saved');

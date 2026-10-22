@@ -2,6 +2,7 @@
 (()=>{
   'use strict';
   const buffers=[];
+  let decodedPictures=null;
   let transportClock=null,preparing=false,buffering=null;
   const nearest=value=>value<0?-Math.floor(-value+.5):Math.floor(value+.5);
   function clockTicks(project){
@@ -23,6 +24,8 @@
   }
   function draw({project,frame,audioFrame=frame,transportEpoch=0,context,width,height,mediaFor,ensureAudio,playing,activeIds,revision}){
     const edit=window.CinematicumEditing,assets=new Map(project.assets.map(a=>[a.id,a]));
+    if(!decodedPictures&&window.CinematicumDecodedFrameCache)decodedPictures=new window.CinematicumDecodedFrameCache();
+    const pictureDecoders=new Set();
     const clocks=[],decoders=[],lockedVoices=new Set();let pending=false;
     if(!playing||buffering?.epoch!==transportEpoch)buffering=null;
     const sequences=new Map([[project.sequence_id||'main',project],...(project.sequences||[]).map(s=>[s.id,s])]);
@@ -44,6 +47,14 @@
       media.nested=nested;media.ownerClipId=clip.id;media.revision=revision;activeIds.add(key);
       if(media.kind!=='image'){
         const seek=sourceFrame/project.fps,tolerance=playing?(precisePicture?.75/project.fps:.16):.01;
+        const source=media.requestUrl||media.url||el.currentSrc||el.src;
+        const identity=media.kind==='video'&&source?JSON.stringify([project.id,asset.id,asset.sha256||null,source]):null;
+        const cacheIntent=identity&&(!playing||backwards);
+        media.decodedPicture=cacheIntent?decodedPictures?.get(identity,seek):null;
+        // Native forward decoding already owns a playback queue. Copying every
+        // displayed 4K frame into RGBA snapshots would compete with that queue.
+        // Retain snapshots only for explicit pause/scrub/reverse reuse.
+        if(cacheIntent&&decodedPictures){pictureDecoders.add(el);decodedPictures.observe(el,identity,()=>!media.disposed);}
         const playbackRate=media.kind==='audio'?rate:Math.max(.0625,Math.min(16,rate));
         // Native media setters may rebuild an AVFoundation audio tap even if
         // the requested value is unchanged. Keep steady playback untouched.
@@ -54,12 +65,16 @@
         // of gaps. Seek once per transport/source edit, then let the audio clock
         // drive transport. Picture-only decoders can continue to resynchronize.
         const syncKey=JSON.stringify([transportEpoch,rate,backwards,Math.round((seek-audioFrame/project.fps*(backwards?-rate:rate))*1e6)]);
-        const mustSeek=!sound||!playing||media.audioSyncKey!==syncKey;
+        const mustSeek=!media.decodedPicture&&(!sound||!playing||media.audioSyncKey!==syncKey);
         if(mustSeek&&Number.isFinite(el.duration)&&el.readyState>=1){
           if(Math.abs(el.currentTime-seek)>(sound?.005:tolerance)){try{el.currentTime=Math.min(seek,Math.max(0,el.duration-.001));}catch(error){}}
           if(sound&&playing)media.audioSyncKey=syncKey;
         }
         if(!playing)media.audioSyncKey=null;
+        if(identity&&decodedPictures&&(!playing||backwards)&&!media.decodedPicture&&!el.seeking&&el.readyState>=2){
+          decodedPictures.capture(identity,el.currentTime,el);
+          media.decodedPicture=decodedPictures.get(identity,seek);
+        }
         const routing=sound?ensureAudio(media,clip,asset,{playbackRate:rate,sourceTime:seek,reverse:backwards}):null,audible=sound&&routing?.ready!==false;
         const muted=media.source?false:!audible;
         if(el.muted!==muted)el.muted=muted;
@@ -104,7 +119,7 @@
           const separateSound=asset.kind==='video';
           if(pictureActive&&asset.kind!=='audio'){
             const media=sourceMedia(clip,key,asset,edit.sourceFrame(clip,at),rate,backwards,!separateSound&&audioActive,clipGain,clipLeft,clipRight,Boolean(prefix),Boolean(prefix)),el=media.el;
-            if(media.kind==='image'?el.complete&&el.naturalWidth:el.readyState>=2){picture=el;aw=asset.width||el.videoWidth||el.naturalWidth;ah=asset.height||el.videoHeight||el.naturalHeight;}
+            if(media.decodedPicture||(media.kind==='image'?el.complete&&el.naturalWidth:el.readyState>=2)){picture=media.decodedPicture||el;aw=asset.width||el.videoWidth||el.naturalWidth;ah=asset.height||el.videoHeight||el.naturalHeight;}
           }
           const resolved=window.CinematicumMulticam?.resolveAudio(project,clip,asset)||{clip,asset};
           const soundClip=resolved.clip,soundAsset=resolved.asset;
@@ -140,6 +155,7 @@
       }
     }
     visit(project,frame,audioFrame,context,width,height,'',0,1,1,1,1,false);
+    decodedPictures?.retain(pictureDecoders);
     preparing=pending;
     if(playing&&pending){
       // A new overlapping source must start at its authored position. Hold all
@@ -169,5 +185,5 @@
     // transport to leave a completed source and continue into a cut or gap.
     return {waiting:false,frame:el.ended?Math.ceil(frame-1e-7):frame,source:value.key};
   }
-  window.CinematicumSequencePlayback={draw,sampleSequenceFrame,clock,ready:()=>!preparing,clear(){transportClock=null;preparing=false;buffering=null;for(const canvas of buffers){canvas.width=1;canvas.height=1;}buffers.length=0;}};
+  window.CinematicumSequencePlayback={draw,sampleSequenceFrame,clock,ready:()=>!preparing,cacheStats:()=>decodedPictures?.stats()||null,clear(){transportClock=null;preparing=false;buffering=null;decodedPictures?.clear();for(const canvas of buffers){canvas.width=1;canvas.height=1;}buffers.length=0;}};
 })();

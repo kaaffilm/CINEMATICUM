@@ -11,7 +11,12 @@ import json
 import math
 
 COORDINATES = "normalized-image-xy-pixel-centers"
-MAX_PLANAR_FRAMES = 240
+MAX_PLANAR_FRAMES = 960
+MAX_PLANAR_ANALYSIS_EDGE = 1280
+# The disk-backed gray sequence is also the source of FFmpeg's bounded
+# reverse window (YUV420p needs at most 1.5 times this amount).
+MAX_PLANAR_DECODE_BYTES = 256 * 1024 * 1024
+MAX_PLANAR_TRACK_BYTES = 2 * 1024 * 1024
 MAX_WARP_PIXELS = 2_073_600
 IDENTITY = [1., 0., 0., 0., 1., 0., 0., 0., 1.]
 
@@ -22,6 +27,23 @@ def number(value, label, low, high, integer=False):
     if not low <= value <= high or integer and value != int(value):
         raise ValueError(label + " is outside its supported range")
     return int(value) if integer else float(value)
+
+
+def planar_analysis_size(width, height, count):
+    """Choose an even canvas within both edge and whole-window byte bounds.
+
+    Long takes trade analysis resolution for duration. The seed preview and
+    measurement must use this same calculation, including reversed sources.
+    """
+    width=number(width,"Planar source width",16,32768,True)
+    height=number(height,"Planar source height",16,32768,True)
+    count=number(count,"Planar frame count",1,MAX_PLANAR_FRAMES,True)
+    factor=min(1.,MAX_PLANAR_ANALYSIS_EDGE/max(width,height),
+               math.sqrt(MAX_PLANAR_DECODE_BYTES/(width*height*count)))
+    result=(max(16,int(width*factor/2)*2),max(16,int(height*factor/2)*2))
+    if result[0]*result[1]*count>MAX_PLANAR_DECODE_BYTES:
+        raise ValueError("Planar analysis exceeds its decoded-window byte bound")
+    return result
 
 
 def invert(matrix):
@@ -116,7 +138,7 @@ def validate_planar_motion(value, animation_start=0, animation_duration=None):
     if not isinstance(canvas,dict) or set(canvas)!={"width","height"}:raise ValueError("Planar motion needs its source canvas")
     canvas={key:number(canvas[key],"Planar canvas",16,32768,True) for key in ("width","height")}
     keys=value.get("keys")
-    if not isinstance(keys,list) or not 1<=len(keys)<=MAX_PLANAR_FRAMES:raise ValueError("Planar motion needs 1–240 measured frames")
+    if not isinstance(keys,list) or not 1<=len(keys)<=MAX_PLANAR_FRAMES:raise ValueError("Planar motion needs 1–960 measured frames")
     result=[];previous=None
     # Preserve measured keys through incompatible timing edits for undo and
     # save/reopen. Invalidated keys never execute, even if their new domain is
@@ -159,9 +181,15 @@ def compile_planar_warp(motion, animation_offset, width, height, pixel_format="r
     offset=number(animation_offset,"Planar animation offset",-1_296_000,1_296_000,True)
     keys=motion["keys"];inverses=[invert(k["matrix"]) for k in keys]
     frame=f"(N+({offset}))"
+    coefficients=[[format(matrix[component],'.15g') for matrix in inverses] for component in range(9)]
     def expression(component,lo=0,hi=None):
         hi=len(keys) if hi is None else hi
-        if hi-lo==1:return format(inverses[lo][component],'.15g')
+        values=coefficients[component]
+        # Exact in the renderer's existing decimal representation: stationary
+        # coefficients need one scalar, not hundreds of identical branches.
+        # This keeps common affine/translation long takes practical without
+        # approximating measured samples or dropping their frame clocks.
+        if all(value==values[lo] for value in values[lo:hi]):return values[lo]
         mid=(lo+hi)//2
         return f"if(lt({frame},{keys[mid]['frame']}),{expression(component,lo,mid)},{expression(component,mid,hi)})"
     # Ten GEQ registers: load H, then reuse consumed coefficients for the

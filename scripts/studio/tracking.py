@@ -80,18 +80,27 @@ def _prepare(project, project_dir, clip_id, request):
         raise ValueError("Point tracking requires a video picture clip")
     if not isinstance(request, dict):
         raise ValueError("Tracking settings must be an object")
+    planar = request.get("mode") in {"affine", "projective"}
+    if planar:
+        if __package__:
+            from .projective_warp import MAX_PLANAR_FRAMES, planar_analysis_size
+        else:
+            from projective_warp import MAX_PLANAR_FRAMES, planar_analysis_size
+    maximum = MAX_PLANAR_FRAMES if planar else MAX_TRACK_FRAMES
     first = _number(request.get("frame_start", 0), "First tracking frame", 0, clip["duration"] - 1, True)
     count = _number(request.get("frame_count", min(240, clip["duration"] - first)), "Tracking frame count",
-                    1, min(MAX_TRACK_FRAMES, clip["duration"] - first), True)
+                    1, min(maximum, clip["duration"] - first), True)
     window = copy.deepcopy(clip)
     # Conform from the original source origin before selecting integer output
     # frames. Moving the in point would reround half-frame timestamp ties and
     # can measure different pictures from those used by the timeline.
     window["reverse"] = False
-    planar = request.get("mode") in {"affine", "projective"}
-    factor = min(1, (640 if planar else ANALYSIS_EDGE) / max(asset["width"], asset["height"]))
-    width = max(16, int(asset["width"] * factor / 2) * 2)
-    height = max(16, int(asset["height"] * factor / 2) * 2)
+    if planar:
+        width,height = planar_analysis_size(asset["width"],asset["height"],count)
+    else:
+        factor = min(1, ANALYSIS_EDGE / max(asset["width"], asset["height"]))
+        width = max(16, int(asset["width"] * factor / 2) * 2)
+        height = max(16, int(asset["height"] * factor / 2) * 2)
     return project, clip, asset, _media_path(project_dir, asset["path"]), window, first, count, width, height
 
 

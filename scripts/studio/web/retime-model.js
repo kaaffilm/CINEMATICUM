@@ -34,7 +34,7 @@
     return result;
   }
   function validate(recipe) {
-    if(!recipe||typeof recipe!=='object'||Array.isArray(recipe)||recipe.version!==1||!['nearest','optical_flow'].includes(recipe.method)||!['varispeed','mute'].includes(recipe.audio))throw Error('Invalid speed-ramp recipe.');
+    if(!recipe||typeof recipe!=='object'||Array.isArray(recipe)||recipe.version!==1||!['nearest','optical_flow'].includes(recipe.method)||!['varispeed','pitch_preserve','mute'].includes(recipe.audio))throw Error('Invalid speed-ramp recipe.');
     if(!Array.isArray(recipe.keys)||recipe.keys.length<2||recipe.keys.length>32)throw Error('A speed ramp needs 2–32 keys.');
     let previous=-1;
     for(const key of recipe.keys){

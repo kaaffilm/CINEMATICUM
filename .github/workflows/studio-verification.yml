@@ -88,6 +88,11 @@ jobs:
           for file in scripts/studio/web/*.js scripts/studio/macos/*.js scripts/studio/*.cjs; do
             node --check "$file"
           done
+      - name: Verify bounded decoded-frame cache lifecycle
+        run: node scripts/studio/test_decoded_frame_cache.cjs
+      - name: Accept decoded-picture reuse in the actual pinned browser
+        run: |
+          node scripts/studio/test_decoded_frame_cache_browser.cjs --browser "$CINEMATICUM_BROWSER" --evidence "$RUNNER_TEMP/decoded-frame-cache-acceptance"
       - name: Accept actual multicamera editing, save, reopen and rendered source audio
         run: |
           node scripts/studio/test_multicam_sync_browser.cjs \
@@ -190,6 +195,8 @@ jobs:
             ${{ runner.temp }}/cinematicum-runtimes/verification-environment.json
             ${{ runner.temp }}/cinematicum-runtimes/verification-path.json
             ${{ runner.temp }}/cinematicum-runtimes/*.log
+            ${{ runner.temp }}/decoded-frame-cache-acceptance/**/*.json
+            ${{ runner.temp }}/decoded-frame-cache-acceptance/**/*.png
             ${{ runner.temp }}/multicam-browser-acceptance/**/*.json
             ${{ runner.temp }}/multicam-browser-acceptance/**/*.png
             ${{ runner.temp }}/multicam-monitor-acceptance/**/*.json

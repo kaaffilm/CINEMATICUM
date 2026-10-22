@@ -13,7 +13,7 @@ import stat
 import sys
 
 sys.path.insert(0,str(Path(__file__).resolve().parent))
-from projective_warp import COORDINATES, IDENTITY, MAX_PLANAR_FRAMES, validate_matrix, validate_quad, transform
+from projective_warp import COORDINATES, IDENTITY, MAX_PLANAR_FRAMES, MAX_PLANAR_ANALYSIS_EDGE, MAX_PLANAR_DECODE_BYTES, validate_matrix, validate_quad, transform
 
 
 def runtime():
@@ -41,18 +41,20 @@ def capabilities():
 
 
 def measure(request):
-    cv,np=runtime()
     if not isinstance(request,dict) or set(request)!={"frames","width","height","count","model","quad"}:
         raise ValueError("Invalid planar worker request")
     w,h,count=request["width"],request["height"],request["count"]
-    if any(type(v) is not int for v in (w,h,count)) or not 16<=w<=640 or not 16<=h<=640 or not 1<=count<=MAX_PLANAR_FRAMES:
+    if any(type(v) is not int for v in (w,h,count)) or not 16<=w<=MAX_PLANAR_ANALYSIS_EDGE or not 16<=h<=MAX_PLANAR_ANALYSIS_EDGE or not 1<=count<=MAX_PLANAR_FRAMES:
         raise ValueError("Planar analysis exceeds its frame/canvas bounds")
+    if w*h*count>MAX_PLANAR_DECODE_BYTES:
+        raise ValueError("Planar analysis exceeds its decoded-window byte bound")
     model=request["model"]
     if model not in {"affine","projective"}:raise ValueError("Unknown planar model")
     quad=validate_quad(request["quad"])
     path=Path(request["frames"])
     if path.is_symlink() or not stat.S_ISREG(path.stat().st_mode) or path.stat().st_size!=w*h*count:
         raise ValueError("The bounded decoded frame sequence is missing or incomplete")
+    cv,np=runtime()
     frames=np.memmap(path,dtype=np.uint8,mode="r",shape=(count,h,w))
     roi=np.asarray(quad,np.float32)*[w,h]-.5
     mask=np.zeros((h,w),np.uint8)

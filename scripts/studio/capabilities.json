@@ -3,7 +3,7 @@
   "build": "0.13.0",
   "reviewed_on": "2026-10-22",
   "parity_complete": false,
-  "evidence_note": "Studio 0.13.0/build 14 implements measured Lensfun radial profiles, four fisheye projections and bounded FCPXML interchange. Accepted core cdd15816 passed all 925 tests with zero failures/errors/skips and unchanged 367 declared source files plus manifest and all five managed runtimes. Six actual Mac phases passed 150 outer checks (four native executions and two preparations, 36 nested UI assertions); exact native XML artifacts passed the independent pinned Linux lxml/Apple 1.10 DTD gate. Installation passed 5/5 for 114 runtime/web and 119 bundle files while preserving prior 0.12 and 59 project files/2,858,334,501 bytes; canonical launch passed 16/16; all eight installed runtime phases passed 14/14 with 5/5 preparation and 6/6 final preservation. Original isolated/Chromium evidence retains its actual source/native=false identity. This documentation/evidence publication preserves all accepted product/test/native/CI bytes. Exact published-head CI is a post-publication gate recorded in PR 162/current run/artifact. Full professional parity, external Final Cut Pro host parity, signed distribution and accepted-film issuance remain unclaimed.",
+  "evidence_note": "Studio 0.13.0/build 14 implements measured Lensfun radial profiles, four fisheye projections and bounded FCPXML interchange. Accepted core cdd15816 passed all 925 tests with zero failures/errors/skips and unchanged 367 declared source files plus manifest and all five managed runtimes. Six actual Mac phases passed 150 outer checks (four native executions and two preparations, 36 nested UI assertions); exact native XML artifacts passed the independent pinned Linux lxml/Apple 1.10 DTD gate. Installation passed 5/5 for 114 runtime/web and 119 bundle files while preserving prior 0.12 and 59 project files/2,858,334,501 bytes; canonical launch passed 16/16; all eight installed runtime phases passed 14/14 with 5/5 preparation and 6/6 final preservation. Original isolated/Chromium evidence retains its actual source/native=false identity. This documentation/evidence publication preserves all accepted product/test/native/CI bytes. Exact published-head CI is a post-publication gate recorded in PR 162/current run/artifact. Full professional parity, external Final Cut Pro host parity, signed distribution and accepted-film issuance remain unclaimed. Incremental pitch, planar-range and decoded-cache source changes have focused engine evidence only; earlier installed/native receipts do not certify these new bytes.",
   "release_acceptance": {
     "status": "bounded_local_native_and_installed_gates_passed_publication_ready",
     "version": "0.13.0",
@@ -434,7 +434,7 @@
     {
       "id": "editor.variable_speed",
       "status": "implemented_bounded",
-      "scope": "Studio 0.12: exact analytic integration of 2–32 linearly interpolated speed keys, 0.25–4x forward, up to 240 frames. Authored source recipe survives undo/save/reopen/archive and split/edge trims. Absolute 48 kHz source sampling uses a 64-tap anti-aliased varispeed filter, selected stream/channels and existing gain/pan/fades; pitch follows speed. Rendered playback; unchanged constant-speed live PCM. At most 16 authored/expanded ramp instances. Unsupported timewarped ancestors, bindings and interchange refuse explicitly; Publication dcea8619 and its exact-source CI completed; the actual 925-test and installed 0.13 gates are recorded separately in release_acceptance.",
+      "scope": "Studio 0.12: exact analytic integration of 2–32 linearly interpolated speed keys, 0.25–4x forward, up to 240 frames. Authored source recipe survives undo/save/reopen/archive and split/edge trims. Absolute 48 kHz source sampling uses a 64-tap anti-aliased varispeed filter, selected stream/channels and existing gain/pan/fades; pitch follows speed. Rendered playback; unchanged constant-speed live PCM. At most 16 authored/expanded ramp instances. Unsupported timewarped ancestors, bindings and interchange refuse explicitly; Publication dcea8619 and its exact-source CI completed; the actual 925-test and installed 0.13 gates are recorded separately in release_acceptance. The current candidate additionally offers explicit pitch_preserve audio: stereo-linked 2048-sample/256-hop phase vocoder at the analytic source clock, with curve-wide synthesis state retained through fractional splits/trims. Finite windows can soften transients; rendered playback is required.",
       "evidence": [
         "retime.py",
         "retime_worker.py",
@@ -446,9 +446,10 @@
         "macos/RetimeSmoke.js",
         "RETIME.md",
         "VERIFICATION_0_12.md",
-        "verification/0.12.0/native-retime-02/archive/ENGINE_TEST_retime_report.json"
+        "verification/0.12.0/native-retime-02/archive/ENGINE_TEST_retime_report.json",
+        "test_pitch_retime.py"
       ],
-      "acceptance": "Core c9869e86 passed all 895 tests. Four retime phases passed 58 outer checks: three actual WKWebView executions and one fixture preparation. Actual source-map authoring, undo/save/reopen, processed playback, archive restoration, original-media preservation and independently decoded picture/stereo audio passed; Chromium separately passed 58 checks. The installed 0.12 bundle, canonical launch and all eight selected default-runtime endpoints passed. Publication dcea8619 and its exact-source CI completed; the actual 925-test and installed 0.13 gates are recorded separately in release_acceptance. See VERIFICATION_0_12.md. These shared retime checks are not counted again for optical flow."
+      "acceptance": "Core c9869e86 passed all 895 tests. Four retime phases passed 58 outer checks: three actual WKWebView executions and one fixture preparation. Actual source-map authoring, undo/save/reopen, processed playback, archive restoration, original-media preservation and independently decoded picture/stereo audio passed; Chromium separately passed 58 checks. The installed 0.12 bundle, canonical launch and all eight selected default-runtime endpoints passed. Publication dcea8619 and its exact-source CI completed; the actual 925-test and installed 0.13 gates are recorded separately in release_acceptance. See VERIFICATION_0_12.md. These shared retime checks are not counted again for optical flow. Incremental Mac checks passed six numerical tests, one actual selected-stream FFmpeg mux/decode and exact fractional split-PCM test, and all 19 existing retime tests. Expanded native and sustained audio acceptance remain open."
     },
     {
       "id": "editor.optical_flow",
@@ -595,7 +596,7 @@
     {
       "id": "tracking.planar",
       "status": "implemented_bounded",
-      "scope": "Actual OpenCV pyramidal Lucas–Kanade tracking with forward/backward and photometric rejection, plus RANSAC affine or projective measurement. Four-corner authoring, source-bound receipts, inverse stabilization and measured image corner pinning feed paused and movie output; pinning accounts for existing stabilization. Limits: 240 frames, 640-pixel analysis edge and 2,073,600 warped canvas pixels. Pure parent timeline moves remap dependent pins; incompatible source/timing/placement/driver-transform edits retain media, authored values and measurements as visibly stale. Stale motion never executes and blocks movie export until remeasured or explicitly cleared; save/reopen and undo preserve it. No automatic reacquisition, neural re-identification, lens/rolling-shutter estimation or unrestricted production tracker.",
+      "scope": "Actual OpenCV pyramidal Lucas–Kanade tracking with forward/backward and photometric rejection, plus RANSAC affine or projective measurement. Four-corner authoring, source-bound receipts, inverse stabilization and measured image corner pinning feed paused and movie output; pinning accounts for existing stabilization. Limits: 960 frames, up to 1280-pixel analysis edge with adaptive 256 MiB gray decode bound and 2 MiB track documents and 2,073,600 warped canvas pixels. Pure parent timeline moves remap dependent pins; incompatible source/timing/placement/driver-transform edits retain media, authored values and measurements as visibly stale. Stale motion never executes and blocks movie export until remeasured or explicitly cleared; save/reopen and undo preserve it. No automatic reacquisition, neural re-identification, lens/rolling-shutter estimation or unrestricted production tracker.",
       "evidence": [
         "planar_tracking.py",
         "planar_worker.py",
@@ -610,9 +611,10 @@
         "web/viewer-tools.js",
         "test_frame_preview.py",
         "verification/0.9.1/bundle-fixed-planar/result.json",
-        "verification/0.9.1/worker-bytecode-fix/manifest.json"
+        "verification/0.9.1/worker-bytecode-fix/manifest.json",
+        "test_planar_scale.py"
       ],
-      "acceptance": "Bundle-fixed-planar passed 10/10 in 10.282 seconds after explicit -B worker-launch correction: seven actual native stages, real OpenCV 4.11.0/NumPy 2.3.5 measurement, apply/undo/redo/timing invalidation/remap/save/reopen/paused-frame/ProRes export. Movie remains 268,926 bytes, both pin centers [80.5,64.0]. Earlier 10/10 runs and concurrent-inference timeout remain historical. Install-03 full receipt is collected; canonical launch passed 16/16 and final published-source reconciliation passed 9/9. Wider production throughput is unverified."
+      "acceptance": "Bundle-fixed-planar passed 10/10 in 10.282 seconds after explicit -B worker-launch correction: seven actual native stages, real OpenCV 4.11.0/NumPy 2.3.5 measurement, apply/undo/redo/timing invalidation/remap/save/reopen/paused-frame/ProRes export. Movie remains 268,926 bytes, both pin centers [80.5,64.0]. Earlier 10/10 runs and concurrent-inference timeout remain historical. Install-03 full receipt is collected; canonical launch passed 16/16 and final published-source reconciliation passed 9/9. Wider production throughput is unverified. Incremental Mac checks passed actual 300-frame/768-edge OpenCV measurement and 17 geometry/UI/render/resource tests, including actual warped pixels at key 959. Wider native/projective production acceptance remains open."
     },
     {
       "id": "color.sdr",
@@ -774,7 +776,7 @@
         "macos/GenerationInferenceSmoke.js",
         "test_generated_take_timing.py"
       ],
-      "acceptance": "Normal 480x 272/17-frame/20-step workflow accepted within this bounded case: two real inference outputs each passed 14/14 media checks and both final-native-01 playback runs passed 14/14 (2.236s and 2.149s), including every timeline frame. Final-extended-01 also passed actual 33-frame inference and native playback; generation elapsed 928.394 seconds and the whole extended batch elapsed 937.624 seconds. The exact inference/media/playback reports passed 11/11, 14/14 and 14/14 respectively; playback elapsed 4.208 seconds and all original source bytes/provenance stayed unchanged. This closes one bounded longer case; production-quality and sustained-operation claims remain unsupported."
+      "acceptance": "Normal 480x 272/17-frame/20-step workflow accepted within this bounded case: two real inference outputs each passed 14/14 media checks and both final-native-01 playback runs passed 14/14 (2.236s and 2.149s), including every timeline frame. Final-extended-01 also passed actual 33-frame inference and native playback; generation elapsed 928.394 seconds and the whole extended batch elapsed 937.624 seconds. The exact inference/media/playback reports passed 11/11, 14/14 and 14/14 respectively; playback elapsed 4.208 seconds and all original source bytes/provenance stayed unchanged. This closes one bounded longer case; production-quality and sustained-operation claims remain unsupported. The acceptance harness admits 49/65/81-frame requests, with exact requested/emitted frame checks. No longer inference ran in this candidate; the engine deadline is unchanged."
     },
     {
       "id": "audio.mix",
@@ -1396,9 +1398,15 @@
     },
     {
       "id": "performance.decoded_frame_cache",
-      "status": "missing",
-      "scope": "No general decoded-frame/GPU playback cache or production-scale real-media performance acceptance. Encoded preview proxies, bounded paused-frame jobs and source PCM caches are implemented for their separate purposes; they do not establish sustained multilayer decoded-picture throughput.",
-      "evidence": []
+      "status": "implemented_bounded",
+      "scope": "96 MiB/120-entry LRU of frozen decoded display pictures for repeated paused/scrub/reverse requests. Keys bind project, source hash, proxy/source URL and sample time. Normal forward playback performs no snapshot copies or callback registrations. Eviction/reset release surfaces; callback ownership and decoder URL changes are guarded. General GPU caching and sustained multilayer production-media/native Mac performance remain open.",
+      "evidence": [
+        "web/decoded-frame-cache.js",
+        "web/sequence-playback.js",
+        "test_decoded_frame_cache.cjs",
+        "test_decoded_frame_cache_browser.cjs"
+      ],
+      "acceptance": "Integrated Mac Node lifecycle, memory, source identity, seek reuse, stale callback/reset and zero-forward-work checks passed. Actual browser pixel acceptance is a separate CI gate; production/native throughput is not claimed."
     },
     {
       "id": "production.signed_distribution",

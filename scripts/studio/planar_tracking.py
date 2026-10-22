@@ -16,13 +16,15 @@ import tempfile
 import time
 
 if __package__:
-    from .projective_warp import (COORDINATES, IDENTITY, MAX_PLANAR_FRAMES, invert, multiply,
+    from .projective_warp import (COORDINATES, IDENTITY, MAX_PLANAR_FRAMES, MAX_PLANAR_ANALYSIS_EDGE,
+                                 MAX_PLANAR_DECODE_BYTES, MAX_PLANAR_TRACK_BYTES, invert, multiply,
                                  number, quad_matrix, transform, validate_matrix, validate_planar_motion, validate_quad)
 else:
-    from projective_warp import (COORDINATES, IDENTITY, MAX_PLANAR_FRAMES, invert, multiply,
+    from projective_warp import (COORDINATES, IDENTITY, MAX_PLANAR_FRAMES, MAX_PLANAR_ANALYSIS_EDGE,
+                                 MAX_PLANAR_DECODE_BYTES, MAX_PLANAR_TRACK_BYTES, invert, multiply,
                                 number, quad_matrix, transform, validate_matrix, validate_planar_motion, validate_quad)
 
-ANALYSIS_EDGE = 640
+ANALYSIS_EDGE = MAX_PLANAR_ANALYSIS_EDGE
 WORKER = Path(__file__).with_name("planar_worker.py")
 
 
@@ -53,7 +55,7 @@ def planar_capabilities(python=None):
             if result.returncode:raise ValueError(result.stderr.strip()[-500:])
             value=json.loads(result.stdout)
             if not value.get("runtime_operations_verified") or not value.get("available"):raise ValueError("Planar runtime did not pass its operation probe")
-            return {**value,"python":str(path),"max_frames":MAX_PLANAR_FRAMES,"analysis_edge":ANALYSIS_EDGE}
+            return {**value,"python":str(path),"max_frames":MAX_PLANAR_FRAMES,"analysis_edge":ANALYSIS_EDGE,"max_decoded_bytes":MAX_PLANAR_DECODE_BYTES}
         except (OSError,ValueError,subprocess.TimeoutExpired) as exc:reasons.append(str(exc))
     return {"available":False,"models":[],"reason":"Install the optional CINEMATICUM Tracking runtime to measure affine/projective motion. "
             +(reasons[-1] if reasons else "No isolated OpenCV runtime was found.")}
@@ -99,7 +101,7 @@ def track_planar(project,project_dir,clip_id,request,progress=None,cancel_event=
     quad=validate_quad(request.get("quad"))
     prepared=_prepare(project,project_dir,clip_id,request)
     project,clip,asset,path,window,first,count,width,height=prepared
-    if count>MAX_PLANAR_FRAMES:raise ValueError("Planar measurement supports at most 240 source-conformed frames")
+    if count>MAX_PLANAR_FRAMES:raise ValueError("Planar measurement supports at most 960 source-conformed frames")
     deadline=time.monotonic()+120
     identity=_source(prepared,cancel_event,deadline)
     runtime=planar_capabilities()
@@ -121,7 +123,7 @@ def track_planar(project,project_dir,clip_id,request,progress=None,cancel_event=
         output=directory/"result.json"
         _run([runtime["python"],"-I","-B",str(WORKER),"--request",str(manifest)],directory,"planar-measure",
              cancel_event,deadline,output,env=_environment())
-        if output.stat().st_size>1024*1024:raise ValueError("Planar measurement exceeded its result bound")
+        if output.stat().st_size>MAX_PLANAR_TRACK_BYTES:raise ValueError("Planar measurement exceeded its result bound")
         measured=json.loads(output.read_text())
         if _source(prepared,cancel_event,deadline)!=identity:raise ValueError("The original source changed during planar measurement")
     for sample in measured["samples"]:sample["frame"]+=first
@@ -135,14 +137,18 @@ def track_planar(project,project_dir,clip_id,request,progress=None,cancel_event=
 def validate_planar_track(track,expected_source):
     if not isinstance(track,dict) or track.get("version")!=1 or track.get("kind")!="planar-track":
         raise ValueError("Expected a CINEMATICUM planar-track document")
-    if len(json.dumps(track,allow_nan=False).encode())>1024*1024:raise ValueError("Planar track exceeds 1 MiB")
+    if len(json.dumps(track,allow_nan=False).encode())>MAX_PLANAR_TRACK_BYTES:raise ValueError("Planar track exceeds 2 MiB")
     if track.get("coordinates")!=COORDINATES or track.get("source")!=expected_source:
         raise ValueError("The planar track belongs to different source bytes, timing or coordinate conventions")
     model=track.get("model")
     if model not in {"affine","projective"}:raise ValueError("Planar measurement has an unsupported model")
     quad=validate_quad(track.get("reference_quad"))
     samples=track.get("samples")
-    if not isinstance(samples,list) or not 1<=len(samples)<=MAX_PLANAR_FRAMES:raise ValueError("Planar tracks need 1–240 explicit measured frames")
+    if not isinstance(samples,list) or not 1<=len(samples)<=MAX_PLANAR_FRAMES:raise ValueError("Planar tracks need 1–960 explicit measured frames")
+    analysis_width=number(track.get("analysis_width"),"Analysis width",16,MAX_PLANAR_ANALYSIS_EDGE,True)
+    analysis_height=number(track.get("analysis_height"),"Analysis height",16,MAX_PLANAR_ANALYSIS_EDGE,True)
+    if analysis_width*analysis_height*len(samples)>MAX_PLANAR_DECODE_BYTES:
+        raise ValueError("Planar track exceeds its decoded-window byte bound")
     result=[];previous=None
     for sample in samples:
         if not isinstance(sample,dict) or type(sample.get("visible")) is not bool:raise ValueError("Every planar sample needs explicit visibility")
@@ -178,8 +184,8 @@ def validate_planar_track(track,expected_source):
         raise ValueError("The first measured planar frame must be the visible identity reference")
     return {"version":1,"kind":"planar-track","model":model,"coordinates":COORDINATES,"source":copy.deepcopy(expected_source),
             "reference_frame":result[0]["frame"],"reference_quad":quad,"samples":result,
-            "analysis_width":number(track.get("analysis_width"),"Analysis width",16,640,True),
-            "analysis_height":number(track.get("analysis_height"),"Analysis height",16,640,True),
+            "analysis_width":analysis_width,
+            "analysis_height":analysis_height,
             "backend":str(track.get("backend","imported"))[:160],"opencv":str(track.get("opencv",""))[:40],
             "numpy":str(track.get("numpy",""))[:40],"measurement_note":str(track.get("measurement_note",""))[:1024]}
 
@@ -231,7 +237,7 @@ def _authored_transform(clip):
 
 def _stabilization_identity(clip):
     # Measurement keys are not editable in the UI. Bind their immutable
-    # measurement identity without copying a second 240-matrix document into
+    # measurement identity without copying a second measured-matrix document into
     # every overlay. Source timing has its own exact binding.
     return {name:{"track_sha256":motion.get("source",{}).get("track_sha256"),
                   "invalidated":motion.get("invalidated")}

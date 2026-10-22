@@ -9,6 +9,7 @@ from __future__ import annotations
 import copy
 import hashlib
 import json
+import math
 from pathlib import Path
 import random
 import shutil
@@ -304,6 +305,40 @@ class PlanarInferenceTests(unittest.TestCase):
                     for actual,corner in zip(sample["corners"],QUAD):
                         self.assertAlmostEqual(actual[0]*WIDTH,corner[0]*WIDTH+2*sample["frame"],delta=.8)
                         self.assertAlmostEqual(actual[1]*HEIGHT,corner[1]*HEIGHT+sample["frame"],delta=.8)
+
+    def test_real_extended_range_and_wider_canvas_measure_known_motion(self):
+        # Labelled synthetic ENGINE TEST media. This exercises both former
+        # limits in a real decode/worker/import/apply journey, not a film claim.
+        width,height,count=768,96,300
+        rng=random.Random(8271);texture=rng.randbytes(width*height);raw=bytearray()
+        shifts=[]
+        for frame in range(count):
+            dx=round(4*math.sin(frame/29));dy=round(2*math.sin(frame/37));shifts.append((dx,dy))
+            for y in range(height):
+                row=texture[((y-dy)%height)*width:((y-dy)%height+1)*width]
+                raw.extend(row[-dx:]+row[:-dx] if dx else row)
+        video=self.root/"media/ENGINE_TEST_extended_planar.mkv"
+        ffmpeg(["-f","rawvideo","-pixel_format","gray","-video_size",f"{width}x{height}",
+                "-framerate","30","-i","pipe:0","-c:v","ffv1",str(video)],bytes(raw))
+        asset=probe_media(video);asset.update(id="plane",name=video.name,path="media/"+video.name,
+                                             sha256=hashlib.sha256(video.read_bytes()).hexdigest())
+        project={"version":1,"id":"extended-planar-test","name":"ENGINE TEST extended planar motion",
+                 "width":width,"height":height,"fps":30,"assets":[asset],"titles":[],"settings":{},
+                 "clips":[{"id":"background","asset_id":"plane","track":0,"start":0,"in":0,"duration":count,"volume":0}]}
+        project=validate_project(project,self.root)
+        quad=[[.1,.15],[.9,.15],[.9,.85],[.1,.85]]
+        measured=track_planar(project,self.root,"background",{"mode":"projective","quad":quad,"frame_count":count})
+        self.assertEqual((measured["analysis_width"],measured["analysis_height"]),(width,height))
+        self.assertEqual(len(measured["samples"]),count)
+        self.assertTrue(all(sample["visible"] for sample in measured["samples"]))
+        for sample in measured["samples"][::29]+measured["samples"][-1:]:
+            dx,dy=shifts[sample["frame"]]
+            for actual,corner in zip(sample["corners"],quad):
+                self.assertAlmostEqual(actual[0]*width,corner[0]*width+dx,delta=.8)
+                self.assertAlmostEqual(actual[1]*height,corner[1]*height+dy,delta=.8)
+        motion=planar_motion(project,self.root,"background",measured)
+        self.assertEqual(len(motion["keys"]),count)
+        self.assertEqual(motion["keys"][-1]["frame"],count-1)
 
     def test_real_occlusion_produces_gaps_without_fake_reacquisition(self):
         project=build_fixture(self.root,lost=True)

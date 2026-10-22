@@ -23,6 +23,7 @@ from test_editing_ui_macos import read_helper_result
 from macos.verify_generated_take import verify_take
 
 HERE = Path(__file__).resolve().parent
+ACCEPTANCE_FRAMES = (17, 33, 49, 65, 81)
 
 
 def write_json(path, value):
@@ -31,16 +32,23 @@ def write_json(path, value):
     os.replace(temporary, path)
 
 
+def acceptance_timeout(frames, repeats):
+    if type(frames) is not int or frames not in ACCEPTANCE_FRAMES:
+        raise ValueError('Native inference acceptance supports 17, 33, 49, 65 or 81 requested frames.')
+    if type(repeats) is not int or repeats not in (1, 2, 3):
+        raise ValueError('Native inference acceptance supports one to three serial takes.')
+    # This observer budget never extends the application's own engine deadline.
+    return 1200 * ((frames - 1) // 16)
+
+
 def run(binary, evidence, repeats=2, frames=17):
-    if frames not in (17, 33):
-        raise ValueError('Native inference acceptance supports 17 or 33 requested frames.')
-    per_take_timeout = 1200 if frames == 17 else 2400
+    per_take_timeout = acceptance_timeout(frames, repeats)
     evidence = Path(evidence).resolve()
     evidence.mkdir(parents=True, exist_ok=False)
     began = time.monotonic()
     store = server = thread = monitor = None
     finished = threading.Event()
-    scope = 'normal-preset' if frames == 17 else 'longer bounded 33-frame'
+    scope = 'normal-preset' if frames == 17 else f'longer bounded {frames}-frame'
     result = {'passed': False, 'scope': f'Actual {scope} Wan inference through WKWebView controls',
               'requested': {'width': 480, 'height': 272, 'frames': frames, 'steps': 20,
                             'fps': 16, 'cfg': 6, 'repeats': repeats},
@@ -81,6 +89,8 @@ def run(binary, evidence, repeats=2, frames=17):
         result['ui'] = ui
         checks['native_generation_controls_completed'] = native.returncode == 0 and ui.get('passed') is True
         checks['no_uncaught_browser_errors'] = not ui.get('page_errors', [])
+        checks['native_requested_frame_count_matches'] = ui.get('requested_frames') == frames and all(
+            item.get('requested_frames') == frames for item in ui.get('takes', []))
         saved_project = store.get(project['id'])
         checks['native_and_saved_project_identity_match_requested_project'] = (
             ui.get('project_id') == project['id'] == saved_project.get('id')
@@ -132,8 +142,8 @@ def main():
     parser.add_argument('--binary', type=Path, required=True)
     parser.add_argument('--output', type=Path, required=True)
     parser.add_argument('--repeats', type=int, choices=(1, 2, 3), default=2)
-    parser.add_argument('--frames', type=int, choices=(17, 33), default=17,
-                        help='Keep the normal 17-frame preset or request one bounded longer 33-frame case.')
+    parser.add_argument('--frames', type=int, choices=ACCEPTANCE_FRAMES, default=17,
+                        help='Keep the normal 17-frame preset or request a bounded 33/49/65/81-frame case.')
     args = parser.parse_args()
     if sys.platform != 'darwin': parser.error('Actual native inference acceptance requires macOS.')
     if not args.binary.is_file(): parser.error('Pass the compiled SmokeTest.swift helper.')
