@@ -1,0 +1,145 @@
+{
+  "ffmpeg_executable": "/usr/bin/ffmpeg",
+  "ffmpeg_version": "ffmpeg version 6.1.1-3ubuntu5 Copyright (c) 2000-2023 the FFmpeg developers",
+  "fixture": {
+    "frames": 24,
+    "height": 64,
+    "sample_rate": 48000,
+    "source_sample_frames": 48000,
+    "width": 96
+  },
+  "kind": "retime-real-media-test-observations",
+  "observations": {
+    "test_audio_only_original_uses_same_curve_and_exact_black_picture_count": {
+      "black_frames": 12,
+      "decoded_stereo_samples": 24000,
+      "max_sample_error": 6.222057291060956e-07
+    },
+    "test_engine_export_and_paused_frame_preserve_ramp_gain_pan_and_fades": {
+      "decoded_frames": 14,
+      "decoded_stereo_samples": 28000,
+      "max_analytic_pcm_error": 1.5337012255103866e-05,
+      "paused_png_max_channel_error": 0,
+      "prores_picture_rmse": 9.244533936157044,
+      "source_indices": [
+        4,
+        5,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        15
+      ]
+    },
+    "test_fast_varispeed_antialias_filter_rejects_high_band_and_keeps_low_tone": {
+      "300hz_to_1200hz_max_sample_error": 4.1246414184681335e-06,
+      "decoded_stereo_samples": 8000,
+      "rejection_db": -97.6122934337354,
+      "retimed_rejected_band_rms": 1.8616598373250404e-06,
+      "source_14khz_rms": 0.14142135735003553
+    },
+    "test_fractional_clock_every_sample_and_split_preserve_routing_and_phase": {
+      "absolute_origin_frames": "19/2",
+      "decoded_stereo_samples": 19219,
+      "left_samples": 6407,
+      "max_analytic_sample_error": 6.261389854655963e-07,
+      "max_split_sample_error": 0.0,
+      "rate": "30000/1001",
+      "right_samples": 12812
+    },
+    "test_mute_is_exact_silence_with_full_fractional_sample_count": {
+      "decoded_stereo_samples": 11211,
+      "nonzero_samples": 0
+    },
+    "test_nearest_actual_pixels_follow_quadratic_clock_and_selected_pcm": {
+      "decoded_frames": 12,
+      "decoded_stereo_samples": 24000,
+      "max_sample_error": 6.222057291060956e-07,
+      "source_indices": [
+        4,
+        5,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        15
+      ]
+    },
+    "test_nested_fractional_trim_uses_parent_grid_without_second_phase_shift": {
+      "active_stereo_samples": 19219,
+      "decoded_stereo_samples": 35235,
+      "exclusive_last_active_sample": 34434,
+      "first_active_sample": 15215,
+      "max_analytic_pcm_error": 1.5770268133347143e-05
+    },
+    "test_optical_flow_reconstructs_real_midpoints_beyond_nearest_and_blend": {
+      "flow_pairs": 6,
+      "interpolated_frames": 6,
+      "linear_blend_rmse": [
+        11.350069342258402,
+        11.361033856026385,
+        11.343405961010843,
+        11.267252717335149,
+        11.181349178182588,
+        11.121614393286748
+      ],
+      "midpoint_rmse": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "nearest_rmse": [
+        18.852285817787603,
+        18.844465736361137,
+        18.76581123469743,
+        18.6211032463469,
+        18.486371982465194,
+        18.438404717288275
+      ]
+    },
+    "test_saved_trimmed_recipe_archives_original_and_reopens_for_identical_render": {
+      "archive_members": [
+        "assets.json",
+        "media/ENGINE_TEST_retime.mkv",
+        "project.json"
+      ],
+      "decoded_frames": 8,
+      "decoded_stereo_samples": 16000,
+      "max_analytic_pcm_error": 1.583715916078643e-05,
+      "original_source_offline_during_reopened_render": true,
+      "restored_picture_and_pcm_identical": true
+    }
+  },
+  "runtime": {
+    "analysis_edge": 640,
+    "audio": "64-tap anti-aliased varispeed; pitch follows speed",
+    "available": true,
+    "max_edge": 1280,
+    "max_frames": 240,
+    "max_pixels": 921600,
+    "method": "OpenCV DIS medium bidirectional dense optical flow",
+    "operation_probe": {
+      "median_displacement_error_pixels": 3.1085978662304115e-06
+    },
+    "python": "/workspace/scratch/091f394ee5df/cinematicum-runtimes/verification/bin/python",
+    "rendered_playback": true,
+    "versions": {
+      "numpy": "2.3.5",
+      "opencv-python-headless": "4.11.0.86"
+    }
+  },
+  "source_sha256": "349254ecec8e75ed72b57109e90c6ef4cda204f1668e3b7f6789893ce0d60fb1"
+}

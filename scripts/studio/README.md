@@ -1,4 +1,4 @@
-# CINEMATICUM Studio 0.11
+# CINEMATICUM Studio 0.12
 
 A working local audiovisual editor. Media are imported into an owned project,
 edited on a frame-based timeline, previewed, and exported through real render
@@ -10,17 +10,20 @@ issuance effect.
 
 ## Current candidate
 
-Studio 0.11 adds simultaneous camera monitoring, fixed-camera source sound,
-bounded scene-linear Float32 OCIO/ACES movies, editable OTIO retime/dissolve
-compositions, measured HDR photographs and planar panoramas. It retains 0.10 deep/multiview
-EXR, checkpoint-backed SAM 2.1 and TAPIR, optical design, Mitsuba/PBRT still
-rendering, CPU COLMAP, typed scene processing, paired collaboration and measured
-multicamera synchronization. Open **Studio tools** for scientific workflows,
-**Multicam** for camera monitoring, **Interchange** for OTIO, **Develop images**
-for still photography and **Export** for movie processing. See
-[Features 0.11](FEATURES_0_11.md), [Verification 0.11](VERIFICATION_0_11.md) and
-[remaining work](UNFINISHED_0_11.md). Frozen verification, native acceptance,
-installation and installed launch are independent release gates.
+Studio 0.12 adds editable variable speed curves, actual dense optical-flow
+interpolation and source-grid varispeed sound. Select an original timeline clip
+and open **Speed ramp & optical flow** in its inspector. Curves remain editable
+through split/edge trim, undo, save/reopen and portable archive restoration.
+Paused pictures, rendered playback and export use the actual source-time map.
+The current bounds and pitch/quality limits are in [Retiming](RETIME.md).
+
+This candidate starts from the integrated 0.11 core and retains simultaneous
+camera monitoring, fixed-camera sound, scene-linear Float32 OCIO/ACES movies,
+editable OTIO compositions, measured HDR photographs and planar panoramas, plus
+the earlier scientific, learned, scene and collaboration workflows. See
+[Features 0.12](FEATURES_0_12.md), [Verification 0.12](VERIFICATION_0_12.md) and
+[remaining work](UNFINISHED_0_12.md). Frozen whole-build verification, native
+WKWebView acceptance, installation and installed launch remain distinct gates.
 
 ## Previous upgrade
 
@@ -45,7 +48,7 @@ scene-linear EXR masters, calibrated cameras, physical materials, exact clocks,
 measured tracking and OCIO/RAW/bracket still processing remain available.
 Read the [source comparison and capability audit](CAPABILITY_AUDIT.md),
 [capability ledger](capabilities.json), and
-[current unfinished-work register](UNFINISHED_0_10.md) for implemented bounds and
+[current unfinished-work register](UNFINISHED_0_12.md) for implemented bounds and
 remaining professional gaps. [Verification 0.9](VERIFICATION_0_9.md) is historical
 evidence for the earlier candidate. Its 515-test result does not certify newer
 source. The current verification record identifies current-source acceptance,
@@ -280,7 +283,7 @@ hold, ease-in, ease-out and smooth ease-in/out interpolation. Each property uses
 its own keys and the base property value at frame zero. Keyframe chips expose
 playhead navigation, outgoing interpolation and deletion. Trims and splits preserve the complete animation and fade envelopes, including
 hidden keys outside the trimmed range. Editing a fade resets its envelope to
-the current clip range. Retiming rescales animation and fade times to integer
+the current clip range. Constant retiming rescales animation and fade times to integer
 output frames.
 
 Space plays/pauses, S splits the selected clip at the playhead, Delete removes
@@ -1031,6 +1034,24 @@ foreign browser origins and invalid Host headers. Supported routes:
 | `GET /api/jobs/{id}` | Read progress, errors, and verified output |
 | `POST /api/jobs/{id}/cancel` | Cancel the owned local job |
 
+## Editable speed ramps and optical flow
+
+The inspector's **Speed ramp & optical flow** controls author 2–32 linear speed
+keys at 0.25×–4× across up to 240 output frames. The original media, rational
+source origin and complete curve survive splits, edge trims, undo, saved
+projects and archives. Actual bidirectional DIS flow supplies intermediate
+pictures, while the selected original stream/channel pair follows a 64-tap
+anti-aliased varispeed clock. Gain, pan and output-time fades apply afterward.
+Pitch follows speed. Play renders the actual ramp sequence before playback;
+the constant-speed live source mixer retains its previous behavior.
+
+This is Standard8 opaque SDR processing, bounded to a 1280-pixel source edge,
+921,600 source pixels and at most 16 authored/expanded ramp instances. The
+worker refuses High16/Float32 processing, alpha/PQ/HLG sources and unsupported
+time/tracking bindings. Slip/slide/roll involving ramps and nonlinear OTIO interchange remain
+unsupported. [RETIME.md](RETIME.md) documents the exact map, complete bounds,
+quality limits and actual source-bound acceptance.
+
 ## Current boundaries
 
 The project stores integer timeline frames with exclusive clip ends and an exact
@@ -1048,7 +1069,7 @@ EXR masters; authored Cycles scenes can also export float EXR sequences and
 passes. The separate [Float32 movie candidate](FLOAT_MOVIE_PIPELINE.md) extends
 OCIO scene-linear processing across its documented bounded movie operations.
 This implementation still lacks HDR finishing, RAW-movie editing,
-variable speed ramps, optical-flow retiming, general automatic tracking
+pitch-preserving variable-speed sound, general automatic tracking
 re-identification, roto hierarchy/paint, unrestricted mesh/rig and texture editing,
 plugin hosting, general AAF/XML/native-project interchange, a full audio
 workstation and a production-scale decoded GPU playback cache. Actual SAM 2.1

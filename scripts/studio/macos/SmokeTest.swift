@@ -288,18 +288,34 @@ final class SmokeDelegate: NSObject, NSApplicationDelegate, WKNavigationDelegate
     func finishAfterDownloads(_ report: [String: Any], attempt: Int = 0) {
         guard !finishing else { return }
         let expectsDownload = report["expect_download"] as? Bool == true
-        if expectsDownload && downloadErrors.isEmpty && (activeDownloads.count > 0 || downloadEvidence.isEmpty) && attempt < 80 {
+        let expectedCount = report["expected_download_count"] as? Int
+        if report["expected_download_count"] != nil && (expectedCount == nil || expectedCount! < 0 || expectedCount! > 32) {
+            var invalid = report
+            invalid["passed"] = false
+            invalid["download_error"] = "Invalid expected download count."
+            captureAndFinish(invalid)
+            return
+        }
+        let validateDownloads = expectsDownload || expectedCount != nil
+        let minimumCount = expectedCount ?? (expectsDownload ? 1 : 0)
+        let completedCount = downloadEvidence.filter { ($0["state"] as? String) == "completed" }.count
+        // JavaScript can finish after a download click but before WebKit
+        // registers that download. An earlier completed ZIP cannot satisfy a
+        // two-file archive/movie acceptance contract.
+        if validateDownloads && downloadErrors.isEmpty && (activeDownloads.count > 0 || completedCount < minimumCount) && attempt < 80 {
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.05) { [weak self] in
                 self?.finishAfterDownloads(report, attempt: attempt + 1)
             }
             return
         }
         var result = report
-        if expectsDownload && (downloadEvidence.isEmpty || !activeDownloads.isEmpty || !downloadErrors.isEmpty
+        let countMismatch = expectedCount.map { downloadEvidence.count != $0 } ?? (downloadEvidence.count < minimumCount)
+        if validateDownloads && (countMismatch || !activeDownloads.isEmpty || !downloadErrors.isEmpty
             || downloadEvidence.contains(where: { ($0["state"] as? String) != "completed" })) {
             result["passed"] = false
-            result["download_error"] = downloadErrors.isEmpty ? "Native download did not complete." : downloadErrors.joined(separator: "; ")
+            result["download_error"] = downloadErrors.isEmpty ? "Native downloads did not complete: expected \(minimumCount), completed \(completedCount)." : downloadErrors.joined(separator: "; ")
         }
+        if validateDownloads { result["completed_download_count"] = completedCount }
         captureAndFinish(result)
     }
 

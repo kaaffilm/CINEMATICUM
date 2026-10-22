@@ -49,10 +49,22 @@ async function browserHelper() {
       await page.goto(options['--url']);
       const script = fs.readFileSync(options['--script'], 'utf8');
       const result = await page.evaluate(source => (new Function('return (async () => {' + source + '\n})();'))(), script);
-      await Promise.all(pending);
+      const explicitCount = result.expected_download_count;
+      if (explicitCount !== undefined && (!Number.isInteger(explicitCount) || explicitCount < 0 || explicitCount > 32)) throw Error('Invalid expected download count');
+      const minimumCount = explicitCount ?? (result.expect_download ? 1 : 0);
+      // A click may return before the browser emits its download event. Wait
+      // for the declared count as well as the currently registered promises.
+      // An already completed ZIP must not conceal the still-pending MOV.
+      while (result.passed === true && !downloadErrors.length && Date.now() < deadline - 350) {
+        await Promise.all(pending);
+        if (downloads.length >= minimumCount && downloads.length === pending.length) break;
+        await new Promise(resolve => setTimeout(resolve, 25));
+      }
+      const countMatches = explicitCount === undefined ? downloads.length >= minimumCount : downloads.length === explicitCount;
+      if (result.passed === true && (!countMatches || downloads.length !== pending.length)) throw Error('Downloads did not complete: expected ' + minimumCount + ', completed ' + downloads.length);
       await page.screenshot({path: options['--output']});
-      return {...result, page_errors: errors, downloads, download_errors: downloadErrors,
-        passed: result.passed === true && !errors.length && !downloadErrors.length && (!result.expect_download || downloads.length > 0),
+      return {...result, page_errors: errors, downloads, download_errors: downloadErrors, completed_download_count: downloads.length,
+        passed: result.passed === true && !errors.length && !downloadErrors.length && countMatches && downloads.length === pending.length,
         transport: 'Chromium', browser_version: await browser.version(), h264_decoder: h264, native_certified: false, screenshot: options['--output']};
     })();
     const result = await Promise.race([work, timeout]); process.stdout.write(JSON.stringify(result) + '\n');

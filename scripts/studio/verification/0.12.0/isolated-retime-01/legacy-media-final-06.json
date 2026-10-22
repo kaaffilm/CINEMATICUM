@@ -1,0 +1,49 @@
+{
+  "elapsed_seconds": 18.452328436000244,
+  "errors": 0,
+  "failures": 0,
+  "log": "/workspace/scratch/091f394ee5df/cinematicum-retime-test-evidence/legacy-media-final-06.log",
+  "names": [
+    "test_timeline_audio.TimelineAudioTests.test_retime_has_exact_output_frames_and_preserves_slow_split_boundaries",
+    "test_timeline_audio.TimelineAudioTests.test_reverse_picture_and_sound_and_source_bounds",
+    "test_timeline_audio.TimelineAudioTests.test_audio_tempo_duration_and_pitch",
+    "test_timeline_audio.TimelineAudioTests.test_linear_fades_and_stereo_balance_change_decoded_samples",
+    "test_frame_preview.FramePreviewTests.test_current_frame_uses_the_actual_export_graph",
+    "test_editorial.EditorialMediaTests.test_nested_retime_reverse_uses_exact_sequence_clock",
+    "test_multicam_monitor.ActualMulticamMonitorTests.test_nested_instances_keep_locked_audio_gain_and_original_clock",
+    "test_multicam_monitor.ActualMulticamMonitorTests.test_reversed_locked_movie_keeps_correct_source_span",
+    "test_multicam_monitor.ActualMulticamMonitorTests.test_retimed_monitor_clock_and_nested_speed_export_keep_selected_stream",
+    "test_trim_edits.DecodedTrimTests.test_actual_render_frames_match_slip_slide_roll_source_selection"
+  ],
+  "passed": true,
+  "skipped": 0,
+  "source_after": {
+    "scripts/studio/editorial.py": "5c29d96d609648e2012658c9a6d51de4e593ede301a257f2a1b48f2dca4f3f27",
+    "scripts/studio/engine.py": "e52eb218c0d186328f11bcbcff3009be6481daccdfa085422df787f32e8e641e",
+    "scripts/studio/retime.py": "a8158c3dafcdac2d9a95f360bb3efab856a3008fa187372ee25e7daa02cb142c",
+    "scripts/studio/retime_worker.py": "a3981dc1823b5142eea04f8b42b93075c95186efc9c7a166e06cd76ece31cce6",
+    "scripts/studio/test_editorial.py": "bbd3947785b704652426e459e9d43bd385a354e0881bb0513e6e6823ed27b4cb",
+    "scripts/studio/test_frame_preview.py": "eb135a7974183f0d9e376301e0313efc04b8e8db0b48d6410638bdc07f77b119",
+    "scripts/studio/test_multicam_monitor.py": "237df6f6ba6ca24621269973990e7ecc89dcbc7ab5f6664920ab254b71850462",
+    "scripts/studio/test_timeline_audio.py": "3cfc9128438f27591f1230c81c54295f1ce7e10d844c0266b7293b2013f1e000",
+    "scripts/studio/test_trim_edits.py": "1deaa4254a818e461bfa5113d7511f8874304f89d1aa6b2789974c693848b0a7",
+    "scripts/studio/web/app.js": "35c3780c4601520c2b918abdeeb101cddb3006c75aa9c08219d5b8a286141fd5",
+    "scripts/studio/web/editing.js": "b4a2a988b20982ada77c54d7e5340795b7fd5ed5c0b35fa53cd3fb962ab7052b",
+    "scripts/studio/web/retime-model.js": "05d9ff44128e4817abacd405d4ff326f750d312c0223ee82c2b4b5dc83ee8613"
+  },
+  "source_before": {
+    "scripts/studio/editorial.py": "5c29d96d609648e2012658c9a6d51de4e593ede301a257f2a1b48f2dca4f3f27",
+    "scripts/studio/engine.py": "e52eb218c0d186328f11bcbcff3009be6481daccdfa085422df787f32e8e641e",
+    "scripts/studio/retime.py": "a8158c3dafcdac2d9a95f360bb3efab856a3008fa187372ee25e7daa02cb142c",
+    "scripts/studio/retime_worker.py": "a3981dc1823b5142eea04f8b42b93075c95186efc9c7a166e06cd76ece31cce6",
+    "scripts/studio/test_editorial.py": "bbd3947785b704652426e459e9d43bd385a354e0881bb0513e6e6823ed27b4cb",
+    "scripts/studio/test_frame_preview.py": "eb135a7974183f0d9e376301e0313efc04b8e8db0b48d6410638bdc07f77b119",
+    "scripts/studio/test_multicam_monitor.py": "237df6f6ba6ca24621269973990e7ecc89dcbc7ab5f6664920ab254b71850462",
+    "scripts/studio/test_timeline_audio.py": "3cfc9128438f27591f1230c81c54295f1ce7e10d844c0266b7293b2013f1e000",
+    "scripts/studio/test_trim_edits.py": "1deaa4254a818e461bfa5113d7511f8874304f89d1aa6b2789974c693848b0a7",
+    "scripts/studio/web/app.js": "35c3780c4601520c2b918abdeeb101cddb3006c75aa9c08219d5b8a286141fd5",
+    "scripts/studio/web/editing.js": "b4a2a988b20982ada77c54d7e5340795b7fd5ed5c0b35fa53cd3fb962ab7052b",
+    "scripts/studio/web/retime-model.js": "05d9ff44128e4817abacd405d4ff326f750d312c0223ee82c2b4b5dc83ee8613"
+  },
+  "tests": 10
+}

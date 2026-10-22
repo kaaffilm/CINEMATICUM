@@ -1,7 +1,7 @@
 {
   "format": 2,
   "schema": "cinematicum-source-integrity",
-  "version": "0.11.0",
+  "version": "0.12.0",
   "scope": {
     "root_files": [
       ".github/workflows/studio-verification.yml",
@@ -57,13 +57,13 @@
   "files": [
     {
       "path": ".github/workflows/studio-verification.yml",
-      "size": 7519,
-      "sha256": "b25d84289ac2ff36806507cb0185d0273b9b936e4b7d6e7a4b3c977f603845f3"
+      "size": 8118,
+      "sha256": "769a0d3e4b1b25285e94e54f148bb9254a0e22f9ca65ea9d1e8aa5f1ac355d57"
     },
     {
       "path": "README.md",
-      "size": 17508,
-      "sha256": "e6f71e7b6ab47e38291b385d95a7b9af4eaa8cb40ceada997d7066cf9ca6c30b"
+      "size": 17571,
+      "sha256": "048bac9f1cfcfcd63b388170bb42a8f63bc29a9fbffd58643c4156938683b85d"
     },
     {
       "path": "scripts/studio/CAPABILITY_AUDIT.md",
@@ -79,6 +79,11 @@
       "path": "scripts/studio/FEATURES_0_11.md",
       "size": 4529,
       "sha256": "f26e721814c4198abd5cd8a9be7065d2babc7f292c1386b08dedba3834139452"
+    },
+    {
+      "path": "scripts/studio/FEATURES_0_12.md",
+      "size": 3900,
+      "sha256": "5678f964be76c9fdc66a988a9297e7930ab2b6af53d8f787ecf94d30f80b053d"
     },
     {
       "path": "scripts/studio/FLOAT_MOVIE_PIPELINE.md",
@@ -102,8 +107,8 @@
     },
     {
       "path": "scripts/studio/README.md",
-      "size": 72569,
-      "sha256": "4dfe9773a3191e58fe61090416d8447f04e5133386cb5d5f6a94772dd396b812"
+      "size": 73843,
+      "sha256": "61a9f0ed03193cfc93805b6cccce817990dbc02cb0285d919a3e01d3e3aa9b1f"
     },
     {
       "path": "scripts/studio/RECOVERY_0_10.md",
@@ -114,6 +119,11 @@
       "path": "scripts/studio/RECOVERY_SOURCE_0_10.json",
       "size": 53996,
       "sha256": "1604ac394587d16cf1bfdda01714d54d367976827423147f543d8a5123a264c4"
+    },
+    {
+      "path": "scripts/studio/RETIME.md",
+      "size": 14714,
+      "sha256": "1c4b8cc9d7f516ec5e6088a7e71315949b25622ccf0ef8321eee3a835b331290"
     },
     {
       "path": "scripts/studio/SCENE_PROCESSING_V1.md",
@@ -146,6 +156,11 @@
       "sha256": "e9560cf9f6acfb2e43c597abc910af747abdcc4cd3db6fb7163480d3e400bdbd"
     },
     {
+      "path": "scripts/studio/UNFINISHED_0_12.md",
+      "size": 6923,
+      "sha256": "4de46900479620f3b31ff25c2d883781dc526d5583642df99d450a91c52a5f37"
+    },
+    {
       "path": "scripts/studio/UNFINISHED_0_9.md",
       "size": 23774,
       "sha256": "e52096708ad997a88cf2cc20c86be3ec9494ccf5bff7ab4183072b960e597ccc"
@@ -159,6 +174,11 @@
       "path": "scripts/studio/VERIFICATION_0_11.md",
       "size": 4633,
       "sha256": "6e7ae0e39f7736a00f8cfd09f65f68d8754a86dc4ca64ab7b1fcc81dad4644b1"
+    },
+    {
+      "path": "scripts/studio/VERIFICATION_0_12.md",
+      "size": 4223,
+      "sha256": "b5b93572e03ea257e107f840222b080d85500e341e4f919321a50877af990b91"
     },
     {
       "path": "scripts/studio/VERIFICATION_0_5.md",
@@ -227,8 +247,8 @@
     },
     {
       "path": "scripts/studio/capabilities.json",
-      "size": 75619,
-      "sha256": "68bc1a2824a7a159b9bc9c7196a4a4c548e4c4cea45d0b0264e1690723a0c4a1"
+      "size": 78083,
+      "sha256": "727531a78571e1df9bd5c9ed4273237b7faf27d6fa1ea7b85898de94a7fc899d"
     },
     {
       "path": "scripts/studio/collaboration.py",
@@ -262,13 +282,13 @@
     },
     {
       "path": "scripts/studio/editorial.py",
-      "size": 26716,
-      "sha256": "5716eb7d82a6c033931d1a261790394cb309c68f90e01755134e59da9b2f354c"
+      "size": 27152,
+      "sha256": "5c29d96d609648e2012658c9a6d51de4e593ede301a257f2a1b48f2dca4f3f27"
     },
     {
       "path": "scripts/studio/engine.py",
-      "size": 94227,
-      "sha256": "607c9dcea0fbda2f0a5c0b64d323ecefb9043f9d9fe3ca1fd295274649db0303"
+      "size": 96103,
+      "sha256": "e52eb218c0d186328f11bcbcff3009be6481daccdfa085422df787f32e8e641e"
     },
     {
       "path": "scripts/studio/fetch_verification_raw.py",
@@ -277,8 +297,8 @@
     },
     {
       "path": "scripts/studio/float_movie.py",
-      "size": 25553,
-      "sha256": "2a889c728138e244996816f7a785f051e9564fa2e68e6b9a8e2788c870fdd2bd"
+      "size": 25722,
+      "sha256": "9e4a0de1faa0e39221775fbb284422179b0c85e3e1ba1cf61b63f3615e47482f"
     },
     {
       "path": "scripts/studio/float_movie_worker.py",
@@ -288,7 +308,7 @@
     {
       "path": "scripts/studio/frame_preview.py",
       "size": 5174,
-      "sha256": "4f1e3374fd4c095fc21a6656929f37eef26185f8ff486d6d6d868b467436981d"
+      "sha256": "9ac66b06ebcb905743f684b64c48538d1e6aaed5dd26637cd72f7c3e6dadee6c"
     },
     {
       "path": "scripts/studio/generation-runtime-lock.json",
@@ -327,8 +347,8 @@
     },
     {
       "path": "scripts/studio/install_macos.py",
-      "size": 19854,
-      "sha256": "8abbee4a4b94ae358eebba8ee9f3a789d2325701832392a6a1c3923e754d07df"
+      "size": 19887,
+      "sha256": "04dc936cbc00eeb4c9d2fe71bbb63976c43e75a7d2c34455860981f358cfea11"
     },
     {
       "path": "scripts/studio/install_physical_rendering.py",
@@ -357,8 +377,8 @@
     },
     {
       "path": "scripts/studio/interchange.py",
-      "size": 35108,
-      "sha256": "4caa275c02fb4b3aef4c809d97a5fb6b349345fe6628ae816b80e0462a0b7d1d"
+      "size": 35384,
+      "sha256": "f7cdc22ca0027c9b711fe1bbb31255a23368b9af39ea929c044e617b5a2038d7"
     },
     {
       "path": "scripts/studio/learned-runtime-lock.json",
@@ -497,8 +517,8 @@
     },
     {
       "path": "scripts/studio/macos/OtioCompositionsSmoke.js",
-      "size": 11252,
-      "sha256": "b3213ca720ffdc5440717d250f744d52f92f929803a59ff58e4f043f75e5199b"
+      "size": 11306,
+      "sha256": "e9c855f74409ae1228f3f829dd7e5c111bb76755c483882dffa2307f9ba91e67"
     },
     {
       "path": "scripts/studio/macos/PhysicalSceneSmoke.js",
@@ -524,6 +544,11 @@
       "path": "scripts/studio/macos/RecoverySmoke.js",
       "size": 3548,
       "sha256": "b1d150003199c5c695bae36ecde18850846e1b6370dc01cb6a1ec5df30605377"
+    },
+    {
+      "path": "scripts/studio/macos/RetimeSmoke.js",
+      "size": 11923,
+      "sha256": "6370cd21586bce0abb08e803467a4bee36d78beca72b2b61e4206b5473bc7a61"
     },
     {
       "path": "scripts/studio/macos/RotoSmoke.js",
@@ -552,8 +577,8 @@
     },
     {
       "path": "scripts/studio/macos/SmokeTest.swift",
-      "size": 21965,
-      "sha256": "f87928a4fc07c444e603337b282bb71817b48644f297bc85c5624cc0e6e8b188"
+      "size": 23086,
+      "sha256": "f6b3ee4295bcefe003c2220a7ed42a3dc4208a95ce6842936b8a901048aef6cd"
     },
     {
       "path": "scripts/studio/macos/StartupQuitAcceptance.swift",
@@ -562,8 +587,8 @@
     },
     {
       "path": "scripts/studio/macos/StillPhotographySmoke.js",
-      "size": 14274,
-      "sha256": "0db50b42d096fabb337475b2f6bfe25fc5cd216b3896d3c9264cbc6e01a5230d"
+      "size": 14361,
+      "sha256": "10eb41e31f579d52355493b76c177eb6d25a35d3768200ef3f20f86815f0506b"
     },
     {
       "path": "scripts/studio/macos/StudioApp.swift",
@@ -667,8 +692,8 @@
     },
     {
       "path": "scripts/studio/planar_tracking.py",
-      "size": 19931,
-      "sha256": "01c0163cc7acfa68eaf02d3f273c6c14c6a2cf6aaed412064441bd6688e4a4a9"
+      "size": 20066,
+      "sha256": "6fdc54760ea51b42e1a304725fafbd1057ed37b3dd5114c78e66bfa302a1c792"
     },
     {
       "path": "scripts/studio/planar_worker.py",
@@ -781,6 +806,16 @@
       "sha256": "84d694f44ac761ccb70048eb3665037e19764b774363bae4d8ce47dba0cddb37"
     },
     {
+      "path": "scripts/studio/retime.py",
+      "size": 22553,
+      "sha256": "a8158c3dafcdac2d9a95f360bb3efab856a3008fa187372ee25e7daa02cb142c"
+    },
+    {
+      "path": "scripts/studio/retime_worker.py",
+      "size": 9270,
+      "sha256": "a3981dc1823b5142eea04f8b42b93075c95186efc9c7a166e06cd76ece31cce6"
+    },
+    {
       "path": "scripts/studio/roto.py",
       "size": 12288,
       "sha256": "824c706099dc25308a2bcdc3328abdb9e0d3db53978fdc9d24f08ecb51bce425"
@@ -842,8 +877,8 @@
     },
     {
       "path": "scripts/studio/server.py",
-      "size": 106183,
-      "sha256": "f438456c5e45f944471b8b8e13454e53b7938eba8aaf1b875fb70a26a29aa0bb"
+      "size": 106366,
+      "sha256": "baee0a0ab0ab697a8316fef0e59025f41de02a6274f5dbdb5b7d273315cdf9e1"
     },
     {
       "path": "scripts/studio/source_integrity.py",
@@ -892,8 +927,8 @@
     },
     {
       "path": "scripts/studio/test_audio_routing.py",
-      "size": 29456,
-      "sha256": "3e9a090dbe8232bc4bb169fc181c8ee289e6a6ab2cb2ca6af8addc0676c1142a"
+      "size": 29616,
+      "sha256": "152bfdcff640d111fca590576a3b68b270016dfc9f398917fdb47c421b7490e9"
     },
     {
       "path": "scripts/studio/test_audio_routing_macos.py",
@@ -1192,8 +1227,8 @@
     },
     {
       "path": "scripts/studio/test_multicam_sync_browser.cjs",
-      "size": 7486,
-      "sha256": "502fa22b1c364387b8552d06f412ac385b7bda46ce25e13ed378bac5f4cedd3d"
+      "size": 8654,
+      "sha256": "705c55cfd3dd882efb17965364a41437d94207ee10e755720758a39aa6bef86e"
     },
     {
       "path": "scripts/studio/test_multicam_sync_macos.py",
@@ -1207,8 +1242,8 @@
     },
     {
       "path": "scripts/studio/test_otio_compositions_browser.cjs",
-      "size": 8033,
-      "sha256": "4412a951ffbf16a89101680e253aef1560b9966f4792067c35897b34b44e86d7"
+      "size": 9201,
+      "sha256": "5232c1591c4adf2141595d3383f5b40a4a256f97661177d00f2b5327cdcf93f1"
     },
     {
       "path": "scripts/studio/test_otio_compositions_macos.py",
@@ -1304,6 +1339,26 @@
       "path": "scripts/studio/test_recovery_ui_macos.py",
       "size": 5132,
       "sha256": "bb9ec803aba270d6341e9dfe45c0e0f10aa8d8eb7a06be85aeccb40559e8752c"
+    },
+    {
+      "path": "scripts/studio/test_retime.py",
+      "size": 41709,
+      "sha256": "53ffe4e08b725435115b75c1cf29f51999c9e2235fe2f6ce2769dd41c39c1d90"
+    },
+    {
+      "path": "scripts/studio/test_retime_browser.cjs",
+      "size": 9194,
+      "sha256": "d502dc52f8ab65c51fc7bda7f3148e2785c17473dca4ba90ebe77f1ee707ffab"
+    },
+    {
+      "path": "scripts/studio/test_retime_download_completion.py",
+      "size": 10934,
+      "sha256": "9b048f886ad3fb113dc5363cc0a7f3b82dd7774572cb09d5983758eebf103d39"
+    },
+    {
+      "path": "scripts/studio/test_retime_macos.py",
+      "size": 18869,
+      "sha256": "6837235034cf6cee62061d9059e25a71b6885b571b5f07c9b4d175cec91f8cfa"
     },
     {
       "path": "scripts/studio/test_roto_ui_macos.py",
@@ -1512,8 +1567,8 @@
     },
     {
       "path": "scripts/studio/tracking.py",
-      "size": 20058,
-      "sha256": "bdaede2e53d17abe4a519fb5e7c91131dd86dda5bebc1e3a7ae1863802e52b75"
+      "size": 20236,
+      "sha256": "478c42f63e75ec605345f833e38d32b629bc6ceb66dfe3ec2cdb3ab4e46c8894"
     },
     {
       "path": "scripts/studio/verification-browser-package-lock.json",
@@ -1542,8 +1597,8 @@
     },
     {
       "path": "scripts/studio/web/app.js",
-      "size": 137513,
-      "sha256": "e7aa7c7f55383ffe46fd95573b9cc345c880a0cea462e23fd120cb79604550d2"
+      "size": 140286,
+      "sha256": "35c3780c4601520c2b918abdeeb101cddb3006c75aa9c08219d5b8a286141fd5"
     },
     {
       "path": "scripts/studio/web/archive-ui.js",
@@ -1582,8 +1637,8 @@
     },
     {
       "path": "scripts/studio/web/editing.js",
-      "size": 10125,
-      "sha256": "fcf1a80d232128a5edc3a9f25064f87277aa05086457d9453420539590b6c5a6"
+      "size": 10691,
+      "sha256": "b4a2a988b20982ada77c54d7e5340795b7fd5ed5c0b35fa53cd3fb962ab7052b"
     },
     {
       "path": "scripts/studio/web/editorial-ui.js",
@@ -1602,8 +1657,8 @@
     },
     {
       "path": "scripts/studio/web/index.html",
-      "size": 19558,
-      "sha256": "13125b85238885b39db925ffcb526cbd84fd87ea31a8892e6ebfd6110eca5aaa"
+      "size": 19649,
+      "sha256": "feed37bda02ac6b389339d221573ab4cc08205d4fcfd464cf92261073879ec44"
     },
     {
       "path": "scripts/studio/web/interchange-ui.js",
@@ -1666,6 +1721,16 @@
       "sha256": "e146ee9ce5f7ca16ca0c55a32b36491f9769e61fdc263d1ede4699bcbda9d0ab"
     },
     {
+      "path": "scripts/studio/web/retime-model.js",
+      "size": 8862,
+      "sha256": "05d9ff44128e4817abacd405d4ff326f750d312c0223ee82c2b4b5dc83ee8613"
+    },
+    {
+      "path": "scripts/studio/web/retime-ui.js",
+      "size": 15207,
+      "sha256": "7472eb6021f57f9df5a937da49dd6afb6e6bc58c5d90d2b6dc344016fd64bd31"
+    },
+    {
       "path": "scripts/studio/web/runtime-management-ui.js",
       "size": 11554,
       "sha256": "ba3dfbe28b85f9f33546a856d378736a3230d20da41b2362cfbe6a170ad444b7"
@@ -1687,8 +1752,8 @@
     },
     {
       "path": "scripts/studio/web/sequence-playback.js",
-      "size": 13210,
-      "sha256": "e463646a8a9ddf67908e8f4a9cfdb1d03b73d6d1b52565bf35a6a1ba6d4755e7"
+      "size": 13224,
+      "sha256": "ab01741442ca91ab37ee8c88d749977954c61c6b77621120fc6ef8e0b761d17b"
     },
     {
       "path": "scripts/studio/web/style.css",
@@ -1702,8 +1767,8 @@
     },
     {
       "path": "scripts/studio/web/viewer-tools.js",
-      "size": 5905,
-      "sha256": "38b2104eaf3571e338100b2f26336ec8b10ec68460e4405b8b04a5c743e12fad"
+      "size": 5915,
+      "sha256": "5e9d311cdb1d67a26b98ad3bb16e572b660abe7b65f714c737bac26fdb7ce244"
     }
   ]
 }

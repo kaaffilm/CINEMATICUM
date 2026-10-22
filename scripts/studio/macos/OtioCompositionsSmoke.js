@@ -70,6 +70,6 @@ return await (async()=>{
       metrics.movie_href=await render(restoredID);steps.push('restored_nested_picture_audio_render_and_download');
       if(JSON.stringify(await saved(cfg.project_id))!==originalText)throw Error('Restored render changed the saved original');
     }else throw Error('Unsupported phase');
-    return {passed:true,steps,metrics,expect_download:true,elapsed_ms:Math.round(performance.now()-began)};
+    return {passed:true,steps,metrics,expect_download:true,expected_download_count:cfg.operation==='archive'?2:1,elapsed_ms:Math.round(performance.now()-began)};
   }catch(error){return {passed:false,steps,metrics,error:String(error),elapsed_ms:Math.round(performance.now()-began)};}
 })();

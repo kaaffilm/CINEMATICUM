@@ -35,13 +35,13 @@ childClip.reverse=false;args.transportEpoch++;api.draw(args);assert.strictEqual(
         script=r"""
 const fs=require('fs'),vm=require('vm'),assert=require('assert'),path=JSON.parse(fs.readFileSync(0,'utf8')).path;
 const source=fs.readFileSync(path,'utf8');let now=0,callback=null,clock={waiting:true,frame:0},resumeResolve;
-const widget={textContent:'',label:'',setAttribute(key,value){this.label=value;}},state={project:{id:'project',fps:24,settings:{}},frame:0,rendered:false,playing:false,media:new Map()};
+const widget={textContent:'',label:'',setAttribute(key,value){this.label=value;}},state={project:{id:'project',fps:24,settings:{},clips:[],tracks:[],sequences:[]},frame:0,rendered:false,playing:false,media:new Map()};
 const context={state:'running',resume:()=>Promise.resolve()};
 const sandbox={state,$:()=>widget,audioContext:context,playbackAudioFrame:0,playbackEpoch:0,playbackRequest:0,playbackPreparing:false,playbackAudioUnavailable:false,
  playbackFrame:0,playbackOrigin:0,animation:null,frameViewer:{hide(){},invalidate(){}},performance:{now:()=>now},durationFrames:()=>96,
  drawPreview(){},updateTransport(){},toast(){},setTimeout,requestAnimationFrame(fn){callback=fn;return 1;},cancelAnimationFrame(){callback=null;},
  window:{CinematicumSequencePlayback:{ready:()=>true,clock:()=>clock}}};
-vm.createContext(sandbox);vm.runInContext(source.slice(source.indexOf('function stop()'),source.indexOf('function switchPreview(')),sandbox);
+vm.createContext(sandbox);vm.runInContext(source.slice(source.indexOf('function hasSpeedRamps('),source.indexOf('function updatePreviewNote()')),sandbox);vm.runInContext(source.slice(source.indexOf('function stop()'),source.indexOf('function switchPreview(')),sandbox);
 (async()=>{
  await sandbox.play();assert(state.playing);assert.strictEqual(widget.label,'Pause timeline');
  now=200;callback(now);assert.strictEqual(state.frame,0,'Startup must wait on source clock');

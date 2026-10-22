@@ -51,6 +51,7 @@
     // Audio fades retain their own original domain so their endpoint stays put.
     ensureAnimationDomain(clip);
     if(clip.audio){clip.audio.fade_duration=original.audio?.fade_duration??original.duration;clip.audio.fade_offset=(original.audio?.fade_offset??0)+offset;}
+    if(original.retime)clip.retime=window.CinematicumRetimeModel.slice(original,offset).retime;
     return clip;
   }
   function retimeExtraChannels(clip,ratio) {
@@ -74,6 +75,7 @@
   }
   function sourceFrame(clip,frame) {
     const local=clamp(frame-clip.start,0,clip.duration-1),speed=clip.speed??1;
+    if(clip.retime)return window.CinematicumRetimeModel.nearestFrame(clip,local);
     return clip.in+(clip.reverse?(clip.duration-1-local)*speed:local*speed);
   }
   function audioGain(project,clip,local) {
@@ -83,6 +85,7 @@
     return curve(clip,'volume',local)*(track(project,clip.track).gain??1)*fade;
   }
   function trim(clip,edge,requested,max=Infinity,still=false) {
+    if(clip.retime)return window.CinematicumRetimeModel.trim(clip,edge,requested,max);
     const speed=clip.speed??1,sourceIn=clip.in??0;
     if(edge==='left') {
       const available=still?Infinity:clip.reverse?(max-sourceIn-clip.duration*speed)/speed:sourceIn/speed;
@@ -98,6 +101,7 @@
     if(!Number.isInteger(requested))throw Error('The edit offset must be a whole number of timeline frames.');
     const clip=project.clips.find(c=>c.id===clipId);
     if(!clip)throw Error('Select a timeline clip.');
+    if(clip.retime)throw Error('Trim speed ramps with their edges or speed-curve dialog. Slip, slide and roll are unsupported for this clock.');
     if(track(project,clip.track).locked)throw Error('Unlock the selected track before trimming.');
     const peers=project.clips.filter(c=>c.track===clip.track),copy=v=>JSON.parse(JSON.stringify(v));
     const source=c=>{
@@ -130,6 +134,7 @@
       const left=kind==='slide'?peers.filter(c=>c.id!==clip.id&&c.start+c.duration===clip.start):[];
       if(right.length!==1||(kind==='slide'&&left.length!==1))throw Error(kind==='slide'?'Slide needs one touching clip on each side.':'Roll needs one touching clip after the selected clip.');
       const group=kind==='slide'?[left[0],clip,right[0]]:[clip,right[0]],ids=new Set(group.map(c=>c.id));
+      if(group.some(c=>c.retime))throw Error('A neighboring speed ramp cannot participate in slip, slide or roll. Trim its edge or edit its speed curve.');
       if(peers.some(c=>!ids.has(c.id)&&c.start<group.at(-1).start+group.at(-1).duration&&c.start+c.duration>group[0].start))throw Error('Trim an unoverlapped group of adjacent clips.');
       const leading=kind==='slide'?left[0]:clip,boundsA=limits(leading,'right'),boundsB=limits(right[0],'left');
       const low=Math.max(boundsA[0],boundsB[0]),high=Math.min(boundsA[1],boundsB[1]);

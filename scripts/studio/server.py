@@ -45,7 +45,7 @@ from color_pipeline import import_cube, list_luts
 import recovery
 from collaboration import CollaborationError
 
-VERSION = "0.11.0"
+VERSION = "0.12.0"
 MAX_UPLOAD = 8 * 1024 * 1024 * 1024
 MAX_JSON = 8 * 1024 * 1024
 IDENTIFIER = re.compile(r"^[a-f0-9]{32}$")
@@ -1383,7 +1383,7 @@ class Handler(BaseHTTPRequestHandler):
     def dispatch_get(self):
         parsed = urlparse(self.path)
         parts = unquote(parsed.path).strip("/").split("/")
-        if parsed.path in {"/learned-tracking-ui.js", "/collaboration-ui.js", "/runtime-management-ui.js", "/reconstruction-ui.js", "/scene-processing-ui.js", "/multicam-sync-ui.js", "/multicam-monitor.js", "/float-movie-ui.js"}:
+        if parsed.path in {"/learned-tracking-ui.js", "/collaboration-ui.js", "/runtime-management-ui.js", "/reconstruction-ui.js", "/scene-processing-ui.js", "/multicam-sync-ui.js", "/multicam-monitor.js", "/float-movie-ui.js", "/retime-model.js", "/retime-ui.js"}:
             return self.file(WEB / parsed.path[1:])
         if parts == ["api", "runtime-management"]:
             from runtime_management import inventory
@@ -1404,6 +1404,9 @@ class Handler(BaseHTTPRequestHandler):
             return self.json(200, imaging_capabilities())
         if parts == ["api", "float-movie-capabilities"]:
             from float_movie import capabilities
+            return self.json(200, capabilities())
+        if parts == ["api", "retime-capabilities"]:
+            from retime import capabilities
             return self.json(200, capabilities())
         if parts == ["api", "learned-capabilities"]:
             from learned_tracking import learned_capabilities

@@ -213,6 +213,8 @@ def _asset_identities(value):
 def export_otio(project, project_dir):
     """Return {document, warnings}; media remains in the existing project."""
     p = _validated_project(project, project_dir)
+    if any(clip.get("retime") for sequence in [p] + p.get("sequences", []) for clip in sequence.get("clips", [])):
+        raise ValueError("OTIO does not preserve CINEMATICUM's variable-speed and optical-flow recipe. Render and reimport those edits before exchanging them.")
     if __package__:
         from .otio_compositions import needs_export, export_compositions
     else:

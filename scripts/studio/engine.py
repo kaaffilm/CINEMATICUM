@@ -32,6 +32,7 @@ if __package__:
     from .roto_assets import prepare_roto_mask
     from .timebase import parse_rate, project_rate
     from .multicam import validate_lock, resolve_audio, verify_sources as verify_multicam_sources
+    from .retime import validate_clip as validate_ramp, validate_project_ramps, source_position as retime_source_position, prepare as prepare_ramp
     from .tracking import validate_motion
     from .color_pipeline import validate_pipeline, compile_pipeline
     from .media_orientation import still_display_info
@@ -43,6 +44,7 @@ else:
     from roto_assets import prepare_roto_mask
     from timebase import parse_rate, project_rate
     from multicam import validate_lock, resolve_audio, verify_sources as verify_multicam_sources
+    from retime import validate_clip as validate_ramp, validate_project_ramps, source_position as retime_source_position, prepare as prepare_ramp
     from tracking import validate_motion
     from color_pipeline import validate_pipeline, compile_pipeline
     from media_orientation import still_display_info
@@ -359,10 +361,12 @@ def _validate_single_project(project, project_dir, sequence_assets=None):
         c.setdefault("reverse", False)
         if not isinstance(c["reverse"], bool):
             raise ValueError("Clip reverse must be true or false.")
+        validate_ramp(p, c, a)
+        source_end = float(retime_source_position(c, c["duration"])) if c.get("retime") else c["in"] + c["duration"] * c["speed"]
         if c["start"] + c["duration"] > maximum:
             raise ValueError("Timeline exceeds the six-hour limit.")
         # Permit only half a project frame of metadata rounding, never a freeze-frame fallback.
-        if a["kind"] != "image" and (c["in"] + c["duration"] * c["speed"]) / fps > a["duration"] + 0.5 / fps:
+        if a["kind"] != "image" and source_end / fps > a["duration"] + 0.5 / fps:
             raise ValueError(f"Clip {ident} extends beyond its source media. Shorten the trim.")
         if a["kind"] == "image" and c["in"]:
             raise ValueError("Still images have no source in point.")
@@ -386,8 +390,12 @@ def _validate_single_project(project, project_dir, sequence_assets=None):
             stream = next((item for item in a.get("audio_streams", []) if item["index"] == selected_stream), None)
             if stream is None:
                 raise ValueError("The selected audio stream does not exist in this source.")
-            if (c["in"] + c["duration"] * c["speed"]) / fps > stream["duration"] + .5 / fps:
+            if source_end / fps > stream["duration"] + .5 / fps:
                 raise ValueError("The clip extends beyond its selected audio stream.")
+        if c.get("retime", {}).get("audio") == "varispeed" and a["has_audio"]:
+            effective = stream or next(item for item in a["audio_streams"] if item["index"] == a["audio_stream_index"])
+            if source_end / fps > effective["duration"] + 1e-6 / fps:
+                raise ValueError("The speed curve extends beyond its selected source audio. Shorten the ramp or mute its sound.")
         if audio.get("channels") is not None:
             channels = audio["channels"]
             count = (stream or {}).get("channels", a.get("audio_channels", 0))
@@ -571,7 +579,9 @@ def validate_project(project, project_dir):
     if not isinstance(project, dict):
         raise ValueError("Project must be an object.")
     if not any(key in project for key in ("sequence_id", "sequence_name", "sequences", "multicam_groups")):
-        return _validate_single_project(project, project_dir)
+        result = _validate_single_project(project, project_dir)
+        validate_project_ramps(result)
+        return result
     if project.get("version") != 1:
         raise ValueError("Unsupported project format. Expected version 1.")
     project = copy.deepcopy(project)
@@ -656,6 +666,7 @@ def validate_project(project, project_dir):
             if not angle or angle["asset_id"] != clip.get("asset_id"):
                 raise ValueError("A multicamera clip must retain its selected angle's source identity.")
             resolve_audio(result, clip, media)
+    validate_project_ramps(result)
     return result
 
 
@@ -881,8 +892,8 @@ def _graph(project, project_dir, temp_dir, cancel_event=None, _context=None, _na
                 and isinstance(provenance, dict) and provenance.get("type") == "cinematicum-imaging"
                 and provenance.get("version") == 1 and provenance.get("display_encoding") == "sRGB")
 
-    def add_input(asset):
-        source = _media_path(project_dir, asset["path"])
+    def add_input(asset, prepared_path=None):
+        source = Path(prepared_path) if prepared_path is not None else _media_path(project_dir, asset["path"])
         number = _context["next_input"]
         _context["next_input"] += 1
         inputs.extend(["-threads", "2", "-protocol_whitelist", "file,pipe"])
@@ -895,6 +906,7 @@ def _graph(project, project_dir, temp_dir, cancel_event=None, _context=None, _na
                      key=lambda item: (item[1]["track"], item[0]))
     for index, (_, clip) in enumerate(ordered):
         nested = clip.get("sequence_id") is not None
+        ramp = bool(clip.get("retime"))
         if nested:
             asset = sequence_asset(_context["root"], clip["sequence_id"], _context["views"])
             _context["next_sequence"] += 1
@@ -914,7 +926,19 @@ def _graph(project, project_dir, temp_dir, cancel_event=None, _context=None, _na
             filters.append(child_graph)
         else:
             asset = assets[clip["asset_id"]]
-            input_index = add_input(asset)
+            prepared_path = None
+            if ramp:
+                prepared_path, actual, _ = prepare_ramp(project, clip, asset, project_dir,
+                    Path(temp_dir) / ("retime-" + str(index)), audio_origin=_audio_origin, cancel_event=cancel_event)
+                asset = {**asset, **actual}
+                clip = copy.deepcopy(clip)
+                clip.pop("retime")
+                clip.update({"in": 0, "speed": 1, "reverse": False})
+                # The worker selected and routed the original stream. Keep
+                # authored gain/pan/fades on the ordinary timeline graph.
+                clip["audio"].pop("stream_index", None)
+                clip["audio"].pop("channels", None)
+            input_index = add_input(asset, prepared_path)
         start, length, source_in = clip["start"] / fps, clip["duration"] / fps, clip["in"] / fps
         if clip["track"] >= 0:
             layout = clip["planar_motion"]["canvas"] if clip.get("planar_motion", {}).get("mode") == "corner_pin" else asset
@@ -1153,7 +1177,7 @@ def _graph(project, project_dir, temp_dir, cancel_event=None, _context=None, _na
             canvas = next_canvas
         track_gain = track_state(project, clip["track"])[1]
         largest_volume = max([clip["volume"]] + [k["volume"] for k in clip["keyframes"] if "volume" in k])
-        sound_clip, sound_asset = (clip, asset) if nested else resolve_audio(project, clip, assets)
+        sound_clip, sound_asset = (clip, asset) if nested or ramp else resolve_audio(project, clip, assets)
         sound_input = input_index
         if sound_asset["id"] != asset["id"]:
             sound_input = add_input(sound_asset)
@@ -1502,6 +1526,7 @@ def render_project(project, project_dir, output_path, profile="h264", progress=N
                     "transparent_background": bool(p.get("settings", {}).get("transparent_background")) and profile == "master16",
                     "dynamic_range": "SDR UNORM; no scene-linear HDR/ACES movie mastering",
                     "packet_verification": packet_receipt,
+                    "retime_reports": [json.loads(path.read_text()) for path in sorted(Path(temp_dir).rglob("retime-report.json"))],
                     "elapsed_seconds": round(time.monotonic() - started, 3), "has_audio": True,
                     "issuance_status_changed": False}
     finally:

@@ -335,7 +335,17 @@ def apply_action(project, action, values, project_dir):
     p.setdefault('sequence_id', 'main')
     p.setdefault('sequence_name', 'Main sequence')
     p.setdefault('sequences', [])
-    if action == 'sequence_create':
+    if action in ('retime_apply', 'retime_remove'):
+        if __package__:
+            from .retime import apply_edit, capabilities
+        else:
+            from retime import apply_edit, capabilities
+        if action == 'retime_apply':
+            runtime = capabilities()
+            if not runtime['available']:
+                raise ValueError(runtime['reason'])
+        apply_edit(p, values, remove=action == 'retime_remove')
+    elif action == 'sequence_create':
         if len(views) >= MAX_SEQUENCES:
             raise ValueError('The project already contains 64 sequences.')
         ident = uuid.uuid4().hex

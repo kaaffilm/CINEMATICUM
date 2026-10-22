@@ -1,0 +1,49 @@
+{
+  "ffmpeg_executable": "/usr/bin/ffmpeg",
+  "ffmpeg_version": "ffmpeg version 6.1.1-3ubuntu5 Copyright (c) 2000-2023 the FFmpeg developers",
+  "fixture": {
+    "frames": 24,
+    "height": 64,
+    "sample_rate": 48000,
+    "source_sample_frames": 48000,
+    "width": 96
+  },
+  "kind": "retime-real-media-test-observations",
+  "observations": {
+    "test_audio_only_original_uses_same_curve_and_exact_black_picture_count": {
+      "black_frames": 12,
+      "decoded_stereo_samples": 24000,
+      "max_sample_error": 6.222057291060956e-07
+    },
+    "test_fast_varispeed_antialias_filter_rejects_high_band_and_keeps_low_tone": {
+      "300hz_to_1200hz_max_sample_error": 4.1246414184681335e-06,
+      "decoded_stereo_samples": 8000,
+      "rejection_db": -97.6122934337354,
+      "retimed_rejected_band_rms": 1.8616598373250404e-06,
+      "source_14khz_rms": 0.14142135735003553
+    },
+    "test_mute_is_exact_silence_with_full_fractional_sample_count": {
+      "decoded_stereo_samples": 11211,
+      "nonzero_samples": 0
+    }
+  },
+  "runtime": {
+    "analysis_edge": 640,
+    "audio": "64-tap anti-aliased varispeed; pitch follows speed",
+    "available": true,
+    "max_edge": 1280,
+    "max_frames": 240,
+    "max_pixels": 921600,
+    "method": "OpenCV DIS medium bidirectional dense optical flow",
+    "operation_probe": {
+      "median_displacement_error_pixels": 3.1085978662304115e-06
+    },
+    "python": "/workspace/scratch/091f394ee5df/cinematicum-runtimes/verification/bin/python",
+    "rendered_playback": true,
+    "versions": {
+      "numpy": "2.3.5",
+      "opencv-python-headless": "4.11.0.86"
+    }
+  },
+  "source_sha256": "55d1c3e1c069397864d1b4aa79a67e4135abfed5360ad1379dde06e700d246f0"
+}

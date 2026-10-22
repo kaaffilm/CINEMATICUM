@@ -1,0 +1,97 @@
+{
+  "request": {
+    "version": 1,
+    "width": 96,
+    "height": 64,
+    "video": true,
+    "source_first": 4,
+    "source_count": 12,
+    "positions": [
+      4.0,
+      4.541666666666667,
+      5.166666666666667,
+      5.875,
+      6.666666666666667,
+      7.541666666666667,
+      8.5,
+      9.541666666666666,
+      10.666666666666666,
+      11.875,
+      13.166666666666666,
+      14.541666666666666
+    ],
+    "recipe": {
+      "version": 1,
+      "method": "nearest",
+      "audio": "varispeed",
+      "offset": 0,
+      "keys": [
+        {
+          "frame": 0,
+          "speed": 0.5
+        },
+        {
+          "frame": 12,
+          "speed": 1.5
+        }
+      ]
+    },
+    "source_in": 4.0,
+    "duration": 12,
+    "fps": {
+      "numerator": 24,
+      "denominator": 1
+    },
+    "samples": 24000,
+    "sample_phase": 0.0,
+    "audio_first": 7968,
+    "audio_count": 24064
+  },
+  "source_matches": [
+    4,
+    4,
+    4,
+    4,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11
+  ],
+  "raw_matches": [
+    4,
+    4,
+    4,
+    4,
+    4,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    11
+  ],
+  "decoded_matches": [
+    4,
+    4,
+    4,
+    4,
+    4,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    11
+  ],
+  "raw_equals_decoded": true,
+  "raw_vs_decoded_max_error": 0,
+  "source_vs_original_max_error": 139,
+  "source_codec": "ffv1",
+  "source_pixel_format": "bgr0"
+}

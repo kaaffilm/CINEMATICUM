@@ -1,27 +1,40 @@
 {
   "version": 1,
-  "build": "0.11.0",
+  "build": "0.12.0",
   "reviewed_on": "2026-10-22",
   "parity_complete": false,
-  "evidence_note": "The 0.11 candidate integrates simultaneous cameras, fixed-source audio, scene-linear Float32 OCIO/ACES movies, OTIO retime/nested/dissolve exchange, measured HDR/panorama stills and guarded startup quit. Feature receipts distinguish source-bound browser/numeric acceptance from native Mac and installed application acceptance. Base a031a04 passed 812 tests locally and in exact-head CI and its 0.10 installation passed all independent source/bundle/backup/project/checkout gates; its first installed ordinary quit exceeded its deadline and remains a failed historical launch gate. Current combined full regression, native phases, installation and exact-head CI have separate release receipts. No full professional parity, production quality or accepted-film issuance is implied.",
+  "evidence_note": "The 0.12 candidate starts from the integrated 0.11 core 530ba240 and adds bounded editable variable speed, actual optical-flow source pictures and exact-grid varispeed audio. The original isolated retime candidate passed 48 distinct selected tests and 58 actual Chromium checks with independent pixel/sample truth. Those results retain their own source identities; integrated frozen regression, native WKWebView, installation and exact-head CI have separate current-source receipts. Prior 0.11 and historical release results do not certify this new source. Full professional parity, arbitrary-footage quality, signed distribution and accepted-film issuance remain unclaimed.",
   "release_acceptance": {
     "status": "integration_acceptance_in_progress",
-    "version": "0.11.0",
-    "build": 12,
-    "base_commit": "a031a04e19007f7bac252c1f5b0f8d66db15371a",
+    "version": "0.12.0",
+    "build": 13,
+    "base_commit": "530ba2400571a8b67efa2d9ab28997f65920c006",
     "frozen_regression": {
-      "status": "pending_integrated_source_freeze"
+      "status": "pending_current_source_freeze_and_run",
+      "report": "verification/0.12.0/whole-build-current-01/report.json"
     },
-    "native_gates": {},
+    "native_gates": {
+      "retime": {
+        "status": "pending_actual_wkwebview",
+        "phases": [
+          "prepare",
+          "author",
+          "playback",
+          "archive"
+        ],
+        "maximum_phase_seconds": 18,
+        "maximum_helper_seconds": 14
+      }
+    },
     "installation": {
       "status": "pending"
     },
     "installed_launch": {
-      "status": "pending_startup_quit_correction"
+      "status": "pending"
     },
     "parity_complete": false
   },
-  "unfinished_work": "UNFINISHED_0_11.md",
+  "unfinished_work": "UNFINISHED_0_12.md",
   "capabilities": [
     {
       "id": "editor.rational_clock",
@@ -36,7 +49,7 @@
     {
       "id": "editor.timeline",
       "status": "partial",
-      "scope": "Own multitrack edit/trim/split/ripple/slip/slide/roll, constant speed/reverse, track controls, shared-format live sequences, manual and waveform-synchronized multicam, simultaneous camera monitoring and fixed-source sound, captions and verified preview proxies. Variable speed ramps, optical-flow retiming, clock-drift correction and general offline/online conform remain missing.",
+      "scope": "Own multitrack edit/trim/split/ripple/slip/slide/roll, constant speed/reverse, track controls, shared-format live sequences, measured multicam synchronization, simultaneous camera monitoring and fixed-source sound, captions and verified proxies. The 0.12 candidate adds bounded variable speed and actual optical flow, editable curves with exact split/edge-trim clocks, rendered playback and selected-stream varispeed audio. Pitch-preserving variable-speed sound, general timewarped nesting, clock-drift correction and offline/online conform remain missing; current native/release gates remain separate.",
       "evidence": [
         "engine.py",
         "web/editing.js",
@@ -49,7 +62,41 @@
         "test_editorial.py",
         "multicam.py",
         "web/multicam-monitor.js",
-        "test_multicam_monitor.py"
+        "test_multicam_monitor.py",
+        "retime.py",
+        "retime_worker.py",
+        "web/retime-model.js",
+        "web/retime-ui.js",
+        "test_retime.py",
+        "RETIME.md"
+      ]
+    },
+    {
+      "id": "editor.variable_speed",
+      "status": "implemented_bounded",
+      "scope": "Studio 0.12 candidate; native/release acceptance pending: exact analytic integration of 2–32 linearly interpolated speed keys, 0.25–4x forward, up to 240 frames. Authored source recipe survives undo/save/reopen/archive and split/edge trims. Absolute 48 kHz source sampling uses a 64-tap anti-aliased varispeed filter, selected stream/channels and existing gain/pan/fades; pitch follows speed. Rendered playback; unchanged constant-speed live PCM. At most 16 authored/expanded ramp instances. Unsupported timewarped ancestors, bindings and interchange refuse explicitly; native and integrated release acceptance remain separate.",
+      "evidence": [
+        "retime.py",
+        "retime_worker.py",
+        "web/retime-model.js",
+        "web/retime-ui.js",
+        "test_retime.py",
+        "test_retime_macos.py",
+        "test_retime_browser.cjs",
+        "macos/RetimeSmoke.js",
+        "RETIME.md"
+      ]
+    },
+    {
+      "id": "editor.optical_flow",
+      "status": "implemented_bounded",
+      "scope": "Studio 0.12 candidate; native/release acceptance pending: actual pinned OpenCV DIS medium bidirectional dense-flow measurement and inverse-warp source-frame interpolation; confidence and cut checks use nearest original pictures where unreliable. Standard8 opaque SDR originals only, 16-pixel minimum, 1280 edge/921600 pixels, 640 analysis edge, 512 MiB raw-picture estimate and 120-second derivative deadline. Original hashes checked before/after; receipts record actual interpolation and fallback. No high16/Float32/HDR/alpha-source retiming or production-scale optical-flow quality claim.",
+      "evidence": [
+        "retime.py",
+        "retime_worker.py",
+        "test_retime.py",
+        "test_retime_macos.py",
+        "RETIME.md"
       ]
     },
     {

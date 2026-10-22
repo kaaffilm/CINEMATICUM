@@ -2,17 +2,18 @@
 
 ## CINEMATICUM Studio — editable production workspace
 
-The current **0.11 candidate** retains scientific authoring, learned tracking,
-reconstruction, scene processing, collaboration and measured synchronization,
-and integrates simultaneous cameras, locked source audio, scene-linear
-Float32 OCIO/ACES movies, editable OTIO compositions and measured HDR/panorama
-photographs. [Implemented scope](scripts/studio/FEATURES_0_11.md),
-[verification](scripts/studio/VERIFICATION_0_11.md) and
-[remaining work](scripts/studio/UNFINISHED_0_11.md) distinguish current source
-from passed acceptance and installation. The published 0.10 base passed 812
-tests locally and in CI and is installed, while its first startup-quit failure
-is being corrected in this candidate. Historical 0.9.1 acceptance remains
-bound to its recorded source.
+The current **0.12 candidate** builds on the integrated 0.11 core and adds
+editable variable speed curves, actual optical-flow interpolation and exact
+source-grid varispeed sound. Source media and speed curves remain editable
+through undo, splits, edge trims, save/reopen and portable archives. Rendered
+playback and exports execute the same real source-time processing.
+[Implemented scope](scripts/studio/FEATURES_0_12.md),
+[verification](scripts/studio/VERIFICATION_0_12.md) and
+[remaining work](scripts/studio/UNFINISHED_0_12.md) distinguish implementation,
+source-bound test evidence and pending native/release acceptance. The earlier
+0.11 scientific, camera, Float32, OTIO, still-photography and lifecycle work is
+retained. Previous release results remain bound to their recorded source and
+do not certify this new candidate.
 
 Open the media editor with `make studio`. On macOS, `make studio-install-macos`
 builds **CINEMATICUM Studio.app** using the installed Xcode tools. CINEMATICUM owns

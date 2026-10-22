@@ -64,6 +64,10 @@ jobs:
         run: |
           python3 -I -B scripts/studio/bootstrap_verification_linux.py \
             --root "$RUNNER_TEMP/cinematicum-runtimes" --stage scene
+      - name: Prepare the independent hash-pinned browser
+        run: |
+          python3 -I -B scripts/studio/bootstrap_verification_linux.py \
+            --root "$RUNNER_TEMP/cinematicum-runtimes" --stage browser
       - name: Verify the frozen whole build with actual engines and no skipped tests
         run: |
           "$RUNNER_TEMP/cinematicum-runtimes/verification/bin/python" -I -B scripts/studio/run_verification.py \
@@ -73,10 +77,6 @@ jobs:
           for file in scripts/studio/web/*.js scripts/studio/macos/*.js scripts/studio/*.cjs; do
             node --check "$file"
           done
-      - name: Prepare the independent hash-pinned browser
-        run: |
-          python3 -I -B scripts/studio/bootstrap_verification_linux.py \
-            --root "$RUNNER_TEMP/cinematicum-runtimes" --stage browser
       - name: Accept actual multicamera editing, save, reopen and rendered source audio
         run: |
           node scripts/studio/test_multicam_sync_browser.cjs \
@@ -101,6 +101,12 @@ jobs:
             --python "$RUNNER_TEMP/cinematicum-runtimes/verification/bin/python" \
             --browser "$CINEMATICUM_BROWSER" \
             --evidence "$RUNNER_TEMP/otio-compositions-acceptance"
+      - name: Accept authored speed ramps, optical-flow pictures, source audio and archive restore
+        run: |
+          node scripts/studio/test_retime_browser.cjs \
+            --python "$RUNNER_TEMP/cinematicum-runtimes/verification/bin/python" \
+            --browser "$CINEMATICUM_BROWSER" \
+            --evidence "$RUNNER_TEMP/retime-acceptance"
       - name: Accept authenticated startup quit, saved edits and active render protection
         run: |
           node scripts/studio/test_startup_quit_browser.cjs \
@@ -135,6 +141,10 @@ jobs:
             ${{ runner.temp }}/float-movie-acceptance/**/*.png
             ${{ runner.temp }}/otio-compositions-acceptance/**/*.json
             ${{ runner.temp }}/otio-compositions-acceptance/**/*.png
+            ${{ runner.temp }}/retime-acceptance/**/*.json
+            ${{ runner.temp }}/retime-acceptance/**/*.png
+            ${{ runner.temp }}/retime-acceptance/driver.stdout
+            ${{ runner.temp }}/retime-acceptance/driver.stderr
             ${{ runner.temp }}/startup-quit-acceptance/**/*.json
             ${{ runner.temp }}/startup-quit-acceptance/**/*.png
             ${{ runner.temp }}/still-photography-acceptance/**/*.json

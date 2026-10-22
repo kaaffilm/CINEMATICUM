@@ -270,6 +270,7 @@ def validate_planar_binding(motion,project,clip,assets):
     if not isinstance(source,dict):raise ValueError("Planar motion lacks its exact measured source binding")
     tracked=clip if motion["mode"]=="stabilize" else next((c for c in project["clips"] if c["id"]==source.get("clip_id")),None)
     if tracked is None or tracked.get("asset_id") not in assets:raise ValueError("The measured background clip is missing; remove or remeasure its corner pin")
+    if tracked.get("retime"):raise ValueError("Remove dependent measured planar motion before applying a variable-speed source clock")
     asset=assets[tracked["asset_id"]]
     if asset.get("kind")!="video":raise ValueError("A measured planar background must be an owned video source")
     identity=_identity(project,tracked,asset)

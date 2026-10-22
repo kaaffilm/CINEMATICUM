@@ -73,6 +73,8 @@ def _prepare(project, project_dir, clip_id, request):
     clip = next((c for c in project["clips"] if c["id"] == clip_id), None)
     if clip is None:
         raise ValueError("Select a picture clip to track")
+    if clip.get("retime"):
+        raise ValueError("Render this speed-ramped edit to a new source before measuring tracking; source-bound motion cannot use a nonlinear clock.")
     asset = next(a for a in project["assets"] if a["id"] == clip["asset_id"])
     if asset["kind"] != "video" or clip["track"] < 0:
         raise ValueError("Point tracking requires a video picture clip")

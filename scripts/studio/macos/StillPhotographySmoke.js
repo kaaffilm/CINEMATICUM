@@ -78,6 +78,6 @@ return await (async () => {
   try{
     await until(()=>$('#project-select')?.options.length>=2&&$('#viewer-project').textContent,'The application did not bootstrap',3500);await select(PHOTO_FIXTURE.project_id,PHOTO_FIXTURE.project_name);
     if(PHOTO_FIXTURE.operation==='import')await importPhotos();else if(['hdr','panorama'].includes(PHOTO_FIXTURE.operation))await develop(PHOTO_FIXTURE.operation);else await deliver();
-    return {...result,passed:true,steps,elapsed_ms:Math.round(performance.now()-begun)};
+    return {...result,passed:true,steps,expected_download_count:{import:0,hdr:4,panorama:3,deliver:2}[PHOTO_FIXTURE.operation],elapsed_ms:Math.round(performance.now()-begun)};
   }catch(error){return {...result,passed:false,steps,error:String(error),elapsed_ms:Math.round(performance.now()-begun)};}
 })();

@@ -82,7 +82,7 @@
       if(depth>8)return;
       const scope={...project,...sequence},clips=(sequence.clips||[]).filter(c=>edit.active(scope,c.track)&&((withPicture&&contains(c,at))||(withAudio&&contains(c,audioAt)))).sort((a,b)=>a.track-b.track);
       for(const clip of clips){
-        const pictureActive=withPicture&&contains(clip,at)&&clip.track>=0,audioActive=withAudio&&contains(clip,audioAt);
+        const pictureActive=withPicture&&contains(clip,at)&&clip.track>=0,audioActive=withAudio&&!clip.retime&&contains(clip,audioAt);
         const local=at-clip.start,audioLocal=audioAt-clip.start,pose=edit.pose(clip,local),pan=clip.audio?.pan||0;
         const clipGain=audioActive?gain*edit.audioGain(scope,clip,audioLocal):0,clipLeft=left*Math.min(1,1-pan),clipRight=right*Math.min(1,1+pan);
         const rate=speed*(clip.speed??1),backwards=reversed!==Boolean(clip.reverse),soundFrame=audioSourceFrame(clip,audioAt);

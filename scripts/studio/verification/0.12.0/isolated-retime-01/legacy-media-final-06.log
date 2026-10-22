@@ -1,0 +1,15 @@
+test_retime_has_exact_output_frames_and_preserves_slow_split_boundaries (test_timeline_audio.TimelineAudioTests.test_retime_has_exact_output_frames_and_preserves_slow_split_boundaries) ... ok
+test_reverse_picture_and_sound_and_source_bounds (test_timeline_audio.TimelineAudioTests.test_reverse_picture_and_sound_and_source_bounds) ... ok
+test_audio_tempo_duration_and_pitch (test_timeline_audio.TimelineAudioTests.test_audio_tempo_duration_and_pitch) ... ok
+test_linear_fades_and_stereo_balance_change_decoded_samples (test_timeline_audio.TimelineAudioTests.test_linear_fades_and_stereo_balance_change_decoded_samples) ... ok
+test_current_frame_uses_the_actual_export_graph (test_frame_preview.FramePreviewTests.test_current_frame_uses_the_actual_export_graph) ... ok
+test_nested_retime_reverse_uses_exact_sequence_clock (test_editorial.EditorialMediaTests.test_nested_retime_reverse_uses_exact_sequence_clock) ... ok
+test_nested_instances_keep_locked_audio_gain_and_original_clock (test_multicam_monitor.ActualMulticamMonitorTests.test_nested_instances_keep_locked_audio_gain_and_original_clock) ... ok
+test_reversed_locked_movie_keeps_correct_source_span (test_multicam_monitor.ActualMulticamMonitorTests.test_reversed_locked_movie_keeps_correct_source_span) ... ok
+test_retimed_monitor_clock_and_nested_speed_export_keep_selected_stream (test_multicam_monitor.ActualMulticamMonitorTests.test_retimed_monitor_clock_and_nested_speed_export_keep_selected_stream) ... ok
+test_actual_render_frames_match_slip_slide_roll_source_selection (test_trim_edits.DecodedTrimTests.test_actual_render_frames_match_slip_slide_roll_source_selection) ... ok
+
+----------------------------------------------------------------------
+Ran 10 tests in 18.317s
+
+OK

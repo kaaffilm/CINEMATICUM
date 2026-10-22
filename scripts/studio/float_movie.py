@@ -75,6 +75,8 @@ def validate_float_project(project):
         raise ValueError("Float32 movies support at most 8,388,608 canvas pixels.")
     assets = {a["id"]: a for a in project["assets"]}
     for clip in project["clips"]:
+        if clip.get("retime"):
+            raise ValueError("Float32 v1 does not flatten speed ramps or optical flow. Use Standard 8-bit SDR for this retime workflow.")
         if clip.get("sequence_id"):
             raise ValueError("Float32 v1 requires flattened sequence edits; live nested sequences are unsupported.")
         if clip["track"] < 0:
