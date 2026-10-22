@@ -1,5 +1,9 @@
 # CINEMATICUM 0.9.1 candidate — remaining work
 
+> Historical 0.9.1 record. Current implemented scope is in [Features 0.10](FEATURES_0_10.md), current evidence in [Verification 0.10](VERIFICATION_0_10.md), and current gaps in [Remaining work 0.10](UNFINISHED_0_10.md). Statements below describe their earlier source freeze.
+
+
+
 Reviewed 21 October 2026. This register distinguishes missing implementations, bounded features, current acceptance and release alignment. The filename is retained for existing links. [Verification 0.9.1](VERIFICATION_0_9_1.md) records the current candidate; [verification 0.9](VERIFICATION_0_9.md) preserves earlier execution without transferring its results to newer source.
 
 **CINEMATICUM remains incomplete against the requested application and system scope.** Selected-source audio playback, measured affine/projective tracking and high16 SDR movie processing are implemented in the current source. They do not complete the absent systems below. The machine-readable [capability ledger](capabilities.json) retains `parity_complete: false`.

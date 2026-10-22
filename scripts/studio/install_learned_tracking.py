@@ -6,6 +6,9 @@ Existing unrelated files are never adopted or overwritten. Each --step runs
 one foreground, resumable phase; downloads are cancellable fixed byte chunks.
 No model code or weights are downloaded by inference itself. Native CPython
 is an explicit external prerequisite. MPS/CUDA acceleration is not certified.
+Native package verification retains its 12-second child deadline. An admitted
+foreground CI caller can explicitly extend only that inventory deadline through
+the Python API; installed RECORD, source and checkpoint checks remain identical.
 """
 from __future__ import annotations
 
@@ -391,7 +394,14 @@ def extract_source(archive,source,runtime,python_version,event=None):
     if seen!=set(expected):raise ValueError("The exact upstream archive omitted required learned source files")
 
 
-def probe_runtime(runtime,lock,digest,event=None):
+def _package_check_budget(value):
+    if type(value) is not int or not 1 <= value <= 60:
+        raise ValueError("An explicit foreground learned package-check budget must be an integer from 1 to 60 seconds")
+    return value
+
+
+def probe_runtime(runtime,lock,digest,event=None,*,package_check_seconds=12):
+    package_check_seconds=_package_check_budget(package_check_seconds)
     runtime=Path(runtime);config=runtime/"pyvenv.cfg"
     if config.is_symlink() or not config.is_file() or not re.search(r"(?mi)^include-system-site-packages\s*=\s*false\s*$",config.read_text()):
         raise ValueError("Learned runtime must be a real isolated virtual environment")
@@ -403,7 +413,7 @@ def probe_runtime(runtime,lock,digest,event=None):
     for location in report["locations"].values():
         try:Path(location).resolve().relative_to(runtime.resolve())
         except ValueError as exc:raise ValueError("A learned package loaded from outside the owned runtime") from exc
-    report["package_inventory"]=_verify_package_files(runtime,lock,event)
+    report["package_inventory"]=_verify_package_files(runtime,lock,event,timeout=package_check_seconds)
     capabilities=json.loads(_run([runtime/"bin/python","-I","-B",WORKER,"--capabilities"],12,event))
     if (capabilities.get("available") is not True or capabilities.get("lock_sha256")!=digest
             or capabilities.get("device")!="cpu" or set(capabilities.get("models",{}))!={"sam2","tapir"}):
@@ -416,7 +426,7 @@ def probe_runtime(runtime,lock,digest,event=None):
     return report
 
 
-def _verify_package_files(runtime,lock,event=None):
+def _verify_package_files(runtime,lock,event=None,*,timeout=12):
     """Verify installed RECORD hashes and refuse unrecorded importable files."""
     allowed=[record["path"] for source in lock["sources"] for record in source["files"]
              if record["path"].startswith(source["package"]+"/")]
@@ -454,7 +464,7 @@ identity=hashlib.sha256(json.dumps(fingerprints,sort_keys=True,separators=(',','
 print(json.dumps({'distributions':len(names),'recorded_entries':count,'site_files':len(actual),'package_files_sha256':identity,'upstream_source_files':len(upstream)}))
 '''
     payload=json.dumps([[package["name"] for package in lock["packages"]],allowed],separators=(",",":"))
-    return json.loads(_run([Path(runtime)/"bin/python","-I","-B","-c",code,payload],12,event))
+    return json.loads(_run([Path(runtime)/"bin/python","-I","-B","-c",code,payload],_package_check_budget(timeout),event))
 
 
 def _model_probe(runtime,backend,lock,digest,event=None):
@@ -485,7 +495,7 @@ def _inventory(runtime,event=None):
     return result
 
 
-def _existing(destination,lock,digest,event=None):
+def _existing(destination,lock,digest,event=None,*,package_check_seconds=12):
     if not os.path.lexists(destination):return None
     if not destination.is_symlink():raise ValueError("An existing unmanaged learned destination will not be replaced or modified")
     relative=Path(os.readlink(destination))
@@ -499,7 +509,7 @@ def _existing(destination,lock,digest,event=None):
             or receipt.get("stable_destination")!=str(destination)):
         raise ValueError("Managed learned runtime lacks a matching pinned installation receipt")
     if _inventory(runtime,event)!=receipt.get("inventory"):raise ValueError("Installed learned runtime inventory changed after publication")
-    verification=probe_runtime(runtime,lock,digest,event)
+    verification=probe_runtime(runtime,lock,digest,event,package_check_seconds=package_check_seconds)
     for backend in ("sam2","tapir"):
         acceptance=receipt.get("model_acceptance",{}).get(backend,{})
         required={"actual_checkpoint_mask","binary_full_depth_alpha"} if backend=="sam2" else {"actual_checkpoint_motion","actual_learned_visibility"}
@@ -521,12 +531,13 @@ def info(destination=None):
             "scope":"Official SAM2.1 Tiny and PyTorch TAPIR, CPU-only readiness; MPS/CUDA and arbitrary production footage remain separate acceptance"}
 
 
-def step(destination=None,python=None,cancel_event=None,download_cache=None):
+def step(destination=None,python=None,cancel_event=None,download_cache=None,*,package_check_seconds=12):
+    package_check_seconds=_package_check_budget(package_check_seconds)
     _cancel(cancel_event);lock,digest=load_lock();destination=_destination(destination)
-    if os.path.lexists(destination):return _existing(destination,lock,digest,cancel_event)
+    if os.path.lexists(destination):return _existing(destination,lock,digest,cancel_event,package_check_seconds=package_check_seconds)
     destination.parent.mkdir(parents=True,exist_ok=True)
     with _lock(destination.parent):
-        if os.path.lexists(destination):return _existing(destination,lock,digest,cancel_event)
+        if os.path.lexists(destination):return _existing(destination,lock,digest,cancel_event,package_check_seconds=package_check_seconds)
         journal=destination.parent/PENDING
         if not os.path.lexists(journal):
             base=choose_python(python);versions=destination.parent/VERSIONS_DIRECTORY
@@ -595,7 +606,7 @@ def step(destination=None,python=None,cancel_event=None,download_cache=None):
         elif phase=="dependencies":
             _run([interpreter,"-I","-B","-m","pip","--isolated","check"],10,cancel_event);state["phase"]="verify"
         elif phase=="verify":
-            _save(runtime/"learned-verification.json",probe_runtime(runtime,lock,digest,cancel_event))
+            _save(runtime/"learned-verification.json",probe_runtime(runtime,lock,digest,cancel_event,package_check_seconds=package_check_seconds))
             inventory=_inventory(runtime,cancel_event)
             for name in ("readiness-inventory.json","acceptance-sam2.json","acceptance-tapir.json"):
                 inventory.pop(name,None)
@@ -606,7 +617,7 @@ def step(destination=None,python=None,cancel_event=None,download_cache=None):
             _save(runtime/("acceptance-"+backend+".json"),_model_probe(runtime,backend,lock,digest,cancel_event))
             state["phase"]="probe-tapir" if backend=="sam2" else "publish"
         elif phase=="publish":
-            before,_=_read(runtime/"learned-verification.json");current=probe_runtime(runtime,lock,digest,cancel_event)
+            before,_=_read(runtime/"learned-verification.json");current=probe_runtime(runtime,lock,digest,cancel_event,package_check_seconds=package_check_seconds)
             if current["versions"]!=before["versions"] or current["worker_sha256"]!=before["worker_sha256"]:
                 state.update(phase="verify",index=0)
                 _save(journal,state)
@@ -634,17 +645,18 @@ def step(destination=None,python=None,cancel_event=None,download_cache=None):
         return {"status":"in_progress","phase":state["phase"],"index":state["index"],"lock_sha256":digest}
 
 
-def install(destination=None,python=None,check_only=False,cancel_event=None,progress=None,download_cache=None):
+def install(destination=None,python=None,check_only=False,cancel_event=None,progress=None,download_cache=None,*,package_check_seconds=12):
+    package_check_seconds=_package_check_budget(package_check_seconds)
     _cancel(cancel_event);lock,digest=load_lock();destination=_destination(destination)
     if check_only:
-        result=_existing(destination,lock,digest,cancel_event)
+        result=_existing(destination,lock,digest,cancel_event,package_check_seconds=package_check_seconds)
         if result is None:raise ValueError("The managed learned runtime is not installed at "+str(destination))
         return result
     started=time.monotonic()
     while True:
         _cancel(cancel_event)
         if time.monotonic()-started>3600:raise TimeoutError("Learned installation exceeded its one-hour foreground budget; verified owned progress may be resumed")
-        result=step(destination,python,cancel_event,download_cache)
+        result=step(destination,python,cancel_event,download_cache,package_check_seconds=package_check_seconds)
         if progress is not None:progress(result)
         if result["status"]!="in_progress":return result
 

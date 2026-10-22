@@ -1,11 +1,14 @@
 """Preservation, immutable transport and selected-source extraction gates."""
 import hashlib
+import base64
 import io
 import json
 from pathlib import Path
 import tarfile
 import tempfile
 import threading
+import subprocess
+import sys
 import unittest
 from unittest.mock import patch
 from urllib.request import Request
@@ -14,6 +17,38 @@ import install_learned_tracking as installer
 
 
 class LearnedInstallerTests(unittest.TestCase):
+    def test_explicit_foreground_package_budget_refuses_unbounded_values_without_writes(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            destination=Path(temporary)/"new/runtime"
+            for budget in (None,False,0,-1,61,1.5,float("inf"),"60"):
+                for operation in (installer.step,installer.install):
+                    with self.subTest(budget=budget,operation=operation.__name__),self.assertRaisesRegex(ValueError,"package-check budget"):
+                        operation(destination,package_check_seconds=budget)
+            self.assertFalse(destination.parent.exists())
+
+    def test_longer_package_deadline_still_rejects_changed_recorded_bytes(self):
+        # Tiny distribution exercises only the real RECORD verifier, never a
+        # substitute model, model worker, or checkpoint acceptance result.
+        with tempfile.TemporaryDirectory() as temporary:
+            runtime=Path(temporary)/"venv"
+            subprocess.run([sys.executable,"-I","-B","-m","venv","--without-pip",str(runtime)],check=True,timeout=15,capture_output=True)
+            site=runtime/f"lib/python{sys.version_info.major}.{sys.version_info.minor}/site-packages"
+            metadata=site/"cinematicum_integrity_fixture-1.0.dist-info";metadata.mkdir()
+            module=site/"cinematicum_integrity_fixture.py";module.write_bytes(b"VALUE=1\n")
+            (metadata/"METADATA").write_bytes(b"Metadata-Version: 2.1\nName: cinematicum-integrity-fixture\nVersion: 1.0\n")
+            rows=[]
+            for path in (module,metadata/"METADATA"):
+                data=path.read_bytes();identity=base64.urlsafe_b64encode(hashlib.sha256(data).digest()).rstrip(b"=").decode()
+                rows.append(f"{path.relative_to(site).as_posix()},sha256={identity},{len(data)}")
+            rows.append(f"{metadata.name}/RECORD,,")
+            (metadata/"RECORD").write_text("\n".join(rows)+"\n")
+            lock={"sources":[],"packages":[{"name":"cinematicum-integrity-fixture"}]}
+            checked=installer._verify_package_files(runtime,lock,timeout=60)
+            self.assertEqual(checked["recorded_entries"],3)
+            module.write_bytes(b"VALUE=2\n")
+            with self.assertRaisesRegex(RuntimeError,"bytes differ from their installed RECORD"):
+                installer._verify_package_files(runtime,lock,timeout=60)
+
     def test_observed_official_cdn_redirect_preserves_ranges_and_rejects_other_hosts(self):
         handler=installer._TrustedRedirects()
         request=Request("https://huggingface.co/facebook/model/resolve/frozen/checkpoint.pt",

@@ -223,7 +223,13 @@ def verify_managed_runtimes():
         destination = Path(interpreter).expanduser().absolute().parent.parent
         # The installer validates the owned stable link, lock, external
         # prerequisites, complete inventory and real numerical probes.
-        check = installer.install(destination=destination, check_only=True)
+        # Whole-build Linux verification is an admitted foreground CI job.
+        # Two complete inventories plus real optical inference can exceed the
+        # native CLI's 14-second per-call budget on slower filesystems.
+        budget = {"phase_budget_seconds": 60} if name == "optiland" and sys.platform == "linux" else {}
+        if name == "learned" and sys.platform == "linux":
+            budget = {"package_check_seconds": 60}
+        check = installer.install(destination=destination, check_only=True, **budget)
         runtime = destination.resolve(strict=True)
         receipt_path = runtime / installer.RECEIPT
         if receipt_path.is_symlink() or receipt_path.stat().st_size > 32 * 1024 * 1024:

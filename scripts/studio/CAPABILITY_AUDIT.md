@@ -1,5 +1,9 @@
 # CINEMATICUM 0.9.1 candidate — engineering comparison and implementation audit
 
+> Historical 0.9.1 record. Current implemented scope is in [Features 0.10](FEATURES_0_10.md), current evidence in [Verification 0.10](VERIFICATION_0_10.md), and current gaps in [Remaining work 0.10](UNFINISHED_0_10.md). Statements below describe their earlier source freeze.
+
+
+
 **Status: a substantive upgrade to CINEMATICUM's own editor; full parity with the listed applications remains unimplemented.** This audit records inspected source/interfaces, concrete changes, reproducible acceptance and unresolved requirements. It does not assign a misleading completion percentage or present an installed external program as an implemented CINEMATICUM feature.
 
 The user requirement is one audiovisual authoring application with one project, timeline, media inventory, undo history and output pipeline. CINEMATICUM's controls author the data. FFmpeg and Blender are headless processing engines; no third-party editor interface is opened or embedded. A backend integration counts only for the operations actually exposed, preserved and executed.

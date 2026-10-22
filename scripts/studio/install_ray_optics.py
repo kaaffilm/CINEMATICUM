@@ -8,6 +8,9 @@ is performed. --step performs one bounded, resumable foreground phase without
 starting detached work; --info describes the pinned setup without modifying it.
 A permanent venv is published through a stable relative link only after exact
 wheel, isolation, full inventory, ray-tracing and diffraction verification.
+The native CLI keeps its 14-second phase deadline. A foreground CI caller may
+explicitly request a bounded larger phase budget through the Python API; this
+does not remove cancellation, numerical probes, or either inventory check.
 """
 from __future__ import annotations
 
@@ -584,9 +587,15 @@ def _step(destination, python, event, wheel_cache):
         return result
 
 
-def step(destination=None, python=None, cancel_event=None, wheel_cache=None):
+def _phase_budget(value):
+    if type(value) is not int or not 1 <= value <= 60:
+        raise ValueError("An explicit foreground optics phase budget must be an integer from 1 to 60 seconds.")
+    return value
+
+
+def step(destination=None, python=None, cancel_event=None, wheel_cache=None, *, phase_budget_seconds=STEP_SECONDS):
     """One foreground phase; deadline cancellation terminates only owned children."""
-    event = _BudgetEvent(cancel_event)
+    event = _BudgetEvent(cancel_event, _phase_budget(phase_budget_seconds))
     try:
         return _step(destination, python, event, wheel_cache)
     except InterruptedError:
@@ -594,11 +603,13 @@ def step(destination=None, python=None, cancel_event=None, wheel_cache=None):
         raise
 
 
-def install(destination=None, python=None, check_only=False, cancel_event=None, progress=None, wheel_cache=None):
+def install(destination=None, python=None, check_only=False, cancel_event=None, progress=None, wheel_cache=None,
+            *, phase_budget_seconds=STEP_SECONDS):
+    phase_budget_seconds = _phase_budget(phase_budget_seconds)
     lock, digest = load_lock(); destination = _destination(destination)
     if check_only:
         _cancel(cancel_event)
-        result = _existing(destination, digest, _BudgetEvent(cancel_event))
+        result = _existing(destination, digest, _BudgetEvent(cancel_event, phase_budget_seconds))
         if result is None:
             raise ValueError("The managed optics runtime is not installed at " + str(destination))
         return result
@@ -607,7 +618,7 @@ def install(destination=None, python=None, check_only=False, cancel_event=None, 
         _cancel(cancel_event)
         if time.monotonic() - started > 3600:
             raise TimeoutError("Optics installation exceeded its one-hour foreground budget; owned progress remains resumable.")
-        result = step(destination, python, cancel_event, wheel_cache)
+        result = step(destination, python, cancel_event, wheel_cache, phase_budget_seconds=phase_budget_seconds)
         if progress is not None:
             progress(result)
         if result["status"] != "in_progress":

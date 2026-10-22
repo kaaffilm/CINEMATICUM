@@ -31,7 +31,7 @@ it is not a signature or a substitute for reviewing a changed manifest.
 
 ## Actual engines and skipped-test policy
 
-The Studio workflow uses Ubuntu 24.04 and Python 3.11. Its fresh verification
+The Studio workflow uses Ubuntu 24.04 and Python 3.12. Its fresh verification
 venv installs the six packages in
 `verification-linux-x86_64.requirements.txt` with exact versions, published
 SHA-256 wheel hashes, binary-only installation and dependency resolution.
@@ -46,6 +46,11 @@ upstream commit and checks its exact length and SHA-256. The binary stays in
 the runner's temporary directory. Its [upstream attribution](https://github.com/letmaik/rawpy/blob/a39c2e7a44911889c3360891012f862f904ba551/test/README.txt)
 identifies the rawsamples.ch camera sample and CC BY-NC-SA 4.0 license. It is a
 verification input, not production footage or a bundled application asset.
+
+The Linux bootstrap additionally provisions the separately locked optical, learned,
+physical and COLMAP runtimes, actual PBRT and official Blender, with input hashes
+and a runtime receipt. Model weights and media remain outside Git. The release
+runner inventories these runtimes before and after executing the full suite.
 
 Run the full discoverable suite with the isolated venv interpreter:
 

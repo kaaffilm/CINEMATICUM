@@ -17,6 +17,7 @@ import sys
 import tempfile
 import threading
 import unittest
+from unittest.mock import patch
 
 import ray_optics as optics
 
@@ -110,6 +111,42 @@ class OpticalPrescriptionTests(unittest.TestCase):
 
 class OpticsInstallerTests(unittest.TestCase):
     """Installer isolation, cancellation and durable byte-identity boundaries."""
+    def test_explicit_foreground_budget_is_bounded_before_any_setup(self):
+        import install_ray_optics as installer
+        with tempfile.TemporaryDirectory(prefix="cinematicum-optics-budget-TEST-") as temporary:
+            destination = Path(temporary) / "new" / "runtime"
+            for budget in (None, False, 0, -1, 61, 1.5, float("inf"), "60"):
+                for operation in (installer.step, installer.install):
+                    with self.subTest(budget=budget, operation=operation.__name__), self.assertRaisesRegex(ValueError, "phase budget"):
+                        operation(destination, phase_budget_seconds=budget)
+            self.assertFalse(destination.parent.exists())
+            self.assertEqual(installer.info(destination)["phase_budget_seconds"], 14)
+
+    def test_longer_foreground_check_still_rejects_bytes_changed_by_probe(self):
+        import install_ray_optics as installer
+        with tempfile.TemporaryDirectory(prefix="cinematicum-optics-budget-drift-TEST-") as temporary:
+            root = Path(temporary); destination = root / "runtime"
+            name = installer._target()[2] + "-" + "1" * 32
+            runtime = root / installer.VERSIONS_DIRECTORY / name
+            runtime.mkdir(parents=True)
+            data = runtime / "identity-boundary-fixture.txt"
+            data.write_text("before probe")
+            receipt = {"schema": "cinematicum-optics-install", "version": 2,
+                "wheel_lock_sha256": installer.load_lock()[1], "runtime_directory": str(runtime),
+                "stable_destination": str(destination), "base_python": sys.executable,
+                "base_python_identity": installer._base_identity(sys.executable),
+                "inventory": installer._inventory(runtime)}
+            installer._save_state(runtime / installer.RECEIPT, receipt)
+            destination.symlink_to(Path(installer.VERSIONS_DIRECTORY) / name, target_is_directory=True)
+            def change_bytes(_runtime, event):
+                self.assertFalse(event.is_set())
+                data.write_text("changed during probe")
+                return {"scope": "test control flow only; no optical acceptance asserted"}
+            with patch.object(installer, "probe_runtime", side_effect=change_bytes):
+                with self.assertRaisesRegex(ValueError, "changed during actual numerical verification"):
+                    installer.install(destination, check_only=True, phase_budget_seconds=60)
+            self.assertEqual(json.loads((runtime / installer.RECEIPT).read_text()), receipt)
+
     def test_info_and_isolated_cli_do_not_create_runtime_or_import_engine(self):
         import install_ray_optics as installer
         with tempfile.TemporaryDirectory(prefix="cinematicum-optics-info-TEST-") as temporary:

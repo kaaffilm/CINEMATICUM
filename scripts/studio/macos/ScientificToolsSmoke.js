@@ -41,7 +41,9 @@ return await (async () => {
     click('#authoring-tools');
     await until(() => $('#authoring-tools-dialog')?.open, 'Studio tools did not open');
     click(`[data-authoring-tool="${tool}"]`);
-    await until(() => $(dialog)?.open && !$(button)?.disabled, 'Actual installed engine did not make the tool ready', 7000);
+    // A cold Optiland probe imports the complete installed optical engine.
+    // Allow its measured startup within the unchanged overall phase deadline.
+    await until(() => $(dialog)?.open && !$(button)?.disabled, 'Actual installed engine did not make the tool ready', tool === 'ray-optics' ? 10000 : 7000);
     const box = control(dialog).getBoundingClientRect(), run = control(button), rect = run.getBoundingClientRect();
     require(box.left >= 0 && box.right <= innerWidth + .5 && box.top >= 0 && box.bottom <= innerHeight + .5, 'Scientific tool exceeds native viewport');
     const hit = document.elementFromPoint(rect.left + rect.width / 2, rect.top + rect.height / 2);

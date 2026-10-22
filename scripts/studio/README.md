@@ -1,4 +1,4 @@
-# CINEMATICUM Studio 0.9.1
+# CINEMATICUM Studio 0.10
 
 A working local audiovisual editor. Media are imported into an owned project,
 edited on a frame-based timeline, previewed, and exported through real render
@@ -8,7 +8,17 @@ processing engines; no external editor interface is embedded or launched.
 No missing shot is replaced with filler. Exporting media has no film
 issuance effect.
 
-## This upgrade
+## Current candidate
+
+Studio 0.10 adds deep/multiview EXR, checkpoint-backed SAM 2.1 and TAPIR, optical
+design, Mitsuba/PBRT physical still rendering, CPU COLMAP reconstruction, typed
+scene processing, paired collaboration and waveform multicamera synchronization.
+Open **Studio tools** for scientific authoring and **Runtime setup** for managed
+engines. See [Features 0.10](FEATURES_0_10.md), [Verification 0.10](VERIFICATION_0_10.md)
+and [remaining work](UNFINISHED_0_10.md). This recovered candidate still has
+separate whole-build, installation and installed-launch gates.
+
+## Previous upgrade
 
 The 0.9.1 candidate adds source-sample live audio, measured affine/projective
 planar tracking and image corner pinning, and 16-bit UNORM SDR processing with
@@ -31,7 +41,7 @@ scene-linear EXR masters, calibrated cameras, physical materials, exact clocks,
 measured tracking and OCIO/RAW/bracket still processing remain available.
 Read the [source comparison and capability audit](CAPABILITY_AUDIT.md),
 [capability ledger](capabilities.json), and
-[current unfinished-work register](UNFINISHED_0_9.md) for implemented bounds and
+[current unfinished-work register](UNFINISHED_0_10.md) for implemented bounds and
 remaining professional gaps. [Verification 0.9](VERIFICATION_0_9.md) is historical
 evidence for the earlier candidate. Its 515-test result does not certify newer
 source. The current verification record identifies current-source acceptance,

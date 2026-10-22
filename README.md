@@ -2,6 +2,14 @@
 
 ## CINEMATICUM Studio — editable production workspace
 
+The current **0.10 candidate** preserves the recovered scientific authoring,
+learned tracking, reconstruction, scene-processing, collaboration and waveform
+synchronization implementations. [Implemented scope](scripts/studio/FEATURES_0_10.md),
+[verification](scripts/studio/VERIFICATION_0_10.md) and
+[remaining work](scripts/studio/UNFINISHED_0_10.md) identify the actual bounds
+and independent release gates. Earlier acceptance below belongs to its pinned
+0.9.1 source; it does not certify this newer candidate.
+
 Open the media editor with `make studio`. On macOS, `make studio-install-macos`
 builds **CINEMATICUM Studio.app** using the installed Xcode tools. CINEMATICUM owns
 the timeline, compositor, mixer, color controls and 3D authoring interface. They

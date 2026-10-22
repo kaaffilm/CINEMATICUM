@@ -1,5 +1,6 @@
 name: Studio media verification
 on:
+  workflow_dispatch:
   pull_request:
     paths:
       - 'README.md'
@@ -15,45 +16,87 @@ permissions:
 jobs:
   media-and-http:
     runs-on: ubuntu-24.04
-    timeout-minutes: 20
+    timeout-minutes: 60
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
-          python-version: '3.11'
+          python-version: '3.12'
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
       - name: Verify the complete declared source inventory
-        run: python3 -I scripts/studio/source_integrity.py --check
-      - name: Install media engine
-        run: sudo apt-get update -qq && sudo apt-get install -y ffmpeg
-      - name: Install hash-pinned imaging, tracking and interchange engines in a clean venv
+        run: python3 -I -B scripts/studio/source_integrity.py --check
+      - name: Install declared media, LLVM and CPU renderer build prerequisites
         run: |
-          python3 -m venv "$RUNNER_TEMP/cinematicum-verification"
-          "$RUNNER_TEMP/cinematicum-verification/bin/python" -m pip install --require-hashes --only-binary=:all: \
-            --report "$RUNNER_TEMP/cinematicum-pip-report.json" \
-            -r scripts/studio/verification-linux-x86_64.requirements.txt
-          "$RUNNER_TEMP/cinematicum-verification/bin/python" -m pip check
-      - name: Fetch and verify the authentic camera RAW fixture
+          sudo apt-get update -qq
+          sudo apt-get install -y --no-install-recommends ffmpeg llvm-18 build-essential \
+            libgl1-mesa-dev libxrandr-dev libxinerama-dev libxcursor-dev libxi-dev \
+            libx11-dev zlib1g-dev libegl1 libxkbcommon0 libnss3 libatk1.0-0 \
+            libatk-bridge2.0-0 libdrm2 libxcomposite1 libxdamage1 libxfixes3 \
+            libxrandr2 libgbm1 libasound2t64
+          dpkg-query -W ffmpeg llvm-18 build-essential libgl1-mesa-dev libxrandr-dev \
+            libxinerama-dev libxcursor-dev libxi-dev libx11-dev zlib1g-dev libegl1 \
+            libxkbcommon0 > "$RUNNER_TEMP/cinematicum-host-prerequisites.txt"
+      - name: Reuse immutable runtime downloads
+        uses: actions/cache@v4
+        with:
+          path: ${{ runner.temp }}/cinematicum-runtimes/downloads
+          key: studio-engine-downloads-linux-x86_64-py312-${{ hashFiles('scripts/studio/*linux*lock.json', 'scripts/studio/learned-runtime-lock.json') }}
+      - name: Prepare hash-pinned imaging, tracking, interchange and authentic RAW
         run: |
-          python3 -I scripts/studio/fetch_verification_raw.py --output "$RUNNER_TEMP/ENGINE_TEST_RAW_KODAK_DC50.KDC"
-          printf 'CINEMATICUM_RAW_TEST_FILE=%s\n' "$RUNNER_TEMP/ENGINE_TEST_RAW_KODAK_DC50.KDC" >> "$GITHUB_ENV"
-      - name: Verify real media, adapters, and project API
+          python3 -I -B scripts/studio/bootstrap_verification_linux.py \
+            --root "$RUNNER_TEMP/cinematicum-runtimes" --stage base \
+            --github-env "$GITHUB_ENV" --github-path "$GITHUB_PATH"
+      - name: Verify exact engine code, wheel and checkpoint downloads
         run: |
-          "$RUNNER_TEMP/cinematicum-verification/bin/python" -I scripts/studio/run_verification.py \
+          python3 -I -B scripts/studio/bootstrap_verification_linux.py \
+            --root "$RUNNER_TEMP/cinematicum-runtimes" --stage downloads
+      - name: Install and accept actual Optiland, Mitsuba, COLMAP, SAM2 and TAPIR engines
+        run: |
+          python3 -I -B scripts/studio/bootstrap_verification_linux.py \
+            --root "$RUNNER_TEMP/cinematicum-runtimes" --stage engines
+      - name: Build exact upstream PBRT CPU renderer and submodules
+        run: |
+          python3 -I -B scripts/studio/bootstrap_verification_linux.py \
+            --root "$RUNNER_TEMP/cinematicum-runtimes" --stage pbrt
+      - name: Install and verify official pinned Cycles runtime
+        run: |
+          python3 -I -B scripts/studio/bootstrap_verification_linux.py \
+            --root "$RUNNER_TEMP/cinematicum-runtimes" --stage scene
+      - name: Verify the frozen whole build with actual engines and no skipped tests
+        run: |
+          "$RUNNER_TEMP/cinematicum-runtimes/verification/bin/python" -I -B scripts/studio/run_verification.py \
             --report "$RUNNER_TEMP/cinematicum-verification-report.json"
-      - name: Check editor JavaScript
+      - name: Check editor and acceptance JavaScript
         run: |
-          for file in scripts/studio/web/*.js scripts/studio/macos/*.js; do
+          for file in scripts/studio/web/*.js scripts/studio/macos/*.js scripts/studio/*.cjs; do
             node --check "$file"
           done
+      - name: Prepare the independent hash-pinned browser
+        run: |
+          python3 -I -B scripts/studio/bootstrap_verification_linux.py \
+            --root "$RUNNER_TEMP/cinematicum-runtimes" --stage browser
+      - name: Accept actual multicamera editing, save, reopen and rendered source audio
+        run: |
+          node scripts/studio/test_multicam_sync_browser.cjs \
+            --python "$RUNNER_TEMP/cinematicum-runtimes/verification/bin/python" \
+            --browser "$CINEMATICUM_BROWSER" \
+            --evidence "$RUNNER_TEMP/multicam-browser-acceptance"
       - name: Preserve verification receipts
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: studio-verification-receipts
           path: |
-            ${{ runner.temp }}/cinematicum-pip-report.json
+            ${{ runner.temp }}/cinematicum-host-prerequisites.txt
             ${{ runner.temp }}/cinematicum-verification-report.json
+            ${{ runner.temp }}/cinematicum-runtimes/*-report.json
+            ${{ runner.temp }}/cinematicum-runtimes/*-receipt.json
+            ${{ runner.temp }}/cinematicum-runtimes/*-bootstrap.json
+            ${{ runner.temp }}/cinematicum-runtimes/verification-environment.json
+            ${{ runner.temp }}/cinematicum-runtimes/verification-path.json
+            ${{ runner.temp }}/cinematicum-runtimes/*.log
+            ${{ runner.temp }}/multicam-browser-acceptance/**/*.json
+            ${{ runner.temp }}/multicam-browser-acceptance/**/*.png
           if-no-files-found: warn
