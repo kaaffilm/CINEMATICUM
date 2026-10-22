@@ -1,0 +1,39 @@
+{
+  "schema": "cinematicum-targeted-integration-v1",
+  "modules": [
+    "test_fcpxml",
+    "test_lens_compositor",
+    "test_lens_geometry",
+    "test_interchange",
+    "test_install_macos"
+  ],
+  "tests": 72,
+  "failures": 0,
+  "errors": 0,
+  "skips": 0,
+  "elapsed_seconds": 30.353,
+  "passed": true,
+  "source_before": {
+    "fcpxml.py": "d2eb27d14243d6d51e3d19325d09101fe9a67209231e79d92a101bfbe8b14064",
+    "server.py": "be99dad61d534ee91aa377a04a08ddf59f605373f06b79126b130dc51ec494ad",
+    "install_macos.py": "e5063ae4758f6ca51639fa5461eb713b308cfc5914102dd467d33963fa1369fd",
+    "lens_geometry.py": "0b73721c600a4933a26f97e4e3351d5e941d7f635ce7495bc8402635b2761e3c",
+    "compositor.py": "3ceaa0e1df26eb5d0d264f3eee0c3e5bffbdb0a3019621ba7449c1649667c963",
+    "web/app.js": "04b80d6129722dd6c7c91e2ee9025f89461993b7be72d68e8a8c415cf2c6962b",
+    "web/compositor-ui.js": "04e99eb7c04b702fbd05d535728d9537a7a899741848e8202f3d4dc64dd17298",
+    "web/interchange-ui.js": "e0b74c54728de48e136e1d0c40608da63785847a1fdf5c93acbd377da2df3923",
+    "web/index.html": "2707509f6e8c17250e2fea625cd23fefdac9f4be693d1e9153481d0711c2c2c0"
+  },
+  "source_after": {
+    "fcpxml.py": "d2eb27d14243d6d51e3d19325d09101fe9a67209231e79d92a101bfbe8b14064",
+    "server.py": "be99dad61d534ee91aa377a04a08ddf59f605373f06b79126b130dc51ec494ad",
+    "install_macos.py": "e5063ae4758f6ca51639fa5461eb713b308cfc5914102dd467d33963fa1369fd",
+    "lens_geometry.py": "0b73721c600a4933a26f97e4e3351d5e941d7f635ce7495bc8402635b2761e3c",
+    "compositor.py": "3ceaa0e1df26eb5d0d264f3eee0c3e5bffbdb0a3019621ba7449c1649667c963",
+    "web/app.js": "04b80d6129722dd6c7c91e2ee9025f89461993b7be72d68e8a8c415cf2c6962b",
+    "web/compositor-ui.js": "04e99eb7c04b702fbd05d535728d9537a7a899741848e8202f3d4dc64dd17298",
+    "web/interchange-ui.js": "e0b74c54728de48e136e1d0c40608da63785847a1fdf5c93acbd377da2df3923",
+    "web/index.html": "2707509f6e8c17250e2fea625cd23fefdac9f4be693d1e9153481d0711c2c2c0"
+  },
+  "source_unchanged": true
+}

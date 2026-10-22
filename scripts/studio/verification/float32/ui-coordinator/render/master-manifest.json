@@ -1,0 +1,288 @@
+{
+  "artifacts": [
+    {
+      "path": "config.ocio",
+      "sha256": "1748717664d82dd7a53f01e23d0692d2444049ac7d7f5c08d19618cec48506bf",
+      "size": 73014
+    },
+    {
+      "path": "display.png",
+      "sha256": "1d7b6914d76e69a0a4314141dd433b3b1d640f2fc2bea93da7de130e19803ca8",
+      "size": 505
+    },
+    {
+      "path": "frames/frame-00000000.exr",
+      "sha256": "81f0a0455a1a3743294c97fd7236c0a97bd8998b5e303769b923063e19ac7c94",
+      "size": 3452
+    },
+    {
+      "path": "frames/frame-00000001.exr",
+      "sha256": "41aa6f03c089525e0189af2562581ed4af0cda970814e92a8679028dc48bd7c3",
+      "size": 3435
+    },
+    {
+      "path": "frames/frame-00000002.exr",
+      "sha256": "c6ecd4342b1d5fdc978fc6c37c8eff4aec86e28048d8812af33677fd7982a9d5",
+      "size": 3441
+    },
+    {
+      "path": "frames/frame-00000003.exr",
+      "sha256": "94d3b6b9bbd5222732df1fb104731dd5a585b2e29211c434f1c3fb370eda8d73",
+      "size": 3439
+    },
+    {
+      "path": "mix.wav",
+      "sha256": "6d5289585d8d2d73fb38d79815af6a98edef07178d8ba0077586479bf0f51dd3",
+      "size": 384114
+    }
+  ],
+  "audio": {
+    "channels": 2,
+    "encoding": "pcm_f32le",
+    "sample_rate": 48000,
+    "samples": 48000
+  },
+  "calibrated_display": false,
+  "color": {
+    "config": "studio-config-v5.0.0_aces-v2.1_ocio-v2.6",
+    "config_cache_id": "7a622835835238d8456c47cab01b2c3b:6001c324468d497f99aa06d3014798d8",
+    "config_sha256": "1748717664d82dd7a53f01e23d0692d2444049ac7d7f5c08d19618cec48506bf",
+    "default_input_space": "Camera Rec.709",
+    "display": "sRGB - Display",
+    "display_encoding": "sRGB",
+    "display_processor": "53face6a-f4b6-1c6a-b0af-5088d6ed6ab8",
+    "float_storage": "OpenEXR FLOAT32 RGBA, ZIP compression, associated alpha",
+    "input_processors": {
+      "ACEScg": "99aa06d3-0147-98d8-6001-c324468d497f",
+      "Linear Rec.709 (sRGB)": "e6dbcae1-37ae-e24a-65c6-6f79bf329187"
+    },
+    "ocio_version": "2.6.0",
+    "output_processor": "c0edb850-1654-d77a-ea28-db2f3af46a66",
+    "output_space": "ACES2065-1",
+    "version": 1,
+    "view": "ACES 2.0 - SDR 100 nits (Rec.709)",
+    "working_space": "ACEScg"
+  },
+  "display_is_sdr": true,
+  "duration": 1.0,
+  "format": "cinematicum-scene-linear-movie",
+  "frame_rate": {
+    "denominator": 1,
+    "numerator": 4
+  },
+  "frames": 4,
+  "hdr_monitoring": false,
+  "implementation": {
+    "engine.py": "054c4f56f284241f8748298c6f0922958d12065645ecb536f3ba342da011c959",
+    "float_movie.py": "2a889c728138e244996816f7a785f051e9564fa2e68e6b9a8e2788c870fdd2bd",
+    "float_movie_worker.py": "757cf805c74173b1a1bf5e6dfec3d236d9b7a53175c7259a81db129b617570b3",
+    "image_worker.py": "d90a704768d7ce46205ca9de1f7840a8a70b0809c864c3760f7d5b0a6ee1c748"
+  },
+  "issuance_effect": "NONE",
+  "linear_statistics": {
+    "above_one_channels": 3440,
+    "maximum": 8.0,
+    "minimum": -4.0,
+    "negative_channels": 1720
+  },
+  "processing_bits": 32,
+  "project": {
+    "assets": [
+      {
+        "audio_channels": 1,
+        "audio_duration": 1.0,
+        "audio_sample_rate": 48000,
+        "audio_stream_index": 1,
+        "audio_streams": [
+          {
+            "channels": 1,
+            "codec": "pcm_s16le",
+            "container_id": null,
+            "duration": 1.0,
+            "index": 1,
+            "language": "",
+            "sample_rate": 48000
+          }
+        ],
+        "codec": "ffv1",
+        "color_transfer": "unknown",
+        "duration": 1.0,
+        "fps": "4/1",
+        "frames": 0,
+        "has_audio": true,
+        "height": 24,
+        "id": "0538fc5da6de49319101b8e673e5ddf8",
+        "kind": "video",
+        "name": "ENGINE_TEST_movie.mkv",
+        "path": "media/0538fc5da6de49319101b8e673e5ddf8.mkv",
+        "pixel_format": "gbrap16le",
+        "sha256": "eee0f07882597aa060a815fe3319ded4fdcf2ea1f3fc37a772d7bc10b489ccdd",
+        "size": 97875,
+        "video_stream_index": 0,
+        "width": 32
+      },
+      {
+        "audio_channels": 0,
+        "audio_duration": 0.0,
+        "audio_sample_rate": 0,
+        "audio_stream_index": null,
+        "audio_streams": [],
+        "codec": "exr",
+        "coded_height": 24,
+        "coded_width": 32,
+        "color_transfer": "linear",
+        "duration": 0.0,
+        "exif_orientation": 1,
+        "fps": "25/1",
+        "frames": 0,
+        "has_audio": false,
+        "height": 24,
+        "id": "dcbfac46edd845c495d5f76cfe46cad4",
+        "imaging_source": {
+          "alpha_mode": "straight",
+          "color_space": "ACEScg",
+          "header_only": true,
+          "height": 24,
+          "kind": "image",
+          "reader": "OpenEXR.File",
+          "width": 32
+        },
+        "kind": "image",
+        "name": "ENGINE_TEST_negative_superwhite.exr",
+        "orientation_applied": "ffmpeg_autorotate",
+        "path": "media/dcbfac46edd845c495d5f76cfe46cad4.exr",
+        "pixel_format": "gbrapf32le",
+        "sha256": "093448cbd20f03e2083488d58e35b3e4a2d14134afdac9261a780b8238d57a79",
+        "size": 744,
+        "video_stream_index": 0,
+        "width": 32
+      }
+    ],
+    "clips": [
+      {
+        "animation_duration": 4,
+        "animation_offset": 0,
+        "animation_start": 0,
+        "asset_id": "0538fc5da6de49319101b8e673e5ddf8",
+        "audio": {
+          "fade_duration": 4,
+          "fade_in": 0,
+          "fade_offset": 0,
+          "fade_out": 0,
+          "pan": 0.0
+        },
+        "duration": 4,
+        "effects": {
+          "blur": 0.0,
+          "chroma_key": "",
+          "sharpen": 0.0,
+          "vignette": false
+        },
+        "float_input_space": "Linear Rec.709 (sRGB)",
+        "grade": {
+          "contrast": 1.0,
+          "exposure": 0.0,
+          "saturation": 1.0,
+          "temperature": 0.0
+        },
+        "id": "ENGINE_TEST_video",
+        "in": 0.0,
+        "keyframes": [],
+        "opacity": 1.0,
+        "reverse": false,
+        "rotation": 0.0,
+        "scale": 0.5,
+        "speed": 1.0,
+        "start": 0,
+        "track": 0,
+        "volume": 1.0,
+        "x": 0.0,
+        "y": 0.0
+      },
+      {
+        "animation_duration": 4,
+        "animation_offset": 0,
+        "animation_start": 0,
+        "asset_id": "dcbfac46edd845c495d5f76cfe46cad4",
+        "audio": {
+          "fade_duration": 4,
+          "fade_in": 0,
+          "fade_offset": 0,
+          "fade_out": 0,
+          "pan": 0.0
+        },
+        "duration": 4,
+        "effects": {
+          "blur": 0.0,
+          "chroma_key": "",
+          "sharpen": 0.0,
+          "vignette": false
+        },
+        "float_input_space": "ACEScg",
+        "grade": {
+          "contrast": 1.0,
+          "exposure": 0.0,
+          "saturation": 1.0,
+          "temperature": 0.0
+        },
+        "id": "ENGINE_TEST_exr",
+        "in": 0.0,
+        "keyframes": [],
+        "opacity": 1.0,
+        "reverse": false,
+        "rotation": 27.0,
+        "scale": 0.73,
+        "speed": 1.0,
+        "start": 0,
+        "track": 1,
+        "volume": 1.0,
+        "x": 0.0,
+        "y": 0.0
+      }
+    ],
+    "fps": 4,
+    "frame_rate": {
+      "denominator": 1,
+      "numerator": 4
+    },
+    "height": 24,
+    "id": "561895abde66416481e135b01ecc918a",
+    "name": "ENGINE TEST float native",
+    "revision": 4,
+    "settings": {
+      "float_color": {
+        "version": 1,
+        "config": "studio-config-v5.0.0_aces-v2.1_ocio-v2.6",
+        "working_space": "ACEScg",
+        "output_space": "ACES2065-1",
+        "default_input_space": "Camera Rec.709",
+        "display": "sRGB - Display",
+        "view": "ACES 2.0 - SDR 100 nits (Rec.709)"
+      },
+      "image_precision": "float32",
+      "transparent_background": true
+    },
+    "titles": [],
+    "tracks": [],
+    "updated_at": "2026-10-22T09:57:35Z",
+    "version": 1,
+    "width": 32
+  },
+  "project_sha256": "2a757300be340356ce299bf0f4f3540532788780e392d6ddf5f4fdfff8ae3fd6",
+  "rgb_clipped_in_compositor": false,
+  "sources": [
+    {
+      "asset_id": "0538fc5da6de49319101b8e673e5ddf8",
+      "path": "media/0538fc5da6de49319101b8e673e5ddf8.mkv",
+      "sha256": "eee0f07882597aa060a815fe3319ded4fdcf2ea1f3fc37a772d7bc10b489ccdd",
+      "size": 97875
+    },
+    {
+      "asset_id": "dcbfac46edd845c495d5f76cfe46cad4",
+      "path": "media/dcbfac46edd845c495d5f76cfe46cad4.exr",
+      "sha256": "093448cbd20f03e2083488d58e35b3e4a2d14134afdac9261a780b8238d57a79",
+      "size": 744
+    }
+  ],
+  "version": 1
+}

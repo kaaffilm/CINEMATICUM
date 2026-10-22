@@ -1,0 +1,12 @@
+{
+  "command": [
+    "/workspace/scratch/091f394ee5df/cinematicum-runtimes/verification/bin/python",
+    "-I",
+    "-B",
+    "-m",
+    "venv",
+    "/tmp/cinematicum-fcpxml-schema-bootstrap-20261022-01/runtime"
+  ],
+  "exit_code": 0,
+  "elapsed_seconds": 3.98
+}

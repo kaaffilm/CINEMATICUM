@@ -1,0 +1,333 @@
+{
+  "schema": "cinematicum-startup-quit-acceptance-v1",
+  "passed": true,
+  "phase": "protection",
+  "native_certified": true,
+  "engine_test_only": true,
+  "installed_app_certified": false,
+  "force_kill_used": false,
+  "checks": {
+    "actual_production_native_quit_phase": true,
+    "actual_worker_durably_cancelled_after_choice": true,
+    "explicit_active_job_cancellation_reason": true,
+    "actual_dirty_edit_persisted": true,
+    "source_media_preserved": true,
+    "no_cancelled_partial_export": true,
+    "two_actual_native_alert_pictures": true,
+    "source_remained_frozen": true
+  },
+  "source_sha256": {
+    "macos/StudioApp.swift": "acf64f068cc870ed0bb4e458cb78359a830f007807a22f9bc933485aa2ae0b08",
+    "web/app.js": "e7aa7c7f55383ffe46fd95573b9cc345c880a0cea462e23fd120cb79604550d2",
+    "server.py": "f438456c5e45f944471b8b8e13454e53b7938eba8aaf1b875fb70a26a29aa0bb",
+    "engine.py": "607c9dcea0fbda2f0a5c0b64d323ecefb9043f9d9fe3ca1fd295274649db0303",
+    "startup_quit_fixture.py": "03cb6f0ad94b91c029524c227f8b0aeb6785dea06a9218228381ed7668794e35",
+    "macos/StartupQuitAcceptance.swift": "8dfdb2d5aa866349daefe81b7703435fe662731a7a09a1c1eb1f6b4d54ee0eba",
+    "build_startup_quit.py": "c5b196cf8b91e11cdf1c26ce2982de656f6b10f02595838d6c24e58ac86398e8",
+    "test_startup_quit_macos.py": "f2b16fda4d838975b21a5ed06e3d7b642f6e2f918a09a8bdd3d1c20dad3685c6",
+    "verification/0.9.1/tools/production-quit-05/QuitWorkflow.js": "d1604138407113f69afb41c0e326ac2c693ccf51f2274ed7aef6846f4c73504b"
+  },
+  "build": {
+    "schema": "cinematicum-native-startup-quit-build-v1",
+    "compiled": true,
+    "production_source_sha256": "acf64f068cc870ed0bb4e458cb78359a830f007807a22f9bc933485aa2ae0b08",
+    "unchanged_production_class_sha256": "e611e726a29caafa0db6c7e3d7db7ac1ff47f85f874f9163de5d579951f48dcb",
+    "harness_sha256": "8dfdb2d5aa866349daefe81b7703435fe662731a7a09a1c1eb1f6b4d54ee0eba",
+    "generated_source_sha256": "64f294cf8a485b27d9f0e2ae6cf2d549b18defed21663739db7dc1aea507a9e2",
+    "binary": "/Users/midiakiasat/.midia-ai/gateway-live/acceptance/cinematicum-0.11-20261022-own-025436f6/startup-quit-build-02/cinematicum-startup-quit-acceptance",
+    "binary_sha256": "738f1ed8c137bdce9f8fedbe50463ef202801510cf256f48bd16842c444795eb",
+    "command": [
+      "/usr/bin/xcrun",
+      "swiftc",
+      "-O",
+      "-swift-version",
+      "5",
+      "-framework",
+      "Cocoa",
+      "-framework",
+      "WebKit",
+      "-target",
+      "arm64-apple-macos12.0",
+      "-module-cache-path",
+      "/Users/midiakiasat/.midia-ai/gateway-live/acceptance/cinematicum-0.11-20261022-own-025436f6/startup-quit-build-02/module-cache",
+      "/Users/midiakiasat/.midia-ai/gateway-live/acceptance/cinematicum-0.11-20261022-own-025436f6/startup-quit-build-02/StartupQuitAcceptance.swift",
+      "-o",
+      "/Users/midiakiasat/.midia-ai/gateway-live/acceptance/cinematicum-0.11-20261022-own-025436f6/startup-quit-build-02/cinematicum-startup-quit-acceptance"
+    ]
+  },
+  "command": [
+    "/Users/midiakiasat/.midia-ai/gateway-live/acceptance/cinematicum-0.11-20261022-own-025436f6/startup-quit-build-02/cinematicum-startup-quit-acceptance",
+    "--python",
+    "/opt/homebrew/Cellar/python@3.13/3.13.13/Frameworks/Python.framework/Versions/3.13/bin/python3.13",
+    "--server",
+    "/Users/midiakiasat/.midia-ai/gateway-live/workspaces/auto-8f91ac5c986eed5ac689d7f8b2ff6a29-next-011/scripts/studio/startup_quit_fixture.py",
+    "--workspace",
+    "/Users/midiakiasat/.midia-ai/gateway-live/acceptance/cinematicum-0.11-20261022-own-025436f6/startup-protection-01/workspace",
+    "--evidence",
+    "/Users/midiakiasat/.midia-ai/gateway-live/acceptance/cinematicum-0.11-20261022-own-025436f6/startup-protection-01",
+    "--phase",
+    "protection",
+    "--workflow",
+    "/Users/midiakiasat/.midia-ai/gateway-live/workspaces/auto-8f91ac5c986eed5ac689d7f8b2ff6a29-next-011/scripts/studio/verification/0.9.1/tools/production-quit-05/QuitWorkflow.js"
+  ],
+  "native": {
+    "after_keep_working": {
+      "dirty": false,
+      "job": {
+        "created_at": 1792666204.271529,
+        "error": null,
+        "id": "92bf8ad4ef924712804bce189d440dc9",
+        "kind": "render",
+        "progress": 0.0040885,
+        "project_id": "ced1f8bbea544ba3af14edb1fe03918d",
+        "result": null,
+        "state": "running"
+      },
+      "project": {
+        "assets": [
+          {
+            "audio_channels": 0,
+            "audio_duration": 0,
+            "audio_sample_rate": 0,
+            "audio_stream_index": null,
+            "audio_streams": [],
+            "codec": "png",
+            "coded_height": 32,
+            "coded_width": 64,
+            "color_transfer": "unknown",
+            "duration": 0,
+            "exif_orientation": 1,
+            "fps": "25/1",
+            "frames": 0,
+            "has_audio": false,
+            "height": 32,
+            "id": "d35da18437334b6d848bc601a355ed0b",
+            "kind": "image",
+            "name": "ENGINE_TEST_quit_source.png",
+            "orientation_applied": "ffmpeg_autorotate",
+            "path": "media/d35da18437334b6d848bc601a355ed0b.png",
+            "pixel_format": "rgba64be",
+            "sha256": "3446fbe995d675a8c85ff31145159c75038365e2ae3ba67ea697fb58e47549e6",
+            "size": 356,
+            "video_stream_index": 0,
+            "width": 64
+          }
+        ],
+        "clips": [
+          {
+            "animation_duration": 48,
+            "animation_offset": 0,
+            "animation_start": 0,
+            "asset_id": "d35da18437334b6d848bc601a355ed0b",
+            "audio": {
+              "fade_duration": 48,
+              "fade_in": 0,
+              "fade_offset": 0,
+              "fade_out": 0,
+              "pan": 0
+            },
+            "duration": 48,
+            "effects": {
+              "blur": 0,
+              "chroma_key": "",
+              "sharpen": 0,
+              "vignette": false
+            },
+            "grade": {
+              "contrast": 1,
+              "exposure": 0,
+              "saturation": 1,
+              "temperature": 0
+            },
+            "id": "quit_test_picture",
+            "in": 0,
+            "keyframes": [],
+            "opacity": 1,
+            "reverse": false,
+            "rotation": 27,
+            "scale": 0.73,
+            "speed": 1,
+            "start": 0,
+            "track": 0,
+            "volume": 1,
+            "x": 0.07,
+            "y": -0.09
+          }
+        ],
+        "fps": 12,
+        "frame_rate": {
+          "denominator": 1,
+          "numerator": 12
+        },
+        "height": 360,
+        "id": "ced1f8bbea544ba3af14edb1fe03918d",
+        "name": "ENGINE TEST \u2014 startup quit",
+        "revision": 4,
+        "settings": {
+          "image_precision": "high16",
+          "transparent_background": true
+        },
+        "titles": [],
+        "tracks": [],
+        "updated_at": "2026-10-22T10:50:06Z",
+        "version": 1,
+        "width": 640
+      }
+    },
+    "checks": {
+      "actual_active_work_requires_confirmation": true,
+      "actual_cancel_jobs_button": true,
+      "actual_ffmpeg_progress_and_unsaved_edit": true,
+      "actual_keep_working_button": true,
+      "every_quit_request_authenticated": true,
+      "expected_ordinary_quit_count": true,
+      "keep_working_preserved_real_worker_and_restored_editor": true,
+      "ordinary_dirty_edit_durably_saved_before_prompt": true,
+      "ordinary_quit_deferred_for_owned_shutdown": true,
+      "owned_server_exited_before_application": true
+    },
+    "elapsed_seconds": 8.473194003105164,
+    "engine_test_only": true,
+    "force_kill_used": false,
+    "ordinary_quit_requests": 2,
+    "owned_server_exit_status": 0,
+    "owned_server_pid": 99193,
+    "owned_server_still_running": false,
+    "passed": true,
+    "phase": "protection",
+    "schema": "cinematicum-native-startup-quit-v1",
+    "scope": "Unchanged production class ordinary quit, save and real NSAlert decisions; isolated real server transport barriers. Installed launcher and user projects are not exercised.",
+    "state": "confirmed-cancel",
+    "transport_events": [
+      {
+        "at": 1792666204.2641568,
+        "event": "save-response",
+        "revision": 3,
+        "status": 200
+      },
+      {
+        "at": 1792666206.8050182,
+        "event": "save-response",
+        "revision": 4,
+        "status": 200
+      },
+      {
+        "at": 1792666206.810705,
+        "authenticated": true,
+        "decision": {
+          "cancel_active": false
+        },
+        "event": "quit-response",
+        "response": {
+          "active_jobs": [
+            {
+              "id": "92bf8ad4ef924712804bce189d440dc9",
+              "kind": "render",
+              "state": "running"
+            }
+          ],
+          "ready": false
+        },
+        "status": 200
+      },
+      {
+        "at": 1792666207.5728781,
+        "authenticated": true,
+        "decision": {
+          "cancel_active": false
+        },
+        "event": "quit-response",
+        "response": {
+          "active_jobs": [
+            {
+              "id": "92bf8ad4ef924712804bce189d440dc9",
+              "kind": "render",
+              "state": "running"
+            }
+          ],
+          "ready": false
+        },
+        "status": 200
+      },
+      {
+        "at": 1792666207.978034,
+        "authenticated": true,
+        "decision": {
+          "cancel_active": true
+        },
+        "event": "quit-response",
+        "response": {
+          "active_jobs": [
+            {
+              "id": "92bf8ad4ef924712804bce189d440dc9",
+              "kind": "render",
+              "state": "running"
+            }
+          ],
+          "ready": true
+        },
+        "status": 200
+      }
+    ],
+    "workflow": {
+      "dirty_before_quit": true,
+      "job_id": "92bf8ad4ef924712804bce189d440dc9",
+      "job_progress": 0.0040885,
+      "job_state": "running",
+      "passed": true,
+      "project_id": "ced1f8bbea544ba3af14edb1fe03918d"
+    }
+  },
+  "shutdown_receipt": {
+    "version": 1,
+    "reason": "native-user-confirmed-job-cancellation",
+    "completed_at": 1792666209.923011,
+    "active_at_shutdown": [
+      {
+        "id": "92bf8ad4ef924712804bce189d440dc9",
+        "kind": "render",
+        "state": "running"
+      },
+      {
+        "id": "77816362fe134be490842afc6b151698",
+        "kind": "frame-preview",
+        "state": "running"
+      },
+      {
+        "id": "ac5f69b6f0494c3188ac5ddfa85cc908",
+        "kind": "frame-preview",
+        "state": "queued"
+      }
+    ],
+    "terminal_jobs": [
+      {
+        "id": "92bf8ad4ef924712804bce189d440dc9",
+        "state": "cancelled",
+        "error": "Render cancelled; source media and completed exports are unchanged."
+      },
+      {
+        "id": "77816362fe134be490842afc6b151698",
+        "state": "cancelled",
+        "error": "Frame preview superseded"
+      },
+      {
+        "id": "ac5f69b6f0494c3188ac5ddfa85cc908",
+        "state": "cancelled",
+        "error": "Job cancelled before starting"
+      }
+    ]
+  },
+  "saved_project_sha256": "8ad1d2450048be118bffae65e3e90faf114caf3491c521e6a78e088da599245b",
+  "actual_job": {
+    "id": "92bf8ad4ef924712804bce189d440dc9",
+    "project_id": "ced1f8bbea544ba3af14edb1fe03918d",
+    "kind": "render",
+    "state": "cancelled",
+    "progress": 0.0040885,
+    "created_at": 1792666204.271529,
+    "error": "Render cancelled; source media and completed exports are unchanged.",
+    "result": null,
+    "finished_at": 1792666209.922013
+  },
+  "elapsed_seconds": 8.575
+}

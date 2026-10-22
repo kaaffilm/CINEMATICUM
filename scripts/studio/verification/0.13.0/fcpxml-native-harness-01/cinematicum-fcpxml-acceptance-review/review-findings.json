@@ -1,0 +1,57 @@
+{
+  "schema": "cinematicum-independent-fcpxml-review-v1",
+  "reviewer": "lens_completion",
+  "scope": "Read-only review; production fixes belong to verification_runtime. Existing native and OTIO retime semantics were not changed.",
+  "primary_references": [
+    "https://developer.apple.com/documentation/professional-video-applications/timemap",
+    "https://developer.apple.com/documentation/professional-video-applications/timing-attributes",
+    "https://developer.apple.com/documentation/professional-video-applications/frame-sampling",
+    "https://developer.apple.com/documentation/professional-video-applications/document-type-definition"
+  ],
+  "findings": [
+    {
+      "id": "negative-discrete-endpoint-unproven",
+      "finding": "The Apple continuous source-time map example does not specify the decoded first-frame convention of negative-slope mappings. Native reverse flips a finite, conformed half-open frame window. No installed Final Cut Pro or independent rendered FCP fixture is available.",
+      "resolution": "Negative timeMap import and native reverse FCPXML export are explicitly refused; native and OTIO reverse remain unchanged."
+    },
+    {
+      "id": "conform-map-sampling-mismatch",
+      "finding": "The original importer overwrote conform-rate sampling with timeMap sampling and accepted mismatched values, although Apple requires them to agree.",
+      "resolution": "Production now explicitly rejects mismatched frameSampling; focused regression added by feature owner."
+    },
+    {
+      "id": "general-positive-nearest-mismatch",
+      "finding": "Actual numbered native frames at 0.6, 0.8, 1.4, 1.6, 2.5, 3 and 4 times speed differ from a continuous source-time nearest-neighbor map. FFmpeg rounds input timestamps before holding samples.",
+      "evidence": "positive-time-map-sampling.json",
+      "resolution": "Picture timing is restricted to same-rate integer-in proven grids: explicit floor repeats at 0.25/0.5, normal speed 1, and speed 2 only with an actual source clock proof."
+    },
+    {
+      "id": "quantized-double-speed-boundaries",
+      "finding": "Across 32 small actual raw/FFV1 cases, 28 passed. Double-speed exact raw clock cases passed, but four Matroska cases failed due to millisecond timestamp rounding. All tested 0.25/0.5 floor-repeat and normal-speed integer-in grids matched the independent source counters.",
+      "evidence": "floor-repeat-and-integral-grid.json",
+      "resolution": "Double-speed production media admission proves that actual decoded presentation PTS equals consecutive exact frame ticks; it compares PTS with best_effort_timestamp, bounds the decoded prefix, caches only unchanged file identity, and rejects quantized, variable or ambiguous clocks. The feature owner added a real reordered H.264 case."
+    },
+    {
+      "id": "fractional-repeat-tail",
+      "finding": "A 10-frame window at 0.25 times speed with fractional consumed source extent returned only 8 frames from the inherited native trim/fps EOF path.",
+      "evidence": "positive-time-map-sampling.json",
+      "resolution": "Slow picture maps require an integral consumed source-frame extent at both import and export; the native engine is unchanged."
+    },
+    {
+      "id": "unsupported-note-descendants",
+      "finding": "Malformed nested content inside note elements was previously ignored.",
+      "resolution": "Production strict checks now require plain-text notes and reject unexpected trailing text."
+    }
+  ],
+  "additional_review": {
+    "time_origins": "Asset starts, sequence origins, connected offsets and nested compound trims use exact rational seconds before conversion to whole native frames. The actual independent 40-frame / 64064-stereo-sample fixture verifies these clocks.",
+    "xml_and_sources": "Reviewed byte/depth/element/attribute budgets, DTD/entity/PI refusal, owned-media-only relinks, source hash ambiguity, immutable source checks and explicit unsupported effects/sampling. XML media labels never cause file or network access.",
+    "export": "Reviewed reachable compound resources, full-duration gap with independent ordered lanes, exact retained origins, public time maps, source hash metadata and unsupported authoring refusal. No private snapshot is substituted for public timeline operators.",
+    "provenance_followup": "Feature owner additionally found and fixed preservation of prior sequence timecode origins on repeated import; review checked validation and merged-origin behavior."
+  },
+  "remaining_limits": [
+    "Actual Final Cut Pro import/render parity is unavailable; DTD validity and public self-reimport cannot certify an external editor.",
+    "Native final audio limiting and external retime/DSP algorithms are not encoded by static public dB values. The direct PCM fixture remains below the limiter threshold.",
+    "Actual WKWebView native phases and final integrated source/release gates remain required; portable browser results never claim native certification."
+  ]
+}

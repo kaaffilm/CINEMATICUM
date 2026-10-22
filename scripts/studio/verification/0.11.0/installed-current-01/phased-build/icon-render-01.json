@@ -1,0 +1,24 @@
+{
+  "phase": "icon_render",
+  "argv": [
+    "/Users/midiakiasat/Applications/.cinematicum-build-verified-011-025436f6/draw-icon",
+    "/Users/midiakiasat/Applications/.cinematicum-build-verified-011-025436f6/StudioIcon.iconset"
+  ],
+  "exit_code": 0,
+  "timed_out": false,
+  "elapsed": 0.106,
+  "stdout": "",
+  "stderr": "",
+  "files": {
+    "StudioIcon.iconset/icon_32x32@2x.png": "d7013a95e9d69311b97f96e4ba992553aec188d50db0a54e5262076cef0156cb",
+    "StudioIcon.iconset/icon_128x128.png": "aa8d4a89933a946000275f528d273167fcc56b9dbd32060ec97b06ca486c5c77",
+    "StudioIcon.iconset/icon_256x256@2x.png": "2bd57005161a3bf1b220b2cc1dee74032466fa2cf10679f59df9cd0958b50154",
+    "StudioIcon.iconset/icon_32x32.png": "7a5a1747d60221dc38396fc3c2c33488dd3e5d498e8e242dfec80567e76c565f",
+    "StudioIcon.iconset/icon_512x512.png": "2bd57005161a3bf1b220b2cc1dee74032466fa2cf10679f59df9cd0958b50154",
+    "StudioIcon.iconset/icon_16x16.png": "26b629fc92aa73fcac267a55c04756a5e5bcfe0f3c33f2f55355247d420607e9",
+    "StudioIcon.iconset/icon_16x16@2x.png": "7a5a1747d60221dc38396fc3c2c33488dd3e5d498e8e242dfec80567e76c565f",
+    "StudioIcon.iconset/icon_128x128@2x.png": "62ab9b723aeb20b5e94fd3fd37c5e2659a7b72b462193be0f56ca74942e1ad29",
+    "StudioIcon.iconset/icon_512x512@2x.png": "405a802cfdfb5bd9ea8d163b46455019c4484cda8122e3ba6815781d1b765ed4",
+    "StudioIcon.iconset/icon_256x256.png": "62ab9b723aeb20b5e94fd3fd37c5e2659a7b72b462193be0f56ca74942e1ad29"
+  }
+}

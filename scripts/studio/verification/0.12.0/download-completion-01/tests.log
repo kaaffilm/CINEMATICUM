@@ -1,0 +1,11 @@
+test_late_second_registration_waits_for_both_actual_files (test_retime_download_completion.DownloadCompletionTests.test_late_second_registration_waits_for_both_actual_files) ... ok
+test_missing_second_download_fails_under_three_second_deadline (test_retime_download_completion.DownloadCompletionTests.test_missing_second_download_fails_under_three_second_deadline) ... ok
+test_new_tracked_untracked_and_ignored_source_cannot_escape_inventory (test_source_integrity.SourceIntegrityTests.test_new_tracked_untracked_and_ignored_source_cannot_escape_inventory) ... ok
+test_reproduction_excludes_manifest_media_binaries_and_generated_fixtures (test_source_integrity.SourceIntegrityTests.test_reproduction_excludes_manifest_media_binaries_and_generated_fixtures) ... ok
+test_same_size_tamper_and_missing_tracked_source_both_fail (test_source_integrity.SourceIntegrityTests.test_same_size_tamper_and_missing_tracked_source_both_fail) ... ok
+test_source_symlink_and_manifest_scope_tamper_are_rejected (test_source_integrity.SourceIntegrityTests.test_source_symlink_and_manifest_scope_tamper_are_rejected) ... ok
+
+----------------------------------------------------------------------
+Ran 6 tests in 14.059s
+
+OK

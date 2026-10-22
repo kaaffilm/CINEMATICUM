@@ -1,0 +1,751 @@
+{
+  "schema": "cinematicum-production-native-quit-v1",
+  "passed": true,
+  "acceptance_runner_sha256": "055c0065f1e759d59474e96634aa2dc91f566dc28448908a08a0872c46999176",
+  "scope": "Unchanged production ordinary-quit/alert/cancel methods and real AppKit alert buttons; isolated actual server launch and child-exit forwarding; not production launcher or installed-bundle UI acceptance",
+  "fixture": "SYNTHETIC ENGINE TEST ONLY \u2014 NOT FILM FOOTAGE",
+  "workload": {
+    "width": 640,
+    "height": 360,
+    "fps": 12,
+    "frames": 48,
+    "profile": "master16",
+    "first": "complete after Keep Working",
+    "second": "cancel through actual ordinary-quit alert"
+  },
+  "build": {
+    "schema": "cinematicum-production-class-quit-build-v1",
+    "production_source_sha256": "5bc3028eb4921b8e1d11f1a0e3a4ab2116c6ddcadce43a3968e6b42a0e80e79b",
+    "unchanged_production_class_sha256": "36650303394fbb1169923b1d3d48e0cc4fe3443478d15f69294dbab82eec8bbb",
+    "harness_sha256": "921a7cfaf45f074d7478d35f243c28c094f78f3577e705b9afa0a0cf101633b0",
+    "generated_source_sha256": "bbb4470a7cbe0ac54eb5bd8926a9dc58f694aa3ca55892c59886c0d6faf15456",
+    "compiled": true,
+    "binary": "/Users/midiakiasat/.midia-ai/gateway-live/workspaces/auto-d5f5e80a10b691457cec8d25044150b5/.completion-evidence/production-quit-01/native-build/cinematicum-production-quit-acceptance",
+    "binary_sha256": "0a9e034186ed00cb317167ab51bacddd59b3cc196d88a40305cc546b86122cd3",
+    "command": [
+      "/usr/bin/xcrun",
+      "swiftc",
+      "-O",
+      "-swift-version",
+      "5",
+      "-framework",
+      "Cocoa",
+      "-framework",
+      "WebKit",
+      "-target",
+      "arm64-apple-macos12.0",
+      "-module-cache-path",
+      "/Users/midiakiasat/.midia-ai/gateway-live/workspaces/auto-d5f5e80a10b691457cec8d25044150b5/.completion-evidence/production-quit-01/native-build/module-cache",
+      "/Users/midiakiasat/.midia-ai/gateway-live/workspaces/auto-d5f5e80a10b691457cec8d25044150b5/.completion-evidence/production-quit-01/native-build/ProductionQuitAcceptance.swift",
+      "-o",
+      "/Users/midiakiasat/.midia-ai/gateway-live/workspaces/auto-d5f5e80a10b691457cec8d25044150b5/.completion-evidence/production-quit-01/native-build/cinematicum-production-quit-acceptance"
+    ]
+  },
+  "checks": {
+    "actual_native_ordinary_quit_gate": true,
+    "two_distinct_actual_render_jobs": true,
+    "first_render_durably_completed": true,
+    "first_actual_work_finished_after_keep_working_click": true,
+    "second_render_durably_cancelled": true,
+    "second_admitted_after_first_completed": true,
+    "ordinary_dirty_edit_saved_and_retained": true,
+    "actual_job_snapshots_separate_before_and_after_saved_edit": true,
+    "completed_master_bytes_preserved_across_later_cancellation": true,
+    "independent_completed_master_hash_matches_receipt": true,
+    "completed_export_manifest_survives_cancellation": true,
+    "cancelled_job_publishes_no_media_or_partial_export": true,
+    "retained_master_independently_decodes_exact_format_and_frame_count": true,
+    "retained_picture_and_audio_fully_decode_without_error": true,
+    "durable_exit_reason_is_native_confirmed_job_cancellation": true,
+    "shutdown_receipt_matches_all_affected_terminal_jobs": true,
+    "actual_owned_server_exited_normally": true,
+    "source_fixture_identity_preserved": true,
+    "both_actual_native_alert_choices_observed": true,
+    "actual_alert_captures_retained": true,
+    "frozen_production_class_and_runtime_unchanged": true
+  },
+  "installed_app_ui_certified": false,
+  "accessibility_or_screen_recording_permission_requested": false,
+  "runtime_source_sha256_before": {
+    "adapters.py": "2ec3f1de6039c78393f77d9a8da16fcffb939646ebd805350edc2ccfb027025e",
+    "audio_source.py": "09a6d4bd5c7c5ccb0fc4670c0e2487b68be892f1a668a38fd9373bddc5503f51",
+    "camera_io.py": "cf70c41b57d8e9785680cb7390a44cdf6272774cba6f767cab119b44bdde60ca",
+    "color_pipeline.py": "32ed3f92da8713282e9917c470498ccdcfc10a5207e6eff6b8344413c01cab81",
+    "compositor.py": "418fdccd4aa4108e4346f74776ab6a9db483c7b810e357d30b7291501679e530",
+    "editorial.py": "c1d5d24c4c0b13f6a22c0ecbbde701f86e5e77afa20525fc51ed60d5a337aa3a",
+    "engine.py": "e6484a8ac57541f8908768561c83aede658939ceccbc832777e7dea7aafc026c",
+    "frame_preview.py": "8e06c5fee370cef7b0ed5a21c52440bdfe66b8dd451d4b43245940cd152c1329",
+    "generation-runtime-lock.json": "bed58809d01a894cf7717ba835aef8f73ff6325601a13b88872c53c66732da09",
+    "generation_readiness.py": "afa317958cd1271a0b4f3b4191fc91dcf5af3db93273a6df7927bb0ed1ec61fe",
+    "image_worker.py": "d90a704768d7ce46205ca9de1f7840a8a70b0809c864c3760f7d5b0a6ee1c748",
+    "imaging-macos-arm64-py313.lock.json": "19cf27e5c2cd41c17a97085fff2c565fca58e1cb78a3c7d2eaa945a99f62ba03",
+    "imaging.py": "bfd1d3bede15c35946ade43e127173ccb2d39aad3f0c84208150b5bf61621da5",
+    "install_imaging.py": "44c66f7b1916c93d9b228b230942036a54f1a3836444aeddf7f389553f5e7e76",
+    "install_tracking.py": "073a94746f9982b9b06f5b5a4ca2a310f62391ac2b119fd1595eace0067fe496",
+    "interchange.py": "f3e7eafc2ac8a7d2f2b4f5b0783bf487bc7194277c2e9c5f1e6b710a78ac276e",
+    "lens_assets.py": "cb9d6d706bdf40ab7af32911a1c4c8ec0ad0a66d27ac640eda6a910e9b6f585d",
+    "macos/StudioApp.swift": "5bc3028eb4921b8e1d11f1a0e3a4ab2116c6ddcadce43a3968e6b42a0e80e79b",
+    "managed_generation.py": "79513ddb3b404885ac97ac6c14226d6a9c3d92ef609b32fa1a9e1d1928c97538",
+    "media_management.py": "112be61405bd8e219f75482e6be1d8a1093e7d0b83754d721ad274ed2be3092f",
+    "media_orientation.py": "f7e27ccee72830ca716fea86b365c7f3a513ad137a7c05e78c480b9520c5f27d",
+    "modeling_blender.py": "0c22d0cc37f152eed5d1b25f49a284be7e7fa93a1a639731302f63cac8c5339f",
+    "planar_tracking.py": "01c0163cc7acfa68eaf02d3f273c6c14c6a2cf6aaed412064441bd6688e4a4a9",
+    "planar_worker.py": "65f95d2d7910e40bf095c8cd8bb456afc3e134a9d43e84a9050f62ed2520e2a7",
+    "production.py": "6835782486f4232828f3eecc8d49ef0e07925cb12d1ac978826ebf9ae1cf8f37",
+    "project_archive.py": "eaaedc17c51a50dd3bedc38c7962b6919a3a14aaf3f385f4c8b3ac028d2bcd36",
+    "projective_warp.py": "d5ebe0a65b2756c49a6c2b05c43b8d242e5d63dec5d30ade8c81aa8ac64aa53a",
+    "recovery.py": "26ee61d76ad3dd4c502033004c9294cb7bd8872f43c40caede174ce5f85e8db5",
+    "render_devices.py": "64eadcc154ef7f48f9e710807b75947e75a14e7b381939bc6a641a2f76f8f851",
+    "roto.py": "824c706099dc25308a2bcdc3328abdb9e0d3db53978fdc9d24f08ecb51bce425",
+    "roto_assets.py": "bfcf604b05b52987524fb4c9208bd8eb14689cf44078665319dd96a41d4360f8",
+    "scene.py": "fbb76abf0cff086de260892a92f7cc367bff7d62b7b880f70b6f428c187feee2",
+    "scene_hierarchy.py": "cb3d55a9bded30cc50da3582694e0184b37416f6bcc225534d8a28fe3c3ac835",
+    "scene_modeling.py": "1790825ba4ca5099629ce96582fe003080fd1126339042e252809784d4fe9879",
+    "sequence_interchange.py": "7835ca35cc586db273c31d68d5c4d764c486c20f4ba0f4b940a5c956d9a76b6f",
+    "server.py": "156d831d22ddb2fe52b6d2b2d00d2f516d80854d1c383f3321c09bc7b7d2bccd",
+    "spatial_import.py": "2eba894b06571be9faaecefdd10d53ef77fee84c07cfaa35373abb71aa0df0f6",
+    "timebase.py": "4bb129c0545741ef69c73f509d0cac8a943da18f01322c64b7029b676ae33ca8",
+    "tracking-macos-arm64-py313.lock.json": "91e3a4fb7c238fd540ae4cd9f669a8010c592caec27080aed5aa5da58e31144d",
+    "tracking.py": "bdaede2e53d17abe4a519fb5e7c91131dd86dda5bebc1e3a7ae1863802e52b75",
+    "waveform.py": "ca2503aa4555d2f5bb3eba47d019711e1b7cf85a2fe6c5c660e459bce0824792",
+    "web/app.js": "fb496bd6ab03840470ed2f490ea59a352360a480fbdb6ee8ee93115b011824fc",
+    "web/archive-ui.js": "d928645674325e620f92720afcde875d9e0f422f45e647483cb5eaa319e011b3",
+    "web/audio-routing.js": "3cd78859882264f78204f1bab6e5c53e8346b1956a7594101357bb7e131002c8",
+    "web/camera-io-ui.js": "b6eba14106224ebd3712f514bba60d4df0363267d12f1675e899feb8c85ebbec",
+    "web/color-pipeline-ui.js": "d630d7f5ccc39107ad23d00c0ddf295ebb665aae1a8207a5cd2a802767209cba",
+    "web/compositor-ui.js": "4b1460429721ef21557b61ed75c498ba31dff3ff635655c31c5ba418de6a7607",
+    "web/editing.js": "fcf1a80d232128a5edc3a9f25064f87277aa05086457d9453420539590b6c5a6",
+    "web/editorial-ui.js": "bbcf46d3dde07092fb403c80977e47e81b5632c17e571bb5883f5bfbfa47a1b5",
+    "web/imaging-ui.js": "312e6f841862f452608b9d2db7abd4a2b4f94a13549ae81bdcb308190df0cbd2",
+    "web/index.html": "bac447587b4e1a9186bff3bd71128d852fb334f5d4f76808423f74c1090c2ba9",
+    "web/interchange-ui.js": "a61b3c6abe7d73b659dc4a153a6c868bcfaa8b4e924cad915b3518da580ac3ec",
+    "web/managed-generation-ui.js": "30863088c3d7721657eecfb9ef5b915d4156a0c263dbc32b4bc0a21535b0e9de",
+    "web/media-management-ui.js": "f15d9ad5b4ca8da5456a13bd1441d32145616cdaecb5b732cd98b0013f931e9c",
+    "web/pcm-playback.js": "85aae75a9ee044e0ba048617e2963adbc189c4c1900f9a874651bcb1ac0c149d",
+    "web/production-ui.js": "f2a6c31942df20d76d75b918adc9374dec4e48454a45c1517e185b2a57335ba5",
+    "web/recovery-ui.js": "e146ee9ce5f7ca16ca0c55a32b36491f9769e61fdc263d1ede4699bcbda9d0ab",
+    "web/scene-editor.css": "413f7bb52631dc1e127eb07dd816df3624d7e3c8ddb70ca512e460faad1ad61b",
+    "web/scene-editor.js": "63137b8183953133d9f0aa557c493f0ece847e7b18144e18eab00930d6d51173",
+    "web/sequence-playback.js": "4828da4ec0eba70b5f3356395b17022ee77077632d8dbdbf47cf740f6e7f4ab6",
+    "web/style.css": "cef4f9f0a3c1370e23c6f772f90b10343a4dab8fef301434ec3d66adc1edba68",
+    "web/tracking-ui.js": "038aec934aca1e2bce3dfb62341ac7f673cb8152a5690ee130c3970e8e100013",
+    "web/viewer-tools.js": "72c36319b06c452c5eeadad967e207c5ebb7021aad19a64317d872ba911bad28"
+  },
+  "source_integrity_file_sha256": "7b4fd2befc955799b7758905b8289fadfae910fc8f38a4aa4543e7834675018f",
+  "fixture_identity": {
+    "project_id": "1ed992d94f4442f895d553dfa93e22ff",
+    "asset_id": "6decec4a96e54232accbfae3bccbe905"
+  },
+  "source_fixture_sha256": "3446fbe995d675a8c85ff31145159c75038365e2ae3ba67ea697fb58e47549e6",
+  "initial_project": {
+    "version": 1,
+    "id": "1ed992d94f4442f895d553dfa93e22ff",
+    "name": "ENGINE TEST \u2014 real ordinary quit",
+    "fps": 12,
+    "width": 640,
+    "height": 360,
+    "assets": [
+      {
+        "id": "6decec4a96e54232accbfae3bccbe905",
+        "name": "ENGINE_TEST_QUIT_16bit_source.png",
+        "path": "media/6decec4a96e54232accbfae3bccbe905.png",
+        "sha256": "3446fbe995d675a8c85ff31145159c75038365e2ae3ba67ea697fb58e47549e6",
+        "size": 356,
+        "kind": "image",
+        "duration": 0.0,
+        "width": 64,
+        "height": 32,
+        "has_audio": false,
+        "frames": 0,
+        "codec": "png",
+        "pixel_format": "rgba64be",
+        "color_transfer": "unknown",
+        "fps": "25/1",
+        "video_stream_index": 0,
+        "audio_stream_index": null,
+        "audio_sample_rate": 0,
+        "audio_channels": 0,
+        "audio_duration": 0.0,
+        "audio_streams": [],
+        "coded_width": 64,
+        "coded_height": 32,
+        "exif_orientation": 1,
+        "orientation_applied": "ffmpeg_autorotate"
+      }
+    ],
+    "clips": [
+      {
+        "id": "ordinary_quit_fixture",
+        "asset_id": "6decec4a96e54232accbfae3bccbe905",
+        "track": 0,
+        "start": 0,
+        "in": 0.0,
+        "duration": 48,
+        "scale": 0.73,
+        "rotation": 27.0,
+        "x": 0.07,
+        "y": -0.09,
+        "animation_start": 0,
+        "animation_duration": 48,
+        "animation_offset": 0,
+        "speed": 1.0,
+        "reverse": false,
+        "volume": 1.0,
+        "opacity": 1.0,
+        "audio": {
+          "fade_duration": 48,
+          "fade_offset": 0,
+          "fade_in": 0,
+          "fade_out": 0,
+          "pan": 0.0
+        },
+        "grade": {
+          "exposure": 0.0,
+          "contrast": 1.0,
+          "saturation": 1.0,
+          "temperature": 0.0
+        },
+        "effects": {
+          "blur": 0.0,
+          "sharpen": 0.0,
+          "vignette": false,
+          "chroma_key": ""
+        },
+        "keyframes": []
+      }
+    ],
+    "titles": [],
+    "settings": {
+      "image_precision": "high16",
+      "transparent_background": false
+    },
+    "revision": 2,
+    "frame_rate": {
+      "numerator": 12,
+      "denominator": 1
+    },
+    "tracks": [],
+    "updated_at": "2026-10-21T20:31:29Z"
+  },
+  "fixture_preparation_exit": {
+    "version": 1,
+    "reason": "owner-shutdown",
+    "completed_at": 1792614689.349236,
+    "active_at_shutdown": [],
+    "terminal_jobs": []
+  },
+  "ui_scripts": {
+    "QuitWorkflow.js": {
+      "source_sha256": "d1604138407113f69afb41c0e326ac2c693ccf51f2274ed7aef6846f4c73504b",
+      "bound_sha256": "9084c1bf070cc70b6a5ca37be7870b1695aef00ef764f9c986da9ea9118700f0",
+      "path": "/Users/midiakiasat/Library/Application Support/CINEMATICUM/Verification/0.9.1-bundle-fixed-20261021-native/quit05/bound-first-job.js"
+    },
+    "QuitRestart.js": {
+      "source_sha256": "45496dad6a27835083f4d5973e93c4de7a292c57fa79f2837aeb08d4e237a802",
+      "bound_sha256": "9720dcdad049a48356f4b3d153efa60724653f99bc1553fad89e76154a234e4c",
+      "path": "/Users/midiakiasat/Library/Application Support/CINEMATICUM/Verification/0.9.1-bundle-fixed-20261021-native/quit05/bound-second-job.js"
+    }
+  },
+  "native": {
+    "after_keep_working": {
+      "dirty": false,
+      "job": {
+        "created_at": 1792614690.854214,
+        "error": null,
+        "id": "cbca7207e9cc495f83c5d83280f0fe3b",
+        "kind": "render",
+        "progress": 0.0040885,
+        "project_id": "1ed992d94f4442f895d553dfa93e22ff",
+        "result": null,
+        "state": "running"
+      },
+      "project": {
+        "assets": [
+          {
+            "audio_channels": 0,
+            "audio_duration": 0,
+            "audio_sample_rate": 0,
+            "audio_stream_index": null,
+            "audio_streams": [],
+            "codec": "png",
+            "coded_height": 32,
+            "coded_width": 64,
+            "color_transfer": "unknown",
+            "duration": 0,
+            "exif_orientation": 1,
+            "fps": "25/1",
+            "frames": 0,
+            "has_audio": false,
+            "height": 32,
+            "id": "6decec4a96e54232accbfae3bccbe905",
+            "kind": "image",
+            "name": "ENGINE_TEST_QUIT_16bit_source.png",
+            "orientation_applied": "ffmpeg_autorotate",
+            "path": "media/6decec4a96e54232accbfae3bccbe905.png",
+            "pixel_format": "rgba64be",
+            "sha256": "3446fbe995d675a8c85ff31145159c75038365e2ae3ba67ea697fb58e47549e6",
+            "size": 356,
+            "video_stream_index": 0,
+            "width": 64
+          }
+        ],
+        "clips": [
+          {
+            "animation_duration": 48,
+            "animation_offset": 0,
+            "animation_start": 0,
+            "asset_id": "6decec4a96e54232accbfae3bccbe905",
+            "audio": {
+              "fade_duration": 48,
+              "fade_in": 0,
+              "fade_offset": 0,
+              "fade_out": 0,
+              "pan": 0
+            },
+            "duration": 48,
+            "effects": {
+              "blur": 0,
+              "chroma_key": "",
+              "sharpen": 0,
+              "vignette": false
+            },
+            "grade": {
+              "contrast": 1,
+              "exposure": 0,
+              "saturation": 1,
+              "temperature": 0
+            },
+            "id": "ordinary_quit_fixture",
+            "in": 0,
+            "keyframes": [],
+            "opacity": 1,
+            "reverse": false,
+            "rotation": 27,
+            "scale": 0.73,
+            "speed": 1,
+            "start": 0,
+            "track": 0,
+            "volume": 1,
+            "x": 0.07,
+            "y": -0.09
+          }
+        ],
+        "fps": 12,
+        "frame_rate": {
+          "denominator": 1,
+          "numerator": 12
+        },
+        "height": 360,
+        "id": "1ed992d94f4442f895d553dfa93e22ff",
+        "name": "ENGINE TEST \u2014 real ordinary quit",
+        "revision": 4,
+        "settings": {
+          "image_precision": "high16",
+          "transparent_background": true
+        },
+        "titles": [],
+        "tracks": [],
+        "updated_at": "2026-10-21T20:31:32Z",
+        "version": 1,
+        "width": 640
+      },
+      "save_state": "SAVED LOCALLY"
+    },
+    "alerts": [
+      {
+        "action": "Keep Working",
+        "picture": "/Users/midiakiasat/Library/Application Support/CINEMATICUM/Verification/0.9.1-bundle-fixed-20261021-native/quit05/native-alerts/keep-working-alert.png",
+        "text": [
+          "CINEMATICUM Studio",
+          "1 media job is still running. Keep CINEMATICUM open to finish, or cancel the active work and quit. Saved projects and completed media will be preserved."
+        ],
+        "window_class": "_NSAlertPanel"
+      },
+      {
+        "action": "Cancel Jobs and Quit",
+        "picture": "/Users/midiakiasat/Library/Application Support/CINEMATICUM/Verification/0.9.1-bundle-fixed-20261021-native/quit05/native-alerts/cancel-jobs-alert.png",
+        "text": [
+          "CINEMATICUM Studio",
+          "1 media job is still running. Keep CINEMATICUM open to finish, or cancel the active work and quit. Saved projects and completed media will be preserved."
+        ],
+        "window_class": "_NSAlertPanel"
+      }
+    ],
+    "checks": {
+      "actual_first_active_job_alert": true,
+      "actual_second_active_job_alert": true,
+      "completed_media_hashed_before_second_job": true,
+      "keep_working_allowed_first_actual_render_to_complete": true,
+      "keep_working_preserved_admission_for_second_actual_render": true,
+      "keep_working_restored_ui_and_preserved_actual_job": true,
+      "ordinary_edit_is_unsaved_before_quit": true,
+      "production_quit_saved_dirty_project_before_alert": true,
+      "production_waited_for_owned_server_exit": true,
+      "real_render_made_progress_before_quit": true
+    },
+    "completed_master_before_cancellation": {
+      "bytes": 9281929,
+      "path": "/Users/midiakiasat/Library/Application Support/CINEMATICUM/Verification/0.9.1-bundle-fixed-20261021-native/quit05/workspace/projects/1ed992d94f4442f895d553dfa93e22ff/exports/cbca7207e9cc495f83c5d83280f0fe3b.mkv",
+      "sha256": "0bdcf44378a04acd0e00f035cd06b4d480c4ff77b85c4361235d36963898528d"
+    },
+    "elapsed_seconds": 64.58392000198364,
+    "first_completed_before_second_job": {
+      "download_href": "/api/projects/1ed992d94f4442f895d553dfa93e22ff/exports/cbca7207e9cc495f83c5d83280f0fe3b.mkv?download=1",
+      "job": {
+        "created_at": 1792614690.854214,
+        "error": null,
+        "finished_at": 1792614750.307175,
+        "id": "cbca7207e9cc495f83c5d83280f0fe3b",
+        "kind": "render",
+        "progress": 1,
+        "project_id": "1ed992d94f4442f895d553dfa93e22ff",
+        "result": {
+          "alpha_mode": "straight",
+          "color_space": "SDR Rec.709",
+          "duration": 4,
+          "dynamic_range": "SDR UNORM; no scene-linear HDR/ACES movie mastering",
+          "elapsed_seconds": 59.361,
+          "encoding": "ffv1",
+          "filename": "cbca7207e9cc495f83c5d83280f0fe3b.mkv",
+          "fps": 12,
+          "frame_rate": {
+            "denominator": 1,
+            "numerator": 12
+          },
+          "frames": 48,
+          "has_audio": true,
+          "height": 360,
+          "image_precision": "high16",
+          "issuance_status_changed": false,
+          "packet_verification": {
+            "pcm_bytes": 768000,
+            "pcm_samples": 192000,
+            "video_packets": 48
+          },
+          "path": "/Users/midiakiasat/Library/Application Support/CINEMATICUM/Verification/0.9.1-bundle-fixed-20261021-native/quit05/workspace/projects/1ed992d94f4442f895d553dfa93e22ff/exports/cbca7207e9cc495f83c5d83280f0fe3b.mkv",
+          "pixel_format": "gbrap16le",
+          "processing_bits": 16,
+          "profile": "master16",
+          "project_revision": 3,
+          "sha256": "0bdcf44378a04acd0e00f035cd06b4d480c4ff77b85c4361235d36963898528d",
+          "size": 9281929,
+          "transparent_background": false,
+          "url": "/api/projects/1ed992d94f4442f895d553dfa93e22ff/exports/cbca7207e9cc495f83c5d83280f0fe3b.mkv",
+          "width": 640
+        },
+        "state": "completed"
+      }
+    },
+    "keep_working_click_at": 1792614693.2821798,
+    "owned_server_exit_status": 0,
+    "owned_server_pid": 45691,
+    "passed": true,
+    "phase": "confirming-cancel",
+    "scope": "Unchanged production ordinary-quit/alert/cancel methods and real NSAlert buttons with actual FFmpeg jobs; isolated server startup and child-exit forwarding, not production launcher or installed-app UI acceptance",
+    "second_render": {
+      "first_job_id": "cbca7207e9cc495f83c5d83280f0fe3b",
+      "job_id": "306344d66618433ba088c34214307154",
+      "job_progress": 0.0040885,
+      "job_state": "running",
+      "passed": true,
+      "project_id": "1ed992d94f4442f895d553dfa93e22ff"
+    },
+    "workflow": {
+      "dirty_before_quit": true,
+      "job_id": "cbca7207e9cc495f83c5d83280f0fe3b",
+      "job_progress": 0.0040885,
+      "job_state": "running",
+      "passed": true,
+      "project_id": "1ed992d94f4442f895d553dfa93e22ff"
+    }
+  },
+  "native_returncode": 0,
+  "durable_render_jobs": [
+    {
+      "id": "306344d66618433ba088c34214307154",
+      "project_id": "1ed992d94f4442f895d553dfa93e22ff",
+      "kind": "render",
+      "state": "cancelled",
+      "progress": 0.0040885,
+      "created_at": 1792614750.760854,
+      "error": "Render cancelled; source media and completed exports are unchanged.",
+      "result": null,
+      "finished_at": 1792614753.6986399
+    },
+    {
+      "id": "cbca7207e9cc495f83c5d83280f0fe3b",
+      "project_id": "1ed992d94f4442f895d553dfa93e22ff",
+      "kind": "render",
+      "state": "completed",
+      "progress": 1,
+      "created_at": 1792614690.854214,
+      "error": null,
+      "result": {
+        "path": "/Users/midiakiasat/Library/Application Support/CINEMATICUM/Verification/0.9.1-bundle-fixed-20261021-native/quit05/workspace/projects/1ed992d94f4442f895d553dfa93e22ff/exports/cbca7207e9cc495f83c5d83280f0fe3b.mkv",
+        "sha256": "0bdcf44378a04acd0e00f035cd06b4d480c4ff77b85c4361235d36963898528d",
+        "duration": 4.0,
+        "width": 640,
+        "height": 360,
+        "fps": 12,
+        "frame_rate": {
+          "numerator": 12,
+          "denominator": 1
+        },
+        "frames": 48,
+        "size": 9281929,
+        "profile": "master16",
+        "color_space": "SDR Rec.709",
+        "image_precision": "high16",
+        "processing_bits": 16,
+        "pixel_format": "gbrap16le",
+        "encoding": "ffv1",
+        "alpha_mode": "straight",
+        "transparent_background": false,
+        "dynamic_range": "SDR UNORM; no scene-linear HDR/ACES movie mastering",
+        "packet_verification": {
+          "video_packets": 48,
+          "pcm_samples": 192000,
+          "pcm_bytes": 768000
+        },
+        "elapsed_seconds": 59.361,
+        "has_audio": true,
+        "issuance_status_changed": false,
+        "url": "/api/projects/1ed992d94f4442f895d553dfa93e22ff/exports/cbca7207e9cc495f83c5d83280f0fe3b.mkv",
+        "filename": "cbca7207e9cc495f83c5d83280f0fe3b.mkv",
+        "project_revision": 3
+      },
+      "finished_at": 1792614750.307175
+    }
+  ],
+  "saved_project": {
+    "version": 1,
+    "id": "1ed992d94f4442f895d553dfa93e22ff",
+    "name": "ENGINE TEST \u2014 real ordinary quit",
+    "fps": 12,
+    "width": 640,
+    "height": 360,
+    "assets": [
+      {
+        "id": "6decec4a96e54232accbfae3bccbe905",
+        "name": "ENGINE_TEST_QUIT_16bit_source.png",
+        "path": "media/6decec4a96e54232accbfae3bccbe905.png",
+        "sha256": "3446fbe995d675a8c85ff31145159c75038365e2ae3ba67ea697fb58e47549e6",
+        "size": 356,
+        "kind": "image",
+        "duration": 0.0,
+        "width": 64,
+        "height": 32,
+        "has_audio": false,
+        "frames": 0,
+        "codec": "png",
+        "pixel_format": "rgba64be",
+        "color_transfer": "unknown",
+        "fps": "25/1",
+        "video_stream_index": 0,
+        "audio_stream_index": null,
+        "audio_sample_rate": 0,
+        "audio_channels": 0,
+        "audio_duration": 0.0,
+        "audio_streams": [],
+        "coded_width": 64,
+        "coded_height": 32,
+        "exif_orientation": 1,
+        "orientation_applied": "ffmpeg_autorotate"
+      }
+    ],
+    "clips": [
+      {
+        "id": "ordinary_quit_fixture",
+        "asset_id": "6decec4a96e54232accbfae3bccbe905",
+        "track": 0,
+        "start": 0,
+        "in": 0.0,
+        "duration": 48,
+        "scale": 0.73,
+        "rotation": 27.0,
+        "x": 0.07,
+        "y": -0.09,
+        "animation_start": 0,
+        "animation_duration": 48,
+        "animation_offset": 0,
+        "speed": 1.0,
+        "reverse": false,
+        "volume": 1.0,
+        "opacity": 1.0,
+        "audio": {
+          "fade_duration": 48,
+          "fade_offset": 0,
+          "fade_in": 0,
+          "fade_out": 0,
+          "pan": 0.0
+        },
+        "grade": {
+          "exposure": 0.0,
+          "contrast": 1.0,
+          "saturation": 1.0,
+          "temperature": 0.0
+        },
+        "effects": {
+          "blur": 0.0,
+          "sharpen": 0.0,
+          "vignette": false,
+          "chroma_key": ""
+        },
+        "keyframes": []
+      }
+    ],
+    "titles": [],
+    "settings": {
+      "image_precision": "high16",
+      "transparent_background": true
+    },
+    "revision": 5,
+    "frame_rate": {
+      "numerator": 12,
+      "denominator": 1
+    },
+    "tracks": [],
+    "updated_at": "2026-10-21T20:32:30Z"
+  },
+  "render_snapshot_sha256": {
+    "cbca7207e9cc495f83c5d83280f0fe3b": "2a50f729eec4a7170296cae7a4e29db296fcbcbdfb7ecf83016796321d15e01b",
+    "306344d66618433ba088c34214307154": "ffc1d038d06b641707ad6304cac362b289a78874cd1aec5aacadbd9e8243d653"
+  },
+  "export_directory_after_quit": [
+    "cbca7207e9cc495f83c5d83280f0fe3b.json",
+    "cbca7207e9cc495f83c5d83280f0fe3b.mkv"
+  ],
+  "retained_master_streams": [
+    {
+      "index": 0,
+      "codec_name": "ffv1",
+      "codec_long_name": "FFmpeg video codec #1",
+      "codec_type": "video",
+      "codec_tag_string": "[0][0][0][0]",
+      "codec_tag": "0x0000",
+      "width": 640,
+      "height": 360,
+      "coded_width": 640,
+      "coded_height": 360,
+      "has_b_frames": 0,
+      "sample_aspect_ratio": "1:1",
+      "display_aspect_ratio": "16:9",
+      "pix_fmt": "gbrap16le",
+      "level": -99,
+      "color_range": "pc",
+      "color_space": "gbr",
+      "field_order": "progressive",
+      "refs": 1,
+      "r_frame_rate": "12/1",
+      "avg_frame_rate": "12/1",
+      "time_base": "1/1000",
+      "start_pts": 0,
+      "start_time": "0.000000",
+      "bits_per_raw_sample": "16",
+      "nb_read_frames": "48",
+      "extradata_size": 201,
+      "disposition": {
+        "default": 0,
+        "dub": 0,
+        "original": 0,
+        "comment": 0,
+        "lyrics": 0,
+        "karaoke": 0,
+        "forced": 0,
+        "hearing_impaired": 0,
+        "visual_impaired": 0,
+        "clean_effects": 0,
+        "attached_pic": 0,
+        "timed_thumbnails": 0,
+        "non_diegetic": 0,
+        "captions": 0,
+        "descriptions": 0,
+        "metadata": 0,
+        "dependent": 0,
+        "still_image": 0,
+        "multilayer": 0
+      },
+      "tags": {
+        "ENCODER": "Lavc62.28.101 ffv1",
+        "DURATION": "00:00:04.000000000"
+      }
+    },
+    {
+      "index": 1,
+      "codec_name": "pcm_s16le",
+      "codec_long_name": "PCM signed 16-bit little-endian",
+      "codec_type": "audio",
+      "codec_tag_string": "[0][0][0][0]",
+      "codec_tag": "0x0000",
+      "sample_fmt": "s16",
+      "sample_rate": "48000",
+      "channels": 2,
+      "bits_per_sample": 16,
+      "initial_padding": 0,
+      "r_frame_rate": "0/0",
+      "avg_frame_rate": "0/0",
+      "time_base": "1/1000",
+      "start_pts": 0,
+      "start_time": "0.000000",
+      "bit_rate": "1536000",
+      "nb_read_frames": "189",
+      "disposition": {
+        "default": 0,
+        "dub": 0,
+        "original": 0,
+        "comment": 0,
+        "lyrics": 0,
+        "karaoke": 0,
+        "forced": 0,
+        "hearing_impaired": 0,
+        "visual_impaired": 0,
+        "clean_effects": 0,
+        "attached_pic": 0,
+        "timed_thumbnails": 0,
+        "non_diegetic": 0,
+        "captions": 0,
+        "descriptions": 0,
+        "metadata": 0,
+        "dependent": 0,
+        "still_image": 0,
+        "multilayer": 0
+      },
+      "tags": {
+        "ENCODER": "Lavc62.28.101 pcm_s16le",
+        "DURATION": "00:00:04.000000000"
+      }
+    }
+  ],
+  "final_session_exit": {
+    "version": 1,
+    "reason": "native-user-confirmed-job-cancellation",
+    "completed_at": 1792614753.9093592,
+    "active_at_shutdown": [
+      {
+        "id": "99613f8e8a104b4090ea36b5008c82b1",
+        "kind": "frame-preview",
+        "state": "running"
+      }
+    ],
+    "terminal_jobs": [
+      {
+        "id": "99613f8e8a104b4090ea36b5008c82b1",
+        "state": "cancelled",
+        "error": "Frame preview superseded"
+      }
+    ]
+  },
+  "actual_alert_captures": [
+    {
+      "path": "/Users/midiakiasat/Library/Application Support/CINEMATICUM/Verification/0.9.1-bundle-fixed-20261021-native/quit05/native-alerts/keep-working-alert.png",
+      "valid": true,
+      "sha256": "8189daa995bf34b8970da9b0b0a30b006bd223339ce3401de5e40ee08d7afded"
+    },
+    {
+      "path": "/Users/midiakiasat/Library/Application Support/CINEMATICUM/Verification/0.9.1-bundle-fixed-20261021-native/quit05/native-alerts/cancel-jobs-alert.png",
+      "valid": true,
+      "sha256": "12e1fd470bd5a4ccfdd6bb5f3988bcd7383dc738b91b475387c6ecb88c69c931"
+    }
+  ],
+  "elapsed_seconds": 67.203
+}

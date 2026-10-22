@@ -1,0 +1,12 @@
+{
+  "schema": "cinematicum-native-record-transfer-v1",
+  "passed": true,
+  "source_commit": "cdd15816c228fe4133fbb3ce6d90978333d699e6",
+  "source_tree": "a62ce29a8af68b38d14820c45fc42e1266762e34",
+  "source_manifest_sha256": "21034979d805cdf680c255720f6311319f3fc22c2b405dbd43294a5485d09f8d",
+  "archive_bytes": 57996,
+  "archive_sha256": "e48d1567f1749fe30476b6f5cb2d8409abbcd34ed4c586ec0e0e0b43e77a354a",
+  "verified_record_files": 95,
+  "native_media_inventory_files": 50,
+  "all_record_hashes_verified": true
+}

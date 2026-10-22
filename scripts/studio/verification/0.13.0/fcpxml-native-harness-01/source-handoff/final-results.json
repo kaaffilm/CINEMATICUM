@@ -1,0 +1,196 @@
+{
+  "browser": {
+    "browser_sha256": "f661a8c124888f491966c29581f33c1953c86c15d77048bc91452b66743d5f3a",
+    "browser_sha256_after": "f661a8c124888f491966c29581f33c1953c86c15d77048bc91452b66743d5f3a",
+    "elapsed_ms": 14628,
+    "error": null,
+    "native_certified": false,
+    "native_prores_playback_certified": false,
+    "passed": true,
+    "phases": [
+      {
+        "checks": 11,
+        "elapsed_seconds": 3.061,
+        "error": null,
+        "native_certified": false,
+        "operation": "prepare",
+        "passed": true
+      },
+      {
+        "checks": 30,
+        "elapsed_seconds": 4.026,
+        "error": null,
+        "native_certified": false,
+        "operation": "author",
+        "passed": true
+      },
+      {
+        "checks": 33,
+        "elapsed_seconds": 5.898,
+        "error": null,
+        "native_certified": false,
+        "operation": "render",
+        "passed": true
+      }
+    ],
+    "python_exit_code": 0,
+    "schema": "cinematicum-phased-fcpxml-browser-check-v1"
+  },
+  "dtd_artifacts": {
+    "author/ENGINE_TEST_exported.fcpxml": {
+      "sha256": "3bd3fd5f06bc01323708d8948aa4e7c50fceac4b98ca2f539f7f53a2c99f60d6",
+      "size": 4595
+    },
+    "prepare/ENGINE_TEST_input.fcpxml": {
+      "sha256": "c0654f0e5582479eb307e04baeafd926aa350319f6db8b494a8a7a1df7317769",
+      "size": 2793
+    }
+  },
+  "frozen_source": {
+    "fcpxml.py": "d2eb27d14243d6d51e3d19325d09101fe9a67209231e79d92a101bfbe8b14064",
+    "install_macos.py": "8291966a06594387db5fbf0aa6106abebd4593ea6296a15d1b9fb1587c5b862c",
+    "server.py": "06a2ffa157f339d64a93f4ed923bf6af3764e33697d808ddef0b7bc40c56595e",
+    "test_fcpxml.py": "2c633fb6d7b438ac5bd9108b6d36a715a81caf5b928c75adf23451052cd6591a",
+    "web/index.html": "2707509f6e8c17250e2fea625cd23fefdac9f4be693d1e9153481d0711c2c2c0",
+    "web/interchange-ui.js": "e0b74c54728de48e136e1d0c40608da63785847a1fdf5c93acbd377da2df3923"
+  },
+  "independent_movie": {
+    "every_pcm_sample_identical": true,
+    "frames": 40,
+    "max_pcm_lsb_error": 0,
+    "sample_frames": 64064,
+    "source_channels": [
+      0,
+      0,
+      0,
+      0,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "source_color_max_error": 3.0,
+    "source_counters": [
+      8,
+      9,
+      10,
+      11,
+      20,
+      21,
+      22,
+      23,
+      24,
+      25,
+      18,
+      19,
+      20,
+      21,
+      22,
+      23,
+      36,
+      37,
+      38,
+      39,
+      40,
+      41,
+      40,
+      41,
+      42,
+      43,
+      44,
+      45,
+      46,
+      47,
+      50,
+      51,
+      56,
+      58,
+      60,
+      62,
+      64,
+      66,
+      68,
+      70
+    ]
+  },
+  "native_certified": false,
+  "native_prores_playback_certified": false,
+  "phases": [
+    {
+      "checks": 11,
+      "elapsed_seconds": 3.061,
+      "operation": "prepare",
+      "passed": true,
+      "report": "/workspace/scratch/091f394ee5df/cinematicum-fcpxml-native-driver-06/prepare/ENGINE_TEST_fcpxml_report.json",
+      "report_identity": {
+        "sha256": "ccd17703f2915401f8bdeb340374cc22018fdb4000398541649e33ba2c3f665e",
+        "size": 19438
+      }
+    },
+    {
+      "checks": 30,
+      "completed_downloads": 1,
+      "download_errors": [],
+      "elapsed_seconds": 4.026,
+      "operation": "author",
+      "page_errors": [],
+      "passed": true,
+      "report": "/workspace/scratch/091f394ee5df/cinematicum-fcpxml-native-driver-06/author/ENGINE_TEST_fcpxml_report.json",
+      "report_identity": {
+        "sha256": "2357e0f6be14ad8c32d5139527f5dd88742d9193753757724795316af174899c",
+        "size": 23309
+      },
+      "ui_checks": 16,
+      "ui_elapsed_ms": 2020
+    },
+    {
+      "checks": 33,
+      "completed_downloads": 1,
+      "download_errors": [],
+      "elapsed_seconds": 5.898,
+      "operation": "render",
+      "page_errors": [],
+      "passed": true,
+      "report": "/workspace/scratch/091f394ee5df/cinematicum-fcpxml-native-driver-06/render/ENGINE_TEST_fcpxml_report.json",
+      "report_identity": {
+        "sha256": "5e1ff3648b1c54bd6c425df533ffce526d6cf87ee20d99e2d5f9336b900437a0",
+        "size": 24656
+      },
+      "ui_checks": 4,
+      "ui_elapsed_ms": 2227
+    }
+  ],
+  "schema": "cinematicum-fcpxml-native-handoff-results-v1"
+}

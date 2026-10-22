@@ -1,0 +1,10 @@
+{
+  "repository": "https://github.com/lensfun/lensfun",
+  "commit": "9e6deafe100a7c6f7ce019624bb8c4da20bf7c29",
+  "path": "data/db/slr-olympus.xml",
+  "url": "https://raw.githubusercontent.com/lensfun/lensfun/9e6deafe100a7c6f7ce019624bb8c4da20bf7c29/data/db/slr-olympus.xml",
+  "bytes": 116602,
+  "sha256": "f7693b6779edd8ed10d7dc23113669255bfa4987cea7db0e843f7f5f2bbbe615",
+  "license": "CC-BY-SA-3.0",
+  "license_sha256": "3f941b3b89cf7b8370ceb83cc76d2120d471b58735d8ca60238a751a48d7f72f"
+}

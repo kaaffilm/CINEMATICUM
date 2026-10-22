@@ -1,0 +1,446 @@
+{
+  "schema": "cinematicum-public-evidence-transfer-v1",
+  "packed_sha256": "36820890cd44f0a31ebbbb02c9fc58386a9cf519ac6ced47f828773d457a88d4",
+  "files": [
+    {
+      "path": "scripts/studio/verification/0.12.0/installed-current-01/controller-build-01-failed/build.json",
+      "bytes": 1096,
+      "sha256": "734bee6c75cf9c2b34f9f8ae95f4d46156aaaf29796179f675fa028d9114c9cc"
+    },
+    {
+      "path": "scripts/studio/verification/0.12.0/installed-current-01/controller-build-02/build.json",
+      "bytes": 1432,
+      "sha256": "efe152e2ac9f0b2c68f88faa7e7274108fe1d1e48d2cf75a10c982b729646321"
+    },
+    {
+      "path": "scripts/studio/verification/0.12.0/installed-current-01/installation-summary.json",
+      "bytes": 24478,
+      "sha256": "8d95706b7e01ed003a272dee828fa04f8f9fa61608f4427b2c56a75f16dbfdac"
+    },
+    {
+      "path": "scripts/studio/verification/0.12.0/installed-current-01/launch/installed-launch-report.json",
+      "bytes": 78574,
+      "sha256": "8663dedb034555b41a464616bcdf01d4090dcd6422323692b7d5b13f70b871ba"
+    },
+    {
+      "path": "scripts/studio/verification/0.12.0/installed-current-01/launch/native-launch.json",
+      "bytes": 953,
+      "sha256": "856368d07254fae1c7208d879b2bcfdce4970d4420bc1878bf53721c57104d2e"
+    },
+    {
+      "path": "scripts/studio/verification/0.12.0/installed-current-01/launch/native-observe-1.json",
+      "bytes": 817,
+      "sha256": "10763aeec17b61a6405a05f5531395fbaf05cbbb9ee31bb90b9a283f1d999e9a"
+    },
+    {
+      "path": "scripts/studio/verification/0.12.0/installed-current-01/launch/native-ordinary-quit.json",
+      "bytes": 369,
+      "sha256": "a55a866fd3724a2b855bdda4f97b538e25d22335b851f8ea89a24d0f2ccf9653"
+    },
+    {
+      "path": "scripts/studio/verification/0.12.0/installed-current-01/launch/native-preflight.json",
+      "bytes": 317,
+      "sha256": "c9b1ded2249ea5e4f0e2efae3bc47fa7fea900d2523184dbf8efd509b6c063d7"
+    },
+    {
+      "path": "scripts/studio/verification/0.12.0/installed-current-01/launch/owned-launch.json",
+      "bytes": 572,
+      "sha256": "166f1a98af1a9488c44e60b219d2f32ccd919d697d48cf0b0c271927435f0bc1"
+    },
+    {
+      "path": "scripts/studio/verification/0.12.0/installed-current-01/launch/workspace-after-hashes.json",
+      "bytes": 11939,
+      "sha256": "1d41240db21e5987f9ab1e6248c8e66c03a61c60099d7a68c7e56c561aa52fbc"
+    },
+    {
+      "path": "scripts/studio/verification/0.12.0/installed-current-01/launch/workspace-before-hashes.json",
+      "bytes": 11939,
+      "sha256": "1d41240db21e5987f9ab1e6248c8e66c03a61c60099d7a68c7e56c561aa52fbc"
+    },
+    {
+      "path": "scripts/studio/verification/0.12.0/installed-current-01/phased-build/finish-01.json",
+      "bytes": 599,
+      "sha256": "4c0bf6d4ed95d7cfe257347434519b63efa01beca2ebc16c4ece2a8e6a0705ce"
+    },
+    {
+      "path": "scripts/studio/verification/0.12.0/installed-current-01/phased-build/icon_compile-01.json",
+      "bytes": 834,
+      "sha256": "1e0d467192053ea310c81f51ecf9f55e4fe5fc8bdfead459f64794cbcffb0657"
+    },
+    {
+      "path": "scripts/studio/verification/0.12.0/installed-current-01/phased-build/icon_render-01.json",
+      "bytes": 1278,
+      "sha256": "5bef6eb6a3ee84b7a8b04eebceda635216ffea2c9b6fafff5bafed70e28cd686"
+    },
+    {
+      "path": "scripts/studio/verification/0.12.0/installed-current-01/phased-build/iconutil-01.json",
+      "bytes": 707,
+      "sha256": "33d488b28a429123047c74f36518718634859ceb7420967b5d386a6fbb5b21bb"
+    },
+    {
+      "path": "scripts/studio/verification/0.12.0/installed-current-01/phased-build/install-commit-01.json",
+      "bytes": 845,
+      "sha256": "124b196f3e2e04a3764c76eb1c6c9d1e7448e99d9274694730a14f50d7c486f6"
+    },
+    {
+      "path": "scripts/studio/verification/0.12.0/installed-current-01/phased-build/main-compile-01.json",
+      "bytes": 1185,
+      "sha256": "7ac6577ccdfc1d9346c38853d7cf848540c1d8dda0df5bc4e69829a3ff16ad1e"
+    },
+    {
+      "path": "scripts/studio/verification/0.12.0/installed-current-01/phased-build/preparation.json",
+      "bytes": 770,
+      "sha256": "8c9a38f4fec718f82ad91d29cc49c67083d98d9d17c98a0d81073a7acd94b4d5"
+    },
+    {
+      "path": "scripts/studio/verification/0.12.0/installed-current-01/phased-build/staged-validation-01.json",
+      "bytes": 23827,
+      "sha256": "ae222760924bd6bf5008aab6175aa58ef793882dd084f898548295e28e7b8071"
+    },
+    {
+      "path": "scripts/studio/verification/0.12.0/installed-current-01/readiness-phased/deep/native-launch.json",
+      "bytes": 952,
+      "sha256": "c80274856209d50e3e7803b79fd4c0c714abae0651e318bfddd18d5a5deb2571"
+    },
+    {
+      "path": "scripts/studio/verification/0.12.0/installed-current-01/readiness-phased/deep/native-observe-1.json",
+      "bytes": 816,
+      "sha256": "c5ceb1898ff3274ed5118c1acadab4a1c82ffa97c8f55510ba2bda6ea50f10da"
+    },
+    {
+      "path": "scripts/studio/verification/0.12.0/installed-current-01/readiness-phased/deep/native-ordinary-quit.json",
+      "bytes": 369,
+      "sha256": "a55a866fd3724a2b855bdda4f97b538e25d22335b851f8ea89a24d0f2ccf9653"
+    },
+    {
+      "path": "scripts/studio/verification/0.12.0/installed-current-01/readiness-phased/deep/native-preflight.json",
+      "bytes": 317,
+      "sha256": "c9b1ded2249ea5e4f0e2efae3bc47fa7fea900d2523184dbf8efd509b6c063d7"
+    },
+    {
+      "path": "scripts/studio/verification/0.12.0/installed-current-01/readiness-phased/deep/owned-launch.json",
+      "bytes": 571,
+      "sha256": "01fc0db315e537c1d55ca61ce6dc3bb691a400133fa7e75a69060ae9081c8470"
+    },
+    {
+      "path": "scripts/studio/verification/0.12.0/installed-current-01/readiness-phased/deep/phase-started.json",
+      "bytes": 1166,
+      "sha256": "a04065c9ddc0575014e909baf34115eb1cee2c0fc55c8fec2eda725e0bb31e1f"
+    },
+    {
+      "path": "scripts/studio/verification/0.12.0/installed-current-01/readiness-phased/deep/tool-report.json",
+      "bytes": 7387,
+      "sha256": "52088e7f2705953ace1d2d113ca5025e50ba97260e43dc1003290b7a85cb4780"
+    },
+    {
+      "path": "scripts/studio/verification/0.12.0/installed-current-01/readiness-phased/learned/native-launch.json",
+      "bytes": 953,
+      "sha256": "c61c6cfc0f0a61d825e8bf8135e740f59e07faad554a63d62adcd2d638ecf8a1"
+    },
+    {
+      "path": "scripts/studio/verification/0.12.0/installed-current-01/readiness-phased/learned/native-observe-1.json",
+      "bytes": 817,
+      "sha256": "098a901fa6dd92c6f69f1f0eca1d8f43b9046cef751b68aaf7bdbc3050a0dc29"
+    },
+    {
+      "path": "scripts/studio/verification/0.12.0/installed-current-01/readiness-phased/learned/native-ordinary-quit.json",
+      "bytes": 369,
+      "sha256": "a55a866fd3724a2b855bdda4f97b538e25d22335b851f8ea89a24d0f2ccf9653"
+    },
+    {
+      "path": "scripts/studio/verification/0.12.0/installed-current-01/readiness-phased/learned/native-preflight.json",
+      "bytes": 317,
+      "sha256": "c9b1ded2249ea5e4f0e2efae3bc47fa7fea900d2523184dbf8efd509b6c063d7"
+    },
+    {
+      "path": "scripts/studio/verification/0.12.0/installed-current-01/readiness-phased/learned/owned-launch.json",
+      "bytes": 572,
+      "sha256": "a9b26fbf468200d14e1caf43182eb56721c57a5d208e201accf1831a48432800"
+    },
+    {
+      "path": "scripts/studio/verification/0.12.0/installed-current-01/readiness-phased/learned/phase-started.json",
+      "bytes": 1170,
+      "sha256": "fd35eb59358aea6cec621575394129f88007d6575f099864105408bd255b7293"
+    },
+    {
+      "path": "scripts/studio/verification/0.12.0/installed-current-01/readiness-phased/learned/tool-report.json",
+      "bytes": 7391,
+      "sha256": "65655c15ff783d2e015b7e307f365ddeba8969cabe091494a2ca9e2c01120aa8"
+    },
+    {
+      "path": "scripts/studio/verification/0.12.0/installed-current-01/readiness-phased/multicam-sync/native-launch.json",
+      "bytes": 952,
+      "sha256": "ef7bc859e09a0bd61a5966f2f7e4d84ee41c9a75d06f5f519850ab84e119cb4f"
+    },
+    {
+      "path": "scripts/studio/verification/0.12.0/installed-current-01/readiness-phased/multicam-sync/native-observe-1.json",
+      "bytes": 816,
+      "sha256": "f6f15f4c8d46839a536267302289de50cfb4c19826f968b87233a8568bc19b47"
+    },
+    {
+      "path": "scripts/studio/verification/0.12.0/installed-current-01/readiness-phased/multicam-sync/native-ordinary-quit.json",
+      "bytes": 369,
+      "sha256": "a55a866fd3724a2b855bdda4f97b538e25d22335b851f8ea89a24d0f2ccf9653"
+    },
+    {
+      "path": "scripts/studio/verification/0.12.0/installed-current-01/readiness-phased/multicam-sync/native-preflight.json",
+      "bytes": 317,
+      "sha256": "c9b1ded2249ea5e4f0e2efae3bc47fa7fea900d2523184dbf8efd509b6c063d7"
+    },
+    {
+      "path": "scripts/studio/verification/0.12.0/installed-current-01/readiness-phased/multicam-sync/owned-launch.json",
+      "bytes": 571,
+      "sha256": "edb40c08501aca89f818a45d1d1ef16be74f831ab0d1f29d8e7b33804f1a8543"
+    },
+    {
+      "path": "scripts/studio/verification/0.12.0/installed-current-01/readiness-phased/multicam-sync/phase-started.json",
+      "bytes": 1175,
+      "sha256": "42277be5ca2e89350623f8663dd9eec637e2a04644ee772967aee570f3821174"
+    },
+    {
+      "path": "scripts/studio/verification/0.12.0/installed-current-01/readiness-phased/multicam-sync/tool-report.json",
+      "bytes": 7396,
+      "sha256": "05bcb1b32c9eab2d4ca5569fcb701dcf327c5e5a3aebc8aa9f13c7852c809634"
+    },
+    {
+      "path": "scripts/studio/verification/0.12.0/installed-current-01/readiness-phased/native-preflight.json",
+      "bytes": 317,
+      "sha256": "c9b1ded2249ea5e4f0e2efae3bc47fa7fea900d2523184dbf8efd509b6c063d7"
+    },
+    {
+      "path": "scripts/studio/verification/0.12.0/installed-current-01/readiness-phased/physical-rendering/native-launch.json",
+      "bytes": 952,
+      "sha256": "53065e4dac514ffcf02f27ece982f6c5d76d19d3bbca04aac1aafc2c65b253c7"
+    },
+    {
+      "path": "scripts/studio/verification/0.12.0/installed-current-01/readiness-phased/physical-rendering/native-observe-1.json",
+      "bytes": 816,
+      "sha256": "13ce15714c24bf7c3e59408fc410872992ecc2efc107e092404c714f42b28438"
+    },
+    {
+      "path": "scripts/studio/verification/0.12.0/installed-current-01/readiness-phased/physical-rendering/native-ordinary-quit.json",
+      "bytes": 369,
+      "sha256": "a55a866fd3724a2b855bdda4f97b538e25d22335b851f8ea89a24d0f2ccf9653"
+    },
+    {
+      "path": "scripts/studio/verification/0.12.0/installed-current-01/readiness-phased/physical-rendering/native-preflight.json",
+      "bytes": 317,
+      "sha256": "c9b1ded2249ea5e4f0e2efae3bc47fa7fea900d2523184dbf8efd509b6c063d7"
+    },
+    {
+      "path": "scripts/studio/verification/0.12.0/installed-current-01/readiness-phased/physical-rendering/owned-launch.json",
+      "bytes": 571,
+      "sha256": "96a463af12409e448d6353e2ba2807f51a026e3469e314393c9262d76d582311"
+    },
+    {
+      "path": "scripts/studio/verification/0.12.0/installed-current-01/readiness-phased/physical-rendering/phase-started.json",
+      "bytes": 1180,
+      "sha256": "7f0cf942e4d38aa5508fc7e933dab667ceb6f81e6360496950cc64567730049c"
+    },
+    {
+      "path": "scripts/studio/verification/0.12.0/installed-current-01/readiness-phased/physical-rendering/tool-report.json",
+      "bytes": 7401,
+      "sha256": "605b7de85a068c98dcd1df3f17d54eb848ca7e64cfc6ecbe6320e61d0a456e63"
+    },
+    {
+      "path": "scripts/studio/verification/0.12.0/installed-current-01/readiness-phased/prepare-report.json",
+      "bytes": 15598,
+      "sha256": "cabb92eb98b1612926587b7dbcfe7cdcb2318bc516c884091405aab90361d924"
+    },
+    {
+      "path": "scripts/studio/verification/0.12.0/installed-current-01/readiness-phased/ray-optics/native-launch.json",
+      "bytes": 952,
+      "sha256": "e668f45d628e559f508dd602cb92697f2a274f3f49f7b9863b7691b5aaf06537"
+    },
+    {
+      "path": "scripts/studio/verification/0.12.0/installed-current-01/readiness-phased/ray-optics/native-observe-1.json",
+      "bytes": 816,
+      "sha256": "2e14a90233a55b821fc1ac871a01bcf17c2a9c6cb7dda47a706ad3faf59360f2"
+    },
+    {
+      "path": "scripts/studio/verification/0.12.0/installed-current-01/readiness-phased/ray-optics/native-ordinary-quit.json",
+      "bytes": 369,
+      "sha256": "a55a866fd3724a2b855bdda4f97b538e25d22335b851f8ea89a24d0f2ccf9653"
+    },
+    {
+      "path": "scripts/studio/verification/0.12.0/installed-current-01/readiness-phased/ray-optics/native-preflight.json",
+      "bytes": 317,
+      "sha256": "c9b1ded2249ea5e4f0e2efae3bc47fa7fea900d2523184dbf8efd509b6c063d7"
+    },
+    {
+      "path": "scripts/studio/verification/0.12.0/installed-current-01/readiness-phased/ray-optics/owned-launch.json",
+      "bytes": 571,
+      "sha256": "fba328abad68ed4055fb0d30fe1e81202568690c8a7debc8c1bb0eac9e34d40e"
+    },
+    {
+      "path": "scripts/studio/verification/0.12.0/installed-current-01/readiness-phased/ray-optics/phase-started.json",
+      "bytes": 1172,
+      "sha256": "2cfa5fcad81e2466b06f3b4576dcee7a5fdfa361dd28727ab85bb458d9f41a5f"
+    },
+    {
+      "path": "scripts/studio/verification/0.12.0/installed-current-01/readiness-phased/ray-optics/tool-report.json",
+      "bytes": 7394,
+      "sha256": "469137ad4b375a66e816551c090acc3d29a21bf25725f3187c6fae78d45d7c61"
+    },
+    {
+      "path": "scripts/studio/verification/0.12.0/installed-current-01/readiness-phased/reconstruction/native-launch.json",
+      "bytes": 952,
+      "sha256": "4bb879b1339aa4bc19c338c38ab01f7afc473bf71b2ec4d83f1250dc0b2f9c60"
+    },
+    {
+      "path": "scripts/studio/verification/0.12.0/installed-current-01/readiness-phased/reconstruction/native-observe-1.json",
+      "bytes": 816,
+      "sha256": "adc39853bd1acaf119a74ebd4c074b5624acb37446d3789a594af87036d3856f"
+    },
+    {
+      "path": "scripts/studio/verification/0.12.0/installed-current-01/readiness-phased/reconstruction/native-ordinary-quit.json",
+      "bytes": 369,
+      "sha256": "a55a866fd3724a2b855bdda4f97b538e25d22335b851f8ea89a24d0f2ccf9653"
+    },
+    {
+      "path": "scripts/studio/verification/0.12.0/installed-current-01/readiness-phased/reconstruction/native-preflight.json",
+      "bytes": 317,
+      "sha256": "c9b1ded2249ea5e4f0e2efae3bc47fa7fea900d2523184dbf8efd509b6c063d7"
+    },
+    {
+      "path": "scripts/studio/verification/0.12.0/installed-current-01/readiness-phased/reconstruction/owned-launch.json",
+      "bytes": 571,
+      "sha256": "28cc157cfdd5f3da974de93f4bfbbe07640228a157938858b91f6d7c0d7d697b"
+    },
+    {
+      "path": "scripts/studio/verification/0.12.0/installed-current-01/readiness-phased/reconstruction/phase-started.json",
+      "bytes": 1175,
+      "sha256": "0b327e6e3f1662b0aab77b638ef0be7d963eb660ab7190fc9ea1d9b3408dfcf1"
+    },
+    {
+      "path": "scripts/studio/verification/0.12.0/installed-current-01/readiness-phased/reconstruction/tool-report.json",
+      "bytes": 7397,
+      "sha256": "98976cf912cb1f85e3a13357c8472a79f1befd91eb92ffd352d1c83f042f84bc"
+    },
+    {
+      "path": "scripts/studio/verification/0.12.0/installed-current-01/readiness-phased/retime/native-launch.json",
+      "bytes": 952,
+      "sha256": "0c51b242d60c4f051a3eb9ce2ca928ab0a42f7124f07941d698571eaff0fa3d1"
+    },
+    {
+      "path": "scripts/studio/verification/0.12.0/installed-current-01/readiness-phased/retime/native-observe-1.json",
+      "bytes": 816,
+      "sha256": "b7c141c3708be9678ecdce1489e040fd59b13d9455b127d06263852d46ac3de9"
+    },
+    {
+      "path": "scripts/studio/verification/0.12.0/installed-current-01/readiness-phased/retime/native-ordinary-quit.json",
+      "bytes": 369,
+      "sha256": "a55a866fd3724a2b855bdda4f97b538e25d22335b851f8ea89a24d0f2ccf9653"
+    },
+    {
+      "path": "scripts/studio/verification/0.12.0/installed-current-01/readiness-phased/retime/native-preflight.json",
+      "bytes": 317,
+      "sha256": "c9b1ded2249ea5e4f0e2efae3bc47fa7fea900d2523184dbf8efd509b6c063d7"
+    },
+    {
+      "path": "scripts/studio/verification/0.12.0/installed-current-01/readiness-phased/retime/owned-launch.json",
+      "bytes": 571,
+      "sha256": "a0b4b474ca32eae545b1155a54c595d89a281d1ffc67ffdeda59148f86145f33"
+    },
+    {
+      "path": "scripts/studio/verification/0.12.0/installed-current-01/readiness-phased/retime/phase-started.json",
+      "bytes": 1168,
+      "sha256": "1b70e56d1fa6354271c6a0e80a7f62a6d3ea7e2c6bd183521b738be59228467d"
+    },
+    {
+      "path": "scripts/studio/verification/0.12.0/installed-current-01/readiness-phased/retime/tool-report.json",
+      "bytes": 7854,
+      "sha256": "73bca3a347351c02d7236487ef7baf74b3e26bb5476cc95733717690548910e1"
+    },
+    {
+      "path": "scripts/studio/verification/0.12.0/installed-current-01/readiness-phased/scene-processing/native-launch.json",
+      "bytes": 952,
+      "sha256": "d94faf294d7d5c536f40d7aa54f5bfe330ad5932a1ea436c7acab598029767b1"
+    },
+    {
+      "path": "scripts/studio/verification/0.12.0/installed-current-01/readiness-phased/scene-processing/native-observe-1.json",
+      "bytes": 816,
+      "sha256": "9486b8b2cfb8b79821de993f2bf4c84608b87a741986eb02a406d204e32eca18"
+    },
+    {
+      "path": "scripts/studio/verification/0.12.0/installed-current-01/readiness-phased/scene-processing/native-ordinary-quit.json",
+      "bytes": 369,
+      "sha256": "a55a866fd3724a2b855bdda4f97b538e25d22335b851f8ea89a24d0f2ccf9653"
+    },
+    {
+      "path": "scripts/studio/verification/0.12.0/installed-current-01/readiness-phased/scene-processing/native-preflight.json",
+      "bytes": 317,
+      "sha256": "c9b1ded2249ea5e4f0e2efae3bc47fa7fea900d2523184dbf8efd509b6c063d7"
+    },
+    {
+      "path": "scripts/studio/verification/0.12.0/installed-current-01/readiness-phased/scene-processing/owned-launch.json",
+      "bytes": 571,
+      "sha256": "f3a1c247a2ca774d4842b0ee28a47d09d8a3d3852454a88bd5d5578668273be0"
+    },
+    {
+      "path": "scripts/studio/verification/0.12.0/installed-current-01/readiness-phased/scene-processing/phase-started.json",
+      "bytes": 1177,
+      "sha256": "23c3bb9f21a0ed45de865f081a19edc5d2a1bf5a0a22c143842a9a6e053d628c"
+    },
+    {
+      "path": "scripts/studio/verification/0.12.0/installed-current-01/readiness-phased/scene-processing/tool-report.json",
+      "bytes": 7400,
+      "sha256": "45799965157b31a88a6a7e7a9e95d40ce85255e8d8b31c60f9e9a7e1e5c4d4d7"
+    },
+    {
+      "path": "scripts/studio/verification/0.12.0/installed-current-01/readiness-phased/verify/native-preflight.json",
+      "bytes": 317,
+      "sha256": "c9b1ded2249ea5e4f0e2efae3bc47fa7fea900d2523184dbf8efd509b6c063d7"
+    },
+    {
+      "path": "scripts/studio/verification/0.12.0/installed-current-01/readiness-phased/verify/ownership-deep.json",
+      "bytes": 288,
+      "sha256": "b8919e8da2b70f297bb62b0265ff1db5604a09c6c4cb935c843742c04769445a"
+    },
+    {
+      "path": "scripts/studio/verification/0.12.0/installed-current-01/readiness-phased/verify/ownership-learned.json",
+      "bytes": 288,
+      "sha256": "b8919e8da2b70f297bb62b0265ff1db5604a09c6c4cb935c843742c04769445a"
+    },
+    {
+      "path": "scripts/studio/verification/0.12.0/installed-current-01/readiness-phased/verify/ownership-multicam-sync.json",
+      "bytes": 288,
+      "sha256": "b8919e8da2b70f297bb62b0265ff1db5604a09c6c4cb935c843742c04769445a"
+    },
+    {
+      "path": "scripts/studio/verification/0.12.0/installed-current-01/readiness-phased/verify/ownership-physical-rendering.json",
+      "bytes": 288,
+      "sha256": "b8919e8da2b70f297bb62b0265ff1db5604a09c6c4cb935c843742c04769445a"
+    },
+    {
+      "path": "scripts/studio/verification/0.12.0/installed-current-01/readiness-phased/verify/ownership-ray-optics.json",
+      "bytes": 288,
+      "sha256": "b8919e8da2b70f297bb62b0265ff1db5604a09c6c4cb935c843742c04769445a"
+    },
+    {
+      "path": "scripts/studio/verification/0.12.0/installed-current-01/readiness-phased/verify/ownership-reconstruction.json",
+      "bytes": 288,
+      "sha256": "b8919e8da2b70f297bb62b0265ff1db5604a09c6c4cb935c843742c04769445a"
+    },
+    {
+      "path": "scripts/studio/verification/0.12.0/installed-current-01/readiness-phased/verify/ownership-retime.json",
+      "bytes": 288,
+      "sha256": "b8919e8da2b70f297bb62b0265ff1db5604a09c6c4cb935c843742c04769445a"
+    },
+    {
+      "path": "scripts/studio/verification/0.12.0/installed-current-01/readiness-phased/verify/ownership-scene-processing.json",
+      "bytes": 288,
+      "sha256": "b8919e8da2b70f297bb62b0265ff1db5604a09c6c4cb935c843742c04769445a"
+    },
+    {
+      "path": "scripts/studio/verification/0.12.0/installed-current-01/readiness-phased/verify/readiness-verification-report.json",
+      "bytes": 29783,
+      "sha256": "8dd544c219ff5c43ad32e81c2fb334de48b42b98b3a49747c20cb8df33a6e2f5"
+    },
+    {
+      "path": "scripts/studio/verification/0.12.0/core-acceptance-01/mac-frozen-source-binding.json",
+      "bytes": 530,
+      "sha256": "934e5b737e0a09d95cce67249d1c6a7067e7e228f0e400d8784f33fcee6b5e6c"
+    }
+  ]
+}

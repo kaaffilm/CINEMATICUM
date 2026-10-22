@@ -1,0 +1,35 @@
+{
+  "schema": "cinematicum-published-source-installed-reconciliation-v1",
+  "passed": true,
+  "checks": {
+    "exact_final_commit_and_clean_source": true,
+    "complete_declared_source_manifest_valid": true,
+    "accepted_runtime_native_installer_identity_unchanged": true,
+    "all_112_installed_runtime_payloads_match_publication": true,
+    "embedded_native_and_runtime_manifest_matches": true,
+    "native_executable_is_actual_accepted_build": true,
+    "whole_bundle_matches_final_native_preservation": true,
+    "prior_bundle_archive_preserved": true,
+    "owner_checkout_head_status_makefile_preserved": true,
+    "declared_documentation_only_reconciliation_passed": true
+  },
+  "source_commit": "dcea86196f81d6476a0f60538429b984b24c1129",
+  "accepted_core": "c9869e86b9421b7fdc083d249b1616114320f0d5",
+  "source_integrity_sha256": "f0ab0513951f5c62c0d990ac8f592d361e10415a27c1eab38e402f005bf8ee73",
+  "code_identity_sha256": "6141615ad83161ce8a83c94913f4e75e00d84ca8ad730a0d710524cd07bfd6dc",
+  "runtime_files": 112,
+  "bundle_files": 117,
+  "bundle_inventory_sha256": "0815da5bec19eb5c214496000e3a9ca07bdc8781fdebb3730a7e0fa79b5ea2c2",
+  "source_integrity": {
+    "passed": true,
+    "version": "0.12.0",
+    "version_matches": true,
+    "checked_files": 343,
+    "changed": [],
+    "missing": [],
+    "unexpected": [],
+    "untracked": [],
+    "invalid": []
+  },
+  "prior_full_test_report_not_relabelled": true
+}

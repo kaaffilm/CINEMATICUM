@@ -1,0 +1,13 @@
+{
+  "schema": "cinematicum-pr-ci-update-v1",
+  "passed": true,
+  "url": "https://github.com/kaaffilm/CINEMATICUM/pull/162",
+  "head": "dcea86196f81d6476a0f60538429b984b24c1129",
+  "title": "Studio 0.12: editable retiming, integrated production workflows and verified native release",
+  "is_draft": true,
+  "previous_body_sha256": "20832d83f6054982ed12bb956bdc7d63646fcacf4043d2e7e50d324cc859a78a",
+  "body_sha256": "ade7674faffc5e825b801957094dde300c4527e9683eedb90002e9274408733b",
+  "ci_run": 39780897825,
+  "ci_source_binding_sha256": "4fa773e251f54a75742c1adfc10c43b463d328cd4a9af75961ea364f44719c6d",
+  "source_commit_created": false
+}

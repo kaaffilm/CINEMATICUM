@@ -1,0 +1,31 @@
+{
+  "schema": "cinematicum-production-class-acceptance-build-v1",
+  "source": "/Users/midiakiasat/.midia-ai/gateway-live/workspaces/auto-049b4fce2e0098ab8912278756348132/scripts/studio/macos/StudioApp.swift",
+  "production_source_sha256": "5bc3028eb4921b8e1d11f1a0e3a4ab2116c6ddcadce43a3968e6b42a0e80e79b",
+  "unchanged_production_class_sha256": "36650303394fbb1169923b1d3d48e0cc4fe3443478d15f69294dbab82eec8bbb",
+  "removed_bootstrap_sha256": "1fb5d042cdbf6a4dc20622872bb3dae9147213e4d52de5c6618af49ddb9f9981",
+  "harness_sha256": "44ab3c17cb6c2d9237804e9e295251ade0cd3fe51c627674ebf05984640dfcb7",
+  "generated_source_sha256": "72d2265bf28c314c8b99c91cf2c451a50c7816086fbbf0eb1fa88bf60ac4b072",
+  "scope": "Unchanged production StudioAppDelegate class; isolated acceptance startup, not an installed-app launch",
+  "compiled": true,
+  "binary": "/Users/midiakiasat/Library/Application Support/CINEMATICUM/Verification/0.9.1-bundle-fixed-20261021-03/download04-build01/cinematicum-production-native-acceptance",
+  "binary_sha256": "4c32b7af89259bed262c97a33c6ccc440f207a5ab36665f3235d8ff4e0df36e3",
+  "command": [
+    "/usr/bin/xcrun",
+    "swiftc",
+    "-O",
+    "-swift-version",
+    "5",
+    "-framework",
+    "Cocoa",
+    "-framework",
+    "WebKit",
+    "-target",
+    "arm64-apple-macos12.0",
+    "-module-cache-path",
+    "/Users/midiakiasat/Library/Application Support/CINEMATICUM/Verification/0.9.1-bundle-fixed-20261021-03/download04-build01/module-cache",
+    "/Users/midiakiasat/Library/Application Support/CINEMATICUM/Verification/0.9.1-bundle-fixed-20261021-03/download04-build01/ProductionAcceptance.swift",
+    "-o",
+    "/Users/midiakiasat/Library/Application Support/CINEMATICUM/Verification/0.9.1-bundle-fixed-20261021-03/download04-build01/cinematicum-production-native-acceptance"
+  ]
+}

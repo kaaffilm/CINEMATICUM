@@ -1,0 +1,47 @@
+{
+  "browser_version": "134.0.6998.35",
+  "checks": {
+    "actual_export_decoder_and_clock_advance": true,
+    "export_belongs_to_owned_project": true,
+    "owned_real_frame_path": true,
+    "reopened_measured_profile": true
+  },
+  "completed_download_count": 1,
+  "download_errors": [],
+  "downloads": [
+    {
+      "path": "/workspace/scratch/091f394ee5df/cinematicum-013-integration/lens-browser-integrated-01/render/native_downloads/4e80efd1d5a342c0b8d217057306220e.mp4",
+      "state": "completed",
+      "suggested_filename": "4e80efd1d5a342c0b8d217057306220e.mp4",
+      "url": "http://127.0.0.1:39333/api/projects/da7b8709e8b34b13b46e88a93112cd9a/exports/4e80efd1d5a342c0b8d217057306220e.mp4?download=1"
+    }
+  ],
+  "elapsed_ms": 3154,
+  "expect_download": true,
+  "expected_download_count": 1,
+  "frames": {
+    "lensfun": {
+      "frame": 0,
+      "pixel_hash": "319d83ff",
+      "url": "/api/projects/da7b8709e8b34b13b46e88a93112cd9a/previews/737e3478ad9cd0c0bfe5a2dd6dfd1e006b41c62a82a9564d53da45e7dfec94d4.png"
+    }
+  },
+  "h264_decoder": "probably",
+  "metrics": {
+    "delivery": "h264",
+    "lens_id": "a7bbd6a9-5db7-4b8a-b00f-9fb6b75b1518",
+    "movie_href": "/api/projects/da7b8709e8b34b13b46e88a93112cd9a/exports/4e80efd1d5a342c0b8d217057306220e.mp4?download=1",
+    "playback": {
+      "mechanism": "shipped editor transport",
+      "time": 0.074177,
+      "url": "/api/projects/da7b8709e8b34b13b46e88a93112cd9a/exports/4e80efd1d5a342c0b8d217057306220e.mp4"
+    }
+  },
+  "native_certified": false,
+  "page_errors": [],
+  "passed": true,
+  "physical_open_panel_asserted": false,
+  "physical_save_panel_asserted": false,
+  "screenshot": "/workspace/scratch/091f394ee5df/cinematicum-013-integration/lens-browser-integrated-01/render/ENGINE_TEST_lens_models.png",
+  "transport": "Chromium"
+}

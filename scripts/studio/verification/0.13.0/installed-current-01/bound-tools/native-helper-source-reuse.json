@@ -1,0 +1,37 @@
+{
+  "schema": "cinematicum-native-test-helper-source-reuse-v1",
+  "scope": "SmokeTest source matches the accepted compiled helper. InstalledAppControl changed only its exact version/build guards; its actual 0.13 bounded native compilation passed and the exact transferred build receipt is retained. No installed 0.13 application launch is claimed.",
+  "source_base_commit": "dcea86196f81d6476a0f60538429b984b24c1129",
+  "helpers": [
+    {
+      "name": "SmokeTest",
+      "current_source": "scripts/studio/macos/SmokeTest.swift",
+      "current_source_sha256": "f6b3ee4295bcefe003c2220a7ed42a3dc4208a95ce6842936b8a901048aef6cd",
+      "accepted_build_record": "scripts/studio/verification/0.12.0/native-build/smoke-build-02.json",
+      "accepted_build_record_sha256": "b8da7878270894ae19377fdf7b752ef4ef919563350bd92343c58ed64efcc97c",
+      "accepted_binary_sha256": "c6b70d236c056a6ed3eaa08ef44aaa1672ecce904f8004095b69ac2a60f3bee7",
+      "source_equal": true,
+      "native_binary_rechecked_this_candidate": false,
+      "reuse_allowed_after_actual_binary_recheck": true
+    },
+    {
+      "name": "InstalledAppControl",
+      "current_source": "scripts/studio/verification/0.13.0/tools/installed-launch-01/InstalledAppControl.swift",
+      "current_source_sha256": "242ce3defae2a0d6f3466fb5a937776106081178cdbd40b16f55108a2fcf77e8",
+      "accepted_build_record": "scripts/studio/verification/0.12.0/installed-current-01/controller-build-02/build.json",
+      "accepted_build_record_sha256": "efe152e2ac9f0b2c68f88faa7e7274108fe1d1e48d2cf75a10c982b729646321",
+      "accepted_binary_sha256": "cdd2bfe16006d71e685f9ddc6bb844bdf8d970b9681217702c9aaeb70833b6f8",
+      "source_equal": false,
+      "native_binary_rechecked_this_candidate": true,
+      "reuse_allowed": false,
+      "change": "Only exact version/build constants: 0.12.0/13 to 0.13.0/14",
+      "fresh_compile_required": false,
+      "actual_0_13_build_record": "scripts/studio/verification/0.13.0/native-build/controller-build-01.json",
+      "actual_0_13_build_record_sha256": "71a35e6351e7a930da0767efa73a9e3ddf404ebf496b12bbf514c4c740db6462",
+      "actual_0_13_binary_sha256": "514babe113c42ae6f666b29ab0b934d878cbc50cf7d9053086fea60a72877101",
+      "actual_0_13_compilation_passed": true
+    }
+  ],
+  "passed": true,
+  "passed_scope": "Source comparison and required build decision completed; not native acceptance"
+}

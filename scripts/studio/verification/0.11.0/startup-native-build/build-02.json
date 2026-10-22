@@ -1,0 +1,28 @@
+{
+  "schema": "cinematicum-native-startup-quit-build-v1",
+  "compiled": true,
+  "production_source_sha256": "acf64f068cc870ed0bb4e458cb78359a830f007807a22f9bc933485aa2ae0b08",
+  "unchanged_production_class_sha256": "e611e726a29caafa0db6c7e3d7db7ac1ff47f85f874f9163de5d579951f48dcb",
+  "harness_sha256": "8dfdb2d5aa866349daefe81b7703435fe662731a7a09a1c1eb1f6b4d54ee0eba",
+  "generated_source_sha256": "64f294cf8a485b27d9f0e2ae6cf2d549b18defed21663739db7dc1aea507a9e2",
+  "binary": "/Users/midiakiasat/.midia-ai/gateway-live/acceptance/cinematicum-0.11-20261022-own-025436f6/startup-quit-build-02/cinematicum-startup-quit-acceptance",
+  "binary_sha256": "738f1ed8c137bdce9f8fedbe50463ef202801510cf256f48bd16842c444795eb",
+  "command": [
+    "/usr/bin/xcrun",
+    "swiftc",
+    "-O",
+    "-swift-version",
+    "5",
+    "-framework",
+    "Cocoa",
+    "-framework",
+    "WebKit",
+    "-target",
+    "arm64-apple-macos12.0",
+    "-module-cache-path",
+    "/Users/midiakiasat/.midia-ai/gateway-live/acceptance/cinematicum-0.11-20261022-own-025436f6/startup-quit-build-02/module-cache",
+    "/Users/midiakiasat/.midia-ai/gateway-live/acceptance/cinematicum-0.11-20261022-own-025436f6/startup-quit-build-02/StartupQuitAcceptance.swift",
+    "-o",
+    "/Users/midiakiasat/.midia-ai/gateway-live/acceptance/cinematicum-0.11-20261022-own-025436f6/startup-quit-build-02/cinematicum-startup-quit-acceptance"
+  ]
+}

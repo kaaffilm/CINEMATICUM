@@ -1,0 +1,44 @@
+{
+  "browser_version": "134.0.6998.35",
+  "completed_download_count": 1,
+  "download_errors": [],
+  "downloads": [
+    {
+      "path": "/workspace/scratch/091f394ee5df/cinematicum-012-browser-02/playback/native_downloads/66feb006f97045ac87722576051cd4ee.mov",
+      "state": "completed",
+      "suggested_filename": "66feb006f97045ac87722576051cd4ee.mov",
+      "url": "http://127.0.0.1:40909/api/projects/15730b3bfe7b4d1c88447e9b38844ace/exports/66feb006f97045ac87722576051cd4ee.mov?download=1"
+    }
+  ],
+  "elapsed_ms": 8030,
+  "expect_download": true,
+  "expected_download_count": 1,
+  "h264_decoder": "probably",
+  "metrics": {
+    "movie_href": "/api/projects/15730b3bfe7b4d1c88447e9b38844ace/exports/66feb006f97045ac87722576051cd4ee.mov?download=1",
+    "playback": {
+      "decoded_video_frames": 13,
+      "left_right_rms_ratio": 0.7638983712172973,
+      "media_time": 0.379271,
+      "peak": 0.08415544033050537,
+      "samples": 17408
+    },
+    "processed_pixel": [
+      145,
+      152,
+      136,
+      255
+    ]
+  },
+  "native_certified": false,
+  "page_errors": [],
+  "passed": true,
+  "screenshot": "/workspace/scratch/091f394ee5df/cinematicum-012-browser-02/playback/ENGINE_TEST_retime.png",
+  "steps": [
+    "actual_interpolated_paused_picture",
+    "play_uses_actual_rendered_preview",
+    "rendered_picture_clock_and_nonzero_stereo_audio",
+    "actual_prores_export_and_download"
+  ],
+  "transport": "Chromium"
+}

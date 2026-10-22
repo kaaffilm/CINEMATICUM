@@ -1,0 +1,47 @@
+{
+  "browser_version": "134.0.6998.35",
+  "checks": {
+    "actual_download_is_fcpxml": true,
+    "apply_is_unsaved_edit": true,
+    "download_review_preserves_saved_edit": true,
+    "downloaded_source_hashes_use_automatic_relink": true,
+    "explicit_control_value_exists": true,
+    "magnetic_connection_limit_shown": true,
+    "nested_reference_and_forward_time_map_remain_editable": true,
+    "one_redo_restores_imported_identity": true,
+    "one_undo_restores_original_cut": true,
+    "original_cut_visible_before_import": true,
+    "owned_fcpxml_attachment": true,
+    "public_time_map_and_compound_resources_exported": true,
+    "review_does_not_mutate_live_or_saved_edit": true,
+    "review_retains_exact_rational_extent": true,
+    "save_switch_reopen_preserves_complete_saved_edit": true,
+    "saved_exact_timeline_extent": true
+  },
+  "completed_download_count": 1,
+  "download_errors": [],
+  "downloads": [
+    {
+      "path": "/workspace/scratch/091f394ee5df/cinematicum-fcpxml-native-driver-05/author/native_downloads/05d2a9e0afca4344a22eb07ca0e5a120.fcpxml",
+      "state": "completed",
+      "suggested_filename": "05d2a9e0afca4344a22eb07ca0e5a120.fcpxml",
+      "url": "http://127.0.0.1:39529/api/projects/c796fd985f9c4cc1ad3a3b297759f1f7/exports/05d2a9e0afca4344a22eb07ca0e5a120.fcpxml?download=1"
+    }
+  ],
+  "elapsed_ms": 1756,
+  "expect_download": true,
+  "expected_download_count": 1,
+  "frames": {},
+  "h264_decoder": "probably",
+  "metrics": {
+    "fcpxml_href": "/api/projects/c796fd985f9c4cc1ad3a3b297759f1f7/exports/05d2a9e0afca4344a22eb07ca0e5a120.fcpxml?download=1",
+    "review_save_state": "LOCAL PROJECT"
+  },
+  "native_certified": false,
+  "page_errors": [],
+  "passed": true,
+  "physical_open_panel_asserted": false,
+  "physical_save_panel_asserted": false,
+  "screenshot": "/workspace/scratch/091f394ee5df/cinematicum-fcpxml-native-driver-05/author/ENGINE_TEST_fcpxml.png",
+  "transport": "Chromium"
+}

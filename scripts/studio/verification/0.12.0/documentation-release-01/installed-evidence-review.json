@@ -1,0 +1,87 @@
+{
+  "accepted_core_commit": "c9869e86b9421b7fdc083d249b1616114320f0d5",
+  "accepted_core_manifest_sha256": "31125bf9cef0a920bc0a5e45b2f132fdfbf4d3a5640d55cb01af372266d736d3",
+  "accepted_core_tree": "941da9dbc805788a89c610ee688cc17de08fccc4",
+  "actual_mac_source_files_compared": 344,
+  "bundle_files": 117,
+  "final_preservation_checks": 6,
+  "final_preservation_elapsed_seconds": 2.674,
+  "force_termination_used": false,
+  "installation_checks": 5,
+  "installed_launch_checks": 16,
+  "installed_launch_elapsed_seconds": 7.028,
+  "passed": true,
+  "readiness_phases": [
+    {
+      "checks": 14,
+      "elapsed_seconds": 3.613,
+      "report_sha256": "52088e7f2705953ace1d2d113ca5025e50ba97260e43dc1003290b7a85cb4780",
+      "tool": "deep"
+    },
+    {
+      "checks": 14,
+      "elapsed_seconds": 14.404,
+      "report_sha256": "469137ad4b375a66e816551c090acc3d29a21bf25725f3187c6fae78d45d7c61",
+      "tool": "ray-optics"
+    },
+    {
+      "checks": 14,
+      "elapsed_seconds": 3.985,
+      "report_sha256": "605b7de85a068c98dcd1df3f17d54eb848ca7e64cfc6ecbe6320e61d0a456e63",
+      "tool": "physical-rendering"
+    },
+    {
+      "checks": 14,
+      "elapsed_seconds": 5.817,
+      "report_sha256": "65655c15ff783d2e015b7e307f365ddeba8969cabe091494a2ca9e2c01120aa8",
+      "tool": "learned"
+    },
+    {
+      "checks": 14,
+      "elapsed_seconds": 3.287,
+      "report_sha256": "98976cf912cb1f85e3a13357c8472a79f1befd91eb92ffd352d1c83f042f84bc",
+      "tool": "reconstruction"
+    },
+    {
+      "checks": 14,
+      "elapsed_seconds": 2.772,
+      "report_sha256": "45799965157b31a88a6a7e7a9e95d40ce85255e8d8b31c60f9e9a7e1e5c4d4d7",
+      "tool": "scene-processing"
+    },
+    {
+      "checks": 14,
+      "elapsed_seconds": 2.648,
+      "report_sha256": "05bcb1b32c9eab2d4ca5569fcb701dcf327c5e5a3aebc8aa9f13c7852c809634",
+      "tool": "multicam-sync"
+    },
+    {
+      "checks": 14,
+      "elapsed_seconds": 3.503,
+      "report_sha256": "73bca3a347351c02d7236487ef7baf74b3e26bb5476cc95733717690548910e1",
+      "tool": "retime"
+    }
+  ],
+  "readiness_preparation_checks": 5,
+  "readiness_preparation_elapsed_seconds": 3.709,
+  "readiness_total_phase_checks": 112,
+  "recorded_phased_commands_copied": true,
+  "review_only_no_native_execution": true,
+  "runtime_payloads_matched_to_local_core": 112,
+  "schema": "cinematicum-0.12-public-installed-evidence-review-v1",
+  "transferred_files_verified": 88,
+  "workspace_before": {
+    "file_count": 57,
+    "inventory_sha256": "f3e2a94dd77fa0c4e8299121803952b91c613d13c69f7eb4b0267fb4087b860b",
+    "total_bytes": 2858334304
+  },
+  "workspace_comparison": {
+    "added_derivative_count": 0,
+    "changed_count": 0,
+    "changed_path_sha256": [],
+    "missing_count": 0,
+    "missing_path_sha256": [],
+    "passed": true,
+    "unexpected_added_count": 0,
+    "unexpected_added_path_sha256": []
+  }
+}

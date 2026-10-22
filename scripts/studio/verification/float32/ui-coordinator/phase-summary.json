@@ -1,0 +1,33 @@
+{
+  "passed": true,
+  "native_certified": false,
+  "phases": [
+    {
+      "phase": "prepare",
+      "passed": true,
+      "checks": 3,
+      "ui_checks": 0,
+      "elapsed_seconds": 1.316,
+      "error": null,
+      "native_certified": false
+    },
+    {
+      "phase": "author",
+      "passed": true,
+      "checks": 9,
+      "ui_checks": 8,
+      "elapsed_seconds": 5.009,
+      "error": null,
+      "native_certified": false
+    },
+    {
+      "phase": "render",
+      "passed": true,
+      "checks": 16,
+      "ui_checks": 5,
+      "elapsed_seconds": 5.134,
+      "error": null,
+      "native_certified": false
+    }
+  ]
+}

@@ -1,0 +1,13 @@
+tree 941da9dbc805788a89c610ee688cc17de08fccc4
+parent 530ba2400571a8b67efa2d9ab28997f65920c006
+author midiakiasat <midiakiasat@users.noreply.github.com> 1792671386 +0000
+committer midiakiasat <midiakiasat@users.noreply.github.com> 1792671386 +0000
+
+Implement Studio 0.12 speed ramps and optical-flow retiming
+
+Add editable source time curves, actual dense-flow picture interpolation,
+and anti-aliased varispeed audio with retained routing and edit history.
+Preserve original media through split, trim, save/reopen and archives.
+
+Require exact download completion in native and browser acceptance and
+cover delayed registration and missing files with real browser tests.

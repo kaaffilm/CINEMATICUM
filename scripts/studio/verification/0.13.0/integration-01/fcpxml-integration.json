@@ -1,0 +1,104 @@
+{
+  "schema": "cinematicum-fcpxml-integration-v1",
+  "base_commit": "dcea86196f81d6476a0f60538429b984b24c1129",
+  "feature_manifest": {
+    "schema": "cinematicum-fcpxml-feature-handoff-v1",
+    "base_commit": "c9869e86b9421b7fdc083d249b1616114320f0d5",
+    "base_tree": "941da9dbc805788a89c610ee688cc17de08fccc4",
+    "paths": [
+      {
+        "path": "scripts/studio/fcpxml.py",
+        "bytes": 64549,
+        "sha256": "d2eb27d14243d6d51e3d19325d09101fe9a67209231e79d92a101bfbe8b14064",
+        "base_sha256": null
+      },
+      {
+        "path": "scripts/studio/server.py",
+        "bytes": 108003,
+        "sha256": "06a2ffa157f339d64a93f4ed923bf6af3764e33697d808ddef0b7bc40c56595e",
+        "base_sha256": "baee0a0ab0ab697a8316fef0e59025f41de02a6274f5dbdb5b7d273315cdf9e1"
+      },
+      {
+        "path": "scripts/studio/install_macos.py",
+        "bytes": 19900,
+        "sha256": "8291966a06594387db5fbf0aa6106abebd4593ea6296a15d1b9fb1587c5b862c",
+        "base_sha256": "04dc936cbc00eeb4c9d2fe71bbb63976c43e75a7d2c34455860981f358cfea11"
+      },
+      {
+        "path": "scripts/studio/web/interchange-ui.js",
+        "bytes": 24087,
+        "sha256": "e0b74c54728de48e136e1d0c40608da63785847a1fdf5c93acbd377da2df3923",
+        "base_sha256": "58bbeee0061c5b1f74dbaa89a4acded0f28991eb3f254d52fe215300632c241f"
+      },
+      {
+        "path": "scripts/studio/web/index.html",
+        "bytes": 19654,
+        "sha256": "2707509f6e8c17250e2fea625cd23fefdac9f4be693d1e9153481d0711c2c2c0",
+        "base_sha256": "feed37bda02ac6b389339d221573ab4cc08205d4fcfd464cf92261073879ec44"
+      },
+      {
+        "path": "scripts/studio/test_fcpxml.py",
+        "bytes": 24072,
+        "sha256": "2c633fb6d7b438ac5bd9108b6d36a715a81caf5b928c75adf23451052cd6591a",
+        "base_sha256": null
+      },
+      {
+        "path": "scripts/studio/FCPXML_INTERCHANGE.md",
+        "bytes": 12369,
+        "sha256": "003b1abfd36bd0f1ebbc845b4c8a71c51798fb86584b6a164608d881fb009295",
+        "base_sha256": null
+      }
+    ],
+    "patch_sha256": "7828902ad6e197197f17287e30c9772e7ae36428a2b36fcb265c44d1248e2865",
+    "patch_bytes": 138630,
+    "production_engine_changed": false,
+    "new_runtime_dependencies": []
+  },
+  "paths": [
+    {
+      "path": "scripts/studio/fcpxml.py",
+      "before_sha256": null,
+      "feature_sha256": "d2eb27d14243d6d51e3d19325d09101fe9a67209231e79d92a101bfbe8b14064",
+      "after_sha256": "d2eb27d14243d6d51e3d19325d09101fe9a67209231e79d92a101bfbe8b14064"
+    },
+    {
+      "path": "scripts/studio/server.py",
+      "before_sha256": "823b9cf270f30c065749d7686ec641dc28ac2afbbd864c2220cf333b31721dec",
+      "feature_sha256": "06a2ffa157f339d64a93f4ed923bf6af3764e33697d808ddef0b7bc40c56595e",
+      "after_sha256": "b777f2502216f9dac29156bc50ca4267bcb95b2001a66bef37d3eb44e5777921"
+    },
+    {
+      "path": "scripts/studio/install_macos.py",
+      "before_sha256": "aae8a7f6f499137bc0c34530349fe5aa304c138ef5fdeded0b17b7daed1940cf",
+      "feature_sha256": "8291966a06594387db5fbf0aa6106abebd4593ea6296a15d1b9fb1587c5b862c",
+      "after_sha256": "c6df70dc4cfa5e841ae951263f90b7a43e09ed579553b535034cba50d074e7d6"
+    },
+    {
+      "path": "scripts/studio/web/interchange-ui.js",
+      "before_sha256": "58bbeee0061c5b1f74dbaa89a4acded0f28991eb3f254d52fe215300632c241f",
+      "feature_sha256": "e0b74c54728de48e136e1d0c40608da63785847a1fdf5c93acbd377da2df3923",
+      "after_sha256": "e0b74c54728de48e136e1d0c40608da63785847a1fdf5c93acbd377da2df3923"
+    },
+    {
+      "path": "scripts/studio/web/index.html",
+      "before_sha256": "feed37bda02ac6b389339d221573ab4cc08205d4fcfd464cf92261073879ec44",
+      "feature_sha256": "2707509f6e8c17250e2fea625cd23fefdac9f4be693d1e9153481d0711c2c2c0",
+      "after_sha256": "2707509f6e8c17250e2fea625cd23fefdac9f4be693d1e9153481d0711c2c2c0"
+    },
+    {
+      "path": "scripts/studio/test_fcpxml.py",
+      "before_sha256": null,
+      "feature_sha256": "2c633fb6d7b438ac5bd9108b6d36a715a81caf5b928c75adf23451052cd6591a",
+      "after_sha256": "2c633fb6d7b438ac5bd9108b6d36a715a81caf5b928c75adf23451052cd6591a"
+    },
+    {
+      "path": "scripts/studio/FCPXML_INTERCHANGE.md",
+      "before_sha256": null,
+      "feature_sha256": "003b1abfd36bd0f1ebbc845b4c8a71c51798fb86584b6a164608d881fb009295",
+      "after_sha256": "003b1abfd36bd0f1ebbc845b4c8a71c51798fb86584b6a164608d881fb009295"
+    }
+  ],
+  "server": "FCPXML dispatch applied cleanly while preserving the lensfun-import route",
+  "installer": "Manually added only fcpxml.py alongside the existing lens_geometry.py runtime entry",
+  "passed": true
+}

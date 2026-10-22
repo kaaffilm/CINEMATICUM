@@ -1,0 +1,31 @@
+{
+  "schema": "cinematicum-startup-quit-verification-v1",
+  "browser": {
+    "checks": 39,
+    "passed": true,
+    "elapsed_seconds": 21.651
+  },
+  "shutdown_suite": {
+    "command": "/workspace/scratch/091f394ee5df/cinematicum-runtimes/verification/bin/python -B -m unittest test_shutdown -v",
+    "tests": 5,
+    "failures": 0,
+    "errors": 0,
+    "elapsed_seconds": 0.146
+  },
+  "syntax": {
+    "javascript": [
+      "web/app.js",
+      "test_startup_quit_browser.cjs"
+    ],
+    "python": [
+      "build_startup_quit.py",
+      "test_startup_quit_macos.py",
+      "startup_quit_fixture.py"
+    ],
+    "passed": true
+  },
+  "native_compiled": false,
+  "native_acceptance_passed": false,
+  "installed_application_certified": false,
+  "original_native_failure_cause": "Not conclusively observed; both documented startup races were reproduced independently."
+}

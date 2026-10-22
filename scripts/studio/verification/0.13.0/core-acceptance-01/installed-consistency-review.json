@@ -1,0 +1,93 @@
+{
+  "all_reported_checks_true": true,
+  "core_commit": "cdd15816c228fe4133fbb3ce6d90978333d699e6",
+  "core_tree": "a62ce29a8af68b38d14820c45fc42e1266762e34",
+  "external_guard_tests": 6,
+  "external_helper_changed_only_four_identity_constants": true,
+  "final_preservation_gates": 6,
+  "final_preservation_seconds": 2.186,
+  "install_gates": 5,
+  "installed_bundle_files": 119,
+  "installed_inventory_sha256": "ce983bba3a03ce13b965d779b26b04ed8cbc40bb111d9f43999a9e11ee583672",
+  "installed_runtime_files": 114,
+  "launch_gates": 16,
+  "launch_seconds": 6.972,
+  "mac_frozen_source_records_compared": 368,
+  "native_sha256": "ca2a5bf65d934b87b0dfafc55392b648bda650c1c7ce76491cc5b21e20a84b39",
+  "original_text_files": 99,
+  "passed": true,
+  "protected_install_project_bytes": 2858334501,
+  "protected_install_project_files": 59,
+  "protected_readiness_bytes": 2858334304,
+  "protected_readiness_files": 57,
+  "raw_media_copied": false,
+  "readiness_prepare_gates": 5,
+  "readiness_prepare_seconds": 10.163,
+  "receipt_hashes": {
+    "final_preservation": "56a15e8249f9e8b22ab04170e89671a4f576cc304570ae1c9194382b6155ccdd",
+    "installation": "c096f0aa20fca94bd5e1e2c352e062b423f90c50961a87dd092c52de5873ddc5",
+    "launch": "c32618ede19c254250d41e7e93a327cf03c6b03f25592c0998b6d4fb99056e14",
+    "tool_binding": "a802f92ad5a9b41a03b28610551d41c1ecf313522a09801c418272d33afd0c08"
+  },
+  "runtime_phases": [
+    {
+      "checks": 14,
+      "report": "scripts/studio/verification/0.13.0/installed-current-01/readiness-phased/deep/tool-report.json",
+      "report_sha256": "8e1870e7aa581d0db47807c9792ecb19aed2b5a77f97e25df6b147317badd93b",
+      "seconds": 6.174,
+      "tool": "deep"
+    },
+    {
+      "checks": 14,
+      "report": "scripts/studio/verification/0.13.0/installed-current-01/readiness-phased/ray-optics/tool-report.json",
+      "report_sha256": "b921a4c8ca2951f18172ea0f5044f070b7ce66008568801b1e0da246b92aac6a",
+      "seconds": 13.285,
+      "tool": "ray-optics"
+    },
+    {
+      "checks": 14,
+      "report": "scripts/studio/verification/0.13.0/installed-current-01/readiness-phased/physical-rendering/tool-report.json",
+      "report_sha256": "c63b5995307f9db17f6560fc3b22c1b6db750f0d2ea29885bcce2e02190bd62e",
+      "seconds": 3.641,
+      "tool": "physical-rendering"
+    },
+    {
+      "checks": 14,
+      "report": "scripts/studio/verification/0.13.0/installed-current-01/readiness-phased/learned/tool-report.json",
+      "report_sha256": "fee84ea30b94c8ad152b20382b66e5bf2fe63ca0059db35a520fdcbf9efd414a",
+      "seconds": 5.373,
+      "tool": "learned"
+    },
+    {
+      "checks": 14,
+      "report": "scripts/studio/verification/0.13.0/installed-current-01/readiness-phased/reconstruction/tool-report.json",
+      "report_sha256": "dbef1dc060cb426caaecbf701f8dcdabe7b85dc3ec9dd31ebeb65404a3eb38fb",
+      "seconds": 7.902,
+      "tool": "reconstruction"
+    },
+    {
+      "checks": 14,
+      "report": "scripts/studio/verification/0.13.0/installed-current-01/readiness-phased/scene-processing/tool-report.json",
+      "report_sha256": "6ba144ab6528c62b54c1467361f6873e45f71b496465303dace03395eaca260d",
+      "seconds": 1.934,
+      "tool": "scene-processing"
+    },
+    {
+      "checks": 14,
+      "report": "scripts/studio/verification/0.13.0/installed-current-01/readiness-phased/multicam-sync/tool-report.json",
+      "report_sha256": "f053f0b5d55e284a02d1fc9c07c81a21254be6578f0dcd6b15ce27296b6fc546",
+      "seconds": 2.523,
+      "tool": "multicam-sync"
+    },
+    {
+      "checks": 14,
+      "report": "scripts/studio/verification/0.13.0/installed-current-01/readiness-phased/retime/tool-report.json",
+      "report_sha256": "7865965053982c8119e6ef9d50934844a38a48641a3b9920d36ac982b21848bd",
+      "seconds": 2.255,
+      "tool": "retime"
+    }
+  ],
+  "schema": "cinematicum-0.13-installed-evidence-consistency-v1",
+  "scope": "Read-only original receipt/file/hash and source-binding comparison; no new native execution",
+  "source_manifest_sha256": "21034979d805cdf680c255720f6311319f3fc22c2b405dbd43294a5485d09f8d"
+}

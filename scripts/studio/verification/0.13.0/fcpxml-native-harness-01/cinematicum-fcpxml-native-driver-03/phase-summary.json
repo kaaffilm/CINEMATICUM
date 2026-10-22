@@ -1,0 +1,22 @@
+{
+  "native_certified": false,
+  "passed": false,
+  "phases": [
+    {
+      "checks": 10,
+      "elapsed_seconds": 1.294,
+      "error": null,
+      "native_certified": false,
+      "operation": "prepare",
+      "passed": true
+    },
+    {
+      "checks": 6,
+      "elapsed_seconds": 2.874,
+      "error": "Error: download_review_preserves_saved_edit; interchange=Review the imported timeline and warnings before applying it.; frame=Rendering current frame\u2026; job=Rendering / ; toast=Project saved.",
+      "native_certified": false,
+      "operation": "author",
+      "passed": false
+    }
+  ]
+}

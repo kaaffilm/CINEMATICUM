@@ -1,0 +1,33 @@
+{
+  "schema": "cinematicum-float32-ui-acceptance-v1",
+  "phase": "prepare",
+  "passed": true,
+  "engine_test_only": true,
+  "transport": "Chromium",
+  "native_certified": false,
+  "issuance_effect": "NONE",
+  "checks": {
+    "actual_source_media_admitted": true,
+    "saved_float_multitrack_fixture": true,
+    "source_unchanged": true
+  },
+  "source_sha256": {
+    "float_movie.py": "2a889c728138e244996816f7a785f051e9564fa2e68e6b9a8e2788c870fdd2bd",
+    "float_movie_worker.py": "757cf805c74173b1a1bf5e6dfec3d236d9b7a53175c7259a81db129b617570b3",
+    "engine.py": "054c4f56f284241f8748298c6f0922958d12065645ecb536f3ba342da011c959",
+    "image_worker.py": "d90a704768d7ce46205ca9de1f7840a8a70b0809c864c3760f7d5b0a6ee1c748",
+    "imaging.py": "bfd1d3bede15c35946ade43e127173ccb2d39aad3f0c84208150b5bf61621da5",
+    "timebase.py": "4bb129c0545741ef69c73f509d0cac8a943da18f01322c64b7029b676ae33ca8",
+    "frame_preview.py": "4f1e3374fd4c095fc21a6656929f37eef26185f8ff486d6d6d868b467436981d",
+    "server.py": "e5ee1f0f2f7bb3e01c1aa2fe72bdc77b847713e6770d2585750404a37fb95057",
+    "project_archive.py": "319e58348e5c969fbedd185bb45d94287ee33115355a4b5ed21128f6ebff675d",
+    "web/app.js": "600be72675b518ae27cf201fe0e6e22888355eee6ba1738cf33bc54cc929c60e",
+    "web/index.html": "e012eb5f0d357e2bee85e87aadad509199e8f17f5365afa89140d1f2b0ef1a61",
+    "web/viewer-tools.js": "38b2104eaf3571e338100b2f26336ec8b10ec68460e4405b8b04a5c743e12fad",
+    "web/float-movie-ui.js": "521c0d85a7c68ed4448593fc65b31cd213fd567327381902c4f6f6618ed1dccd",
+    "macos/FloatMovieSmoke.js": "53c2c1226cb76501282d02d3232301db3cd2292d5d6e6c9363fb0d5d7fa3aa9d",
+    "test_float_movie_ui_macos.py": "f127e4e19ec2f46157d95cef3e34755f38f2c617eda60da0a6038d524d2a0c1e"
+  },
+  "scope": "Shipped controls and real downloaded EXR/audio bytes. Explicit evidence destination; physical input, NSSavePanel, installed launcher, HDR monitoring and calibrated display are not certified.",
+  "elapsed_seconds": 1.316
+}

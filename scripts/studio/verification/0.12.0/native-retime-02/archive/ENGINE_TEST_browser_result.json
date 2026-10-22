@@ -1,0 +1,37 @@
+{
+  "completed_download_count": 2,
+  "download_destination_policy": "explicit test evidence directory; no save panel is simulated",
+  "download_errors": [],
+  "downloads": [
+    {
+      "bytes": 789530,
+      "path": "/Users/midiakiasat/.midia-ai/gateway-live/acceptance/cinematicum-0.12-20261022-own-061702ff/retime-native-02/archive/native_downloads/ENGINE_TEST_959DE1B5-C51D-4046-844F-A93043AE8296_5625c2d77a27454e959ebec6c3930b76.cinematicum.zip",
+      "state": "completed",
+      "suggested_filename": "5625c2d77a27454e959ebec6c3930b76.cinematicum.zip",
+      "url": "http://127.0.0.1:58534/api/projects/203f02164be548c4839b7013bcc454a2/exports/5625c2d77a27454e959ebec6c3930b76.cinematicum.zip?download=1"
+    },
+    {
+      "bytes": 180643,
+      "path": "/Users/midiakiasat/.midia-ai/gateway-live/acceptance/cinematicum-0.12-20261022-own-061702ff/retime-native-02/archive/native_downloads/ENGINE_TEST_AFBDAA70-C493-40F0-9454-DE8C7A129EFB_727b10d2f1bb4e90a4867943ed3c39c7.mov",
+      "state": "completed",
+      "suggested_filename": "727b10d2f1bb4e90a4867943ed3c39c7.mov",
+      "url": "http://127.0.0.1:58534/api/projects/41cf10dd38104d7a840f533215f55728/exports/727b10d2f1bb4e90a4867943ed3c39c7.mov?download=1"
+    }
+  ],
+  "elapsed_ms": 4401,
+  "expect_download": true,
+  "expected_download_count": 2,
+  "metrics": {
+    "movie_href": "/api/projects/41cf10dd38104d7a840f533215f55728/exports/727b10d2f1bb4e90a4867943ed3c39c7.mov?download=1",
+    "restored_project_id": "41cf10dd38104d7a840f533215f55728"
+  },
+  "page_errors": [],
+  "passed": true,
+  "screenshot": "/Users/midiakiasat/.midia-ai/gateway-live/acceptance/cinematicum-0.12-20261022-own-061702ff/retime-native-02/archive/ENGINE_TEST_retime.png",
+  "screenshot_bytes": 348569,
+  "steps": [
+    "actual_archive_download_and_file_upload",
+    "restored_new_identity_keeps_editable_ramps",
+    "restored_picture_audio_render_and_download"
+  ]
+}

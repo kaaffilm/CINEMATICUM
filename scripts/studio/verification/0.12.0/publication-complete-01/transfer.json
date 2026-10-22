@@ -1,0 +1,49 @@
+{
+  "schema": "cinematicum-publication-receipt-transfer-v1",
+  "runs": [
+    {
+      "conclusion": "",
+      "databaseId": 39780897825,
+      "event": "pull_request",
+      "headSha": "dcea86196f81d6476a0f60538429b984b24c1129",
+      "status": "in_progress",
+      "url": "https://github.com/kaaffilm/CINEMATICUM/actions/runs/39780897825",
+      "workflowName": "Studio media verification"
+    },
+    {
+      "conclusion": "",
+      "databaseId": 39780887699,
+      "event": "push",
+      "headSha": "dcea86196f81d6476a0f60538429b984b24c1129",
+      "status": "in_progress",
+      "url": "https://github.com/kaaffilm/CINEMATICUM/actions/runs/39780887699",
+      "workflowName": "Studio media verification"
+    }
+  ],
+  "files": [
+    {
+      "name": "publication-materialized.json",
+      "bytes": 267,
+      "sha256": "9fc8891bcc4dc704fab27687c4399faffb7dd8fb3ff3aa838db5b4d7f2e2f27e",
+      "text": "{\n  \"passed\": true,\n  \"commit\": \"dcea86196f81d6476a0f60538429b984b24c1129\",\n  \"tree\": \"bcc211cff651a3773ae09823758e3add0d8e2e96\",\n  \"base_commit\": \"c9869e86b9421b7fdc083d249b1616114320f0d5\",\n  \"files\": 309,\n  \"source_tracked_clean\": true,\n  \"all_exact_bytes\": true\n}\n"
+    },
+    {
+      "name": "publication-push-result.json",
+      "bytes": 879,
+      "sha256": "bafcc3e8de193ad1a8745fd60b22bb2c19eff414e833241aea08bbf2895e8e5e",
+      "text": "{\n  \"schema\": \"cinematicum-reviewed-publication-push-v1\",\n  \"old\": \"a031a04e19007f7bac252c1f5b0f8d66db15371a\",\n  \"commit\": \"dcea86196f81d6476a0f60538429b984b24c1129\",\n  \"branch\": \"midia/cinematicum-functional-media-workbench-656cfb38\",\n  \"ancestor_verified\": true,\n  \"expected_remote_explicit\": true,\n  \"argv\": [\n    \"git\",\n    \"push\",\n    \"--porcelain\",\n    \"--force-with-lease=refs/heads/midia/cinematicum-functional-media-workbench-656cfb38:a031a04e19007f7bac252c1f5b0f8d66db15371a\",\n    \"origin\",\n    \"dcea86196f81d6476a0f60538429b984b24c1129:refs/heads/midia/cinematicum-functional-media-workbench-656cfb38\"\n  ],\n  \"exit_code\": 0,\n  \"stdout\": \"To https://github.com/kaaffilm/CINEMATICUM.git\\n \\tdcea86196f81d6476a0f60538429b984b24c1129:refs/heads/midia/cinematicum-functional-media-workbench-656cfb38\\ta031a04..dcea861\\nDone\\n\",\n  \"stderr\": \"\",\n  \"elapsed_seconds\": 4.321\n}\n"
+    },
+    {
+      "name": "publication-pr-update.json",
+      "bytes": 3631,
+      "sha256": "b8c3392bc678b85d0a47f464f0cb58522cdc9a8e207e94a630361bab193da7d8",
+      "text": "{\n  \"passed\": true,\n  \"head\": \"dcea86196f81d6476a0f60538429b984b24c1129\",\n  \"title\": \"Studio 0.12: editable retiming, integrated production workflows and verified native release\",\n  \"body_sha256\": \"20832d83f6054982ed12bb956bdc7d63646fcacf4043d2e7e50d324cc859a78a\",\n  \"is_draft\": true,\n  \"url\": \"https://github.com/kaaffilm/CINEMATICUM/pull/162\",\n  \"runs\": [\n    {\n      \"conclusion\": \"success\",\n      \"databaseId\": 39780897833,\n      \"event\": \"pull_request\",\n      \"headSha\": \"dcea86196f81d6476a0f60538429b984b24c1129\",\n      \"status\": \"completed\",\n      \"url\": \"https://github.com/kaaffilm/CINEMATICUM/actions/runs/39780897833\",\n      \"workflowName\": \"godstudio-verification\"\n    },\n    {\n      \"conclusion\": \"success\",\n      \"databaseId\": 39780897808,\n      \"event\": \"pull_request\",\n      \"headSha\": \"dcea86196f81d6476a0f60538429b984b24c1129\",\n      \"status\": \"completed\",\n      \"url\": \"https://github.com/kaaffilm/CINEMATICUM/actions/runs/39780897808\",\n      \"workflowName\": \"godcut-verification\"\n    },\n    {\n      \"conclusion\": \"success\",\n      \"databaseId\": 39780897813,\n      \"event\": \"pull_request\",\n      \"headSha\": \"dcea86196f81d6476a0f60538429b984b24c1129\",\n      \"status\": \"completed\",\n      \"url\": \"https://github.com/kaaffilm/CINEMATICUM/actions/runs/39780897813\",\n      \"workflowName\": \"director-engine-verification\"\n    },\n    {\n      \"conclusion\": \"success\",\n      \"databaseId\": 39780897732,\n      \"event\": \"pull_request\",\n      \"headSha\": \"dcea86196f81d6476a0f60538429b984b24c1129\",\n      \"status\": \"completed\",\n      \"url\": \"https://github.com/kaaffilm/CINEMATICUM/actions/runs/39780897732\",\n      \"workflowName\": \"product-boundary-verification\"\n    },\n    {\n      \"conclusion\": \"success\",\n      \"databaseId\": 39780897811,\n      \"event\": \"pull_request\",\n      \"headSha\": \"dcea86196f81d6476a0f60538429b984b24c1129\",\n      \"status\": \"completed\",\n      \"url\": \"https://github.com/kaaffilm/CINEMATICUM/actions/runs/39780897811\",\n      \"workflowName\": \"no-toy-film-stack\"\n    },\n    {\n      \"conclusion\": \"\",\n      \"databaseId\": 39780897825,\n      \"event\": \"pull_request\",\n      \"headSha\": \"dcea86196f81d6476a0f60538429b984b24c1129\",\n      \"status\": \"in_progress\",\n      \"url\": \"https://github.com/kaaffilm/CINEMATICUM/actions/runs/39780897825\",\n      \"workflowName\": \"Studio media verification\"\n    },\n    {\n      \"conclusion\": \"\",\n      \"databaseId\": 39780897887,\n      \"event\": \"pull_request\",\n      \"headSha\": \"dcea86196f81d6476a0f60538429b984b24c1129\",\n      \"status\": \"in_progress\",\n      \"url\": \"https://github.com/kaaffilm/CINEMATICUM/actions/runs/39780897887\",\n      \"workflowName\": \"public-auditor-runner\"\n    },\n    {\n      \"conclusion\": \"success\",\n      \"databaseId\": 39780897707,\n      \"event\": \"pull_request\",\n      \"headSha\": \"dcea86196f81d6476a0f60538429b984b24c1129\",\n      \"status\": \"completed\",\n      \"url\": \"https://github.com/kaaffilm/CINEMATICUM/actions/runs/39780897707\",\n      \"workflowName\": \"public-release-consumption\"\n    },\n    {\n      \"conclusion\": \"success\",\n      \"databaseId\": 39780897799,\n      \"event\": \"pull_request\",\n      \"headSha\": \"dcea86196f81d6476a0f60538429b984b24c1129\",\n      \"status\": \"completed\",\n      \"url\": \"https://github.com/kaaffilm/CINEMATICUM/actions/runs/39780897799\",\n      \"workflowName\": \"outsider-reproducible-release\"\n    },\n    {\n      \"conclusion\": \"success\",\n      \"databaseId\": 39780897627,\n      \"event\": \"pull_request\",\n      \"headSha\": \"dcea86196f81d6476a0f60538429b984b24c1129\",\n      \"status\": \"completed\",\n      \"url\": \"https://github.com/kaaffilm/CINEMATICUM/actions/runs/39780897627\",\n      \"workflowName\": \"public-release-lineage\"\n    }\n  ]\n}\n"
+    },
+    {
+      "name": "published-installed-reconciliation.json",
+      "bytes": 1423,
+      "sha256": "6496793610329fe81d32d0a27e72999c38cf21739772c05abf7beacf4292ebc7",
+      "text": "{\n  \"schema\": \"cinematicum-published-source-installed-reconciliation-v1\",\n  \"passed\": true,\n  \"checks\": {\n    \"exact_final_commit_and_clean_source\": true,\n    \"complete_declared_source_manifest_valid\": true,\n    \"accepted_runtime_native_installer_identity_unchanged\": true,\n    \"all_112_installed_runtime_payloads_match_publication\": true,\n    \"embedded_native_and_runtime_manifest_matches\": true,\n    \"native_executable_is_actual_accepted_build\": true,\n    \"whole_bundle_matches_final_native_preservation\": true,\n    \"prior_bundle_archive_preserved\": true,\n    \"owner_checkout_head_status_makefile_preserved\": true,\n    \"declared_documentation_only_reconciliation_passed\": true\n  },\n  \"source_commit\": \"dcea86196f81d6476a0f60538429b984b24c1129\",\n  \"accepted_core\": \"c9869e86b9421b7fdc083d249b1616114320f0d5\",\n  \"source_integrity_sha256\": \"f0ab0513951f5c62c0d990ac8f592d361e10415a27c1eab38e402f005bf8ee73\",\n  \"code_identity_sha256\": \"6141615ad83161ce8a83c94913f4e75e00d84ca8ad730a0d710524cd07bfd6dc\",\n  \"runtime_files\": 112,\n  \"bundle_files\": 117,\n  \"bundle_inventory_sha256\": \"0815da5bec19eb5c214496000e3a9ca07bdc8781fdebb3730a7e0fa79b5ea2c2\",\n  \"source_integrity\": {\n    \"passed\": true,\n    \"version\": \"0.12.0\",\n    \"version_matches\": true,\n    \"checked_files\": 343,\n    \"changed\": [],\n    \"missing\": [],\n    \"unexpected\": [],\n    \"untracked\": [],\n    \"invalid\": []\n  },\n  \"prior_full_test_report_not_relabelled\": true\n}\n"
+    }
+  ]
+}

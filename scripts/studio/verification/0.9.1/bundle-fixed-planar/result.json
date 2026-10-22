@@ -1,0 +1,77 @@
+{
+  "passed": true,
+  "checks": {
+    "real_wk_workflow": true,
+    "background_stabilization_persisted": true,
+    "editable_image_pin_persisted": true,
+    "no_stale_motion_released": true,
+    "undo_restored_source_range": true,
+    "actual_movie_frame_count": true,
+    "pin_visible_in_both_captured_frames": true,
+    "pin_follows_stabilized_plane_in_actual_movie": true,
+    "actual_worker_measurement_receipt": true,
+    "measurement_matches_admitted_bytes": true
+  },
+  "runtime": {
+    "available": true,
+    "backend": "opencv-lk-ransac",
+    "opencv": "4.11.0",
+    "numpy": "2.3.5",
+    "models": [
+      "affine",
+      "projective"
+    ],
+    "coordinates": "normalized-image-xy-pixel-centers",
+    "runtime_operations_verified": true,
+    "python": "/Users/midiakiasat/Library/Application Support/CINEMATICUM/Tracking/py313-v1/bin/python",
+    "max_frames": 240,
+    "analysis_edge": 640
+  },
+  "receipt": {
+    "movie_sha256": "1c5bd058c3ca54a033ce1afd6f38aa26086b85c3b0ce9215d6dbf84467beb84c",
+    "movie_bytes": 268926,
+    "pin_centers": [
+      [
+        80.5,
+        64.0
+      ],
+      [
+        80.5,
+        64.0
+      ]
+    ],
+    "measurement_sha256": "48c773d26c4b3e1d7e91a7ff8571759aaa2beef3d2795ea031ca5f15f45537a5"
+  },
+  "workspace": "/Users/midiakiasat/Library/Application Support/CINEMATICUM/Verification/0.9.1-bundle-fixed-20261021-native/planar/ENGINE_TEST_planar-ixzb_gb0",
+  "fixture": "SYNTHETIC ENGINE TEST \u2014 NOT PRODUCTION MEDIA",
+  "bounds_seconds": {
+    "workflow": 120,
+    "export": 60,
+    "native_helper": 130,
+    "subprocess": 140
+  },
+  "ui": {
+    "clip_id": "80a18e94-1a8d-469b-ac16-346e8dd3f5d5",
+    "download_href": "/api/projects/4f5d03da43ab4686a68c979dd9b5abd7/exports/fbed1106a1be4fb7bea50813aea9bbd9.mov?download=1",
+    "elapsed_ms": 8437,
+    "measurements": "/api/projects/4f5d03da43ab4686a68c979dd9b5abd7/analysis/413c4a417bc3494186bf5b36edd25288.json?download=1",
+    "page_errors": [],
+    "passed": true,
+    "pin_id": "1d7483dc-c55a-4615-b5f1-62e27b50229a",
+    "project_id": "4f5d03da43ab4686a68c979dd9b5abd7",
+    "screenshot": "/Users/midiakiasat/Library/Application Support/CINEMATICUM/Verification/0.9.1-bundle-fixed-20261021-native/planar/planar.png",
+    "screenshot_bytes": 370521,
+    "steps": [
+      "select_exact_fixture_project",
+      "native_four_corner_pick_and_actual_projective_measurement",
+      "planar_stabilization_and_image_pin_on_stabilized_background",
+      "separate_stabilization_and_pin_undo_redo",
+      "timing_dependency_invalidation_translation_remap_and_undo",
+      "save_reopen_and_actual_processed_frame",
+      "native_export_of_reopened_measured_composite"
+    ]
+  },
+  "native_returncode": 0,
+  "evidence_errors": [],
+  "elapsed_seconds": 10.282
+}

@@ -1,0 +1,35 @@
+{
+  "command": [
+    "/workspace/scratch/091f394ee5df/verification/venv/bin/python",
+    "-B",
+    "-m",
+    "unittest",
+    "test_install_macos",
+    "test_planar_tracking.PlanarInferenceTests.test_real_affine_and_projective_measurement_tracks_known_translation",
+    "-v"
+  ],
+  "returncode": 0,
+  "elapsed_seconds": 2.3141893269930733,
+  "files": {
+    "scripts/studio/imaging.py": {
+      "sha256": "bfd1d3bede15c35946ade43e127173ccb2d39aad3f0c84208150b5bf61621da5",
+      "bytes": 25146
+    },
+    "scripts/studio/planar_tracking.py": {
+      "sha256": "01c0163cc7acfa68eaf02d3f273c6c14c6a2cf6aaed412064441bd6688e4a4a9",
+      "bytes": 19931
+    },
+    "scripts/studio/lens_assets.py": {
+      "sha256": "cb9d6d706bdf40ab7af32911a1c4c8ec0ad0a66d27ac640eda6a910e9b6f585d",
+      "bytes": 5364
+    },
+    "scripts/studio/roto_assets.py": {
+      "sha256": "bfcf604b05b52987524fb4c9208bd8eb14689cf44078665319dd96a41d4360f8",
+      "bytes": 5679
+    },
+    "scripts/studio/test_install_macos.py": {
+      "sha256": "08105bc8cb5c9650450e49ced27a3a774dd6cdd81cdd59237807206d0efd34bf",
+      "bytes": 9143
+    }
+  }
+}

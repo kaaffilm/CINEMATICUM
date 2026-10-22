@@ -1,0 +1,33 @@
+{
+  "schema": "cinematicum-case001-owner-output-inventory-v1",
+  "observed_at_utc": "2026-10-21T22:41:06.572Z",
+  "source_of_observation": "MIDIA-AI current authorized session, read-only metadata inventory",
+  "owner_checkout": "/Users/midiakiasat/Downloads/Apps/midiakiasat/Kaaffilm/CINEMATICUM",
+  "scope": "Exact owner-checkout THE_LAST_RENDER source shots, delivery and QC directories; metadata only, no broader search or file-content reading",
+  "directories": {
+    "source/films/THE_LAST_RENDER/shots": {
+      "exists": true,
+      "regular_files": 0,
+      "bytes": 0,
+      "extensions": {},
+      "truncated": false
+    },
+    "dist/films/THE_LAST_RENDER": {
+      "exists": true,
+      "regular_files": 0,
+      "bytes": 0,
+      "extensions": {},
+      "truncated": false
+    },
+    "production/THE_LAST_RENDER/qc": {
+      "exists": true,
+      "regular_files": 0,
+      "bytes": 0,
+      "extensions": {},
+      "truncated": false
+    }
+  },
+  "content_read": false,
+  "source_or_output_modified": false,
+  "interpretation": "No source shot, delivery or QC files are present in these three exact owner-checkout directories at observation. This is not an audit of other locations or historical public compiler/replay artifacts."
+}

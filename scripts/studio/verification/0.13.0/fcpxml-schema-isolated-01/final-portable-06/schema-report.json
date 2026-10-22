@@ -1,0 +1,95 @@
+{
+  "schema": "cinematicum-independent-fcpxml-dtd-validation-v1",
+  "passed": true,
+  "dtd_version": "1.10",
+  "files": [
+    {
+      "role": "hand_fixture",
+      "path": "/workspace/scratch/091f394ee5df/cinematicum-fcpxml-native-driver-06/prepare/ENGINE_TEST_input.fcpxml",
+      "passed": true,
+      "bytes": 2793,
+      "sha256": "c0654f0e5582479eb307e04baeafd926aa350319f6db8b494a8a7a1df7317769",
+      "errors": [],
+      "unchanged": true
+    },
+    {
+      "role": "actual_export",
+      "path": "/workspace/scratch/091f394ee5df/cinematicum-fcpxml-native-driver-06/author/ENGINE_TEST_exported.fcpxml",
+      "passed": true,
+      "bytes": 4595,
+      "sha256": "3bd3fd5f06bc01323708d8948aa4e7c50fceac4b98ca2f539f7f53a2c99f60d6",
+      "errors": [],
+      "unchanged": true
+    }
+  ],
+  "scope": "Actual local Apple 1.10 DTD grammar only; no Final Cut Pro application, source-time or rendered-media claim.",
+  "lock_identity": {
+    "bytes": 1201,
+    "sha256": "04ae4133c7e910ee217b2641e1bc187572baf9684454cf6dc9e3c2bb9b4a6ba3"
+  },
+  "dtd_identity": {
+    "bytes": 40206,
+    "sha256": "6044527401b6cc92a9d86383437794d8de801c1904b6d08409ce81720fd23f33"
+  },
+  "runtime_before": {
+    "lxml": "6.1.1",
+    "lxml_version": [
+      6,
+      1,
+      1,
+      0
+    ],
+    "libxml2": [
+      2,
+      14,
+      6
+    ],
+    "libxml2_compiled": [
+      2,
+      14,
+      6
+    ],
+    "python": "3.12.14",
+    "module": "/tmp/cinematicum-fcpxml-schema-bootstrap-20261022-01/runtime/lib/python3.12/site-packages/lxml/etree.cpython-312-x86_64-linux-gnu.so",
+    "module_identity": {
+      "bytes": 5276528,
+      "sha256": "d7597a0fec22576416028238ff20a65f90d97ab6f96f65fe3a620780855add48"
+    }
+  },
+  "checks": {
+    "actual_dtd_positive_control": true,
+    "actual_dtd_negative_control": true,
+    "external_dtd_refused": true,
+    "external_entity_refused": true,
+    "separate_1_9_dtd_claim_refused": true,
+    "runtime_unchanged": true,
+    "dtd_unchanged": true,
+    "lock_unchanged": true
+  },
+  "runtime_after": {
+    "lxml": "6.1.1",
+    "lxml_version": [
+      6,
+      1,
+      1,
+      0
+    ],
+    "libxml2": [
+      2,
+      14,
+      6
+    ],
+    "libxml2_compiled": [
+      2,
+      14,
+      6
+    ],
+    "python": "3.12.14",
+    "module": "/tmp/cinematicum-fcpxml-schema-bootstrap-20261022-01/runtime/lib/python3.12/site-packages/lxml/etree.cpython-312-x86_64-linux-gnu.so",
+    "module_identity": {
+      "bytes": 5276528,
+      "sha256": "d7597a0fec22576416028238ff20a65f90d97ab6f96f65fe3a620780855add48"
+    }
+  },
+  "elapsed_seconds": 0.051
+}

@@ -1,4 +1,7 @@
 .DS_Store
+__pycache__/
+.cinematicum-studio/
+.studio-test/
 **pycache**/
 *.pyc
 dist/
@@ -11,3 +14,4 @@ dist/films/
 .cinematicum-build/
 *.tmp
 *.wav.tmp
+

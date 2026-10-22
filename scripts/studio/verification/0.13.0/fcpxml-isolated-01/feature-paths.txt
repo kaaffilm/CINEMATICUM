@@ -1,0 +1,7 @@
+scripts/studio/fcpxml.py
+scripts/studio/server.py
+scripts/studio/install_macos.py
+scripts/studio/web/interchange-ui.js
+scripts/studio/web/index.html
+scripts/studio/test_fcpxml.py
+scripts/studio/FCPXML_INTERCHANGE.md

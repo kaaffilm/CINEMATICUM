@@ -1,0 +1,18 @@
+{
+  "passed": true,
+  "before_tree": "1ecf33541ab82e3dda47259813d5d203e70479d0",
+  "after_tree": "941da9dbc805788a89c610ee688cc17de08fccc4",
+  "patch_sha256": "8f2e4c979a044161c2f755e3d91f8404bb557712d9fdb71a0cabe351aace64e5",
+  "changed_paths": [
+    ".github/workflows/studio-verification.yml",
+    "scripts/studio/macos/OtioCompositionsSmoke.js",
+    "scripts/studio/macos/RetimeSmoke.js",
+    "scripts/studio/macos/SmokeTest.swift",
+    "scripts/studio/macos/StillPhotographySmoke.js",
+    "scripts/studio/source-integrity.json",
+    "scripts/studio/test_multicam_sync_browser.cjs",
+    "scripts/studio/test_otio_compositions_browser.cjs",
+    "scripts/studio/test_retime_browser.cjs",
+    "scripts/studio/test_retime_download_completion.py"
+  ]
+}

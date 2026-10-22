@@ -1,0 +1,51 @@
+{
+  "browser_version": "134.0.6998.35",
+  "checks": {
+    "actual_owned_paused_frame": true,
+    "actual_owned_prores_export": true,
+    "paused_frame_matches_independent_source_pixel": true,
+    "saved_imported_lanes_reopen": true
+  },
+  "completed_download_count": 1,
+  "download_errors": [],
+  "downloads": [
+    {
+      "path": "/workspace/scratch/091f394ee5df/cinematicum-fcpxml-native-driver-05/render/native_downloads/4c6e393c30f9438898624d94c5e10c04.mov",
+      "state": "completed",
+      "suggested_filename": "4c6e393c30f9438898624d94c5e10c04.mov",
+      "url": "http://127.0.0.1:46755/api/projects/c796fd985f9c4cc1ad3a3b297759f1f7/exports/4c6e393c30f9438898624d94c5e10c04.mov?download=1"
+    }
+  ],
+  "elapsed_ms": 2123,
+  "expect_download": true,
+  "expected_download_count": 1,
+  "frames": {
+    "imported": {
+      "frame": 6,
+      "height": 32,
+      "pixel": [
+        0,
+        0,
+        102,
+        255
+      ],
+      "url": "/api/projects/c796fd985f9c4cc1ad3a3b297759f1f7/previews/4b487eb7877b46c0e07b348e5417b3b73074e558421ef882f3461e38fea5d208.png",
+      "width": 48
+    }
+  },
+  "h264_decoder": "probably",
+  "metrics": {
+    "movie_href": "/api/projects/c796fd985f9c4cc1ad3a3b297759f1f7/exports/4c6e393c30f9438898624d94c5e10c04.mov?download=1",
+    "playback": {
+      "attempted": false,
+      "reason": "Explicit Chromium portability run does not certify the native ProRes decoder."
+    }
+  },
+  "native_certified": false,
+  "page_errors": [],
+  "passed": true,
+  "physical_open_panel_asserted": false,
+  "physical_save_panel_asserted": false,
+  "screenshot": "/workspace/scratch/091f394ee5df/cinematicum-fcpxml-native-driver-05/render/ENGINE_TEST_fcpxml.png",
+  "transport": "Chromium"
+}

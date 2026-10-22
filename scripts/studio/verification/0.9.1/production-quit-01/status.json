@@ -1,0 +1,16 @@
+{
+  "state": "FAILED",
+  "elapsed_seconds": 6.979,
+  "results": [
+    {
+      "name": "build",
+      "exit_code": 0
+    },
+    {
+      "name": "quit",
+      "exit_code": 2
+    }
+  ],
+  "error": "Native ordinary-quit gate failed",
+  "traceback": "Traceback (most recent call last):\n  File \"/Users/midiakiasat/.midia-ai/gateway-live/workspaces/auto-d5f5e80a10b691457cec8d25044150b5/.completion-evidence/production-quit-01/run.py\", line 11, in <module>\n    if not step('quit',[py,'-I',str(h/'run_quit.py'),'--source',str(r),'--binary',str(w/'native-build/cinematicum-production-quit-acceptance'),'--python',py,'--output',str(w/'production-quit-01')],110):raise RuntimeError('Native ordinary-quit gate failed')\n                                                                                                                                                                                                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nRuntimeError: Native ordinary-quit gate failed\n"
+}

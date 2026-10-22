@@ -1,0 +1,781 @@
+{
+  "format": "cinematicum-native-observation-summary-v1",
+  "scope": "Current and historical native evidence, with original reports unchanged. Install-03 full private after-receipt is collected/hash-verified and publicly summarized without private filenames. Canonical launch-02 passed 16/16; final reconciliation passed 9/9 against exact 81827cf; chooser-04 passed 22 independent and 9 native checks at the public-action scope. Earlier uncollected, failed and access-blocked observations remain historical. All 23 exact-81827cf CI workflows passed; later status/evidence-commit CI is separate. This Studio work does not establish full parity or current THE LAST RENDER completion/issuance.",
+  "workspace": "/Users/midiakiasat/.midia-ai/gateway-live/workspaces/auto-d5f5e80a10b691457cec8d25044150b5",
+  "source_base_commit": "a6454d3514b3afa9ba29f594ab6bb3b79065d1a2",
+  "audio": {
+    "scope": "Actual WKWebView source PCM captures, independent decoded-source oracles",
+    "report": "final-native-01/audio/ENGINE_TEST_audio_acceptance_report.json",
+    "report_sha256": "bf049a011b59e5f714215169b1d53e7f3160896a7ff0551dc672c0c9fcf0c656",
+    "routing_checks_passed": 11,
+    "routing_checks_total": 11,
+    "sequence_cases": {
+      "overlap": {
+        "passed": 12,
+        "total": 12,
+        "repetitions": 3,
+        "elapsed_seconds": 10.605
+      },
+      "nested": {
+        "passed": 12,
+        "total": 12,
+        "repetitions": 3,
+        "elapsed_seconds": 10.397
+      },
+      "retimed": {
+        "passed": 12,
+        "total": 12,
+        "repetitions": 3,
+        "elapsed_seconds": 10.821
+      }
+    },
+    "zero_underruns": true,
+    "clock_drift_bound_ms": 80,
+    "passed": true,
+    "routing_elapsed_seconds": 6.533
+  },
+  "high16": {
+    "report": "final-extended-01/high16/ENGINE_TEST_high16_native_report.json",
+    "passed": 21,
+    "total": 21,
+    "elapsed_seconds": 2.153,
+    "receipt_state": "Unaltered raw report copied and hash-verified",
+    "scope": "Saved high16 precision, transformed alpha, native export controls and actual WKDownload; not NSSavePanel interaction, HDR or calibrated monitoring",
+    "earlier_bootstrap_failure": {
+      "report": "final-native-01/high16/ENGINE_TEST_high16_native_report.json",
+      "report_sha256": "8fb8e5087494967e1f97a6ca3bb9c7f18e0bd7a02dbafe2412031c34a556ff60",
+      "passed": false,
+      "cause": "Fixture project was not selected explicitly; harness now uses the exact intended project through native controls."
+    },
+    "report_sha256": "9a20eaaff4c41dfd15aa820d4a39cc6cf5d526087ca052913947037112c2afea",
+    "download_bytes": 63252,
+    "download_sha256": "c864ecf9c5f9962a35a57827e40580f16ef21bf4ac4544cee5491b5282c518d2"
+  },
+  "planar": {
+    "report": "bundle-fixed-planar/result.json",
+    "report_sha256": "00d5cd9eb9a8287fef76d0b91ad8844a05c80ab1286e97a40f3fcc0803f3e013",
+    "passed": 10,
+    "total": 10,
+    "elapsed_seconds": 10.282,
+    "actual_measurements": 12,
+    "native_stages": 7,
+    "movie_bytes": 268926,
+    "movie_sha256": "1c5bd058c3ca54a033ce1afd6f38aa26086b85c3b0ce9215d6dbf84467beb84c",
+    "pin_centers": [
+      [
+        80.5,
+        64.0
+      ],
+      [
+        80.5,
+        64.0
+      ]
+    ],
+    "measurement_sha256": "48c773d26c4b3e1d7e91a7ff8571759aaa2beef3d2795ea031ca5f15f45537a5",
+    "scope": "Actual worker-corrected native pipeline; does not certify installed canonical-launch immutability."
+  },
+  "generation": {
+    "inference_report": ".completion-evidence/generation-normal-02/report.json",
+    "reverification_report": ".completion-evidence/generation-reverified-03/report.json",
+    "width": 480,
+    "height": 272,
+    "frames_per_take": 17,
+    "steps": 20,
+    "fps": 16,
+    "cfg": 6,
+    "serial_actual_jobs_completed": 2,
+    "inference_workflow_elapsed_seconds": 1094.71,
+    "takes": [
+      {
+        "job_id": "9becc7019e674af7b41b1c496749b215",
+        "seed": 42,
+        "media_passed": 14,
+        "media_total": 14,
+        "native_passed": 14,
+        "native_total": 14,
+        "source_sha256": "57fcc0bf999b53ce0661e467f94688875969ae9d16e60ff7d27e547657242e51",
+        "earlier_native_passed": 13,
+        "final_native_report": "final-native-01/actual-take-1/ENGINE_TEST_actual_take_report.json",
+        "final_native_report_sha256": "aaa834bdd7c76e567ce8c1c4f8f62a86d2854f18198a8f8f754f1995721d0df6",
+        "final_native_elapsed_seconds": 2.236,
+        "all_17_timeline_frames_preserved": true,
+        "earlier_native_failure": "full_take_played_at_native_rate_without_extra_media; defaultClip floor rounding dropped the last timeline frame"
+      },
+      {
+        "job_id": "4207bdc08fba45c0aa48d731b522d1de",
+        "seed": 43,
+        "media_passed": 14,
+        "media_total": 14,
+        "native_passed": 14,
+        "native_total": 14,
+        "source_sha256": "05a8f65656cc522cb3a637628d2022252216872eb1bcf8025d5905349b562613",
+        "earlier_native_passed": 14,
+        "final_native_report": "final-native-01/actual-take-2/ENGINE_TEST_actual_take_report.json",
+        "final_native_report_sha256": "d64795e097b5b89aa9da7aae9744a29954c6be976f19da0af6e75fe5e7b20ed9",
+        "final_native_elapsed_seconds": 2.149,
+        "all_17_timeline_frames_preserved": true
+      }
+    ],
+    "normal_gate_complete": true,
+    "corrected_native_rerun": "Both final-native-01 runs passed 14/14 with all 17 timeline frames and original source/provenance preserved.",
+    "longer_33_frame_case": {
+      "state": "passed",
+      "job_id": "c3db07f8a6b549e8aed24a593035cb65",
+      "requested_frames": 33,
+      "accepted": true,
+      "inference_elapsed_seconds": 928.394,
+      "native_playback": "Passed 14/14 with the complete actual 33-frame source and unchanged media/provenance",
+      "receipt_state": "Unaltered inference and playback reports copied and hash-verified",
+      "report": "final-extended-01/generation33/report.json",
+      "report_sha256": "7df576feb8e7bedae8c45a42925bad64d34f77ede2d371456c1ddfb7ba6ea824",
+      "inference_checks_passed": 11,
+      "inference_checks_total": 11,
+      "media_checks_passed": 14,
+      "media_checks_total": 14,
+      "source_sha256": "d04d5bad300a117b1519b1d7d2144741591589921275e326bddc15bba86f085e",
+      "requested": {
+        "width": 480,
+        "height": 272,
+        "frames": 33,
+        "steps": 20,
+        "fps": 16,
+        "cfg": 6,
+        "repeats": 1
+      },
+      "native_playback_report": "final-extended-01/generation33-playback/ENGINE_TEST_actual_take_report.json",
+      "native_playback_report_sha256": "bfcfbfe1849a522cf1ccaf91b5ed566b37968ac97a6bdfc96af538c66fc3c14e",
+      "native_playback_checks_passed": 14,
+      "native_playback_checks_total": 14,
+      "native_playback_elapsed_seconds": 4.208
+    }
+  },
+  "installation": {
+    "status": "passed_collected_receipt",
+    "replacement_executed": true,
+    "independent_verifier_observed_passed": true,
+    "full_raw_receipt_copied": true,
+    "report": "installation-03-collected-summary.json",
+    "scope": "Public privacy-minimized summary of collected and hash-verified full private installation-after receipt; historical observation.json remains unchanged.",
+    "elapsed_seconds": 16.515,
+    "steps": [
+      {
+        "name": "snapshot-before",
+        "exit_code": 0
+      },
+      {
+        "name": "install",
+        "exit_code": 0
+      },
+      {
+        "name": "verify-after",
+        "exit_code": 0
+      }
+    ],
+    "gates": [
+      {
+        "name": "source",
+        "passed": true
+      },
+      {
+        "name": "installed",
+        "passed": true
+      },
+      {
+        "name": "receipt_and_backup",
+        "passed": true
+      },
+      {
+        "name": "projects",
+        "passed": true
+      },
+      {
+        "name": "original_checkout",
+        "passed": true
+      }
+    ],
+    "operative_source_files_verified": 189,
+    "runtime_files_verified": 62,
+    "bundle_files_verified": 67,
+    "bundle_inventory_sha256": "577a3550a6136bfe130434bf760ff0f21f1e24864facd5c11c52a07028afb6a9",
+    "source_code_identity_sha256": "76a4e33d0ed3398ef51b19625f51b0ad45a5c524989408137234f7964aa4db22",
+    "embedded_source_manifest": {
+      "mode": 384,
+      "sha256": "46e82f17bb855d6c2446aa6b3a820bd763fbb7659fc13c00b92afb14346ee922",
+      "size": 6090
+    },
+    "protected_workspace": {
+      "file_count": 57,
+      "total_bytes": 2858327758,
+      "inventory_sha256": "92b93d309c24e36e500c17fbdb99d9813d9ee3a5628dfe81f4a1faf0b74868ce"
+    },
+    "previous_bundle": {
+      "ditto_metadata": [],
+      "mode": 384,
+      "path": "/Users/midiakiasat/Applications/.CINEMATICUM-Backups.noindex/CINEMATICUM Studio-20261021T203503Z-56ab09c8.zip",
+      "sha256": "d1bd106e480d9f5e4dc9e2485e4eb48481e86636570e03e2d7a198021d42633f",
+      "size": 834259,
+      "verified_file_count": 70,
+      "verified_file_inventory_sha256": "a7381b6f10bdc8cf0b711c918c9241f5bbc05c434ea4a6b7f568cfc8911ef29d"
+    },
+    "original_59_file_prior_app_archive_preserved": true,
+    "raw_after_sha256": "08a3d73a39706c46b9c63785f15403fd1abd9a8ea39cb2b11713c519cb10d852",
+    "canonical_app_readiness": {
+      "status": "passed",
+      "report": "installed-launch-02/installed-launch-report.json",
+      "report_sha256": "fd3fdc614e94c4cd88246baaea638905ec34cf9d3fbae9189265959efc1fe28c",
+      "checks_passed": 16,
+      "checks_total": 16,
+      "elapsed_seconds": 5.361,
+      "scope": "Canonical LaunchServices app, actual bundled-engine readiness, ordinary quit and whole-bundle preservation; not installed editing/export UI.",
+      "preexisting_protected_files_compared": 55,
+      "operational_metadata_files_excluded": 2,
+      "new_allowed_derivatives": 2,
+      "missing_changed_or_unexpected_added_files": 0
+    },
+    "native_quit_guard": "Passed production-class isolated acceptance: 21 independent and 10 native checks; not installed-app UI.",
+    "native_save_panel": "Chooser04 passed 22/22 independent+9/9 native via AppKit Return Save and public NSSavePanel.cancel; physical input/navigation/full chooser pixels/existing-file replacement excluded.",
+    "final_source_reconciliation": "PASSED 9/9 against 81827cf92d159b9619d51000da61ea3c8a6b6ce7",
+    "full_raw_after_bytes": 54245,
+    "historical_observation": "installation-03-observation.json",
+    "report_sha256": "e983c77c1f52aabbbf0e433d1389a91da734166eade9f24912c1967330aa1dcf",
+    "native_launch_certified_by_installation_receipt": false,
+    "native_launch_certified_by_separate_canonical_report": true
+  },
+  "historical_observations": {
+    "workspace": "/Users/midiakiasat/.midia-ai/gateway-live/workspaces/auto-7978fb133a30bc1735fce292ea179e23",
+    "audio": {
+      "scope": "Actual WKWebView source PCM captures, independent decoded-source oracles",
+      "report": ".completion-evidence/native-03/audio/ENGINE_TEST_audio_acceptance_report.json",
+      "report_sha256": "1db93ed69976bd1b0a4872e5d0723d680cca9f84f0b4b1edab0c6a16f93b0f08",
+      "routing_checks_passed": 11,
+      "routing_checks_total": 11,
+      "sequence_cases": {
+        "overlap": {
+          "passed": 12,
+          "total": 12,
+          "repetitions": 3
+        },
+        "nested": {
+          "passed": 12,
+          "total": 12,
+          "repetitions": 3
+        },
+        "retimed": {
+          "passed": 12,
+          "total": 12,
+          "repetitions": 3
+        }
+      },
+      "zero_underruns": true,
+      "clock_drift_bound_ms": 80
+    },
+    "high16": {
+      "report": ".completion-evidence/native-03/high16/ENGINE_TEST_high16_native_report.json",
+      "report_sha256": "8a6557105a3ebcdf18a68493632f3b744fa5819f241fca6127b6f1d67cf6af1b",
+      "passed": 21,
+      "total": 21,
+      "download_bytes": 63252,
+      "download_sha256": "0635c6f95ee4051e30c839e58eb2d64b2cecb83a9a8c9eeb177ed2c5d9cf7ef4",
+      "scope": "Native export controls and actual WKDownload; clamped 16-bit SDR, not HDR or NSSavePanel interaction"
+    },
+    "planar": {
+      "report": ".completion-evidence/planar-native-08/result.json",
+      "passed": 10,
+      "total": 10,
+      "elapsed_seconds": 9.463,
+      "actual_measurements": 12,
+      "native_stages": 7,
+      "movie_bytes": 268926,
+      "movie_sha256": "1c5bd058c3ca54a033ce1afd6f38aa26086b85c3b0ce9215d6dbf84467beb84c",
+      "pin_centers": [
+        [
+          80.5,
+          64.0
+        ],
+        [
+          80.5,
+          64.0
+        ]
+      ],
+      "measurement_sha256": "9f06e8171f55641f40b6ce4a6e31e52f8c6ea6237eb712fbad1573695db40165"
+    },
+    "generation": {
+      "inference_report": ".completion-evidence/generation-normal-02/report.json",
+      "reverification_report": ".completion-evidence/generation-reverified-03/report.json",
+      "width": 480,
+      "height": 272,
+      "frames_per_take": 17,
+      "steps": 20,
+      "fps": 16,
+      "cfg": 6,
+      "serial_actual_jobs_completed": 2,
+      "inference_workflow_elapsed_seconds": 1094.71,
+      "takes": [
+        {
+          "job_id": "9becc7019e674af7b41b1c496749b215",
+          "seed": 42,
+          "media_passed": 14,
+          "media_total": 14,
+          "native_passed": 13,
+          "native_total": 14,
+          "source_sha256": "57fcc0bf999b53ce0661e467f94688875969ae9d16e60ff7d27e547657242e51",
+          "native_failure": "full_take_played_at_native_rate_without_extra_media; defaultClip floor rounding dropped the last timeline frame"
+        },
+        {
+          "job_id": "4207bdc08fba45c0aa48d731b522d1de",
+          "seed": 43,
+          "media_passed": 14,
+          "media_total": 14,
+          "native_passed": 14,
+          "native_total": 14,
+          "source_sha256": "05a8f65656cc522cb3a637628d2022252216872eb1bcf8025d5905349b562613"
+        }
+      ],
+      "normal_gate_complete": false,
+      "corrected_native_rerun": "Pending renewed MIDIA-AI execution authorization",
+      "longer_33_frame_case": "Harness prepared; not executed"
+    },
+    "installation": {
+      "current_candidate_installed": false,
+      "reason": "MIDIA-AI runtime 0.7.2 to 0.8.0 upgrade invalidated the command grant before final sync/install",
+      "error": "COMMANDER_AUTHORITY_EXPIRED_OR_CHANGED",
+      "predecessor_session": "s_11ff15a431b5298cc1d54555db5fdc5661a4e267b925089a",
+      "successor_session": "s_f87be8477ab753fbb210d6fa6f75a2746b8731a7f92643b5"
+    },
+    "installation02": {
+      "installer_exit_code": 0,
+      "replacement_executed": true,
+      "independently_verified": true,
+      "verification_status": "Install-02 PASSED: snapshot-before, actual installation and independent verify-after all exited 0.",
+      "old_app_snapshot": {
+        "files": 59,
+        "bytes": 1963931
+      },
+      "protected_workspace_snapshot": {
+        "files": 56,
+        "bytes": 2858327609,
+        "scope": "All observed files, including external runtime caches"
+      },
+      "verification_bound_history": "Initial independent helper refused the 2 GiB inventory bound before writes; a 4 GiB bound now hashes all bytes without exclusions.",
+      "elapsed_seconds": 40.491,
+      "steps": {
+        "snapshot-before": 0,
+        "install": 0,
+        "verify-after": 0
+      },
+      "receipt_state": "Public privacy-minimized derived summary copied and hash-verified; full raw receipts retained separately",
+      "canonical_app_readiness": "Pending",
+      "native_save_panel": "Production-native-01 acceptance failed at save-button timeout; unaccepted, helper investigation in progress",
+      "native_quit_guard": "Pending",
+      "report": "installation-02-summary.json",
+      "report_sha256": "d81cbf8402eff7c980a7bbc63725f2bc9fbd0e9530161288ced6200fce3aa818",
+      "raw_after_sha256": "36602c13b42923215360ab4d1dabcaf12955031dcb0d9d215622b5f6aeaee05f",
+      "raw_before_sha256": "9f8b6093341312b995c4869f017986ca95041a04e8002998f2871abb9285b226",
+      "runtime_files_verified": 62,
+      "bundle_files_verified": 67,
+      "runtime_inventory_sha256": "8079816fe43c639c87436fa042c251c5b4db3295bb29f59f31511803efddd2f8",
+      "bundle_inventory_sha256": "612f8f023d62f07ef7c63e0398d075a28f031a3f883f47dbf95d756cea6c674a",
+      "embedded_source_manifest_sha256": "0f74477629fa14bb0363d790c7b9bf6fe07a0b9bfa2f1d8abc9df3712e9cf5e7",
+      "captured_source_integrity_sha256": "341ba1bdf46eb12c3b8e3c74d2af0c4e4e825eccc1d189481e4c2ea60c744565",
+      "previous_bundle": {
+        "ditto_metadata": [],
+        "mode": 384,
+        "path": "/Users/midiakiasat/Applications/.CINEMATICUM-Backups.noindex/CINEMATICUM Studio-20261021T194535Z-0089da9e.zip",
+        "sha256": "16ef0e6eff894dc6a7e9b84869173fa9b8218fc3538a521323506b6947759dba",
+        "size": 765416,
+        "verified_file_count": 59,
+        "verified_file_inventory_sha256": "6470b0d92b63b2946c48a45e69690253ae42210fe7b94fd5c97867c53fea4caf"
+      },
+      "protected_workspace": {
+        "file_count": 56,
+        "inventory_sha256": "f8330f39fd67995cc28baf0c9c1ffe5d3aa1e7356076118712511924b4faef3e",
+        "total_bytes": 2858327609
+      },
+      "original_checkout_preserved_scope": "Makefile bytes/mode, HEAD and Git status; other owner-file contents and credentials are not inspected",
+      "native_launch_certified": false,
+      "final_source_reconciliation": "Pending final source publication/synchronization and independent read-only comparison against the installed 62 runtime files, two native sources and installer. Harness/docs/capabilities/repository-integrity changes are outside bundled runtime; a second replacement is unnecessary if the mappings remain unchanged."
+    },
+    "planar_final_native01": {
+      "report": "final-native-01/planar/result.json",
+      "passed": 10,
+      "total": 10,
+      "elapsed_seconds": 7.342,
+      "actual_measurements": 12,
+      "native_stages": 7,
+      "movie_bytes": 268926,
+      "movie_sha256": "1c5bd058c3ca54a033ce1afd6f38aa26086b85c3b0ce9215d6dbf84467beb84c",
+      "pin_centers": [
+        [
+          80.5,
+          64.0
+        ],
+        [
+          80.5,
+          64.0
+        ]
+      ],
+      "measurement_sha256": "d82e16ee43fcb77acafe579d5ddf962cf011e9ba42a83534e15fb8c4a91f85b6",
+      "report_sha256": "7a58f14f80987cfd8f6a3ed8dc4dd0323c19d4e63e980cc919670917e3154ed5"
+    },
+    "production_native_download01": {
+      "report": "production-native-01/production-download-report.json",
+      "report_sha256": "d8b85fdb3b2296b404800db17f02e1c7a9d5c45e02b6e33473db6b02d09ade2b",
+      "build_report": "production-native-01/build.json",
+      "build_report_sha256": "c60ada959701312a687bc1f8df9ebaa165bbb064e4b10b322af4a6741647936f",
+      "passed": false,
+      "scope": "Unchanged production StudioAppDelegate class with isolated startup; real NSSavePanel Save/Cancel and WKDownload; not an installed-bundle UI claim",
+      "production_source_sha256": "5bc3028eb4921b8e1d11f1a0e3a4ab2116c6ddcadce43a3968e6b42a0e80e79b",
+      "unchanged_production_class_sha256": "36650303394fbb1169923b1d3d48e0cc4fe3443478d15f69294dbab82eec8bbb",
+      "compiled": true,
+      "export_ui_completed": true,
+      "native_phase": "save-button",
+      "native_error": "Timed out in actual native phase: save-button",
+      "native_elapsed_seconds": 40.04328405857086,
+      "saved_file_verified": false,
+      "installed_app_ui_certified": false,
+      "status": "Retained failed acceptance; chooser remains unaccepted, helper investigation in progress"
+    },
+    "authorization_first_upgrade_recovery": {
+      "status": "restored_and_executed",
+      "historical_error": "COMMANDER_AUTHORITY_EXPIRED_OR_CHANGED",
+      "cause": "MIDIA-AI catalogue 0.7.2 to 0.8.0 invalidated the predecessor command grant",
+      "resolution": "Successor reports a reusable owner grant and successfully fetched verified source and executed final native gates."
+    },
+    "owned_default_download_recovery": {
+      "report": "owned-default-download-recovery.json",
+      "report_sha256": "0afa081f12ca353311ca0ecad5055c9a895678dc0c2bd181667776bbddb8e489",
+      "scope": "Only two exact receipt/hash-bound synthetic outputs from prior failed attempts recovered. Original aggregate failures unchanged."
+    },
+    "canonical_launch01": {
+      "report": "installed-launch-01/installed-launch-report.json",
+      "report_sha256": "47cdbc8b9d9e2abf140155e37d050afdec899f31c955ff0cd29ed69490068b15",
+      "passed": false,
+      "scope": "Exact canonical installed app through real LaunchServices; production launcher and bundled-engine readiness; no UI editing/playback/export or production-quality acceptance",
+      "failed_checks": [
+        "whole_installed_bundle_unchanged_after_launch_and_quit"
+      ],
+      "bundle_before_files": 67,
+      "bundle_after_files": 70,
+      "protected_files_preserved": 56,
+      "cause": "Isolated -I workers ignored inherited bytecode settings and wrote imaging/media_orientation/projective_warp pyc files inside bundle."
+    },
+    "installation03_initial_observation": {
+      "status": "observed_passed",
+      "replacement_executed": true,
+      "independent_verifier_observed_passed": true,
+      "full_raw_receipt_copied": false,
+      "report": "installation-03-observation.json",
+      "report_sha256": "de8ef8a29ccaf4126604ace9c9d05c7b16ca314dcf4deb119130fdca0510c9c0",
+      "scope": "Selected fields returned by the independently verified Mac installation03 before the MIDIA connection context changed. Full before/after inventories remain on the Mac; this record is an observation, not a copy of the full raw receipt.",
+      "elapsed_seconds": 16.515,
+      "steps": [
+        {
+          "name": "snapshot-before",
+          "exit_code": 0
+        },
+        {
+          "name": "install",
+          "exit_code": 0
+        },
+        {
+          "name": "verify-after",
+          "exit_code": 0
+        }
+      ],
+      "gates": [
+        {
+          "name": "source",
+          "passed": true
+        },
+        {
+          "name": "installed",
+          "passed": true
+        },
+        {
+          "name": "receipt_and_backup",
+          "passed": true
+        },
+        {
+          "name": "projects",
+          "passed": true
+        },
+        {
+          "name": "original_checkout",
+          "passed": true
+        }
+      ],
+      "operative_source_files_verified": 189,
+      "runtime_files_verified": 62,
+      "bundle_files_verified": 67,
+      "bundle_inventory_sha256": "577a3550a6136bfe130434bf760ff0f21f1e24864facd5c11c52a07028afb6a9",
+      "source_code_identity_sha256": "76a4e33d0ed3398ef51b19625f51b0ad45a5c524989408137234f7964aa4db22",
+      "embedded_source_manifest": {
+        "mode": 384,
+        "sha256": "46e82f17bb855d6c2446aa6b3a820bd763fbb7659fc13c00b92afb14346ee922",
+        "size": 6090
+      },
+      "protected_workspace": {
+        "file_count": 57,
+        "total_bytes": 2858327758,
+        "inventory_sha256": "92b93d309c24e36e500c17fbdb99d9813d9ee3a5628dfe81f4a1faf0b74868ce"
+      },
+      "previous_bundle": {
+        "ditto_metadata": [],
+        "mode": 384,
+        "path": "/Users/midiakiasat/Applications/.CINEMATICUM-Backups.noindex/CINEMATICUM Studio-20261021T203503Z-56ab09c8.zip",
+        "sha256": "d1bd106e480d9f5e4dc9e2485e4eb48481e86636570e03e2d7a198021d42633f",
+        "size": 834259,
+        "verified_file_count": 70,
+        "verified_file_inventory_sha256": "a7381b6f10bdc8cf0b711c918c9241f5bbc05c434ea4a6b7f568cfc8911ef29d"
+      },
+      "original_59_file_prior_app_archive_preserved": true,
+      "raw_after_sha256": "08a3d73a39706c46b9c63785f15403fd1abd9a8ea39cb2b11713c519cb10d852",
+      "native_launch_certified": false,
+      "canonical_app_readiness": {
+        "status": "LAUNCHED_RESULT_UNCOLLECTED",
+        "supervisor_pid": 8525,
+        "report_path": "/Users/midiakiasat/Library/Application Support/CINEMATICUM/Verification/0.9.1-bundle-fixed-20261021-03/installed-launch02/installed-launch-report.json",
+        "passed": null
+      },
+      "native_quit_guard": "Passed production-class isolated acceptance: 21 independent and 10 native checks; not installed-app UI.",
+      "native_save_panel": "Default-destination Save verified in attempt03; synthetic Escape cancellation failed; corrected SDK Cancel helper04 unexecuted.",
+      "final_source_reconciliation": "NOT_EXECUTED",
+      "collection_block": {
+        "existing_session_error": "CROSS_CHAT_SESSION_ACCESS_DENIED",
+        "fresh_session_error": "ACTIVE_SESSION_LIMIT",
+        "fresh_session_created": false,
+        "context_bypass_attempted": false,
+        "other_sessions_closed": false
+      }
+    },
+    "authorization_later_context_block": {
+      "status": "blocked_after_context_change",
+      "historical_upgrade_interruption": "COMMANDER_AUTHORITY_EXPIRED_OR_CHANGED, subsequently resolved by successful successor execution",
+      "existing_session_error": "CROSS_CHAT_SESSION_ACCESS_DENIED",
+      "fresh_current_conversation_session_error": "ACTIVE_SESSION_LIMIT",
+      "limit": 64,
+      "fresh_session_created": false,
+      "other_sessions_closed": false,
+      "context_bypass_attempted": false,
+      "effect": "Full install03 receipt and canonical02 outcome uncollected; helper04 and final reconciliation unexecuted."
+    },
+    "production_native_download03": {
+      "report": "production-native-03/production-download-report.json",
+      "report_sha256": "70a860ca3662e9f20b343c7eb945dfb7cb7f97c7162e3f1438c2b38efff96675",
+      "passed": false,
+      "scope": "Unchanged production StudioAppDelegate class with isolated startup; real default Movies/job-UUID NSSavePanel Save and attempted cancellation through actual buttons or public AppKit keyboard events, and WKDownload; receipt-verified owned output relocated afterward for evidence; not an installed-bundle UI claim",
+      "independent_checks_passed": 20,
+      "independent_checks_total": 22,
+      "failed_checks": [
+        "actual_native_class_gate",
+        "cancel_has_no_destination"
+      ],
+      "elapsed_seconds": 10.211,
+      "saved_file_verified": true,
+      "saved_file": {
+        "bytes": 63252,
+        "path": "/Users/midiakiasat/Library/Application Support/CINEMATICUM/Verification/0.9.1-bundle-fixed-20261021-native/download03/native-downloads/df90f3797c194f9e8466e0de87dca120.mkv",
+        "sha256": "33e350dc3493366a6e8a902f68324d2626201851aac75d4d47bf9123cac19d7c"
+      },
+      "native_cancel_verified": false,
+      "failure": "Synthetic Escape did not cancel; destination recreated. Failed report retained.",
+      "owned_recovery_report": "production-native-03/owned-default-download-recovery.json",
+      "owned_recovery_sha256": "6076059642510bf52c4612c9d919faf8cf8853151f7fdc5128ca4369c4fcf4e7",
+      "installed_app_ui_certified": false,
+      "followup_helper04": "Reviewed and curated; NATIVE_UNEXECUTED"
+    }
+  },
+  "authorization": {
+    "status": "restored_and_executed",
+    "historical_errors": [
+      "COMMANDER_AUTHORITY_EXPIRED_OR_CHANGED",
+      "CROSS_CHAT_SESSION_ACCESS_DENIED",
+      "ACTIVE_SESSION_LIMIT"
+    ],
+    "resolution": "Current authorized session completed evidence recovery, final source reconciliation and real foreground download04 compile/run.",
+    "approval_pending": false,
+    "prior_failed_and_uncollected_observations_preserved": true
+  },
+  "final_native_batch": {
+    "report": "final-native-01/status.json",
+    "report_sha256": "cafd4a8ab353f397fc13db47c52035706b2cd041073894cb5be459478a3d8250",
+    "original_status": "FAILED",
+    "reason": "High16 fixture bootstrap failed; audio, planar and both 17-frame native playbacks passed. High16 subsequent acceptance is recorded separately."
+  },
+  "extended_native_batch": {
+    "state": "PASSED",
+    "elapsed_seconds": 937.624,
+    "steps": {
+      "high16": 0,
+      "generation33": 0,
+      "generation33-playback": 0,
+      "source-after": 0
+    },
+    "receipt_state": "Unaltered raw report copied and hash-verified",
+    "report": "final-extended-01/status.json",
+    "report_sha256": "a917706936b026e25be306918de06569e5eb78649c1cc3063827d3eb71ba5c54"
+  },
+  "production_native_download": {
+    "report": "production-native-04/production-download-report.json",
+    "report_sha256": "eef28f07bb8311f2f4770e11cd4e549c5d8b04c1bf73e0c76ae8046de9c1712e",
+    "build_report": "production-native-04/build.json",
+    "build_report_sha256": "1f9b0b02363e1ffe556b919a27ae8cf128ad74fd697702cc8db797c1f91b692e",
+    "passed": true,
+    "scope": "Unchanged production StudioAppDelegate class with isolated startup; real default Movies/job-UUID NSSavePanel Save through an actual button or public AppKit Return events, Cancel through an actual button or documented public NSSavePanel.cancel action, and WKDownload; receipt-verified owned output relocated afterward for evidence; not an installed-bundle UI claim",
+    "independent_checks_passed": 22,
+    "independent_checks_total": 22,
+    "native_checks_passed": 9,
+    "native_checks_total": 9,
+    "elapsed_seconds": 9.47,
+    "saved_file_verified": true,
+    "saved_file": {
+      "bytes": 63252,
+      "path": "/Users/midiakiasat/Library/Application Support/CINEMATICUM/Verification/0.9.1-bundle-fixed-20261021-03/download04-run01/native-downloads/e20bd2de7b4b46a3ab64ea0367053101.mkv",
+      "sha256": "920d7deaa27f7585f057252aa5c6bc7eee88444972bd49e2c497e36669b05a9f"
+    },
+    "native_cancel_verified": true,
+    "save_interaction": {
+      "key": "Return",
+      "key_code": 36,
+      "kind": "NSApplication.sendEvent",
+      "panel_was_key": true,
+      "window_number": 6001
+    },
+    "cancel_interaction": {
+      "documented_public_action": true,
+      "kind": "NSSavePanel.cancel",
+      "physical_button_or_keyboard_input": false,
+      "selector": "cancel:",
+      "sender": "actual NSSavePanel",
+      "window_number": 6006
+    },
+    "no_cancelled_destination_or_partial": true,
+    "completed_master_preserved": true,
+    "installed_app_ui_certified": false,
+    "physical_keyboard_or_mouse_input_certified": false,
+    "cancel_keyboard_route_certified": false,
+    "full_native_chooser_visual_capture_certified": false,
+    "existing_destination_replacement_certified": false,
+    "arbitrary_chooser_navigation_or_renamed_destination_certified": false
+  },
+  "published_base_commit": "4530c54faf969b0a42f2eb7e73f67c295443d275",
+  "operative_source_inventory": {
+    "report": "bundle-fixed-frozen-operative-source.json",
+    "sha256": "30b514a409c8a0d86a047780b004942f6c65defbaf3ccb7e0da72f92085f7f3d",
+    "files": 189,
+    "runtime_changes_since_base": [
+      "imaging.py",
+      "planar_tracking.py",
+      "lens_assets.py",
+      "roto_assets.py"
+    ],
+    "scope": "Five explicit -B arguments; no processing/native-launcher behavior changes."
+  },
+  "full_regression": {
+    "status": "passed",
+    "environment": "Isolated local Linux with pinned actual optional workers and genuine Kodak RAW; native macOS acceptance and GitHub CI are separate.",
+    "tests": 544,
+    "report_elapsed_seconds": 169.194,
+    "wrapper_elapsed_seconds": 169.301,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "expected_failures": 0,
+    "unchanged_operative_files": 189,
+    "javascript_syntax_checks_passed": 48,
+    "javascript_scope": "Unchanged from the prior successful syntax check; the worker correction changes Python only.",
+    "report": "verification/0.9.1/bundle-fixed-full-actual-runtime-report.json",
+    "report_sha256": "50f5531cbbd015abb7dc238c91e91ecc685d0cda48014deac31f70e416264541",
+    "source_inventory": "verification/0.9.1/bundle-fixed-frozen-operative-source.json",
+    "source_inventory_sha256": "30b514a409c8a0d86a047780b004942f6c65defbaf3ccb7e0da72f92085f7f3d",
+    "unchanged_source_check": "verification/0.9.1/bundle-fixed-frozen-operative-check.json"
+  },
+  "production_quit": {
+    "report": "production-quit-05/production-quit-report.json",
+    "report_sha256": "a686c88ca02f35477223756652f3be71ab6af9a3a48d581efb21789d9a99dadf",
+    "passed": true,
+    "independent_checks_passed": 21,
+    "independent_checks_total": 21,
+    "native_checks_passed": 10,
+    "native_checks_total": 10,
+    "elapsed_seconds": 67.203,
+    "scope": "Unchanged production ordinary-quit/alert/cancel methods and real AppKit alert buttons; isolated actual server launch and child-exit forwarding; not production launcher or installed-bundle UI acceptance",
+    "workload": {
+      "width": 640,
+      "height": 360,
+      "fps": 12,
+      "frames": 48,
+      "profile": "master16",
+      "first": "complete after Keep Working",
+      "second": "cancel through actual ordinary-quit alert"
+    },
+    "completed_master": {
+      "bytes": 9281929,
+      "path": "/Users/midiakiasat/Library/Application Support/CINEMATICUM/Verification/0.9.1-bundle-fixed-20261021-native/quit05/workspace/projects/1ed992d94f4442f895d553dfa93e22ff/exports/cbca7207e9cc495f83c5d83280f0fe3b.mkv",
+      "sha256": "0bdcf44378a04acd0e00f035cd06b4d480c4ff77b85c4361235d36963898528d"
+    },
+    "durable_job_states": [
+      "cancelled",
+      "completed"
+    ],
+    "final_exit_reason": "native-user-confirmed-job-cancellation",
+    "ephemeral_preview_settled": true,
+    "installed_app_ui_certified": false,
+    "historical_attempts": [
+      "production-quit-01/status.json",
+      "production-quit-02/production-quit-report.json",
+      "production-quit-03/production-quit-report.json",
+      "production-quit-04/production-quit-report.json"
+    ]
+  },
+  "worker_bytecode_correction": {
+    "report": "worker-bytecode-fix/manifest.json",
+    "report_sha256": "387e85f1fdd1dc1a238e6af5f8f144158e31b9fbd719f6825690cfab7cb9097d",
+    "launch_sites": 5,
+    "runtime_modules": 4,
+    "explicit_argument": "-B",
+    "focused_tests_passed": 8,
+    "actual_before_failure_retained": true,
+    "included_in_frozen_544_test_suite": true,
+    "installed_by_observed_install03": true,
+    "canonical_launch02_result": "PASSED 16/16; report recovered and unchanged whole bundle verified"
+  },
+  "published_runtime_commit": "81827cf92d159b9619d51000da61ea3c8a6b6ce7",
+  "final_source_reconciliation": {
+    "report": "final-reconciliation-81827-01.json",
+    "report_sha256": "0c6d76e03bfca1bedbb4a4320eff6127398f7d9036d6cad8f6c5a45f9975ab06",
+    "passed": true,
+    "checks_passed": 9,
+    "checks_total": 9,
+    "scope": "Final published source, every installed runtime file, native-source mapping and unchanged complete bundle; read-only reconciliation, no replacement installation",
+    "source_commit": "81827cf92d159b9619d51000da61ea3c8a6b6ce7",
+    "runtime_file_count": 62,
+    "bundle_file_count": 67,
+    "runtime_inventory_sha256": "49f226121b5df2f13a0eb39a642a113695231870a425120c7f372dfddc97149a",
+    "bundle_inventory_sha256": "577a3550a6136bfe130434bf760ff0f21f1e24864facd5c11c52a07028afb6a9",
+    "source_code_identity_sha256": "76a4e33d0ed3398ef51b19625f51b0ad45a5c524989408137234f7964aa4db22",
+    "signing_or_notarization_certified": false
+  },
+  "github_ci": {
+    "status": "passed",
+    "commit": "81827cf92d159b9619d51000da61ea3c8a6b6ce7",
+    "successful_workflow_runs": 23,
+    "pull_request_runs": 13,
+    "push_runs": 10,
+    "failed_running_queued_or_cancelled_runs": 0,
+    "studio_workflow_run": 39686306795,
+    "studio_job": 119521127572,
+    "studio_push_jobs": [
+      {
+        "run": 39686300384,
+        "job": 119521105124
+      },
+      {
+        "run": 39686285911,
+        "job": 119521055726
+      }
+    ],
+    "scope": "Exact published runtime freeze; later status/evidence commit and live PR-head CI remain separate.",
+    "live_pr_checks": "https://github.com/kaaffilm/CINEMATICUM/pull/162/checks"
+  }
+}

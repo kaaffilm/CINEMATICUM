@@ -1,0 +1,37 @@
+{
+  "schema": "cinematicum-owned-native-phase-command-v1",
+  "passed": true,
+  "exit_code": 0,
+  "timed_out": false,
+  "elapsed_seconds": 0.622,
+  "foreground_deadline_seconds": 18,
+  "owned_process_group": 84450,
+  "phase_source_sha256": "7ac5c1ab01292c7d7ab0c0bc2119b67230a2307a12d0e095a0719966153c8caf",
+  "stdout_sha256": "e61dfb1356fdafcb3d19b96281b04e2dfafa29835cb2480766b745a1fefaa0f8",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "inner": {
+    "native": {
+      "passed": true,
+      "operation": "prepare",
+      "elapsed_seconds": 0.225,
+      "error": null,
+      "native_certified": false,
+      "checks": {
+        "exact_frozen_runtime_web_acceptance_source": true,
+        "lossless_fixture_matches_independent_source_samples": true,
+        "exact_upstream_profile_bytes_and106_samples": true,
+        "one_real_source_and_no_preauthored_graph": true,
+        "sentinel_project_unchanged": true,
+        "original_owned_source_bytes_unchanged": true,
+        "native_helper_binary_unchanged": true,
+        "all_owned_jobs_terminal": true,
+        "foreground_phase_within18_seconds": true,
+        "runtime_web_acceptance_source_unchanged": true
+      }
+    },
+    "source_commit": "cdd15816c228fe4133fbb3ce6d90978333d699e6",
+    "source_tree": "a62ce29a8af68b38d14820c45fc42e1266762e34",
+    "source_manifest_sha256": "21034979d805cdf680c255720f6311319f3fc22c2b405dbd43294a5485d09f8d"
+  },
+  "error_output": null
+}

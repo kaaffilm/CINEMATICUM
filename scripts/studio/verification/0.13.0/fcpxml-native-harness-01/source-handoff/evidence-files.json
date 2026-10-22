@@ -1,0 +1,1067 @@
+{
+  "file_count": 265,
+  "files": {
+    "cinematicum-fcpxml-acceptance-review/counterexample-inventory.json": {
+      "sha256": "e44b68d8e6b096fa36dabf33b39dfe08116e53bef51169a4beafefa74012c6ee",
+      "size": 433
+    },
+    "cinematicum-fcpxml-acceptance-review/feature-source-snapshot.json": {
+      "sha256": "d950f3baf58ebbd56cd9ffd8a8abd1a398cb37ae3bf0ac81ac743599ede34724",
+      "size": 530
+    },
+    "cinematicum-fcpxml-acceptance-review/final-feature-source-snapshot.json": {
+      "sha256": "e8f593897c245fd2da1ad26b658cc3f53206b94b7b191f08cf60ec5173e339cc",
+      "size": 530
+    },
+    "cinematicum-fcpxml-acceptance-review/floor-repeat-and-integral-grid.json": {
+      "sha256": "859c5e4c31d8f6823895d2db7435b2841ccaed8094fda9e079cb3d6c6135adb5",
+      "size": 25400
+    },
+    "cinematicum-fcpxml-acceptance-review/positive-time-map-sampling.json": {
+      "sha256": "148eaf4660eb3372a68c058f1a31cbabbf44bb3c00554672c6a942adf38d4a47",
+      "size": 6937
+    },
+    "cinematicum-fcpxml-acceptance-review/review-findings.json": {
+      "sha256": "226882b5b20ed5343031b5c3f933d403f985a5892596e91194d558588dfb92e8",
+      "size": 4992
+    },
+    "cinematicum-fcpxml-acceptance-review/source-24-1.mkv": {
+      "sha256": "547417b0bb6fd26f8756b06ead3bdb33276f90b6e2d9629c680bdeb5efa98e8b",
+      "size": 2973
+    },
+    "cinematicum-fcpxml-acceptance-review/source-30000-1001.mkv": {
+      "sha256": "7c9a7f9ef0136cd47285dc18cd4d1bdabdd8449e9d0916cc64292e05214ce002",
+      "size": 2973
+    },
+    "cinematicum-fcpxml-native-driver-01/preflight-failure.json": {
+      "sha256": "ea219d2828b3699f66d2a0083a4008e651de45324402fc2663816e5e190aa5e1",
+      "size": 520
+    },
+    "cinematicum-fcpxml-native-driver-02/author/ENGINE_TEST_fcpxml.js": {
+      "sha256": "5df6ce74d4d891c573ffe407f4183af4e15525d9e1db0e60bf1ef38a17350132",
+      "size": 18042
+    },
+    "cinematicum-fcpxml-native-driver-02/author/ENGINE_TEST_fcpxml_report.json": {
+      "sha256": "3a90524ccd925aefaf53af39c7c9b7a362fb40bb26693538cfa0c431589138a2",
+      "size": 19237
+    },
+    "cinematicum-fcpxml-native-driver-02/author/ENGINE_TEST_owned_jobs.json": {
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+      "size": 3
+    },
+    "cinematicum-fcpxml-native-driver-02/author/ENGINE_TEST_saved_project.json": {
+      "sha256": "25a1660522b79b3a3c4e374e6caf6ffdb3a193a5c1cbe060e0a35cac0df61450",
+      "size": 3050
+    },
+    "cinematicum-fcpxml-native-driver-02/browser-report.json": {
+      "sha256": "d8f28de51ee60e66e776f631f9fdd507088f834c866c3e0cc70b93cca3578881",
+      "size": 885
+    },
+    "cinematicum-fcpxml-native-driver-02/chromium-adapter.cjs": {
+      "sha256": "2f7783af68fd2347c2389b683f42c0c81f29ec45113230100683de251bdcd4b5",
+      "size": 279
+    },
+    "cinematicum-fcpxml-native-driver-02/driver.stderr": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    "cinematicum-fcpxml-native-driver-02/driver.stdout": {
+      "sha256": "cb289e1d3b9956762edc4462e7e37a50508d23f45c0fa18a76a9cb05119765fc",
+      "size": 276
+    },
+    "cinematicum-fcpxml-native-driver-02/fixture/fcpxml-fixture.json": {
+      "sha256": "489c9289a7989f9095e41778539ed6f408295cc497aab0243b72dd2cf5bb33fa",
+      "size": 4098
+    },
+    "cinematicum-fcpxml-native-driver-02/fixture/prepare-passed.json": {
+      "sha256": "e0034a6448d43fba81e23191553e0652fcac0b69bd441855a80d755d1d668a4d",
+      "size": 18096
+    },
+    "cinematicum-fcpxml-native-driver-02/fixture/source-fixture/blue.wav": {
+      "sha256": "f2f217782d900a98ff0b1fd4e4d2a58bbfd6b6b62a56093b90a0d44321f7039a",
+      "size": 615060
+    },
+    "cinematicum-fcpxml-native-driver-02/fixture/source-fixture/media/blue.mov": {
+      "sha256": "01a2518a2786e063fdfef550946f1a31f90469dd3c42b0478731425e3dcb3c36",
+      "size": 643279
+    },
+    "cinematicum-fcpxml-native-driver-02/fixture/source-fixture/media/red.mov": {
+      "sha256": "ea6e2213ccc89745e39123ee148255f4ab9a2657ca8b18a1ca73efe703f915f7",
+      "size": 643279
+    },
+    "cinematicum-fcpxml-native-driver-02/fixture/source-fixture/red.wav": {
+      "sha256": "35a7658d806f4bb7c7f4670283d30465c1044822f393c305b7ec30542e87561a",
+      "size": 615060
+    },
+    "cinematicum-fcpxml-native-driver-02/fixture/truth/ENGINE_TEST_timeline.fcpxml": {
+      "sha256": "c0654f0e5582479eb307e04baeafd926aa350319f6db8b494a8a7a1df7317769",
+      "size": 2793
+    },
+    "cinematicum-fcpxml-native-driver-02/fixture/truth/expected.json": {
+      "sha256": "3657b709002748598715b507a25200d338fb4b990336db3d5932ceaf6d17ca4b",
+      "size": 1044
+    },
+    "cinematicum-fcpxml-native-driver-02/fixture/truth/expected.s16le": {
+      "sha256": "7925af27f06f06d240b0259d889ec045f4c6930823ae4c9f54188fbb9290a18c",
+      "size": 256256
+    },
+    "cinematicum-fcpxml-native-driver-02/fixture/workspace/.cinematicum-workspace.lock": {
+      "sha256": "2be88ebc15f87e643e3a4a006d9e08169600e38e16578fd663f4d30c99cae668",
+      "size": 46
+    },
+    "cinematicum-fcpxml-native-driver-02/fixture/workspace/last-session-exit.json": {
+      "sha256": "e618d54477e8146308f6eddc811de2e8fda4a813c619651799147bb77b9eac09",
+      "size": 138
+    },
+    "cinematicum-fcpxml-native-driver-02/fixture/workspace/projects/3c14bd8fa58a4b4db3943fda0d7f18e6/assets.json": {
+      "sha256": "f9bb42b786e99e261b8ab7e521bd0e5ab256cf7b50dfc73d92b2b80401421694",
+      "size": 1702
+    },
+    "cinematicum-fcpxml-native-driver-02/fixture/workspace/projects/3c14bd8fa58a4b4db3943fda0d7f18e6/media/909439d0c0974badb414dd6cc20a8e03.mov": {
+      "sha256": "ea6e2213ccc89745e39123ee148255f4ab9a2657ca8b18a1ca73efe703f915f7",
+      "size": 643279
+    },
+    "cinematicum-fcpxml-native-driver-02/fixture/workspace/projects/3c14bd8fa58a4b4db3943fda0d7f18e6/media/cc2be8b1032e4110ac5bd901ec7bbbef.mov": {
+      "sha256": "01a2518a2786e063fdfef550946f1a31f90469dd3c42b0478731425e3dcb3c36",
+      "size": 643279
+    },
+    "cinematicum-fcpxml-native-driver-02/fixture/workspace/projects/3c14bd8fa58a4b4db3943fda0d7f18e6/project.json": {
+      "sha256": "25a1660522b79b3a3c4e374e6caf6ffdb3a193a5c1cbe060e0a35cac0df61450",
+      "size": 3050
+    },
+    "cinematicum-fcpxml-native-driver-02/fixture/workspace/projects/3c14bd8fa58a4b4db3943fda0d7f18e6/versions/000000000001.json": {
+      "sha256": "9e4a9b1fa56c16371cc0a9daa8f883e069e4ec0c3867060495ab4ef9fb3b8f9c",
+      "size": 2549
+    },
+    "cinematicum-fcpxml-native-driver-02/fixture/workspace/projects/823fe84708924e419ddf5ecf6fcc4fc2/assets.json": {
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+      "size": 3
+    },
+    "cinematicum-fcpxml-native-driver-02/fixture/workspace/projects/823fe84708924e419ddf5ecf6fcc4fc2/project.json": {
+      "sha256": "96b952bf5204b58ea4dd3126cea7136edc7561ca4ee0841fe012b703047fa5d8",
+      "size": 372
+    },
+    "cinematicum-fcpxml-native-driver-02/phase-summary.json": {
+      "sha256": "fd7d903dab035e25898ca9d8bbf21cd14fe53e1cb04e08a8c60af389b3f39b12",
+      "size": 439
+    },
+    "cinematicum-fcpxml-native-driver-02/prepare/ENGINE_TEST_fcpxml_report.json": {
+      "sha256": "bfe6f88ec3d67d58a4a330547de78dc5fe34504ac96dbd5193bcffecb373ca7c",
+      "size": 19234
+    },
+    "cinematicum-fcpxml-native-driver-02/prepare/ENGINE_TEST_owned_jobs.json": {
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+      "size": 3
+    },
+    "cinematicum-fcpxml-native-driver-02/prepare/ENGINE_TEST_saved_project.json": {
+      "sha256": "25a1660522b79b3a3c4e374e6caf6ffdb3a193a5c1cbe060e0a35cac0df61450",
+      "size": 3050
+    },
+    "cinematicum-fcpxml-native-driver-02/source-inventory.json": {
+      "sha256": "d2e39e65a5ee0964bd0b5563ff984c234753bb97c088325dd7a2bb535ce47221",
+      "size": 16581
+    },
+    "cinematicum-fcpxml-native-driver-03/author/ENGINE_TEST_browser_result.json": {
+      "sha256": "791ca130d5bf4906b14d54493231467f2a3ab8bf283fb71890eaa65b733402f2",
+      "size": 2048
+    },
+    "cinematicum-fcpxml-native-driver-03/author/ENGINE_TEST_fcpxml.js": {
+      "sha256": "287da8f26279f855bb499bca6c07f29f51a73bf6b1738b56f6ba5332d93f4efa",
+      "size": 18042
+    },
+    "cinematicum-fcpxml-native-driver-03/author/ENGINE_TEST_fcpxml.png": {
+      "sha256": "0f7f08bd3ed30e92a48e118fd39e5884f338ad7f597c7df16cfe14c20fde94a4",
+      "size": 204520
+    },
+    "cinematicum-fcpxml-native-driver-03/author/ENGINE_TEST_fcpxml_report.json": {
+      "sha256": "11a98bfabf8d44753518b3416012ad76c3da20ed066e5cd979adbd06a23c6fcd",
+      "size": 22287
+    },
+    "cinematicum-fcpxml-native-driver-03/author/ENGINE_TEST_frame_requests.json": {
+      "sha256": "e0f4b343b4e47603ec2877a80a2168b99f0f72a81f04857576f3b891a7c530bc",
+      "size": 18008
+    },
+    "cinematicum-fcpxml-native-driver-03/author/ENGINE_TEST_owned_jobs.json": {
+      "sha256": "d92e2aa44c22e44a8a33057b0244f2039dbd6f73025e33e4c6c63e330ab18215",
+      "size": 687
+    },
+    "cinematicum-fcpxml-native-driver-03/author/ENGINE_TEST_saved_project.json": {
+      "sha256": "78406a4a32d85fe7fe699e0f52627e4f6f4d9fc011a1c7a216873ba9eb1ab235",
+      "size": 15461
+    },
+    "cinematicum-fcpxml-native-driver-03/author/native_downloads/cc5e724a060f4601a5123ef52741fc2c.fcpxml": {
+      "sha256": "91439d0b169d7ccdab8e8cddd515b5deb6d076a17cbf5345d9203564915eb962",
+      "size": 4595
+    },
+    "cinematicum-fcpxml-native-driver-03/browser-report.json": {
+      "sha256": "f79bcd75cfbaa60f89f4e9ac3be33452c1b55d1580da0140c2726921a195e81a",
+      "size": 947
+    },
+    "cinematicum-fcpxml-native-driver-03/chromium-adapter.cjs": {
+      "sha256": "e43b3006b34ba2335324abceb3373682e8042a2c4d398c81dde849c6dd4ad055",
+      "size": 343
+    },
+    "cinematicum-fcpxml-native-driver-03/driver.stderr": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    "cinematicum-fcpxml-native-driver-03/driver.stdout": {
+      "sha256": "7b18f0391b9ceb2ffbbb92928a42e616de7a504494bb600c6201f834b36c4a2e",
+      "size": 438
+    },
+    "cinematicum-fcpxml-native-driver-03/fixture/fcpxml-fixture.json": {
+      "sha256": "cb89e0843838cb82ce0154752d5f46406cc17a2969ae092682c55bca99409f95",
+      "size": 4098
+    },
+    "cinematicum-fcpxml-native-driver-03/fixture/prepare-passed.json": {
+      "sha256": "7a4de645f1bd1c4a751a17a6aca5e07a4f6cffcc25eb0bdca2aff8bf25254d7d",
+      "size": 18096
+    },
+    "cinematicum-fcpxml-native-driver-03/fixture/source-fixture/blue.wav": {
+      "sha256": "f2f217782d900a98ff0b1fd4e4d2a58bbfd6b6b62a56093b90a0d44321f7039a",
+      "size": 615060
+    },
+    "cinematicum-fcpxml-native-driver-03/fixture/source-fixture/media/blue.mov": {
+      "sha256": "01a2518a2786e063fdfef550946f1a31f90469dd3c42b0478731425e3dcb3c36",
+      "size": 643279
+    },
+    "cinematicum-fcpxml-native-driver-03/fixture/source-fixture/media/red.mov": {
+      "sha256": "ea6e2213ccc89745e39123ee148255f4ab9a2657ca8b18a1ca73efe703f915f7",
+      "size": 643279
+    },
+    "cinematicum-fcpxml-native-driver-03/fixture/source-fixture/red.wav": {
+      "sha256": "35a7658d806f4bb7c7f4670283d30465c1044822f393c305b7ec30542e87561a",
+      "size": 615060
+    },
+    "cinematicum-fcpxml-native-driver-03/fixture/truth/ENGINE_TEST_timeline.fcpxml": {
+      "sha256": "c0654f0e5582479eb307e04baeafd926aa350319f6db8b494a8a7a1df7317769",
+      "size": 2793
+    },
+    "cinematicum-fcpxml-native-driver-03/fixture/truth/expected.json": {
+      "sha256": "3657b709002748598715b507a25200d338fb4b990336db3d5932ceaf6d17ca4b",
+      "size": 1044
+    },
+    "cinematicum-fcpxml-native-driver-03/fixture/truth/expected.s16le": {
+      "sha256": "7925af27f06f06d240b0259d889ec045f4c6930823ae4c9f54188fbb9290a18c",
+      "size": 256256
+    },
+    "cinematicum-fcpxml-native-driver-03/fixture/workspace/.cinematicum-workspace.lock": {
+      "sha256": "5136ff8d8e36f37d4035c1d1cb1a369146cbc371366296beaa947cafb9dc9741",
+      "size": 50
+    },
+    "cinematicum-fcpxml-native-driver-03/fixture/workspace/last-session-exit.json": {
+      "sha256": "5861803621ac769fee58f5d07a23a9109cd0d3e03b31d3e5e6569a31fb05a1ae",
+      "size": 138
+    },
+    "cinematicum-fcpxml-native-driver-03/fixture/workspace/projects/24f71a638e0a471ba2c9614c49060308/assets.json": {
+      "sha256": "71099c03274a99e703dbe642cccfcae73225df6127989ccfb9ebfe040ee4490b",
+      "size": 1702
+    },
+    "cinematicum-fcpxml-native-driver-03/fixture/workspace/projects/24f71a638e0a471ba2c9614c49060308/exports/cc5e724a060f4601a5123ef52741fc2c.fcpxml": {
+      "sha256": "91439d0b169d7ccdab8e8cddd515b5deb6d076a17cbf5345d9203564915eb962",
+      "size": 4595
+    },
+    "cinematicum-fcpxml-native-driver-03/fixture/workspace/projects/24f71a638e0a471ba2c9614c49060308/media/be55800d585f43a79f27286829daa00d.mov": {
+      "sha256": "01a2518a2786e063fdfef550946f1a31f90469dd3c42b0478731425e3dcb3c36",
+      "size": 643279
+    },
+    "cinematicum-fcpxml-native-driver-03/fixture/workspace/projects/24f71a638e0a471ba2c9614c49060308/media/da66cd47bf9546cfa6115a8857697c4b.mov": {
+      "sha256": "ea6e2213ccc89745e39123ee148255f4ab9a2657ca8b18a1ca73efe703f915f7",
+      "size": 643279
+    },
+    "cinematicum-fcpxml-native-driver-03/fixture/workspace/projects/24f71a638e0a471ba2c9614c49060308/previews/66d4e46fee2c11cd9188fdafea3f43b534ab7c6d35eb4c30d1c33cfd8ee1d452.png": {
+      "sha256": "11c8a962076bba83af43b3c3f8da2b6e8ecd04906aa148a8229d1f115e36a2c7",
+      "size": 144
+    },
+    "cinematicum-fcpxml-native-driver-03/fixture/workspace/projects/24f71a638e0a471ba2c9614c49060308/project.json": {
+      "sha256": "78406a4a32d85fe7fe699e0f52627e4f6f4d9fc011a1c7a216873ba9eb1ab235",
+      "size": 15461
+    },
+    "cinematicum-fcpxml-native-driver-03/fixture/workspace/projects/24f71a638e0a471ba2c9614c49060308/thumbnails/be55800d585f43a79f27286829daa00d.jpg": {
+      "sha256": "e6077209bd0c96521f3ae27eb545e5449739775ea7813afec157dda48305fdc9",
+      "size": 1420
+    },
+    "cinematicum-fcpxml-native-driver-03/fixture/workspace/projects/24f71a638e0a471ba2c9614c49060308/thumbnails/da66cd47bf9546cfa6115a8857697c4b.jpg": {
+      "sha256": "5c62e6710b672def4ad9a6a6672c8f7fbfeef035c39279f120520e6590a21736",
+      "size": 1565
+    },
+    "cinematicum-fcpxml-native-driver-03/fixture/workspace/projects/24f71a638e0a471ba2c9614c49060308/versions/000000000001.json": {
+      "sha256": "d178ca104263ec685a667b9c89bb8ec126d43e4c8acff77a8d72f3087c57f229",
+      "size": 2549
+    },
+    "cinematicum-fcpxml-native-driver-03/fixture/workspace/projects/24f71a638e0a471ba2c9614c49060308/versions/000000000002.json": {
+      "sha256": "55761e4a74fdf3137c861f393a00d2470d9dfb0ccf7ffd6f514477920500b90f",
+      "size": 3471
+    },
+    "cinematicum-fcpxml-native-driver-03/fixture/workspace/projects/24f71a638e0a471ba2c9614c49060308/waveforms/78b500d9eac72b584b496f9559763f68b633acecd0c54359f9022bdc25382a03.json": {
+      "sha256": "27fdc0c8a368b735137689aa6509a70e02769c3a02fe763ed4ac94c1137e2970",
+      "size": 32521
+    },
+    "cinematicum-fcpxml-native-driver-03/fixture/workspace/projects/24f71a638e0a471ba2c9614c49060308/waveforms/b9a4a99ac661631b03b80eb83f6b17e3051c72b0672d68a5771bed8d2a89ef72.json": {
+      "sha256": "7b4833066610fb42d622afdd573e77101fe187269995def227b0d225b9dbf235",
+      "size": 32518
+    },
+    "cinematicum-fcpxml-native-driver-03/fixture/workspace/projects/ac1c7aa54f824df1a342beaf84ee335e/assets.json": {
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+      "size": 3
+    },
+    "cinematicum-fcpxml-native-driver-03/fixture/workspace/projects/ac1c7aa54f824df1a342beaf84ee335e/project.json": {
+      "sha256": "184f7ae67775a959ee67ff675f251e6519904c3ce12aedd4bec6e01e96b671a5",
+      "size": 372
+    },
+    "cinematicum-fcpxml-native-driver-03/phase-summary.json": {
+      "sha256": "4b0185dcc6cf8aa808052a9eaea8299011afbccb3ff70b3c8bac09fe4274283a",
+      "size": 601
+    },
+    "cinematicum-fcpxml-native-driver-03/prepare/ENGINE_TEST_fcpxml_report.json": {
+      "sha256": "56c857fcfde63a646399ff09c483c2fc3a9b0cdfb1f7d99ad0dc6d6e272007d9",
+      "size": 19234
+    },
+    "cinematicum-fcpxml-native-driver-03/prepare/ENGINE_TEST_owned_jobs.json": {
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+      "size": 3
+    },
+    "cinematicum-fcpxml-native-driver-03/prepare/ENGINE_TEST_saved_project.json": {
+      "sha256": "91a4e172e0f88518a2d1e486347ed8630dc263c7ab525ee2cccea8930089dcbd",
+      "size": 3050
+    },
+    "cinematicum-fcpxml-native-driver-03/source-inventory.json": {
+      "sha256": "d2e39e65a5ee0964bd0b5563ff984c234753bb97c088325dd7a2bb535ce47221",
+      "size": 16581
+    },
+    "cinematicum-fcpxml-native-driver-04/author/ENGINE_TEST_browser_result.json": {
+      "sha256": "6fe132fbffe97ec819f85d404d7e80e644ef24ec5827b978c4496fc1c2a0308a",
+      "size": 1937
+    },
+    "cinematicum-fcpxml-native-driver-04/author/ENGINE_TEST_fcpxml.js": {
+      "sha256": "9f3cdbd003f786a6728df064b20a717ad2dc89e6fac126d0a8fcf399076d419a",
+      "size": 18123
+    },
+    "cinematicum-fcpxml-native-driver-04/author/ENGINE_TEST_fcpxml.png": {
+      "sha256": "3a0a8f102a48bf4ccbc6d56bf9ec4dfff916ece7dc5e72792750184fe353f732",
+      "size": 83217
+    },
+    "cinematicum-fcpxml-native-driver-04/author/ENGINE_TEST_fcpxml_report.json": {
+      "sha256": "3c8754a0bd8fbff31ad9bae19bc6daf895665f503548430c99286190d8383a4e",
+      "size": 23099
+    },
+    "cinematicum-fcpxml-native-driver-04/author/ENGINE_TEST_frame_requests.json": {
+      "sha256": "54b78e123adfa137c967458979e2fd88c4e3edae4e700c83ed93fc7b16ef564f",
+      "size": 18008
+    },
+    "cinematicum-fcpxml-native-driver-04/author/ENGINE_TEST_owned_jobs.json": {
+      "sha256": "8584cebafb09c8af16ee33ee5e80ff1fbce47c9d3320a4e63e8756e55f1733c5",
+      "size": 687
+    },
+    "cinematicum-fcpxml-native-driver-04/author/ENGINE_TEST_saved_project.json": {
+      "sha256": "60c3c4b2952da327cc781a1f87e3f763e48c596209ce67e9e09b930eea88b586",
+      "size": 15461
+    },
+    "cinematicum-fcpxml-native-driver-04/author/native_downloads/0d2a7b7e6e224b74a91f4a37336aaea9.fcpxml": {
+      "sha256": "08e800c7b2418fbbf55e6e63ddf30519a4f998d6d5031303c3a4d91180c3dbe2",
+      "size": 4595
+    },
+    "cinematicum-fcpxml-native-driver-04/browser-report.json": {
+      "sha256": "30a64fad487ea7a09b8c25c5b8c4a8ba7c4cab4170a665080df1be02dc74e3a5",
+      "size": 928
+    },
+    "cinematicum-fcpxml-native-driver-04/chromium-adapter.cjs": {
+      "sha256": "e43b3006b34ba2335324abceb3373682e8042a2c4d398c81dde849c6dd4ad055",
+      "size": 343
+    },
+    "cinematicum-fcpxml-native-driver-04/driver.stderr": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    "cinematicum-fcpxml-native-driver-04/driver.stdout": {
+      "sha256": "4373ec8351b20257c61b0fb692ccc4f79b2ab944738e40a31df6e5c680037641",
+      "size": 368
+    },
+    "cinematicum-fcpxml-native-driver-04/fixture/author-passed.json": {
+      "sha256": "457e1bcb2097e18d3077c349967b6168a9b430b278d74b5fe8b1304e22e14796",
+      "size": 18096
+    },
+    "cinematicum-fcpxml-native-driver-04/fixture/fcpxml-fixture.json": {
+      "sha256": "5919c4427547d4574d8d1161ef8c36f94b4c1d403ce64254ffa82bf8a5285dd1",
+      "size": 4098
+    },
+    "cinematicum-fcpxml-native-driver-04/fixture/prepare-passed.json": {
+      "sha256": "6b42cf1b32e605550890efcc12ff3c905d05c7533219786e1dd7b16909f66748",
+      "size": 18096
+    },
+    "cinematicum-fcpxml-native-driver-04/fixture/source-fixture/blue.wav": {
+      "sha256": "f2f217782d900a98ff0b1fd4e4d2a58bbfd6b6b62a56093b90a0d44321f7039a",
+      "size": 615060
+    },
+    "cinematicum-fcpxml-native-driver-04/fixture/source-fixture/media/blue.mov": {
+      "sha256": "01a2518a2786e063fdfef550946f1a31f90469dd3c42b0478731425e3dcb3c36",
+      "size": 643279
+    },
+    "cinematicum-fcpxml-native-driver-04/fixture/source-fixture/media/red.mov": {
+      "sha256": "ea6e2213ccc89745e39123ee148255f4ab9a2657ca8b18a1ca73efe703f915f7",
+      "size": 643279
+    },
+    "cinematicum-fcpxml-native-driver-04/fixture/source-fixture/red.wav": {
+      "sha256": "35a7658d806f4bb7c7f4670283d30465c1044822f393c305b7ec30542e87561a",
+      "size": 615060
+    },
+    "cinematicum-fcpxml-native-driver-04/fixture/truth/ENGINE_TEST_timeline.fcpxml": {
+      "sha256": "c0654f0e5582479eb307e04baeafd926aa350319f6db8b494a8a7a1df7317769",
+      "size": 2793
+    },
+    "cinematicum-fcpxml-native-driver-04/fixture/truth/expected.json": {
+      "sha256": "3657b709002748598715b507a25200d338fb4b990336db3d5932ceaf6d17ca4b",
+      "size": 1044
+    },
+    "cinematicum-fcpxml-native-driver-04/fixture/truth/expected.s16le": {
+      "sha256": "7925af27f06f06d240b0259d889ec045f4c6930823ae4c9f54188fbb9290a18c",
+      "size": 256256
+    },
+    "cinematicum-fcpxml-native-driver-04/fixture/workspace/.cinematicum-workspace.lock": {
+      "sha256": "0c44aa0d5eadf1c0e92e1802ce29f6ae3eb0f47e6993a9aed8f16770b9b9acd9",
+      "size": 50
+    },
+    "cinematicum-fcpxml-native-driver-04/fixture/workspace/jobs/dda1146061bc46d88c66991445f7b4ff.json": {
+      "sha256": "8566cd34e348af8eacef05d2996950d5c2098e58d33eeb20856d8e3d3c7f92fc",
+      "size": 1417
+    },
+    "cinematicum-fcpxml-native-driver-04/fixture/workspace/jobs/dda1146061bc46d88c66991445f7b4ff.snapshot": {
+      "sha256": "199d07c4e97fd2c8c17ae4e14d1dbc50adc30c4eb051a3678e3abef83b96f8cc",
+      "size": 15461
+    },
+    "cinematicum-fcpxml-native-driver-04/fixture/workspace/last-session-exit.json": {
+      "sha256": "9c46a234e6ea9e81918600daaf8027abf5a2e01dc23066760b590be24a080ed0",
+      "size": 138
+    },
+    "cinematicum-fcpxml-native-driver-04/fixture/workspace/projects/4725b27ad74c4e6db9c4fb3fe831b8d9/assets.json": {
+      "sha256": "3254d532fcbaef046af09ce13d0e9b576b4607cdf7bc99d2e04cd03729aad035",
+      "size": 1702
+    },
+    "cinematicum-fcpxml-native-driver-04/fixture/workspace/projects/4725b27ad74c4e6db9c4fb3fe831b8d9/exports/0d2a7b7e6e224b74a91f4a37336aaea9.fcpxml": {
+      "sha256": "08e800c7b2418fbbf55e6e63ddf30519a4f998d6d5031303c3a4d91180c3dbe2",
+      "size": 4595
+    },
+    "cinematicum-fcpxml-native-driver-04/fixture/workspace/projects/4725b27ad74c4e6db9c4fb3fe831b8d9/exports/dda1146061bc46d88c66991445f7b4ff.json": {
+      "sha256": "5f459a5791199f3185d0e50b37462cfde26c26126b6ce0bc300bf9e1b02a446b",
+      "size": 17852
+    },
+    "cinematicum-fcpxml-native-driver-04/fixture/workspace/projects/4725b27ad74c4e6db9c4fb3fe831b8d9/exports/dda1146061bc46d88c66991445f7b4ff.mov": {
+      "sha256": "ee63a18c22ae83ada7b7839a4ad5004cad5fe9da81a98802005438c7e6b69da1",
+      "size": 272423
+    },
+    "cinematicum-fcpxml-native-driver-04/fixture/workspace/projects/4725b27ad74c4e6db9c4fb3fe831b8d9/media/12159b0346474f989fcd5c1db75c55fe.mov": {
+      "sha256": "01a2518a2786e063fdfef550946f1a31f90469dd3c42b0478731425e3dcb3c36",
+      "size": 643279
+    },
+    "cinematicum-fcpxml-native-driver-04/fixture/workspace/projects/4725b27ad74c4e6db9c4fb3fe831b8d9/media/7ebe05a303014a1fbd79b097d565f93f.mov": {
+      "sha256": "ea6e2213ccc89745e39123ee148255f4ab9a2657ca8b18a1ca73efe703f915f7",
+      "size": 643279
+    },
+    "cinematicum-fcpxml-native-driver-04/fixture/workspace/projects/4725b27ad74c4e6db9c4fb3fe831b8d9/previews/6203337d4aa05456a584093f39b5e449661b60b71e4de66f5b175329766e268e.png": {
+      "sha256": "11c8a962076bba83af43b3c3f8da2b6e8ecd04906aa148a8229d1f115e36a2c7",
+      "size": 144
+    },
+    "cinematicum-fcpxml-native-driver-04/fixture/workspace/projects/4725b27ad74c4e6db9c4fb3fe831b8d9/previews/74f5e4bbe8e0c1d2e6931551ef7f77892e21f2ac21119b49f693a2ffb5b56bac.png": {
+      "sha256": "4f2921a37d1ab3c5ac070996d0200a6e70e6d08d2321cc5c75411dce21a88f19",
+      "size": 145
+    },
+    "cinematicum-fcpxml-native-driver-04/fixture/workspace/projects/4725b27ad74c4e6db9c4fb3fe831b8d9/previews/895e25c2ad9e818d6b78eb10aa148a187947d84441ddd9013f8a201cb2d67c6c.png": {
+      "sha256": "4f2921a37d1ab3c5ac070996d0200a6e70e6d08d2321cc5c75411dce21a88f19",
+      "size": 145
+    },
+    "cinematicum-fcpxml-native-driver-04/fixture/workspace/projects/4725b27ad74c4e6db9c4fb3fe831b8d9/project.json": {
+      "sha256": "199d07c4e97fd2c8c17ae4e14d1dbc50adc30c4eb051a3678e3abef83b96f8cc",
+      "size": 15461
+    },
+    "cinematicum-fcpxml-native-driver-04/fixture/workspace/projects/4725b27ad74c4e6db9c4fb3fe831b8d9/thumbnails/12159b0346474f989fcd5c1db75c55fe.jpg": {
+      "sha256": "e6077209bd0c96521f3ae27eb545e5449739775ea7813afec157dda48305fdc9",
+      "size": 1420
+    },
+    "cinematicum-fcpxml-native-driver-04/fixture/workspace/projects/4725b27ad74c4e6db9c4fb3fe831b8d9/thumbnails/7ebe05a303014a1fbd79b097d565f93f.jpg": {
+      "sha256": "5c62e6710b672def4ad9a6a6672c8f7fbfeef035c39279f120520e6590a21736",
+      "size": 1565
+    },
+    "cinematicum-fcpxml-native-driver-04/fixture/workspace/projects/4725b27ad74c4e6db9c4fb3fe831b8d9/versions/000000000001.json": {
+      "sha256": "89c4ec4740e7f5fef1cd239ded87be7c78607f73842bac8a6871a0aff128d949",
+      "size": 2549
+    },
+    "cinematicum-fcpxml-native-driver-04/fixture/workspace/projects/4725b27ad74c4e6db9c4fb3fe831b8d9/versions/000000000002.json": {
+      "sha256": "27b69c68efbfdf0dec4cf53ccc8ee7b808a5a08e08dea6b97de6cec77668fac0",
+      "size": 3471
+    },
+    "cinematicum-fcpxml-native-driver-04/fixture/workspace/projects/4725b27ad74c4e6db9c4fb3fe831b8d9/versions/000000000003.json": {
+      "sha256": "4c56269453e5776e057c8215d9f5921dc5404e82ba0189005bf494a72d892081",
+      "size": 16808
+    },
+    "cinematicum-fcpxml-native-driver-04/fixture/workspace/projects/4725b27ad74c4e6db9c4fb3fe831b8d9/waveforms/1c6653a96dfb5eefcfe282c64664cd528fe3734d6a07f7605fe2d0a16a4817e3.json": {
+      "sha256": "27fdc0c8a368b735137689aa6509a70e02769c3a02fe763ed4ac94c1137e2970",
+      "size": 32521
+    },
+    "cinematicum-fcpxml-native-driver-04/fixture/workspace/projects/4725b27ad74c4e6db9c4fb3fe831b8d9/waveforms/5c37530476c4f7ad80cd74451d6d97a31b28368dcae7e5b529b2046628a7594c.json": {
+      "sha256": "7b4833066610fb42d622afdd573e77101fe187269995def227b0d225b9dbf235",
+      "size": 32518
+    },
+    "cinematicum-fcpxml-native-driver-04/fixture/workspace/projects/82cbf1d9e860467cb0fd0ab50b5657cf/assets.json": {
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+      "size": 3
+    },
+    "cinematicum-fcpxml-native-driver-04/fixture/workspace/projects/82cbf1d9e860467cb0fd0ab50b5657cf/project.json": {
+      "sha256": "54dc18c26426106d499ed7e57ff9202104c1724cc8dea93c5c7c78e092ba5814",
+      "size": 372
+    },
+    "cinematicum-fcpxml-native-driver-04/phase-summary.json": {
+      "sha256": "33e1395d94ef8f39ead1d3cc2004be1999928ad07488baaefce0e4fdbf4577e0",
+      "size": 578
+    },
+    "cinematicum-fcpxml-native-driver-04/prepare/ENGINE_TEST_fcpxml_report.json": {
+      "sha256": "9538750903e136a50f314bdc07fe184e4eb1e151487f795970b748abcd2df585",
+      "size": 19234
+    },
+    "cinematicum-fcpxml-native-driver-04/prepare/ENGINE_TEST_owned_jobs.json": {
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+      "size": 3
+    },
+    "cinematicum-fcpxml-native-driver-04/prepare/ENGINE_TEST_saved_project.json": {
+      "sha256": "39ad2be7cf6c09ae3bead8427dc06a43929e6fd9cc04a873d7001cb18029ed49",
+      "size": 3050
+    },
+    "cinematicum-fcpxml-native-driver-04/render/ENGINE_TEST_browser_result.json": {
+      "sha256": "1c21b29dcf7e1551714f7a7de013dd00eb535a125deca1d559136d3598bd9360",
+      "size": 1720
+    },
+    "cinematicum-fcpxml-native-driver-04/render/ENGINE_TEST_fcpxml.js": {
+      "sha256": "b02b59b267fc044338da8a2cffa4136c61fbfdfde121b1a664ef63da6b12c364",
+      "size": 14376
+    },
+    "cinematicum-fcpxml-native-driver-04/render/ENGINE_TEST_fcpxml.png": {
+      "sha256": "bd49d7735d461445ba0b05b44c3cba239fe325e847a8ba8dfc49a2e9f8474b8d",
+      "size": 94805
+    },
+    "cinematicum-fcpxml-native-driver-04/render/ENGINE_TEST_fcpxml_report.json": {
+      "sha256": "27af4203f8cd7ee0b0a1130f7dce4e80bf7d8b54bb7376f7afe03171bbcf7bb9",
+      "size": 24399
+    },
+    "cinematicum-fcpxml-native-driver-04/render/ENGINE_TEST_frame_requests.json": {
+      "sha256": "90ba2797e4439802d4715c0dddae48fcab27b6df76587a75d7d1c1cf23d8ddcc",
+      "size": 36013
+    },
+    "cinematicum-fcpxml-native-driver-04/render/ENGINE_TEST_imported_frame.png": {
+      "sha256": "4f2921a37d1ab3c5ac070996d0200a6e70e6d08d2321cc5c75411dce21a88f19",
+      "size": 145
+    },
+    "cinematicum-fcpxml-native-driver-04/render/ENGINE_TEST_owned_jobs.json": {
+      "sha256": "69621ef31cc03a44d3d80c0398f26fa7bd4ccf48925f643ef87d8d730cc88ea5",
+      "size": 2870
+    },
+    "cinematicum-fcpxml-native-driver-04/render/ENGINE_TEST_saved_project.json": {
+      "sha256": "199d07c4e97fd2c8c17ae4e14d1dbc50adc30c4eb051a3678e3abef83b96f8cc",
+      "size": 15461
+    },
+    "cinematicum-fcpxml-native-driver-04/render/native_downloads/dda1146061bc46d88c66991445f7b4ff.mov": {
+      "sha256": "ee63a18c22ae83ada7b7839a4ad5004cad5fe9da81a98802005438c7e6b69da1",
+      "size": 272423
+    },
+    "cinematicum-fcpxml-native-driver-04/source-inventory.json": {
+      "sha256": "aa015569cca9d0ec67dc8e58673ee5da9ecb4a216e99b1bdf6b53c16ee1bd756",
+      "size": 16581
+    },
+    "cinematicum-fcpxml-native-driver-05/author/ENGINE_TEST_browser_result.json": {
+      "sha256": "61edd5bad812f969dc72594a4c69ba1f209f066cfebeb71dc9aaf5ed0fc92aab",
+      "size": 1937
+    },
+    "cinematicum-fcpxml-native-driver-05/author/ENGINE_TEST_exported.fcpxml": {
+      "sha256": "4b64e6729fae1331f73e313b1d24c3154296e0cbef8c4800041613404c8645ef",
+      "size": 4595
+    },
+    "cinematicum-fcpxml-native-driver-05/author/ENGINE_TEST_fcpxml.js": {
+      "sha256": "d6d3b6dbeea67c67e4d674f11f96cac810ede1c671576381191e8b42a7ba3bce",
+      "size": 18123
+    },
+    "cinematicum-fcpxml-native-driver-05/author/ENGINE_TEST_fcpxml.png": {
+      "sha256": "3a0a8f102a48bf4ccbc6d56bf9ec4dfff916ece7dc5e72792750184fe353f732",
+      "size": 83217
+    },
+    "cinematicum-fcpxml-native-driver-05/author/ENGINE_TEST_fcpxml_report.json": {
+      "sha256": "d63cbe4e9d98eddacea9ecc97e53bb337838a628c633d48880c7969541d91e81",
+      "size": 23309
+    },
+    "cinematicum-fcpxml-native-driver-05/author/ENGINE_TEST_frame_requests.json": {
+      "sha256": "ede2a28f766f4258cee065ba4f1c73892fc8a8a6d0571ebd0ed617bf82d9ce67",
+      "size": 18008
+    },
+    "cinematicum-fcpxml-native-driver-05/author/ENGINE_TEST_owned_jobs.json": {
+      "sha256": "152c018d08fb44601183b6cac091118b3414a7eea9d37b9333fab3b81845dfea",
+      "size": 687
+    },
+    "cinematicum-fcpxml-native-driver-05/author/ENGINE_TEST_saved_project.json": {
+      "sha256": "3b8f30b691e6335c94fd3ae7ff34bafd820eb135da08a1f213e057afc7dedfa6",
+      "size": 15461
+    },
+    "cinematicum-fcpxml-native-driver-05/author/native_downloads/05d2a9e0afca4344a22eb07ca0e5a120.fcpxml": {
+      "sha256": "4b64e6729fae1331f73e313b1d24c3154296e0cbef8c4800041613404c8645ef",
+      "size": 4595
+    },
+    "cinematicum-fcpxml-native-driver-05/browser-report.json": {
+      "sha256": "fae2cc39bf1c94fb90227c4ee8bdcce18c69070408831f20f2e5c26f375dd3d7",
+      "size": 926
+    },
+    "cinematicum-fcpxml-native-driver-05/chromium-adapter.cjs": {
+      "sha256": "e43b3006b34ba2335324abceb3373682e8042a2c4d398c81dde849c6dd4ad055",
+      "size": 343
+    },
+    "cinematicum-fcpxml-native-driver-05/driver.stderr": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    "cinematicum-fcpxml-native-driver-05/driver.stdout": {
+      "sha256": "18e98af02ff10336a3eacdf46f1d3b5895cec142a26123b1f8be1366782b606e",
+      "size": 367
+    },
+    "cinematicum-fcpxml-native-driver-05/fixture/author-passed.json": {
+      "sha256": "8df8c4a2c4c9bd70704d047832d95a2a402ebd8ff0c4fc3161f0d7ccfa49c262",
+      "size": 18096
+    },
+    "cinematicum-fcpxml-native-driver-05/fixture/fcpxml-fixture.json": {
+      "sha256": "f5f65ee2c0e34b59ef00e52d503bb2cd19231287647c0fb0e4adab11979b0387",
+      "size": 4098
+    },
+    "cinematicum-fcpxml-native-driver-05/fixture/prepare-passed.json": {
+      "sha256": "de75361023f93bb690f41318943cdc50d1f107b944a3dde426b968e02d63937e",
+      "size": 18096
+    },
+    "cinematicum-fcpxml-native-driver-05/fixture/render-passed.json": {
+      "sha256": "d4d680f9aa4be5bbf1462cdb6982b79d678d917f25d200264da925d14190ce28",
+      "size": 18096
+    },
+    "cinematicum-fcpxml-native-driver-05/fixture/source-fixture/blue.wav": {
+      "sha256": "f2f217782d900a98ff0b1fd4e4d2a58bbfd6b6b62a56093b90a0d44321f7039a",
+      "size": 615060
+    },
+    "cinematicum-fcpxml-native-driver-05/fixture/source-fixture/media/blue.mov": {
+      "sha256": "01a2518a2786e063fdfef550946f1a31f90469dd3c42b0478731425e3dcb3c36",
+      "size": 643279
+    },
+    "cinematicum-fcpxml-native-driver-05/fixture/source-fixture/media/red.mov": {
+      "sha256": "ea6e2213ccc89745e39123ee148255f4ab9a2657ca8b18a1ca73efe703f915f7",
+      "size": 643279
+    },
+    "cinematicum-fcpxml-native-driver-05/fixture/source-fixture/red.wav": {
+      "sha256": "35a7658d806f4bb7c7f4670283d30465c1044822f393c305b7ec30542e87561a",
+      "size": 615060
+    },
+    "cinematicum-fcpxml-native-driver-05/fixture/truth/ENGINE_TEST_timeline.fcpxml": {
+      "sha256": "c0654f0e5582479eb307e04baeafd926aa350319f6db8b494a8a7a1df7317769",
+      "size": 2793
+    },
+    "cinematicum-fcpxml-native-driver-05/fixture/truth/expected.json": {
+      "sha256": "3657b709002748598715b507a25200d338fb4b990336db3d5932ceaf6d17ca4b",
+      "size": 1044
+    },
+    "cinematicum-fcpxml-native-driver-05/fixture/truth/expected.s16le": {
+      "sha256": "7925af27f06f06d240b0259d889ec045f4c6930823ae4c9f54188fbb9290a18c",
+      "size": 256256
+    },
+    "cinematicum-fcpxml-native-driver-05/fixture/workspace/.cinematicum-workspace.lock": {
+      "sha256": "7cfd308c3488b66c7518ff89dd3922ba4effb8d36cd072ffe4bbf1d6dbd717ce",
+      "size": 50
+    },
+    "cinematicum-fcpxml-native-driver-05/fixture/workspace/jobs/4c6e393c30f9438898624d94c5e10c04.json": {
+      "sha256": "8690dd82144069f345e064133baec78dcdd06023a25556e77049edfa031da55b",
+      "size": 1417
+    },
+    "cinematicum-fcpxml-native-driver-05/fixture/workspace/jobs/4c6e393c30f9438898624d94c5e10c04.snapshot": {
+      "sha256": "4638fe75b575b93b599a8b4c12f19bea49b23ad88b5f3a197d8e88189c496db1",
+      "size": 15461
+    },
+    "cinematicum-fcpxml-native-driver-05/fixture/workspace/last-session-exit.json": {
+      "sha256": "21fd096368ded8f399686ce2a79f5456b322c648c2e85b5cce2f6518465b147e",
+      "size": 138
+    },
+    "cinematicum-fcpxml-native-driver-05/fixture/workspace/projects/351d3690db714f9fb2879f14d800031e/assets.json": {
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+      "size": 3
+    },
+    "cinematicum-fcpxml-native-driver-05/fixture/workspace/projects/351d3690db714f9fb2879f14d800031e/project.json": {
+      "sha256": "68057ba43c0b9e8dae6d8878d2483ba4801ca80398138ef210be0572fb8bf6bc",
+      "size": 372
+    },
+    "cinematicum-fcpxml-native-driver-05/fixture/workspace/projects/c796fd985f9c4cc1ad3a3b297759f1f7/assets.json": {
+      "sha256": "d6279067ccc338256364575886333ecea628714c14eeb776154794127ef13ab5",
+      "size": 1702
+    },
+    "cinematicum-fcpxml-native-driver-05/fixture/workspace/projects/c796fd985f9c4cc1ad3a3b297759f1f7/exports/05d2a9e0afca4344a22eb07ca0e5a120.fcpxml": {
+      "sha256": "4b64e6729fae1331f73e313b1d24c3154296e0cbef8c4800041613404c8645ef",
+      "size": 4595
+    },
+    "cinematicum-fcpxml-native-driver-05/fixture/workspace/projects/c796fd985f9c4cc1ad3a3b297759f1f7/exports/4c6e393c30f9438898624d94c5e10c04.json": {
+      "sha256": "fd5406a8d2f202cbcce376e6bb996d9c17b14a83932b439ec3e8e606130c9bbf",
+      "size": 17852
+    },
+    "cinematicum-fcpxml-native-driver-05/fixture/workspace/projects/c796fd985f9c4cc1ad3a3b297759f1f7/exports/4c6e393c30f9438898624d94c5e10c04.mov": {
+      "sha256": "ee63a18c22ae83ada7b7839a4ad5004cad5fe9da81a98802005438c7e6b69da1",
+      "size": 272423
+    },
+    "cinematicum-fcpxml-native-driver-05/fixture/workspace/projects/c796fd985f9c4cc1ad3a3b297759f1f7/media/13f70b6ed111474f8f56a1dcd1cc0546.mov": {
+      "sha256": "01a2518a2786e063fdfef550946f1a31f90469dd3c42b0478731425e3dcb3c36",
+      "size": 643279
+    },
+    "cinematicum-fcpxml-native-driver-05/fixture/workspace/projects/c796fd985f9c4cc1ad3a3b297759f1f7/media/5050830bdda94affa5080757c678525b.mov": {
+      "sha256": "ea6e2213ccc89745e39123ee148255f4ab9a2657ca8b18a1ca73efe703f915f7",
+      "size": 643279
+    },
+    "cinematicum-fcpxml-native-driver-05/fixture/workspace/projects/c796fd985f9c4cc1ad3a3b297759f1f7/previews/4b487eb7877b46c0e07b348e5417b3b73074e558421ef882f3461e38fea5d208.png": {
+      "sha256": "4f2921a37d1ab3c5ac070996d0200a6e70e6d08d2321cc5c75411dce21a88f19",
+      "size": 145
+    },
+    "cinematicum-fcpxml-native-driver-05/fixture/workspace/projects/c796fd985f9c4cc1ad3a3b297759f1f7/previews/8ce2355a413a66e0c3719de9270ee0ccbe5a1ac533c7c80409c0fb448c78645c.png": {
+      "sha256": "11c8a962076bba83af43b3c3f8da2b6e8ecd04906aa148a8229d1f115e36a2c7",
+      "size": 144
+    },
+    "cinematicum-fcpxml-native-driver-05/fixture/workspace/projects/c796fd985f9c4cc1ad3a3b297759f1f7/previews/dcb2ee4e01ce16fcba5fb8348c4a04a1f9d3f95a02fd9fea782a78aa8dfd20fc.png": {
+      "sha256": "4f2921a37d1ab3c5ac070996d0200a6e70e6d08d2321cc5c75411dce21a88f19",
+      "size": 145
+    },
+    "cinematicum-fcpxml-native-driver-05/fixture/workspace/projects/c796fd985f9c4cc1ad3a3b297759f1f7/project.json": {
+      "sha256": "4638fe75b575b93b599a8b4c12f19bea49b23ad88b5f3a197d8e88189c496db1",
+      "size": 15461
+    },
+    "cinematicum-fcpxml-native-driver-05/fixture/workspace/projects/c796fd985f9c4cc1ad3a3b297759f1f7/thumbnails/13f70b6ed111474f8f56a1dcd1cc0546.jpg": {
+      "sha256": "e6077209bd0c96521f3ae27eb545e5449739775ea7813afec157dda48305fdc9",
+      "size": 1420
+    },
+    "cinematicum-fcpxml-native-driver-05/fixture/workspace/projects/c796fd985f9c4cc1ad3a3b297759f1f7/thumbnails/5050830bdda94affa5080757c678525b.jpg": {
+      "sha256": "5c62e6710b672def4ad9a6a6672c8f7fbfeef035c39279f120520e6590a21736",
+      "size": 1565
+    },
+    "cinematicum-fcpxml-native-driver-05/fixture/workspace/projects/c796fd985f9c4cc1ad3a3b297759f1f7/versions/000000000001.json": {
+      "sha256": "e21f3192bcf64d19bbed8079d4adbd34be8f5a823df8bd88f3fa54594a1b1bb1",
+      "size": 2549
+    },
+    "cinematicum-fcpxml-native-driver-05/fixture/workspace/projects/c796fd985f9c4cc1ad3a3b297759f1f7/versions/000000000002.json": {
+      "sha256": "143f1f4559f9cced20c58c02f6d1adfa6e131f60209d775113be028f1e27eca5",
+      "size": 3471
+    },
+    "cinematicum-fcpxml-native-driver-05/fixture/workspace/projects/c796fd985f9c4cc1ad3a3b297759f1f7/versions/000000000003.json": {
+      "sha256": "0fdf5c022e260396701155427bdfa7c8a5fa5bcce8ffc5b3dc1399a5ceabe07d",
+      "size": 16808
+    },
+    "cinematicum-fcpxml-native-driver-05/fixture/workspace/projects/c796fd985f9c4cc1ad3a3b297759f1f7/waveforms/43a9f219a50f87c80332a27f979908b8f15fd30303a60daf7e6b7f0b55b32172.json": {
+      "sha256": "7b4833066610fb42d622afdd573e77101fe187269995def227b0d225b9dbf235",
+      "size": 32518
+    },
+    "cinematicum-fcpxml-native-driver-05/fixture/workspace/projects/c796fd985f9c4cc1ad3a3b297759f1f7/waveforms/ba7e98525b07cf0c728efdde24f728f521b5ba4fbd80da8da280746b6fa7948b.json": {
+      "sha256": "27fdc0c8a368b735137689aa6509a70e02769c3a02fe763ed4ac94c1137e2970",
+      "size": 32521
+    },
+    "cinematicum-fcpxml-native-driver-05/phase-summary.json": {
+      "sha256": "7e9de7e7401d5c065b6a6a306e9c60b9be1a7ec0d3169b92d28dd63e412d3eca",
+      "size": 576
+    },
+    "cinematicum-fcpxml-native-driver-05/prepare/ENGINE_TEST_fcpxml_report.json": {
+      "sha256": "572736d8066e49f800d1181d54caa7ae583f1d8edf80f29145b749c0e102eb68",
+      "size": 19438
+    },
+    "cinematicum-fcpxml-native-driver-05/prepare/ENGINE_TEST_input.fcpxml": {
+      "sha256": "c0654f0e5582479eb307e04baeafd926aa350319f6db8b494a8a7a1df7317769",
+      "size": 2793
+    },
+    "cinematicum-fcpxml-native-driver-05/prepare/ENGINE_TEST_owned_jobs.json": {
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+      "size": 3
+    },
+    "cinematicum-fcpxml-native-driver-05/prepare/ENGINE_TEST_saved_project.json": {
+      "sha256": "55fe82aca1be57dffdc9852cde5647dddc0b82c01652dce7863514ab66ef83ec",
+      "size": 3050
+    },
+    "cinematicum-fcpxml-native-driver-05/render/ENGINE_TEST_browser_result.json": {
+      "sha256": "50262f00d00a01262672e843e0abb89931caa89732b1f7cce10b0da77a98b68e",
+      "size": 1720
+    },
+    "cinematicum-fcpxml-native-driver-05/render/ENGINE_TEST_fcpxml.js": {
+      "sha256": "3bf275dddbc37bcc470bf2e500c6023487206521b2b9ccdcb5ab059aab740701",
+      "size": 14376
+    },
+    "cinematicum-fcpxml-native-driver-05/render/ENGINE_TEST_fcpxml.png": {
+      "sha256": "bd49d7735d461445ba0b05b44c3cba239fe325e847a8ba8dfc49a2e9f8474b8d",
+      "size": 94805
+    },
+    "cinematicum-fcpxml-native-driver-05/render/ENGINE_TEST_fcpxml_report.json": {
+      "sha256": "a8bb9efa082ac4ba2594736e03732f0e93108503b2a772ef706d385f739e6413",
+      "size": 24656
+    },
+    "cinematicum-fcpxml-native-driver-05/render/ENGINE_TEST_frame_requests.json": {
+      "sha256": "f36b6ce36485555651f66e7011c08a7063fecc425e4f8468f47ee7d460769178",
+      "size": 36013
+    },
+    "cinematicum-fcpxml-native-driver-05/render/ENGINE_TEST_imported_frame.png": {
+      "sha256": "4f2921a37d1ab3c5ac070996d0200a6e70e6d08d2321cc5c75411dce21a88f19",
+      "size": 145
+    },
+    "cinematicum-fcpxml-native-driver-05/render/ENGINE_TEST_owned_jobs.json": {
+      "sha256": "aa5812d5b3f979ba92314b7c0b503d47a414f36a515cf9146b78c7daa1202fa6",
+      "size": 2871
+    },
+    "cinematicum-fcpxml-native-driver-05/render/ENGINE_TEST_saved_project.json": {
+      "sha256": "4638fe75b575b93b599a8b4c12f19bea49b23ad88b5f3a197d8e88189c496db1",
+      "size": 15461
+    },
+    "cinematicum-fcpxml-native-driver-05/render/native_downloads/4c6e393c30f9438898624d94c5e10c04.mov": {
+      "sha256": "ee63a18c22ae83ada7b7839a4ad5004cad5fe9da81a98802005438c7e6b69da1",
+      "size": 272423
+    },
+    "cinematicum-fcpxml-native-driver-05/source-inventory.json": {
+      "sha256": "8f03bdc85e4be2b1870a13235d436e938f5360eddb2874b6d9e66a4dc35b8c11",
+      "size": 16581
+    },
+    "cinematicum-fcpxml-native-driver-06/author/ENGINE_TEST_browser_result.json": {
+      "sha256": "0a6c435d7b9db00d050b4e4d5277c37d6cd032e68e07ad71990db5717fdfa9f2",
+      "size": 1937
+    },
+    "cinematicum-fcpxml-native-driver-06/author/ENGINE_TEST_exported.fcpxml": {
+      "sha256": "3bd3fd5f06bc01323708d8948aa4e7c50fceac4b98ca2f539f7f53a2c99f60d6",
+      "size": 4595
+    },
+    "cinematicum-fcpxml-native-driver-06/author/ENGINE_TEST_fcpxml.js": {
+      "sha256": "49be0421c7124ab574de632b8b806eda4ff1b818c818e545052c0324081f986e",
+      "size": 18123
+    },
+    "cinematicum-fcpxml-native-driver-06/author/ENGINE_TEST_fcpxml.png": {
+      "sha256": "3a0a8f102a48bf4ccbc6d56bf9ec4dfff916ece7dc5e72792750184fe353f732",
+      "size": 83217
+    },
+    "cinematicum-fcpxml-native-driver-06/author/ENGINE_TEST_fcpxml_report.json": {
+      "sha256": "2357e0f6be14ad8c32d5139527f5dd88742d9193753757724795316af174899c",
+      "size": 23309
+    },
+    "cinematicum-fcpxml-native-driver-06/author/ENGINE_TEST_frame_requests.json": {
+      "sha256": "613cae826770bb489ebf950ba3f8c5eaa9a72de13960854b360da01e4fa2034f",
+      "size": 18008
+    },
+    "cinematicum-fcpxml-native-driver-06/author/ENGINE_TEST_owned_jobs.json": {
+      "sha256": "6fcaf24f6917274b4b79376e8df6317336a830d97720212d02caa0879b274512",
+      "size": 686
+    },
+    "cinematicum-fcpxml-native-driver-06/author/ENGINE_TEST_saved_project.json": {
+      "sha256": "bb897bff61ffc30c1cc30e3fbd39c8eb26b2c54c9b13531227b539dffce86067",
+      "size": 15461
+    },
+    "cinematicum-fcpxml-native-driver-06/author/native_downloads/60779dad471647a5ac476cbe3004cec1.fcpxml": {
+      "sha256": "3bd3fd5f06bc01323708d8948aa4e7c50fceac4b98ca2f539f7f53a2c99f60d6",
+      "size": 4595
+    },
+    "cinematicum-fcpxml-native-driver-06/browser-report.json": {
+      "sha256": "854787a1112fc43e4eff8dd921bdf45ef23a4a8819c87c6042052bb1ff2d5e61",
+      "size": 926
+    },
+    "cinematicum-fcpxml-native-driver-06/chromium-adapter.cjs": {
+      "sha256": "e43b3006b34ba2335324abceb3373682e8042a2c4d398c81dde849c6dd4ad055",
+      "size": 343
+    },
+    "cinematicum-fcpxml-native-driver-06/driver.stderr": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    "cinematicum-fcpxml-native-driver-06/driver.stdout": {
+      "sha256": "4b714bd4c5f3d5d3a9fac789cd8ab91d0f412cc5f1583e4a322cf0fb5d9034ef",
+      "size": 367
+    },
+    "cinematicum-fcpxml-native-driver-06/fixture/author-passed.json": {
+      "sha256": "6720d9f2467917c2ac9f80b19ce7d26d086d400b7ab00e8f371c6be2ada1182f",
+      "size": 18096
+    },
+    "cinematicum-fcpxml-native-driver-06/fixture/fcpxml-fixture.json": {
+      "sha256": "ba61647fdc142e076914138a5793c63aad0bc9041d9f946817cb7d76112f0b8f",
+      "size": 4098
+    },
+    "cinematicum-fcpxml-native-driver-06/fixture/prepare-passed.json": {
+      "sha256": "7b19893e42a4adf829f4ec47639d41b4b784d0fb615f6ca42419e40c18e9f615",
+      "size": 18096
+    },
+    "cinematicum-fcpxml-native-driver-06/fixture/render-passed.json": {
+      "sha256": "d19055706355e5c7be4dc7b7fb0ec9ae7af7f9cf477640442ff0a12fb5d21cca",
+      "size": 18096
+    },
+    "cinematicum-fcpxml-native-driver-06/fixture/source-fixture/blue.wav": {
+      "sha256": "f2f217782d900a98ff0b1fd4e4d2a58bbfd6b6b62a56093b90a0d44321f7039a",
+      "size": 615060
+    },
+    "cinematicum-fcpxml-native-driver-06/fixture/source-fixture/media/blue.mov": {
+      "sha256": "01a2518a2786e063fdfef550946f1a31f90469dd3c42b0478731425e3dcb3c36",
+      "size": 643279
+    },
+    "cinematicum-fcpxml-native-driver-06/fixture/source-fixture/media/red.mov": {
+      "sha256": "ea6e2213ccc89745e39123ee148255f4ab9a2657ca8b18a1ca73efe703f915f7",
+      "size": 643279
+    },
+    "cinematicum-fcpxml-native-driver-06/fixture/source-fixture/red.wav": {
+      "sha256": "35a7658d806f4bb7c7f4670283d30465c1044822f393c305b7ec30542e87561a",
+      "size": 615060
+    },
+    "cinematicum-fcpxml-native-driver-06/fixture/truth/ENGINE_TEST_timeline.fcpxml": {
+      "sha256": "c0654f0e5582479eb307e04baeafd926aa350319f6db8b494a8a7a1df7317769",
+      "size": 2793
+    },
+    "cinematicum-fcpxml-native-driver-06/fixture/truth/expected.json": {
+      "sha256": "3657b709002748598715b507a25200d338fb4b990336db3d5932ceaf6d17ca4b",
+      "size": 1044
+    },
+    "cinematicum-fcpxml-native-driver-06/fixture/truth/expected.s16le": {
+      "sha256": "7925af27f06f06d240b0259d889ec045f4c6930823ae4c9f54188fbb9290a18c",
+      "size": 256256
+    },
+    "cinematicum-fcpxml-native-driver-06/fixture/workspace/.cinematicum-workspace.lock": {
+      "sha256": "390cf37437bd5cbe844b6857213a463df0c2bd5918cf12706263734b4dc6b5e7",
+      "size": 50
+    },
+    "cinematicum-fcpxml-native-driver-06/fixture/workspace/jobs/8e8954d7b436465f917a85d64230ccad.json": {
+      "sha256": "6b3acba6ab94e2f8a15d09a642601ec7e4855a957c5fde18771df18beb4160b7",
+      "size": 1418
+    },
+    "cinematicum-fcpxml-native-driver-06/fixture/workspace/jobs/8e8954d7b436465f917a85d64230ccad.snapshot": {
+      "sha256": "217d5fd5f1aae169f76b8ff2fcbc3919961033f32aa13a93cc753bcfabec1434",
+      "size": 15461
+    },
+    "cinematicum-fcpxml-native-driver-06/fixture/workspace/last-session-exit.json": {
+      "sha256": "3e89b0efecb42fbf111d535f74fe63f7e632ad2891b925b9daa82a15e4a4dc3a",
+      "size": 138
+    },
+    "cinematicum-fcpxml-native-driver-06/fixture/workspace/projects/02ac25cdec344fc59c03d0281a97c73b/assets.json": {
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+      "size": 3
+    },
+    "cinematicum-fcpxml-native-driver-06/fixture/workspace/projects/02ac25cdec344fc59c03d0281a97c73b/project.json": {
+      "sha256": "df8b190842c7cb95f00e136e6b3977d0aefe68bd1a8931583f676f6d6e2786f3",
+      "size": 372
+    },
+    "cinematicum-fcpxml-native-driver-06/fixture/workspace/projects/9a9a42e1f8e3495b81b86c44dff9193e/assets.json": {
+      "sha256": "27be113d3f2a1683449a36f847e8f515ca42463ddabeef6cf5e2daef8d387fb6",
+      "size": 1702
+    },
+    "cinematicum-fcpxml-native-driver-06/fixture/workspace/projects/9a9a42e1f8e3495b81b86c44dff9193e/exports/60779dad471647a5ac476cbe3004cec1.fcpxml": {
+      "sha256": "3bd3fd5f06bc01323708d8948aa4e7c50fceac4b98ca2f539f7f53a2c99f60d6",
+      "size": 4595
+    },
+    "cinematicum-fcpxml-native-driver-06/fixture/workspace/projects/9a9a42e1f8e3495b81b86c44dff9193e/exports/8e8954d7b436465f917a85d64230ccad.json": {
+      "sha256": "af62d605eb65308be3b10e06db775fde283f89c51e711ad3b243ff3befe2bd82",
+      "size": 17852
+    },
+    "cinematicum-fcpxml-native-driver-06/fixture/workspace/projects/9a9a42e1f8e3495b81b86c44dff9193e/exports/8e8954d7b436465f917a85d64230ccad.mov": {
+      "sha256": "ee63a18c22ae83ada7b7839a4ad5004cad5fe9da81a98802005438c7e6b69da1",
+      "size": 272423
+    },
+    "cinematicum-fcpxml-native-driver-06/fixture/workspace/projects/9a9a42e1f8e3495b81b86c44dff9193e/media/abe62b21366847d396148f02ddd8f2ae.mov": {
+      "sha256": "ea6e2213ccc89745e39123ee148255f4ab9a2657ca8b18a1ca73efe703f915f7",
+      "size": 643279
+    },
+    "cinematicum-fcpxml-native-driver-06/fixture/workspace/projects/9a9a42e1f8e3495b81b86c44dff9193e/media/bd7e4179fec64a59b37751690b2fae5d.mov": {
+      "sha256": "01a2518a2786e063fdfef550946f1a31f90469dd3c42b0478731425e3dcb3c36",
+      "size": 643279
+    },
+    "cinematicum-fcpxml-native-driver-06/fixture/workspace/projects/9a9a42e1f8e3495b81b86c44dff9193e/previews/1657e0161dc9218011eb714f0ddca44d6da5dd1fdb2cd5daa8b74798db06bb65.png": {
+      "sha256": "4f2921a37d1ab3c5ac070996d0200a6e70e6d08d2321cc5c75411dce21a88f19",
+      "size": 145
+    },
+    "cinematicum-fcpxml-native-driver-06/fixture/workspace/projects/9a9a42e1f8e3495b81b86c44dff9193e/previews/7aee1e62cb794405981d5663f7787bc8ca700e65c343600330fa3e0d6bd8b69f.png": {
+      "sha256": "4f2921a37d1ab3c5ac070996d0200a6e70e6d08d2321cc5c75411dce21a88f19",
+      "size": 145
+    },
+    "cinematicum-fcpxml-native-driver-06/fixture/workspace/projects/9a9a42e1f8e3495b81b86c44dff9193e/previews/8982fb1403666ca8f16beacbeda9ae50e896e4e70f7e8aa65fed11f4761f1318.png": {
+      "sha256": "11c8a962076bba83af43b3c3f8da2b6e8ecd04906aa148a8229d1f115e36a2c7",
+      "size": 144
+    },
+    "cinematicum-fcpxml-native-driver-06/fixture/workspace/projects/9a9a42e1f8e3495b81b86c44dff9193e/project.json": {
+      "sha256": "217d5fd5f1aae169f76b8ff2fcbc3919961033f32aa13a93cc753bcfabec1434",
+      "size": 15461
+    },
+    "cinematicum-fcpxml-native-driver-06/fixture/workspace/projects/9a9a42e1f8e3495b81b86c44dff9193e/thumbnails/abe62b21366847d396148f02ddd8f2ae.jpg": {
+      "sha256": "5c62e6710b672def4ad9a6a6672c8f7fbfeef035c39279f120520e6590a21736",
+      "size": 1565
+    },
+    "cinematicum-fcpxml-native-driver-06/fixture/workspace/projects/9a9a42e1f8e3495b81b86c44dff9193e/thumbnails/bd7e4179fec64a59b37751690b2fae5d.jpg": {
+      "sha256": "e6077209bd0c96521f3ae27eb545e5449739775ea7813afec157dda48305fdc9",
+      "size": 1420
+    },
+    "cinematicum-fcpxml-native-driver-06/fixture/workspace/projects/9a9a42e1f8e3495b81b86c44dff9193e/versions/000000000001.json": {
+      "sha256": "459c19083a528f444492234c71a34d1459ae52701638ce0964625e60dfbd2eb5",
+      "size": 2549
+    },
+    "cinematicum-fcpxml-native-driver-06/fixture/workspace/projects/9a9a42e1f8e3495b81b86c44dff9193e/versions/000000000002.json": {
+      "sha256": "a3616444ee432129159c61ede4fe4c88d3c786a05dd82fc8fc667ff5a342590e",
+      "size": 3471
+    },
+    "cinematicum-fcpxml-native-driver-06/fixture/workspace/projects/9a9a42e1f8e3495b81b86c44dff9193e/versions/000000000003.json": {
+      "sha256": "8b29d75c916452914031b2880b7f2aa70136011b6549160b836e116bab0764cc",
+      "size": 16808
+    },
+    "cinematicum-fcpxml-native-driver-06/fixture/workspace/projects/9a9a42e1f8e3495b81b86c44dff9193e/waveforms/695a51540ccc03c0668661f8a5212d1a369ee16a4a7a4e3a1bc7d2d96d8c383f.json": {
+      "sha256": "27fdc0c8a368b735137689aa6509a70e02769c3a02fe763ed4ac94c1137e2970",
+      "size": 32521
+    },
+    "cinematicum-fcpxml-native-driver-06/fixture/workspace/projects/9a9a42e1f8e3495b81b86c44dff9193e/waveforms/7a543ce0e30a1f625b53b2a4d10eae7eba7dad2ad1b12dac652175eca1c4247f.json": {
+      "sha256": "7b4833066610fb42d622afdd573e77101fe187269995def227b0d225b9dbf235",
+      "size": 32518
+    },
+    "cinematicum-fcpxml-native-driver-06/phase-summary.json": {
+      "sha256": "ab26b44863d50b54bbfa1f24c8d268f4b2a28ad228de918945afa7997e117464",
+      "size": 576
+    },
+    "cinematicum-fcpxml-native-driver-06/prepare/ENGINE_TEST_fcpxml_report.json": {
+      "sha256": "ccd17703f2915401f8bdeb340374cc22018fdb4000398541649e33ba2c3f665e",
+      "size": 19438
+    },
+    "cinematicum-fcpxml-native-driver-06/prepare/ENGINE_TEST_input.fcpxml": {
+      "sha256": "c0654f0e5582479eb307e04baeafd926aa350319f6db8b494a8a7a1df7317769",
+      "size": 2793
+    },
+    "cinematicum-fcpxml-native-driver-06/prepare/ENGINE_TEST_owned_jobs.json": {
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+      "size": 3
+    },
+    "cinematicum-fcpxml-native-driver-06/prepare/ENGINE_TEST_saved_project.json": {
+      "sha256": "e067a0df55466ce6578c54249080f35d6a7d2b757d79785c8e557b95ff737e72",
+      "size": 3050
+    },
+    "cinematicum-fcpxml-native-driver-06/render/ENGINE_TEST_browser_result.json": {
+      "sha256": "1c3cfd725265929fc723ba3c494df041d670bb9b7a2013c1ce05fec3235b7c6e",
+      "size": 1720
+    },
+    "cinematicum-fcpxml-native-driver-06/render/ENGINE_TEST_fcpxml.js": {
+      "sha256": "385ea5cf88772a67d9d9998db486f6aaf66240fc900364c337b3f347dc4af4b2",
+      "size": 14376
+    },
+    "cinematicum-fcpxml-native-driver-06/render/ENGINE_TEST_fcpxml.png": {
+      "sha256": "12d458970cfbe159cc1e6f354bef15d8b0f4eced923b28b2695368640102dae9",
+      "size": 92611
+    },
+    "cinematicum-fcpxml-native-driver-06/render/ENGINE_TEST_fcpxml_report.json": {
+      "sha256": "5e1ff3648b1c54bd6c425df533ffce526d6cf87ee20d99e2d5f9336b900437a0",
+      "size": 24656
+    },
+    "cinematicum-fcpxml-native-driver-06/render/ENGINE_TEST_frame_requests.json": {
+      "sha256": "76529b92c77eac77ba41106573125d0d9c76f7b0552a2b4545ecab27c3c12eeb",
+      "size": 36013
+    },
+    "cinematicum-fcpxml-native-driver-06/render/ENGINE_TEST_imported_frame.png": {
+      "sha256": "4f2921a37d1ab3c5ac070996d0200a6e70e6d08d2321cc5c75411dce21a88f19",
+      "size": 145
+    },
+    "cinematicum-fcpxml-native-driver-06/render/ENGINE_TEST_owned_jobs.json": {
+      "sha256": "b7102fcab5b0dbd887e12f74100412bef124167eba8b274fe873552c1fbb63cc",
+      "size": 2871
+    },
+    "cinematicum-fcpxml-native-driver-06/render/ENGINE_TEST_saved_project.json": {
+      "sha256": "217d5fd5f1aae169f76b8ff2fcbc3919961033f32aa13a93cc753bcfabec1434",
+      "size": 15461
+    },
+    "cinematicum-fcpxml-native-driver-06/render/native_downloads/8e8954d7b436465f917a85d64230ccad.mov": {
+      "sha256": "ee63a18c22ae83ada7b7839a4ad5004cad5fe9da81a98802005438c7e6b69da1",
+      "size": 272423
+    },
+    "cinematicum-fcpxml-native-driver-06/source-inventory.json": {
+      "sha256": "83ade71d5759e4aaa4f9a07d9e40e9015971493dcd1652801c58798c58f04101",
+      "size": 16581
+    }
+  },
+  "schema": "cinematicum-retained-evidence-inventory-v1",
+  "total_bytes": 24357144
+}

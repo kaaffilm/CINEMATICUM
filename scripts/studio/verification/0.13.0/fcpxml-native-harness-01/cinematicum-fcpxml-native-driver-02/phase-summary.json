@@ -1,0 +1,22 @@
+{
+  "native_certified": false,
+  "passed": false,
+  "phases": [
+    {
+      "checks": 10,
+      "elapsed_seconds": 1.478,
+      "error": null,
+      "native_certified": false,
+      "operation": "prepare",
+      "passed": true
+    },
+    {
+      "checks": 4,
+      "elapsed_seconds": 0.018,
+      "error": "[Errno 1] Operation not permitted",
+      "native_certified": false,
+      "operation": "author",
+      "passed": false
+    }
+  ]
+}

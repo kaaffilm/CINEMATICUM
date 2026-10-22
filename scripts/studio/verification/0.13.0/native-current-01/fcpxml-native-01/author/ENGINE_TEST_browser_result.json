@@ -1,0 +1,46 @@
+{
+  "checks": {
+    "actual_download_is_fcpxml": true,
+    "apply_is_unsaved_edit": true,
+    "download_review_preserves_saved_edit": true,
+    "downloaded_source_hashes_use_automatic_relink": true,
+    "explicit_control_value_exists": true,
+    "magnetic_connection_limit_shown": true,
+    "nested_reference_and_forward_time_map_remain_editable": true,
+    "one_redo_restores_imported_identity": true,
+    "one_undo_restores_original_cut": true,
+    "original_cut_visible_before_import": true,
+    "owned_fcpxml_attachment": true,
+    "public_time_map_and_compound_resources_exported": true,
+    "review_does_not_mutate_live_or_saved_edit": true,
+    "review_retains_exact_rational_extent": true,
+    "save_switch_reopen_preserves_complete_saved_edit": true,
+    "saved_exact_timeline_extent": true
+  },
+  "completed_download_count": 1,
+  "download_destination_policy": "explicit test evidence directory; no save panel is simulated",
+  "download_errors": [],
+  "downloads": [
+    {
+      "bytes": 4595,
+      "path": "/Users/midiakiasat/.midia-ai/gateway-live/acceptance/cinematicum-0.13-20261022-own-e980f36e/fcpxml-native-01/author/native_downloads/ENGINE_TEST_997BF6A8-5E12-4257-9A42-914D53F4FDEC_f15500abfebf4fbabcfe93e8c32e7536.fcpxml",
+      "state": "completed",
+      "suggested_filename": "f15500abfebf4fbabcfe93e8c32e7536.fcpxml",
+      "url": "http://127.0.0.1:52311/api/projects/b7c4bdc3b0544cb9a76f95ebdf61ee43/exports/f15500abfebf4fbabcfe93e8c32e7536.fcpxml?download=1"
+    }
+  ],
+  "elapsed_ms": 1184,
+  "expect_download": true,
+  "expected_download_count": 1,
+  "frames": {},
+  "metrics": {
+    "fcpxml_href": "/api/projects/b7c4bdc3b0544cb9a76f95ebdf61ee43/exports/f15500abfebf4fbabcfe93e8c32e7536.fcpxml?download=1",
+    "review_save_state": "LOCAL PROJECT"
+  },
+  "page_errors": [],
+  "passed": true,
+  "physical_open_panel_asserted": false,
+  "physical_save_panel_asserted": false,
+  "screenshot": "/Users/midiakiasat/.midia-ai/gateway-live/acceptance/cinematicum-0.13-20261022-own-e980f36e/fcpxml-native-01/author/ENGINE_TEST_fcpxml.png",
+  "screenshot_bytes": 305115
+}

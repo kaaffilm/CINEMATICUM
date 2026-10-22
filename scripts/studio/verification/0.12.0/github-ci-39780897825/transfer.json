@@ -1,0 +1,85 @@
+{
+  "schema": "cinematicum-actual-ci-public-receipts-v1",
+  "run_id": 39780897825,
+  "published_commit": "dcea86196f81d6476a0f60538429b984b24c1129",
+  "source_binding_sha256": "4fa773e251f54a75742c1adfc10c43b463d328cd4a9af75961ea364f44719c6d",
+  "artifact_sha256": "37b4958311da499254491efa4eb95cb50e2e96ebd75d1bf7b1c019d9677c405e",
+  "artifact_url": "https://github.com/kaaffilm/CINEMATICUM/actions/runs/39780897825/artifacts/12428235438",
+  "scope": "Exact selected public text receipts; original complete 366-member artifact remains retained and hash-bound",
+  "files": [
+    {
+      "path": "metadata.json",
+      "bytes": 16495,
+      "sha256": "eead084f7018aa6b99467b008458fdbcb07e3b82422f69ba42eb1a049e4ac7ad"
+    },
+    {
+      "path": "artifact-download-01.json",
+      "bytes": 463,
+      "sha256": "221a41bf770c4ab2bbb4ff906964c2244c0ba51af773d879553906f6c2758d72"
+    },
+    {
+      "path": "artifact-members.json",
+      "bytes": 58579,
+      "sha256": "6a06d6c640ca912059b879e6900a17cf1225041e6f1f754988134105b0dc1726"
+    },
+    {
+      "path": "frozen-whole-build-report.json",
+      "bytes": 137537,
+      "sha256": "8d9b5b8dadf862dda6f54b275e85b4733abacdc59c29515cd8c2abd1e722342c"
+    },
+    {
+      "path": "source-binding.json",
+      "bytes": 4234,
+      "sha256": "3e6f5d9314febbc0bc2aaf4dac616e6d4c0d026bdc06b0929a8e0c6cf89a74ed"
+    },
+    {
+      "path": "source-binding-02.json",
+      "bytes": 4759,
+      "sha256": "4fa773e251f54a75742c1adfc10c43b463d328cd4a9af75961ea364f44719c6d"
+    },
+    {
+      "path": "browser-summary.json",
+      "bytes": 2342,
+      "sha256": "c9a20f6b9dec93aa8b6452fa142ca15c1e5cfb8645aa995b73fe274452b1caec"
+    },
+    {
+      "path": "browser-reports/multicam-browser-acceptance/browser-report.json",
+      "bytes": 939,
+      "sha256": "24176367867e7ee30d2c16f2975f521b22b90260c5beead3acdc5d7ed6398f1c"
+    },
+    {
+      "path": "browser-reports/multicam-monitor-acceptance/browser-report.json",
+      "bytes": 1041,
+      "sha256": "67fdc4dc9e564533916e096c105046e926a87a09f59ceacc0f7a9c83481e625e"
+    },
+    {
+      "path": "browser-reports/float-movie-acceptance/browser-report.json",
+      "bytes": 9974,
+      "sha256": "76034d630a3dea3c9029bf5c42e35d8c400a60b49302c6343312fcdc60228881"
+    },
+    {
+      "path": "browser-reports/otio-compositions-acceptance/browser-report.json",
+      "bytes": 1044,
+      "sha256": "f0169c886a7ff7569e24c4c2016f42402632153db5d04887c8bcff83eaae0908"
+    },
+    {
+      "path": "browser-reports/retime-acceptance/browser-report.json",
+      "bytes": 1031,
+      "sha256": "66e5b19a0258ee41c2a2bc76e77ce5dad2bbbb8835bd3d8b0724eec621f7650b"
+    },
+    {
+      "path": "browser-reports/startup-quit-acceptance/report.json",
+      "bytes": 17217,
+      "sha256": "e1f768da89d91db66fc02e3e45ccb1ba035d6213f7d80431eeb43cf30b3deded"
+    },
+    {
+      "path": "browser-reports/still-photography-acceptance/browser-report.json",
+      "bytes": 1074,
+      "sha256": "733a53799ba471ea51f45a35a36339955a91f881788a136cc2183ac4f7544f15"
+    }
+  ],
+  "transport": {
+    "bytes": 37068,
+    "sha256": "6863453abab8cdaf1efe067d66a3f3a3684b3360146ea1b6726875440eb243cb"
+  }
+}

@@ -1,0 +1,11 @@
+test_core_requires_exact_accepted_commit_and_actual_git_tree (__main__.Guards.test_core_requires_exact_accepted_commit_and_actual_git_tree) ... ok
+test_existing_cache_change_and_unknown_new_file_fail_but_exact_new_derivative_passes (__main__.Guards.test_existing_cache_change_and_unknown_new_file_fail_but_exact_new_derivative_passes) ... ok
+test_names_only_inspects_types_and_refuses_symlink_and_environment_files (__main__.Guards.test_names_only_inspects_types_and_refuses_symlink_and_environment_files) ... ok
+test_nofollow_metadata_reader_rejects_leaf_and_ancestor_symlinks (__main__.Guards.test_nofollow_metadata_reader_rejects_leaf_and_ancestor_symlinks) ... ok
+test_phase_validation_refuses_missing_guard_rebound_source_failure_force_and_unsupported_tool (__main__.Guards.test_phase_validation_refuses_missing_guard_rebound_source_failure_force_and_unsupported_tool) ... ok
+test_retime_requires_pinned_actual_probe_fields_and_finite_numeric_tolerance (__main__.Guards.test_retime_requires_pinned_actual_probe_fields_and_finite_numeric_tolerance) ... ok
+
+----------------------------------------------------------------------
+Ran 6 tests in 0.032s
+
+OK

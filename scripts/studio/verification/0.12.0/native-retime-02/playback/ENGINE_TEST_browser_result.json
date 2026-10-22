@@ -1,0 +1,43 @@
+{
+  "completed_download_count": 1,
+  "download_destination_policy": "explicit test evidence directory; no save panel is simulated",
+  "download_errors": [],
+  "downloads": [
+    {
+      "bytes": 180643,
+      "path": "/Users/midiakiasat/.midia-ai/gateway-live/acceptance/cinematicum-0.12-20261022-own-061702ff/retime-native-02/playback/native_downloads/ENGINE_TEST_41F9C6AA-23F0-400F-BA8B-2F58F91C8C04_e28a863005dc423bb4da92d975efdcdb.mov",
+      "state": "completed",
+      "suggested_filename": "e28a863005dc423bb4da92d975efdcdb.mov",
+      "url": "http://127.0.0.1:58428/api/projects/203f02164be548c4839b7013bcc454a2/exports/e28a863005dc423bb4da92d975efdcdb.mov?download=1"
+    }
+  ],
+  "elapsed_ms": 8958,
+  "expect_download": true,
+  "expected_download_count": 1,
+  "metrics": {
+    "movie_href": "/api/projects/203f02164be548c4839b7013bcc454a2/exports/e28a863005dc423bb4da92d975efdcdb.mov?download=1",
+    "playback": {
+      "decoded_video_frames": 8,
+      "left_right_rms_ratio": 0.7706305946743087,
+      "media_time": 0.36560616666974965,
+      "peak": 0.08415589481592178,
+      "samples": 21504
+    },
+    "processed_pixel": [
+      146,
+      153,
+      137,
+      255
+    ]
+  },
+  "page_errors": [],
+  "passed": true,
+  "screenshot": "/Users/midiakiasat/.midia-ai/gateway-live/acceptance/cinematicum-0.12-20261022-own-061702ff/retime-native-02/playback/ENGINE_TEST_retime.png",
+  "screenshot_bytes": 351671,
+  "steps": [
+    "actual_interpolated_paused_picture",
+    "play_uses_actual_rendered_preview",
+    "rendered_picture_clock_and_nonzero_stereo_audio",
+    "actual_prores_export_and_download"
+  ]
+}

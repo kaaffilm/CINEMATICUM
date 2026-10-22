@@ -1,0 +1,52 @@
+{
+  "checks": {
+    "actual_owned_paused_frame": true,
+    "actual_owned_prores_export": true,
+    "native_decoder_plays_actual_downloaded_movie": true,
+    "paused_frame_matches_independent_source_pixel": true,
+    "saved_imported_lanes_reopen": true
+  },
+  "completed_download_count": 1,
+  "download_destination_policy": "explicit test evidence directory; no save panel is simulated",
+  "download_errors": [],
+  "downloads": [
+    {
+      "bytes": 272405,
+      "path": "/Users/midiakiasat/.midia-ai/gateway-live/acceptance/cinematicum-0.13-20261022-own-e980f36e/fcpxml-native-01/render/native_downloads/ENGINE_TEST_3D758005-6A02-47FD-846C-0A14924F773B_1718cd487d7d4e799b3277a36a57dfdb.mov",
+      "state": "completed",
+      "suggested_filename": "1718cd487d7d4e799b3277a36a57dfdb.mov",
+      "url": "http://127.0.0.1:52422/api/projects/b7c4bdc3b0544cb9a76f95ebdf61ee43/exports/1718cd487d7d4e799b3277a36a57dfdb.mov?download=1"
+    }
+  ],
+  "elapsed_ms": 1929,
+  "expect_download": true,
+  "expected_download_count": 1,
+  "frames": {
+    "imported": {
+      "frame": 6,
+      "height": 32,
+      "pixel": [
+        0,
+        0,
+        102,
+        255
+      ],
+      "url": "/api/projects/b7c4bdc3b0544cb9a76f95ebdf61ee43/previews/819190616b30ddf76ef375ae53a7259f95e507c5b97e22b1de0a0ecb6c599281.png",
+      "width": 48
+    }
+  },
+  "metrics": {
+    "movie_href": "/api/projects/b7c4bdc3b0544cb9a76f95ebdf61ee43/exports/1718cd487d7d4e799b3277a36a57dfdb.mov?download=1",
+    "playback": {
+      "mechanism": "test-owned native video element; product ProRes transport is not asserted",
+      "time": 0.06948195832956117,
+      "url": "/api/projects/b7c4bdc3b0544cb9a76f95ebdf61ee43/exports/1718cd487d7d4e799b3277a36a57dfdb.mov"
+    }
+  },
+  "page_errors": [],
+  "passed": true,
+  "physical_open_panel_asserted": false,
+  "physical_save_panel_asserted": false,
+  "screenshot": "/Users/midiakiasat/.midia-ai/gateway-live/acceptance/cinematicum-0.13-20261022-own-e980f36e/fcpxml-native-01/render/ENGINE_TEST_fcpxml.png",
+  "screenshot_bytes": 343004
+}

@@ -1,0 +1,15 @@
+test_changed_or_unrelated_targets_and_symlinks_are_preserved (test_install_macos.ArchiveInstallationTests.test_changed_or_unrelated_targets_and_symlinks_are_preserved) ... ok
+test_corrupt_archive_cannot_retire_original (test_install_macos.ArchiveInstallationTests.test_corrupt_archive_cannot_retire_original) ... ok
+test_failed_destination_move_restores_old_bundle (test_install_macos.ArchiveInstallationTests.test_failed_destination_move_restores_old_bundle) ... ok
+test_legacy_versions_leave_only_canonical_app_and_recoverable_zips (test_install_macos.ArchiveInstallationTests.test_legacy_versions_leave_only_canonical_app_and_recoverable_zips) ... ok
+test_packaged_isolated_workers_do_not_write_into_the_bundle (test_install_macos.ArchiveInstallationTests.test_packaged_isolated_workers_do_not_write_into_the_bundle)
+The launcher's -B/environment must survive actual isolated children. ... ok
+test_packaged_runtime_imports_without_the_development_checkout (test_install_macos.ArchiveInstallationTests.test_packaged_runtime_imports_without_the_development_checkout)
+A source-tree pass must not hide missing bundled transitive imports. ... ok
+test_replacement_archive_recovers_exact_executable_and_mode (test_install_macos.ArchiveInstallationTests.test_replacement_archive_recovers_exact_executable_and_mode) ... ok
+test_real_affine_and_projective_measurement_tracks_known_translation (test_planar_tracking.PlanarInferenceTests.test_real_affine_and_projective_measurement_tracks_known_translation) ... ok
+
+----------------------------------------------------------------------
+Ran 8 tests in 2.204s
+
+OK

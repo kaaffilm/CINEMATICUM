@@ -1,0 +1,18 @@
+{
+  "binding": {
+    "accepted_runner_sha256": "96d5bb0c904108454ae4aa38c5f2abd586abcf9355f6ee404cae06268898a757",
+    "controller_binary_sha256": "514babe113c42ae6f666b29ab0b934d878cbc50cf7d9053086fea60a72877101",
+    "controller_source_sha256": "242ce3defae2a0d6f3466fb5a937776106081178cdbd40b16f55108a2fcf77e8",
+    "coordinator_sha256": "a9c6feadfe85b263dd3010f8cd1815e753450048bc12c48b6788891fd9f65391",
+    "core_commit": "cdd15816c228fe4133fbb3ce6d90978333d699e6",
+    "core_source_manifest_sha256": "21034979d805cdf680c255720f6311319f3fc22c2b405dbd43294a5485d09f8d",
+    "core_tree": "a62ce29a8af68b38d14820c45fc42e1266762e34",
+    "installation_evidence_sha256": "1c73ce565024cd2b1e693ce6e405d44cce6c216b822bf038761e76f2556817dd",
+    "installed_native_sha256": "ca2a5bf65d934b87b0dfafc55392b648bda650c1c7ce76491cc5b21e20a84b39",
+    "private_baseline_sha256": "aa212748d23f5fc46bdd135c0699880b7817dab42d0eaebae42f321f782b9a5e",
+    "source_code_identity_sha256": "5c5ace4ea0d1368e847481e6cb40040e05fdbcb4c5088798d22f1a224e97a72b"
+  },
+  "schema": "cinematicum-installed-readiness-phased-v2:started",
+  "started_unix": 1792678481.2218041,
+  "tool": "multicam-sync"
+}

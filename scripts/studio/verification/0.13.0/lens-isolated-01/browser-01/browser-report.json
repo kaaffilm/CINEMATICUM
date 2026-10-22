@@ -1,0 +1,32 @@
+{
+  "schema": "cinematicum-lens-models-browser-acceptance-v1",
+  "native_certified": false,
+  "passed": false,
+  "checks": {
+    "actual_shipped_browser_controls": false,
+    "exact_upstream_calibration_saved": false,
+    "one_owned_source_and_clip": false,
+    "original_source_bytes_unchanged": true,
+    "one_complete_movie_export": false,
+    "browser_binary_unchanged": true
+  },
+  "profile_sha256": "f7693b6779edd8ed10d7dc23113669255bfa4987cea7db0e843f7f5f2bbbe615",
+  "browser_sha256": "f661a8c124888f491966c29581f33c1953c86c15d77048bc91452b66743d5f3a",
+  "ui": {
+    "passed": false,
+    "native_certified": false,
+    "transport": "Chromium",
+    "checks": {},
+    "frames": {},
+    "page_errors": [],
+    "error": "page.waitForFunction: EvalError: Refused to evaluate a string as JavaScript because 'unsafe-eval' is not an allowed source of script in the following Content Security Policy directive: \"script-src 'self'\".\n\n    at eval (<anonymous>)\n    at predicate (eval at evaluate (:234:30), <anonymous>:11:37)\n    at next (eval at evaluate (:234:30), <anonymous>:32:31)\n    at main (/workspace/scratch/091f394ee5df/cinematicum-lens-candidate/scripts/studio/test_lens_models_browser.cjs:37:16)",
+    "ui": {
+      "toast": "",
+      "frame": "",
+      "job": ""
+    },
+    "elapsed_ms": 1277
+  },
+  "jobs": [],
+  "elapsed_seconds": 4.07
+}

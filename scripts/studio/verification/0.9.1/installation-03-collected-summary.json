@@ -1,0 +1,124 @@
+{
+  "before_sha256": "b2c4ea223e1cfa2b0c6db62bd45171c11a0704be4e54d0a2e969e1ab9b6fefb0",
+  "derived_from_raw_sha256": "08a3d73a39706c46b9c63785f15403fd1abd9a8ea39cb2b11713c519cb10d852",
+  "developer_id_or_notarization_certified": false,
+  "external_runtimes": "Not read or modified; Python/FFmpeg/Blender and optional runtimes remain separate prerequisites",
+  "full_raw_receipt_bytes": 54245,
+  "full_raw_receipt_collected": true,
+  "full_raw_receipt_published": false,
+  "gates": [
+    {
+      "name": "source",
+      "passed": true
+    },
+    {
+      "name": "installed",
+      "passed": true
+    },
+    {
+      "name": "receipt_and_backup",
+      "passed": true
+    },
+    {
+      "name": "projects",
+      "passed": true
+    },
+    {
+      "name": "original_checkout",
+      "passed": true
+    }
+  ],
+  "historical_observation": {
+    "preserved_unchanged": true,
+    "report": "installation-03-observation.json",
+    "sha256": "de8ef8a29ccaf4126604ace9c9d05c7b16ca314dcf4deb119130fdca0510c9c0"
+  },
+  "installed": {
+    "build": "10",
+    "bundle_file_count": 67,
+    "bundle_id": "com.cinematicum.studio",
+    "bundle_inventory_sha256": "577a3550a6136bfe130434bf760ff0f21f1e24864facd5c11c52a07028afb6a9",
+    "bundle_total_bytes": 2097812,
+    "embedded_source_manifest": {
+      "mode": 384,
+      "sha256": "46e82f17bb855d6c2446aa6b3a820bd763fbb7659fc13c00b92afb14346ee922",
+      "size": 6090
+    },
+    "executable": {
+      "architecture": "arm64",
+      "code_signature_command_present": true,
+      "cpu_subtype": 0,
+      "cpu_type": 16777228,
+      "file_type": "MH_EXECUTE",
+      "mode": 493,
+      "sha256": "7457dd6edd93583b3efa44586f05a701f7b2a0e8520e18fe49dbc9a17203dfdf",
+      "signature_note": "Presence of a signature command does not certify Developer ID signing or notarization",
+      "size": 225200
+    },
+    "runtime_file_count": 62,
+    "runtime_inventory_sha256": "49f226121b5df2f13a0eb39a642a113695231870a425120c7f372dfddc97149a",
+    "version": "0.9.1"
+  },
+  "native_launch_certified_by_this_installation_receipt": false,
+  "original_checkout": {
+    "Makefile": {
+      "mode": 420,
+      "sha256": "63711cf7cf7bd44fcc32b454f19e2652e0039d8452510ffd8ff297f090b854c6",
+      "size": 4383
+    },
+    "head": "5003627c56413ce1aff1df324668fc11792ea58a",
+    "preserved": true,
+    "scope": "Makefile bytes/mode, HEAD and Git status; other owner-file contents and credentials are not inspected",
+    "status_record_count": 2,
+    "status_sha256": "bb611ee4fc26723af1b9cdf9208f90ccf8e9ef0409a9581bb32d2fc976c3dcc5"
+  },
+  "passed": true,
+  "previous_bundle": {
+    "mode": 384,
+    "sha256": "d1bd106e480d9f5e4dc9e2485e4eb48481e86636570e03e2d7a198021d42633f",
+    "size": 834259,
+    "verified_file_count": 70,
+    "verified_file_inventory_sha256": "a7381b6f10bdc8cf0b711c918c9241f5bbc05c434ea4a6b7f568cfc8911ef29d",
+    "verified_preserved": true
+  },
+  "privacy_note": "The complete installation receipt remains private. This summary omits protected project/cache filenames, all project or asset content, original-checkout status filenames and credentials. The canonical launch02 report is curated separately with hashed project paths and unchanged raw bytes.",
+  "protected_workspace": {
+    "file_count": 57,
+    "inventory_sha256": "92b93d309c24e36e500c17fbdb99d9813d9ee3a5628dfe81f4a1faf0b74868ce",
+    "preserved": true,
+    "total_bytes": 2858327758
+  },
+  "receipt_created_at": "2026-10-21T20:35:03.558825+00:00",
+  "schema": "cinematicum-installation-public-summary-v1",
+  "scope": "Privacy-minimized summary derived from the now-collected complete independent installation03 receipt. Installation and preservation only; canonical launch and final published-source reconciliation have separate receipts.",
+  "signing_performed": false,
+  "source": {
+    "code_identity_sha256": "76a4e33d0ed3398ef51b19625f51b0ad45a5c524989408137234f7964aa4db22",
+    "git_head": "4530c54faf969b0a42f2eb7e73f67c295443d275",
+    "installer": {
+      "mode": 384,
+      "sha256": "f48b06b22054873a16ef2fa6e29b8fb2240303d9d9d350998486d57c52af3443",
+      "size": 18882
+    },
+    "native_sources": {
+      "StudioApp.swift": {
+        "mode": 384,
+        "sha256": "5bc3028eb4921b8e1d11f1a0e3a4ab2116c6ddcadce43a3968e6b42a0e80e79b",
+        "size": 27144
+      },
+      "StudioIcon.swift": {
+        "mode": 384,
+        "sha256": "9be90f8566a606a664f012926c1e85f99a44b277c616fd597d51df1760a9a49b",
+        "size": 2744
+      }
+    },
+    "runtime_file_count": 62,
+    "source_integrity": {
+      "mode": 420,
+      "sha256": "7b4fd2befc955799b7758905b8289fadfae910fc8f38a4aa4543e7834675018f",
+      "size": 36854
+    },
+    "version": "0.9.1"
+  },
+  "source_binding_note": "Git HEAD records the checkout ancestry at installation; the code identity binds actual runtime/native/installer bytes and modes. Final published-source reconciliation is a separate receipt."
+}

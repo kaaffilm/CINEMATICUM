@@ -1,0 +1,43 @@
+{
+  "schema": "cinematicum-reconstruction-wheel-lock",
+  "version": 1,
+  "platform": "macos-arm64",
+  "python": "3.13",
+  "packages": [
+    {
+      "name": "numpy",
+      "version": "2.5.4",
+      "filename": "numpy-2.5.4-cp313-cp313-macosx_14_0_arm64.whl",
+      "url": "https://files.pythonhosted.org/packages/e2/84/6a3d75b3ba3dfe84ac0053450753d1e6d250a8bf80f66474cc46d1fb643f/numpy-2.5.4-cp313-cp313-macosx_14_0_arm64.whl",
+      "sha256": "6d6a71b9d9a97c03633aa12565ef2825ffa036cc1d99cfd50dacf0f128af4fe2",
+      "size": 5445803
+    },
+    {
+      "name": "pycolmap",
+      "version": "4.2.1",
+      "filename": "pycolmap-4.2.1-cp313-cp313-macosx_14_0_arm64.whl",
+      "url": "https://files.pythonhosted.org/packages/1e/33/37c56b31f8678e12453f82f661f587d62c7d1dd14884a75afc2026194ac4/pycolmap-4.2.1-cp313-cp313-macosx_14_0_arm64.whl",
+      "sha256": "a9bcc24a5980f34293f899d5bff2c0abfe4e33d9a73c54b7d2c748c224d20659",
+      "size": 20785214
+    },
+    {
+      "name": "pillow",
+      "version": "13.0.0",
+      "filename": "pillow-13.0.0-cp313-cp313-macosx_11_0_arm64.whl",
+      "url": "https://files.pythonhosted.org/packages/98/c8/ccede3dcc4f274b80fb49199eed1ef34ba05566c8b71976b9d1f111da2e3/pillow-13.0.0-cp313-cp313-macosx_11_0_arm64.whl",
+      "sha256": "f11a3c1358bb3c68012a7b1f41b223c3db9f7bfde90b481df028cfe1c3363313",
+      "size": 4852187
+    }
+  ],
+  "source": "https://github.com/colmap/colmap",
+  "scope": "CPU SIFT feature extraction, matching, incremental structure from motion and Ceres bundle adjustment. Standard wheels do not provide CUDA PatchMatch dense reconstruction.",
+  "licenses": {
+    "COLMAP": "BSD-3-Clause; bundled dependencies retain their separate licenses",
+    "NumPy": "BSD-3-Clause and bundled third-party notices",
+    "Pillow": "MIT-CMU and bundled third-party notices"
+  },
+  "external_runtime": {
+    "python": "Native CPython 3.13",
+    "dense": "CUDA PatchMatch is unavailable in this CPU workflow; no dense engine is installed."
+  }
+}

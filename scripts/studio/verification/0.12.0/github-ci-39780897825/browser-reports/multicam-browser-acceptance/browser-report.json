@@ -1,0 +1,40 @@
+{
+  "native_certified": false,
+  "passed": true,
+  "phases": [
+    {
+      "checks": 7,
+      "elapsed_seconds": 0.602,
+      "error": null,
+      "operation": "prepare",
+      "passed": true
+    },
+    {
+      "checks": 13,
+      "elapsed_seconds": 2.658,
+      "error": null,
+      "operation": "author",
+      "passed": true
+    },
+    {
+      "checks": 20,
+      "elapsed_seconds": 3.414,
+      "error": null,
+      "operation": "synchronize",
+      "passed": true
+    },
+    {
+      "checks": 19,
+      "elapsed_seconds": 3.022,
+      "error": null,
+      "operation": "render",
+      "passed": true
+    }
+  ],
+  "schema": "cinematicum-actual-multicam-sync-chromium-acceptance-v1",
+  "chromium_executable_sha256": "f661a8c124888f491966c29581f33c1953c86c15d77048bc91452b66743d5f3a",
+  "elapsed_ms": 9829,
+  "python_exit_code": 0,
+  "error": null,
+  "report": "/home/runner/work/_temp/multicam-browser-acceptance/browser-report.json"
+}

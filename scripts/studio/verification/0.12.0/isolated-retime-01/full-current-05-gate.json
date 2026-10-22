@@ -1,0 +1,117 @@
+{
+  "cwd": "/workspace/scratch/091f394ee5df/cinematicum-retime-candidate/scripts/studio",
+  "elapsed_seconds": 16.348,
+  "errors": 0,
+  "expected_failures": 0,
+  "failures": 0,
+  "frozen_source_unchanged": true,
+  "interpreter": "/workspace/scratch/091f394ee5df/cinematicum-runtimes/verification/bin/python",
+  "invocation": "unittest.TextTestRunner(verbosity=2).run(unittest.defaultTestLoader.loadTestsFromName('test_retime'))",
+  "kind": "retime-entire-module-current-source-gate",
+  "log_path": "/workspace/scratch/091f394ee5df/cinematicum-retime-test-evidence/full-current-05.log",
+  "observations_path": "/workspace/scratch/091f394ee5df/cinematicum-retime-test-evidence/full-current-05-observations.json",
+  "passed": true,
+  "reproduce_command": [
+    "/workspace/scratch/091f394ee5df/cinematicum-runtimes/verification/bin/python",
+    "-m",
+    "unittest",
+    "-v",
+    "test_retime"
+  ],
+  "skipped": 0,
+  "source_after": {
+    "scripts/studio/editorial.py": {
+      "bytes": 27152,
+      "sha256": "5c29d96d609648e2012658c9a6d51de4e593ede301a257f2a1b48f2dca4f3f27"
+    },
+    "scripts/studio/engine.py": {
+      "bytes": 96103,
+      "sha256": "e52eb218c0d186328f11bcbcff3009be6481daccdfa085422df787f32e8e641e"
+    },
+    "scripts/studio/planar_tracking.py": {
+      "bytes": 20066,
+      "sha256": "6fdc54760ea51b42e1a304725fafbd1057ed37b3dd5114c78e66bfa302a1c792"
+    },
+    "scripts/studio/retime.py": {
+      "bytes": 22553,
+      "sha256": "a8158c3dafcdac2d9a95f360bb3efab856a3008fa187372ee25e7daa02cb142c"
+    },
+    "scripts/studio/retime_worker.py": {
+      "bytes": 9270,
+      "sha256": "a3981dc1823b5142eea04f8b42b93075c95186efc9c7a166e06cd76ece31cce6"
+    },
+    "scripts/studio/test_retime.py": {
+      "bytes": 41709,
+      "sha256": "53ffe4e08b725435115b75c1cf29f51999c9e2235fe2f6ce2769dd41c39c1d90"
+    },
+    "scripts/studio/tracking.py": {
+      "bytes": 20236,
+      "sha256": "478c42f63e75ec605345f833e38d32b629bc6ceb66dfe3ec2cdb3ab4e46c8894"
+    },
+    "scripts/studio/web/app.js": {
+      "bytes": 140286,
+      "sha256": "35c3780c4601520c2b918abdeeb101cddb3006c75aa9c08219d5b8a286141fd5"
+    },
+    "scripts/studio/web/editing.js": {
+      "bytes": 10691,
+      "sha256": "b4a2a988b20982ada77c54d7e5340795b7fd5ed5c0b35fa53cd3fb962ab7052b"
+    },
+    "scripts/studio/web/retime-model.js": {
+      "bytes": 8862,
+      "sha256": "05d9ff44128e4817abacd405d4ff326f750d312c0223ee82c2b4b5dc83ee8613"
+    },
+    "scripts/studio/web/retime-ui.js": {
+      "bytes": 15207,
+      "sha256": "7472eb6021f57f9df5a937da49dd6afb6e6bc58c5d90d2b6dc344016fd64bd31"
+    }
+  },
+  "source_before": {
+    "scripts/studio/editorial.py": {
+      "bytes": 27152,
+      "sha256": "5c29d96d609648e2012658c9a6d51de4e593ede301a257f2a1b48f2dca4f3f27"
+    },
+    "scripts/studio/engine.py": {
+      "bytes": 96103,
+      "sha256": "e52eb218c0d186328f11bcbcff3009be6481daccdfa085422df787f32e8e641e"
+    },
+    "scripts/studio/planar_tracking.py": {
+      "bytes": 20066,
+      "sha256": "6fdc54760ea51b42e1a304725fafbd1057ed37b3dd5114c78e66bfa302a1c792"
+    },
+    "scripts/studio/retime.py": {
+      "bytes": 22553,
+      "sha256": "a8158c3dafcdac2d9a95f360bb3efab856a3008fa187372ee25e7daa02cb142c"
+    },
+    "scripts/studio/retime_worker.py": {
+      "bytes": 9270,
+      "sha256": "a3981dc1823b5142eea04f8b42b93075c95186efc9c7a166e06cd76ece31cce6"
+    },
+    "scripts/studio/test_retime.py": {
+      "bytes": 41709,
+      "sha256": "53ffe4e08b725435115b75c1cf29f51999c9e2235fe2f6ce2769dd41c39c1d90"
+    },
+    "scripts/studio/tracking.py": {
+      "bytes": 20236,
+      "sha256": "478c42f63e75ec605345f833e38d32b629bc6ceb66dfe3ec2cdb3ab4e46c8894"
+    },
+    "scripts/studio/web/app.js": {
+      "bytes": 140286,
+      "sha256": "35c3780c4601520c2b918abdeeb101cddb3006c75aa9c08219d5b8a286141fd5"
+    },
+    "scripts/studio/web/editing.js": {
+      "bytes": 10691,
+      "sha256": "b4a2a988b20982ada77c54d7e5340795b7fd5ed5c0b35fa53cd3fb962ab7052b"
+    },
+    "scripts/studio/web/retime-model.js": {
+      "bytes": 8862,
+      "sha256": "05d9ff44128e4817abacd405d4ff326f750d312c0223ee82c2b4b5dc83ee8613"
+    },
+    "scripts/studio/web/retime-ui.js": {
+      "bytes": 15207,
+      "sha256": "7472eb6021f57f9df5a937da49dd6afb6e6bc58c5d90d2b6dc344016fd64bd31"
+    }
+  },
+  "tests_run": 19,
+  "tracking_interpreter": "/workspace/scratch/091f394ee5df/cinematicum-runtimes/verification/bin/python",
+  "unexpected_successes": 0
+}

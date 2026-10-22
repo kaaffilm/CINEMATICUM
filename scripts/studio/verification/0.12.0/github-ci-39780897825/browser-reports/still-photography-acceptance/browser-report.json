@@ -1,0 +1,47 @@
+{
+  "native_certified": false,
+  "passed": true,
+  "phases": [
+    {
+      "checks": 7,
+      "elapsed_seconds": 0.531,
+      "error": null,
+      "operation": "prepare",
+      "passed": true
+    },
+    {
+      "checks": 8,
+      "elapsed_seconds": 2.935,
+      "error": null,
+      "operation": "import",
+      "passed": true
+    },
+    {
+      "checks": 21,
+      "elapsed_seconds": 6.105,
+      "error": null,
+      "operation": "hdr",
+      "passed": true
+    },
+    {
+      "checks": 19,
+      "elapsed_seconds": 7.719,
+      "error": null,
+      "operation": "panorama",
+      "passed": true
+    },
+    {
+      "checks": 15,
+      "elapsed_seconds": 6.933,
+      "error": null,
+      "operation": "deliver",
+      "passed": true
+    }
+  ],
+  "schema": "cinematicum-actual-still-photography-browser-acceptance-v1",
+  "chromium_executable_sha256": "f661a8c124888f491966c29581f33c1953c86c15d77048bc91452b66743d5f3a",
+  "elapsed_ms": 24366,
+  "python_exit_code": 0,
+  "error": null,
+  "report": "/home/runner/work/_temp/still-photography-acceptance/browser-report.json"
+}

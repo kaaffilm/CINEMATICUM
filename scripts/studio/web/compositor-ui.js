@@ -1,0 +1,794 @@
+/* Editable FFmpeg image graph. No source pixels are fabricated in this workspace. */
+(() => {
+  'use strict';
+  const copy = value => JSON.parse(JSON.stringify(value));
+  const escape = value => String(value ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  const clamp = (value, min, max) => Math.max(min, Math.min(max, value));
+  const number = (value, fallback = 0) => Number.isFinite(Number(value)) ? Number(value) : fallback;
+  const CURVE_CHANNELS = ['master','red','green','blue'];
+  const CURVE_COLORS = {master:'#e6e8ee',red:'#ed7979',green:'#81c998',blue:'#83a6f4'};
+  const IDENTITY = [[0,0],[1,1]], POLYGON = [[.1,.85],[.5,.1],[.9,.85]];
+  const POINT_GAP = 1/255+.00001;
+  const BLEND_MODES = {normal:'Normal',multiply:'Multiply',screen:'Screen',add:'Add',difference:'Difference'};
+  const EASING = {linear:'Linear',constant:'Hold',ease_in:'Ease in',ease_out:'Ease out',ease_in_out:'Ease in / out',cubic:'Cubic · custom tangents'};
+  const BEZIER=[[.5,.1,.2790861,.1,.7209139,.1,1],[.9,.5,.9,.2790861,.9,.7209139,1],[.5,.9,.7209139,.9,.2790861,.9,1],[.1,.5,.1,.7209139,.1,.2790861,1]];
+  const MASKABLE=new Set(['grade','curves','blur','sharpen','chroma_key','lens_distortion']);
+  const dependencies=node=>[...node.inputs,...(node.mask_input?[node.mask_input]:[])];
+  const inputNames=node=>[...definitions[node.type].inputs,...(MASKABLE.has(node.type)?['Effect mask · alpha']:[])];
+  const MAX_FRAME=1296000;
+  const definitions = {
+    source: {name:'Source',inputs:[],color:'#6d9fac',defaults:{},description:'The selected clip, trimmed and fitted to the graph canvas. Add Project media sources to composite other footage with it.'},
+    media_source: {name:'Project media',inputs:[],color:'#71b4ab',defaults:{asset_id:'',source_in:0,duration:1,offset:0,outside:'transparent'},description:'Read another project video or image into this graph. Source timing uses the preserved animation frames; trims and splits keep the same composite timing. This node contributes picture only.'},
+    alpha_mask: {name:'Alpha mask',inputs:['Image','Mask alpha'],color:'#cfad76',defaults:{invert:false},description:'Multiply image transparency by the second image’s alpha, or its inverse. Straight image colors remain unchanged. This accepts a learned segmentation matte or any project alpha source.'},
+    lens_distortion: {name:'Calibrated lens',inputs:['Image'],color:'#83b9b8',defaults:{direction:'undistort',fx:1,fy:1,cx:.5,cy:.5,k1:0,k2:0,k3:0,p1:0,p2:0},description:'Correct calibrated Brown or Lensfun radial distortion, or convert an explicit fisheye projection. The actual pixels use transparency-aware bilinear filtering.',fields:[['fx','FX / image width',.1,20,.001],['fy','FY / image height',.1,20,.001],['cx','Principal X / width',-2,3,.001],['cy','Principal Y / height',-2,3,.001],['k1','Radial k1',-1,1,.001],['k2','Radial k2',-1,1,.001],['k3','Radial k3',-1,1,.001],['p1','Tangential p1',-.2,.2,.0001],['p2','Tangential p2',-.2,.2,.0001]]},
+    grade: {name:'Color grade',inputs:['Image'],color:'#bc9bd3',defaults:{exposure:0,contrast:1,saturation:1,temperature:0},description:'Correct this branch before combining it with other branches.',fields:[['exposure','Exposure · stops',-3,3,.05],['contrast','Contrast',0,3,.05],['saturation','Saturation',0,3,.05],['temperature','Temperature',-1,1,.02]]},
+    curves: {name:'Color curves',inputs:['Image'],color:'#bc9bd3',defaults:{master:copy(IDENTITY),red:copy(IDENTITY),green:copy(IDENTITY),blue:copy(IDENTITY)},description:'Shape the master tone curve and individual RGB channels. Channel curves are applied before the master curve.'},
+    blur: {name:'Gaussian blur',inputs:['Image'],color:'#82a4ce',defaults:{sigma:2},description:'Blur the image while retaining its existing transparency.',fields:[['sigma','Radius',0,30,.1]]},
+    sharpen: {name:'Sharpen',inputs:['Image'],color:'#82a4ce',defaults:{amount:1},description:'Recover edge definition with an unsharp mask.',fields:[['amount','Amount',0,3,.05]]},
+    chroma_key: {name:'Chroma key',inputs:['Image'],color:'#80b99b',defaults:{color:'#00ff00',similarity:.18,blend:.08},description:'Remove a selected color. Connect the transparent result to a Merge foreground.',fields:[['similarity','Color similarity',.01,1,.01],['blend','Edge blend',0,1,.01]]},
+    mask: {name:'Shape mask',inputs:['Image'],color:'#cfad76',defaults:{shape:'ellipse',x:.5,y:.5,width:.65,height:.65,rotation:0,feather:.15,invert:false,points:copy(POLYGON),bezier:copy(BEZIER)},description:'Draw cubic Bezier anchors and handles with point feather, or use an ellipse, rectangle or polygon. Shapes evaluate in the same frame domain as the clip.',fields:[['x','Center X',0,1,.01],['y','Center Y',0,1,.01],['width','Width',.01,2,.01],['height','Height',.01,2,.01],['rotation','Rotation · degrees',-360,360,1],['feather','Inward feather',0,1,.01]]},
+    merge: {name:'Merge',inputs:['Background','Foreground'],color:'#d39c84',defaults:{opacity:1,mode:'normal'},description:'Blend the foreground over the background. Each branch’s transparency and foreground opacity determine its contribution.',fields:[['opacity','Foreground opacity',0,1,.01]]}
+  };
+  const animationFields=type=>['sharpen','lens_distortion'].includes(type)?[]:[...(definitions[type].fields||[]).map(field=>field[0]),...(type==='mask'?['points','bezier']:[])];
+  const parameterName=(type,name)=>name==='points'?'Polygon path':name==='bezier'?'Bezier path':definitions[type].fields?.find(field=>field[0]===name)?.[1]||name;
+  const validPoints=(points,min,max)=>Array.isArray(points)&&points.length>=min&&points.length<=max&&points.every(point=>Array.isArray(point)&&point.length===2&&point.every(value=>typeof value==='number'&&Number.isFinite(value)&&value>=0&&value<=1));
+  const validPolygon=points=>validPoints(points,3,24)&&!points.some((point,i)=>Math.hypot(point[0]-points[(i+1)%points.length][0],point[1]-points[(i+1)%points.length][1])<.00001);
+  const validBezier=points=>Array.isArray(points)&&points.length>=2&&points.length<=32&&points.every(point=>Array.isArray(point)&&point.length===7&&point.every((value,i)=>typeof value==='number'&&Number.isFinite(value)&&value>=(i===6?0:-2)&&value<=(i===6?4:3)));
+  const NODE_WIDTH = 174;
+  const nodeHeight = node => ['source','media_source'].includes(node.type) ? 132 : ['merge','alpha_mask'].includes(node.type)||MASKABLE.has(node.type) ? 138 : 110;
+  const freshGraph = () => ({version:1,nodes:[{id:'source',type:'source',inputs:[],params:{},position:{x:42,y:62}}],output:'source'});
+  function validate(graph,timing={}) {
+    if (!graph || typeof graph!=='object'||Array.isArray(graph)||Object.keys(graph).some(name=>!['version','nodes','output'].includes(name))||graph.version !== 1 || !Array.isArray(graph.nodes) || !graph.nodes.length || graph.nodes.length > 32) return 'A graph needs 1–32 nodes, version 1, and an output.';
+    const nodes = new Map(),start=timing.animationStart??0,duration=timing.animationDuration??MAX_FRAME;
+    if(!Number.isInteger(start)||start < -MAX_FRAME||start>0||!Number.isInteger(duration)||duration<1||duration>MAX_FRAME)return 'Animation requires a bounded integer frame domain.';
+    let keyCount=0,valueCount=0;
+    for (const node of graph.nodes) {
+      if (!node || typeof node!=='object'||Array.isArray(node)||Object.keys(node).some(name=>!['id','type','inputs','params','position','animation','tracking_source','mask_input','mask_invert'].includes(name))||typeof node.id !== 'string' || !/^[A-Za-z0-9_-]{1,128}$/.test(node.id)|| nodes.has(node.id)) return 'Every node needs a unique bounded ID and supported fields.';
+      if (!Object.hasOwn(definitions,node.type)) return 'This graph contains an unsupported node.';
+      if (!Array.isArray(node.inputs) || node.inputs.length !== definitions[node.type].inputs.length) return `${definitions[node.type].name} has the wrong number of inputs.`;
+      if(node.params!==undefined&&(!node.params||typeof node.params!=='object'||Array.isArray(node.params)||Object.keys(node.params).some(name=>!Object.hasOwn(definitions[node.type].defaults,name)&&!(node.type==='lens_distortion'&&['model','projection','profile'].includes(name)))))return 'This node contains unsupported parameters.';
+      if(node.position!==undefined&&(!node.position||typeof node.position!=='object'||Array.isArray(node.position)||Object.keys(node.position).sort().join(',')!=='x,y'||!Object.values(node.position).every(v=>typeof v==='number'&&Number.isFinite(v)&&Math.abs(v)<=100000)))return 'Node positions require finite x/y coordinates.';
+      const p={...definitions[node.type].defaults,...node.params};
+      if(node.type==='media_source'){
+        if(!node.params||typeof node.params!=='object'||Array.isArray(node.params)||Object.keys(node.params).some(name=>!['asset_id','source_in','duration','offset','outside'].includes(name)))return 'Project media supports an asset, source in, duration, offset and outside policy only.';
+        if(typeof p.asset_id!=='string'||! /^[A-Za-z0-9_-]{1,128}$/.test(p.asset_id))return 'Choose an existing project media asset.';
+        if(!Number.isInteger(p.source_in)||p.source_in<0||p.source_in>=MAX_FRAME||!Number.isInteger(p.duration)||p.duration<1||p.duration>MAX_FRAME||p.source_in+p.duration>MAX_FRAME)return 'Source in and duration must select a bounded positive integer frame range.';
+        if(!Number.isInteger(p.offset)||Math.abs(p.offset)>MAX_FRAME||p.offset+p.duration>MAX_FRAME)return 'Source offset must place the range inside the supported frame limits.';
+        if(!['transparent','hold'].includes(p.outside))return 'Choose transparent or hold outside the source range.';
+      }
+      for(const [name,,min,max]of definitions[node.type].fields||[])if(typeof p[name]!=='number'||!Number.isFinite(p[name])||p[name]<min||p[name]>max)return `${parameterName(node.type,name)} must be a finite value between ${min} and ${max}.`;
+      if(node.type==='lens_distortion'){
+        if(node.params!==undefined&&(!node.params||typeof node.params!=='object'||Array.isArray(node.params)))return 'Lens calibration must contain named numeric parameters.';
+        if(!['undistort','distort'].includes(p.direction))return 'Choose lens correction or lens distortion.';
+        const lensError=validateLensModel(p);if(lensError)return lensError;
+      }
+      if(node.type==='curves')for(const channel of CURVE_CHANNELS){const points=p[channel];if(!validPoints(points,2,12)||points[0][0]!==0||points.at(-1)[0]!==1||points.some((point,i)=>i&&point[0]-points[i-1][0]<1/255-1e-9))return 'Curve points need distinct, increasing inputs from 0 to 1.';}
+      if(node.type==='mask'&&(!['ellipse','rectangle','polygon','bezier'].includes(p.shape)||typeof p.invert!=='boolean'||!validPolygon(p.points)||!validBezier(p.bezier)))return 'Masks require valid polygon vertices, boolean inversion, and a Bezier path of 2–32 anchors with finite handles/feather.';
+      if(node.type==='alpha_mask'&&typeof p.invert!=='boolean')return 'Alpha-mask inversion must be boolean.';
+      if(node.type==='chroma_key'&&(typeof p.color!=='string'||!/^#[0-9A-Fa-f]{6}$/.test(p.color)))return 'Chroma key color must be an RGB hex color.';
+      if(node.mask_input!==undefined&&(!MASKABLE.has(node.type)||typeof node.mask_input!=='string'||!node.mask_input||node.mask_invert!==undefined&&typeof node.mask_invert!=='boolean'))return 'Effect masks need a valid upstream node and boolean inversion.';
+      if(node.mask_input===undefined&&node.mask_invert!==undefined)return 'Effect mask inversion needs a connection.';
+      if(node.type==='merge'&&!BLEND_MODES[p.mode])return 'Choose an available blend mode.';
+      if(node.tracking_source!==undefined){
+        const source=node.tracking_source;
+        if(node.type!=='mask'||!source||typeof source!=='object'||Array.isArray(source)||Object.keys(source).sort().join(',')!=='backend,sha256,version'||source.version!==1||typeof source.sha256!=='string'||!/^[0-9a-fA-F]{64}$/.test(source.sha256)||typeof source.backend!=='string'||[...source.backend].length>160)return 'Mask tracking provenance requires version 1, a SHA-256 digest, and a backend name up to 160 characters.';
+      }
+      if(node.animation!==undefined){
+        if(!node.animation||typeof node.animation!=='object'||Array.isArray(node.animation))return 'Node animation must contain named property channels.';
+        for(const [name,keys]of Object.entries(node.animation)){
+          if(!animationFields(node.type).includes(name))return 'This property does not support animation.';
+          const maximum=['points','bezier'].includes(name)?64:128;if(!Array.isArray(keys)||!keys.length||keys.length>maximum)return `${parameterName(node.type,name)} supports 1–${maximum} keys.`;
+          const times=new Set();
+          for(const key of keys){
+            if(!key||typeof key!=='object'||Array.isArray(key)||Object.keys(key).some(name=>!['frame','value','interpolation','in_tangent','out_tangent'].includes(name)))return 'Animation keys support frame, value and interpolation.';
+            if(!Number.isInteger(key.frame)||key.frame<start||key.frame>=duration||times.has(key.frame))return 'Key times must be unique integer frames inside the animation domain.';
+            if(!Object.hasOwn(EASING,key.interpolation??'linear'))return 'Choose a supported keyframe interpolation.';
+            for(const tangent of ['in_tangent','out_tangent'])if(key[tangent]!==undefined&&(typeof key[tangent]!=='number'||!Number.isFinite(key[tangent])||key[tangent]<0||key[tangent]>3))return 'Cubic tangents are progress slopes from 0 to 3.';
+            times.add(key.frame);keyCount++;
+            if(name==='points'||name==='bezier'){
+              if(!(name==='points'?validPolygon:validBezier)(key.value)||key.value.length!==p[name].length)return 'Animated paths must preserve their anchor count and order.';
+              valueCount+=key.value.length*(name==='points'?2:7);
+            }else{
+              const [,,min,max]=definitions[node.type].fields.find(field=>field[0]===name);
+              if(typeof key.value!=='number'||!Number.isFinite(key.value)||key.value<min||key.value>max)return 'Animated values must stay inside the property limits.';
+              valueCount++;
+            }
+          }
+        }
+      }
+      if(keyCount>1024||valueCount>8192)return 'This graph exceeds its animation budget (1024 keys / 8192 coordinate values).';
+      nodes.set(node.id,node);
+    }
+    if (graph.nodes.filter(node => node.type === 'source').length !== 1) return 'A graph needs exactly one Source node.';
+    if (graph.nodes.filter(node => node.type === 'media_source').length > 8) return 'A graph supports up to eight additional project media sources.';
+    if (graph.nodes.filter(node => node.type === 'lens_distortion').length > 2) return 'A graph supports up to two calibrated lens nodes.';
+    if (!nodes.has(graph.output)) return 'Choose an existing node as the output.';
+    const done = new Set(), visiting = new Set();
+    function visit(id) {
+      if (!nodes.has(id)) return 'An input refers to a missing node.';
+      if (visiting.has(id)) return 'That connection creates a cycle. Images must flow toward the output.';
+      if (done.has(id)) return '';
+      visiting.add(id);
+      for (const input of dependencies(nodes.get(id))) { const error = visit(input); if (error) return error; }
+      visiting.delete(id);done.add(id);return '';
+    }
+    for (const node of graph.nodes) { const error = visit(node.id); if (error) return error; }
+    return '';
+  }
+  function animationValue(base,keys,frame){
+    const byFrame=new Map([[0,{frame:0,value:base,interpolation:'linear'}]]);
+    for(const key of keys||[])byFrame.set(key.frame,key);
+    const points=[...byFrame.values()].sort((a,b)=>a.frame-b.frame);
+    if(frame<=points[0].frame)return copy(points[0].value);
+    for(let i=0;i<points.length-1;i++)if(frame<points[i+1].frame){
+      const a=points[i],b=points[i+1],t=(frame-a.frame)/(b.frame-a.frame),mode=a.interpolation||'linear';
+      const amount=mode==='constant'?0:mode==='ease_in'?t*t:mode==='ease_out'?1-(1-t)**2:mode==='ease_in_out'?t*t*(3-2*t):mode==='cubic'?((a.out_tangent??0)+(b.in_tangent??0)-2)*t*t*t+(3-2*(a.out_tangent??0)-(b.in_tangent??0))*t*t+(a.out_tangent??0)*t:t;
+      const mix=(x,y)=>Array.isArray(x)?x.map((value,i)=>mix(value,y[i])):x+(y-x)*amount;
+      return mix(a.value,b.value);
+    }
+    return copy(points.at(-1).value);
+  }
+  function paramsAt(node,frame){
+    const params=copy({...definitions[node.type].defaults,...node.params});
+    for(const [name,keys]of Object.entries(node.animation||{}))params[name]=animationValue(params[name],keys,frame);
+    return params;
+  }
+  function mediaFrameAt(node,frame){
+    const p=node.params,relative=frame-p.offset;
+    if(p.outside==='transparent'&&(relative<0||relative>=p.duration))return null;
+    return p.source_in+clamp(relative,0,p.duration-1);
+  }
+  function lensBound(p){
+    const radius=Math.hypot(Math.max(Math.abs(p.cx/p.fx),Math.abs((1-p.cx)/p.fx)),Math.max(Math.abs(p.cy/p.fy),Math.abs((1-p.cy)/p.fy))),r2=radius*radius;
+    return 3*Math.abs(p.k1)*r2+5*Math.abs(p.k2)*r2*r2+7*Math.abs(p.k3)*r2*r2*r2+8*radius*(Math.abs(p.p1)+Math.abs(p.p2));
+  }
+  const LENS_PROJECTIONS={equidistant:'Equidistant',equisolid:'Equisolid angle',stereographic:'Stereographic',orthographic:'Orthographic'};
+  const PROFILE_KEYS=['version','maker','lens','source_sha256','focal_mm','calibration_crop','calibration_aspect','image_crop','center_x','center_y','distortion','coefficients'].sort();
+  function lensProfileBound(p){
+    const v=p.coefficients,d=1-(p.distortion==='poly3'?v[0]:v.reduce((a,b)=>a+b,0));
+    if(p.distortion!=='poly5'&&d<.1)return Infinity;
+    const c=p.distortion==='poly3'?[0,v[0]/d**3,0,0]:p.distortion==='poly5'?[0,v[0],0,v[1]]:[v[2]/d**2,v[1]/d**3,v[0]/d**4,0];
+    const radius=p.calibration_crop/p.image_crop*Math.hypot(p.calibration_aspect,1)*(1+Math.abs(p.center_x)+Math.abs(p.center_y));
+    return c.reduce((sum,value,i)=>sum+(i+2)*Math.abs(value)*radius**(i+1),0);
+  }
+  function validateLensProfile(p){
+    if(!p||typeof p!=='object'||Array.isArray(p)||Object.keys(p).sort().join(',')!==PROFILE_KEYS.join(',')||p.version!==1)return 'Choose a supported Lensfun version 1 calibration.';
+    for(const [key,limit]of [['maker',160],['lens',256]])if(typeof p[key]!=='string'||!p[key].length||p[key].length>limit||/[\u0000-\u001f]/.test(p[key]))return 'Lensfun maker and model must contain bounded printable names.';
+    if(typeof p.source_sha256!=='string'||! /^[a-f0-9]{64}$/.test(p.source_sha256))return 'Lensfun requires its source XML SHA-256 identity.';
+    for(const [key,min,max]of [['focal_mm',.1,2000],['calibration_crop',.1,100],['calibration_aspect',1,4],['image_crop',.1,100],['center_x',-.5,.5],['center_y',-.5,.5]])if(typeof p[key]!=='number'||!Number.isFinite(p[key])||p[key]<min||p[key]>max)return 'Lensfun sensor and calibration values exceed their supported bounds.';
+    if(p.image_crop+1e-10<p.calibration_crop)return 'The capture crop factor must be at least the calibration crop factor; extrapolation is unsupported.';
+    const count={poly3:1,poly5:2,ptlens:3}[p.distortion];
+    if(typeof p.distortion!=='string'||!count||!Array.isArray(p.coefficients)||p.coefficients.length!==count||!p.coefficients.every(v=>typeof v==='number'&&Number.isFinite(v)&&Math.abs(v)<=1))return 'Lensfun needs poly3, poly5 or PTLens coefficients with the correct count.';
+    if(lensProfileBound(p)>.8+1e-12)return 'This calibration exceeds the full-image inverse bound (0.8). Use a smaller captured field or another calibration.';
+    return '';
+  }
+  function validateLensModel(p){
+    const model=p.model===undefined?'brown':p.model;
+    if(!['brown','fisheye','lensfun'].includes(model))return 'Choose Brown, a fisheye projection, or Lensfun.';
+    if(model==='brown'){
+      if(Object.hasOwn(p,'projection')||Object.hasOwn(p,'profile'))return 'Brown cannot also contain a fisheye projection or Lensfun profile.';
+      return lensBound(p)>.45+1e-12?'These Brown coefficients exceed the full-image invertibility limit. Reduce coefficients or use a narrower calibrated field.':'';
+    }
+    if(['k1','k2','k3','p1','p2'].some(key=>p[key]!==0))return 'Apply Brown coefficients in a separate lens node.';
+    if(model==='fisheye')return typeof p.projection==='string'&&Object.hasOwn(LENS_PROJECTIONS,p.projection)&&!Object.hasOwn(p,'profile')?'':'Choose one explicit fisheye projection without a Lensfun profile.';
+    if(Object.hasOwn(p,'projection')||['fx','fy','cx','cy'].some(key=>p[key]!==definitions.lens_distortion.defaults[key]))return 'Lensfun uses its recorded sensor crop and optical center; manual intrinsics remain at defaults.';
+    return validateLensProfile(p.profile);
+  }
+  const lensActive=p=>p.model==='fisheye'||(p.model==='lensfun'?p.profile.coefficients.some(v=>v!==0):['k1','k2','k3','p1','p2'].some(key=>p[key]));
+  function splitBezier(points,index,t=.5){
+    if(!validBezier(points)||!Number.isInteger(index)||index<0||index>=points.length||points.length>=32||!(t>0&&t<1))throw Error('Choose a Bezier segment inside a path of fewer than 32 anchors.');
+    const out=copy(points),a=out[index],b=out[(index+1)%out.length],mix=(p,q)=>p.map((v,i)=>v+(q[i]-v)*t);
+    const p0=a.slice(0,2),p1=a.slice(4,6),p2=b.slice(2,4),p3=b.slice(0,2),q0=mix(p0,p1),q1=mix(p1,p2),q2=mix(p2,p3),r0=mix(q0,q1),r1=mix(q1,q2),center=mix(r0,r1);
+    a[4]=q0[0];a[5]=q0[1];b[2]=q2[0];b[3]=q2[1];
+    out.splice(index+1,0,[...center,...r0,...r1,a[6]+(b[6]-a[6])*t]);return out;
+  }
+  function parseSvgPath(data,viewBox=[0,0,1,1],allowOutside=false){
+    if(typeof data!=='string'||data.length>32768||!Array.isArray(viewBox)||viewBox.length!==4||!viewBox.every(Number.isFinite)||viewBox[2]<=0||viewBox[3]<=0)throw Error('SVG path or viewBox is invalid.');
+    const pattern=/[A-Za-z]|[+-]?(?:\d*\.\d+|\d+\.?\d*)(?:[eE][+-]?\d+)?/g,tokens=data.match(pattern)||[];
+    if(data.replace(pattern,'').replace(/[\s,]/g,'')||tokens.length>2048)throw Error('SVG path contains unsupported tokens.');
+    let index=0,command='',current=[0,0],anchors=[],closed=false,previous='',quadratic=null;
+    const numeric=count=>{if(index+count>tokens.length)throw Error('SVG path has incomplete coordinates.');const v=tokens.slice(index,index+count).map(Number);if(!v.every(Number.isFinite))throw Error('SVG coordinates must be finite.');index+=count;return v;};
+    const append=(end,c1=current,c2=end)=>{if(!anchors.length)throw Error('SVG path must start with M.');const prior=anchors.at(-1);prior[4]=c1[0];prior[5]=c1[1];anchors.push([...end,...c2,...end,1]);current=end;};
+    while(index<tokens.length){
+      if(/^[A-Za-z]$/.test(tokens[index]))command=tokens[index++];
+      else if(!command)throw Error('SVG coordinates require a path command.');
+      const upper=command.toUpperCase(),relative=command!==upper,base=[...current],point=v=>[v[0]+(relative?base[0]:0),v[1]+(relative?base[1]:0)];
+      if(upper==='Z'){closed=true;if(index!==tokens.length)throw Error('Import one closed SVG subpath at a time.');break;}
+      if(upper==='M'){
+        if(anchors.length)throw Error('Import one closed SVG subpath at a time.');current=point(numeric(2));anchors.push([...current,...current,...current,1]);command=relative?'l':'L';
+      }else if(upper==='L')append(point(numeric(2)));
+      else if(upper==='H'){const [x]=numeric(1);append([x+(relative?base[0]:0),base[1]]);}
+      else if(upper==='V'){const [y]=numeric(1);append([base[0],y+(relative?base[1]:0)]);}
+      else if(upper==='C'){const v=numeric(6);append(point(v.slice(4)),point(v.slice(0,2)),point(v.slice(2,4)));}
+      else if(upper==='S'){const v=numeric(4),last=anchors.at(-1),c1=['C','S'].includes(previous)?[2*base[0]-last[2],2*base[1]-last[3]]:base;append(point(v.slice(2)),c1,point(v.slice(0,2)));}
+      else if(upper==='Q'||upper==='T'){
+        const v=numeric(upper==='Q'?4:2),q=upper==='Q'?point(v.slice(0,2)):['Q','T'].includes(previous)&&quadratic?[2*base[0]-quadratic[0],2*base[1]-quadratic[1]]:base,end=point(v.slice(upper==='Q'?2:0));
+        append(end,[base[0]+2*(q[0]-base[0])/3,base[1]+2*(q[1]-base[1])/3],[end[0]+2*(q[0]-end[0])/3,end[1]+2*(q[1]-end[1])/3]);quadratic=q;
+      }else throw Error('SVG supports closed M/L/H/V/C/S/Q/T/Z paths. Convert arcs to cubic curves before import.');
+      previous=upper;if(!['Q','T'].includes(upper))quadratic=null;
+      if(anchors.length>33)throw Error('SVG path exceeds 32 Bezier anchors.');
+    }
+    if(!closed||anchors.length<3)throw Error('Choose one closed SVG path with at least two anchors.');
+    const first=anchors[0],last=anchors.at(-1);
+    if(Math.hypot(first[0]-last[0],first[1]-last[1])<1e-9){first[2]=last[2];first[3]=last[3];anchors.pop();}
+    for(const a of anchors)for(let i=0;i<6;i++)a[i]=(a[i]-viewBox[i%2])/viewBox[2+i%2];
+    if(!validBezier(anchors)&&!(allowOutside&&anchors.length>=2&&anchors.length<=32&&anchors.every(a=>a.length===7&&a.every(Number.isFinite)&&a.slice(0,6).every(v=>Math.abs(v)<=1e6))))throw Error('SVG coordinates exceed the Bezier editing domain.');return anchors;
+  }
+  function svgDocument(params,width=1000,height=1000){
+    if(!validBezier(params.bezier)||![width,height].every(v=>Number.isFinite(v)&&v>0))throw Error('Invalid Bezier SVG geometry.');
+    const angle=params.rotation*Math.PI/180,c=Math.cos(angle),s=Math.sin(angle),project=(x,y)=>{const px=(x-.5)*width*params.width,py=(y-.5)*height*params.height;return [width*params.x+c*px-s*py,height*params.y+s*px+c*py];};
+    const f=v=>Number(v.toFixed(8)),p=params.bezier,first=project(...p[0].slice(0,2));
+    let d='M '+first.map(f).join(' ');for(let i=0;i<p.length;i++){const a=p[i],b=p[(i+1)%p.length];d+=' C '+[...project(...a.slice(4,6)),...project(...b.slice(2,4)),...project(...b.slice(0,2))].map(f).join(' ');}d+=' Z';
+    return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${f(width)} ${f(height)}"><title>CINEMATICUM Bezier boundary</title><desc>Closed cubic boundary. CINEMATICUM metadata retains authored transforms and point feather.</desc><metadata data-cinematicum-roto="1">${escape(JSON.stringify(params))}</metadata><path d="${d}" fill="white" fill-rule="evenodd"/></svg>`;
+  }
+  function parseSvgDocument(text){
+    if(typeof text!=='string'||text.length>262144||/<!DOCTYPE|<!ENTITY/i.test(text))throw Error('SVG must be an entity-free document below 256 KiB.');
+    const doc=new DOMParser().parseFromString(text,'image/svg+xml');
+    if(doc.querySelector('parsererror')||doc.documentElement.localName!=='svg')throw Error('This file is not valid SVG.');
+    for(const element of doc.querySelectorAll('*')){
+      if(!['svg','path','title','desc','metadata'].includes(element.localName))throw Error('Import a single SVG path; other elements and groups are not supported.');
+      for(const attribute of element.attributes)if(/^on/i.test(attribute.name)||/href|src/i.test(attribute.name)||attribute.name==='transform'||attribute.name==='style'||/url\(/i.test(attribute.value))throw Error('SVG external resources, scripts and transforms are not accepted. Bake transforms into path coordinates.');
+    }
+    const paths=doc.querySelectorAll('path');if(paths.length!==1)throw Error('Choose exactly one closed SVG path.');
+    const box=(doc.documentElement.getAttribute('viewBox')||'').trim().split(/[\s,]+/).map(Number);
+    const metadata=doc.querySelector('metadata[data-cinematicum-roto="1"]');
+    if(metadata){
+      const params=JSON.parse(metadata.textContent),g=freshGraph();g.nodes.push({id:'mask',type:'mask',inputs:['source'],params});g.output='mask';
+      if(!params||params.shape!=='bezier'||validate(g))throw Error('CINEMATICUM SVG metadata is invalid.');
+      const complete={...copy(definitions.mask.defaults),...params},points=parseSvgPath(paths[0].getAttribute('d'),box,true);
+      const expectedDocument=new DOMParser().parseFromString(svgDocument(complete,box[2],box[3]),'image/svg+xml'),expected=parseSvgPath(expectedDocument.querySelector('path').getAttribute('d'),[0,0,box[2],box[3]],true);
+      if(points.length!==expected.length||points.some((a,i)=>a.slice(0,6).some((v,j)=>Math.abs(v-expected[i][j])>1e-7)))throw Error('SVG boundary and CINEMATICUM metadata disagree. Remove the metadata to import an externally edited path.');
+      return complete;
+    }
+    const points=parseSvgPath(paths[0].getAttribute('d'),box);
+    return {...copy(definitions.mask.defaults),shape:'bezier',x:.5,y:.5,width:1,height:1,rotation:0,feather:0,bezier:points};
+  }
+  function wouldCycle(graph, from, to) {
+    const nodes = new Map(graph.nodes.map(node => [node.id,node])), seen = new Set();
+    function contains(id) {
+      if (id === to) return true;
+      if (seen.has(id)) return false;
+      seen.add(id);return (nodes.has(id)?dependencies(nodes.get(id)):[]).some(contains);
+    }
+    return contains(from);
+  }
+  function curveValue(points, x) {
+    // Shape-preserving cubic Hermite interpolation, matching the render curve.
+    const count=points.length,h=[],d=[],slopes=[];
+    for(let i=0;i<count-1;i++){h[i]=points[i+1][0]-points[i][0];d[i]=(points[i+1][1]-points[i][1])/h[i];}
+    if(count===2)slopes.push(d[0],d[0]);
+    else {
+      const end=(h0,h1,d0,d1)=>{const value=((2*h0+h1)*d0-h0*d1)/(h0+h1);return value*d0<=0?0:(d0*d1<0&&Math.abs(value)>Math.abs(3*d0)?3*d0:value);};
+      slopes[0]=end(h[0],h[1],d[0],d[1]);slopes[count-1]=end(h[count-2],h[count-3],d[count-2],d[count-3]);
+      for(let i=1;i<count-1;i++){const w1=2*h[i]+h[i-1],w2=h[i]+2*h[i-1];slopes[i]=d[i-1]*d[i]<=0?0:(w1+w2)/(w1/d[i-1]+w2/d[i]);}
+    }
+    let i=0;while(i<count-2&&x>points[i+1][0])i++;
+    const t=clamp((x-points[i][0])/h[i],0,1),t2=t*t,t3=t2*t;
+    return clamp((2*t3-3*t2+1)*points[i][1]+(t3-2*t2+t)*h[i]*slopes[i]+(-2*t3+3*t2)*points[i+1][1]+(t3-t2)*h[i]*slopes[i+1],0,1);
+  }
+  function mount(host, bridge = {}) {
+    let graph = freshGraph(), context = {}, selected = 'source', inspector = null, pending = null, drag = null;
+    let zoom = 1, pan = {x:0,y:0}, destroyed = false, positions = new Map(), lensCatalog = null, lensChoice = '';
+    let curveChannel='master',curvePoint=0,polygonPoint=0,bezierPoint=0,bezierHandle=0,bezierDrag=null,editorDrag=null,animationChannel=null;
+    host.classList.add('compositor-editor');
+    host.innerHTML = `<div class="compositor-toolbar"><span class="compositor-title">NODE COMPOSITOR</span><select data-graph-add-type aria-label="Node type to add">${Object.entries(definitions).filter(([type])=>type!=='source').map(([type,definition])=>`<option value="${type}">${definition.name}</option>`).join('')}</select><button data-graph-action="add" class="small" title="Add after the selected node">＋ Add</button><button data-graph-action="masked" class="quiet small" title="Create a grade, feathered mask, and merge branch">Masked correction</button><button data-graph-action="load-graph" class="quiet small">Import graph</button><button data-graph-action="save-graph" class="quiet small">Save graph</button><span class="compositor-toolbar-spacer"></span><button data-graph-action="fit" class="quiet small" title="Fit all nodes">Fit</button><button data-graph-action="preview" class="small">Render preview ↗</button></div><div class="compositor-stage" tabindex="0" aria-label="Node graph. Drag nodes, or connect an output port to an input port."><div class="compositor-world"><svg class="compositor-wires" aria-hidden="true"></svg><div class="compositor-nodes"></div></div><div class="compositor-empty" hidden><strong>Select a picture clip.</strong><span>Import a video or image, add it to the timeline, then select its clip.</span><button data-graph-action="import" class="small">Import media</button></div><div class="compositor-connection-hint" hidden></div></div><div class="compositor-footer"><span data-graph-status>Source → output</span><span>Drag background to pan · ⌘/Ctrl + wheel to zoom</span><label>Output <select data-graph-output aria-label="Compositor output node"></select></label></div>`;
+    const stage=host.querySelector('.compositor-stage'),world=host.querySelector('.compositor-world'),nodesElement=host.querySelector('.compositor-nodes'),wires=host.querySelector('.compositor-wires');
+    const notify = (message,error=false) => bridge.toast?.(message,error);
+    const nodeById = id => graph.nodes.find(node => node.id===id);
+    const currentFrame=()=>Math.round(number(context.frame,number(bridge.getFrame?.(),0)));
+    const frameAllowed=frame=>frame>=(context.animationStart??0)&&frame<(context.animationDuration??MAX_FRAME);
+    const sourceId = () => graph.nodes.find(node=>node.type==='source')?.id;
+    const listMedia = () => {const items=bridge.listMedia?.()||context.media||[];return Array.isArray(items)?items.filter(item=>item&&['video','image'].includes(item.kind)):[];};
+    const getMedia = id => bridge.getMedia?.(id)||listMedia().find(item=>item.id===id);
+    const mediaFrames = item => item?.kind==='image'?MAX_FRAME:Math.max(0,Math.min(MAX_FRAME,Math.floor(number(item?.duration)*number(context.fps,24)+.5+1e-8)));
+    function sourceIssue(node){const item=getMedia(node.params.asset_id),p=node.params;if(!item||!['video','image'].includes(item.kind))return 'This source is missing from the project. Choose another media asset.';if(/\.exr$/i.test(String(item.path||''))||item.codec==='exr')return 'Develop this linear EXR master to an explicit display image before adding it to the composite.';if(item.kind==='image'&&p.source_in)return 'Still images have no source in point.';if(item.kind==='video'&&p.source_in+p.duration>mediaFrames(item))return 'The selected range extends beyond this video. Shorten its duration or source in point.';if(['smpte2084','arib-std-b67'].includes(item.color_transfer))return 'Convert this HDR source to SDR before adding it to the composite.';return '';}
+    const label = node => `${definitions[node.type]?.name || node.type} ${node.type==='source'?'':graph.nodes.indexOf(node)}`.trim();
+    function position(node) { return positions.get(node.id) || {x:0,y:0}; }
+    function cachePositions() { positions=new Map(graph.nodes.map((node,index)=>[node.id,{x:number(node.position?.x,42+index*230),y:number(node.position?.y,62)}])); }
+    function activeNodes() {const active=new Set();function walk(id){if(active.has(id))return;active.add(id);nodeById(id)&&dependencies(nodeById(id)).forEach(walk);}walk(graph.output);return active;}
+    function applyView() {world.style.transform=`translate(${pan.x}px,${pan.y}px) scale(${zoom})`;stage.style.backgroundPosition=`${pan.x}px ${pan.y}px`;stage.style.backgroundSize=`${20*zoom}px ${20*zoom}px`;}
+    function portPoint(id, input=null) {const node=nodeById(id),p=positions.get(id);return p&&node?{x:p.x+(input===null?NODE_WIDTH:0),y:p.y+(input===null?54:54+input*24)}:null;}
+    function curve(a,b) {const d=Math.max(45,Math.abs(b.x-a.x)*.48);return `M ${a.x} ${a.y} C ${a.x+d} ${a.y}, ${b.x-d} ${b.y}, ${b.x} ${b.y}`;}
+    function drawWires(cursor) {
+      const active=activeNodes();let paths='';
+      for (const node of graph.nodes) [...node.inputs,...(MASKABLE.has(node.type)?[node.mask_input]:[])].forEach((id,index)=>{const a=portPoint(id),b=portPoint(node.id,index);if(a&&b)paths+=`<path class="${active.has(node.id)?'active':''}" d="${curve(a,b)}"></path>`;});
+      if(pending&&cursor){const a=portPoint(pending);if(a)paths+=`<path class="pending" d="${curve(a,cursor)}"></path>`;}
+      wires.innerHTML=paths;
+    }
+    function summary(node) {
+      const p={...definitions[node.type].defaults,...node.params};
+      if(node.type==='source')return context.sourceLabel||'Selected clip';
+      if(node.type==='media_source')return `${getMedia(p.asset_id)?.name||'Missing media'} · ${p.offset}–${p.offset+p.duration-1}f · ${p.outside}`;
+      if(node.type==='lens_distortion')return p.model==='lensfun'?`Lensfun · ${p.profile.distortion} · ${p.profile.focal_mm} mm`:p.model==='fisheye'?`${LENS_PROJECTIONS[p.projection]} → ${p.direction==='undistort'?'rectilinear':'fisheye'}`:`${p.direction==='undistort'?'Correct':'Reproduce'} · k1 ${p.k1.toFixed(3)} · k2 ${p.k2.toFixed(3)}`;
+      if(node.type==='grade')return `${number(p.exposure).toFixed(2)} EV · sat ${number(p.saturation).toFixed(2)}`;
+      if(node.type==='curves')return `Master + RGB · ${CURVE_CHANNELS.reduce((sum,name)=>sum+(p[name]?.length||2),0)} points`;
+      if(node.type==='blur')return `Radius ${number(p.sigma).toFixed(1)}`;
+      if(node.type==='sharpen')return `Amount ${number(p.amount).toFixed(2)}`;
+      if(node.type==='chroma_key')return `${p.color} · ${number(p.similarity).toFixed(2)}`;
+      if(node.type==='mask')return `${p.shape}${p.invert?' · inverted':''} · feather ${number(p.feather).toFixed(2)}`;
+      return `${BLEND_MODES[p.mode]||'Normal'} · ${Math.round(number(p.opacity,1)*100)}%`;
+    }
+    function renderGraph() {
+      const enabled=Boolean(context.key),active=activeNodes();
+      host.classList.toggle('graph-unavailable',!enabled);host.querySelector('.compositor-empty').hidden=enabled;
+      host.querySelectorAll('[data-graph-action]:not([data-graph-action=import]),[data-graph-add-type],[data-graph-output]').forEach(control=>{control.disabled=!enabled;});
+      if(enabled)host.querySelector('[data-graph-action=preview]').disabled=bridge.renderAvailable?.()===false;
+      nodesElement.hidden=!enabled;wires.hidden=!enabled;
+      nodesElement.innerHTML=graph.nodes.map(node=>{const definition=definitions[node.type]||definitions.source,p=position(node),thumbnail=node.type==='source'?context.sourceThumb:node.type==='media_source'?getMedia(node.params.asset_id)?.thumbnailUrl:null;return `<article class="compositor-node ${selected===node.id?'selected':''} ${graph.output===node.id?'graph-output':''} ${active.has(node.id)?'connected':'disconnected'}" data-node="${escape(node.id)}" data-node-type="${escape(node.type)}" tabindex="0" aria-label="${escape(label(node))}${graph.output===node.id?', output':''}" style="left:${p.x}px;top:${p.y}px;width:${NODE_WIDTH}px;height:${nodeHeight(node)}px;--node-color:${definition.color}"><div class="compositor-node-head"><span>${escape(label(node))}</span><span class="node-output-tag">${graph.output===node.id?'OUT':''}</span></div>${inputNames(node).map((name,index)=>`<button class="node-port node-input" data-node-input="${index}" data-node-target="${escape(node.id)}" style="top:${48+index*24}px" aria-label="Connect ${escape(name)} input of ${escape(label(node))}" title="${escape(name)} input"></button><span class="node-input-label" style="top:${48+index*24}px">${escape(name)}</span>`).join('')}<button class="node-port node-output ${pending===node.id?'pending':''}" data-node-output="${escape(node.id)}" aria-label="Connect output of ${escape(label(node))}" title="Drag or click, then choose an input"></button>${thumbnail?`<img class="node-source-thumb" src="${escape(thumbnail)}" alt="Source thumbnail" draggable="false">`:''}<div class="node-summary" title="${escape(summary(node))}">${escape(summary(node))}</div></article>`;}).join('');
+      const error=validate(graph);host.querySelector('[data-graph-status]').textContent=enabled?(error||`${graph.nodes.length} nodes · ${active.size} in output`):'Select a video or image clip';host.querySelector('[data-graph-status]').classList.toggle('invalid',Boolean(error));
+      host.querySelector('[data-graph-output]').innerHTML=graph.nodes.map(node=>`<option value="${escape(node.id)}" ${node.id===graph.output?'selected':''}>${escape(label(node))}</option>`).join('');
+      const hint=host.querySelector('.compositor-connection-hint');hint.hidden=!pending;hint.textContent=pending?'Choose an input port · Esc cancels':'';
+      applyView();drawWires();
+    }
+    function fit() {
+      if(!stage.clientWidth||!stage.clientHeight||!graph.nodes.length)return;
+      const bounds=graph.nodes.map(node=>({p:position(node),h:nodeHeight(node)})),minX=Math.min(...bounds.map(n=>n.p.x)),minY=Math.min(...bounds.map(n=>n.p.y)),maxX=Math.max(...bounds.map(n=>n.p.x+NODE_WIDTH)),maxY=Math.max(...bounds.map(n=>n.p.y+n.h));
+      zoom=clamp(Math.min((stage.clientWidth-60)/(maxX-minX),(stage.clientHeight-42)/(maxY-minY)),.28,1);
+      pan={x:(stage.clientWidth-(maxX-minX)*zoom)/2-minX*zoom,y:(stage.clientHeight-(maxY-minY)*zoom)/2-minY*zoom};applyView();
+    }
+    function selectNode(id) {if(!nodeById(id))return;selected=id;renderGraph();renderInspector();}
+    function commit(next, nextSelected=selected) {
+      const error=validate(next,context);if(error){notify(error,true);return false;}
+      if(!context.key)return false;
+      for(const node of next.nodes.filter(item=>item.type==='media_source')){const issue=sourceIssue(node);if(issue){notify(issue,true);return false;}}
+      const pixels=number(context.graphWidth)*number(context.graphHeight);
+      if(pixels>0){
+        const byId=new Map(next.nodes.map(node=>[node.id,node])),active=new Set();function visit(id){if(active.has(id))return;active.add(id);dependencies(byId.get(id)).forEach(visit);}visit(next.output);
+        const nodes=next.nodes.filter(node=>active.has(node.id));
+        if(pixels>2073600&&nodes.some(node=>node.type==='lens_distortion'&&lensActive(node.params))){notify('Calibrated lens processing supports up to 2,073,600 pixels (1920 × 1080) per graph canvas.',true);return false;}
+        const images=nodes.reduce((sum,node)=>sum+(node.type==='merge'&&(node.params.mode||'normal')!=='normal'?5:node.type==='lens_distortion'?22:node.type==='alpha_mask'?6:node.type==='curves'?2:1)+(node.mask_input?10:0),0);
+        if(pixels*images>268435456){notify('This graph exceeds its working-image budget. Reduce graph complexity or project resolution.',true);return false;}
+      }
+      const previous=graph;graph=copy(next);selected=nextSelected;cachePositions();
+      try {if(bridge.onChange?.(copy(graph),context.key)===false){graph=previous;cachePositions();return false;}}catch(error){graph=previous;cachePositions();notify(error.message,true);return false;}
+      renderGraph();renderInspector();return true;
+    }
+    function addNode(type) {
+      if(!definitions[type]||type==='source'||!context.key)return;
+      if(graph.nodes.length>=32){notify('This clip already has 32 nodes.',true);return;}
+      const next=copy(graph),from=nodeById(selected)||nodeById(graph.output),p=position(from),id=crypto.randomUUID();
+      if(type==='media_source'){
+        if(graph.nodes.filter(node=>node.type==='media_source').length>=8){notify('This graph already has eight project media sources.',true);return;}
+        const items=listMedia(),item=items.find(media=>media.id!==context.sourceAssetId)||items[0];
+        if(!item){notify('Import a video or still image before adding a media source.',true);bridge.onImport?.();return;}
+        const duration=Math.min(Math.max(1,context.clipDuration||context.animationDuration||1),mediaFrames(item));
+        next.nodes.push({id,type,inputs:[],params:{asset_id:item.id,source_in:0,duration,offset:context.clipOffset||0,outside:'transparent'},position:{x:p.x,y:p.y+170}});
+        if(commit(next,id))requestAnimationFrame(fit);return;
+      }
+      next.nodes.push({id,type,inputs:type==='merge'?[sourceId(),from.id]:type==='alpha_mask'?[from.id,sourceId()]:[from.id],params:copy(definitions[type].defaults),position:{x:p.x+230,y:p.y+(definitions[type].inputs.length===2?45:0)}});next.output=id;
+      if(commit(next,id))requestAnimationFrame(fit);
+    }
+    function maskedCorrection() {
+      if(graph.nodes.length>29){notify('A masked correction needs three available node slots.',true);return;}
+      const next=copy(graph),base=nodeById(selected)||nodeById(graph.output),p=position(base),ids=[crypto.randomUUID(),crypto.randomUUID(),crypto.randomUUID()];
+      next.nodes.push({id:ids[0],type:'grade',inputs:[base.id],params:{...definitions.grade.defaults,exposure:.5},position:{x:p.x+230,y:p.y-80}},{id:ids[1],type:'mask',inputs:[ids[0]],params:copy(definitions.mask.defaults),position:{x:p.x+460,y:p.y-80}},{id:ids[2],type:'merge',inputs:[base.id,ids[1]],params:{opacity:1},position:{x:p.x+690,y:p.y+30}});next.output=ids[2];
+      if(commit(next,ids[1]))requestAnimationFrame(fit);
+    }
+    function deleteNode() {
+      const node=nodeById(selected);if(!node||node.type==='source')return;
+      const next=copy(graph),fallback=node.inputs[0]||sourceId();next.nodes=next.nodes.filter(item=>item.id!==node.id);for(const item of next.nodes){item.inputs=item.inputs.map(id=>id===node.id?fallback:id);if(item.mask_input===node.id){delete item.mask_input;delete item.mask_invert;}}if(next.output===node.id)next.output=fallback;commit(next,fallback);
+    }
+    function duplicateNode() {
+      const node=nodeById(selected);if(!node||node.type==='source')return;
+      if(graph.nodes.length>=32){notify('This clip already has 32 nodes.',true);return;}
+      const next=copy(graph),duplicate=copy(node),p=position(node);duplicate.id=crypto.randomUUID();duplicate.position={x:p.x+30,y:p.y+150};next.nodes.push(duplicate);if(commit(next,duplicate.id))requestAnimationFrame(fit);
+    }
+    function connect(from,to,input) {
+      if(!nodeById(from)||!nodeById(to))return;
+      if(wouldCycle(graph,from,to)){notify('That connection would create a cycle. Choose an upstream node.',true);return;}
+      const next=copy(graph),node=next.nodes.find(n=>n.id===to);if(input===node.inputs.length&&MASKABLE.has(node.type)){node.mask_input=from;node.mask_invert??=false;}else{if(input<0||input>=node.inputs.length)return;node.inputs[input]=from;}pending=null;commit(next,to);
+    }
+    function keyButton(node,name){
+      if(!animationFields(node.type).includes(name))return '';
+      const keyed=node.animation?.[name]?.some(key=>key.frame===currentFrame()),active=!!node.animation?.[name];
+      return `<button class="icon-button" data-node-key="${name}" aria-label="${keyed?'Remove':'Set'} ${escape(parameterName(node.type,name))} keyframe" title="${keyed?'Remove':'Set'} key at frame ${currentFrame()}" aria-pressed="${keyed?'true':'false'}" ${frameAllowed(currentFrame())?'':'disabled'} style="font-size:14px;flex:none;color:${active?'var(--accent)':'var(--muted)'}">${keyed?'◆':'◇'}</button>`;
+    }
+    function parameterControl(name,title,min,max,step,value) {const node=nodeById(selected);return `<div class="node-parameter"><div><label style="flex:1">${escape(title)}</label>${keyButton(node,name)}<input type="number" data-node-param="${name}" min="${min}" max="${max}" step="${step}" value="${Number(value.toFixed(6))}" aria-label="${escape(title)}"></div><input type="range" data-node-param="${name}" min="${min}" max="${max}" step="${step}" value="${value}" aria-label="${escape(title)} slider"></div>`;}
+    function animationEditor(node){
+      const fields=animationFields(node.type);if(!fields.length)return '';
+      if(!fields.includes(animationChannel))animationChannel=Object.keys(node.animation||{})[0]||fields[0];
+      const frame=currentFrame(),keys=node.animation?.[animationChannel]||[],key=keys.find(key=>key.frame===frame),active=keys.length>0;
+      return `<div class="inspector-section node-animation"><h3>PROPERTY ANIMATION</h3><label>Channel<select data-node-animation-channel aria-label="Animated property">${fields.map(name=>`<option value="${name}" ${name===animationChannel?'selected':''}>${escape(parameterName(node.type,name))}${node.animation?.[name]?' · '+node.animation[name].length+' keys':''}</option>`).join('')}</select></label><div class="field-row"><label>Playhead frame<input data-node-animation-frame type="number" step="1" min="${context.animationStart??0}" max="${(context.animationDuration??MAX_FRAME)-1}" value="${frame}" aria-label="Node animation playhead frame"></label><label>Key interpolation<select data-node-animation-easing ${key?'':'disabled'} aria-label="Node keyframe interpolation">${Object.entries(EASING).map(([value,label])=>`<option value="${value}" ${(key?.interpolation||'linear')===value?'selected':''}>${label}</option>`).join('')}</select></label></div><div class="inspector-actions"><button data-node-key="${animationChannel}" ${frameAllowed(frame)?'':'disabled'}>${key?'◆ Remove key':'◇ Set key'}</button><button data-node-animation-clear ${active?'':'disabled'} title="Keep the current value and remove this channel’s animation">Make static</button></div>${key?`<div class="field-row"><label>Incoming progress slope<input data-node-tangent="in_tangent" type="number" min="0" max="3" step=".05" value="${key.in_tangent??0}"></label><label>Outgoing progress slope<input data-node-tangent="out_tangent" type="number" min="0" max="3" step=".05" value="${key.out_tangent??0}"></label></div><p class="note">Custom cubic tangents: 0 is flat, 1 follows the segment slope, 3 is steep. Incoming controls the preceding cubic segment.</p><label>Move key to frame<input data-node-key-time type="number" step="1" min="${context.animationStart??0}" max="${(context.animationDuration??MAX_FRAME)-1}" value="${frame}" aria-label="Move node keyframe"></label>`:''}<div class="keyframe-list" aria-label="Property keyframes">${keys.map(item=>`<span class="keyframe-chip"><button data-node-animation-seek="${item.frame}" title="Go to frame ${item.frame}" ${item.frame===frame?'aria-current="true"':''}>${item.frame===frame?'◆':'◇'} ${item.frame}</button><button data-node-animation-remove="${item.frame}" aria-label="Remove key at frame ${item.frame}">×</button></span>`).join('')}</div><p class="note">${!frameAllowed(frame)?'The playhead is outside this clip’s animation domain. ':''}${active?'Editing this property sets a key at the playhead.':'Set a key to animate this property independently.'} Interpolation applies after a key. Trims preserve the original animation time.</p></div>`;
+    }
+    function writeParameter(target,name,value,forceKey=false){
+      target.params??={};
+      if(forceKey||target.animation?.[name]){
+        const frame=currentFrame();if(!frameAllowed(frame)){notify('Move the playhead inside the animation domain before setting a key.',true);return false;}
+        target.animation??={};const keys=target.animation[name]||[],existing=keys.find(key=>key.frame===frame);
+        if(!existing&&keys.length>=(['points','bezier'].includes(name)?64:128)){notify('This property has reached its keyframe limit.',true);return false;}
+        if(existing)existing.value=copy(value);else keys.push({frame,value:copy(value),interpolation:'linear'});
+        target.animation[name]=keys.sort((a,b)=>a.frame-b.frame);
+      }else target.params[name]=copy(value);
+      return true;
+    }
+    function removeAnimationKey(next,name,frame){
+      const target=next.nodes.find(node=>node.id===selected);if(!target?.animation?.[name])return false;
+      target.animation[name]=target.animation[name].filter(key=>key.frame!==frame);
+      if(!target.animation[name].length)delete target.animation[name];if(!Object.keys(target.animation).length)delete target.animation;
+      return true;
+    }
+    function toggleKey(name){
+      const node=nodeById(selected);if(!node||!animationFields(node.type).includes(name))return;
+      animationChannel=name;const next=copy(graph),target=next.nodes.find(item=>item.id===selected);
+      if(node.animation?.[name]?.some(key=>key.frame===currentFrame()))removeAnimationKey(next,name,currentFrame());
+      else if(!writeParameter(target,name,paramsAt(node,currentFrame())[name],true))return;
+      commit(next);
+    }
+    function seekAnimation(frame){
+      if(!Number.isInteger(frame)||!frameAllowed(frame)){notify('Choose a frame inside the animation domain.',true);renderInspector();return;}
+      const result=bridge.onSeek?.(frame);if(result===false)return;
+      context={...context,frame:Number.isFinite(result)?result:frame};renderInspector();
+    }
+    function canEditPath(){
+      const keys=nodeById(selected)?.animation?.points;if(!keys)return true;
+      if(!frameAllowed(currentFrame())){notify('Move the playhead inside the animation domain before editing an animated path.',true);return false;}
+      if(keys.length>=64&&!keys.some(key=>key.frame===currentFrame())){notify('This path has reached its 64-key limit.',true);return false;}
+      return true;
+    }
+    const editorStyle='width:100%;aspect-ratio:1;display:block;touch-action:none;background:#10141c;border:1px solid #354050;border-radius:6px;cursor:crosshair';
+    function editorGrid(curve=false) {
+      return [0,.25,.5,.75,1].map(value=>`<path d="M${18+220*value} 18V238 M18 ${18+220*value}H238" fill="none" stroke="#303a49" stroke-width="${value===0||value===1?1:.6}"/>`).join('')+
+        (curve?'<path d="M18 238L238 18" stroke="#6b7280" stroke-width=".7" stroke-dasharray="3 4"/>':'')+
+        `<text x="128" y="252" text-anchor="middle" fill="#8e9bad" font-size="9">${curve?'INPUT':'LOCAL X'}</text><text x="8" y="128" text-anchor="middle" transform="rotate(-90 8 128)" fill="#8e9bad" font-size="9">${curve?'OUTPUT':'LOCAL Y'}</text>`;
+    }
+    function curveGraphic(points) {
+      const color=CURVE_COLORS[curveChannel],path=Array.from({length:129},(_,i)=>{const x=i/128;return `${i?'L':'M'}${18+220*x} ${238-220*curveValue(points,x)}`;}).join(' ');
+      return editorGrid(true)+`<path d="${path}" fill="none" stroke="${color}" stroke-width="2"/>`+points.map((point,index)=>`<circle data-curve-point="${index}" cx="${18+220*point[0]}" cy="${238-220*point[1]}" r="${index===curvePoint?5.7:4.3}" fill="${index===curvePoint?color:'#10141c'}" stroke="${color}" stroke-width="1.6" tabindex="0" role="button" aria-label="Curve point ${index+1}, input ${point[0].toFixed(3)}, output ${point[1].toFixed(3)}" style="cursor:grab"><title>Input ${point[0].toFixed(3)} · Output ${point[1].toFixed(3)}</title></circle>`).join('');
+    }
+    function polygonGraphic(points) {
+      return editorGrid()+`<polygon points="${points.map(point=>`${18+220*point[0]},${18+220*point[1]}`).join(' ')}" fill="#cfad76" fill-opacity=".15" fill-rule="evenodd" stroke="#cfad76" stroke-width="1.8"/>`+points.map((point,index)=>`<circle data-polygon-point="${index}" cx="${18+220*point[0]}" cy="${18+220*point[1]}" r="${index===polygonPoint?5.7:4.3}" fill="${index===polygonPoint?'#cfad76':'#10141c'}" stroke="#cfad76" stroke-width="1.6" tabindex="0" role="button" aria-label="Polygon vertex ${index+1}, X ${point[0].toFixed(3)}, Y ${point[1].toFixed(3)}" style="cursor:grab"><title>Vertex ${index+1}</title></circle>`).join('');
+    }
+    function curveEditor(params) {
+      const points=params[curveChannel]||IDENTITY;curvePoint=clamp(curvePoint,0,points.length-1);const point=points[curvePoint],end=curvePoint===0||curvePoint===points.length-1;
+      return `<div class="inspector-section node-curve-editor"><label>Channel<select data-curve-channel aria-label="Curve channel">${CURVE_CHANNELS.map(channel=>`<option value="${channel}" ${channel===curveChannel?'selected':''}>${channel==='master'?'Master · RGB':channel[0].toUpperCase()+channel.slice(1)}</option>`).join('')}</select></label><svg data-curve-editor viewBox="0 0 256 256" tabindex="0" role="group" aria-label="Editable ${curveChannel} tone curve" style="${editorStyle};margin-top:12px">${curveGraphic(points)}</svg><p class="note">Click to add a point; drag to shape the curve. Arrow keys nudge the selected point.</p><div class="field-row"><label>Input<input data-curve-coordinate="0" type="number" min="${end?point[0]:points[curvePoint-1][0]+POINT_GAP}" max="${end?point[0]:points[curvePoint+1][0]-POINT_GAP}" step=".001" value="${point[0]}" ${end?'disabled':''}></label><label>Output<input data-curve-coordinate="1" type="number" min="0" max="1" step=".001" value="${point[1]}"></label></div><div class="inspector-actions"><button data-node-action="curve-remove" ${end?'disabled':''}>Remove point</button><button data-node-action="curve-reset">Reset channel</button></div></div>`;
+    }
+    function polygonEditor(params) {
+      const points=params.points||POLYGON;polygonPoint=clamp(polygonPoint,0,points.length-1);const point=points[polygonPoint],node=nodeById(selected),animated=!!node.animation?.points;
+      return `<div class="inspector-section node-polygon-editor"><div class="control-row"><label>Polygon path · frame ${currentFrame()}</label>${keyButton(node,'points')}</div><svg data-polygon-editor viewBox="0 0 256 256" tabindex="0" role="group" aria-label="Editable polygon mask vertices" style="${editorStyle}">${polygonGraphic(points)}</svg><p class="note">${animated?'Drag a vertex to key this shape at the playhead. Vertex count stays fixed across keys.':'Drag a vertex. Double-click an edge to add one.'} Placement, size and rotation apply to the whole shape.</p><div class="field-row"><label>Vertex X<input data-polygon-coordinate="0" type="number" min="0" max="1" step=".001" value="${point[0]}"></label><label>Vertex Y<input data-polygon-coordinate="1" type="number" min="0" max="1" step=".001" value="${point[1]}"></label></div><div class="inspector-actions"><button data-node-action="polygon-add" ${points.length>=24||animated?'disabled':''}>Add vertex</button><button data-node-action="polygon-remove" ${points.length<=3||animated?'disabled':''}>Remove vertex</button></div><button data-node-action="polygon-reset" class="quiet full" ${animated?'disabled':''}>Reset polygon</button></div>`;
+    }
+    function bezierGraphic(points){
+      const xy=p=>[18+220*p[0],18+220*p[1]],pair=p=>xy(p).join(' '),first=points[0];
+      let path='M '+pair(first);
+      for(let i=0;i<points.length;i++){const a=points[i],b=points[(i+1)%points.length];path+=' C '+pair(a.slice(4,6))+' '+pair(b.slice(2,4))+' '+pair(b.slice(0,2));}path+=' Z';
+      let result=editorGrid()+`<path d="${path}" fill="#cfad76" fill-opacity=".14" fill-rule="evenodd" stroke="#cfad76" stroke-width="1.8"/>`;
+      for(let i=0;i<points.length;i++){
+        const a=points[i],selectedPoint=i===bezierPoint;
+        if(selectedPoint){result+=`<path d="M${pair(a.slice(2,4))} L${pair(a)} L${pair(a.slice(4,6))}" stroke="#8daacb" fill="none" stroke-width="1"/>`;
+          for(const h of [2,4]){const p=xy(a.slice(h,h+2));result+=`<circle data-bezier-point="${i}" data-bezier-handle="${h}" cx="${p[0]}" cy="${p[1]}" r="4" fill="#26384e" stroke="#a7c9ee" tabindex="0" role="button" aria-label="${h===2?'Incoming':'Outgoing'} handle of anchor ${i+1}"/>`;}}
+        const p=xy(a);result+=`<circle data-bezier-point="${i}" data-bezier-handle="0" cx="${p[0]}" cy="${p[1]}" r="${selectedPoint?5.5:4}" fill="${selectedPoint?'#cfad76':'#10141c'}" stroke="#cfad76" stroke-width="1.6" tabindex="0" role="button" aria-label="Bezier anchor ${i+1}"/>`;
+      }return result;
+    }
+    function bezierEditor(params){
+      const points=params.bezier||BEZIER;bezierPoint=clamp(bezierPoint,0,points.length-1);const point=points[bezierPoint],node=nodeById(selected);
+      const fields=[[0,'Anchor X'],[1,'Anchor Y'],[2,'Incoming X'],[3,'Incoming Y'],[4,'Outgoing X'],[5,'Outgoing Y']];
+      const coordinates=[fields.slice(0,2),fields.slice(2,4),fields.slice(4,6)].map(pair=>`<div class="field-row">${pair.map(([i,label])=>`<label>${label}<input data-bezier-coordinate="${i}" type="number" min="-2" max="3" step=".001" value="${point[i]}"></label>`).join('')}</div>`).join('');
+      return `<div class="inspector-section node-bezier-editor"><div class="control-row"><label>Cubic path · frame ${currentFrame()}</label>${keyButton(node,'bezier')}</div><svg data-bezier-editor viewBox="0 0 256 256" tabindex="0" role="group" aria-label="Editable cubic Bezier roto path" style="${editorStyle}">${bezierGraphic(points)}</svg><p class="note">Drag anchors or handles. Shift-drag a handle mirrors the opposite handle. Point feather scales the global inward feather. Paths use 16-bit rendered coverage.</p><label>Anchor<select data-bezier-selection>${points.map((a,i)=>`<option value="${i}" ${i===bezierPoint?'selected':''}>${i+1} · ${a[0].toFixed(3)}, ${a[1].toFixed(3)}</option>`).join('')}</select></label>${coordinates}<label>Point feather scale<input data-bezier-coordinate="6" type="number" min="0" max="4" step=".05" value="${point[6]}"></label><div class="inspector-actions"><button data-node-action="bezier-split" ${points.length>=32?'disabled':''}>Split next segment</button><button data-node-action="bezier-remove" ${points.length<=2?'disabled':''}>Remove anchor</button><button data-node-action="bezier-smooth">Smooth handles</button><button data-node-action="bezier-corner">Corner</button></div><div class="inspector-actions"><button data-node-action="bezier-import">Import SVG · replace</button><button data-node-action="bezier-export">Export SVG boundary</button></div><p class="note">SVG supports one closed path. Cubic and quadratic geometry is retained; CINEMATICUM SVG metadata also retains point feather. Import replaces this shape and its animation in one undoable edit.</p></div>`;
+    }
+    function bezierCanEdit(){
+      const keys=nodeById(selected)?.animation?.bezier;
+      if(keys&&(!frameAllowed(currentFrame())||keys.length>=64&&!keys.some(k=>k.frame===currentFrame()))){notify('Move inside the animation domain and leave an available path key before editing.',true);return false;}return true;
+    }
+    function writeBezier(next,points){return writeParameter(next.nodes.find(n=>n.id===selected),'bezier',points);}
+    function bezierLocal(event,svg){const p=svg.createSVGPoint();p.x=event.clientX;p.y=event.clientY;const inverse=svg.getScreenCTM()?.inverse();if(!inverse)return [0,0];const q=p.matrixTransform(inverse);return [clamp((q.x-18)/220,-2,3),clamp((q.y-18)/220,-2,3)];}
+    function beginBezierDrag(event){
+      const handle=event.target.closest('[data-bezier-point]'),svg=event.target.closest('[data-bezier-editor]');if(event.button!==0||event.isPrimary===false||!context.key||!handle||!svg||!bezierCanEdit())return false;
+      event.preventDefault();event.stopPropagation();bezierPoint=Number(handle.dataset.bezierPoint);bezierHandle=Number(handle.dataset.bezierHandle);
+      const points=copy(paramsAt(nodeById(selected),currentFrame()).bezier);
+      bezierDrag={pointerId:event.pointerId,svg,points,start:bezierLocal(event,svg),original:copy(points),key:context.key,node:selected,moved:false};
+      svg.innerHTML=bezierGraphic(points);return true;
+    }
+    function moveBezierDrag(event){
+      if(!bezierDrag||event.pointerId!==bezierDrag.pointerId)return;
+      const edit=bezierDrag,point=bezierLocal(event,edit.svg),a=edit.original[bezierPoint],p=edit.points[bezierPoint],h=bezierHandle;
+      let dx=point[0]-edit.start[0],dy=point[1]-edit.start[1];
+      if(h===0){for(const axis of [0,1]){const delta=axis===0?dx:dy;for(const index of [axis,axis+2,axis+4])p[index]=clamp(a[index]+delta,-2,3);}}
+      else{p[h]=clamp(a[h]+dx,-2,3);p[h+1]=clamp(a[h+1]+dy,-2,3);if(event.shiftKey){const opposite=h===2?4:2;p[opposite]=clamp(2*p[0]-p[h],-2,3);p[opposite+1]=clamp(2*p[1]-p[h+1],-2,3);}}
+      edit.moved=Math.abs(dx)+Math.abs(dy)>.0001;edit.svg.innerHTML=bezierGraphic(edit.points);
+      inspector?.querySelectorAll('[data-bezier-coordinate]').forEach(input=>input.value=p[Number(input.dataset.bezierCoordinate)]);
+    }
+    function finishBezierDrag(cancel=false){
+      const edit=bezierDrag;bezierDrag=null;if(!edit)return;
+      if(!cancel&&edit.moved&&context.key===edit.key&&selected===edit.node){const next=copy(graph);if(writeBezier(next,edit.points))commit(next);}
+      else renderInspector();
+    }
+    function downloadText(text,type,name){const blob=new Blob([text],{type}),url=URL.createObjectURL(blob),link=document.createElement('a');link.href=url;link.download=name;document.body.append(link);link.click();link.remove();setTimeout(()=>URL.revokeObjectURL(url),30000);}
+    function chooseText(accept,receive){
+      const input=document.createElement('input'),key=context.key,identity=JSON.stringify(graph),selection=selected;input.type='file';input.accept=accept;input.hidden=true;document.body.append(input);
+      const cleanup=()=>input.remove();input.addEventListener('cancel',cleanup,{once:true});
+      input.addEventListener('change',async()=>{try{const file=input.files?.[0];if(!file)return;if(file.size>262144)throw Error('Choose a file no larger than 256 KiB.');const text=await file.text();if(context.key!==key||selected!==selection||JSON.stringify(graph)!==identity)throw Error('The selected clip, node or graph changed. Select the file again.');receive(text);}catch(error){notify(error.message,true);}finally{cleanup();}},{once:true});input.click();
+    }
+    function bezierAction(action){
+      const node=nodeById(selected);if(node?.type!=='mask')return;
+      if(action==='bezier-export'){downloadText(svgDocument(paramsAt(node,currentFrame()),context.graphWidth||1000,context.graphHeight||1000),'image/svg+xml','cinematicum-roto.svg');return;}
+      if(action==='bezier-import'){chooseText('.svg,image/svg+xml',text=>{const params=parseSvgDocument(text),next=copy(graph),target=next.nodes.find(n=>n.id===selected);target.params=params;delete target.animation;delete target.tracking_source;bezierPoint=0;commit(next);});return;}
+      if(!bezierCanEdit())return;const next=copy(graph),target=next.nodes.find(n=>n.id===selected),points=copy(paramsAt(node,currentFrame()).bezier);
+      if(action==='bezier-split'||action==='bezier-remove'){
+        if(action==='bezier-remove'&&points.length<=2)return;
+        const change=path=>{if(action==='bezier-split')return splitBezier(path,bezierPoint);const result=copy(path);result.splice(bezierPoint,1);return result;};
+        target.params.bezier=change(target.params.bezier||BEZIER);for(const key of target.animation?.bezier||[])key.value=change(key.value);
+        bezierPoint=clamp(bezierPoint+(action==='bezier-split'?1:0),0,target.params.bezier.length-1);commit(next);return;
+      }
+      const a=points[bezierPoint];
+      if(action==='bezier-corner'){a[2]=a[4]=a[0];a[3]=a[5]=a[1];}
+      else if(action==='bezier-smooth'){
+        const previous=points[(bezierPoint+points.length-1)%points.length],following=points[(bezierPoint+1)%points.length],dx=(following[0]-previous[0])/6,dy=(following[1]-previous[1])/6;
+        a[2]=clamp(a[0]-dx,-2,3);a[3]=clamp(a[1]-dy,-2,3);a[4]=clamp(a[0]+dx,-2,3);a[5]=clamp(a[1]+dy,-2,3);
+      }else return;if(writeBezier(next,points))commit(next);
+    }
+    function sceneLens(){
+      const scene=bridge.getSceneCamera?.(),camera=scene?.camera,width=number(scene?.width),height=number(scene?.height);
+      if(!camera||width<=0||height<=0||!Number.isFinite(camera.fov)||camera.fov<=0||camera.fov>=180)return null;
+      if(context.graphWidth&&context.graphHeight&&Math.abs((width/height)/(context.graphWidth/context.graphHeight)-1)>1e-5)return null;
+      const fy=.5/Math.tan(camera.fov*Math.PI/360),fx=fy*height/width*number(camera.focal_ratio,1);
+      return {fx,fy,cx:.5+number(camera.shift_x),cy:.5-number(camera.shift_y)};
+    }
+    function currentLensCatalog(){return lensCatalog&&lensCatalog.key===context.key&&lensCatalog.node===selected&&lensCatalog.graph===JSON.stringify(graph)?lensCatalog:null;}
+    async function readLensFile(file){
+      if(!file||destroyed)return;
+      const key=context.key,node=selected,identity=JSON.stringify(graph);
+      const current=()=>!destroyed&&context.key===key&&selected===node&&JSON.stringify(graph)===identity;
+      try{
+        if(file.size>512*1024||!/\.xml$/i.test(file.name))throw Error('Choose a Lensfun XML file no larger than 512 KiB.');
+        if(!bridge.onLensImport)throw Error('Lensfun import is unavailable. Reopen the application.');
+        const bytes=await file.arrayBuffer();if(bytes.byteLength!==file.size)throw Error('The profile file changed while it was read.');
+        const text=new TextDecoder('utf-8',{fatal:true,ignoreBOM:true}).decode(bytes);
+        if(!current())throw Error('The selected clip or graph changed. Choose the profile again.');
+        const result=await bridge.onLensImport({text});
+        if(!current())throw Error('The selected clip or graph changed. Choose the profile again.');
+        if(!Array.isArray(result?.calibrations)||!result.calibrations.length||result.calibrations.length>2048)throw Error('No supported Lensfun calibrations were returned.');
+        lensCatalog={key,node,graph:identity,...copy(result)};lensChoice=lensCatalog.calibrations[0].id;
+        renderInspector();notify('Choose the measured focal sample and capture crop factor, then apply the calibration.');
+      }catch(error){notify(error.message,true);}
+    }
+    function lensEditor(node){
+      const p={...definitions.lens_distortion.defaults,...node.params},width=number(context.graphWidth),height=number(context.graphHeight),fields=definitions.lens_distortion.fields;
+      const field=name=>{const [,title,min,max,step]=fields.find(item=>item[0]===name);return `<label>${title}<input type="number" data-node-param="${name}" value="${p[name]}" min="${min}" max="${max}" step="${step}"></label>`;};
+      const model=p.model||'brown',choice=model==='fisheye'?p.projection:model,catalog=currentLensCatalog(),sample=catalog?.calibrations.find(c=>c.id===lensChoice);
+      const selection=`<label>Lens model<select data-lens-model><option value="brown" ${choice==='brown'?'selected':''}>Brown calibration</option>${Object.entries(LENS_PROJECTIONS).map(([value,name])=>`<option value="${value}" ${choice===value?'selected':''}>${name} fisheye</option>`).join('')}${model==='lensfun'?'<option value="lensfun" selected disabled>Imported Lensfun calibration</option>':''}</select></label>`;
+      const operation=`<label>Operation<select data-node-param="direction"><option value="undistort" ${p.direction==='undistort'?'selected':''}>Correct to rectilinear</option><option value="distort" ${p.direction==='distort'?'selected':''}>Reproduce source lens</option></select></label>`;
+      const intrinsics=`<h3>CAMERA INTRINSICS</h3><div class="field-row">${field('fx')}${field('fy')}</div><div class="field-row">${field('cx')}${field('cy')}</div><p class="note">${width&&height?`${width} × ${height} graph · FX ${(p.fx*width).toFixed(2)}, FY ${(p.fy*height).toFixed(2)}, CX ${(p.cx*width).toFixed(2)}, CY ${(p.cy*height).toFixed(2)} pixels.`:'Intrinsics are normalized by their image axis.'} Pixel centers start at 0; Y points down.</p><button class="quiet full" data-node-action="lens-camera" ${sceneLens()?'':'disabled'}>Copy base scene camera intrinsics</button>`;
+      const brown=`<h3>BROWN DISTORTION</h3><div class="field-row">${field('k1')}${field('k2')}</div>${field('k3')}<div class="field-row">${field('p1')}${field('p2')}</div><p class="note">Brown coefficients use camera-normalized coordinates. Inverse bound ${lensBound(p).toFixed(3)} / 0.450.</p><button class="quiet full" data-node-action="lens-reset">Reset distortion coefficients</button>`;
+      const stored=model==='lensfun'?`<h3>APPLIED LENSFUN SAMPLE</h3><p>${escape(p.profile.maker)} ${escape(p.profile.lens)}<br>${p.profile.focal_mm} mm · ${escape(p.profile.distortion)} · capture crop ${p.profile.image_crop}</p><p class="note">Calibration crop ${p.profile.calibration_crop} · aspect ${p.profile.calibration_aspect}. Inverse bound ${lensProfileBound(p.profile).toFixed(3)} / 0.800. Profile data is saved in this graph.</p><label>Capture crop factor<input data-lens-crop type="number" min="${p.profile.calibration_crop}" max="100" step=".001" value="${p.profile.image_crop}"></label>`:'';
+      const importUI=`<h3>LENSFUN PROFILE</h3><label>Read Lensfun XML<input type="file" data-lensfun-file accept=".xml,application/xml,text/xml"></label>${catalog?`<label>Exact measured focal sample<select data-lensfun-choice>${catalog.calibrations.map(c=>`<option value="${escape(c.id)}" ${c.id===lensChoice?'selected':''}>${escape(c.label)}</option>`).join('')}</select></label><label>Capture crop factor<input data-lensfun-crop type="number" min="${sample?.profile.calibration_crop||.1}" max="100" step=".001" value="${sample?.profile.calibration_crop||1}"></label><button class="quiet full" data-node-action="lensfun-apply">Apply selected calibration</button>${(catalog.warnings||[]).map(message=>`<p class="note">${escape(message)}</p>`).join('')}`:'<p class="note">Import poly3, poly5 or PTLens radial calibration. Select an exact focal sample; camera matching, interpolation, TCA and vignetting are not automatic.</p>'}`;
+      return `<div class="inspector-section node-lens-editor">${selection}${operation}${model==='lensfun'?stored:intrinsics+(model==='brown'?brown:`<p class="note">${escape(LENS_PROJECTIONS[p.projection])} projection. Correct maps fisheye capture to rectilinear; reproduce maps rectilinear into fisheye. Rays outside the front hemisphere become transparent. The same focal lengths and center define both images.</p>`)}${importUI}<p class="note">Static calibration · transparent outside image · alpha-aware bilinear sampling. Maximum 2,073,600 pixels per graph canvas. Use the complete uncropped capture without letterboxing.</p></div>`;
+    }
+
+    function renderInspector(element=inspector) {
+      if(element!==inspector){if(inspector){inspector.removeEventListener('input',inspectorInput);inspector.removeEventListener('change',inspectorChange);inspector.removeEventListener('click',inspectorClick);inspector.removeEventListener('keydown',onKey);inspector.removeEventListener('pointerdown',inspectorPointerDown);inspector.removeEventListener('dblclick',inspectorDoubleClick);}inspector=element;if(inspector){inspector.addEventListener('input',inspectorInput);inspector.addEventListener('change',inspectorChange);inspector.addEventListener('click',inspectorClick);inspector.addEventListener('keydown',onKey);inspector.addEventListener('pointerdown',inspectorPointerDown);inspector.addEventListener('dblclick',inspectorDoubleClick);}}
+      if(!inspector)return;
+      const node=nodeById(selected);if(!context.key||!node){inspector.innerHTML='<p class="note">Select a picture clip to edit its image graph.</p>';return;}
+      const definition=definitions[node.type],p=paramsAt(node,currentFrame()),output=node.id===graph.output;
+      inspector.innerHTML=`<div class="node-inspector-heading"><span style="background:${definition.color}"></span><strong>${escape(label(node))}</strong>${output?'<small>OUTPUT</small>':''}</div><p class="note">${escape(definition.description)}</p>${node.type==='source'?`<div class="node-source-info">${context.sourceThumb?`<img src="${escape(context.sourceThumb)}" alt="Selected source">`:''}<strong>${escape(context.sourceLabel||'Selected clip')}</strong><span>The graph processes this clip. Clip transforms and timeline layers are applied afterward.</span></div>`:''}${node.inputs.length?`<div class="inspector-section"><h3>CONNECTIONS</h3>${node.inputs.map((id,index)=>`<label>${definition.inputs[index]}<select data-node-connection="${index}" aria-label="${definition.inputs[index]} connection">${graph.nodes.filter(item=>!wouldCycle(graph,item.id,node.id)).map(item=>`<option value="${escape(item.id)}" ${id===item.id?'selected':''}>${escape(label(item))}</option>`).join('')}</select></label>`).join('')}</div>`:''}${MASKABLE.has(node.type)?`<div class="inspector-section"><label>Effect mask · alpha<select data-node-effect-mask aria-label="Effect mask connection"><option value="">None · apply everywhere</option>${graph.nodes.filter(item=>!wouldCycle(graph,item.id,node.id)).map(item=>`<option value="${escape(item.id)}" ${node.mask_input===item.id?'selected':''}>${escape(label(item))}</option>`).join('')}</select></label>${node.mask_input?`<label class="check-field"><input type="checkbox" data-node-mask-invert ${node.mask_invert?'checked':''}>Invert effect mask</label>`:''}</div>`:''}${node.type==='chroma_key'?`<div class="color-control"><label>Remove color</label><input type="color" data-node-param="color" value="${escape(p.color)}" aria-label="Chroma key color"></div>`:''}${node.type==='lens_distortion'?lensEditor(node):''}${node.type==='media_source'?mediaSourceEditor(node):''}${node.type==='curves'?curveEditor(p):''}${node.type==='mask'?`<div class="inspector-section"><label>Shape<select data-node-param="shape"><option value="ellipse" ${p.shape==='ellipse'?'selected':''}>Ellipse</option><option value="rectangle" ${p.shape==='rectangle'?'selected':''}>Rectangle</option><option value="polygon" ${p.shape==='polygon'?'selected':''}>Polygon</option><option value="bezier" ${p.shape==='bezier'?'selected':''}>Bezier roto</option></select></label></div>${p.shape==='polygon'?polygonEditor(p):p.shape==='bezier'?bezierEditor(p):''}`:''}${node.type==='merge'?`<div class="inspector-section"><label>Blend mode<select data-node-param="mode" aria-label="Merge blend mode">${Object.entries(BLEND_MODES).map(([value,name])=>`<option value="${value}" ${p.mode===value?'selected':''}>${name}</option>`).join('')}</select></label></div>`:''}${(node.type==='lens_distortion'?[]:definition.fields||[]).map(([name,title,min,max,step])=>parameterControl(name,title,min,max,step,number(p[name],definition.defaults[name]))).join('')}${['mask','alpha_mask'].includes(node.type)?`<label class="check-field"><input type="checkbox" data-node-param="invert" ${p.invert?'checked':''}> Invert mask</label>`:''}${animationEditor(node)}<div class="inspector-actions"><button data-node-action="output" ${output?'disabled':''}>Use as output</button>${node.type!=='source'?'<button data-node-action="duplicate">Duplicate</button>':''}</div>${node.type!=='source'?'<button class="quiet full node-delete" data-node-action="delete">Delete node · reconnect its inputs</button>':''}<p class="note node-render-note">Frame preview and export evaluate the connected graph. Clip placement is applied afterward.</p>`;
+    }
+    function editorPoints(next,kind,channel=curveChannel,nodeId=selected) {
+      const target=next.nodes.find(node=>node.id===nodeId);target.params??={};
+      const key=kind==='curve'?channel:'points';
+      target.params[key]??=copy(kind==='curve'?IDENTITY:POLYGON);
+      if(kind==='polygon'&&target.animation?.points){
+        const keys=target.animation.points,existing=keys.find(key=>key.frame===currentFrame());
+        if(existing)return existing.value;
+        const value=paramsAt(target,currentFrame()).points;
+        keys.push({frame:currentFrame(),value,interpolation:'linear'});keys.sort((a,b)=>a.frame-b.frame);
+        return value;
+      }
+      return target.params[key];
+    }
+    function editorPosition(event,svg,kind) {
+      const rect=svg.getBoundingClientRect(),x=(event.clientX-rect.left)*256/rect.width,y=(event.clientY-rect.top)*256/rect.height;
+      return [clamp((x-18)/220,0,1),clamp((kind==='curve'?238-y:y-18)/220,0,1)];
+    }
+    function updateEditorGraphic(edit) {
+      const points=editorPoints(edit.next,edit.kind,edit.channel,edit.nodeId),point=points[edit.index];
+      edit.svg.innerHTML=edit.kind==='curve'?curveGraphic(points):polygonGraphic(points);
+      inspector?.querySelectorAll(`[data-${edit.kind==='curve'?'curve':'polygon'}-coordinate]`).forEach(input=>{const axis=Number(input.dataset[edit.kind==='curve'?'curveCoordinate':'polygonCoordinate']);input.value=point[axis];});
+    }
+    function inspectorPointerDown(event) {
+      if(beginBezierDrag(event))return;
+      if(event.button!==0||event.isPrimary===false||!context.key)return;
+      const svg=event.target.closest('[data-curve-editor],[data-polygon-editor]');if(!svg)return;
+      const kind=svg.hasAttribute('data-curve-editor')?'curve':'polygon';if(kind==='polygon'&&!canEditPath())return;
+      const next=copy(graph),points=editorPoints(next,kind),handle=event.target.closest(`[data-${kind}-point]`);
+      let index=handle?Number(handle.dataset[kind==='curve'?'curvePoint':'polygonPoint']):-1,inserted=false;
+      if(index<0&&kind==='curve'){
+        const point=editorPosition(event,svg,kind);index=points.findIndex(existing=>Math.abs(existing[0]-point[0])<POINT_GAP);
+        if(index<0){if(points.length>=12){notify('A channel supports up to 12 curve points.');return;}index=points.findIndex(existing=>existing[0]>point[0]);if(index<1)index=points.length-1;points.splice(index,0,point);inserted=true;}
+      }
+      event.preventDefault();event.stopPropagation();svg.focus({preventScroll:true});
+      if(index<0)return;
+      if(kind==='curve')curvePoint=index;else polygonPoint=index;
+      editorDrag={kind,next,index,inserted,changed:inserted,svg,nodeId:selected,channel:curveChannel,key:context.key,pointerId:event.pointerId};
+      try{svg.setPointerCapture?.(event.pointerId);}catch(_){}updateEditorGraphic(editorDrag);
+    }
+    function editorPointerMove(event) {
+      const edit=editorDrag;if(!edit||event.pointerId!==edit.pointerId)return;
+      const points=editorPoints(edit.next,edit.kind,edit.channel,edit.nodeId),point=editorPosition(event,edit.svg,edit.kind);
+      if(edit.kind==='curve')point[0]=edit.index===0?0:edit.index===points.length-1?1:clamp(point[0],points[edit.index-1][0]+POINT_GAP,points[edit.index+1][0]-POINT_GAP);
+      const rounded=point.map(value=>Math.round(value*1e6)/1e6);
+      if(rounded[0]!==points[edit.index][0]||rounded[1]!==points[edit.index][1])edit.changed=true;
+      points[edit.index]=rounded;updateEditorGraphic(edit);event.preventDefault();
+    }
+    function finishEditor(cancel=false) {
+      const edit=editorDrag;if(!edit)return;editorDrag=null;
+      try{if(edit.svg.hasPointerCapture?.(edit.pointerId))edit.svg.releasePointerCapture(edit.pointerId);}catch(_){}
+      if(!cancel&&edit.changed&&edit.key===context.key&&edit.nodeId===selected&&!destroyed){if(!commit(edit.next))renderInspector();}
+      else renderInspector();
+    }
+    function insertPolygon(next,index,point) {
+      if(nodeById(selected)?.animation?.points){notify('Make the polygon path static before changing its vertex count.',true);return;}
+      const points=editorPoints(next,'polygon');if(points.length>=24){notify('A mask supports up to 24 vertices.');return;}
+      points.splice(index+1,0,point);polygonPoint=index+1;commit(next);
+    }
+    function inspectorDoubleClick(event) {
+      const svg=event.target.closest('[data-polygon-editor]');if(!svg||event.target.closest('[data-polygon-point]'))return;
+      event.preventDefault();event.stopPropagation();const next=copy(graph),points=editorPoints(next,'polygon'),point=editorPosition(event,svg,'polygon');let best=null;
+      for(let i=0;i<points.length;i++){const a=points[i],b=points[(i+1)%points.length],dx=b[0]-a[0],dy=b[1]-a[1],t=clamp(((point[0]-a[0])*dx+(point[1]-a[1])*dy)/(dx*dx+dy*dy),.05,.95),projected=[a[0]+t*dx,a[1]+t*dy],distance=Math.hypot(point[0]-projected[0],point[1]-projected[1]);if(!best||distance<best.distance)best={index:i,point:projected,distance};}
+      if(best?.distance<.07)insertPolygon(next,best.index,best.point);
+    }
+    function editPointAction(action) {
+      const node=nodeById(selected);if(!node)return;
+      if(action.startsWith('curve-')&&node.type==='curves'){
+        const next=copy(graph),points=editorPoints(next,'curve');
+        if(action==='curve-reset'){next.nodes.find(item=>item.id===selected).params[curveChannel]=copy(IDENTITY);curvePoint=0;commit(next);}
+        else if(action==='curve-remove'&&curvePoint>0&&curvePoint<points.length-1){points.splice(curvePoint,1);curvePoint=Math.max(0,curvePoint-1);commit(next);}
+      }
+      if(action.startsWith('polygon-')&&node.type==='mask'){
+        if(node.animation?.points){notify('Make the polygon path static before changing its vertex count.',true);return;}
+        const next=copy(graph),points=editorPoints(next,'polygon');
+        if(action==='polygon-reset'){next.nodes.find(item=>item.id===selected).params.points=copy(POLYGON);polygonPoint=0;commit(next);}
+        else if(action==='polygon-remove'&&points.length>3){points.splice(polygonPoint,1);polygonPoint=clamp(polygonPoint,0,points.length-1);commit(next);}
+        else if(action==='polygon-add'){const a=points[polygonPoint],b=points[(polygonPoint+1)%points.length];insertPolygon(next,polygonPoint,[(a[0]+b[0])/2,(a[1]+b[1])/2]);}
+      }
+    }
+    function editorKey(event) {
+      const svg=event.target.closest('[data-curve-editor],[data-polygon-editor]');if(!svg)return false;
+      const kind=svg.hasAttribute('data-curve-editor')?'curve':'polygon',handle=event.target.closest(`[data-${kind}-point]`);
+      if(handle){if(kind==='curve')curvePoint=Number(handle.dataset.curvePoint);else polygonPoint=Number(handle.dataset.polygonPoint);}
+      if(!['ArrowLeft','ArrowRight','ArrowUp','ArrowDown','Delete','Backspace','Escape'].includes(event.key))return true;
+      event.preventDefault();event.stopPropagation();
+      if(event.key==='Escape'){finishEditor(true);return true;}
+      if(event.key==='Delete'||event.key==='Backspace'){editPointAction(kind+'-remove');inspector?.querySelector(`[data-${kind}-editor]`)?.focus({preventScroll:true});return true;}
+      if(kind==='polygon'&&!canEditPath())return true;
+      const next=copy(graph),points=editorPoints(next,kind),index=kind==='curve'?curvePoint:polygonPoint,axis=['ArrowLeft','ArrowRight'].includes(event.key)?0:1,step=event.altKey ? .001 : event.shiftKey ? .02 : .005;
+      let direction=['ArrowRight','ArrowDown'].includes(event.key)?1:-1;if(kind==='curve'&&axis===1)direction*=-1;
+      points[index][axis]=clamp(points[index][axis]+direction*step,0,1);
+      if(kind==='curve'&&axis===0)points[index][0]=index===0?0:index===points.length-1?1:clamp(points[index][0],points[index-1][0]+POINT_GAP,points[index+1][0]-POINT_GAP);
+      if(commit(next))inspector?.querySelector(`[data-${kind}-point="${index}"]`)?.focus({preventScroll:true});
+      return true;
+    }
+    function inspectorInput(event) {
+      const input=event.target;if(!input.dataset.nodeParam||!['range','number'].includes(input.type))return;
+      for(const control of inspector.querySelectorAll('[data-node-param]'))if(control!==input&&control.dataset.nodeParam===input.dataset.nodeParam)control.value=input.value;
+    }
+    function inspectorChange(event) {
+      const input=event.target,node=nodeById(selected);if(!node)return;
+      if(input.hasAttribute('data-lensfun-file')){readLensFile(input.files?.[0]);return;}
+      if(input.hasAttribute('data-lensfun-choice')){const catalog=currentLensCatalog();if(catalog?.calibrations.some(c=>c.id===input.value)){lensChoice=input.value;renderInspector();}return;}
+      if(input.hasAttribute('data-lensfun-crop'))return;
+      if(input.hasAttribute('data-lens-crop')){const next=copy(graph),target=next.nodes.find(n=>n.id===node.id);if(target.params.model==='lensfun'){target.params.profile.image_crop=Number(input.value);if(!commit(next))renderInspector();}return;}
+      if(input.hasAttribute('data-lens-model')){
+        const mode=input.value;if(mode!=='brown'&&!Object.hasOwn(LENS_PROJECTIONS,mode))return;
+        const next=copy(graph),target=next.nodes.find(n=>n.id===node.id),p=target.params;
+        target.params={...copy(definitions.lens_distortion.defaults),direction:p.direction};
+        if(p.model!=='lensfun')for(const key of ['fx','fy','cx','cy'])target.params[key]=p[key];
+        if(mode!=='brown')Object.assign(target.params,{model:'fisheye',projection:mode});
+        delete target.animation;if(!commit(next))renderInspector();return;
+      }
+      if(input.hasAttribute('data-node-effect-mask')){const next=copy(graph),target=next.nodes.find(n=>n.id===node.id);if(input.value){if(wouldCycle(graph,input.value,node.id)){notify('That mask connection would create a cycle.',true);renderInspector();return;}target.mask_input=input.value;target.mask_invert??=false;}else{delete target.mask_input;delete target.mask_invert;}commit(next);return;}
+      if(input.hasAttribute('data-node-mask-invert')){const next=copy(graph);next.nodes.find(n=>n.id===node.id).mask_invert=input.checked;commit(next);return;}
+      if(input.hasAttribute('data-bezier-selection')){bezierPoint=Number(input.value);renderInspector();return;}
+      if(input.dataset.bezierCoordinate!==undefined){if(!bezierCanEdit())return;const axis=Number(input.dataset.bezierCoordinate),value=Number(input.value),next=copy(graph),points=copy(paramsAt(node,currentFrame()).bezier);if(input.value.trim()===''||!Number.isFinite(value)||!Number.isInteger(axis)||axis<0||axis>6){renderInspector();return;}points[bezierPoint][axis]=clamp(value,axis===6?0:-2,axis===6?4:3);if(writeBezier(next,points))commit(next);return;}
+      if(input.dataset.nodeTangent){const name=input.dataset.nodeTangent,value=Number(input.value);if(!['in_tangent','out_tangent'].includes(name)||input.value.trim()===''||!Number.isFinite(value)||value<0||value>3){renderInspector();return;}const next=copy(graph),key=next.nodes.find(n=>n.id===node.id).animation?.[animationChannel]?.find(k=>k.frame===currentFrame());if(key){key[name]=value;if(name==='out_tangent')key.interpolation='cubic';commit(next);}return;}
+      if(input.dataset.nodeMediaField){
+        if(node.type!=='media_source')return;
+        const name=input.dataset.nodeMediaField,next=copy(graph),p=next.nodes.find(item=>item.id===node.id).params;
+        if(name==='asset_id'){
+          const item=getMedia(input.value);if(!item){notify('Choose an available project asset.',true);renderInspector();return;}
+          p.asset_id=item.id;p.source_in=0;p.duration=Math.min(p.duration,mediaFrames(item));
+        }else if(name==='outside')p.outside=input.value;
+        else if(['source_in','duration','offset'].includes(name)){
+          const value=Number(input.value);if(!Number.isInteger(value)){notify('Source timing uses integer project frames.',true);renderInspector();return;}p[name]=value;
+        }else return;
+        if(!commit(next))renderInspector();return;
+      }
+      if(input.hasAttribute('data-node-animation-channel')){if(animationFields(node.type).includes(input.value)){animationChannel=input.value;renderInspector();}return;}
+      if(input.hasAttribute('data-node-animation-frame')){seekAnimation(Number(input.value));return;}
+      if(input.hasAttribute('data-node-animation-easing')){
+        if(!Object.hasOwn(EASING,input.value))return;
+        const next=copy(graph),key=next.nodes.find(item=>item.id===selected).animation?.[animationChannel]?.find(key=>key.frame===currentFrame());
+        if(key){key.interpolation=input.value;commit(next);}return;
+      }
+      if(input.hasAttribute('data-node-key-time')){
+        const frame=Number(input.value),next=copy(graph),keys=next.nodes.find(item=>item.id===selected).animation?.[animationChannel],key=keys?.find(key=>key.frame===currentFrame());
+        if(!key)return;if(!Number.isInteger(frame)||!frameAllowed(frame)||keys.some(item=>item!==key&&item.frame===frame)){notify('Choose an unoccupied integer frame inside the animation domain.',true);renderInspector();return;}
+        key.frame=frame;keys.sort((a,b)=>a.frame-b.frame);if(commit(next))seekAnimation(frame);return;
+      }
+      if(input.hasAttribute('data-curve-channel')){if(CURVE_CHANNELS.includes(input.value)){curveChannel=input.value;curvePoint=0;renderInspector();}return;}
+      if(input.dataset.curveCoordinate!==undefined||input.dataset.polygonCoordinate!==undefined){
+        const kind=input.dataset.curveCoordinate!==undefined?'curve':'polygon',axis=Number(input.dataset[kind==='curve'?'curveCoordinate':'polygonCoordinate']),value=Number(input.value);
+        if(!Number.isFinite(value)||![0,1].includes(axis)){renderInspector();return;}
+        if(kind==='polygon'&&!canEditPath()){renderInspector();return;}
+        const next=copy(graph),points=editorPoints(next,kind),index=kind==='curve'?curvePoint:polygonPoint;
+        points[index][axis]=clamp(value,Number(input.min),Number(input.max));if(!commit(next))renderInspector();return;
+      }
+      if(input.dataset.nodeConnection!==undefined){connect(input.value,node.id,Number(input.dataset.nodeConnection));return;}
+      const name=input.dataset.nodeParam;if(!name)return;let value=input.type==='checkbox'?input.checked:input.value;
+      if(['range','number'].includes(input.type)){if(!Number.isFinite(Number(value))){renderInspector();return;}value=clamp(Number(value),Number(input.min),Number(input.max));}
+      const next=copy(graph),target=next.nodes.find(n=>n.id===node.id);if(!writeParameter(target,name,value)||!commit(next))renderInspector();
+    }
+    function inspectorClick(event) {
+      const keyed=event.target.closest('[data-node-key]');if(keyed){toggleKey(keyed.dataset.nodeKey);return;}
+      const seek=event.target.closest('[data-node-animation-seek]');if(seek){seekAnimation(Number(seek.dataset.nodeAnimationSeek));return;}
+      const remove=event.target.closest('[data-node-animation-remove]');if(remove){const next=copy(graph);if(removeAnimationKey(next,animationChannel,Number(remove.dataset.nodeAnimationRemove)))commit(next);return;}
+      if(event.target.closest('[data-node-animation-clear]')){
+        const node=nodeById(selected);if(!node?.animation?.[animationChannel])return;
+        const value=paramsAt(node,currentFrame())[animationChannel],next=copy(graph),target=next.nodes.find(item=>item.id===selected);
+        target.params??={};target.params[animationChannel]=value;delete target.animation[animationChannel];if(!Object.keys(target.animation).length)delete target.animation;commit(next);return;
+      }
+      const action=event.target.closest('[data-node-action]')?.dataset.nodeAction;
+      if(action==='lensfun-apply'){
+        const catalog=currentLensCatalog(),sample=catalog?.calibrations.find(c=>c.id===lensChoice);if(!sample)return;
+        const profile=copy(sample.profile);profile.image_crop=Number(inspector.querySelector('[data-lensfun-crop]').value);
+        const next=copy(graph),target=next.nodes.find(n=>n.id===selected);if(target?.type!=='lens_distortion')return;
+        target.params={...copy(definitions.lens_distortion.defaults),direction:target.params.direction,model:'lensfun',profile};delete target.animation;
+        if(commit(next))notify('Lensfun calibration applied. Undo restores the previous lens model.');return;
+      }
+      if(action?.startsWith('bezier-')){bezierAction(action);return;}
+      if(action==='delete')deleteNode();else if(action==='duplicate')duplicateNode();else if(action==='import-media')bridge.onImport?.();else if(action==='lens-camera'||action==='lens-reset'){const next=copy(graph),target=next.nodes.find(node=>node.id===selected);if(target?.type!=='lens_distortion'||target.params.model==='lensfun')return;if(action==='lens-camera'){const intrinsics=sceneLens();if(!intrinsics){notify('Use a scene camera with the same image aspect before copying intrinsics.',true);return;}Object.assign(target.params,intrinsics);}else for(const name of ['k1','k2','k3','p1','p2'])target.params[name]=0;if(!commit(next))renderInspector();}else if(action==='output'){const next=copy(graph);next.output=selected;commit(next);}else if(action)editPointAction(action);
+    }
+    function localPoint(event) {const rect=stage.getBoundingClientRect();return {x:(event.clientX-rect.left-pan.x)/zoom,y:(event.clientY-rect.top-pan.y)/zoom};}
+    function onPointerDown(event) {
+      if(event.button!==0&&event.button!==1)return;
+      const output=event.target.closest('[data-node-output]'),input=event.target.closest('[data-node-input]');
+      if(output){event.preventDefault();pending=output.dataset.nodeOutput;selected=pending;drag={kind:'wire'};stage.focus({preventScroll:true});renderGraph();renderInspector();return;}
+      if(input){event.preventDefault();if(pending)connect(pending,input.dataset.nodeTarget,Number(input.dataset.nodeInput));else selectNode(input.dataset.nodeTarget);return;}
+      const nodeElement=event.target.closest('[data-node]');
+      if(nodeElement){const node=nodeById(nodeElement.dataset.node);if(!node)return;event.preventDefault();selected=node.id;stage.focus({preventScroll:true});drag={kind:'node',id:node.id,start:localPoint(event),original:{...position(node)},moved:false};renderGraph();renderInspector();return;}
+      if(event.target.closest('button,select,input'))return;
+      event.preventDefault();stage.focus({preventScroll:true});drag={kind:'pan',x:event.clientX,y:event.clientY,original:{...pan}};stage.classList.add('panning');
+    }
+    function onPointerMove(event) {
+      if(bezierDrag){moveBezierDrag(event);return;}
+      if(editorDrag){editorPointerMove(event);return;}
+      if(!drag)return;
+      if(drag.kind==='wire'){drawWires(localPoint(event));return;}
+      if(drag.kind==='pan'){pan={x:drag.original.x+event.clientX-drag.x,y:drag.original.y+event.clientY-drag.y};applyView();return;}
+      const point=localPoint(event),p={x:clamp(drag.original.x+point.x-drag.start.x,-100000,100000),y:clamp(drag.original.y+point.y-drag.start.y,-100000,100000)};if(Math.abs(p.x-drag.original.x)+Math.abs(p.y-drag.original.y)>2)drag.moved=true;positions.set(drag.id,p);
+      const element=[...nodesElement.children].find(n=>n.dataset.node===drag.id);if(element){element.style.left=`${p.x}px`;element.style.top=`${p.y}px`;}drawWires();
+    }
+    function onPointerUp(event) {
+      if(bezierDrag){if(event.pointerId===bezierDrag.pointerId)finishBezierDrag();return;}
+      if(editorDrag){if(event.pointerId===editorDrag.pointerId)finishEditor();return;}
+      if(!drag)return;const done=drag;drag=null;stage.classList.remove('panning');
+      if(done.kind==='wire'){const input=document.elementFromPoint(event.clientX,event.clientY)?.closest('[data-node-input]');if(input&&host.contains(input))connect(pending,input.dataset.nodeTarget,Number(input.dataset.nodeInput));else renderGraph();return;}
+      if(done.kind==='node'&&done.moved){const next=copy(graph);next.nodes.find(node=>node.id===done.id).position={...positions.get(done.id)};commit(next);}
+    }
+    function onWheel(event) {
+      if(!context.key)return;event.preventDefault();
+      if(event.ctrlKey||event.metaKey){const point=localPoint(event),rect=stage.getBoundingClientRect();zoom=clamp(zoom*Math.exp(-event.deltaY*.006),.2,1.8);pan={x:event.clientX-rect.left-point.x*zoom,y:event.clientY-rect.top-point.y*zoom};}
+      else{pan.x-=event.deltaX;pan.y-=event.deltaY;}applyView();
+    }
+    function onKey(event) {
+      if(event.target.matches('input,select,textarea')||event.metaKey||event.ctrlKey)return;
+      if(event.key==='Escape'&&bezierDrag){event.preventDefault();event.stopPropagation();finishBezierDrag(true);return;}
+      if(event.target.closest('[data-bezier-editor]')){const handle=event.target.closest('[data-bezier-point]');if(handle){bezierPoint=Number(handle.dataset.bezierPoint);bezierHandle=Number(handle.dataset.bezierHandle);}if(['ArrowLeft','ArrowRight','ArrowUp','ArrowDown'].includes(event.key)&&bezierCanEdit()){event.preventDefault();event.stopPropagation();const next=copy(graph),points=copy(paramsAt(nodeById(selected),currentFrame()).bezier),axis=['ArrowLeft','ArrowRight'].includes(event.key)?0:1,delta=(event.shiftKey ? .02 : event.altKey ? .001 : .005)*(['ArrowLeft','ArrowUp'].includes(event.key)?-1:1),a=points[bezierPoint];for(const h of bezierHandle?[bezierHandle]:[0,2,4])a[h+axis]=clamp(a[h+axis]+delta,-2,3);if(writeBezier(next,points))commit(next);return;}if(['Delete','Backspace'].includes(event.key)){event.preventDefault();event.stopPropagation();bezierAction('bezier-remove');return;}}
+      if(editorKey(event))return;
+      if(['Delete','Backspace'].includes(event.key)){event.preventDefault();event.stopPropagation();deleteNode();}
+      if(event.key==='Escape'){event.preventDefault();event.stopPropagation();pending=null;drag=null;cachePositions();renderGraph();}
+    }
+    function onPointerCancel(){if(bezierDrag)finishBezierDrag(true);if(editorDrag)finishEditor(true);drag=null;pending=null;stage.classList.remove('panning');cachePositions();renderGraph();}
+    function onClick(event) {const action=event.target.closest('[data-graph-action]')?.dataset.graphAction;if(action==='save-graph'){downloadText(JSON.stringify(graph,null,2)+'\n','application/json','cinematicum-graph.json');return;}if(action==='load-graph'){chooseText('.json,application/json',text=>{const next=JSON.parse(text),error=validate(next,context);if(error)throw Error(error);for(const node of next.nodes)node.params={...copy(definitions[node.type].defaults),...node.params};commit(next,next.output);});return;}if(action==='add')addNode(host.querySelector('[data-graph-add-type]').value);else if(action==='masked')maskedCorrection();else if(action==='fit')fit();else if(action==='preview')bridge.onRender?.();else if(action==='import')bridge.onImport?.();}
+    function onChange(event) {if(event.target.matches('[data-graph-output]')){const next=copy(graph);next.output=event.target.value;commit(next);}}
+    host.addEventListener('click',onClick);host.addEventListener('change',onChange);host.addEventListener('keydown',onKey);stage.addEventListener('pointerdown',onPointerDown);stage.addEventListener('wheel',onWheel,{passive:false});window.addEventListener('pointermove',onPointerMove);window.addEventListener('pointerup',onPointerUp);window.addEventListener('pointercancel',onPointerCancel);
+    const resize = new ResizeObserver(()=>{if(!destroyed&&context.key)fit();});resize.observe(stage);
+    cachePositions();renderGraph();
+    return {
+      setContext(next) {const different=context.key!==next.key;context=next;graph=copy(next.graph||freshGraph());if(validate(graph,context)){notify(validate(graph,context),true);}if(different||!nodeById(selected))selected=graph.output;pending=null;drag=null;editorDrag=null;bezierDrag=null;if(different){curveChannel='master';curvePoint=0;polygonPoint=0;bezierPoint=0;bezierHandle=0;animationChannel=null;}cachePositions();renderGraph();renderInspector();if(different)requestAnimationFrame(fit);},
+      setFrame(frame){if(!Number.isFinite(frame)||Math.round(frame)===currentFrame())return;if(bezierDrag)finishBezierDrag(true);if(editorDrag)finishEditor(true);context={...context,frame:Math.round(frame)};renderInspector();},
+      renderInspector,
+      refresh(){renderGraph();renderInspector();},
+      fit,
+      destroy(){destroyed=true;editorDrag=null;bezierDrag=null;resize.disconnect();host.removeEventListener('click',onClick);host.removeEventListener('change',onChange);host.removeEventListener('keydown',onKey);stage.removeEventListener('pointerdown',onPointerDown);stage.removeEventListener('wheel',onWheel);window.removeEventListener('pointermove',onPointerMove);window.removeEventListener('pointerup',onPointerUp);window.removeEventListener('pointercancel',onPointerCancel);if(inspector){inspector.removeEventListener('input',inspectorInput);inspector.removeEventListener('change',inspectorChange);inspector.removeEventListener('click',inspectorClick);inspector.removeEventListener('keydown',onKey);inspector.removeEventListener('pointerdown',inspectorPointerDown);inspector.removeEventListener('dblclick',inspectorDoubleClick);}host.innerHTML='';}
+    };
+  }
+  window.CinematicumCompositor = {mount,validate,wouldCycle,defaultGraph:freshGraph,nodeTypes:copy(definitions),curveValue,animationValue,paramsAt,animationFields,mediaFrameAt,lensBound,lensProfileBound,validateLensProfile,validBezier,splitBezier,parseSvgPath,svgDocument,parseSvgDocument};
+})();

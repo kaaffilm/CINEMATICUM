@@ -1,0 +1,55 @@
+[
+  {
+    "created_at": 1792663448.3773458,
+    "error": null,
+    "finished_at": 1792663448.5537777,
+    "id": "207f26a60870492bb4a5ebf2c7091c9f",
+    "kind": "audio-source",
+    "progress": 1,
+    "project_id": "881ef080839c4b12b37ff46ee37b38a2",
+    "result": {
+      "asset_id": "0df68455c29745e59b8d59048fc95414",
+      "byte_size": 2304058,
+      "cache_key": "dbbc68c6899926f1b3dd5b83af725ac22abef4d4da64d60602b8bb23312ac578",
+      "cached": false,
+      "channels": [
+        1,
+        0
+      ],
+      "codec": "pcm_f32le",
+      "created_at": 1792663448.5503058,
+      "data_offset": 58,
+      "duration": 6.0,
+      "export_source": "original",
+      "frame_bytes": 8,
+      "frames": 288000,
+      "output_channels": 2,
+      "padded_frames": 0,
+      "playback_rate": 1.0,
+      "rate": 48000,
+      "recipe": {
+        "channels": [
+          1,
+          0
+        ],
+        "codec": "pcm_f32le",
+        "output_channels": 2,
+        "pad_frames": 288000,
+        "playback_rate": 1.0,
+        "rate": 48000,
+        "source_channels": 2,
+        "stream_index": 2,
+        "version": 2
+      },
+      "sha256": "f06e6ab597d33c4349b70019a259744583c7f48d8da6061b541703e03aaf9a26",
+      "source_frames": 288000,
+      "source_sha256": "31049ae13f4cb864e68bc25cb725505f8ed834da9ac0738b1c2556e473746f0a",
+      "source_time_scale": 1.0,
+      "state": "ready",
+      "stream_index": 2,
+      "url": "/api/projects/881ef080839c4b12b37ff46ee37b38a2/audio-source/dbbc68c6899926f1b3dd5b83af725ac22abef4d4da64d60602b8bb23312ac578",
+      "version": 2
+    },
+    "state": "completed"
+  }
+]

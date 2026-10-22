@@ -1,0 +1,11 @@
+{
+  "schema": "cinematicum-duplicate-ci-terminal-observation-v1",
+  "run_id": 39780887699,
+  "head_sha": "dcea86196f81d6476a0f60538429b984b24c1129",
+  "status": "completed",
+  "conclusion": "cancelled",
+  "url": "https://github.com/kaaffilm/CINEMATICUM/actions/runs/39780887699",
+  "prior_request_receipt_sha256": "69ce08a8fbcda3119fdadb16f55f0211e7f67a1fa2d8e7728ace39c2889c366b",
+  "accepted_complete_run": 39780897825,
+  "observed_updated_at": "2026-10-22T13:21:33Z"
+}

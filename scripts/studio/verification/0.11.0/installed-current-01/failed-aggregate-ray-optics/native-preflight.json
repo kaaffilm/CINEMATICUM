@@ -1,0 +1,10 @@
+{
+  "canonical_bundle_verified": true,
+  "controller_exit_code": 0,
+  "controller_stderr_bytes": 0,
+  "controller_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "existing_production_app_count": 0,
+  "operation": "preflight",
+  "passed": true,
+  "permissions_requested": false
+}

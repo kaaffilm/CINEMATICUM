@@ -1,5 +1,154 @@
 # CINEMATICUM
 
+## CINEMATICUM Studio — editable production workspace
+
+Studio **0.13.0 / build 14** provides measured Lensfun
+radial profiles, four explicit fisheye projections and bounded public Final Cut
+Pro XML interchange. Lens edits retain selected numeric calibration and source
+identity. FCPXML review maps owned media, preserves rational timeline/source
+clocks and real trimmed compounds, and applies one undoable native edit. Both
+workflows preserve save/reopen and existing portable project archives.
+
+The new source retains the editable variable-speed/optical-flow, simultaneous
+camera, fixed-source audio, Float32, OTIO, scientific, still-photography and
+collaboration workflows. Accepted core `cdd15816` passed the one complete
+**925-test** run with no failures/errors/skips and unchanged source/runtimes.
+Six actual Mac phases passed **150 outer checks**: four native author/render
+executions and two fixture preparations. The actual native FCPXML input and
+export also passed the separate pinned Apple 1.10 DTD gate. The actual
+replacement installation passed 5/5 for 114 runtime/web and 119 bundle files;
+canonical launch passed 16/16, all eight installed-runtime phases passed 14/14,
+and final preservation passed 6/6. [PR #162](https://github.com/kaaffilm/CINEMATICUM/pull/162)
+records the exact publication and its post-publication CI outcome. Original focused/browser evidence
+and the exact new integrated acceptance are recorded in [Features 0.13](scripts/studio/FEATURES_0_13.md),
+[Verification 0.13](scripts/studio/VERIFICATION_0_13.md) and
+[remaining work](scripts/studio/UNFINISHED_0_13.md).
+
+Published **0.12** commit `dcea8619` is the preserved previous release.
+Its core passed **895/895 tests**, its native retime phases passed 58 reported
+outer checks, installation passed 5/5, canonical launch passed 16/16 and all
+eight selected installed-runtime phases passed 14/14. Final installed-source
+reconciliation passed 10/10. Its actual published source also passed all 895 CI
+tests and seven separate browser gates with complete source identity verified.
+Those historical results retain their exact source; the 0.13 gates above
+certify its accepted core separately. [Verification 0.12](scripts/studio/VERIFICATION_0_12.md)
+retains the complete records, including earlier failed attempts. Full
+professional parity and accepted-film issuance remain unfinished.
+
+Open the media editor with `make studio`. On macOS, `make studio-install-macos`
+builds **CINEMATICUM Studio.app** using the installed Xcode tools. CINEMATICUM owns
+the timeline, compositor, mixer, color controls and 3D authoring interface. They
+share editable project data and undo history; FFmpeg, Blender and optional imaging
+workers execute the processing.
+
+The 0.9 source adds multiple editable sequences and live nested picture/sound,
+manual synchronized multicamera cuts, SRT/WebVTT captions and burn-in, source
+audio-stream/channel mapping, and 29.97/59.94 drop-frame display. Preview proxies
+are verified against the original decoded frame clock; exact-original relinking
+restores recorded media identity. Exports continue to use original media.
+
+The compositor now has editable cubic Bézier roto with animated handles and
+point feather, bounded SVG boundary exchange, and combined 1D-shaper/3D Cube
+LUT processing. The 3D workspace adds object parenting with inherited animation,
+editable UVs, actual Blender smart unwrap, island packing and eight live modifier
+types. Cycles device selection validates the executing engine's actual devices.
+A normal owned Metal scene job completed in 82.430497 seconds; independent
+verification passed 18 checks on its actual pixels, retained scene and device
+receipt. Other GPU backends have not been verified on hardware.
+
+These additions retain exact rational timeline timing, retiming/reverse,
+slip/slide/roll editing, measured source tracking, scopes, multi-source node
+compositing, calibrated fSpy/COLMAP cameras, physical lens/material controls and
+H.264/ProRes export. Authored Cycles scenes retain editable `.blend` files and
+scene-linear float EXR sequences with optional render passes. The Develop
+workspace performs real OCIO transforms, camera RAW still development and merges
+exposure brackets through optional imaging/tracking runtimes, including measured
+alignment, camera response, reference motion masks and planar panoramas. The
+[Float32 movie pipeline](scripts/studio/FLOAT_MOVIE_PIPELINE.md) adds bounded
+scene-linear OCIO/ACES timeline processing and EXR+PCM master packages. Standard
+and High16 processing remain SDR; RAW-movie and HDR finishing are not implemented.
+
+Recovery checkpoints, saved-version history, portable project archive/restore
+and production shot-plan binding/assembly remain part of the same app. Managed
+ComfyUI installation, owned MPS startup and one real Wan 1.3B take are verified:
+192 × 128, nine frames at 16 fps, four sampling steps, seed 42. Generation took
+44.410 seconds. Independent media verification and native Add/Play/Save each
+passed 14 checks, including all nine actual source pictures. This is a small
+execution proof. Two later 480 × 272, 17-frame, 20-step Euler takes completed
+and each passed 14 independent media checks. A preceding normal UniPC take was
+nearly black and was rejected. An earlier native playback exposed a final-frame
+insertion defect. After the nearest-frame correction, both final native
+Add/Play/Save runs passed **14/14 checks** and preserved all 17 timeline frames.
+The normal workflow is accepted within these settings. One real 33-frame take
+also passed inference and native playback; its generation harness took 928.394
+seconds. This is one bounded longer case. Production quality and sustained
+operation remain unverified; the earlier ordinary termination's cause is unknown.
+
+The 0.9.1 candidate replaces browser-decoded live sound with a source-sample
+scheduler and adds measured affine/projective planar motion, stabilization,
+image corner pinning, 16-bit UNORM SDR movie processing, and a lossless FFV1
+RGB+alpha master. Native acceptance now covers source routing, overlapping
+clips, live nested sequences and repeated retimed playback with zero underruns,
+plus transformed 16-bit paused pictures and an actual native master download.
+Current-source regression, remaining native gates and installation are recorded
+separately in [Verification 0.9.1](scripts/studio/VERIFICATION_0_9_1.md).
+
+Native quit now asks before cancelling active media jobs. Actual production
+alert acceptance passed **21/21 independent and 10/10 native checks**: one real
+48-frame high16 master completed after Keep Working, and a second render was
+cancelled without damaging the first export. The installer archives the prior
+bundle and records every copied runtime file's SHA-256 identity. The original
+production checkout remains preserved.
+
+Canonical launch exposed isolated workers creating bytecode inside the app.
+Five launches in four modules now explicitly suppress it with `-B`; the frozen
+corrected source passed **544 tests with zero failures, errors or skips** and
+all 189 operative files stayed unchanged. The 48 unchanged JavaScript files
+retain their successful syntax checks. The corrected runtime is published at
+`81827cf92d159b9619d51000da61ea3c8a6b6ce7`; all 23 exact-head workflows passed. Later documentation-commit CI remains
+separate from this frozen result and live
+[PR #162 checks](https://github.com/kaaffilm/CINEMATICUM/pull/162/checks).
+
+Install-03 passed in 16.515 seconds, and its full private receipt has now been
+collected and hash-verified. The corrected 62-file runtime, 67-file bundle,
+70-file prior archive and all 57 protected workspace files were verified.
+Canonical launch-02 passed **16/16**, preserving the entire bundle through real
+launch/engine/ordinary quit. Final reconciliation passed **9/9** against the
+published `81827cf` runtime. Production chooser acceptance passed **22/22**
+through actual Save and the public NSSavePanel Cancel action, with exact media
+bytes and no cancelled destination or partial download. This does not certify
+physical Cancel-button/Escape input, arbitrary chooser navigation or replacement
+of existing files. Current-session access is restored; earlier failed attempts
+remain retained. Full system parity and signed distribution remain unfinished. This Studio work
+does not establish current THE LAST RENDER film completion or issuance; retained
+historical compiler/replay records keep their separate scope.
+
+Start with [the Studio guide](scripts/studio/README.md),
+[the source comparison and capability audit](scripts/studio/CAPABILITY_AUDIT.md),
+[the current verification record](scripts/studio/VERIFICATION_0_13.md), and
+[the current unfinished-work register](scripts/studio/UNFINISHED_0_13.md). These
+records separate source implementation, executed acceptance and deployment.
+Run `make studio-doctor` to inspect installed engines or `make studio-test` for
+application/media tests. Film footage must be imported or actually generated;
+missing media are never replaced with a procedural film. Studio exports do not change
+Case 001's issuance status or repository authority.
+
+Full professional feature parity with all referenced applications and commercial
+AI-provider integrations is not implemented. The audit and machine-readable
+ledger record the remaining work rather than treating an installed engine or a
+visible control as proof of the full feature set.
+
+## Historical production and replay CLI
+
+The sections below retain the **THE LAST RENDER** compiler/replay history and
+its v1.0–v1.7 package boundaries. That version line is separate from Studio 0.9.
+In particular, the old `cinematicum studio` command and its no-network,
+no-external-media/no-selection boundary describe that historical replay
+surface. Studio 0.9 imports and selects media, renders authored scenes, and
+optionally downloads and runs a managed generation engine. Those historical
+restrictions do not describe Studio's current authoring workflow, and neither
+version line changes the repository's issuance authority.
+
 Strict realistic production stack for **THE LAST RENDER**.
 
 This repository does not accept toy procedural media as a final film.
@@ -52,7 +201,7 @@ No procedural fallback. No fake media. No proof-only issuance.
 <!-- CINEMATICUM_PRODUCT_BOUNDARY_V1_START -->
 ## CINEMATICUM v1.0 Product Boundary
 
-CINEMATICUM is now operable as a local product surface.
+This historical v1.0 boundary records the local compiler/replay product surface.
 
 ```bash
 node bin/cinematicum.cjs verify
@@ -79,7 +228,8 @@ The product boundary proves command availability, local studio surface, release-
 <!-- CINEMATICUM_INSTALLABLE_PRODUCT_BOUNDARY_V11_START -->
 ## CINEMATICUM v1.1 Installable Product Boundary
 
-CINEMATICUM now has an installable package boundary.
+This historical v1.1 boundary records the installable compiler/replay package;
+it is separate from the native Studio application described above.
 
 The package must prove, from a clean temporary install, that these commands work without cloning the working tree manually:
 
@@ -259,3 +409,4 @@ Verification command:
 node scripts/verify-production-repository-authority-acknowledgement.mjs
 
 <!-- CINEMATICUM_RECIPROCAL_PRODUCTION_AUTHORITY_ACK_V1_END -->
+

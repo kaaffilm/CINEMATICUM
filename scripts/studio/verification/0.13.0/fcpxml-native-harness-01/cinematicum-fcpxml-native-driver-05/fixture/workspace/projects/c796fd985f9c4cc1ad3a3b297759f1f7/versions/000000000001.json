@@ -1,0 +1,92 @@
+{
+  "version": 1,
+  "base_revision": 1,
+  "written_at": 1792674476.3475728,
+  "sha256": "7d700c3b2249e3a34abc7477d26e0e306ee49d8452545b5e83ffb3a928863edf",
+  "project": {
+    "version": 1,
+    "id": "c796fd985f9c4cc1ad3a3b297759f1f7",
+    "name": "ENGINE TEST FCPXML initial cut",
+    "width": 48,
+    "height": 32,
+    "assets": [
+      {
+        "id": "5050830bdda94affa5080757c678525b",
+        "name": "ENGINE TEST red.mov",
+        "path": "media/5050830bdda94affa5080757c678525b.mov",
+        "sha256": "ea6e2213ccc89745e39123ee148255f4ab9a2657ca8b18a1ca73efe703f915f7",
+        "size": 643279,
+        "kind": "video",
+        "duration": 3.2032,
+        "width": 48,
+        "height": 32,
+        "has_audio": true,
+        "frames": 96,
+        "codec": "qtrle",
+        "pixel_format": "rgb24",
+        "color_transfer": "unknown",
+        "fps": "30000/1001",
+        "video_stream_index": 0,
+        "audio_stream_index": 1,
+        "audio_sample_rate": 48000,
+        "audio_channels": 2,
+        "audio_duration": 3.2,
+        "audio_streams": [
+          {
+            "index": 1,
+            "channels": 2,
+            "container_id": "0x2",
+            "sample_rate": 48000,
+            "codec": "pcm_s16le",
+            "language": "",
+            "duration": 3.2
+          }
+        ]
+      },
+      {
+        "id": "13f70b6ed111474f8f56a1dcd1cc0546",
+        "name": "ENGINE TEST blue.mov",
+        "path": "media/13f70b6ed111474f8f56a1dcd1cc0546.mov",
+        "sha256": "01a2518a2786e063fdfef550946f1a31f90469dd3c42b0478731425e3dcb3c36",
+        "size": 643279,
+        "kind": "video",
+        "duration": 3.2032,
+        "width": 48,
+        "height": 32,
+        "has_audio": true,
+        "frames": 96,
+        "codec": "qtrle",
+        "pixel_format": "rgb24",
+        "color_transfer": "unknown",
+        "fps": "30000/1001",
+        "video_stream_index": 0,
+        "audio_stream_index": 1,
+        "audio_sample_rate": 48000,
+        "audio_channels": 2,
+        "audio_duration": 3.2,
+        "audio_streams": [
+          {
+            "index": 1,
+            "channels": 2,
+            "container_id": "0x2",
+            "sample_rate": 48000,
+            "codec": "pcm_s16le",
+            "language": "",
+            "duration": 3.2
+          }
+        ]
+      }
+    ],
+    "clips": [],
+    "titles": [],
+    "settings": {},
+    "revision": 1,
+    "frame_rate": {
+      "numerator": 30000,
+      "denominator": 1001
+    },
+    "fps": 29.97002997002997,
+    "tracks": [],
+    "updated_at": "2026-10-22T13:07:55Z"
+  }
+}

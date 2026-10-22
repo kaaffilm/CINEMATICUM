@@ -1,0 +1,171 @@
+{
+  "version": 1,
+  "id": "881ef080839c4b12b37ff46ee37b38a2",
+  "name": "ENGINE TEST fixed sound camera monitor",
+  "fps": 24,
+  "width": 96,
+  "height": 64,
+  "assets": [
+    {
+      "id": "b519607e481542cb9cf071069550be80",
+      "name": "ENGINE TEST camera_a.mov",
+      "path": "media/b519607e481542cb9cf071069550be80.mov",
+      "sha256": "6a15325f3cc199e8692579be3459b8ce9983da1a417d75746d917bacb669ecf2",
+      "size": 1164708,
+      "kind": "video",
+      "duration": 6.0,
+      "width": 96,
+      "height": 64,
+      "has_audio": true,
+      "frames": 144,
+      "codec": "h264",
+      "pixel_format": "yuv420p",
+      "color_transfer": "unknown",
+      "fps": "24/1",
+      "video_stream_index": 0,
+      "audio_stream_index": 1,
+      "audio_sample_rate": 48000,
+      "audio_channels": 2,
+      "audio_duration": 6.0,
+      "audio_streams": [
+        {
+          "index": 1,
+          "channels": 2,
+          "container_id": "0x2",
+          "sample_rate": 48000,
+          "codec": "pcm_s16le",
+          "language": "",
+          "duration": 6.0
+        }
+      ],
+      "provenance": {
+        "fixture": "ENGINE TEST"
+      }
+    },
+    {
+      "id": "0df68455c29745e59b8d59048fc95414",
+      "name": "ENGINE TEST camera_b.mov",
+      "path": "media/0df68455c29745e59b8d59048fc95414.mov",
+      "sha256": "31049ae13f4cb864e68bc25cb725505f8ed834da9ac0738b1c2556e473746f0a",
+      "size": 2318115,
+      "kind": "video",
+      "duration": 6.0,
+      "width": 96,
+      "height": 64,
+      "has_audio": true,
+      "frames": 144,
+      "codec": "h264",
+      "pixel_format": "yuv420p",
+      "color_transfer": "unknown",
+      "fps": "24/1",
+      "video_stream_index": 0,
+      "audio_stream_index": 1,
+      "audio_sample_rate": 48000,
+      "audio_channels": 2,
+      "audio_duration": 6.0,
+      "audio_streams": [
+        {
+          "index": 1,
+          "channels": 2,
+          "container_id": "0x2",
+          "sample_rate": 48000,
+          "codec": "pcm_s16le",
+          "language": "",
+          "duration": 6.0
+        },
+        {
+          "index": 2,
+          "channels": 2,
+          "container_id": "0x3",
+          "sample_rate": 48000,
+          "codec": "pcm_s16le",
+          "language": "",
+          "duration": 6.0
+        }
+      ],
+      "provenance": {
+        "fixture": "ENGINE TEST"
+      }
+    }
+  ],
+  "clips": [
+    {
+      "id": "90a665298c964c90b39b8c78d95c65f0",
+      "asset_id": "b519607e481542cb9cf071069550be80",
+      "track": 0,
+      "start": 0,
+      "duration": 120,
+      "in": 12.0,
+      "multicam": {
+        "group_id": "07cd0e4124c84e9a94018dfa8185a2e0",
+        "angle_id": "96212afb016c46008cff289629a9791a"
+      },
+      "animation_start": 0,
+      "animation_duration": 120,
+      "animation_offset": 0,
+      "speed": 1.0,
+      "reverse": false,
+      "volume": 1.0,
+      "opacity": 1.0,
+      "x": 0.0,
+      "y": 0.0,
+      "scale": 1.0,
+      "rotation": 0.0,
+      "audio": {
+        "fade_duration": 120,
+        "fade_offset": 0,
+        "fade_in": 0,
+        "fade_out": 0,
+        "pan": 0.0
+      },
+      "grade": {
+        "exposure": 0.0,
+        "contrast": 1.0,
+        "saturation": 1.0,
+        "temperature": 0.0
+      },
+      "effects": {
+        "blur": 0.0,
+        "sharpen": 0.0,
+        "vignette": false,
+        "chroma_key": ""
+      },
+      "keyframes": []
+    }
+  ],
+  "titles": [],
+  "settings": {},
+  "revision": 2,
+  "frame_rate": {
+    "numerator": 24,
+    "denominator": 1
+  },
+  "tracks": [],
+  "updated_at": "2026-10-22T10:04:03Z",
+  "sequence_id": "main",
+  "sequence_name": "Main sequence",
+  "multicam_groups": [
+    {
+      "id": "07cd0e4124c84e9a94018dfa8185a2e0",
+      "name": "ENGINE TEST camera monitor",
+      "angles": [
+        {
+          "id": "96212afb016c46008cff289629a9791a",
+          "asset_id": "b519607e481542cb9cf071069550be80",
+          "in": 12,
+          "available": 132
+        },
+        {
+          "id": "dd5bb52e0d4d4cb99960aaf8f8aad984",
+          "asset_id": "0df68455c29745e59b8d59048fc95414",
+          "in": 24,
+          "available": 120
+        }
+      ]
+    }
+  ],
+  "captions": [],
+  "caption_style": {},
+  "sequence_duration": 0,
+  "sequences": []
+}

@@ -1,0 +1,106 @@
+{
+  "schema": "cinematicum-installation-tool-observation-v1",
+  "scope": "Selected fields returned by the independently verified Mac installation03 before the MIDIA connection context changed. Full before/after inventories remain on the Mac; this record is an observation, not a copy of the full raw receipt.",
+  "observed_passed": true,
+  "supervisor": {
+    "state": "PASSED",
+    "elapsed_seconds": 16.515,
+    "results": [
+      {
+        "name": "snapshot-before",
+        "exit_code": 0
+      },
+      {
+        "name": "install",
+        "exit_code": 0
+      },
+      {
+        "name": "verify-after",
+        "exit_code": 0
+      }
+    ],
+    "operative_source_files_verified": 189,
+    "full_suite_tests": 544
+  },
+  "gates": [
+    {
+      "name": "source",
+      "passed": true
+    },
+    {
+      "name": "installed",
+      "passed": true
+    },
+    {
+      "name": "receipt_and_backup",
+      "passed": true
+    },
+    {
+      "name": "projects",
+      "passed": true
+    },
+    {
+      "name": "original_checkout",
+      "passed": true
+    }
+  ],
+  "app": "/Users/midiakiasat/Applications/CINEMATICUM Studio.app",
+  "source_code_identity_sha256": "76a4e33d0ed3398ef51b19625f51b0ad45a5c524989408137234f7964aa4db22",
+  "runtime_file_count": 62,
+  "bundle_file_count": 67,
+  "bundle_inventory_sha256": "577a3550a6136bfe130434bf760ff0f21f1e24864facd5c11c52a07028afb6a9",
+  "native": {
+    "architecture": "arm64",
+    "code_signature_command_present": true,
+    "cpu_subtype": 0,
+    "cpu_type": 16777228,
+    "file_type": "MH_EXECUTE",
+    "mode": 493,
+    "sha256": "7457dd6edd93583b3efa44586f05a701f7b2a0e8520e18fe49dbc9a17203dfdf",
+    "size": 225200,
+    "signature_note": "Presence of a signature command does not certify Developer ID signing or notarization"
+  },
+  "embedded_source_manifest": {
+    "mode": 384,
+    "sha256": "46e82f17bb855d6c2446aa6b3a820bd763fbb7659fc13c00b92afb14346ee922",
+    "size": 6090
+  },
+  "protected_workspace": {
+    "file_count": 57,
+    "total_bytes": 2858327758,
+    "inventory_sha256": "92b93d309c24e36e500c17fbdb99d9813d9ee3a5628dfe81f4a1faf0b74868ce"
+  },
+  "previous_bundle": {
+    "ditto_metadata": [],
+    "mode": 384,
+    "path": "/Users/midiakiasat/Applications/.CINEMATICUM-Backups.noindex/CINEMATICUM Studio-20261021T203503Z-56ab09c8.zip",
+    "sha256": "d1bd106e480d9f5e4dc9e2485e4eb48481e86636570e03e2d7a198021d42633f",
+    "size": 834259,
+    "verified_file_count": 70,
+    "verified_file_inventory_sha256": "a7381b6f10bdc8cf0b711c918c9241f5bbc05c434ea4a6b7f568cfc8911ef29d"
+  },
+  "raw_after_sha256": "08a3d73a39706c46b9c63785f15403fd1abd9a8ea39cb2b11713c519cb10d852",
+  "raw_after_path": "/Users/midiakiasat/Library/Application Support/CINEMATICUM/Verification/0.9.1-bundle-fixed-20261021-03/installation-after.json",
+  "full_raw_receipt_copied": false,
+  "source_proof": {
+    "frozen_source_sha256": "30b514a409c8a0d86a047780b004942f6c65defbaf3ccb7e0da72f92085f7f3d",
+    "full_report_sha256": "50f5531cbbd015abb7dc238c91e91ecc685d0cda48014deac31f70e416264541",
+    "tests": 544,
+    "operative_files": 189
+  },
+  "canonical_launch02": {
+    "status": "LAUNCHED_RESULT_UNCOLLECTED",
+    "supervisor_pid": 8525,
+    "report_path": "/Users/midiakiasat/Library/Application Support/CINEMATICUM/Verification/0.9.1-bundle-fixed-20261021-03/installed-launch02/installed-launch-report.json",
+    "passed": null
+  },
+  "final_source_reconciliation": "NOT_EXECUTED",
+  "developer_id_or_notarization_certified": false,
+  "collection_block": {
+    "existing_session_error": "CROSS_CHAT_SESSION_ACCESS_DENIED",
+    "fresh_session_error": "ACTIVE_SESSION_LIMIT",
+    "fresh_session_created": false,
+    "context_bypass_attempted": false,
+    "other_sessions_closed": false
+  }
+}

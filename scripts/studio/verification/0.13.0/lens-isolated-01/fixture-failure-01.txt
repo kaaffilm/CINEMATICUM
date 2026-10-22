@@ -1,0 +1,5 @@
+Observed initial LensProjectWorkflowTests result: 1 test, 1 error, 0.286 seconds.
+The authenticated HTTP import, unchanged-project and missing-token assertions passed before fixture admission.
+The synthetic source fixture used an unsupported .ppm extension.
+ValueError: Unsupported file. Import video, audio, an image, or a Blender scene.
+Correction: encode the same synthetic RGB pixels as a real PNG accepted by the unchanged production admission rules. No production guard or assertion was relaxed.

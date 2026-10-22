@@ -1,0 +1,30 @@
+{
+  "schema": "cinematicum-lens-native-acceptance-files-v1",
+  "base_feature_patch_sha256": "adb9c225c4562bd142e1f5722eb88c96918908fa64aa8807437d51253322cbb7",
+  "files": [
+    {
+      "path": "scripts/studio/LENS_NATIVE_ACCEPTANCE.md",
+      "before_sha256": null,
+      "after_sha256": "c232ebe11d18c2ba98f45b224a7fe4383267e276cea0f7e36b2cf1fee416819a",
+      "bytes": 8356
+    },
+    {
+      "path": "scripts/studio/macos/LensModelsSmoke.js",
+      "before_sha256": null,
+      "after_sha256": "25e5109359e0978f40d97c5dad4b33a3c90736e10e1030a4c907837cb2411f8d",
+      "bytes": 8969
+    },
+    {
+      "path": "scripts/studio/test_lens_models_macos.py",
+      "before_sha256": null,
+      "after_sha256": "8ffdd42e916d12d3efd6cced83a3521a4d360be6bab908e10763d9836d94683c",
+      "bytes": 22644
+    },
+    {
+      "path": "scripts/studio/test_lens_models_native_browser.cjs",
+      "before_sha256": null,
+      "after_sha256": "33f046f1288ec53ca5763d6213472b0d430316e7342cee103e54269bef7e6e97",
+      "bytes": 3541
+    }
+  ]
+}

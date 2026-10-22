@@ -1,0 +1,141 @@
+{
+  "schema": "cinematicum-integrated-browser-evidence-v1",
+  "native_certified": false,
+  "records": [
+    {
+      "path": "monitor-browser-integrated-01/author/ENGINE_TEST_browser_result.json",
+      "size": 1535,
+      "sha256": "db499d1fe858758674316a61f0f041d296c1b1b54c1699513aa39dd2cbfbb0a7"
+    },
+    {
+      "path": "monitor-browser-integrated-01/author/ENGINE_TEST_multicam_monitor.png",
+      "size": 80332,
+      "sha256": "80ddd88332df1c879d132f4015f2946bbb6a98f43403ee8087eecf6b2d4a8e00"
+    },
+    {
+      "path": "monitor-browser-integrated-01/author/ENGINE_TEST_multicam_monitor_report.json",
+      "size": 36102,
+      "sha256": "25b59c5a92d008dc44f64b21267367a9a2442f5448c6f0c1fc2c8cf56b1c928a"
+    },
+    {
+      "path": "monitor-browser-integrated-01/author/ENGINE_TEST_owned_jobs.json",
+      "size": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570"
+    },
+    {
+      "path": "monitor-browser-integrated-01/author/ENGINE_TEST_saved_project.json",
+      "size": 5158,
+      "sha256": "a5c7e6a22e59fb36a158090ed9720d9853471c2a2d35c8cdd7b91f3fa064e1bd"
+    },
+    {
+      "path": "monitor-browser-integrated-01/browser-report.json",
+      "size": 1067,
+      "sha256": "fb8c4cc0e8316575fa0b1a5ef6f6fca927d147aba4130e2958900af816f48741"
+    },
+    {
+      "path": "monitor-browser-integrated-01/phase-summary.json",
+      "size": 610,
+      "sha256": "1d8d403522beb0e276cc64a3d9ca526e25d526d688896cda0500dfa9ba598a0f"
+    },
+    {
+      "path": "monitor-browser-integrated-01/play/ENGINE_TEST_browser_result.json",
+      "size": 13500,
+      "sha256": "173dc23db6830836de377b4e591bfba0a03e35419ab9bbaf2b02556f08878f47"
+    },
+    {
+      "path": "monitor-browser-integrated-01/play/ENGINE_TEST_multicam_monitor.png",
+      "size": 82373,
+      "sha256": "43aedb3f7fb06483b09736b925bf6e96af453cc1f1f2f5750377527d48178be3"
+    },
+    {
+      "path": "monitor-browser-integrated-01/play/ENGINE_TEST_multicam_monitor_report.json",
+      "size": 49275,
+      "sha256": "48a3e838849a347b607debf0131e249c1ec8837e5f49cf8c08339b318773e3e5"
+    },
+    {
+      "path": "monitor-browser-integrated-01/play/ENGINE_TEST_owned_jobs.json",
+      "size": 1600,
+      "sha256": "046e172ae8f66846f0091220129eccb819db197058a18f9e185180bb3f7b1c1a"
+    },
+    {
+      "path": "monitor-browser-integrated-01/play/ENGINE_TEST_saved_project.json",
+      "size": 6167,
+      "sha256": "e4e04082a283aa4c262b062fefaed7c8269aea952ebe322e04a3d572a59838ee"
+    },
+    {
+      "path": "monitor-browser-integrated-01/prepare/ENGINE_TEST_multicam_monitor_report.json",
+      "size": 33595,
+      "sha256": "7e844960051e799130f086c0044362a3de860f5e14e36db33d7762c18ccd42c5"
+    },
+    {
+      "path": "monitor-browser-integrated-01/prepare/ENGINE_TEST_owned_jobs.json",
+      "size": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570"
+    },
+    {
+      "path": "monitor-browser-integrated-01/prepare/ENGINE_TEST_saved_project.json",
+      "size": 4206,
+      "sha256": "c177bd0a58ac0a4a00a28b0f425792735e486948a2c27ddfc22ed211458f178c"
+    },
+    {
+      "path": "monitor-browser-integrated-01/render/ENGINE_TEST_browser_result.json",
+      "size": 2045,
+      "sha256": "9af5079c3d1833d1005ebf002334665e68cfecd4db4229638981203c5d94777f"
+    },
+    {
+      "path": "monitor-browser-integrated-01/render/ENGINE_TEST_multicam_monitor.png",
+      "size": 112486,
+      "sha256": "8976e71d557757286493330676cd07c7338aa8ab22851db8fd02049b4434805b"
+    },
+    {
+      "path": "monitor-browser-integrated-01/render/ENGINE_TEST_multicam_monitor_report.json",
+      "size": 36965,
+      "sha256": "d292c6d0b2373f55911e29310d90eb1832092b852de7116edfc5f813f9955603"
+    },
+    {
+      "path": "monitor-browser-integrated-01/render/ENGINE_TEST_owned_jobs.json",
+      "size": 1451,
+      "sha256": "40a3d8e0aab2bb33bd02fba63e19d8c9972306da3e013e7f40dda6cd93da5165"
+    },
+    {
+      "path": "monitor-browser-integrated-01/render/ENGINE_TEST_saved_project.json",
+      "size": 6168,
+      "sha256": "2181e600c21e45322be321ad58f10d224f044cbb91651a80f65de8ec79f1028a"
+    },
+    {
+      "path": "monitor-browser-integrated-01/source-inventory.json",
+      "size": 15441,
+      "sha256": "41656a0060c59bae75e3128a07fa4b93597951c6b13fb4ade55762d42a4f8294"
+    },
+    {
+      "path": "float-browser-integrated-01/browser-report.json",
+      "size": 1250,
+      "sha256": "90052c49a743b1010d074a2f6600bcd6177df88d582ae3cc5aa485b439fb8c3b"
+    },
+    {
+      "path": "float-browser-integrated-02/browser-report.json",
+      "size": 11395,
+      "sha256": "ae06bf408bd3a2460580b45b817a66aa3372c7f4bf0671588b843e0ce038a6c7"
+    },
+    {
+      "path": "float-browser-integrated-02/download-verification.json",
+      "size": 646,
+      "sha256": "95293f8ea7dee81740a9f3abbfedbba779945b447dfa0dd5cf5b41f1f26353d9"
+    },
+    {
+      "path": "float-browser-integrated-02/float-export-controls.png",
+      "size": 173913,
+      "sha256": "92f1f068acc6eed47f63e09a8859895a5344a480ba84dc7a26dee21efb9ded5b"
+    },
+    {
+      "path": "float-browser-integrated-02/float-master-download.png",
+      "size": 87598,
+      "sha256": "cc151d0a638764c22288d8333688f57df337a704a620b0cba73adf5c813f50a8"
+    },
+    {
+      "path": "float-browser-integrated-02/float-paused-preview.png",
+      "size": 75065,
+      "sha256": "06a6030b4054d051a203b6845f0091941832517079122b570f8950be074e70cd"
+    }
+  ]
+}

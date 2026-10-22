@@ -1,0 +1,15 @@
+{
+  "schema": "cinematicum-mac-frozen-full-suite-binding-v1",
+  "passed": true,
+  "core_commit": "cdd15816c228fe4133fbb3ce6d90978333d699e6",
+  "core_tree": "a62ce29a8af68b38d14820c45fc42e1266762e34",
+  "full_report_sha256": "85a2d15cb8f08c839e9ff4f6416173779c4989ca7551b99b3c84edc86d559745",
+  "source_sha256": "a40f5ead75fc240128030d4c438a8395751fc52f26f2446ceff48de9bcb97fd9",
+  "source_files_compared": 368,
+  "source_manifest_sha256": "21034979d805cdf680c255720f6311319f3fc22c2b405dbd43294a5485d09f8d",
+  "tests": 925,
+  "source_unchanged": true,
+  "managed_runtimes_unchanged": true,
+  "mac_source_tracked_clean": true,
+  "all_exact_source_bytes": true
+}

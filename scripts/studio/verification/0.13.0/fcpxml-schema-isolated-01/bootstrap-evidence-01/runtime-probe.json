@@ -1,0 +1,13 @@
+{
+  "command": [
+    "/tmp/cinematicum-fcpxml-schema-bootstrap-20261022-01/runtime/bin/python",
+    "-I",
+    "-B",
+    "-c",
+    "import json,sys;sys.path.insert(0,sys.argv[1]);from validate_fcpxml_schema import runtime_identity;lock=json.load(open(sys.argv[2]));print(json.dumps(runtime_identity(lock)[1]))",
+    "/workspace/scratch/091f394ee5df/cinematicum-013-integration/fcpxml-validator/source",
+    "/workspace/scratch/091f394ee5df/cinematicum-013-integration/fcpxml-validator/source/fcpxml-schema-validation-lock.json"
+  ],
+  "exit_code": 0,
+  "elapsed_seconds": 0.391
+}

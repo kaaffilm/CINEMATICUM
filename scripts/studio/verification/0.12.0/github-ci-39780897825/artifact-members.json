@@ -1,0 +1,1832 @@
+[
+  {
+    "name": "cinematicum-host-prerequisites.txt",
+    "bytes": 407,
+    "compressed_bytes": 195
+  },
+  {
+    "name": "cinematicum-runtimes/base-install.log",
+    "bytes": 3232,
+    "compressed_bytes": 780
+  },
+  {
+    "name": "cinematicum-verification-report.json",
+    "bytes": 137537,
+    "compressed_bytes": 29768
+  },
+  {
+    "name": "cinematicum-runtimes/base-pip-report.json",
+    "bytes": 114724,
+    "compressed_bytes": 36218
+  },
+  {
+    "name": "cinematicum-runtimes/browser-driver-install.log",
+    "bytes": 216,
+    "compressed_bytes": 165
+  },
+  {
+    "name": "cinematicum-runtimes/browser-runtime-receipt.json",
+    "bytes": 25106,
+    "compressed_bytes": 7187
+  },
+  {
+    "name": "cinematicum-runtimes/build-tools-install.log",
+    "bytes": 1210,
+    "compressed_bytes": 502
+  },
+  {
+    "name": "cinematicum-runtimes/build-tools-pip-report.json",
+    "bytes": 14007,
+    "compressed_bytes": 3094
+  },
+  {
+    "name": "cinematicum-runtimes/download-receipt.json",
+    "bytes": 35666,
+    "compressed_bytes": 9247
+  },
+  {
+    "name": "cinematicum-runtimes/learned-bootstrap.json",
+    "bytes": 9540,
+    "compressed_bytes": 1627
+  },
+  {
+    "name": "cinematicum-runtimes/optics-bootstrap.json",
+    "bytes": 7405,
+    "compressed_bytes": 1282
+  },
+  {
+    "name": "cinematicum-runtimes/pbrt-build-receipt.json",
+    "bytes": 1513,
+    "compressed_bytes": 819
+  },
+  {
+    "name": "cinematicum-runtimes/pbrt-build.log",
+    "bytes": 41150,
+    "compressed_bytes": 4438
+  },
+  {
+    "name": "cinematicum-runtimes/pbrt-configure.log",
+    "bytes": 9729,
+    "compressed_bytes": 2789
+  },
+  {
+    "name": "cinematicum-runtimes/physical-bootstrap.json",
+    "bytes": 3189,
+    "compressed_bytes": 1026
+  },
+  {
+    "name": "cinematicum-runtimes/reconstruction-bootstrap.json",
+    "bytes": 3036,
+    "compressed_bytes": 1071
+  },
+  {
+    "name": "cinematicum-runtimes/scene-bootstrap.json",
+    "bytes": 334,
+    "compressed_bytes": 228
+  },
+  {
+    "name": "cinematicum-runtimes/verification-environment.json",
+    "bytes": 1128,
+    "compressed_bytes": 343
+  },
+  {
+    "name": "cinematicum-runtimes/verification-path.json",
+    "bytes": 84,
+    "compressed_bytes": 79
+  },
+  {
+    "name": "multicam-browser-acceptance/author/ENGINE_TEST_browser_result.json",
+    "bytes": 504,
+    "compressed_bytes": 304
+  },
+  {
+    "name": "multicam-browser-acceptance/author/ENGINE_TEST_multicam_native.png",
+    "bytes": 229993,
+    "compressed_bytes": 225481
+  },
+  {
+    "name": "multicam-browser-acceptance/author/ENGINE_TEST_multicam_native_report.json",
+    "bytes": 35616,
+    "compressed_bytes": 7570
+  },
+  {
+    "name": "multicam-browser-acceptance/author/ENGINE_TEST_owned_jobs.json",
+    "bytes": 3,
+    "compressed_bytes": 5
+  },
+  {
+    "name": "multicam-browser-acceptance/author/ENGINE_TEST_saved_project.json",
+    "bytes": 3326,
+    "compressed_bytes": 777
+  },
+  {
+    "name": "multicam-browser-acceptance/browser-report.json",
+    "bytes": 939,
+    "compressed_bytes": 372
+  },
+  {
+    "name": "multicam-browser-acceptance/fixture/author-passed.json",
+    "bytes": 16977,
+    "compressed_bytes": 6141
+  },
+  {
+    "name": "multicam-browser-acceptance/fixture/prepare-passed.json",
+    "bytes": 16977,
+    "compressed_bytes": 6135
+  },
+  {
+    "name": "multicam-browser-acceptance/fixture/native-fixture.json",
+    "bytes": 2115,
+    "compressed_bytes": 863
+  },
+  {
+    "name": "multicam-browser-acceptance/fixture/render-passed.json",
+    "bytes": 17994,
+    "compressed_bytes": 6514
+  },
+  {
+    "name": "multicam-browser-acceptance/fixture/synchronize-passed.json",
+    "bytes": 17999,
+    "compressed_bytes": 6522
+  },
+  {
+    "name": "multicam-browser-acceptance/fixture/workspace/jobs/af3b1fd19135404a901b40316501713e.json",
+    "bytes": 1382,
+    "compressed_bytes": 673
+  },
+  {
+    "name": "multicam-browser-acceptance/fixture/workspace/jobs/f26df59c234c4feea3aaa6fcdccaa47e.json",
+    "bytes": 702454,
+    "compressed_bytes": 113937
+  },
+  {
+    "name": "multicam-browser-acceptance/fixture/workspace/last-session-exit.json",
+    "bytes": 138,
+    "compressed_bytes": 112
+  },
+  {
+    "name": "multicam-browser-acceptance/fixture/workspace/projects/f6e901bc38034bbd80e0d9493ea6b49e/assets.json",
+    "bytes": 3,
+    "compressed_bytes": 5
+  },
+  {
+    "name": "multicam-browser-acceptance/fixture/workspace/projects/f6e901bc38034bbd80e0d9493ea6b49e/project.json",
+    "bytes": 356,
+    "compressed_bytes": 227
+  },
+  {
+    "name": "multicam-browser-acceptance/fixture/workspace/projects/fea0404990184403b74a3af90b111750/assets.json",
+    "bytes": 2744,
+    "compressed_bytes": 594
+  },
+  {
+    "name": "multicam-browser-acceptance/fixture/workspace/projects/fea0404990184403b74a3af90b111750/exports/af3b1fd19135404a901b40316501713e.json",
+    "bytes": 9773,
+    "compressed_bytes": 2217
+  },
+  {
+    "name": "multicam-browser-acceptance/fixture/workspace/projects/fea0404990184403b74a3af90b111750/multicam-sync/outputs/f26df59c234c4feea3aaa6fcdccaa47e/analysis.json",
+    "bytes": 4583,
+    "compressed_bytes": 1359
+  },
+  {
+    "name": "multicam-browser-acceptance/fixture/workspace/projects/fea0404990184403b74a3af90b111750/multicam-sync/outputs/f26df59c234c4feea3aaa6fcdccaa47e/recipe.json",
+    "bytes": 440,
+    "compressed_bytes": 213
+  },
+  {
+    "name": "multicam-browser-acceptance/fixture/workspace/projects/fea0404990184403b74a3af90b111750/multicam-sync/outputs/f26df59c234c4feea3aaa6fcdccaa47e/waveforms.json",
+    "bytes": 359698,
+    "compressed_bytes": 100677
+  },
+  {
+    "name": "multicam-browser-acceptance/fixture/workspace/projects/fea0404990184403b74a3af90b111750/multicam-sync/outputs/f26df59c234c4feea3aaa6fcdccaa47e/receipt.json",
+    "bytes": 3700,
+    "compressed_bytes": 1338
+  },
+  {
+    "name": "multicam-browser-acceptance/fixture/workspace/projects/fea0404990184403b74a3af90b111750/project.json",
+    "bytes": 8007,
+    "compressed_bytes": 1749
+  },
+  {
+    "name": "multicam-browser-acceptance/fixture/workspace/projects/fea0404990184403b74a3af90b111750/versions/000000000001.json",
+    "bytes": 574,
+    "compressed_bytes": 335
+  },
+  {
+    "name": "multicam-browser-acceptance/fixture/workspace/projects/fea0404990184403b74a3af90b111750/versions/000000000002.json",
+    "bytes": 3751,
+    "compressed_bytes": 862
+  },
+  {
+    "name": "multicam-browser-acceptance/fixture/workspace/projects/fea0404990184403b74a3af90b111750/versions/000000000003.json",
+    "bytes": 3751,
+    "compressed_bytes": 862
+  },
+  {
+    "name": "multicam-browser-acceptance/fixture/workspace/projects/fea0404990184403b74a3af90b111750/versions/000000000004.json",
+    "bytes": 7569,
+    "compressed_bytes": 1752
+  },
+  {
+    "name": "multicam-browser-acceptance/fixture/workspace/projects/fea0404990184403b74a3af90b111750/versions/000000000005.json",
+    "bytes": 3751,
+    "compressed_bytes": 862
+  },
+  {
+    "name": "multicam-browser-acceptance/fixture/workspace/projects/fea0404990184403b74a3af90b111750/versions/000000000006.json",
+    "bytes": 7568,
+    "compressed_bytes": 1745
+  },
+  {
+    "name": "multicam-browser-acceptance/fixture/workspace/projects/fea0404990184403b74a3af90b111750/versions/000000000007.json",
+    "bytes": 8668,
+    "compressed_bytes": 1819
+  },
+  {
+    "name": "multicam-browser-acceptance/fixture/workspace/projects/fea0404990184403b74a3af90b111750/waveforms/474ff0b738314898677f657337df388ac34a98022902966897cf2f8f8b0e8b3d.json",
+    "bytes": 33230,
+    "compressed_bytes": 11206
+  },
+  {
+    "name": "multicam-browser-acceptance/fixture/workspace/projects/fea0404990184403b74a3af90b111750/versions/000000000008.json",
+    "bytes": 8763,
+    "compressed_bytes": 1841
+  },
+  {
+    "name": "multicam-browser-acceptance/fixture/workspace/projects/fea0404990184403b74a3af90b111750/waveforms/5baa90c61ddffb16ea319988f0cb9d6a4f6b7268312f49890864437b2b5b27e5.json",
+    "bytes": 33181,
+    "compressed_bytes": 5714
+  },
+  {
+    "name": "multicam-browser-acceptance/fixture/workspace/projects/fea0404990184403b74a3af90b111750/waveforms/a2b473cb8640794fb8ac44a7a7b6d13a9f92adbc605eaf57519e940b85bb50c3.json",
+    "bytes": 32514,
+    "compressed_bytes": 5636
+  },
+  {
+    "name": "multicam-browser-acceptance/phase-summary.json",
+    "bytes": 617,
+    "compressed_bytes": 187
+  },
+  {
+    "name": "multicam-browser-acceptance/prepare/ENGINE_TEST_multicam_native_report.json",
+    "bytes": 34381,
+    "compressed_bytes": 6969
+  },
+  {
+    "name": "multicam-browser-acceptance/prepare/ENGINE_TEST_owned_jobs.json",
+    "bytes": 3,
+    "compressed_bytes": 5
+  },
+  {
+    "name": "multicam-browser-acceptance/prepare/ENGINE_TEST_saved_project.json",
+    "bytes": 367,
+    "compressed_bytes": 238
+  },
+  {
+    "name": "multicam-browser-acceptance/render/ENGINE_TEST_browser_result.json",
+    "bytes": 1181,
+    "compressed_bytes": 528
+  },
+  {
+    "name": "multicam-browser-acceptance/render/ENGINE_TEST_multicam_native.png",
+    "bytes": 96400,
+    "compressed_bytes": 91359
+  },
+  {
+    "name": "multicam-browser-acceptance/render/ENGINE_TEST_multicam_native_report.json",
+    "bytes": 38353,
+    "compressed_bytes": 8536
+  },
+  {
+    "name": "multicam-browser-acceptance/render/ENGINE_TEST_owned_jobs.json",
+    "bytes": 747949,
+    "compressed_bytes": 115144
+  },
+  {
+    "name": "multicam-browser-acceptance/render/ENGINE_TEST_saved_project.json",
+    "bytes": 8007,
+    "compressed_bytes": 1749
+  },
+  {
+    "name": "multicam-browser-acceptance/source-inventory.json",
+    "bytes": 15645,
+    "compressed_bytes": 5922
+  },
+  {
+    "name": "multicam-browser-acceptance/synchronize/ENGINE_TEST_multicam_native.png",
+    "bytes": 84485,
+    "compressed_bytes": 78838
+  },
+  {
+    "name": "multicam-browser-acceptance/synchronize/ENGINE_TEST_multicam_native_report.json",
+    "bytes": 39049,
+    "compressed_bytes": 8486
+  },
+  {
+    "name": "multicam-browser-acceptance/synchronize/ENGINE_TEST_browser_result.json",
+    "bytes": 2343,
+    "compressed_bytes": 626
+  },
+  {
+    "name": "multicam-browser-acceptance/synchronize/ENGINE_TEST_owned_jobs.json",
+    "bytes": 746484,
+    "compressed_bytes": 114208
+  },
+  {
+    "name": "multicam-browser-acceptance/synchronize/ENGINE_TEST_saved_project.json",
+    "bytes": 6908,
+    "compressed_bytes": 1660
+  },
+  {
+    "name": "multicam-browser-acceptance/synchronize/native_downloads/analysis.json",
+    "bytes": 4583,
+    "compressed_bytes": 1359
+  },
+  {
+    "name": "multicam-browser-acceptance/synchronize/native_downloads/receipt.json",
+    "bytes": 3700,
+    "compressed_bytes": 1338
+  },
+  {
+    "name": "multicam-browser-acceptance/synchronize/native_downloads/waveforms.json",
+    "bytes": 359698,
+    "compressed_bytes": 100677
+  },
+  {
+    "name": "multicam-monitor-acceptance/author/ENGINE_TEST_browser_result.json",
+    "bytes": 1510,
+    "compressed_bytes": 658
+  },
+  {
+    "name": "multicam-monitor-acceptance/author/ENGINE_TEST_multicam_monitor.png",
+    "bytes": 77268,
+    "compressed_bytes": 71562
+  },
+  {
+    "name": "multicam-monitor-acceptance/author/ENGINE_TEST_owned_jobs.json",
+    "bytes": 3,
+    "compressed_bytes": 5
+  },
+  {
+    "name": "multicam-monitor-acceptance/author/ENGINE_TEST_multicam_monitor_report.json",
+    "bytes": 38007,
+    "compressed_bytes": 8016
+  },
+  {
+    "name": "multicam-monitor-acceptance/browser-report.json",
+    "bytes": 1041,
+    "compressed_bytes": 379
+  },
+  {
+    "name": "multicam-monitor-acceptance/author/ENGINE_TEST_saved_project.json",
+    "bytes": 5158,
+    "compressed_bytes": 1272
+  },
+  {
+    "name": "multicam-monitor-acceptance/fixture/author-passed.json",
+    "bytes": 17722,
+    "compressed_bytes": 6403
+  },
+  {
+    "name": "multicam-monitor-acceptance/fixture/monitor-fixture.json",
+    "bytes": 1974,
+    "compressed_bytes": 802
+  },
+  {
+    "name": "multicam-monitor-acceptance/fixture/play-passed.json",
+    "bytes": 17720,
+    "compressed_bytes": 6396
+  },
+  {
+    "name": "multicam-monitor-acceptance/fixture/prepare-passed.json",
+    "bytes": 17723,
+    "compressed_bytes": 6402
+  },
+  {
+    "name": "multicam-monitor-acceptance/fixture/render-passed.json",
+    "bytes": 17722,
+    "compressed_bytes": 6402
+  },
+  {
+    "name": "multicam-monitor-acceptance/fixture/workspace/jobs/333d4ef8174d4eb8b9c952477271b34e.json",
+    "bytes": 1367,
+    "compressed_bytes": 667
+  },
+  {
+    "name": "multicam-monitor-acceptance/fixture/workspace/last-session-exit.json",
+    "bytes": 138,
+    "compressed_bytes": 112
+  },
+  {
+    "name": "multicam-monitor-acceptance/fixture/workspace/projects/93556ebd9adc42058a2f657902ee6101/assets.json",
+    "bytes": 3,
+    "compressed_bytes": 5
+  },
+  {
+    "name": "multicam-monitor-acceptance/fixture/workspace/projects/93556ebd9adc42058a2f657902ee6101/project.json",
+    "bytes": 359,
+    "compressed_bytes": 232
+  },
+  {
+    "name": "multicam-monitor-acceptance/fixture/workspace/projects/f3e32c625de84b96b1bc5beb58e3adb1/assets.json",
+    "bytes": 2014,
+    "compressed_bytes": 531
+  },
+  {
+    "name": "multicam-monitor-acceptance/fixture/workspace/projects/f3e32c625de84b96b1bc5beb58e3adb1/audio-sources/dbbc68c6899926f1b3dd5b83af725ac22abef4d4da64d60602b8bb23312ac578.json",
+    "bytes": 981,
+    "compressed_bytes": 466
+  },
+  {
+    "name": "multicam-monitor-acceptance/fixture/workspace/projects/f3e32c625de84b96b1bc5beb58e3adb1/exports/333d4ef8174d4eb8b9c952477271b34e.json",
+    "bytes": 7819,
+    "compressed_bytes": 1793
+  },
+  {
+    "name": "multicam-monitor-acceptance/fixture/workspace/projects/f3e32c625de84b96b1bc5beb58e3adb1/project.json",
+    "bytes": 6168,
+    "compressed_bytes": 1342
+  },
+  {
+    "name": "multicam-monitor-acceptance/fixture/workspace/projects/f3e32c625de84b96b1bc5beb58e3adb1/versions/000000000001.json",
+    "bytes": 2908,
+    "compressed_bytes": 792
+  },
+  {
+    "name": "multicam-monitor-acceptance/fixture/workspace/projects/f3e32c625de84b96b1bc5beb58e3adb1/versions/000000000002.json",
+    "bytes": 4717,
+    "compressed_bytes": 1235
+  },
+  {
+    "name": "multicam-monitor-acceptance/fixture/workspace/projects/f3e32c625de84b96b1bc5beb58e3adb1/versions/000000000003.json",
+    "bytes": 5689,
+    "compressed_bytes": 1352
+  },
+  {
+    "name": "multicam-monitor-acceptance/fixture/workspace/projects/f3e32c625de84b96b1bc5beb58e3adb1/versions/000000000004.json",
+    "bytes": 4717,
+    "compressed_bytes": 1234
+  },
+  {
+    "name": "multicam-monitor-acceptance/fixture/workspace/projects/f3e32c625de84b96b1bc5beb58e3adb1/versions/000000000005.json",
+    "bytes": 5690,
+    "compressed_bytes": 1353
+  },
+  {
+    "name": "multicam-monitor-acceptance/fixture/workspace/projects/f3e32c625de84b96b1bc5beb58e3adb1/versions/000000000006.json",
+    "bytes": 5729,
+    "compressed_bytes": 1365
+  },
+  {
+    "name": "multicam-monitor-acceptance/fixture/workspace/projects/f3e32c625de84b96b1bc5beb58e3adb1/versions/000000000007.json",
+    "bytes": 6824,
+    "compressed_bytes": 1434
+  },
+  {
+    "name": "multicam-monitor-acceptance/fixture/workspace/projects/f3e32c625de84b96b1bc5beb58e3adb1/versions/000000000008.json",
+    "bytes": 5729,
+    "compressed_bytes": 1364
+  },
+  {
+    "name": "multicam-monitor-acceptance/fixture/workspace/projects/f3e32c625de84b96b1bc5beb58e3adb1/versions/000000000009.json",
+    "bytes": 6824,
+    "compressed_bytes": 1435
+  },
+  {
+    "name": "multicam-monitor-acceptance/fixture/workspace/projects/f3e32c625de84b96b1bc5beb58e3adb1/waveforms/963bb01cd4f1f410f505dd42a0bb331958bb3474d25753d2c4c4260623644405.json",
+    "bytes": 32889,
+    "compressed_bytes": 3382
+  },
+  {
+    "name": "multicam-monitor-acceptance/fixture/workspace/projects/f3e32c625de84b96b1bc5beb58e3adb1/waveforms/628af916c578e974d32ce239f4838c9b586382f2bfe00d69dcc86c13d02288d2.json",
+    "bytes": 32935,
+    "compressed_bytes": 3006
+  },
+  {
+    "name": "multicam-monitor-acceptance/phase-summary.json",
+    "bytes": 610,
+    "compressed_bytes": 182
+  },
+  {
+    "name": "multicam-monitor-acceptance/fixture/workspace/projects/f3e32c625de84b96b1bc5beb58e3adb1/waveforms/fa0885d9e21cbdef53b5f73b40ea1b5875fe9115598734fdac257eab1164706d.json",
+    "bytes": 32909,
+    "compressed_bytes": 3982
+  },
+  {
+    "name": "multicam-monitor-acceptance/play/ENGINE_TEST_browser_result.json",
+    "bytes": 13486,
+    "compressed_bytes": 2793
+  },
+  {
+    "name": "multicam-monitor-acceptance/play/ENGINE_TEST_multicam_monitor.png",
+    "bytes": 79221,
+    "compressed_bytes": 73583
+  },
+  {
+    "name": "multicam-monitor-acceptance/play/ENGINE_TEST_multicam_monitor_report.json",
+    "bytes": 51191,
+    "compressed_bytes": 10357
+  },
+  {
+    "name": "multicam-monitor-acceptance/play/ENGINE_TEST_owned_jobs.json",
+    "bytes": 1600,
+    "compressed_bytes": 634
+  },
+  {
+    "name": "multicam-monitor-acceptance/play/ENGINE_TEST_saved_project.json",
+    "bytes": 6167,
+    "compressed_bytes": 1341
+  },
+  {
+    "name": "multicam-monitor-acceptance/prepare/ENGINE_TEST_multicam_monitor_report.json",
+    "bytes": 35525,
+    "compressed_bytes": 6961
+  },
+  {
+    "name": "multicam-monitor-acceptance/prepare/ENGINE_TEST_owned_jobs.json",
+    "bytes": 3,
+    "compressed_bytes": 5
+  },
+  {
+    "name": "multicam-monitor-acceptance/prepare/ENGINE_TEST_saved_project.json",
+    "bytes": 4206,
+    "compressed_bytes": 1146
+  },
+  {
+    "name": "multicam-monitor-acceptance/render/ENGINE_TEST_browser_result.json",
+    "bytes": 1991,
+    "compressed_bytes": 738
+  },
+  {
+    "name": "multicam-monitor-acceptance/render/ENGINE_TEST_multicam_monitor.png",
+    "bytes": 109077,
+    "compressed_bytes": 103203
+  },
+  {
+    "name": "multicam-monitor-acceptance/render/ENGINE_TEST_multicam_monitor_report.json",
+    "bytes": 38841,
+    "compressed_bytes": 8194
+  },
+  {
+    "name": "multicam-monitor-acceptance/render/ENGINE_TEST_owned_jobs.json",
+    "bytes": 1453,
+    "compressed_bytes": 675
+  },
+  {
+    "name": "multicam-monitor-acceptance/render/ENGINE_TEST_saved_project.json",
+    "bytes": 6168,
+    "compressed_bytes": 1342
+  },
+  {
+    "name": "multicam-monitor-acceptance/source-inventory.json",
+    "bytes": 16350,
+    "compressed_bytes": 6182
+  },
+  {
+    "name": "float-movie-acceptance/completed-job.json",
+    "bytes": 2940,
+    "compressed_bytes": 1332
+  },
+  {
+    "name": "float-movie-acceptance/download-verification.json",
+    "bytes": 646,
+    "compressed_bytes": 382
+  },
+  {
+    "name": "float-movie-acceptance/browser-report.json",
+    "bytes": 9974,
+    "compressed_bytes": 1783
+  },
+  {
+    "name": "float-movie-acceptance/float-export-controls.png",
+    "bytes": 171582,
+    "compressed_bytes": 166263
+  },
+  {
+    "name": "float-movie-acceptance/float-master-download.png",
+    "bytes": 84159,
+    "compressed_bytes": 78089
+  },
+  {
+    "name": "float-movie-acceptance/float-paused-preview.png",
+    "bytes": 72057,
+    "compressed_bytes": 65367
+  },
+  {
+    "name": "float-movie-acceptance/saved-after-render.json",
+    "bytes": 4641,
+    "compressed_bytes": 1334
+  },
+  {
+    "name": "float-movie-acceptance/workspace/jobs/af57ca25d8354ac7ac34297bcec77381.json",
+    "bytes": 2942,
+    "compressed_bytes": 1338
+  },
+  {
+    "name": "float-movie-acceptance/saved-before-reopen.json",
+    "bytes": 4641,
+    "compressed_bytes": 1333
+  },
+  {
+    "name": "float-movie-acceptance/workspace/last-session-exit.json",
+    "bytes": 137,
+    "compressed_bytes": 111
+  },
+  {
+    "name": "float-movie-acceptance/workspace/projects/c5cc77e028b14a3bb092bf44b2299e8e/assets.json",
+    "bytes": 1817,
+    "compressed_bytes": 669
+  },
+  {
+    "name": "float-movie-acceptance/workspace/projects/c5cc77e028b14a3bb092bf44b2299e8e/exports/af57ca25d8354ac7ac34297bcec77381.json",
+    "bytes": 7848,
+    "compressed_bytes": 2158
+  },
+  {
+    "name": "float-movie-acceptance/workspace/projects/c5cc77e028b14a3bb092bf44b2299e8e/previews/55bb2bae81e29662b83223d3f7149dd9bbe91d9268d6a165fcd15c12d6dfb15d.png",
+    "bytes": 171,
+    "compressed_bytes": 142
+  },
+  {
+    "name": "float-movie-acceptance/workspace/projects/c5cc77e028b14a3bb092bf44b2299e8e/previews/78c297af2b6755945d2920a73f2d376ed2c551d32eb919a1492cc4673c1131f8.png",
+    "bytes": 171,
+    "compressed_bytes": 142
+  },
+  {
+    "name": "float-movie-acceptance/workspace/projects/c5cc77e028b14a3bb092bf44b2299e8e/project.json",
+    "bytes": 4715,
+    "compressed_bytes": 1344
+  },
+  {
+    "name": "float-movie-acceptance/workspace/projects/c5cc77e028b14a3bb092bf44b2299e8e/versions/000000000001.json",
+    "bytes": 2648,
+    "compressed_bytes": 922
+  },
+  {
+    "name": "float-movie-acceptance/workspace/projects/c5cc77e028b14a3bb092bf44b2299e8e/versions/000000000002.json",
+    "bytes": 3577,
+    "compressed_bytes": 1137
+  },
+  {
+    "name": "float-movie-acceptance/workspace/projects/c5cc77e028b14a3bb092bf44b2299e8e/versions/000000000003.json",
+    "bytes": 5280,
+    "compressed_bytes": 1441
+  },
+  {
+    "name": "float-movie-acceptance/workspace/projects/c5cc77e028b14a3bb092bf44b2299e8e/waveforms/5ad8a7554f6bf4ddd1d1050bc5f7cb2510fd6c08875f9628ccbbad43499641eb.json",
+    "bytes": 32303,
+    "compressed_bytes": 3265
+  },
+  {
+    "name": "otio-compositions-acceptance/archive/ENGINE_TEST_browser_result.json",
+    "bytes": 1751,
+    "compressed_bytes": 614
+  },
+  {
+    "name": "otio-compositions-acceptance/archive/ENGINE_TEST_otio_compositions.png",
+    "bytes": 91094,
+    "compressed_bytes": 86039
+  },
+  {
+    "name": "otio-compositions-acceptance/archive/ENGINE_TEST_otio_compositions_report.json",
+    "bytes": 38622,
+    "compressed_bytes": 8110
+  },
+  {
+    "name": "otio-compositions-acceptance/archive/ENGINE_TEST_owned_jobs.json",
+    "bytes": 6411,
+    "compressed_bytes": 1453
+  },
+  {
+    "name": "otio-compositions-acceptance/archive/ENGINE_TEST_saved_project.json",
+    "bytes": 25882,
+    "compressed_bytes": 2413
+  },
+  {
+    "name": "otio-compositions-acceptance/author/ENGINE_TEST_browser_result.json",
+    "bytes": 1285,
+    "compressed_bytes": 577
+  },
+  {
+    "name": "otio-compositions-acceptance/author/ENGINE_TEST_otio_compositions.png",
+    "bytes": 171839,
+    "compressed_bytes": 167612
+  },
+  {
+    "name": "otio-compositions-acceptance/author/ENGINE_TEST_otio_compositions_report.json",
+    "bytes": 37457,
+    "compressed_bytes": 7875
+  },
+  {
+    "name": "otio-compositions-acceptance/author/ENGINE_TEST_owned_jobs.json",
+    "bytes": 686,
+    "compressed_bytes": 387
+  },
+  {
+    "name": "otio-compositions-acceptance/author/ENGINE_TEST_saved_project.json",
+    "bytes": 25882,
+    "compressed_bytes": 2414
+  },
+  {
+    "name": "otio-compositions-acceptance/browser-report.json",
+    "bytes": 1044,
+    "compressed_bytes": 378
+  },
+  {
+    "name": "otio-compositions-acceptance/fixture/archive-passed.json",
+    "bytes": 17582,
+    "compressed_bytes": 6334
+  },
+  {
+    "name": "otio-compositions-acceptance/fixture/author-passed.json",
+    "bytes": 17581,
+    "compressed_bytes": 6336
+  },
+  {
+    "name": "otio-compositions-acceptance/fixture/otio-fixture.json",
+    "bytes": 2062,
+    "compressed_bytes": 884
+  },
+  {
+    "name": "otio-compositions-acceptance/fixture/prepare-passed.json",
+    "bytes": 17581,
+    "compressed_bytes": 6335
+  },
+  {
+    "name": "otio-compositions-acceptance/fixture/render-passed.json",
+    "bytes": 17581,
+    "compressed_bytes": 6337
+  },
+  {
+    "name": "otio-compositions-acceptance/fixture/workspace/jobs/5a66c83620914fd286e7e1f3f981141c.json",
+    "bytes": 1381,
+    "compressed_bytes": 670
+  },
+  {
+    "name": "otio-compositions-acceptance/fixture/workspace/jobs/35ee9e08ba2f46d28084c09d9524377f.json",
+    "bytes": 693,
+    "compressed_bytes": 411
+  },
+  {
+    "name": "otio-compositions-acceptance/fixture/workspace/jobs/ee6d1607c7334d62a0030eda6015b28f.json",
+    "bytes": 1379,
+    "compressed_bytes": 669
+  },
+  {
+    "name": "otio-compositions-acceptance/fixture/workspace/jobs/fbf885e234254b608271261b6f606e83.json",
+    "bytes": 687,
+    "compressed_bytes": 363
+  },
+  {
+    "name": "otio-compositions-acceptance/fixture/workspace/last-session-exit.json",
+    "bytes": 137,
+    "compressed_bytes": 111
+  },
+  {
+    "name": "otio-compositions-acceptance/fixture/workspace/projects/875c8c1bd06340c8bdff72480cf636b0/assets.json",
+    "bytes": 1686,
+    "compressed_bytes": 493
+  },
+  {
+    "name": "otio-compositions-acceptance/fixture/workspace/projects/875c8c1bd06340c8bdff72480cf636b0/exports/5a66c83620914fd286e7e1f3f981141c.json",
+    "bytes": 29116,
+    "compressed_bytes": 2904
+  },
+  {
+    "name": "otio-compositions-acceptance/fixture/workspace/projects/875c8c1bd06340c8bdff72480cf636b0/exports/fbf885e234254b608271261b6f606e83.json",
+    "bytes": 461,
+    "compressed_bytes": 271
+  },
+  {
+    "name": "otio-compositions-acceptance/fixture/workspace/projects/875c8c1bd06340c8bdff72480cf636b0/previews/60357713bdc5b1f0bd2b210b960a2cf7c81bbd321a7b5df53289124277cba767.png",
+    "bytes": 218,
+    "compressed_bytes": 180
+  },
+  {
+    "name": "otio-compositions-acceptance/fixture/workspace/projects/875c8c1bd06340c8bdff72480cf636b0/previews/8de1f1723c0879079ff4fad26935e3c6845582a08067187130844a33b86ac34f.png",
+    "bytes": 216,
+    "compressed_bytes": 212
+  },
+  {
+    "name": "otio-compositions-acceptance/fixture/workspace/projects/875c8c1bd06340c8bdff72480cf636b0/previews/d321b6b92077ba98bf24134544784569be786fbf6b86196e8eb5241baaf5f64a.png",
+    "bytes": 218,
+    "compressed_bytes": 180
+  },
+  {
+    "name": "otio-compositions-acceptance/fixture/workspace/projects/875c8c1bd06340c8bdff72480cf636b0/previews/d4e7bbb82d6615bb6b1cad9af2e80cd3748cc93eeb0bb7528567be736c2cd300.png",
+    "bytes": 216,
+    "compressed_bytes": 212
+  },
+  {
+    "name": "otio-compositions-acceptance/fixture/workspace/projects/875c8c1bd06340c8bdff72480cf636b0/project.json",
+    "bytes": 25882,
+    "compressed_bytes": 2413
+  },
+  {
+    "name": "otio-compositions-acceptance/fixture/workspace/projects/875c8c1bd06340c8bdff72480cf636b0/versions/000000000001.json",
+    "bytes": 2509,
+    "compressed_bytes": 751
+  },
+  {
+    "name": "otio-compositions-acceptance/fixture/workspace/projects/875c8c1bd06340c8bdff72480cf636b0/versions/000000000002.json",
+    "bytes": 3431,
+    "compressed_bytes": 971
+  },
+  {
+    "name": "otio-compositions-acceptance/fixture/workspace/projects/875c8c1bd06340c8bdff72480cf636b0/versions/000000000003.json",
+    "bytes": 28109,
+    "compressed_bytes": 2541
+  },
+  {
+    "name": "otio-compositions-acceptance/fixture/workspace/projects/875c8c1bd06340c8bdff72480cf636b0/waveforms/aefcf4f3ab81be6ddfd14c7c1830435fa081c12b1735bb6786112cb1eb10f0d6.json",
+    "bytes": 32658,
+    "compressed_bytes": 4961
+  },
+  {
+    "name": "otio-compositions-acceptance/fixture/workspace/projects/a03f89ebb3ad490ab1d1bdfc7fbc4dc1/assets.json",
+    "bytes": 3,
+    "compressed_bytes": 5
+  },
+  {
+    "name": "otio-compositions-acceptance/fixture/workspace/projects/a03f89ebb3ad490ab1d1bdfc7fbc4dc1/project.json",
+    "bytes": 349,
+    "compressed_bytes": 226
+  },
+  {
+    "name": "otio-compositions-acceptance/fixture/workspace/projects/ccd22bf9d79d4026835a10a3d69ae95d/exports/ee6d1607c7334d62a0030eda6015b28f.json",
+    "bytes": 29473,
+    "compressed_bytes": 3055
+  },
+  {
+    "name": "otio-compositions-acceptance/fixture/workspace/projects/ccd22bf9d79d4026835a10a3d69ae95d/assets.json",
+    "bytes": 1686,
+    "compressed_bytes": 487
+  },
+  {
+    "name": "otio-compositions-acceptance/fixture/workspace/projects/ccd22bf9d79d4026835a10a3d69ae95d/previews/92b636dbadd2a216eb13cf78a20d1f337ef8ad3506024284a7467b24aa088aba.png",
+    "bytes": 216,
+    "compressed_bytes": 212
+  },
+  {
+    "name": "otio-compositions-acceptance/fixture/workspace/projects/ccd22bf9d79d4026835a10a3d69ae95d/project.json",
+    "bytes": 26218,
+    "compressed_bytes": 2556
+  },
+  {
+    "name": "otio-compositions-acceptance/fixture/workspace/projects/ccd22bf9d79d4026835a10a3d69ae95d/versions/000000000001.json",
+    "bytes": 28465,
+    "compressed_bytes": 2685
+  },
+  {
+    "name": "otio-compositions-acceptance/phase-summary.json",
+    "bytes": 612,
+    "compressed_bytes": 181
+  },
+  {
+    "name": "otio-compositions-acceptance/prepare/ENGINE_TEST_otio_compositions_report.json",
+    "bytes": 35245,
+    "compressed_bytes": 6912
+  },
+  {
+    "name": "otio-compositions-acceptance/prepare/ENGINE_TEST_owned_jobs.json",
+    "bytes": 3,
+    "compressed_bytes": 5
+  },
+  {
+    "name": "otio-compositions-acceptance/prepare/ENGINE_TEST_saved_project.json",
+    "bytes": 3011,
+    "compressed_bytes": 883
+  },
+  {
+    "name": "otio-compositions-acceptance/render/ENGINE_TEST_browser_result.json",
+    "bytes": 1180,
+    "compressed_bytes": 519
+  },
+  {
+    "name": "otio-compositions-acceptance/render/ENGINE_TEST_otio_compositions.png",
+    "bytes": 86419,
+    "compressed_bytes": 80748
+  },
+  {
+    "name": "otio-compositions-acceptance/render/ENGINE_TEST_otio_compositions_report.json",
+    "bytes": 37940,
+    "compressed_bytes": 7978
+  },
+  {
+    "name": "otio-compositions-acceptance/render/ENGINE_TEST_owned_jobs.json",
+    "bytes": 2834,
+    "compressed_bytes": 971
+  },
+  {
+    "name": "otio-compositions-acceptance/render/ENGINE_TEST_saved_project.json",
+    "bytes": 25882,
+    "compressed_bytes": 2413
+  },
+  {
+    "name": "otio-compositions-acceptance/source-inventory.json",
+    "bytes": 16216,
+    "compressed_bytes": 6120
+  },
+  {
+    "name": "retime-acceptance/archive/ENGINE_TEST_browser_result.json",
+    "bytes": 1564,
+    "compressed_bytes": 588
+  },
+  {
+    "name": "retime-acceptance/archive/ENGINE_TEST_owned_jobs.json",
+    "bytes": 23536,
+    "compressed_bytes": 2696
+  },
+  {
+    "name": "retime-acceptance/archive/ENGINE_TEST_retime.png",
+    "bytes": 99432,
+    "compressed_bytes": 94003
+  },
+  {
+    "name": "retime-acceptance/archive/ENGINE_TEST_retime_report.json",
+    "bytes": 25958,
+    "compressed_bytes": 8737
+  },
+  {
+    "name": "retime-acceptance/archive/ENGINE_TEST_saved_project.json",
+    "bytes": 4340,
+    "compressed_bytes": 1041
+  },
+  {
+    "name": "retime-acceptance/author/ENGINE_TEST_browser_result.json",
+    "bytes": 622,
+    "compressed_bytes": 355
+  },
+  {
+    "name": "retime-acceptance/author/ENGINE_TEST_owned_jobs.json",
+    "bytes": 3,
+    "compressed_bytes": 5
+  },
+  {
+    "name": "retime-acceptance/author/ENGINE_TEST_retime.png",
+    "bytes": 108785,
+    "compressed_bytes": 102556
+  },
+  {
+    "name": "retime-acceptance/author/ENGINE_TEST_retime_report.json",
+    "bytes": 19382,
+    "compressed_bytes": 7187
+  },
+  {
+    "name": "retime-acceptance/author/ENGINE_TEST_saved_project.json",
+    "bytes": 4340,
+    "compressed_bytes": 1039
+  },
+  {
+    "name": "retime-acceptance/browser-report.json",
+    "bytes": 1031,
+    "compressed_bytes": 377
+  },
+  {
+    "name": "retime-acceptance/driver.stderr",
+    "bytes": 0,
+    "compressed_bytes": 2
+  },
+  {
+    "name": "retime-acceptance/driver.stdout",
+    "bytes": 383,
+    "compressed_bytes": 142
+  },
+  {
+    "name": "retime-acceptance/fixture/author-passed.json",
+    "bytes": 17689,
+    "compressed_bytes": 6374
+  },
+  {
+    "name": "retime-acceptance/fixture/archive-passed.json",
+    "bytes": 17690,
+    "compressed_bytes": 6370
+  },
+  {
+    "name": "retime-acceptance/fixture/playback-passed.json",
+    "bytes": 17691,
+    "compressed_bytes": 6374
+  },
+  {
+    "name": "retime-acceptance/fixture/prepare-passed.json",
+    "bytes": 17690,
+    "compressed_bytes": 6374
+  },
+  {
+    "name": "retime-acceptance/fixture/retime-fixture.json",
+    "bytes": 2302,
+    "compressed_bytes": 1053
+  },
+  {
+    "name": "retime-acceptance/fixture/workspace/jobs/1ee82f99da034213a038f0cbb99633a4.json",
+    "bytes": 685,
+    "compressed_bytes": 361
+  },
+  {
+    "name": "retime-acceptance/fixture/workspace/jobs/2e795d3e9b3d47df9d4af7f8e6479c06.json",
+    "bytes": 6422,
+    "compressed_bytes": 1607
+  },
+  {
+    "name": "retime-acceptance/fixture/workspace/jobs/7edb816d060a4312bd39c75a4fb0bd6c.json",
+    "bytes": 6416,
+    "compressed_bytes": 1611
+  },
+  {
+    "name": "retime-acceptance/fixture/workspace/jobs/8266b4b766264ec2b513acd5bce834b5.json",
+    "bytes": 682,
+    "compressed_bytes": 407
+  },
+  {
+    "name": "retime-acceptance/fixture/workspace/last-session-exit.json",
+    "bytes": 137,
+    "compressed_bytes": 111
+  },
+  {
+    "name": "retime-acceptance/fixture/workspace/jobs/bf51d8989fc346f78f3b0224fbecf253.json",
+    "bytes": 6423,
+    "compressed_bytes": 1609
+  },
+  {
+    "name": "retime-acceptance/fixture/workspace/projects/8ca0eef24281495dbe1504de4f1fdc42/assets.json",
+    "bytes": 1053,
+    "compressed_bytes": 416
+  },
+  {
+    "name": "retime-acceptance/fixture/workspace/projects/8ca0eef24281495dbe1504de4f1fdc42/exports/1ee82f99da034213a038f0cbb99633a4.json",
+    "bytes": 459,
+    "compressed_bytes": 269
+  },
+  {
+    "name": "retime-acceptance/fixture/workspace/projects/8ca0eef24281495dbe1504de4f1fdc42/exports/7edb816d060a4312bd39c75a4fb0bd6c.json",
+    "bytes": 10946,
+    "compressed_bytes": 2216
+  },
+  {
+    "name": "retime-acceptance/fixture/workspace/projects/8ca0eef24281495dbe1504de4f1fdc42/exports/bf51d8989fc346f78f3b0224fbecf253.json",
+    "bytes": 10952,
+    "compressed_bytes": 2215
+  },
+  {
+    "name": "retime-acceptance/fixture/workspace/projects/8ca0eef24281495dbe1504de4f1fdc42/previews/c41afa5cf13faeb67de0fac7bee6f6ffea90e9ec36f8265581a08a8ef39a7ab4.png",
+    "bytes": 7821,
+    "compressed_bytes": 7826
+  },
+  {
+    "name": "retime-acceptance/fixture/workspace/projects/8ca0eef24281495dbe1504de4f1fdc42/project.json",
+    "bytes": 4340,
+    "compressed_bytes": 1041
+  },
+  {
+    "name": "retime-acceptance/fixture/workspace/projects/8ca0eef24281495dbe1504de4f1fdc42/versions/000000000001.json",
+    "bytes": 1779,
+    "compressed_bytes": 664
+  },
+  {
+    "name": "retime-acceptance/fixture/workspace/projects/8ca0eef24281495dbe1504de4f1fdc42/versions/000000000002.json",
+    "bytes": 2801,
+    "compressed_bytes": 915
+  },
+  {
+    "name": "retime-acceptance/fixture/workspace/projects/8ca0eef24281495dbe1504de4f1fdc42/versions/000000000003.json",
+    "bytes": 4903,
+    "compressed_bytes": 1141
+  },
+  {
+    "name": "retime-acceptance/fixture/workspace/projects/8ca0eef24281495dbe1504de4f1fdc42/versions/000000000004.json",
+    "bytes": 4903,
+    "compressed_bytes": 1140
+  },
+  {
+    "name": "retime-acceptance/fixture/workspace/projects/8ca0eef24281495dbe1504de4f1fdc42/versions/000000000005.json",
+    "bytes": 4903,
+    "compressed_bytes": 1143
+  },
+  {
+    "name": "retime-acceptance/fixture/workspace/projects/8ca0eef24281495dbe1504de4f1fdc42/waveforms/a412427ef52f8c5d0d9716a2e5cfd26db29eb54ba7e876e48b82a3711c4690fb.json",
+    "bytes": 31792,
+    "compressed_bytes": 10413
+  },
+  {
+    "name": "retime-acceptance/fixture/workspace/projects/c58f8f47c79340489004a5a20bc5ea01/assets.json",
+    "bytes": 3,
+    "compressed_bytes": 5
+  },
+  {
+    "name": "retime-acceptance/fixture/workspace/projects/c58f8f47c79340489004a5a20bc5ea01/project.json",
+    "bytes": 349,
+    "compressed_bytes": 227
+  },
+  {
+    "name": "retime-acceptance/fixture/workspace/projects/c6f86492a54346faa07e1a7c7dc191e8/assets.json",
+    "bytes": 1053,
+    "compressed_bytes": 415
+  },
+  {
+    "name": "retime-acceptance/fixture/workspace/projects/c6f86492a54346faa07e1a7c7dc191e8/exports/2e795d3e9b3d47df9d4af7f8e6479c06.json",
+    "bytes": 11307,
+    "compressed_bytes": 2369
+  },
+  {
+    "name": "retime-acceptance/fixture/workspace/projects/c6f86492a54346faa07e1a7c7dc191e8/previews/1e6d063f1750b6d141007fd331fd87a21b1418dcfccb375c16240443462fa64b.png",
+    "bytes": 119,
+    "compressed_bytes": 102
+  },
+  {
+    "name": "retime-acceptance/fixture/workspace/projects/c6f86492a54346faa07e1a7c7dc191e8/project.json",
+    "bytes": 4675,
+    "compressed_bytes": 1230
+  },
+  {
+    "name": "retime-acceptance/fixture/workspace/projects/c6f86492a54346faa07e1a7c7dc191e8/versions/000000000001.json",
+    "bytes": 5258,
+    "compressed_bytes": 1322
+  },
+  {
+    "name": "retime-acceptance/fixture/workspace/projects/c6f86492a54346faa07e1a7c7dc191e8/waveforms/e24e6388df6ea47cb536f9683a2fcedf14a95bbbed7407014274d4f149dd1128.json",
+    "bytes": 31792,
+    "compressed_bytes": 10413
+  },
+  {
+    "name": "retime-acceptance/phase-summary.json",
+    "bytes": 615,
+    "compressed_bytes": 185
+  },
+  {
+    "name": "retime-acceptance/playback/ENGINE_TEST_browser_result.json",
+    "bytes": 1401,
+    "compressed_bytes": 642
+  },
+  {
+    "name": "retime-acceptance/playback/ENGINE_TEST_retime.png",
+    "bytes": 106115,
+    "compressed_bytes": 100094
+  },
+  {
+    "name": "retime-acceptance/playback/ENGINE_TEST_owned_jobs.json",
+    "bytes": 14764,
+    "compressed_bytes": 2127
+  },
+  {
+    "name": "retime-acceptance/playback/ENGINE_TEST_retime_report.json",
+    "bytes": 25781,
+    "compressed_bytes": 8771
+  },
+  {
+    "name": "retime-acceptance/playback/ENGINE_TEST_saved_project.json",
+    "bytes": 4340,
+    "compressed_bytes": 1041
+  },
+  {
+    "name": "retime-acceptance/prepare/ENGINE_TEST_owned_jobs.json",
+    "bytes": 3,
+    "compressed_bytes": 5
+  },
+  {
+    "name": "retime-acceptance/prepare/ENGINE_TEST_retime_report.json",
+    "bytes": 18040,
+    "compressed_bytes": 6649
+  },
+  {
+    "name": "retime-acceptance/prepare/ENGINE_TEST_saved_project.json",
+    "bytes": 2418,
+    "compressed_bytes": 822
+  },
+  {
+    "name": "retime-acceptance/source-inventory.json",
+    "bytes": 16317,
+    "compressed_bytes": 6157
+  },
+  {
+    "name": "startup-quit-acceptance/actual-worker-protection/ENGINE_TEST_quit_source.png",
+    "bytes": 6128,
+    "compressed_bytes": 5919
+  },
+  {
+    "name": "startup-quit-acceptance/actual-worker-protection/fixture.json",
+    "bytes": 353,
+    "compressed_bytes": 228
+  },
+  {
+    "name": "startup-quit-acceptance/actual-worker-protection/initial-project.json",
+    "bytes": 2105,
+    "compressed_bytes": 812
+  },
+  {
+    "name": "startup-quit-acceptance/actual-worker-protection/transport-events.json",
+    "bytes": 961,
+    "compressed_bytes": 273
+  },
+  {
+    "name": "startup-quit-acceptance/actual-worker-protection/workspace/jobs/13ac1daeb8c34d0da65d7af636bb8bcf.json",
+    "bytes": 341,
+    "compressed_bytes": 223
+  },
+  {
+    "name": "startup-quit-acceptance/actual-worker-protection/workspace/last-session-exit.json",
+    "bytes": 450,
+    "compressed_bytes": 243
+  },
+  {
+    "name": "startup-quit-acceptance/actual-worker-protection/workspace/projects/a48ba571803f40e5b970b8466dd05d17/assets.json",
+    "bytes": 768,
+    "compressed_bytes": 381
+  },
+  {
+    "name": "startup-quit-acceptance/actual-worker-protection/workspace/projects/a48ba571803f40e5b970b8466dd05d17/media/9985179f0e844b848484cc9ddb8572f8.png",
+    "bytes": 6128,
+    "compressed_bytes": 5919
+  },
+  {
+    "name": "startup-quit-acceptance/actual-worker-protection/workspace/projects/a48ba571803f40e5b970b8466dd05d17/previews/4c147b9cb8ae0229d0a90908ad9cc8b58e4a86422afb231a30a9cfdc85db0989.png",
+    "bytes": 707515,
+    "compressed_bytes": 705556
+  },
+  {
+    "name": "startup-quit-acceptance/actual-worker-protection/workspace/projects/a48ba571803f40e5b970b8466dd05d17/project.json",
+    "bytes": 2101,
+    "compressed_bytes": 817
+  },
+  {
+    "name": "startup-quit-acceptance/actual-worker-protection/workspace/projects/a48ba571803f40e5b970b8466dd05d17/versions/000000000001.json",
+    "bytes": 1438,
+    "compressed_bytes": 641
+  },
+  {
+    "name": "startup-quit-acceptance/actual-worker-protection/workspace/projects/a48ba571803f40e5b970b8466dd05d17/versions/000000000002.json",
+    "bytes": 2451,
+    "compressed_bytes": 914
+  },
+  {
+    "name": "startup-quit-acceptance/actual-worker-protection/workspace/projects/a48ba571803f40e5b970b8466dd05d17/versions/000000000003.json",
+    "bytes": 2451,
+    "compressed_bytes": 913
+  },
+  {
+    "name": "startup-quit-acceptance/await-real-bootstrap/fixture.json",
+    "bytes": 142,
+    "compressed_bytes": 117
+  },
+  {
+    "name": "startup-quit-acceptance/await-real-bootstrap/initial-project.json",
+    "bytes": 357,
+    "compressed_bytes": 231
+  },
+  {
+    "name": "startup-quit-acceptance/await-real-bootstrap/transport-events.json",
+    "bytes": 511,
+    "compressed_bytes": 225
+  },
+  {
+    "name": "startup-quit-acceptance/await-real-bootstrap/workspace/last-session-exit.json",
+    "bytes": 150,
+    "compressed_bytes": 118
+  },
+  {
+    "name": "startup-quit-acceptance/await-real-bootstrap/workspace/projects/c11ed6b1af9149c28788c2196b6a08a2/assets.json",
+    "bytes": 3,
+    "compressed_bytes": 5
+  },
+  {
+    "name": "startup-quit-acceptance/bootstrap-failure-protection/fixture.json",
+    "bytes": 139,
+    "compressed_bytes": 117
+  },
+  {
+    "name": "startup-quit-acceptance/await-real-bootstrap/workspace/projects/c11ed6b1af9149c28788c2196b6a08a2/project.json",
+    "bytes": 354,
+    "compressed_bytes": 234
+  },
+  {
+    "name": "startup-quit-acceptance/bootstrap-failure-protection/initial-project.json",
+    "bytes": 357,
+    "compressed_bytes": 230
+  },
+  {
+    "name": "startup-quit-acceptance/bootstrap-failure-protection/workspace/last-session-exit.json",
+    "bytes": 143,
+    "compressed_bytes": 123
+  },
+  {
+    "name": "startup-quit-acceptance/bootstrap-failure-protection/workspace/projects/af6e0d5da8e740a6af55e66bfb484500/assets.json",
+    "bytes": 3,
+    "compressed_bytes": 5
+  },
+  {
+    "name": "startup-quit-acceptance/bootstrap-failure-protection/workspace/projects/af6e0d5da8e740a6af55e66bfb484500/project.json",
+    "bytes": 354,
+    "compressed_bytes": 234
+  },
+  {
+    "name": "startup-quit-acceptance/report.json",
+    "bytes": 17217,
+    "compressed_bytes": 3024
+  },
+  {
+    "name": "startup-quit-acceptance/save-before-quit/fixture.json",
+    "bytes": 139,
+    "compressed_bytes": 117
+  },
+  {
+    "name": "startup-quit-acceptance/save-before-quit/initial-project.json",
+    "bytes": 357,
+    "compressed_bytes": 233
+  },
+  {
+    "name": "startup-quit-acceptance/save-before-quit/transport-events.json",
+    "bytes": 347,
+    "compressed_bytes": 176
+  },
+  {
+    "name": "startup-quit-acceptance/save-before-quit/workspace/last-session-exit.json",
+    "bytes": 150,
+    "compressed_bytes": 117
+  },
+  {
+    "name": "startup-quit-acceptance/save-before-quit/workspace/projects/b3137c8cf5764acc9100e841b5472096/assets.json",
+    "bytes": 3,
+    "compressed_bytes": 5
+  },
+  {
+    "name": "startup-quit-acceptance/save-before-quit/workspace/projects/b3137c8cf5764acc9100e841b5472096/project.json",
+    "bytes": 425,
+    "compressed_bytes": 272
+  },
+  {
+    "name": "startup-quit-acceptance/save-before-quit/workspace/projects/b3137c8cf5764acc9100e841b5472096/versions/000000000001.json",
+    "bytes": 561,
+    "compressed_bytes": 331
+  },
+  {
+    "name": "startup-quit-acceptance/save-conflict-protection/fixture.json",
+    "bytes": 139,
+    "compressed_bytes": 116
+  },
+  {
+    "name": "startup-quit-acceptance/save-conflict-protection/initial-project.json",
+    "bytes": 357,
+    "compressed_bytes": 233
+  },
+  {
+    "name": "startup-quit-acceptance/save-conflict-protection/transport-events.json",
+    "bytes": 215,
+    "compressed_bytes": 112
+  },
+  {
+    "name": "startup-quit-acceptance/save-conflict-protection/workspace/last-session-exit.json",
+    "bytes": 143,
+    "compressed_bytes": 123
+  },
+  {
+    "name": "startup-quit-acceptance/save-conflict-protection/workspace/projects/2f59c7d836b746a8b53905a6fb8b768a/assets.json",
+    "bytes": 3,
+    "compressed_bytes": 5
+  },
+  {
+    "name": "startup-quit-acceptance/save-conflict-protection/workspace/projects/2f59c7d836b746a8b53905a6fb8b768a/project.json",
+    "bytes": 363,
+    "compressed_bytes": 233
+  },
+  {
+    "name": "startup-quit-acceptance/save-conflict-protection/workspace/projects/2f59c7d836b746a8b53905a6fb8b768a/versions/000000000001.json",
+    "bytes": 561,
+    "compressed_bytes": 330
+  },
+  {
+    "name": "startup-quit-acceptance/save-conflict-protection/workspace/projects/9ca7ca8f302c44ceb68949e4c3970b2e/assets.json",
+    "bytes": 3,
+    "compressed_bytes": 5
+  },
+  {
+    "name": "startup-quit-acceptance/save-conflict-protection/workspace/projects/9ca7ca8f302c44ceb68949e4c3970b2e/project.json",
+    "bytes": 349,
+    "compressed_bytes": 226
+  },
+  {
+    "name": "still-photography-acceptance/browser-report.json",
+    "bytes": 1074,
+    "compressed_bytes": 390
+  },
+  {
+    "name": "still-photography-acceptance/deliver/ENGINE_TEST_still_photography.png",
+    "bytes": 174277,
+    "compressed_bytes": 168745
+  },
+  {
+    "name": "still-photography-acceptance/deliver/owned-jobs.json",
+    "bytes": 70671,
+    "compressed_bytes": 15397
+  },
+  {
+    "name": "still-photography-acceptance/deliver/ENGINE_TEST_still_photography_report.json",
+    "bytes": 37518,
+    "compressed_bytes": 7734
+  },
+  {
+    "name": "still-photography-acceptance/fixture/deliver-passed.json",
+    "bytes": 17406,
+    "compressed_bytes": 6267
+  },
+  {
+    "name": "still-photography-acceptance/fixture/fixture.json",
+    "bytes": 3426,
+    "compressed_bytes": 909
+  },
+  {
+    "name": "still-photography-acceptance/fixture/frame-hdr.png",
+    "bytes": 99518,
+    "compressed_bytes": 99536
+  },
+  {
+    "name": "still-photography-acceptance/fixture/frame-panorama.png",
+    "bytes": 53441,
+    "compressed_bytes": 53031
+  },
+  {
+    "name": "still-photography-acceptance/fixture/hdr-passed.json",
+    "bytes": 17405,
+    "compressed_bytes": 6264
+  },
+  {
+    "name": "still-photography-acceptance/fixture/panorama-passed.json",
+    "bytes": 17406,
+    "compressed_bytes": 6262
+  },
+  {
+    "name": "still-photography-acceptance/fixture/import-passed.json",
+    "bytes": 17405,
+    "compressed_bytes": 6265
+  },
+  {
+    "name": "still-photography-acceptance/fixture/photographs/ENGINE_TEST_HDR_1.png",
+    "bytes": 383157,
+    "compressed_bytes": 383271
+  },
+  {
+    "name": "still-photography-acceptance/fixture/photographs/ENGINE_TEST_HDR_2.png",
+    "bytes": 390763,
+    "compressed_bytes": 390880
+  },
+  {
+    "name": "still-photography-acceptance/fixture/photographs/ENGINE_TEST_HDR_3.png",
+    "bytes": 298968,
+    "compressed_bytes": 298963
+  },
+  {
+    "name": "still-photography-acceptance/fixture/photographs/ENGINE_TEST_PANORAMA_1.png",
+    "bytes": 234310,
+    "compressed_bytes": 229746
+  },
+  {
+    "name": "still-photography-acceptance/fixture/photographs/ENGINE_TEST_PANORAMA_3.png",
+    "bytes": 261767,
+    "compressed_bytes": 256200
+  },
+  {
+    "name": "still-photography-acceptance/fixture/prepare-passed.json",
+    "bytes": 17404,
+    "compressed_bytes": 6262
+  },
+  {
+    "name": "still-photography-acceptance/fixture/workspace/jobs/764be73f55fe48b1860ead0bf27e7579.json",
+    "bytes": 1451,
+    "compressed_bytes": 706
+  },
+  {
+    "name": "still-photography-acceptance/fixture/photographs/ENGINE_TEST_PANORAMA_2.png",
+    "bytes": 239446,
+    "compressed_bytes": 233517
+  },
+  {
+    "name": "still-photography-acceptance/fixture/workspace/jobs/ac2081e0dd874fec95bef5bb518474af.json",
+    "bytes": 13804,
+    "compressed_bytes": 3140
+  },
+  {
+    "name": "still-photography-acceptance/fixture/workspace/jobs/afa62568024345db931c70dbe8058294.json",
+    "bytes": 47743,
+    "compressed_bytes": 12594
+  },
+  {
+    "name": "still-photography-acceptance/fixture/workspace/jobs/d7f6026ce87c4ecdaaea9714b228415f.json",
+    "bytes": 685,
+    "compressed_bytes": 406
+  },
+  {
+    "name": "still-photography-acceptance/fixture/workspace/jobs/d0776e92cf0a4eb79f3318578c3c884d.json",
+    "bytes": 687,
+    "compressed_bytes": 363
+  },
+  {
+    "name": "still-photography-acceptance/fixture/workspace/last-session-exit.json",
+    "bytes": 138,
+    "compressed_bytes": 111
+  },
+  {
+    "name": "still-photography-acceptance/fixture/workspace/projects/41968e01a262465c8b4b731086efd772/assets.json",
+    "bytes": 8454,
+    "compressed_bytes": 1669
+  },
+  {
+    "name": "still-photography-acceptance/fixture/workspace/projects/41968e01a262465c8b4b731086efd772/imaging/outputs/ac2081e0dd874fec95bef5bb518474af/receipt.json",
+    "bytes": 7815,
+    "compressed_bytes": 2291
+  },
+  {
+    "name": "still-photography-acceptance/fixture/workspace/projects/41968e01a262465c8b4b731086efd772/imaging/outputs/ac2081e0dd874fec95bef5bb518474af/display.png",
+    "bytes": 532218,
+    "compressed_bytes": 525842
+  },
+  {
+    "name": "still-photography-acceptance/fixture/workspace/projects/41968e01a262465c8b4b731086efd772/imaging/outputs/afa62568024345db931c70dbe8058294/display.png",
+    "bytes": 366038,
+    "compressed_bytes": 366040
+  },
+  {
+    "name": "still-photography-acceptance/fixture/workspace/projects/41968e01a262465c8b4b731086efd772/imaging/outputs/afa62568024345db931c70dbe8058294/motion.png",
+    "bytes": 2339,
+    "compressed_bytes": 1090
+  },
+  {
+    "name": "still-photography-acceptance/fixture/workspace/projects/41968e01a262465c8b4b731086efd772/imaging/outputs/afa62568024345db931c70dbe8058294/receipt.json",
+    "bytes": 35947,
+    "compressed_bytes": 10799
+  },
+  {
+    "name": "still-photography-acceptance/fixture/workspace/projects/41968e01a262465c8b4b731086efd772/media/39f74aee803741db9ec73f5351fd656b.png",
+    "bytes": 234310,
+    "compressed_bytes": 229746
+  },
+  {
+    "name": "still-photography-acceptance/fixture/workspace/projects/41968e01a262465c8b4b731086efd772/media/765df6d6b23d4705b73556ab9e3dc8db.png",
+    "bytes": 390763,
+    "compressed_bytes": 390880
+  },
+  {
+    "name": "still-photography-acceptance/fixture/workspace/projects/41968e01a262465c8b4b731086efd772/media/9603188047074e99afff66b6a495655e.png",
+    "bytes": 261767,
+    "compressed_bytes": 256200
+  },
+  {
+    "name": "still-photography-acceptance/fixture/workspace/projects/41968e01a262465c8b4b731086efd772/media/a4b1d5fb5032444bb671288fdfabac73.png",
+    "bytes": 532218,
+    "compressed_bytes": 525842
+  },
+  {
+    "name": "still-photography-acceptance/fixture/workspace/projects/41968e01a262465c8b4b731086efd772/media/c97f1d8c5a9046c0ab989c7b8c444fbb.png",
+    "bytes": 366038,
+    "compressed_bytes": 366040
+  },
+  {
+    "name": "still-photography-acceptance/fixture/workspace/projects/41968e01a262465c8b4b731086efd772/media/b30540e7605949d9bd64c10b24c9a375.png",
+    "bytes": 383157,
+    "compressed_bytes": 383271
+  },
+  {
+    "name": "still-photography-acceptance/fixture/workspace/projects/41968e01a262465c8b4b731086efd772/media/f01bd56c899d4d91a277515f74dd9347.png",
+    "bytes": 239446,
+    "compressed_bytes": 233517
+  },
+  {
+    "name": "still-photography-acceptance/fixture/workspace/projects/41968e01a262465c8b4b731086efd772/media/fce1bdf166c148148b194a7b4b0f0d91.png",
+    "bytes": 298968,
+    "compressed_bytes": 298963
+  },
+  {
+    "name": "still-photography-acceptance/fixture/workspace/projects/41968e01a262465c8b4b731086efd772/project.json",
+    "bytes": 12105,
+    "compressed_bytes": 2405
+  },
+  {
+    "name": "still-photography-acceptance/fixture/workspace/projects/4f725e88bf1c40b190a848b99301ab00/assets.json",
+    "bytes": 8454,
+    "compressed_bytes": 1658
+  },
+  {
+    "name": "still-photography-acceptance/fixture/workspace/projects/4f725e88bf1c40b190a848b99301ab00/exports/764be73f55fe48b1860ead0bf27e7579.json",
+    "bytes": 13836,
+    "compressed_bytes": 2709
+  },
+  {
+    "name": "still-photography-acceptance/fixture/workspace/projects/4f725e88bf1c40b190a848b99301ab00/exports/d0776e92cf0a4eb79f3318578c3c884d.json",
+    "bytes": 462,
+    "compressed_bytes": 272
+  },
+  {
+    "name": "still-photography-acceptance/fixture/workspace/projects/4f725e88bf1c40b190a848b99301ab00/imaging/outputs/ac2081e0dd874fec95bef5bb518474af/display.png",
+    "bytes": 532218,
+    "compressed_bytes": 525842
+  },
+  {
+    "name": "still-photography-acceptance/fixture/workspace/projects/4f725e88bf1c40b190a848b99301ab00/imaging/outputs/ac2081e0dd874fec95bef5bb518474af/receipt.json",
+    "bytes": 7815,
+    "compressed_bytes": 2291
+  },
+  {
+    "name": "still-photography-acceptance/fixture/workspace/projects/4f725e88bf1c40b190a848b99301ab00/imaging/outputs/afa62568024345db931c70dbe8058294/display.png",
+    "bytes": 366038,
+    "compressed_bytes": 366040
+  },
+  {
+    "name": "still-photography-acceptance/fixture/workspace/projects/4f725e88bf1c40b190a848b99301ab00/imaging/outputs/afa62568024345db931c70dbe8058294/motion.png",
+    "bytes": 2339,
+    "compressed_bytes": 1090
+  },
+  {
+    "name": "still-photography-acceptance/fixture/workspace/projects/4f725e88bf1c40b190a848b99301ab00/imaging/outputs/afa62568024345db931c70dbe8058294/receipt.json",
+    "bytes": 35947,
+    "compressed_bytes": 10799
+  },
+  {
+    "name": "still-photography-acceptance/fixture/workspace/projects/4f725e88bf1c40b190a848b99301ab00/media/765df6d6b23d4705b73556ab9e3dc8db.png",
+    "bytes": 390763,
+    "compressed_bytes": 390880
+  },
+  {
+    "name": "still-photography-acceptance/fixture/workspace/projects/4f725e88bf1c40b190a848b99301ab00/media/39f74aee803741db9ec73f5351fd656b.png",
+    "bytes": 234310,
+    "compressed_bytes": 229746
+  },
+  {
+    "name": "still-photography-acceptance/fixture/workspace/projects/4f725e88bf1c40b190a848b99301ab00/media/9603188047074e99afff66b6a495655e.png",
+    "bytes": 261767,
+    "compressed_bytes": 256200
+  },
+  {
+    "name": "still-photography-acceptance/fixture/workspace/projects/4f725e88bf1c40b190a848b99301ab00/media/a4b1d5fb5032444bb671288fdfabac73.png",
+    "bytes": 532218,
+    "compressed_bytes": 525842
+  },
+  {
+    "name": "still-photography-acceptance/fixture/workspace/projects/4f725e88bf1c40b190a848b99301ab00/media/b30540e7605949d9bd64c10b24c9a375.png",
+    "bytes": 383157,
+    "compressed_bytes": 383271
+  },
+  {
+    "name": "still-photography-acceptance/fixture/workspace/projects/4f725e88bf1c40b190a848b99301ab00/media/f01bd56c899d4d91a277515f74dd9347.png",
+    "bytes": 239446,
+    "compressed_bytes": 233517
+  },
+  {
+    "name": "still-photography-acceptance/fixture/workspace/projects/4f725e88bf1c40b190a848b99301ab00/media/c97f1d8c5a9046c0ab989c7b8c444fbb.png",
+    "bytes": 366038,
+    "compressed_bytes": 366040
+  },
+  {
+    "name": "still-photography-acceptance/fixture/workspace/projects/4f725e88bf1c40b190a848b99301ab00/media/fce1bdf166c148148b194a7b4b0f0d91.png",
+    "bytes": 298968,
+    "compressed_bytes": 298963
+  },
+  {
+    "name": "still-photography-acceptance/fixture/workspace/projects/4f725e88bf1c40b190a848b99301ab00/previews/8cb24fba6d53f6f6ca166e8f9e4945f0693f33661a887e8e525deb8d1d993f45.png",
+    "bytes": 99518,
+    "compressed_bytes": 99536
+  },
+  {
+    "name": "still-photography-acceptance/fixture/workspace/projects/4f725e88bf1c40b190a848b99301ab00/previews/b7601bc20c7bd2bdc9292081cdb5a3a741b57abb855e278b7b2ec0031e5ea04e.png",
+    "bytes": 53441,
+    "compressed_bytes": 53031
+  },
+  {
+    "name": "still-photography-acceptance/fixture/workspace/projects/4f725e88bf1c40b190a848b99301ab00/previews/ce68f9cceb8ae68dc1dd461d9873b3765856b9a2ed4cf6b3c56f895e122594cb.png",
+    "bytes": 99518,
+    "compressed_bytes": 99536
+  },
+  {
+    "name": "still-photography-acceptance/fixture/workspace/projects/4f725e88bf1c40b190a848b99301ab00/project.json",
+    "bytes": 11768,
+    "compressed_bytes": 2213
+  },
+  {
+    "name": "still-photography-acceptance/fixture/workspace/projects/4f725e88bf1c40b190a848b99301ab00/versions/000000000001.json",
+    "bytes": 560,
+    "compressed_bytes": 324
+  },
+  {
+    "name": "still-photography-acceptance/fixture/workspace/projects/4f725e88bf1c40b190a848b99301ab00/versions/000000000002.json",
+    "bytes": 5817,
+    "compressed_bytes": 1085
+  },
+  {
+    "name": "still-photography-acceptance/fixture/workspace/projects/4f725e88bf1c40b190a848b99301ab00/versions/000000000003.json",
+    "bytes": 5817,
+    "compressed_bytes": 1085
+  },
+  {
+    "name": "still-photography-acceptance/fixture/workspace/projects/4f725e88bf1c40b190a848b99301ab00/versions/000000000004.json",
+    "bytes": 8165,
+    "compressed_bytes": 1653
+  },
+  {
+    "name": "still-photography-acceptance/fixture/workspace/projects/4f725e88bf1c40b190a848b99301ab00/versions/000000000005.json",
+    "bytes": 11468,
+    "compressed_bytes": 2268
+  },
+  {
+    "name": "still-photography-acceptance/fixture/workspace/projects/bd7637b0f9584e09af3b8626a77c1c77/assets.json",
+    "bytes": 3,
+    "compressed_bytes": 5
+  },
+  {
+    "name": "still-photography-acceptance/fixture/workspace/projects/bd7637b0f9584e09af3b8626a77c1c77/project.json",
+    "bytes": 356,
+    "compressed_bytes": 229
+  },
+  {
+    "name": "still-photography-acceptance/fixture/workspace/projects/4f725e88bf1c40b190a848b99301ab00/versions/000000000006.json",
+    "bytes": 12759,
+    "compressed_bytes": 2322
+  },
+  {
+    "name": "still-photography-acceptance/hdr/ENGINE_TEST_still_photography.png",
+    "bytes": 409344,
+    "compressed_bytes": 405524
+  },
+  {
+    "name": "still-photography-acceptance/hdr/native_downloads/display.png",
+    "bytes": 366038,
+    "compressed_bytes": 366040
+  },
+  {
+    "name": "still-photography-acceptance/hdr/native_downloads/motion.png",
+    "bytes": 2339,
+    "compressed_bytes": 1090
+  },
+  {
+    "name": "still-photography-acceptance/hdr/ENGINE_TEST_still_photography_report.json",
+    "bytes": 39447,
+    "compressed_bytes": 8137
+  },
+  {
+    "name": "still-photography-acceptance/hdr/native_downloads/receipt.json",
+    "bytes": 35947,
+    "compressed_bytes": 10799
+  },
+  {
+    "name": "still-photography-acceptance/hdr/owned-jobs.json",
+    "bytes": 51771,
+    "compressed_bytes": 12550
+  },
+  {
+    "name": "still-photography-acceptance/import/ENGINE_TEST_still_photography.png",
+    "bytes": 286988,
+    "compressed_bytes": 282161
+  },
+  {
+    "name": "still-photography-acceptance/import/ENGINE_TEST_still_photography_report.json",
+    "bytes": 35539,
+    "compressed_bytes": 7181
+  },
+  {
+    "name": "still-photography-acceptance/import/owned-jobs.json",
+    "bytes": 3,
+    "compressed_bytes": 5
+  },
+  {
+    "name": "still-photography-acceptance/panorama/ENGINE_TEST_still_photography.png",
+    "bytes": 295120,
+    "compressed_bytes": 290287
+  },
+  {
+    "name": "still-photography-acceptance/panorama/ENGINE_TEST_still_photography_report.json",
+    "bytes": 38920,
+    "compressed_bytes": 8069
+  },
+  {
+    "name": "still-photography-acceptance/panorama/native_downloads/display.png",
+    "bytes": 532218,
+    "compressed_bytes": 525842
+  },
+  {
+    "name": "still-photography-acceptance/panorama/native_downloads/receipt.json",
+    "bytes": 7815,
+    "compressed_bytes": 2291
+  },
+  {
+    "name": "still-photography-acceptance/panorama/owned-jobs.json",
+    "bytes": 67022,
+    "compressed_bytes": 15551
+  },
+  {
+    "name": "still-photography-acceptance/phase-summary.json",
+    "bytes": 747,
+    "compressed_bytes": 198
+  },
+  {
+    "name": "still-photography-acceptance/prepare/ENGINE_TEST_still_photography_report.json",
+    "bytes": 34959,
+    "compressed_bytes": 6871
+  },
+  {
+    "name": "still-photography-acceptance/prepare/owned-jobs.json",
+    "bytes": 3,
+    "compressed_bytes": 5
+  },
+  {
+    "name": "still-photography-acceptance/source-inventory.json",
+    "bytes": 16074,
+    "compressed_bytes": 6069
+  }
+]

@@ -1,4 +1,18 @@
 SHELL := /bin/bash
+
+.PHONY: studio studio-doctor studio-test studio-install-macos
+studio:
+	python3 scripts/studio/server.py --open
+
+studio-doctor:
+	python3 scripts/studio/server.py --doctor
+
+studio-test:
+	python3 -m unittest discover -s scripts/studio -p 'test_*.py' -v
+
+studio-install-macos:
+	python3 scripts/studio/install_macos.py
+
 FILM := THE_LAST_RENDER
 OUT := dist/films/$(FILM)/$(FILM).mp4
 SOURCE_SHOTS := source/films/$(FILM)/shots
@@ -111,3 +125,4 @@ source-shot-one-native: native-backend-status
 
 film-native: qc-stack native-backend-status
 	VIDEO_GEN_COMMAND="$(CURDIR)/scripts/backends/cinematicum-native-comfyui-backend.mjs" $(MAKE) film
+

@@ -1,0 +1,2996 @@
+{
+  "base_commit": "a031a04e19007f7bac252c1f5b0f8d66db15371a",
+  "files": [
+    {
+      "bytes": 268,
+      "git_blob": "1a2807c43c345c0eafd59035a050fb995e5b1d37",
+      "path": ".github/workflows/director-engine-verification.yml",
+      "sha256": "57ac3e29fcc86d97d04de65421fbfca3850ac46d7ca6c921533048c9d63b70fa"
+    },
+    {
+      "bytes": 532,
+      "git_blob": "c741a0112c0e25fb320bc9fef75ada3d434d065c",
+      "path": ".github/workflows/external-auditor-pack-consumption.yml",
+      "sha256": "a97605a5d08407a96c462d7fbf0b7ba695c054c59c1a868e05918cbd03d56747"
+    },
+    {
+      "bytes": 531,
+      "git_blob": "99c298447b144eb10f092cde10aa1a62d046951c",
+      "path": ".github/workflows/external-auditor-pack.yml",
+      "sha256": "27d1bda9a5d72cacdc9347036d3bb1a6faffc9369fc313f79ab78718df790974"
+    },
+    {
+      "bytes": 536,
+      "git_blob": "7bb5bb354936919843ab4f0adbef57a9ac2c3cc2",
+      "path": ".github/workflows/godcut-verification.yml",
+      "sha256": "15028435bd08249cdb53de1260c5e3f65a0795b5c1aeac5e772a606c16f05c9b"
+    },
+    {
+      "bytes": 260,
+      "git_blob": "ae71355980b3a5bf648e9e67de2ee0b62ff49779",
+      "path": ".github/workflows/godstudio-verification.yml",
+      "sha256": "e19c52f7af3624f152ec50c16eefa0d5cfa9b20eb1dd756d3827786d9559a881"
+    },
+    {
+      "bytes": 407,
+      "git_blob": "cb812f81a597d4c252bdd83199ca9b7286105a12",
+      "path": ".github/workflows/installable-product-boundary-verification.yml",
+      "sha256": "70c968f6323ad048e9d6a78caffbab14060c6b9447d4322da64b65df0c0958aa"
+    },
+    {
+      "bytes": 429,
+      "git_blob": "cdbddb543a89204dd515b62abde0724fcb06b559",
+      "path": ".github/workflows/no-toy-film-stack.yml",
+      "sha256": "f3ae7d81b6578dac0325b5222a615f135275fd8b84474aa43440b81d5d8beba4"
+    },
+    {
+      "bytes": 413,
+      "git_blob": "affa2fb6ebfe764000ff771db568a668f503d219",
+      "path": ".github/workflows/outsider-reproducible-release.yml",
+      "sha256": "eef6930d157c9bf2582c2e741dbc71f88ec3467ffe50cc231c7755c900dfd859"
+    },
+    {
+      "bytes": 311,
+      "git_blob": "1a3be943f8d8a38c8ec38d630d86ff718081f354",
+      "path": ".github/workflows/product-boundary-verification.yml",
+      "sha256": "071b7c90b39501c8a19456aad8bd6730736849f654a3d3f93a3a3d810969ae84"
+    },
+    {
+      "bytes": 381,
+      "git_blob": "81a1c3dc4187375649577475dfb1757c77414db6",
+      "path": ".github/workflows/public-auditor-runner.yml",
+      "sha256": "5099bdbee8ba9ed6563eeff5e0d9d337ae87bb317722168ad0eb5fd65b06f9ad"
+    },
+    {
+      "bytes": 501,
+      "git_blob": "b3f2f7832e1ac52bb421983ca7abd6d4ce76c90a",
+      "path": ".github/workflows/public-release-consumption.yml",
+      "sha256": "313d3ede1dec877168478cbadbf34e6d0974d8b7108fb420aa5092f2189f9a6e"
+    },
+    {
+      "bytes": 549,
+      "git_blob": "e6c7a0e99d8d36e78651938d772fb28206effba6",
+      "path": ".github/workflows/public-release-lineage.yml",
+      "sha256": "9f14f93d0f8d386bab22cbbb87ebc453799510712a1962605eb3afc783bc895d"
+    },
+    {
+      "bytes": 5035,
+      "git_blob": "67f8d1e6331ece4106b53bfb68442f3180327232",
+      "path": ".github/workflows/studio-verification.yml",
+      "sha256": "6d155ccd34763363c8842cf6456ff5c9964132b4a63be012b503a48018c08e5e"
+    },
+    {
+      "bytes": 214,
+      "git_blob": "3941bed5a724fd4f8b381286297c6c93a8459579",
+      "path": ".gitignore",
+      "sha256": "cece990534d97f40eb155b6c5b4632505b82db098d3219750419d8b43a94f41d"
+    },
+    {
+      "bytes": 258,
+      "git_blob": "c61e6e3f3833f72941c514ad94772ef667407d47",
+      "path": "LICENSE",
+      "sha256": "36197db5fa45c7f07a8a1d933383e1172222ee401c14c83ae8f53d7095365c8e"
+    },
+    {
+      "bytes": 5466,
+      "git_blob": "08eb8101346aa4db788954112c98980a27ffdc06",
+      "path": "Makefile",
+      "sha256": "02889be22ef173df6e8ad8a152e80f6f466dffff5c9e6abfc463d17aad7b4714"
+    },
+    {
+      "bytes": 16986,
+      "git_blob": "8d12e5b4abf60fe1db0e4c71a1cc0d4ae5e6afda",
+      "path": "README.md",
+      "sha256": "37a7cfc7b9f1132a3ef6efb3e646506db2121412b7ff48b815add5727ac35e1b"
+    },
+    {
+      "bytes": 1100,
+      "git_blob": "10bec2add10d6361d6392def9bd3539ef557f0d8",
+      "path": "package.json",
+      "sha256": "03a0a1bfacca240a6b881fe285322026a6041a2173554d8949e433e8f544d470"
+    },
+    {
+      "bytes": 336,
+      "git_blob": "dbdbdc8b095469c40db08fa204d4c715e8712706",
+      "path": "production/THE_LAST_RENDER/camera/CAMERA_PLAN.md",
+      "sha256": "a46d48ad98f6a6d5e6a19dc60cc97626308bca6a0ad46061c439fe8e5843c6c7"
+    },
+    {
+      "bytes": 456,
+      "git_blob": "4c898185f67fdfca8bd1ca25565ac28dd54d75c6",
+      "path": "production/THE_LAST_RENDER/color/look.json",
+      "sha256": "c989d8b4cfa995dd8a1f41742e0ecfa90e7feee6d471c9224429e7c7403ce649"
+    },
+    {
+      "bytes": 438,
+      "git_blob": "791840516c9b57ff69e9a23f8470dade7e920869",
+      "path": "production/THE_LAST_RENDER/contracts/REALISTIC_FILM_STACK_CONTRACT.md",
+      "sha256": "10b8be34a08035230bdc307367b12b57e92d3e12d0bd5cfc36bc47fba515a35b"
+    },
+    {
+      "bytes": 806,
+      "git_blob": "f25342571299a222f62d0a6c956cd79cab7cb3b6",
+      "path": "production/THE_LAST_RENDER/prompts/001_service_road_rain.json",
+      "sha256": "0a68107f935c3dff8d9c4c552c2de05f08dc07d594b051d8ef4fa2467d7c0ecb"
+    },
+    {
+      "bytes": 785,
+      "git_blob": "f79bf6c58a0aadf6ae8d66e3e2627b69ec5fe1db",
+      "path": "production/THE_LAST_RENDER/prompts/002_facility_wide.json",
+      "sha256": "7a6824d01551d155d83abc23b07fb773d3a07750faa6e96c2cc152c5a3cbccd2"
+    },
+    {
+      "bytes": 803,
+      "git_blob": "1d1b41e575e0d864525f93eee76354ecc066d34d",
+      "path": "production/THE_LAST_RENDER/prompts/003_security_light_threshold.json",
+      "sha256": "ca797400dbe777384a5832451636b477fdc4032b786e491754b89be886ed1151"
+    },
+    {
+      "bytes": 786,
+      "git_blob": "58a2abbed637cd6ab90dc401ee9bd6e39c97bdcc",
+      "path": "production/THE_LAST_RENDER/prompts/004_door_access_panel.json",
+      "sha256": "b08c2ca30cdaff866a8748ffe1ce15877a12a3ce44288dc3277a109f0027452c"
+    },
+    {
+      "bytes": 784,
+      "git_blob": "ad5ef18a373d6f053d35b6569298b7816c619731",
+      "path": "production/THE_LAST_RENDER/prompts/005_door_refuses_body.json",
+      "sha256": "8241f3357ac07d42bcf16b8ec8e4438d4be023c551d4ffd190bb9265dcc0dac0"
+    },
+    {
+      "bytes": 783,
+      "git_blob": "faf2945930d5885608718776540bf38eed43ac96",
+      "path": "production/THE_LAST_RENDER/prompts/006_corridor_tracking.json",
+      "sha256": "03128ea34485e3fd6d1e1f44fa4ebf0df5d6fa072b2a2b1898288ad14aebfa65"
+    },
+    {
+      "bytes": 791,
+      "git_blob": "2ff1c125db8ba32107d1b766a61621a25c7cda11",
+      "path": "production/THE_LAST_RENDER/prompts/007_monitor_wall_loop.json",
+      "sha256": "8941f52e8147b70495a58689a0c7e05588e867d03bb43eaa60254a8fee732024"
+    },
+    {
+      "bytes": 793,
+      "git_blob": "518bec850c4f647d687a0446ac188d6a98233b24",
+      "path": "production/THE_LAST_RENDER/prompts/008_stairwell_descent.json",
+      "sha256": "d903439f6b80f974ee39d36e446869a6603e175bfa826bdab10c08fff74b5fd1"
+    },
+    {
+      "bytes": 794,
+      "git_blob": "eee32c8b279de80b056cc6baa72a7396ca6d8fb2",
+      "path": "production/THE_LAST_RENDER/prompts/009_machine_room_reveal.json",
+      "sha256": "aadce174251287695bda1c9bed3a356e873f2e64b5b845df7bbbc16af8ce3959"
+    },
+    {
+      "bytes": 801,
+      "git_blob": "07c06d0b8afb1d53f3603e7788f7d539f98f3c69",
+      "path": "production/THE_LAST_RENDER/prompts/010_technician_against_machine.json",
+      "sha256": "34a7433ff07a9e25fea5efaa43f08486be567e0ede18747cc499153979c5203f"
+    },
+    {
+      "bytes": 780,
+      "git_blob": "24ccd41472814b3fc1da538a470a60133136b75b",
+      "path": "production/THE_LAST_RENDER/prompts/011_switch_macro_hesitation.json",
+      "sha256": "8a019cf55cf47a965532b658567fa80f7a6009345478615604b17c19911fdd19"
+    },
+    {
+      "bytes": 763,
+      "git_blob": "133f1611577e209f137068b1d9ef0a447b900a70",
+      "path": "production/THE_LAST_RENDER/prompts/012_switch_pull.json",
+      "sha256": "6d8e384b4cde10b4bf2ea9c7468c4d894d691f99d60dd9fc5783e51dced29380"
+    },
+    {
+      "bytes": 791,
+      "git_blob": "9e4812503da59884660477e924faafde4925d611",
+      "path": "production/THE_LAST_RENDER/prompts/013_render_rupture.json",
+      "sha256": "3c84c9416f46690c6188cc4b52d39fe67c11ada6472ddf0ec9517c828a861f0a"
+    },
+    {
+      "bytes": 771,
+      "git_blob": "99d705716ff0225353bf485c0e3f96fb5fb52f66",
+      "path": "production/THE_LAST_RENDER/prompts/014_machine_blackout.json",
+      "sha256": "d9d805db6856414088a33f42750f40ef17ff1db5650dd6b69501fb8b950853a7"
+    },
+    {
+      "bytes": 787,
+      "git_blob": "a6513b8b76c581e6872f74881ca0d7ab403c137e",
+      "path": "production/THE_LAST_RENDER/prompts/015_dead_screen_reflection.json",
+      "sha256": "3d5de675f5f62741fcac68de51fd7a428909a06c6af694abb2bce248cd96cac8"
+    },
+    {
+      "bytes": 790,
+      "git_blob": "970d0a01d7ff86a6941daa116550350fc2e02448",
+      "path": "production/THE_LAST_RENDER/prompts/016_return_corridor_silence.json",
+      "sha256": "66b836d89da1b3ac8e50d2bb43f6d107758c4c730a302b4a5c404f763333819b"
+    },
+    {
+      "bytes": 744,
+      "git_blob": "1ea76adf391e221b8dd92133291517e1fb5ff509",
+      "path": "production/THE_LAST_RENDER/prompts/017_dawn_exit.json",
+      "sha256": "4deda459d9cdfb2afa5aef0ca0ceed12c32c5d49e1248b6b1cf7382929f84b70"
+    },
+    {
+      "bytes": 783,
+      "git_blob": "6f8cbbe33dabe710a103d465cb0b635041c89c6d",
+      "path": "production/THE_LAST_RENDER/prompts/018_empty_facility_lockoff.json",
+      "sha256": "332ddece9238d8db2c99b98a085adb33a7fcbc56887f38070232091346040623"
+    },
+    {
+      "bytes": 4432,
+      "git_blob": "ef4c0bae1230771823eb7d0dfd56e7dd3834a960",
+      "path": "production/THE_LAST_RENDER/shots/shotlist.json",
+      "sha256": "b65b08594334c902a99eadd560fa703fd1a5b4dfeba00f18a06947bcfd8a380b"
+    },
+    {
+      "bytes": 365,
+      "git_blob": "8fb57481d8710f0518f5c90acdd97411f3438d3b",
+      "path": "production/THE_LAST_RENDER/sound/sound_design_plan.json",
+      "sha256": "df4705ebc737f110e0ecf8ea12c1f7ab785f023a8e96194e9b23dd0bc91e8ceb"
+    },
+    {
+      "bytes": 1058,
+      "git_blob": "a90ffd89689bce088696b4c60cb9fdabe14e1f3f",
+      "path": "production/THE_LAST_RENDER/story/SCREENPLAY.md",
+      "sha256": "0c87d5756b869a5573c6d150db7e3ef623662145a6ce13f46b98ead0341ebdfa"
+    },
+    {
+      "bytes": 494,
+      "git_blob": "3fb77bf6cd29eaf7d751da4fe15692f79498b5de",
+      "path": "production/THE_LAST_RENDER/story/TREATMENT.md",
+      "sha256": "f87ab6eaf22e7716b4fdce29be98aa8d86677cf2de3bb6fa03b490541de63fee"
+    },
+    {
+      "bytes": 436,
+      "git_blob": "112a5404578745abe8bdb13cc5b6eb77f04888b1",
+      "path": "production/THE_LAST_RENDER/workflows/README.md",
+      "sha256": "69ed646abe36bd550c87ef94c2149db4c62b3854939d93097dc87334fd0bbdaa"
+    },
+    {
+      "bytes": 57746,
+      "git_blob": "d5b15b978fdad73703e678b9f893db893e0a72fc",
+      "path": "production/THE_LAST_RENDER/workflows/comfyui-api.json",
+      "sha256": "855acd705b603978736f1ef14bf53334784e351fe16bb8318df09c6f97fb98e7"
+    },
+    {
+      "bytes": 13184,
+      "git_blob": "99c7d8ce2caf2fcf55e48e0e8a4e07b49228dad7",
+      "path": "scripts/build-case-001-director-engine.mjs",
+      "sha256": "5ef8e76f4a3ed0a1b3c9c362d06d9de7b40b69a8c4a7bb4d6aa69344d1faaa33"
+    },
+    {
+      "bytes": 9060,
+      "git_blob": "532783ddd6c85f41bc6177c51df4e63282f02ba2",
+      "path": "scripts/build-case-001-godstudio.mjs",
+      "sha256": "6e4e40525d53c573b7e3e136a67934e840e20de888e0f6d7a27f05c394c11152"
+    },
+    {
+      "bytes": 13054,
+      "git_blob": "c2ae13b8872fa91cbcc6c75bd933c2b348b79471",
+      "path": "scripts/compile-case-001-godcut.mjs",
+      "sha256": "84eee0bf12d8eeed6ee061320d7bfa4aaf4a0ab64613c2ac5c407c2e298ab300"
+    },
+    {
+      "bytes": 290,
+      "git_blob": "a3f2381a8424edc0f43bbc38a63d3b5f27d139c6",
+      "path": "scripts/example-video-gen-command.sh",
+      "sha256": "2c1feb4dcd3912984ed8487a6a48c332ec117511837321ff56467a2b859cfd39"
+    },
+    {
+      "bytes": 5335,
+      "git_blob": "21e93774d44d0230d22d745b834fd9090d8a4c0d",
+      "path": "scripts/export-case-001-release-bundle.mjs",
+      "sha256": "d3a701562fc253a30bdb9bb60048135f70b30641a483532f94d7b9ec7f103334"
+    },
+    {
+      "bytes": 9597,
+      "git_blob": "9eef595da23e3c48b14db6598b6fb34bf13429e4",
+      "path": "scripts/export-deterministic-release-bundle.mjs",
+      "sha256": "ef402fa9471117c981d98f0a0a016e6707f5388adfabff08b834c0aeb69d626b"
+    },
+    {
+      "bytes": 2620,
+      "git_blob": "26c0fd686c1d19bd048883840b6b20a7192fd542",
+      "path": "scripts/generate-one-source-shot-with-backend.py",
+      "sha256": "7632e1393192128d1c9e3f65c9a636d1e74438061a22bbd8a1cd6957451fb5a8"
+    },
+    {
+      "bytes": 3614,
+      "git_blob": "801cbd1bff342a93c90d3f6389e579217933eec9",
+      "path": "scripts/generate-source-shots-with-backend.py",
+      "sha256": "a2c01be1c20ac841b88d7d20ee16e0399a2f4e6326155bc45b0f9552a19f7bf5"
+    },
+    {
+      "bytes": 1345,
+      "git_blob": "4c9addb6e00080f8ffb54199e4eaee8b049bcdd0",
+      "path": "scripts/qc-backend-output.py",
+      "sha256": "32525442000c14c8d61a768eea36be3dbb9b8c05b09007dbba8566100fec5315"
+    },
+    {
+      "bytes": 1705,
+      "git_blob": "46197029277c5c8e1b3203f13535e170762042f0",
+      "path": "scripts/qc-final-film-media-selftest.sh",
+      "sha256": "2d2c978a7bbc3912b9479800b464f985976c5b268abfa221cb4c11276a6d23ab"
+    },
+    {
+      "bytes": 3846,
+      "git_blob": "dcaf19b2f2d809362b9f113df34c71fe97d92bfe",
+      "path": "scripts/qc-final-film-media.py",
+      "sha256": "12338bd901cb49562593ecb9d7498260abf63b9c38f1347ccf6653c01e8d7b56"
+    },
+    {
+      "bytes": 2153,
+      "git_blob": "bd258ada27765846fa79b8aa1e89806fc6ee73dc",
+      "path": "scripts/qc-final-film.py",
+      "sha256": "3001f92e82016cfeeab6c4de2ab25ca71273a15ce632eea47ef5c6fb965f92f7"
+    },
+    {
+      "bytes": 2439,
+      "git_blob": "9aeb7d18667ef8de936050aaad483593d5834773",
+      "path": "scripts/qc-no-toy-stack.py",
+      "sha256": "f4714c9c417fb42aff3e92d76c14e74e60a29d3980df2d065fd219b2532fc221"
+    },
+    {
+      "bytes": 4663,
+      "git_blob": "cca0afacd309ff5ad45efc094fc411226ebb8c7e",
+      "path": "scripts/qc-source-shot-media.py",
+      "sha256": "c26202b1fa1108d04352b7fad7b8438229d796e20ed1419fc53d464833d7ef31"
+    },
+    {
+      "bytes": 2106,
+      "git_blob": "b1f24de395bb3f2a96501306993e3b6848a9babc",
+      "path": "scripts/qc-source-shots.py",
+      "sha256": "897ae6e5e19f570f0fe6619650d3d3519503649162f102e491d530a0c71d523d"
+    },
+    {
+      "bytes": 5103,
+      "git_blob": "cc57903a41ca4479d486eef2f24d9b37c3cec58b",
+      "path": "scripts/render-the-last-render-film.py",
+      "sha256": "f5ab94c2e7cb22abe30d0f0294d577dc0d85f6208fbf01627fd1e3b48eee8198"
+    },
+    {
+      "bytes": 153,
+      "git_blob": "7df420ef5c8db21b20e23d8032ba48e2b749f16a",
+      "path": "scripts/render-the-last-render-film.sh",
+      "sha256": "9dbd1ca5dc7d7a19a71fe41cf80d44d2848a73501b3c24848876c9a882a62b84"
+    },
+    {
+      "bytes": 59653,
+      "git_blob": "8fcbaf8a7dbae7e4ffe498ad1dbc8ad61b083a29",
+      "path": "scripts/studio/CAPABILITY_AUDIT.md",
+      "sha256": "c765d56e0f211d8902a6da55462d0c1aa261a4ef780a4ac44eebf0e6856981cc"
+    },
+    {
+      "bytes": 4802,
+      "git_blob": "efb293c1e8a29ffedf09a65c6ead905b4b1798c3",
+      "path": "scripts/studio/FEATURES_0_10.md",
+      "sha256": "34107ce0a73ac77adcc54abbddb25991fd697101368143e8f2aabba925fef94b"
+    },
+    {
+      "bytes": 3814,
+      "git_blob": "022ff2f1047dc1e76e7823bfffa894a7aed98395",
+      "path": "scripts/studio/MULTICAM_SYNC.md",
+      "sha256": "2063fad43a3e0a03d30a96413c361aa2b45e9a979d86dd55f7d6c9d2c2a14bf4"
+    },
+    {
+      "bytes": 69796,
+      "git_blob": "85becf6a6d78be2224da021eaa7930b16b940e6c",
+      "path": "scripts/studio/README.md",
+      "sha256": "54f03f5741d13c96d374139148db70b027c0299c1c088fe7ecdf3deb0f47388f"
+    },
+    {
+      "bytes": 1275,
+      "git_blob": "88b29e70761e652a395fd3d5691f9a59376a52f8",
+      "path": "scripts/studio/RECOVERY_0_10.md",
+      "sha256": "3d919caf0fcb769de2877b8faabecc79d72f769d540e31910284915768bcc9b0"
+    },
+    {
+      "bytes": 53996,
+      "git_blob": "b76d783fecbfca3ebcb569f61ff3900c05245840",
+      "path": "scripts/studio/RECOVERY_SOURCE_0_10.json",
+      "sha256": "1604ac394587d16cf1bfdda01714d54d367976827423147f543d8a5123a264c4"
+    },
+    {
+      "bytes": 2200,
+      "git_blob": "1f2961f8e09c1622c5d94927fe0547e7e3df6917",
+      "path": "scripts/studio/SCENE_PROCESSING_V1.md",
+      "sha256": "1c6e0a250079c3f8677d161ccc582ef1cf04efa0f6d8db015b0dbd4b5e11472b"
+    },
+    {
+      "bytes": 3891,
+      "git_blob": "62f4094ecfb448fa889283a246c79777cca3cb3e",
+      "path": "scripts/studio/SOURCE_INTEGRITY.md",
+      "sha256": "fc9398270bce990a47d92dc9a157bae7531aec68aeef23b858d90942d3157967"
+    },
+    {
+      "bytes": 5792,
+      "git_blob": "d5797252a19dbc9696be632fa273764d764f328b",
+      "path": "scripts/studio/UNFINISHED_0_10.md",
+      "sha256": "b957b08ca180cc58d6cbb91c8680bd9aced0ec4a7002f3758326468c9482da62"
+    },
+    {
+      "bytes": 23774,
+      "git_blob": "45cd0435e3ffcbbdb4f84cc5652a8eb3f77e3aac",
+      "path": "scripts/studio/UNFINISHED_0_9.md",
+      "sha256": "e52096708ad997a88cf2cc20c86be3ec9494ccf5bff7ab4183072b960e597ccc"
+    },
+    {
+      "bytes": 4550,
+      "git_blob": "829075b2453a37508882fdb7cc0698d291913b72",
+      "path": "scripts/studio/VERIFICATION_0_10.md",
+      "sha256": "f1b5d2ab6db7526af52fb9a8cb06e6773732d61de32672e69ac0b75860cfbfc8"
+    },
+    {
+      "bytes": 7666,
+      "git_blob": "e3875f789384a9262e89bd6632c7b7423c744fb9",
+      "path": "scripts/studio/VERIFICATION_0_5.md",
+      "sha256": "56c5912356976be8f455f21d7d51b7614255d91a45ec1d2f3a0d49743bb76373"
+    },
+    {
+      "bytes": 13010,
+      "git_blob": "56f98fafa94b66a3ff86f80f7f6dc50b29d51200",
+      "path": "scripts/studio/VERIFICATION_0_6.md",
+      "sha256": "f6fa9178b9ca81dadbf0075d70c771a2151ffc873a1bdc7782c7858db5157256"
+    },
+    {
+      "bytes": 17818,
+      "git_blob": "57440cf41458e01e29d0bb9f9a4ffa51e4c86b80",
+      "path": "scripts/studio/VERIFICATION_0_7.md",
+      "sha256": "79cf908a0bedcb4788cd0b466307a5547ee774bec6425f50c43516e1c5b76d39"
+    },
+    {
+      "bytes": 9282,
+      "git_blob": "652e5e5442f428a85f6c10dbf083e6820075c8e9",
+      "path": "scripts/studio/VERIFICATION_0_8.md",
+      "sha256": "700e016b2b2ec83973c78ff4e3a959c3df8be9250e06f797c863e190f0efe5f6"
+    },
+    {
+      "bytes": 24221,
+      "git_blob": "2545525ab81e66974b31bebabe685ad14c411928",
+      "path": "scripts/studio/VERIFICATION_0_9.md",
+      "sha256": "fdb3642e7bcbaa6310f340a8bfc49851148d8cecff339814a0c023b969789bc8"
+    },
+    {
+      "bytes": 28977,
+      "git_blob": "d63dd27a44eba03f56bd14b149c8cd6ff1315b07",
+      "path": "scripts/studio/VERIFICATION_0_9_1.md",
+      "sha256": "3a9a2bb618b1ef67fdcc798c55aa1e66394c0f771a3be90fd68113291243c9ef"
+    },
+    {
+      "bytes": 46,
+      "git_blob": "fbdcd804b2faf8f3fc0e5b281f8a85258a1d31de",
+      "path": "scripts/studio/__init__.py",
+      "sha256": "aeb0750043a9ab5d35649f929fea93568eed369368531687288fac2963ac2454"
+    },
+    {
+      "bytes": 30364,
+      "git_blob": "df31874cc8f6ea94e0ac73d5b25c6f56ee45ea1d",
+      "path": "scripts/studio/adapters.py",
+      "sha256": "2ec3f1de6039c78393f77d9a8da16fcffb939646ebd805350edc2ccfb027025e"
+    },
+    {
+      "bytes": 16351,
+      "git_blob": "c1898d179e03a149d98f39fcd1e7b5a3b504eeda",
+      "path": "scripts/studio/audio_source.py",
+      "sha256": "09a6d4bd5c7c5ccb0fc4670c0e2487b68be892f1a668a38fd9373bddc5503f51"
+    },
+    {
+      "bytes": 18727,
+      "git_blob": "7f3171424ca53bdf9ffb95762d1631264d5c643a",
+      "path": "scripts/studio/bootstrap_verification_linux.py",
+      "sha256": "5c661c16b774c0d8480bfcad7e8e6766799388484ad36e3dbf10126cb7195d7d"
+    },
+    {
+      "bytes": 23781,
+      "git_blob": "c07789b20961ccef52ccbe3617a55071aa800b07",
+      "path": "scripts/studio/camera_io.py",
+      "sha256": "cf70c41b57d8e9785680cb7390a44cdf6272774cba6f767cab119b44bdde60ca"
+    },
+    {
+      "bytes": 66390,
+      "git_blob": "9b26fa976f2428fc074d00f130cada2612549ac5",
+      "path": "scripts/studio/capabilities.json",
+      "sha256": "5c254d2179be56826094856ca4dc9ad6f922a7513f4e12b24d9d0513e8eec108"
+    },
+    {
+      "bytes": 60880,
+      "git_blob": "ccaeed9340966ab95d580bb186141c20dbd0bc7d",
+      "path": "scripts/studio/collaboration.py",
+      "sha256": "ad2b241aefb1d8aa4d3571801d03ed6375008679e3145eefa23b3824de952610"
+    },
+    {
+      "bytes": 31775,
+      "git_blob": "c93bb18cec1826c3ff0619046c9ce0cc92f8d5a6",
+      "path": "scripts/studio/collaboration_store.py",
+      "sha256": "c6cade99a7de33e4b065ff5f9abbb98c97ee243bd84260a5738ac7af4baf872a"
+    },
+    {
+      "bytes": 29733,
+      "git_blob": "801d6a1772450abec12a005a8a812cce133e9841",
+      "path": "scripts/studio/color_pipeline.py",
+      "sha256": "32ed3f92da8713282e9917c470498ccdcfc10a5207e6eff6b8344413c01cab81"
+    },
+    {
+      "bytes": 77989,
+      "git_blob": "430d22adac187d62d1878d9f68ce424f5c79899a",
+      "path": "scripts/studio/compositor.py",
+      "sha256": "6f157671a97f45da51f93c27aa9b14ee68df200fc39e50bd44e19d535c2e2c29"
+    },
+    {
+      "bytes": 22242,
+      "git_blob": "4a211f30c92d5bc4f9f0dd83de80aa342196240e",
+      "path": "scripts/studio/deep_compositing.py",
+      "sha256": "c0f79f86e1e9c709e578246015eeb504fb186e0657f26134f1910b7e9e6cb504"
+    },
+    {
+      "bytes": 44486,
+      "git_blob": "1d01a60533f3b7bf31e561f2c24aab66d5dae2e6",
+      "path": "scripts/studio/deep_compositing_worker.py",
+      "sha256": "c69f0584c7d2ce11856c09a50db130ce2172b73da4caa92d44235bf07d0a2e1b"
+    },
+    {
+      "bytes": 21784,
+      "git_blob": "6f9e28c02a2357ee00e35c9f2e0f37af1ce848d2",
+      "path": "scripts/studio/editorial.py",
+      "sha256": "c1d5d24c4c0b13f6a22c0ecbbde701f86e5e77afa20525fc51ed60d5a337aa3a"
+    },
+    {
+      "bytes": 89822,
+      "git_blob": "241ba96e18e20994bcc5eb93f6bd23806c5139e6",
+      "path": "scripts/studio/engine.py",
+      "sha256": "7e8fdd91ef340e80de7af93392aaeea5fbd152f9f19a6a4267b4bd681644771c"
+    },
+    {
+      "bytes": 2434,
+      "git_blob": "194a2fb51707a14f1012eda608d4f6d6df511a08",
+      "path": "scripts/studio/fetch_verification_raw.py",
+      "sha256": "c1fd1cdc765b34bca7a4e658bead168f71834f301abe08d93ecedf5a6b189a91"
+    },
+    {
+      "bytes": 4945,
+      "git_blob": "3720adef5231a209e8abe7a7f266cdbecf1fed69",
+      "path": "scripts/studio/frame_preview.py",
+      "sha256": "8e06c5fee370cef7b0ed5a21c52440bdfe66b8dd451d4b43245940cd152c1329"
+    },
+    {
+      "bytes": 30825,
+      "git_blob": "286f0b43d9ec951490c3bc102f5b7c4a66dce197",
+      "path": "scripts/studio/generation-runtime-lock.json",
+      "sha256": "bed58809d01a894cf7717ba835aef8f73ff6325601a13b88872c53c66732da09"
+    },
+    {
+      "bytes": 15257,
+      "git_blob": "05965a20d8246616b81be757084aef4e0d4907a8",
+      "path": "scripts/studio/generation_readiness.py",
+      "sha256": "afa317958cd1271a0b4f3b4191fc91dcf5af3db93273a6df7927bb0ed1ec61fe"
+    },
+    {
+      "bytes": 30586,
+      "git_blob": "ed99fda52d843b7bc0eead77fb3c403619556dc7",
+      "path": "scripts/studio/image_worker.py",
+      "sha256": "d90a704768d7ce46205ca9de1f7840a8a70b0809c864c3760f7d5b0a6ee1c748"
+    },
+    {
+      "bytes": 2054,
+      "git_blob": "4664ed104bcde90c83afcdc8fe133825561eb91c",
+      "path": "scripts/studio/imaging-macos-arm64-py313.lock.json",
+      "sha256": "19cf27e5c2cd41c17a97085fff2c565fca58e1cb78a3c7d2eaa945a99f62ba03"
+    },
+    {
+      "bytes": 25146,
+      "git_blob": "4a44c1edbb2de3d2b4465e6ea09b6a75b52489aa",
+      "path": "scripts/studio/imaging.py",
+      "sha256": "bfd1d3bede15c35946ade43e127173ccb2d39aad3f0c84208150b5bf61621da5"
+    },
+    {
+      "bytes": 16595,
+      "git_blob": "e1215a4c3c8cc1d956daf2da8767ee8256d54c3e",
+      "path": "scripts/studio/install_imaging.py",
+      "sha256": "44c66f7b1916c93d9b228b230942036a54f1a3836444aeddf7f389553f5e7e76"
+    },
+    {
+      "bytes": 44705,
+      "git_blob": "1a119f4f5cfceaa93c831ef102f3de4bbcda5a2a",
+      "path": "scripts/studio/install_learned_tracking.py",
+      "sha256": "89301f14c6b8764cbc2f93db7dbe0e117f7c1f24f6416b3423fc076e24084294"
+    },
+    {
+      "bytes": 19719,
+      "git_blob": "7b0a072c07871ac1b4621b636353c49ae60ee7ae",
+      "path": "scripts/studio/install_macos.py",
+      "sha256": "d2b3d1b9715eb100cd6a3216bee2b790f4956008d960cf93241c18cfb19df3f8"
+    },
+    {
+      "bytes": 27059,
+      "git_blob": "18428920912b889ae8d3be8adcf299f118699de2",
+      "path": "scripts/studio/install_physical_rendering.py",
+      "sha256": "ad34a2a8bd969f1d2586f566f49aeb641f56a266216ccc9242596e89bf61a40c"
+    },
+    {
+      "bytes": 37469,
+      "git_blob": "79c916c7c02f5a1ac658a5d1e8c9c284065ded19",
+      "path": "scripts/studio/install_ray_optics.py",
+      "sha256": "f85ceffdbeabd2d1bea46b3f2b4e57a0f603af0c3d273e98dcbd8d6c16c4df01"
+    },
+    {
+      "bytes": 26771,
+      "git_blob": "40a719997a1abe5806127e7b5fe3fc124a13535c",
+      "path": "scripts/studio/install_reconstruction.py",
+      "sha256": "19254ed62d499e52a7f79afffc39bd0e96dda6096d7f61bff885fca307207517"
+    },
+    {
+      "bytes": 7497,
+      "git_blob": "a8959367d381f11789d69c13a49246083901ca5f",
+      "path": "scripts/studio/install_scene_processing_runtime.py",
+      "sha256": "f571101b8a248361f762549b2b1e0fcee9bda6abbcc08682129e7e723353f361"
+    },
+    {
+      "bytes": 17949,
+      "git_blob": "be832c2d6931d55299c89a157e5cdde3aee73d6a",
+      "path": "scripts/studio/install_tracking.py",
+      "sha256": "073a94746f9982b9b06f5b5a4ca2a310f62391ac2b119fd1595eace0067fe496"
+    },
+    {
+      "bytes": 34584,
+      "git_blob": "6d66e781fe40948f2b5ea0e14d8aa2a39feb3c85",
+      "path": "scripts/studio/interchange.py",
+      "sha256": "f3e7eafc2ac8a7d2f2b4f5b0783bf487bc7194277c2e9c5f1e6b710a78ac276e"
+    },
+    {
+      "bytes": 39091,
+      "git_blob": "cbd6c91a2a3de3ada1e3feab3b43d59b508ee820",
+      "path": "scripts/studio/learned-runtime-lock.json",
+      "sha256": "e23260b42d00fb3c3f5747f4e99fc05f4a172cd44632700b5019a076e83b00a3"
+    },
+    {
+      "bytes": 4927,
+      "git_blob": "3e061a30a76fcfae8e8112f651c3b52150e0dcb2",
+      "path": "scripts/studio/learned_tools.py",
+      "sha256": "b00cb5bded034282ba510fea65fbaf34dbad7af602e266db8cc01932d86add56"
+    },
+    {
+      "bytes": 41386,
+      "git_blob": "1d43e306a670cdb9be6da3d606815ddb067849eb",
+      "path": "scripts/studio/learned_tracking.py",
+      "sha256": "671a1a3ef60696cc06aa3696ad09f178cd56bf66c760ee0fe94ff4d910f20d23"
+    },
+    {
+      "bytes": 19576,
+      "git_blob": "fb912d11126f7b77767fc9ebd481574e1ba38b49",
+      "path": "scripts/studio/learned_tracking_worker.py",
+      "sha256": "a610ab221e3ffb88a3487ae6c04a1184c4132be5402b414ae1ee34a8b90566a3"
+    },
+    {
+      "bytes": 5364,
+      "git_blob": "7ea067b4af3b044fc45defeaee4adf2227f2e12f",
+      "path": "scripts/studio/lens_assets.py",
+      "sha256": "cb9d6d706bdf40ab7af32911a1c4c8ec0ad0a66d27ac640eda6a910e9b6f585d"
+    },
+    {
+      "bytes": 7419,
+      "git_blob": "c298f413f62ab11c96471d5fce71c6a783768e2b",
+      "path": "scripts/studio/macos/ArchiveSmoke.js",
+      "sha256": "e2797a5222bec04638dcef7eb71bec9f05741b342493690655d57197799a93ea"
+    },
+    {
+      "bytes": 1691,
+      "git_blob": "190ebd1981ae34620f0ddd7985ce8af7dfad6066",
+      "path": "scripts/studio/macos/AudioProbeWorklet.js",
+      "sha256": "4ca62d86c302bd554c3f0a99f91024b4cd60807584952b4b92998889d337b6ae"
+    },
+    {
+      "bytes": 19459,
+      "git_blob": "76182e19790abd4e293b3cfe307c0286755dac93",
+      "path": "scripts/studio/macos/AudioRoutingSmoke.js",
+      "sha256": "db8ab5e1c150fe15bb001e3319626f213371a844a3932d0d1cb64953cf5b4435"
+    },
+    {
+      "bytes": 8615,
+      "git_blob": "638e4461f143c2b74662c41f683fd4d7d647324c",
+      "path": "scripts/studio/macos/CameraImportSmoke.js",
+      "sha256": "7b9faa046923c55d079b41886ad71de6d6a09edf7bf96803861ae6b4069a47fd"
+    },
+    {
+      "bytes": 8382,
+      "git_blob": "3d1cf6509f339929dea155d06842cd53f9924db7",
+      "path": "scripts/studio/macos/ColorPipelineSmoke.js",
+      "sha256": "4181d2f23a7aa730e56f77db8ac19a6c9cd6da4de4dfe764f9fbd93dbf1bb1c3"
+    },
+    {
+      "bytes": 9163,
+      "git_blob": "56113d580b99fd9fa0ed9298653b8d5af405b023",
+      "path": "scripts/studio/macos/CompositorAnimationSmoke.js",
+      "sha256": "24dcee2b50a7092557ee402a3921bd53f099c77635ec7ae2d0f771f579030ac2"
+    },
+    {
+      "bytes": 13673,
+      "git_blob": "cc79f4e1a9d9178bdd6c99f3394654fb3c575e02",
+      "path": "scripts/studio/macos/EditingSmoke.js",
+      "sha256": "3677de5277a154cd6340e30160a4a49d1c7a2652caf1abfd35127248daed521f"
+    },
+    {
+      "bytes": 7552,
+      "git_blob": "cd8741e09ada65f774ca0b2235a5bea13c6fcbee",
+      "path": "scripts/studio/macos/EditorialSmoke.js",
+      "sha256": "c04a2f038d46c48293144c3ae961f4b298110211d861875bcad552e6b1b27ed6"
+    },
+    {
+      "bytes": 5629,
+      "git_blob": "e868e4661065adb4ac9b52c6712ad68ed11cde5d",
+      "path": "scripts/studio/macos/GeneratedTakeSmoke.js",
+      "sha256": "b4212a27c552868e05c96ffbb70fbbb1f0bf0cd858fe9f0bf858738d409440d4"
+    },
+    {
+      "bytes": 6539,
+      "git_blob": "198e48b134c72919d343f09818dca2eb03827e20",
+      "path": "scripts/studio/macos/GenerationInferenceSmoke.js",
+      "sha256": "f18b1967ae0e69b2350f783f2e82b270c96ad365446d6af5dd275e37fe207d7e"
+    },
+    {
+      "bytes": 4485,
+      "git_blob": "68d1c1a25ddfc590e1d81ac585a2709413296ff6",
+      "path": "scripts/studio/macos/GenerationSmoke.js",
+      "sha256": "379753930a61dd2947b9cf226bba15bc303a71b8af824e168273668089a7c70c"
+    },
+    {
+      "bytes": 6495,
+      "git_blob": "2192b334dfecd9ed9008ee0f3ea30b7ec22853f8",
+      "path": "scripts/studio/macos/HighPrecisionSmoke.js",
+      "sha256": "970661912b0f7a5f9cea3eb37286d90892a92e22e17e4711b7d8e636faa27621"
+    },
+    {
+      "bytes": 9068,
+      "git_blob": "65b31f46f4498471d2f3af4c602a00ef81f6f504",
+      "path": "scripts/studio/macos/ImagingSmoke.js",
+      "sha256": "1379069fefba6110510cd937febc39c08b862b13e6f1b9759c857159e3620243"
+    },
+    {
+      "bytes": 9184,
+      "git_blob": "d8efbb6f0c035e3783678c6fd4c7b284b7ad1ead",
+      "path": "scripts/studio/macos/InterchangeSmoke.js",
+      "sha256": "64e461424fdaffe56adf627a110def5bae1756f8ebf3912e312b596685cda917"
+    },
+    {
+      "bytes": 7037,
+      "git_blob": "a00e7bba6526b963ecdf53141b15f9ce3ee5e24e",
+      "path": "scripts/studio/macos/LensSmoke.js",
+      "sha256": "db295fda86ead2328c079f4ba7d94210cfdd584d41764d6632523a2cbbc2abb1"
+    },
+    {
+      "bytes": 8572,
+      "git_blob": "f666e77b94182f922031a00cbe5217478524c98e",
+      "path": "scripts/studio/macos/MediaManagementSmoke.js",
+      "sha256": "fcd1794cac2349062cae994a12682f203726fe2e4791d06e046a624a6ad2a6e7"
+    },
+    {
+      "bytes": 7017,
+      "git_blob": "d611b0bb9ab2a50518aac5dd50275f15c7b124ac",
+      "path": "scripts/studio/macos/MeshImportSmoke.js",
+      "sha256": "bd3cdcac04dab7ac7317506890151c37586632e5062d5f256098b35d07f9f927"
+    },
+    {
+      "bytes": 9982,
+      "git_blob": "1158df93178b553e21a5310ef658bf979c531914",
+      "path": "scripts/studio/macos/MeshModelingSmoke.js",
+      "sha256": "0d2e76ba8e7ff6dc26671ccabbbdd2a01db4f797c4e4d7a01fbcef14789dc907"
+    },
+    {
+      "bytes": 8141,
+      "git_blob": "07c03b27f710730dc9efbaab827bc1f5a9323784",
+      "path": "scripts/studio/macos/MultiSourceSmoke.js",
+      "sha256": "a44b92e83d4546f1018d5fd74e14bdfbe46b4f28beb112559b4a3bf82d490520"
+    },
+    {
+      "bytes": 14001,
+      "git_blob": "3d2fcea5ea622738f8d69da1b798dd035b10e023",
+      "path": "scripts/studio/macos/MulticamSyncSmoke.js",
+      "sha256": "5453267d0b593502a940bb443b30e07ae3176933ca1fcda7146c69b2f5ff1ac5"
+    },
+    {
+      "bytes": 9161,
+      "git_blob": "cf8ad9621bdba2fc7464ad6908397ce71c791ee6",
+      "path": "scripts/studio/macos/PhysicalSceneSmoke.js",
+      "sha256": "9c23ac17ca41913bc21ec2aea81f26235d205e86ba43b46b52fb677f84d70e62"
+    },
+    {
+      "bytes": 8726,
+      "git_blob": "b664aeff28e72043ebdfc97e55ba76eacb33e61f",
+      "path": "scripts/studio/macos/PlanarTrackingSmoke.js",
+      "sha256": "c420aadf738f73f5064eb55dcb1fd32f9dbf88f5e9427659cb95fae314f9b06a"
+    },
+    {
+      "bytes": 8818,
+      "git_blob": "a8609678966a94ce565335e86c66a5a595958f09",
+      "path": "scripts/studio/macos/ProductionSmoke.js",
+      "sha256": "4ddd181525c3ca718cae1d47a20597e1af632ced7429776b1bd779fdb7004111"
+    },
+    {
+      "bytes": 14766,
+      "git_blob": "a89f461d94d5a3c76555ef07ee813694db398fb0",
+      "path": "scripts/studio/macos/ReconstructionSmoke.js",
+      "sha256": "9993bb2b5fa237a54b4194ae580ceba1191cac07f0ae37dd114325e930fe679b"
+    },
+    {
+      "bytes": 3548,
+      "git_blob": "0afaad8d30e85f2d9e15adbf03f53aa6e49469ee",
+      "path": "scripts/studio/macos/RecoverySmoke.js",
+      "sha256": "b1d150003199c5c695bae36ecde18850846e1b6370dc01cb6a1ec5df30605377"
+    },
+    {
+      "bytes": 8678,
+      "git_blob": "b6967db05f908ecdb2c0060a2134bccd4d0fde8d",
+      "path": "scripts/studio/macos/RotoSmoke.js",
+      "sha256": "3dc0b3948136a89b5bae45e200d8974caacff7502510f6efd466a57006de67d3"
+    },
+    {
+      "bytes": 10250,
+      "git_blob": "60271597ad5bec8216f0c520f52a1447324db8d4",
+      "path": "scripts/studio/macos/SceneAuthoringSmoke.js",
+      "sha256": "4ef761589ef2634ce441ef84781fbbe699ab8a7725597bda508adffb141459de"
+    },
+    {
+      "bytes": 4251,
+      "git_blob": "b1f5bd555d91de1e2e177da7c5b4489ea0514eec",
+      "path": "scripts/studio/macos/SceneMastersSmoke.js",
+      "sha256": "c19da7cb9c91d1174bb4a1ef27f129131c62e9d74cef6d9dac5eb4273380bac6"
+    },
+    {
+      "bytes": 12237,
+      "git_blob": "b8c7d04f47136de4dae83288aca8d57d7799ef7e",
+      "path": "scripts/studio/macos/SceneSmoke.js",
+      "sha256": "5b588b0566ad8e386356a04f8379c2adf17d2b5371462f38a3f3e6ac25c8e0f4"
+    },
+    {
+      "bytes": 14205,
+      "git_blob": "84ab8a2ec698a8fc9dacae937b18fafa36ad43ff",
+      "path": "scripts/studio/macos/ScientificToolsSmoke.js",
+      "sha256": "8262fb21209a2003487b4b710e78605141c5326d5ac60efab59b2a88a98dc1bd"
+    },
+    {
+      "bytes": 21965,
+      "git_blob": "6851691cbf8995b1cb42e663fca9e616fd5bf4fc",
+      "path": "scripts/studio/macos/SmokeTest.swift",
+      "sha256": "f87928a4fc07c444e603337b282bb71817b48644f297bc85c5624cc0e6e8b188"
+    },
+    {
+      "bytes": 27144,
+      "git_blob": "609debf7e113d5907e97166f34b40bcd4da39706",
+      "path": "scripts/studio/macos/StudioApp.swift",
+      "sha256": "5bc3028eb4921b8e1d11f1a0e3a4ab2116c6ddcadce43a3968e6b42a0e80e79b"
+    },
+    {
+      "bytes": 2744,
+      "git_blob": "cafc8338237ad8e5bafd9130692ecab9835664aa",
+      "path": "scripts/studio/macos/StudioIcon.swift",
+      "sha256": "9be90f8566a606a664f012926c1e85f99a44b277c616fd597d51df1760a9a49b"
+    },
+    {
+      "bytes": 21727,
+      "git_blob": "bae25cd8bef09dd7c2fc1d6ca5ffd705bdac4914",
+      "path": "scripts/studio/macos/StudioToolsSmoke.js",
+      "sha256": "8da4551c892198e0cff11f9b0c54b270a8a82d52caf5d9dad0ec4b856566f57f"
+    },
+    {
+      "bytes": 3682,
+      "git_blob": "3f107b9ac3ad33e09f77a570a3c9f14b3934a31e",
+      "path": "scripts/studio/macos/TrackingSmoke.js",
+      "sha256": "0fede72653328a4a697724c7d7586296e9ebc6b12784d386aab1981219911871"
+    },
+    {
+      "bytes": 7022,
+      "git_blob": "8669caf6530da665ac25652a0a2abe9148f97016",
+      "path": "scripts/studio/macos/TrimSmoke.js",
+      "sha256": "050cf9d479ba859e63975fa94adee7a93d1afaaf22173db40971577008765e39"
+    },
+    {
+      "bytes": 22221,
+      "git_blob": "9f6020ec3cf199c57d401687776dcabdd604ce46",
+      "path": "scripts/studio/macos/verify_generated_take.py",
+      "sha256": "4af923fefddfafff551eeb1700c26a0f4a85912af4fb9b77ed9ab0d1a7c97d92"
+    },
+    {
+      "bytes": 2890,
+      "git_blob": "dc386e0eaf7137d1ba62d0a78a1e9555356359ea",
+      "path": "scripts/studio/macos/verify_metal_blend.py",
+      "sha256": "73b946bc3eea5764657cbb981c4bcc6621a49909ad5150f8dde9e2d66dbf291a"
+    },
+    {
+      "bytes": 6708,
+      "git_blob": "d959a1552cdcc77412997e6f3962755cb9a67a83",
+      "path": "scripts/studio/macos/verify_metal_result.py",
+      "sha256": "5fe9f4d8e5c3128fb4ba788ecd437924f9b9a533796ade889af20b82f186be16"
+    },
+    {
+      "bytes": 43332,
+      "git_blob": "2e8578d46825bc9936b95c04c8e97c3a3dd3e7d1",
+      "path": "scripts/studio/managed_generation.py",
+      "sha256": "79513ddb3b404885ac97ac6c14226d6a9c3d92ef609b32fa1a9e1d1928c97538"
+    },
+    {
+      "bytes": 13622,
+      "git_blob": "c8104ecb70302422a7e00c4682d8ccd48e54b1ef",
+      "path": "scripts/studio/media_management.py",
+      "sha256": "112be61405bd8e219f75482e6be1d8a1093e7d0b83754d721ad274ed2be3092f"
+    },
+    {
+      "bytes": 5318,
+      "git_blob": "9b9add0353ce1b93c10fb85a7a58fb605fbbd4c8",
+      "path": "scripts/studio/media_orientation.py",
+      "sha256": "f7e27ccee72830ca716fea86b365c7f3a513ad137a7c05e78c480b9520c5f27d"
+    },
+    {
+      "bytes": 10783,
+      "git_blob": "bb5d2a4cf8617fde89bd079c3f9cb48b5badf5f8",
+      "path": "scripts/studio/modeling_blender.py",
+      "sha256": "0c22d0cc37f152eed5d1b25f49a284be7e7fa93a1a639731302f63cac8c5339f"
+    },
+    {
+      "bytes": 46781,
+      "git_blob": "52b2536bdcd6eedfc4d6f534c6839ce533708c88",
+      "path": "scripts/studio/multicam_sync.py",
+      "sha256": "acd262f3c89b1a4501913f1d7932ce3b08f623f4221b55b90d2cb4c9821abc24"
+    },
+    {
+      "bytes": 18334,
+      "git_blob": "75e05498e433345f760814d2031429958cd58656",
+      "path": "scripts/studio/multicam_sync_worker.py",
+      "sha256": "9072efa69d3a4d7262b8f0e51f8387170920e0d13e0e808b03998c5b5be75de3"
+    },
+    {
+      "bytes": 2729,
+      "git_blob": "52ed8987ca99d621573b4b7183cf020159346e0b",
+      "path": "scripts/studio/physical-rendering-linux-x86_64-py312.lock.json",
+      "sha256": "cc367d8b2fa124315dbf7ba82e97cfaf96c09b0cc30c919c21a7f4be157457e5"
+    },
+    {
+      "bytes": 2615,
+      "git_blob": "726dfda73cf32cb2e06dff58f291585b2bafe56a",
+      "path": "scripts/studio/physical-rendering-macos-arm64-py313.lock.json",
+      "sha256": "4a7f4f4dea39e69ed14c13674494a363ad59cf7994ac5999fa1e4d3ca3bd4531"
+    },
+    {
+      "bytes": 60807,
+      "git_blob": "4c10d86340336821200aa2a51fdff3a5fb0af93a",
+      "path": "scripts/studio/physical_rendering.py",
+      "sha256": "46bc249e02716106f1bd68010eed3e074a8a6e0bfb82b163fba5f65d7e53631a"
+    },
+    {
+      "bytes": 22236,
+      "git_blob": "7150f6cca9819974a1f8601452614573633235fd",
+      "path": "scripts/studio/physical_rendering_worker.py",
+      "sha256": "fe724dcac34936301fddb0bbae9a5b4aaf1fabe675a5394170755aa78cbe3739"
+    },
+    {
+      "bytes": 19931,
+      "git_blob": "5807178eb11a0a56c704dc8907888ecd243b99f2",
+      "path": "scripts/studio/planar_tracking.py",
+      "sha256": "01c0163cc7acfa68eaf02d3f273c6c14c6a2cf6aaed412064441bd6688e4a4a9"
+    },
+    {
+      "bytes": 9136,
+      "git_blob": "0497323768b11caf26776866ea00116dd5f0bae7",
+      "path": "scripts/studio/planar_worker.py",
+      "sha256": "65f95d2d7910e40bf095c8cd8bb456afc3e134a9d43e84a9050f62ed2520e2a7"
+    },
+    {
+      "bytes": 20044,
+      "git_blob": "e758687f9c16674064eb1bf34616c65e040c2672",
+      "path": "scripts/studio/production.py",
+      "sha256": "6835782486f4232828f3eecc8d49ef0e07925cb12d1ac978826ebf9ae1cf8f37"
+    },
+    {
+      "bytes": 46710,
+      "git_blob": "55a6beb2d8dcf585b17c576e28688517a7a0284b",
+      "path": "scripts/studio/project_archive.py",
+      "sha256": "1028f91cef561af8f3f99132c08df9472f86a3ccf95b7337acc72a9bcf852246"
+    },
+    {
+      "bytes": 10300,
+      "git_blob": "d872baddf22dad1ab1cf8a87c3c4e80de0dbe1b4",
+      "path": "scripts/studio/projective_warp.py",
+      "sha256": "d5ebe0a65b2756c49a6c2b05c43b8d242e5d63dec5d30ade8c81aa8ac64aa53a"
+    },
+    {
+      "bytes": 13051,
+      "git_blob": "c37cb1e7f09153d3181584d55b7086de323886da",
+      "path": "scripts/studio/ray-optics-linux-x86_64-py312.lock.json",
+      "sha256": "46923a840cfb0a76a34ea8b17ef6c91d7e2d0e758499630f9569a73f2e7090bc"
+    },
+    {
+      "bytes": 12319,
+      "git_blob": "9864ac66a837dbc9244c3e590a5d25b6c0f89c4b",
+      "path": "scripts/studio/ray-optics-macos-arm64-py313.lock.json",
+      "sha256": "2c945f349e4f0dd013d6afef914e00f11ea51700e3a8465f800ffeeb3973cd41"
+    },
+    {
+      "bytes": 21570,
+      "git_blob": "5a2d6a3132258e53b15f88fa1f7ff4bea3ba69bb",
+      "path": "scripts/studio/ray_optics.py",
+      "sha256": "5c751bdf0082f7b1d3f18b12a0277a35955ea1eec3350c7b0d7dd6f73e9895a6"
+    },
+    {
+      "bytes": 23990,
+      "git_blob": "90610d79b23503cbee94e5d445b1bf3c1acf0582",
+      "path": "scripts/studio/ray_optics_worker.py",
+      "sha256": "48ef23c557949fa18382ffd70eaf843cedad4dde07a9ab48910b5658e07a8e1b"
+    },
+    {
+      "bytes": 2101,
+      "git_blob": "a2493da339d023d56ce951a32d8cff1c70761d28",
+      "path": "scripts/studio/reconstruction-linux-x86_64-py312.lock.json",
+      "sha256": "76ae093fd8936c486d4c42cda693b2c532051c9d7ea54feee1b71494c0b88337"
+    },
+    {
+      "bytes": 1987,
+      "git_blob": "b6479e073aef2c9b91f8f57ec711264bc58477e3",
+      "path": "scripts/studio/reconstruction-macos-arm64-py313.lock.json",
+      "sha256": "fefcf6a03f73784dc918919534151567225045c5dd4df8696564b608abe624ac"
+    },
+    {
+      "bytes": 19776,
+      "git_blob": "5630600e93b07a9269b22176a6caf697067832a1",
+      "path": "scripts/studio/reconstruction.py",
+      "sha256": "4c85c7a5702f12631bb95ac1aa0dd5cd9d27f90b1f590c34313b7f234de4891b"
+    },
+    {
+      "bytes": 17948,
+      "git_blob": "27d3b41f75742ba31dd4d1f22201803a1383968d",
+      "path": "scripts/studio/reconstruction_worker.py",
+      "sha256": "235a54e270562a3b0db6212d9eb0114f2780e0a281c73fbaa5120f8da47070e5"
+    },
+    {
+      "bytes": 7190,
+      "git_blob": "31a85044cebc6183280ebe3c203a498ba6b4f377",
+      "path": "scripts/studio/recovery.py",
+      "sha256": "26ee61d76ad3dd4c502033004c9294cb7bd8872f43c40caede174ce5f85e8db5"
+    },
+    {
+      "bytes": 1580,
+      "git_blob": "6aa958d5c1c7b3c99b2c8c87a7314264e3d34196",
+      "path": "scripts/studio/render_devices.py",
+      "sha256": "64eadcc154ef7f48f9e710807b75947e75a14e7b381939bc6a641a2f76f8f851"
+    },
+    {
+      "bytes": 12456,
+      "git_blob": "13f03a94cfe9755a912487be47f61a921409ba43",
+      "path": "scripts/studio/research/ai-motion.md",
+      "sha256": "7119eb65f666a55426bf8060ba7869eacaf13994f472ddcb478987186036a9e4"
+    },
+    {
+      "bytes": 12614,
+      "git_blob": "1213bb2ac889f0a6d5a6885b88e030703083f271",
+      "path": "scripts/studio/research/camera-optics.md",
+      "sha256": "3618e0d6310073edb31b1f21369f4645fc2bd538bcef0dd2de1141eba51c3030"
+    },
+    {
+      "bytes": 42912,
+      "git_blob": "d3ba103931520740142150e1ff777ecf8ab1df47",
+      "path": "scripts/studio/research/color-science.md",
+      "sha256": "6a3bc07ea95f4b21610506375b2cf4c46ccc41bc61c9b269536cf2809240c3c2"
+    },
+    {
+      "bytes": 22742,
+      "git_blob": "17756be8133d7b83a1d28fbb5df328049be4763c",
+      "path": "scripts/studio/research/compositing-motion.md",
+      "sha256": "4dfee38408229cec490afa04b40052ef06273b7ae810185bfd8a68019a93a63b"
+    },
+    {
+      "bytes": 18186,
+      "git_blob": "aef28bd50e70765ab6262fa7f3edc657b23a05e5",
+      "path": "scripts/studio/research/editorial.md",
+      "sha256": "ee74666c2f942ccc8562606d4fcd390f83613f721f3c94e2c6ac0c9e07fe01c0"
+    },
+    {
+      "bytes": 9872,
+      "git_blob": "8ff8a2d974dd47741d105c7647bc3f3f5ad56b4d",
+      "path": "scripts/studio/research/mesh-modeling.md",
+      "sha256": "73ec25b852b28ca78e7bfdc63c700839632eb2ffae8796da7113e806e67f63cc"
+    },
+    {
+      "bytes": 15844,
+      "git_blob": "fd51fd6e60a8882deaaf978f8afa392621eb6b76",
+      "path": "scripts/studio/research/physical-rendering.md",
+      "sha256": "0b3e403d339cc0258efcadb553a53ee461c6db745611b5dd0a6cc00e344d777c"
+    },
+    {
+      "bytes": 17667,
+      "git_blob": "e7e2a08f44961b3340b096f7b6656ba40a90e843",
+      "path": "scripts/studio/research/spatial.md",
+      "sha256": "84d694f44ac761ccb70048eb3665037e19764b774363bae4d8ce47dba0cddb37"
+    },
+    {
+      "bytes": 12288,
+      "git_blob": "3af674af94db3758c19a629f86ccd53b5d1668e7",
+      "path": "scripts/studio/roto.py",
+      "sha256": "824c706099dc25308a2bcdc3328abdb9e0d3db53978fdc9d24f08ecb51bce425"
+    },
+    {
+      "bytes": 5679,
+      "git_blob": "ff95825139be83f286372bda9b680a1d4a1ec64e",
+      "path": "scripts/studio/roto_assets.py",
+      "sha256": "bfcf604b05b52987524fb4c9208bd8eb14689cf44078665319dd96a41d4360f8"
+    },
+    {
+      "bytes": 19563,
+      "git_blob": "d7a0bd6228b673a7c75866b89c87a94560b35d9f",
+      "path": "scripts/studio/run_verification.py",
+      "sha256": "3664753ce9beaea781ea573c0d995826e74a75307700938e929e62b972d5834e"
+    },
+    {
+      "bytes": 8742,
+      "git_blob": "082caa988b8c72f59bc8766641c415f9d37c7104",
+      "path": "scripts/studio/runtime_management.py",
+      "sha256": "10d0a5957daa73da8055d13ec8489485e953aaddf7165df15fecdd4a40181561"
+    },
+    {
+      "bytes": 60792,
+      "git_blob": "819d3dce89b4a2a935e068daa79809d412900f18",
+      "path": "scripts/studio/scene.py",
+      "sha256": "fbb76abf0cff086de260892a92f7cc367bff7d62b7b880f70b6f428c187feee2"
+    },
+    {
+      "bytes": 57640,
+      "git_blob": "ef46aadf82140c97b555f6e6275c1739ae2df745",
+      "path": "scripts/studio/scene_dispatch.py",
+      "sha256": "0abff0740294a988cc5edac17d048dbe067ce878262f973d12477b67f7c99482"
+    },
+    {
+      "bytes": 17954,
+      "git_blob": "0e0c7a6d342c54bd9ad5e434a4c0f78ac8ef4e1f",
+      "path": "scripts/studio/scene_dispatch_store.py",
+      "sha256": "0faa3183ae47254cfd59acc60d94d604fbef92f76e6d40f641afe78e18a5e16e"
+    },
+    {
+      "bytes": 3512,
+      "git_blob": "10b4882621d7e3c453bdd4c49f9ade74288627f2",
+      "path": "scripts/studio/scene_hierarchy.py",
+      "sha256": "cb3d55a9bded30cc50da3582694e0184b37416f6bcc225534d8a28fe3c3ac835"
+    },
+    {
+      "bytes": 38361,
+      "git_blob": "95b49e3bf3aa9884e3464d76f86919e56f54dde6",
+      "path": "scripts/studio/scene_modeling.py",
+      "sha256": "1790825ba4ca5099629ce96582fe003080fd1126339042e252809784d4fe9879"
+    },
+    {
+      "bytes": 46759,
+      "git_blob": "e90ecc895aec8161ba9eab7047ef37c187a211ff",
+      "path": "scripts/studio/scene_processing.py",
+      "sha256": "6561407aebbf544349fd2922a21b972f9309b3170d4f37ae200de8fff38f662a"
+    },
+    {
+      "bytes": 5143,
+      "git_blob": "0ee54744e32155acd91ebbb102eebd443f398547",
+      "path": "scripts/studio/scene_processing_worker.py",
+      "sha256": "7be21fc77548211fbe498a2e6d871c332d2f37230633f390490412e05e2d073d"
+    },
+    {
+      "bytes": 17048,
+      "git_blob": "815a8b1ceaa5484668c3ba1b506c2dcd7d889f3e",
+      "path": "scripts/studio/sequence_interchange.py",
+      "sha256": "7835ca35cc586db273c31d68d5c4d764c486c20f4ba0f4b940a5c956d9a76b6f"
+    },
+    {
+      "bytes": 105592,
+      "git_blob": "eb59e8f1e693758dd70ffc44f438ec1df8b83b1d",
+      "path": "scripts/studio/server.py",
+      "sha256": "c3b6cee39ef611a954237ffe189a8aab06a0504b590605b401955798a95f9c7a"
+    },
+    {
+      "bytes": 51075,
+      "git_blob": "9035111424621977d85fb70cb51e109235d337cf",
+      "path": "scripts/studio/source-integrity.json",
+      "sha256": "83316b1aa60d8e1c8eef733c71fa5795d0e64bdc08797a9707b69c0104c2acc1"
+    },
+    {
+      "bytes": 10118,
+      "git_blob": "9ff45cfadc53bbbd1ef50ff2e2f1c0c4368bcbbd",
+      "path": "scripts/studio/source_integrity.py",
+      "sha256": "869076e74fd39f7a69d03f42ccd449e811e37bf59246cc488f8fc9244507ac40"
+    },
+    {
+      "bytes": 27102,
+      "git_blob": "298fbcfefc55abf94d2efa5860db2e368ed02654",
+      "path": "scripts/studio/spatial_import.py",
+      "sha256": "2eba894b06571be9faaecefdd10d53ef77fee84c07cfaa35373abb71aa0df0f6"
+    },
+    {
+      "bytes": 17401,
+      "git_blob": "56daf7087c971c21d0e72dafc150b21c23d6e903",
+      "path": "scripts/studio/studio_tools.py",
+      "sha256": "e578800750de9707b269b024dc86da7a4a54cc128bc9a71c6c5e3115af616013"
+    },
+    {
+      "bytes": 23920,
+      "git_blob": "7569d4eb56657acd36a6c4c1f50ad0ecb30dda7d",
+      "path": "scripts/studio/test_adapters.py",
+      "sha256": "71a72e4c7505ef728caf022bcee9f4c67a74b75838b418a1c33b39edd223a22f"
+    },
+    {
+      "bytes": 10994,
+      "git_blob": "7818c30ae14a04b28c682d7148b963eae762459c",
+      "path": "scripts/studio/test_alpha_mask.py",
+      "sha256": "127599e9351b94f2d6c35b9f13f06c99b3cff69585bc8559badc5039cdfb80b3"
+    },
+    {
+      "bytes": 16822,
+      "git_blob": "9adf54d5fc07b7dc7ff0473e880a2d908c53a9fd",
+      "path": "scripts/studio/test_archive_http.py",
+      "sha256": "86e2270b0f9875fc2ffe0f9cee7d208ed198642e4026b60ca3bb24a6f2c66534"
+    },
+    {
+      "bytes": 29444,
+      "git_blob": "dd736ddf48798a246d60e5ce2a7fe011e9199495",
+      "path": "scripts/studio/test_audio_routing.py",
+      "sha256": "5b734b19d6d1fffa1296f3dc8ac8922ad86ac1bb4fb0c5493f5c95bd3cc5645e"
+    },
+    {
+      "bytes": 21897,
+      "git_blob": "0d44d0bdadb28c1c177171651947e1a923495669",
+      "path": "scripts/studio/test_audio_routing_macos.py",
+      "sha256": "02c5be858ae4d84d5ec2a9e4177c46572169b69e3b06c9d6db80aab3ffa0ad7d"
+    },
+    {
+      "bytes": 13465,
+      "git_blob": "fe733701f20d32c844965020d89c902a2552efb3",
+      "path": "scripts/studio/test_audio_source.py",
+      "sha256": "476370639c44c53e7ecb394c514320cd97a6959e53952700c473a27c6bde5da0"
+    },
+    {
+      "bytes": 7861,
+      "git_blob": "eeda675fa67bea9dd9edc6f286e94922bce0e804",
+      "path": "scripts/studio/test_camera_import_ui_macos.py",
+      "sha256": "4f5b57e6f433ce1e3de8edb7e9c9c94e37778e655c9965c2da983ccfd9859200"
+    },
+    {
+      "bytes": 10266,
+      "git_blob": "dea851336abda1d53bdef30b11b0d9db150cddb6",
+      "path": "scripts/studio/test_camera_integrity.py",
+      "sha256": "8fbb6e7c362068aaf7dfac231a14abcbb9e1dac26ab0ab715f8eb2fc943a3ad4"
+    },
+    {
+      "bytes": 6926,
+      "git_blob": "a586e10ebfb683eb14b68aa521a8cdc5a3cdddb0",
+      "path": "scripts/studio/test_camera_integrity_blender.py",
+      "sha256": "1dff1b919016ea15dd8fa3f085ae1ae0b48f71f494c3d326c034c53d7c1d631c"
+    },
+    {
+      "bytes": 21851,
+      "git_blob": "74d8f0e21de615ae4a5e5ab34e4c42cb41dfe68d",
+      "path": "scripts/studio/test_camera_io.py",
+      "sha256": "56040209f3d033378e291cbafc13ce6338f14e6840a9f704327a01b3e76632dd"
+    },
+    {
+      "bytes": 27505,
+      "git_blob": "5b34e2f632b106ed091b19bd544b2037682720d0",
+      "path": "scripts/studio/test_collaboration.py",
+      "sha256": "71257dc4625c63ad7bcba5d44bcf27dbadea4c97900167ef4400005ae381e17a"
+    },
+    {
+      "bytes": 14872,
+      "git_blob": "ea3edadc607d66ceea210aec166fd4a07cb9af98",
+      "path": "scripts/studio/test_collaboration_browser.mjs",
+      "sha256": "7d3a756a6b77b9be75c3b20d11406d67403d8b1827abded6ed4686ad44501576"
+    },
+    {
+      "bytes": 15666,
+      "git_blob": "d53fc7340efa9d076698573e8f1a38441b3d0107",
+      "path": "scripts/studio/test_collaboration_store.py",
+      "sha256": "617ff178c5f0d2a4fb9a17f29511153b74d4d92cbc688f71ad811352216e0bc7"
+    },
+    {
+      "bytes": 20405,
+      "git_blob": "79f093b2ad3b5fb3955d8487cc579917261748b2",
+      "path": "scripts/studio/test_color_pipeline.py",
+      "sha256": "94ad997c0c9e353da7a09322d2d61c61cc3b932d73f4cb837b067025e1bc6984"
+    },
+    {
+      "bytes": 9321,
+      "git_blob": "ca7eb5ae13cdd7ae6a4cfc3eb20dea01e41f237d",
+      "path": "scripts/studio/test_color_pipeline_ui_macos.py",
+      "sha256": "78eedc664e2078b6da089ee56c1ad61d07f6789545dc8453e6027e3b8fcf198a"
+    },
+    {
+      "bytes": 35585,
+      "git_blob": "acdf1b09e40c72ac68b0a8348274ebc8693b7d0e",
+      "path": "scripts/studio/test_compositor.py",
+      "sha256": "19bf895aecc74749bde18679197b8154dab86fc210281aa2cdf4abe971ff9ede"
+    },
+    {
+      "bytes": 13122,
+      "git_blob": "e76852a7487fa9bcd0ef144291b1fa782057035e",
+      "path": "scripts/studio/test_compositor_animation_ui_macos.py",
+      "sha256": "110240b732c31609fa00743f07e1db76f3568f7fdb360be5cec9cf3e63d0bbf6"
+    },
+    {
+      "bytes": 25208,
+      "git_blob": "e2c322640bb1b75db9f4ab19ee56b6a3cc158f1d",
+      "path": "scripts/studio/test_deep_compositing.py",
+      "sha256": "15ec7ae062a2f9028d97ca7144159e8a10265a3213e4d0c2d93a73edc17edda6"
+    },
+    {
+      "bytes": 5877,
+      "git_blob": "6fb304f8c24bdfb19df40ea28e56b5f3c2ef29d0",
+      "path": "scripts/studio/test_editing.py",
+      "sha256": "e9baa6c93e0e517c2157a15a28cf290da58cd71d82910a456923bc51b8f0f969"
+    },
+    {
+      "bytes": 17900,
+      "git_blob": "09914a6cdb9933bdfe373e2857533eb3727c05e6",
+      "path": "scripts/studio/test_editing_ui_macos.py",
+      "sha256": "0ecc162165dbc1aa449b55e0054038728344f00917bcc94203a9bd1d75b9ace0"
+    },
+    {
+      "bytes": 21026,
+      "git_blob": "bcd99c62b3d841f21a2165e2821edea5be72a910",
+      "path": "scripts/studio/test_editorial.py",
+      "sha256": "bbd3947785b704652426e459e9d43bd385a354e0881bb0513e6e6823ed27b4cb"
+    },
+    {
+      "bytes": 7660,
+      "git_blob": "fe525fda7e7a867e8e1eb80ebc5901fb7a9886b9",
+      "path": "scripts/studio/test_editorial_ui_macos.py",
+      "sha256": "6b644795e037e7406605fd431a238ae616409506b674aaf0b32ae720b0ce3dfc"
+    },
+    {
+      "bytes": 13067,
+      "git_blob": "02de7ca74cf226475f361ac6cc3826d3084b99ee",
+      "path": "scripts/studio/test_engine.py",
+      "sha256": "dad3a230d7a3043d15f1ffb4ff41de7034fb0113dc2a27e63c26003b1b5ebe90"
+    },
+    {
+      "bytes": 13183,
+      "git_blob": "4bb22514f1d5c83b89a994ca780e242682cd596e",
+      "path": "scripts/studio/test_frame_preview.py",
+      "sha256": "eb135a7974183f0d9e376301e0313efc04b8e8db0b48d6410638bdc07f77b119"
+    },
+    {
+      "bytes": 10882,
+      "git_blob": "acc6778abeb499919aec7c0ecd104f6b10690aec",
+      "path": "scripts/studio/test_generated_take_timing.py",
+      "sha256": "3c96c1784f01e886e73f20c590167f65d887d53fbf0a4320e81d2fa64884f8ed"
+    },
+    {
+      "bytes": 9501,
+      "git_blob": "0ffed56e7bfa18f678d5a33fb3ba1c6f93035e7f",
+      "path": "scripts/studio/test_generated_take_ui_macos.py",
+      "sha256": "1c50d5a4b6dca51a6c7e6f8fccda13d1190729b015ad12236d8095717553e6ae"
+    },
+    {
+      "bytes": 8426,
+      "git_blob": "a98c4a572587aa734044b9a179503b8691c9243f",
+      "path": "scripts/studio/test_generation_inference_macos.py",
+      "sha256": "be23937e0cf5a17f9cc4886284d00d82f19065f85df66c4133c51613bacc713f"
+    },
+    {
+      "bytes": 11464,
+      "git_blob": "b99ec08c65fe609ed2baee7b30f8389fe36a1c1c",
+      "path": "scripts/studio/test_generation_readiness.py",
+      "sha256": "46ac6a0ba7318aefc1e47c99c62352ed23a85e09435db3f78175a08caa672921"
+    },
+    {
+      "bytes": 6805,
+      "git_blob": "d909df75389f563347c8ffe7875f6f3ca3454436",
+      "path": "scripts/studio/test_generation_ui_macos.py",
+      "sha256": "8d0b743e2df23cd3d5823ef66b7cc6342929a6e546558cde1d5090d3a2ee616e"
+    },
+    {
+      "bytes": 13977,
+      "git_blob": "5f3af473b9953c24ea8fa09fa3fc47c36c7aa65f",
+      "path": "scripts/studio/test_high_precision.py",
+      "sha256": "cd8acdb9074018f3a4542a8929935d3633f2b7ff9431f2671e03bb5ca757cc27"
+    },
+    {
+      "bytes": 10424,
+      "git_blob": "f6f5f33e2007a5281f5df46a3880e927538e08f3",
+      "path": "scripts/studio/test_high_precision_ui_macos.py",
+      "sha256": "2e12c8dd9e69179aa81e0ffb3c13a17e213270daa0215e497449442087b3425b"
+    },
+    {
+      "bytes": 24354,
+      "git_blob": "268842257849db0a7d1ce6fd5daa23d3f566b9a7",
+      "path": "scripts/studio/test_imaging.py",
+      "sha256": "6690aa919acebb020d570c3d91bae16c87facc760bd4ec920c9b582b386e56bd"
+    },
+    {
+      "bytes": 14141,
+      "git_blob": "6b37b92773e0abc3e0a554444a0939c5b36a8f1a",
+      "path": "scripts/studio/test_imaging_ui_macos.py",
+      "sha256": "e3038f6fe8d252da656bc41b09f6de7cf879472a8bd5a2b67bea4f60c0372be4"
+    },
+    {
+      "bytes": 8822,
+      "git_blob": "71300e9ca556acaa25ee3ea32a56302d95b102df",
+      "path": "scripts/studio/test_install_imaging.py",
+      "sha256": "0a72b2f2478a458ca0690caef6500ff30914c69b26bb37a0b5081e8866c4fa93"
+    },
+    {
+      "bytes": 12175,
+      "git_blob": "c4eab713efbf40c771a42e9a722ee185c6fabbd7",
+      "path": "scripts/studio/test_install_learned_tracking.py",
+      "sha256": "c75162f3293c3f76851bec4b1e465c0c6e0d3e14eaa5863641685b9e3cebd97e"
+    },
+    {
+      "bytes": 9468,
+      "git_blob": "1f82f06fc97f41843f0024fffbf8bb698a6c2a85",
+      "path": "scripts/studio/test_install_macos.py",
+      "sha256": "e2501c89db1d02d5dec5b7f4d95799f4ae1f7ef8d42c23ef95f5a45df9eaf57a"
+    },
+    {
+      "bytes": 5819,
+      "git_blob": "afb148669075cd33b1f70b0bcd53f2a59a7a3d78",
+      "path": "scripts/studio/test_install_physical_rendering.py",
+      "sha256": "809a7d8699e09b0a93680c3dc43b1d5c2d4a35366cc3c9a096cb33ab0b13a871"
+    },
+    {
+      "bytes": 4949,
+      "git_blob": "3b1d43d1d07f5e9f92c305e673d3f3f65fcb6871",
+      "path": "scripts/studio/test_install_tracking.py",
+      "sha256": "605d38b5fc00e997b23c15536dfe6215a4a90238b38fdb9f325553b5c2a43985"
+    },
+    {
+      "bytes": 28954,
+      "git_blob": "5ea28e99892a273a62670121214d5ff1074206a0",
+      "path": "scripts/studio/test_interchange.py",
+      "sha256": "9793af0f7c840e47f8177a610eceb2aa934ab9cc0ce45c7ec89b9daec91b87be"
+    },
+    {
+      "bytes": 9566,
+      "git_blob": "f421dbd1db38b32073bba045692a1d30f0f8649e",
+      "path": "scripts/studio/test_interchange_ui_macos.py",
+      "sha256": "e784b8142a1bb2e4d6052f5501d5702c74514d3eb4dedb8323839912fe31d79d"
+    },
+    {
+      "bytes": 4576,
+      "git_blob": "45eea5528e28d14e29a543bad21498d1724bf27c",
+      "path": "scripts/studio/test_job_polling.py",
+      "sha256": "d48f89eb2d87f734264341027902967eaf423f809d518a8a424420fbcaf0d225"
+    },
+    {
+      "bytes": 12037,
+      "git_blob": "7f2d9bc719a91ba9eafa054b1f76015c0d042569",
+      "path": "scripts/studio/test_learned_tools.py",
+      "sha256": "f9b2a3ee243a6680545199bb83c8e84baea1274e4525d64319879799f282f11e"
+    },
+    {
+      "bytes": 25995,
+      "git_blob": "557e89304311e2265273125e0f8f3f76a77cc37e",
+      "path": "scripts/studio/test_learned_tracking.py",
+      "sha256": "6b2d1aadc4db74a198f6461d251d75ff743dada53efc82f0ad381bed62254bff"
+    },
+    {
+      "bytes": 27793,
+      "git_blob": "67c984093a3da51cd405351ce9268a3accefbd70",
+      "path": "scripts/studio/test_lens_compositor.py",
+      "sha256": "cfffcfc7b05208cb84359bce90a6a62e4938173bea932fddca6524189676c968"
+    },
+    {
+      "bytes": 14782,
+      "git_blob": "30657465e866ddf766ae1cf46239bcb252b2e7f7",
+      "path": "scripts/studio/test_lens_ui_macos.py",
+      "sha256": "90e563547ba670c58eadbfdcf2b21d163adc60ab56c6fcefc46eccb3d003511e"
+    },
+    {
+      "bytes": 18239,
+      "git_blob": "471eb25d5004c789f72ffb705d4a663d367952f3",
+      "path": "scripts/studio/test_managed_generation.py",
+      "sha256": "77ccbe67a26cc445d011ab1838f6171e4ca6f0dd8f9557eed906b8be74099866"
+    },
+    {
+      "bytes": 8671,
+      "git_blob": "30c419e183d5b4207f99c589f7614435b86edb0c",
+      "path": "scripts/studio/test_media_lifecycle.py",
+      "sha256": "4fb7950ab066d1dd2d7d7c4bb78a686ac2014d91074b1d360262e748d4ddfa55"
+    },
+    {
+      "bytes": 6680,
+      "git_blob": "bcfb32048f5d9bfba13b7ca0c50c4ca73f36e0f2",
+      "path": "scripts/studio/test_media_management.py",
+      "sha256": "007c8e5c9f288c9df6eb855005f071b0d70fb55bc9eb3e0bf061dd2e2fddaa99"
+    },
+    {
+      "bytes": 16296,
+      "git_blob": "d08a44ea02afd3f20fcefd2a23dca84efeba04ac",
+      "path": "scripts/studio/test_media_management_ui_macos.py",
+      "sha256": "531ab4dda39741de016fba6726ae137a34b8a98342f3ae8d1e171bdefd03d8dc"
+    },
+    {
+      "bytes": 9227,
+      "git_blob": "373fa1c8e0239c2f23282db96a0055b5f306f8e0",
+      "path": "scripts/studio/test_media_orientation.py",
+      "sha256": "f6d5c142b47d4619877f8307322caff746b88c7ec7c6c8e42895e2c539775017"
+    },
+    {
+      "bytes": 7924,
+      "git_blob": "0cdcb9705e80caf2c5a34c4c26ddc13b7d788b24",
+      "path": "scripts/studio/test_mesh_import_ui_macos.py",
+      "sha256": "36ba75b430eb915515b0b17516b77da82d7cc99186c9c5f2ab5787eb78fafa39"
+    },
+    {
+      "bytes": 7840,
+      "git_blob": "090f97f6978f12648264edcbdff961c79aacc8a6",
+      "path": "scripts/studio/test_mesh_modeling_ui_macos.py",
+      "sha256": "a1cf2fc30f8f5df65d145b09059d75f3219518aea2269e28b538b551ffe5fefe"
+    },
+    {
+      "bytes": 22248,
+      "git_blob": "592b4edddf2f2a6185657e1097e4a94c8d0458d4",
+      "path": "scripts/studio/test_multi_source_compositor.py",
+      "sha256": "afedf59031ad7602dc80efc6159f6c3fa0e797bb44718f9927319d4697c7c937"
+    },
+    {
+      "bytes": 11112,
+      "git_blob": "4b59e483686b04726699ab4552ab3b0029c10e91",
+      "path": "scripts/studio/test_multi_source_ui_macos.py",
+      "sha256": "2c9e2bf189d1371140dd03b45a1e37fef54ce82b18c8c55777a987024c1570c9"
+    },
+    {
+      "bytes": 44398,
+      "git_blob": "2b72319adff62711adc9155d86d5e3aa1705577d",
+      "path": "scripts/studio/test_multicam_sync.py",
+      "sha256": "187fba44ff329bc1c7f4435ad0c455a497fbf739e031c17d07f8c1b3b3ceea1e"
+    },
+    {
+      "bytes": 7486,
+      "git_blob": "2233bb7cbcc728fd52a4493328c71d050fe4881b",
+      "path": "scripts/studio/test_multicam_sync_browser.cjs",
+      "sha256": "502fa22b1c364387b8552d06f412ac385b7bda46ce25e13ed378bac5f4cedd3d"
+    },
+    {
+      "bytes": 27290,
+      "git_blob": "515c980cc8f8a1f296e55efc634ebc80f276db47",
+      "path": "scripts/studio/test_multicam_sync_macos.py",
+      "sha256": "55193875e7855d9caa867642ea28616ed093982ce24258b9bce2e4e2d6aee4c0"
+    },
+    {
+      "bytes": 11811,
+      "git_blob": "f0a5cb8c7e610f3d90bf38c701df875b40348bc5",
+      "path": "scripts/studio/test_pcm_playback.py",
+      "sha256": "ead27459fe839cbf55e2c4d28c047416c092945ef17a2b9d4a03edbda9cbf152"
+    },
+    {
+      "bytes": 27973,
+      "git_blob": "101b3c0ed4e94ba44a0ed0f54f0d7afde05039ab",
+      "path": "scripts/studio/test_physical_rendering.py",
+      "sha256": "87bfb5490bac226ef37193dac6ca5c88046ce1245d2fdb40adbe41779f9bf696"
+    },
+    {
+      "bytes": 11129,
+      "git_blob": "b3dd21fb32e81d532831b8577b46770cbcf02e13",
+      "path": "scripts/studio/test_physical_scene_blender.py",
+      "sha256": "bcf6520c77874e18ffbe692ee273a9efaafef948cbdeb5f1a9c3a6827376678a"
+    },
+    {
+      "bytes": 5856,
+      "git_blob": "eedbaaf99411370fcc3d0aacf62e355f9ff6bec2",
+      "path": "scripts/studio/test_physical_scene_ui_macos.py",
+      "sha256": "4aa377dd1585263dcfbbcddb543036d7b36e9f5f76985aef6704c84d7958e45c"
+    },
+    {
+      "bytes": 20497,
+      "git_blob": "362e7325bb1e1ec28a1b57c0b750be6f2bfe2d5e",
+      "path": "scripts/studio/test_planar_tracking.py",
+      "sha256": "aeb549a35c196b27c04ab261082b6d471fa1deeee39d30534df39e99683bf5d4"
+    },
+    {
+      "bytes": 8963,
+      "git_blob": "95794270d59fa6bc2743a66f6d2bc3342a0b208f",
+      "path": "scripts/studio/test_planar_tracking_macos.py",
+      "sha256": "9bcdd4ae20538cfb44a2669f9d18380b5c26bd3fc2f9b8311ddb6ab466228581"
+    },
+    {
+      "bytes": 6176,
+      "git_blob": "510fb5184e85e84c53a6bcaec270affb9d6e1560",
+      "path": "scripts/studio/test_probe_timing.py",
+      "sha256": "3cc3504161fb64445b03e61d2f63add50d2edce45d30b487900750b6bc327e2b"
+    },
+    {
+      "bytes": 14668,
+      "git_blob": "39381bcd3c28b01554a3c8fa4f88e6187298e565",
+      "path": "scripts/studio/test_production.py",
+      "sha256": "3ba5032251c63635d70344b3de503574839b222db510d24cc84326ad391794cd"
+    },
+    {
+      "bytes": 12787,
+      "git_blob": "c239d8c20497e7b020c787b6f6a05878acb06a8f",
+      "path": "scripts/studio/test_production_ui_macos.py",
+      "sha256": "26af3c927730256b67039d1e4dc0a2351e2fa993f9583d281335791d8297b1e3"
+    },
+    {
+      "bytes": 27215,
+      "git_blob": "8c60eaa114d84871433235acb1562c8cfcceef8b",
+      "path": "scripts/studio/test_project_archive.py",
+      "sha256": "7dd9ee829339ad1953c7f53755b6244701a70c05c0359fcc396b1a76b1588df4"
+    },
+    {
+      "bytes": 14090,
+      "git_blob": "c8567a8edb0adb4f2f4cfc8ce4d805f64d372939",
+      "path": "scripts/studio/test_project_archive_ui_macos.py",
+      "sha256": "a668648704e8568b983c6d94e70d1b5e3fa2f0f92ea4dd8eb69fcd5e4169ce28"
+    },
+    {
+      "bytes": 33414,
+      "git_blob": "5f702ecd10290178b6710a58f8b4636c48d1b4c6",
+      "path": "scripts/studio/test_ray_optics.py",
+      "sha256": "7b16848f33e0751e4ede5e5d418224eba4db153f88308066c04f6bb43860b20f"
+    },
+    {
+      "bytes": 27062,
+      "git_blob": "117e4ea2d731a75431665e6861a592ac55176d43",
+      "path": "scripts/studio/test_reconstruction.py",
+      "sha256": "fa55747da5c7c33e767e2a07606c19f53818d64cab8a7896db64c26f5a34ba38"
+    },
+    {
+      "bytes": 15407,
+      "git_blob": "2e823fde45de26c3c7e84f591ce6ab47a31fbb54",
+      "path": "scripts/studio/test_reconstruction_browser.cjs",
+      "sha256": "c166b3b8de00d470ccd694660a8a87798d49adaca54740d4d5363baac1fe78ef"
+    },
+    {
+      "bytes": 30442,
+      "git_blob": "cda681194fa534b73cda48dbc76b3d0129c43a26",
+      "path": "scripts/studio/test_reconstruction_ui_macos.py",
+      "sha256": "aec3268bd4aa4cc749a79be34c918a215c6ac0afd44702cd591ae08b563259b3"
+    },
+    {
+      "bytes": 9881,
+      "git_blob": "971db6abb926a7b959cd9aa58ddeeb0d4ff77c7b",
+      "path": "scripts/studio/test_recovery.py",
+      "sha256": "4ad3ec3a64e9dfc0690ce8913fbbbe8cf0aa3408989095a32fad03874a378df2"
+    },
+    {
+      "bytes": 4303,
+      "git_blob": "09a43959a6bf6617f62700f082646cbd50384be4",
+      "path": "scripts/studio/test_recovery_ui.py",
+      "sha256": "623501652d8e207dd79e9ae09cfd995713aac5bf80e7bedb099ec6bb58dde876"
+    },
+    {
+      "bytes": 5132,
+      "git_blob": "f653848f17fcb7a9d6bd9f9c3b51ef23f4742bcb",
+      "path": "scripts/studio/test_recovery_ui_macos.py",
+      "sha256": "bb9ec803aba270d6341e9dfe45c0e0f10aa8d8eb7a06be85aeccb40559e8752c"
+    },
+    {
+      "bytes": 12984,
+      "git_blob": "ade68fd598d8a40fb2858ee75f676aa66ee0bf0f",
+      "path": "scripts/studio/test_roto_ui_macos.py",
+      "sha256": "4033ba8f1d0d34360d16779d6f16b78e10f494b59d6696d59bb7dd0b1756a3c4"
+    },
+    {
+      "bytes": 3793,
+      "git_blob": "e93e8e08a82eed95154e4b29f956ff44bb0c260c",
+      "path": "scripts/studio/test_runtime_management.py",
+      "sha256": "33aeb966ee34be528f944ad2888cffa9122193af1bc68ae239d6c598cf6992b3"
+    },
+    {
+      "bytes": 25964,
+      "git_blob": "7813e346edc8be19b059bf3638a5d796db65029e",
+      "path": "scripts/studio/test_scene.py",
+      "sha256": "3d31a86dc4104dec17763dd45c955f1ad2c9f9b6b5921bee097b28286a37e22c"
+    },
+    {
+      "bytes": 15915,
+      "git_blob": "6e27b34d9e68e88656edac6499b2e40584d05778",
+      "path": "scripts/studio/test_scene_authoring_blender.py",
+      "sha256": "e2f74cfe15ca5dc172e74b5a6d1857baa1035ff2a58af2b624cb7669b964b620"
+    },
+    {
+      "bytes": 9134,
+      "git_blob": "9a101db5cf626321263743515398f4f989622799",
+      "path": "scripts/studio/test_scene_authoring_ui_macos.py",
+      "sha256": "6762f78a28571c0f3b69994013f382dca64a3099522edda2bb478f17ed9b4d27"
+    },
+    {
+      "bytes": 14686,
+      "git_blob": "ea328785903ee35084ab43a264fbd1c4ced210c8",
+      "path": "scripts/studio/test_scene_dispatch_store.py",
+      "sha256": "73c278f027ed8e79c3f5f9ea0799a05bfe5cb753453b952c39554da416401648"
+    },
+    {
+      "bytes": 10596,
+      "git_blob": "eb91c27e3884d1fcffc2350c8aa0f38c155fc0af",
+      "path": "scripts/studio/test_scene_masters.py",
+      "sha256": "6bdec9ea8cbf34036b3575e33522ba4e8c87ec28a1968644378e8893ebca5080"
+    },
+    {
+      "bytes": 8850,
+      "git_blob": "8d6afc75fb8d2cfb77b1741133538e0f2b3d872c",
+      "path": "scripts/studio/test_scene_masters_blender.py",
+      "sha256": "b7aa97570ba893bb2550ea48a7bdba1a332736665412073168877b42e758bb23"
+    },
+    {
+      "bytes": 5623,
+      "git_blob": "8bd09af89b65359f0c0075494df300a00904e62c",
+      "path": "scripts/studio/test_scene_masters_ui_macos.py",
+      "sha256": "6719170a27cfc515cb89f945272ed76804e5aad91a698802ca9e4eef77d38183"
+    },
+    {
+      "bytes": 17078,
+      "git_blob": "1dc4bf1e53cb3f1bc4ca78967c4fb77990d0265f",
+      "path": "scripts/studio/test_scene_modeling.py",
+      "sha256": "95609127a4b2a5236f857323f3d28a7527bf9e28196130de700dac4cd0a40430"
+    },
+    {
+      "bytes": 12748,
+      "git_blob": "84dc75e4633fbc1a42ac7fab3087df13660ab882",
+      "path": "scripts/studio/test_scene_modeling_blender.py",
+      "sha256": "b647cf6e06b9b360804f78d98b352f64b17ece849be96280f544423a61e0b7a8"
+    },
+    {
+      "bytes": 7319,
+      "git_blob": "f69438be3b170d3af60035b415ddf82e12d239c4",
+      "path": "scripts/studio/test_scene_motion_blender.py",
+      "sha256": "1ebf632e4ed52603a382b2fd734cf4ee1d296121fbbc9a26d9324dc9a6979fa4"
+    },
+    {
+      "bytes": 35560,
+      "git_blob": "aeded3b1e059c8493b81713a1c0aee506a73f1ee",
+      "path": "scripts/studio/test_scene_processing.py",
+      "sha256": "71c0b1d737a1486ba9928a9f6b21c88859a40aa634ecf847f2c02ab8acf0d740"
+    },
+    {
+      "bytes": 26277,
+      "git_blob": "528d182ba1c3c16a54a8b5c231eeaf0b9fe0c18e",
+      "path": "scripts/studio/test_scene_processing_browser.cjs",
+      "sha256": "d2713e629361964a8244911d3141ae32fae06bf1c25d8eaea8384bfc39fae982"
+    },
+    {
+      "bytes": 12836,
+      "git_blob": "5b3854ce389997a494eb7dd34e98e14765159d18",
+      "path": "scripts/studio/test_scene_ui_macos.py",
+      "sha256": "d4eee5be138305cafab933c2fdcc048115e64d46ed78ae61ee1224d7d76a0949"
+    },
+    {
+      "bytes": 15145,
+      "git_blob": "fdba70e326ae6d9c60a986d24cfff48dcdfac1b1",
+      "path": "scripts/studio/test_scientific_tools_browser.cjs",
+      "sha256": "2bc7dc1bf0f36aa6ef9b37f808673369c0ec784bb534005d3cedefc326fb1297"
+    },
+    {
+      "bytes": 25855,
+      "git_blob": "2ba55a11d140a873dfd2ecb67ff615a8fc008574",
+      "path": "scripts/studio/test_scientific_tools_ui_macos.py",
+      "sha256": "1948d4bf9f18554c9899de0ac1b7f90774ac85496235129f79cfc0b54067f6d6"
+    },
+    {
+      "bytes": 10749,
+      "git_blob": "bd98fdb40204550b476b6d76f0116b0720046323",
+      "path": "scripts/studio/test_sequence_playback.py",
+      "sha256": "e0e84b0687530476820cec4e02eac3b78f99faca5e414458b4aaee4aff679425"
+    },
+    {
+      "bytes": 29329,
+      "git_blob": "fa5a768fe91fa7299ae1aeacf54d5a73b811a685",
+      "path": "scripts/studio/test_server.py",
+      "sha256": "9431bbea35262b2c6682092b76a1a18bf91344ba1831587f8f129b6052884737"
+    },
+    {
+      "bytes": 7459,
+      "git_blob": "9fb2d49fbee5c0fa5c6ef2f0f3c63873b6afd1c5",
+      "path": "scripts/studio/test_shutdown.py",
+      "sha256": "041a0cc7de6f1410cb98d43eb99ebd68c6d1f40346a7e2b8817a70e9371da2fd"
+    },
+    {
+      "bytes": 4849,
+      "git_blob": "cea952447f921cabec69fc75e740256d93474c52",
+      "path": "scripts/studio/test_source_integrity.py",
+      "sha256": "b68370b43ef257c83c2c3a7b5a141feb5abd4525bd754bb3261fe5574efc6765"
+    },
+    {
+      "bytes": 8451,
+      "git_blob": "26352cb19ac57049154c2497f025ca576a55679f",
+      "path": "scripts/studio/test_spatial_blender.py",
+      "sha256": "418288662df4e234e32fbb308d5a2e60353933a83d5909c49f94e79ca4c87446"
+    },
+    {
+      "bytes": 17465,
+      "git_blob": "11d2207f33507727d06b3c3d6cfc101f5e27af95",
+      "path": "scripts/studio/test_spatial_import.py",
+      "sha256": "a588df83a6095057fcb7a11ce16ca31ccb876c356b7f0324677cb13aba9035c7"
+    },
+    {
+      "bytes": 19522,
+      "git_blob": "e506c8561086e01a8cf3528f9d2f1002f365d658",
+      "path": "scripts/studio/test_studio_tools.py",
+      "sha256": "8f7dba1f3b4a911948c51cec6d00120f3e94141fa219fefcfaf0e3f735dc3c53"
+    },
+    {
+      "bytes": 38382,
+      "git_blob": "23face19ac3419341978151c2b6a2d5cbf84762a",
+      "path": "scripts/studio/test_studio_tools_ui_macos.py",
+      "sha256": "9336d1e5da42c97a325fb7fa953264b735f7674a4e36aa537bf37e13d7dca2be"
+    },
+    {
+      "bytes": 21608,
+      "git_blob": "02268c56acfc5630d1513effa47edc9b70fc0a96",
+      "path": "scripts/studio/test_studio_v2.py",
+      "sha256": "37324ef3b619cd2db512155a5ab75962a056607677873d096f488bea0bbe3208"
+    },
+    {
+      "bytes": 17982,
+      "git_blob": "af7eb5ee537eb129aae9a4b68ebe3deafd7cb1f0",
+      "path": "scripts/studio/test_timebase.py",
+      "sha256": "2403e154889f22b4afd7a9fc45d57ed110d8a5992e6df02a93209ca60ca18986"
+    },
+    {
+      "bytes": 18578,
+      "git_blob": "6920c08b5ffae2929326df6461e66c78811b0346",
+      "path": "scripts/studio/test_timeline_audio.py",
+      "sha256": "3cfc9128438f27591f1230c81c54295f1ce7e10d844c0266b7293b2013f1e000"
+    },
+    {
+      "bytes": 12986,
+      "git_blob": "95610d01880949285109a85ffed4219b1c716691",
+      "path": "scripts/studio/test_tracking.py",
+      "sha256": "508e5c9ae0bf7c3ad430708c742fe46ce8f8ab1428588c4ba7819fd2050498f5"
+    },
+    {
+      "bytes": 3461,
+      "git_blob": "011957abb83d52ee4c386f50b0e2ff505a210c3b",
+      "path": "scripts/studio/test_tracking_ui_macos.py",
+      "sha256": "3955f4f9c529726666867e0b817048d32bde8e355abcfa6431bfdc4be1f2347a"
+    },
+    {
+      "bytes": 9311,
+      "git_blob": "04ea0aad9712652b8fd5f76cb44d2bb44e36536f",
+      "path": "scripts/studio/test_trim_edits.py",
+      "sha256": "1deaa4254a818e461bfa5113d7511f8874304f89d1aa6b2789974c693848b0a7"
+    },
+    {
+      "bytes": 12355,
+      "git_blob": "a4ebc02e5893741a333f4136693ab035d2cb04c4",
+      "path": "scripts/studio/test_trim_ui_macos.py",
+      "sha256": "6fd5c2c2345d04dbd4ae679af399596fea82dacc5c6bbaeb9cc78c6b81261742"
+    },
+    {
+      "bytes": 8165,
+      "git_blob": "f3d84802ffcbeeaa2292b9fde3c225b9d5a3759b",
+      "path": "scripts/studio/test_ui_macos.py",
+      "sha256": "8fb4614fd92d19d8c08188e166e26f485c0ac3c2c52c204cb37f22bb55e06557"
+    },
+    {
+      "bytes": 8603,
+      "git_blob": "05b5568b8362c9a128b0f40258a90fe1ff190927",
+      "path": "scripts/studio/test_verification_runner.py",
+      "sha256": "7649bc60a532df31db5bea6f96ce7f6835a706457dcaa461421fe97eb994a6ca"
+    },
+    {
+      "bytes": 9636,
+      "git_blob": "98f1c00d3c42222954ee3a521aea199514b1a60d",
+      "path": "scripts/studio/timebase.py",
+      "sha256": "4bb129c0545741ef69c73f509d0cac8a943da18f01322c64b7029b676ae33ca8"
+    },
+    {
+      "bytes": 1172,
+      "git_blob": "6a6d9648d5a7b4c031ec56f2e70ecc82f01fb3ca",
+      "path": "scripts/studio/tracking-macos-arm64-py313.lock.json",
+      "sha256": "91e3a4fb7c238fd540ae4cd9f669a8010c592caec27080aed5aa5da58e31144d"
+    },
+    {
+      "bytes": 20058,
+      "git_blob": "10d32308e2316cce31afe3c7531149bcf9cdaeac",
+      "path": "scripts/studio/tracking.py",
+      "sha256": "bdaede2e53d17abe4a519fb5e7c91131dd86dda5bebc1e3a7ae1863802e52b75"
+    },
+    {
+      "bytes": 1713,
+      "git_blob": "fe3d071d52590447fcd839167104f9c3d0db348e",
+      "path": "scripts/studio/verification-browser-package-lock.json",
+      "sha256": "b8613d4c37b9d5b83d6723869915dec293dd9d364a9adda8907b865047047480"
+    },
+    {
+      "bytes": 142,
+      "git_blob": "2776c9ae5d69db2bdd5ad22d7b759ea956ddfed3",
+      "path": "scripts/studio/verification-browser-package.json",
+      "sha256": "678d95e821015d71f4ec80d91ff777e8564d48f46bd6a9c0056be4e67a2aee35"
+    },
+    {
+      "bytes": 1519,
+      "git_blob": "2b0b177a5230c266cb0a61a22eb61d57f512a9b4",
+      "path": "scripts/studio/verification-linux-x86_64.requirements.txt",
+      "sha256": "0dd328e421f6b439f1defbf3b1418826d83c41912b6b12736c3c0765fe72659f"
+    },
+    {
+      "bytes": 32268,
+      "git_blob": "cf367a1d658ef466634575ba0051ed1d4b02bc35",
+      "path": "scripts/studio/verification/0.10.0/multicam-browser-01/author/ENGINE_TEST_multicam_native_report.json",
+      "sha256": "76c39af4b37ec344a2434aea9ae6cd0abf32fef94b3a7d57e85d3d5d4bd9e50a"
+    },
+    {
+      "bytes": 943,
+      "git_blob": "818297aa830c1e0caaa0ebc764a8da494dbb5916",
+      "path": "scripts/studio/verification/0.10.0/multicam-browser-01/browser-report.json",
+      "sha256": "3306a2e78b7d71e20bad03a752b98d42a9d107a0d2651e90729d81a0cc8c5fdf"
+    },
+    {
+      "bytes": 31065,
+      "git_blob": "da199c563f32cf75a0255470eeeb31c747b6e52b",
+      "path": "scripts/studio/verification/0.10.0/multicam-browser-01/prepare/ENGINE_TEST_multicam_native_report.json",
+      "sha256": "1e5c3f1bdcf9f58791751532d2c847f9ba2729bf80c6f3e3f6f105e75bf8c01f"
+    },
+    {
+      "bytes": 35008,
+      "git_blob": "2a130e9ba2cf1acffa0fc20d21260e9c451df6cc",
+      "path": "scripts/studio/verification/0.10.0/multicam-browser-01/render/ENGINE_TEST_multicam_native_report.json",
+      "sha256": "eaa38f3e763d04c6af89de4378570f56ad5a5aafa6b96bf7bb73620941ac726d"
+    },
+    {
+      "bytes": 35710,
+      "git_blob": "51fd731399168c19655d06b356c90fca85ee12b1",
+      "path": "scripts/studio/verification/0.10.0/multicam-browser-01/synchronize/ENGINE_TEST_multicam_native_report.json",
+      "sha256": "1e33511a73269899904de6c1e028ec7d02a539779950d01e9045460db73d1aee"
+    },
+    {
+      "bytes": 32444,
+      "git_blob": "59e54acd06e0f2d068bb890530412f7fc1c63117",
+      "path": "scripts/studio/verification/0.10.0/recovered-native-01/multicam-author-01/ENGINE_TEST_multicam_native_report.json",
+      "sha256": "1155907ae750793f7f262de904cbaba0d1d9101e8fe4de679c1a4f1fdf145796"
+    },
+    {
+      "bytes": 31066,
+      "git_blob": "984399b0b67212842a5d61fc99f929066078617f",
+      "path": "scripts/studio/verification/0.10.0/recovered-native-01/multicam-prepare-01/ENGINE_TEST_multicam_native_report.json",
+      "sha256": "dddb1a1d8929e561179809ad91bf7cbce46f699884ffc4b4955718bd36b4732d"
+    },
+    {
+      "bytes": 35363,
+      "git_blob": "0b2c45c8953596015cf8b39a9d0f022afb5295bc",
+      "path": "scripts/studio/verification/0.10.0/recovered-native-01/multicam-render-01/ENGINE_TEST_multicam_native_report.json",
+      "sha256": "1371ed995421a96f86e56712c325a8ee92ef93c37c38b85d55c38f2da11c3bca"
+    },
+    {
+      "bytes": 14083,
+      "git_blob": "665f675d14ae2532c84241bf2d3aefbff5dad01b",
+      "path": "scripts/studio/verification/0.10.0/recovered-native-01/multicam-source.json",
+      "sha256": "a56322cea38c541d22c052d52b8aca4e1a357da0f2f9cf73b477a7ce0ca512eb"
+    },
+    {
+      "bytes": 36414,
+      "git_blob": "285311d02544afb05b0ffbe0e606cf2e1aa604b1",
+      "path": "scripts/studio/verification/0.10.0/recovered-native-01/multicam-synchronize-01/ENGINE_TEST_multicam_native_report.json",
+      "sha256": "33c435201e010844c35208a75b12046e29f5301ec0e357af30ec9acb822b7f8d"
+    },
+    {
+      "bytes": 32195,
+      "git_blob": "c9ce480c4c35066b939743ea8a8dc991b083da46",
+      "path": "scripts/studio/verification/0.10.0/recovered-native-01/optics-edit-01/ENGINE_TEST_scientific_native_report.json",
+      "sha256": "5f31ae0326d93fa36ba0d5e5e8e45617cbab5d14eb8e2153cbec3f8ca8fbd73f"
+    },
+    {
+      "bytes": 39011,
+      "git_blob": "baa837080f2637b7172cb87b6ad1718443ca20f5",
+      "path": "scripts/studio/verification/0.10.0/recovered-native-01/optics-render-01/ENGINE_TEST_scientific_native_report.json",
+      "sha256": "90a28f979c50a91c9ec08a98685c9a9fdf27434586215d2f84012c9020f46ef9"
+    },
+    {
+      "bytes": 39533,
+      "git_blob": "8ef003c014583cd4ea0e9940ebeba5bf160a7fd1",
+      "path": "scripts/studio/verification/0.10.0/recovered-native-01/physical-01/ENGINE_TEST_scientific_native_report.json",
+      "sha256": "9015eb4b93477a5acb521af1ca75f5e47ab67d1e114216815ae78684f3b2d219"
+    },
+    {
+      "bytes": 38134,
+      "git_blob": "93794941bf65da4e0c00eca0a0d13630c5e4f421",
+      "path": "scripts/studio/verification/0.10.0/recovered-native-01/reconstruction-apply-01/ENGINE_TEST_reconstruction_native_report.json",
+      "sha256": "69a2ae32e80cef7dc9dff1976a6d683aff7f326bfd692a33b8f7d7626a097bbb"
+    },
+    {
+      "bytes": 32774,
+      "git_blob": "f7df015d46f4b70b7481f6b27ef8589b6b19670f",
+      "path": "scripts/studio/verification/0.10.0/recovered-native-01/reconstruction-author-01/ENGINE_TEST_reconstruction_native_report.json",
+      "sha256": "89fe7706f4dd2e7a12460c8a3b867a8e80e479b48538ca5a44bdb9493aa78138"
+    },
+    {
+      "bytes": 31083,
+      "git_blob": "06517418a075a4716eb44ecbb6c6f742564ea520",
+      "path": "scripts/studio/verification/0.10.0/recovered-native-01/reconstruction-prepare-01/ENGINE_TEST_reconstruction_native_report.json",
+      "sha256": "3788eb824b7c1f55644168e9dca75b0b333a35e641522553f3901ab6663bed7b"
+    },
+    {
+      "bytes": 36700,
+      "git_blob": "8e6d591f965a4251729cce57b541de4d809f3e65",
+      "path": "scripts/studio/verification/0.10.0/recovered-native-01/reconstruction-solve-01/ENGINE_TEST_reconstruction_native_report.json",
+      "sha256": "6fead63b1e0f15cf57157f70e405fc10cb990a600ec37ede2739168b0d5ab8ad"
+    },
+    {
+      "bytes": 14082,
+      "git_blob": "110339a82f4740104d4b4f57ffabf99c20a8628c",
+      "path": "scripts/studio/verification/0.10.0/recovered-native-01/reconstruction-source.json",
+      "sha256": "39655c39bea4d5a0918c8a1086fad3bbcfd9bf1d6d54afdae9c0af5433f07434"
+    },
+    {
+      "bytes": 13950,
+      "git_blob": "f237593ef314a0df07949811feea54a5e7f307de",
+      "path": "scripts/studio/verification/0.10.0/recovered-native-01/scientific-source.json",
+      "sha256": "91f226b4bc807845878f5b3d2d776618a4a5b1b18ef93eb9c7a45528246ad972"
+    },
+    {
+      "bytes": 11041,
+      "git_blob": "ed4f27bdf6dcbc82d6150a67a8b373b4f449357a",
+      "path": "scripts/studio/verification/0.10.0/tools/installed-launch-01/InstalledAppControl.swift",
+      "sha256": "07875105ab660b94e4d3c5cbd0d55b8572fc9efd681f00990ac19961250bfd6e"
+    },
+    {
+      "bytes": 2221,
+      "git_blob": "b376fa388b920bdaca8d9298cc359acc27f07145",
+      "path": "scripts/studio/verification/0.10.0/tools/installed-launch-01/build_installed_launch.py",
+      "sha256": "ff72c75045006aef6d2b93f596df72ab02f3031871ed3fcb5d5c2d6dce34495c"
+    },
+    {
+      "bytes": 34079,
+      "git_blob": "af060799bd7ca33951017c772c0a877a27ad9c56",
+      "path": "scripts/studio/verification/0.10.0/tools/installed-launch-01/run_installed_launch.py",
+      "sha256": "5889706803fb9ebde46b463ce361260334088286dc24386831b393e3e89f13d8"
+    },
+    {
+      "bytes": 26793,
+      "git_blob": "95821fb4e2d1186f7a4d0e5ad512ecce2c1c86e2",
+      "path": "scripts/studio/verification/0.10.0/tools/verify_installation.py",
+      "sha256": "b0c24f8992feeb7c8e8892f37bb057107e3bf7c6ca97259bccec44403a8d4d12"
+    },
+    {
+      "bytes": 308,
+      "git_blob": "950e6276b61c607e62e0dbed6235497d8de2bcc0",
+      "path": "scripts/studio/verification/0.9.1/bundle-fixed-frozen-operative-check.json",
+      "sha256": "ce9a03910a87785e5c2ae8397786c334dbbf649b44127a6c884511c76652f709"
+    },
+    {
+      "bytes": 32826,
+      "git_blob": "21529d9895e00e93e99fb8c8b1e832f4571a75e3",
+      "path": "scripts/studio/verification/0.9.1/bundle-fixed-frozen-operative-source.json",
+      "sha256": "30b514a409c8a0d86a047780b004942f6c65defbaf3ccb7e0da72f92085f7f3d"
+    },
+    {
+      "bytes": 970,
+      "git_blob": "cd96309f207b508195bb74a62b3ba7f4ae7dbee5",
+      "path": "scripts/studio/verification/0.9.1/bundle-fixed-full-actual-runtime-report.json",
+      "sha256": "50f5531cbbd015abb7dc238c91e91ecc685d0cda48014deac31f70e416264541"
+    },
+    {
+      "bytes": 503,
+      "git_blob": "4d2818ec956b4914d722d85065a435376fc81c59",
+      "path": "scripts/studio/verification/0.9.1/bundle-fixed-native-01/status.json",
+      "sha256": "2d6e7acb75722d5bb0852a4f74ef1256f0480a9bf95962ea5b302de754b8f117"
+    },
+    {
+      "bytes": 11725,
+      "git_blob": "7b9465d74fd7a6fde722a71720b84c350e16d857",
+      "path": "scripts/studio/verification/0.9.1/bundle-fixed-planar/measurement.json",
+      "sha256": "48c773d26c4b3e1d7e91a7ff8571759aaa2beef3d2795ea031ca5f15f45537a5"
+    },
+    {
+      "bytes": 2763,
+      "git_blob": "3c152de01e3a4e6931de72e0276d85bf5429488d",
+      "path": "scripts/studio/verification/0.9.1/bundle-fixed-planar/result.json",
+      "sha256": "00d5cd9eb9a8287fef76d0b91ad8844a05c80ab1286e97a40f3fcc0803f3e013"
+    },
+    {
+      "bytes": 1698,
+      "git_blob": "df45dae432ba18a533dd23224e41c8bf5e2d3d61",
+      "path": "scripts/studio/verification/0.9.1/bundle-worker-source-sync.json",
+      "sha256": "6dad9ec09ea60d06bcdd25a29613742056829974d98755ee232376b74fb3738c"
+    },
+    {
+      "bytes": 1245,
+      "git_blob": "bdedf14466a30b1a52b5bb4c310a3c714d69950d",
+      "path": "scripts/studio/verification/0.9.1/case001-owner-output-inventory.json",
+      "sha256": "13888d52a35159a20060e97a7a40b614631076abb2d678409756bd0a56ac6bf0"
+    },
+    {
+      "bytes": 544,
+      "git_blob": "4933079e854e34499a7055ccb17f2ef8aefb668f",
+      "path": "scripts/studio/verification/0.9.1/final-dialogs-01/status.json",
+      "sha256": "97080654ffe8bdd0b2a388a97f1958cfcd6d8e0c825593749f3aefc714054d77"
+    },
+    {
+      "bytes": 158654,
+      "git_blob": "79b208b3fc01e2335126015fc72d8aa54aa4501b",
+      "path": "scripts/studio/verification/0.9.1/final-extended-01/generation33-playback/ENGINE_TEST_actual_take_report.json",
+      "sha256": "bfcfbfe1849a522cf1ccaf91b5ed566b37968ac97a6bdfc96af538c66fc3c14e"
+    },
+    {
+      "bytes": 26758,
+      "git_blob": "83ea974ea1916b28b198316df1eee26c7cc429d5",
+      "path": "scripts/studio/verification/0.9.1/final-extended-01/generation33/report.json",
+      "sha256": "7df576feb8e7bedae8c45a42925bad64d34f77ede2d371456c1ddfb7ba6ea824"
+    },
+    {
+      "bytes": 241,
+      "git_blob": "a4edc3123215840eaa46e12fe9c973ec90f77c47",
+      "path": "scripts/studio/verification/0.9.1/final-extended-01/generation33/status.json",
+      "sha256": "c50f423763c8f675dadf7d4244a15510875f1b21a05f9d46c524b263900d5edb"
+    },
+    {
+      "bytes": 4436,
+      "git_blob": "ec01119291a1d90a6ede638c555901047e50ad1a",
+      "path": "scripts/studio/verification/0.9.1/final-extended-01/high16/ENGINE_TEST_high16_native_report.json",
+      "sha256": "9a20eaaff4c41dfd15aa820d4a39cc6cf5d526087ca052913947037112c2afea"
+    },
+    {
+      "bytes": 332,
+      "git_blob": "cc2b6ef9665f04abfd3fca94d2ee5d468f3de911",
+      "path": "scripts/studio/verification/0.9.1/final-extended-01/status.json",
+      "sha256": "a917706936b026e25be306918de06569e5eb78649c1cc3063827d3eb71ba5c54"
+    },
+    {
+      "bytes": 257,
+      "git_blob": "e4f8466c784e156815e85188f4a8241d71d28f54",
+      "path": "scripts/studio/verification/0.9.1/final-frozen-operative-check.json",
+      "sha256": "2f9145314aaf899eb2f3482fa81c992f23ed3c13014a25b56a8feb8611d9096a"
+    },
+    {
+      "bytes": 32593,
+      "git_blob": "47b73e1f76431d07a4c756dbd4c30ac3ac680f6f",
+      "path": "scripts/studio/verification/0.9.1/final-frozen-operative-source.json",
+      "sha256": "5ba0151588b6dbba0b10175503c4768f57da691c1feaa8357afc1fd02f3ab1f2"
+    },
+    {
+      "bytes": 970,
+      "git_blob": "fe90e7a46584f24d7951b7df48b3501d05aa9600",
+      "path": "scripts/studio/verification/0.9.1/final-full-actual-runtime-report.json",
+      "sha256": "e03bef95235724b941181a506e1883ef4aeea1ceacd0ee7feb28c0e0e8019108"
+    },
+    {
+      "bytes": 380,
+      "git_blob": "a920a37616e87b7ffaa3fc04099963ec17979886",
+      "path": "scripts/studio/verification/0.9.1/final-launch-01/status.json",
+      "sha256": "cbc0af7513dd7af5ef2f33b222369898378a95738b995b2712c75752ad1aa987"
+    },
+    {
+      "bytes": 88172,
+      "git_blob": "9eb8f007a8683ab5964144f1c6e713906f6b54aa",
+      "path": "scripts/studio/verification/0.9.1/final-native-01/actual-take-1/ENGINE_TEST_actual_take_report.json",
+      "sha256": "aaa834bdd7c76e567ce8c1c4f8f62a86d2854f18198a8f8f754f1995721d0df6"
+    },
+    {
+      "bytes": 88132,
+      "git_blob": "4fdca0840efd549d00f0b3963aa3392e94ba50b5",
+      "path": "scripts/studio/verification/0.9.1/final-native-01/actual-take-2/ENGINE_TEST_actual_take_report.json",
+      "sha256": "d64795e097b5b89aa9da7aae9744a29954c6be976f19da0af6e75fe5e7b20ed9"
+    },
+    {
+      "bytes": 115807,
+      "git_blob": "1be252ea3fd5174a5caac8d323940f30b5b40855",
+      "path": "scripts/studio/verification/0.9.1/final-native-01/audio/ENGINE_TEST_audio_acceptance_report.json",
+      "sha256": "bf049a011b59e5f714215169b1d53e7f3160896a7ff0551dc672c0c9fcf0c656"
+    },
+    {
+      "bytes": 1184,
+      "git_blob": "e3b1d9960b68849f4455baf5f2662ca78a04008c",
+      "path": "scripts/studio/verification/0.9.1/final-native-01/high16/ENGINE_TEST_high16_native_report.json",
+      "sha256": "8fb8e5087494967e1f97a6ca3bb9c7f18e0bd7a02dbafe2412031c34a556ff60"
+    },
+    {
+      "bytes": 2804,
+      "git_blob": "9736e414d180be02bee57c5095f3240033607490",
+      "path": "scripts/studio/verification/0.9.1/final-native-01/planar/result.json",
+      "sha256": "7a58f14f80987cfd8f6a3ed8dc4dd0323c19d4e63e980cc919670917e3154ed5"
+    },
+    {
+      "bytes": 3256,
+      "git_blob": "c7309fc9e3c75e702647a51759c5e90a6be967ef",
+      "path": "scripts/studio/verification/0.9.1/final-native-01/status.json",
+      "sha256": "cafd4a8ab353f397fc13db47c52035706b2cd041073894cb5be459478a3d8250"
+    },
+    {
+      "bytes": 8367,
+      "git_blob": "c03d16887e321cfa2eb86e693a63b6e781f449e7",
+      "path": "scripts/studio/verification/0.9.1/final-reconciliation-81827-01.json",
+      "sha256": "0c6d76e03bfca1bedbb4a4320eff6127398f7d9036d6cad8f6c5a45f9975ab06"
+    },
+    {
+      "bytes": 257,
+      "git_blob": "9c2f8a611c9f5110b098ef664a9aa798cedbf973",
+      "path": "scripts/studio/verification/0.9.1/frozen-operative-check.json",
+      "sha256": "859d1ba5730910529104e50cb1ce3f03a08613654740937c9ad8ceed60202e88"
+    },
+    {
+      "bytes": 32593,
+      "git_blob": "86b283fb73c9367e410a3f0275949cb9c301a916",
+      "path": "scripts/studio/verification/0.9.1/frozen-operative-source.json",
+      "sha256": "5db8cdeef9c316c5809e8c219815c3e7454f448fe08c7a972c80a3662f976653"
+    },
+    {
+      "bytes": 970,
+      "git_blob": "1854565c655aff4b6d061e1233aa381e63548c8a",
+      "path": "scripts/studio/verification/0.9.1/full-actual-runtime-report.json",
+      "sha256": "d436f9f736d0c4ba5d41bf5762de9e9039efccd99afc18e5577b2311eee821a8"
+    },
+    {
+      "bytes": 4687,
+      "git_blob": "24510da1abce7ff096356772428db9b43ce930af",
+      "path": "scripts/studio/verification/0.9.1/installation-02-summary.json",
+      "sha256": "d81cbf8402eff7c980a7bbc63725f2bc9fbd0e9530161288ced6200fce3aa818"
+    },
+    {
+      "bytes": 4889,
+      "git_blob": "b3066fc02d9a9a6034e5cb1d81ea908e00a1272a",
+      "path": "scripts/studio/verification/0.9.1/installation-03-collected-summary.json",
+      "sha256": "e983c77c1f52aabbbf0e433d1389a91da734166eade9f24912c1967330aa1dcf"
+    },
+    {
+      "bytes": 3731,
+      "git_blob": "5903bd9560116fcc8d60377d71597b477dcc7229",
+      "path": "scripts/studio/verification/0.9.1/installation-03-observation.json",
+      "sha256": "de8ef8a29ccaf4126604ace9c9d05c7b16ca314dcf4deb119130fdca0510c9c0"
+    },
+    {
+      "bytes": 1147,
+      "git_blob": "6117b42da0c7a04678ec0b58e6311c0bd478e89f",
+      "path": "scripts/studio/verification/0.9.1/installed-launch-01/controller-build.json",
+      "sha256": "8e2345eff4cc13d104212c793ae20b6b51f4be5846c509369e438e0030d1d856"
+    },
+    {
+      "bytes": 58433,
+      "git_blob": "5eacdc178d5e22093b7da1b08bc08d6c34afdd66",
+      "path": "scripts/studio/verification/0.9.1/installed-launch-01/installed-launch-report.json",
+      "sha256": "47cdbc8b9d9e2abf140155e37d050afdec899f31c955ff0cd29ed69490068b15"
+    },
+    {
+      "bytes": 58207,
+      "git_blob": "734e1ca58fef806061a2dcfdb1b1b8cc3362048e",
+      "path": "scripts/studio/verification/0.9.1/installed-launch-02/installed-launch-report.json",
+      "sha256": "fd3fdc614e94c4cd88246baaea638905ec34cf9d3fbae9189265959efc1fe28c"
+    },
+    {
+      "bytes": 35462,
+      "git_blob": "25f4008d6b9500802e5988aee66a7cff9884507f",
+      "path": "scripts/studio/verification/0.9.1/native-evidence-summary.json",
+      "sha256": "8649506c8ca14305227f2ea2e928896a481516bd01c9c9a42e823c8eac595fea"
+    },
+    {
+      "bytes": 1838,
+      "git_blob": "dea3c6063b02ebdee41f1c02fe93bfac5de1daa0",
+      "path": "scripts/studio/verification/0.9.1/owned-default-download-recovery.json",
+      "sha256": "0afa081f12ca353311ca0ecad5055c9a895678dc0c2bd181667776bbddb8e489"
+    },
+    {
+      "bytes": 1903,
+      "git_blob": "0ca558e5c8818be18d6fcc41cc683feaff83936c",
+      "path": "scripts/studio/verification/0.9.1/production-native-01/build.json",
+      "sha256": "c60ada959701312a687bc1f8df9ebaa165bbb064e4b10b322af4a6741647936f"
+    },
+    {
+      "bytes": 0,
+      "git_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "path": "scripts/studio/verification/0.9.1/production-native-01/native.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "bytes": 9497,
+      "git_blob": "0370fc0f259e7cd390e73cc1628e22722ad9403c",
+      "path": "scripts/studio/verification/0.9.1/production-native-01/production-download-report.json",
+      "sha256": "d8b85fdb3b2296b404800db17f02e1c7a9d5c45e02b6e33473db6b02d09ade2b"
+    },
+    {
+      "bytes": 1185,
+      "git_blob": "762efcaa1d3608bdad2b73d0413f587eabd5c85e",
+      "path": "scripts/studio/verification/0.9.1/production-native-01/status.json",
+      "sha256": "02a99585c2fc31b7a1da694707451bb430ace3ecaf7c50cf4886bb9df25afc18"
+    },
+    {
+      "bytes": 1923,
+      "git_blob": "763012c2ade01d47dcad925e637f68a48398cdc9",
+      "path": "scripts/studio/verification/0.9.1/production-native-02/build.json",
+      "sha256": "b16ec4e053c946f564b14725377054e47cb2985cf713153ecae0a002265cea2a"
+    },
+    {
+      "bytes": 0,
+      "git_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "path": "scripts/studio/verification/0.9.1/production-native-02/native.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "bytes": 24441,
+      "git_blob": "45444e66a2f6fd6a95da55795d6f6552ad0acc0b",
+      "path": "scripts/studio/verification/0.9.1/production-native-02/production-download-report.json",
+      "sha256": "ea959a498d2c1f6d58542b0833e6e71f9ddd345694c4f99b5500a63d6c68acf7"
+    },
+    {
+      "bytes": 1891,
+      "git_blob": "2c364728fa54c89ee05d003f3dccf4ea1e65700b",
+      "path": "scripts/studio/verification/0.9.1/production-native-03/build.json",
+      "sha256": "cc5633e5e3cdce32d37c0ad1318646d7ad5461fc5498bf26d1d9cd85f7aef396"
+    },
+    {
+      "bytes": 907,
+      "git_blob": "85c9faa94d3b1cfac9dd37ccf288ac3db04d9dbc",
+      "path": "scripts/studio/verification/0.9.1/production-native-03/owned-default-download-recovery.json",
+      "sha256": "6076059642510bf52c4612c9d919faf8cf8853151f7fdc5128ca4369c4fcf4e7"
+    },
+    {
+      "bytes": 36676,
+      "git_blob": "6d45ef2371c35e16b249d22a1b5d56bdd67a2444",
+      "path": "scripts/studio/verification/0.9.1/production-native-03/production-download-report.json",
+      "sha256": "70a860ca3662e9f20b343c7eb945dfb7cb7f97c7162e3f1438c2b38efff96675"
+    },
+    {
+      "bytes": 1807,
+      "git_blob": "08fc5fad6f5f76711f4f651908d02850ffeff8f8",
+      "path": "scripts/studio/verification/0.9.1/production-native-04/build.json",
+      "sha256": "1f9b0b02363e1ffe556b919a27ae8cf128ad74fd697702cc8db797c1f91b692e"
+    },
+    {
+      "bytes": 36199,
+      "git_blob": "ef725896f171aa0a353f84fad46cc76300b83632",
+      "path": "scripts/studio/verification/0.9.1/production-native-04/production-download-report.json",
+      "sha256": "eef28f07bb8311f2f4770e11cd4e549c5d8b04c1bf73e0c76ae8046de9c1712e"
+    },
+    {
+      "bytes": 1531,
+      "git_blob": "974710a4e68d63bdfa878ade70273a932abcfa78",
+      "path": "scripts/studio/verification/0.9.1/production-quit-01/build.json",
+      "sha256": "2b413c0a50e41a950598bff627958fc60716b4308429ef1b029a309b9715dedf"
+    },
+    {
+      "bytes": 1022,
+      "git_blob": "e4fa5302e769340974d2d9169854219531016250",
+      "path": "scripts/studio/verification/0.9.1/production-quit-01/status.json",
+      "sha256": "f3fa921b417391e0c16ba8fb64642c774f4b67d28410c09c2df6649f36628775"
+    },
+    {
+      "bytes": 339,
+      "git_blob": "ebbf92ef465a928aecc09a3ccfacdda2665a6708",
+      "path": "scripts/studio/verification/0.9.1/production-quit-02/first-job.json",
+      "sha256": "00d2ee35cec2a0b067591f57ded704253275cae98e3404f85d2fc02fc478d794"
+    },
+    {
+      "bytes": 16608,
+      "git_blob": "940e85c56e1f6ada7101f741bcdc62f536e693a8",
+      "path": "scripts/studio/verification/0.9.1/production-quit-02/production-quit-report.json",
+      "sha256": "735d3cab0b3d4e9dc8d939cb33cc80e90ded31caaa6d343fcdcadd2a67007b32"
+    },
+    {
+      "bytes": 1065,
+      "git_blob": "a7464edc6b444aa9caa89bf0434cb9980d7a12d4",
+      "path": "scripts/studio/verification/0.9.1/production-quit-02/status.json",
+      "sha256": "6857bdd808d51b45ab3dc9409be1aa6e28e1714830b27afbbeb6b3a5e7a4b807"
+    },
+    {
+      "bytes": 0,
+      "git_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "path": "scripts/studio/verification/0.9.1/production-quit-03/native.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "bytes": 28907,
+      "git_blob": "b5efce02a9717d0afa9be0cb70a127a6c1ee2a6b",
+      "path": "scripts/studio/verification/0.9.1/production-quit-03/production-quit-report.json",
+      "sha256": "ffd8e77027fc66a0a2ab64e56ad986c0297f18d34046871310d04494d37bb5b6"
+    },
+    {
+      "bytes": 29887,
+      "git_blob": "449f0cda6b5e640e899d1e417b86a3c4fdb7fb61",
+      "path": "scripts/studio/verification/0.9.1/production-quit-04/production-quit-report.json",
+      "sha256": "d1e1f65e58319a56294b0dcf3a179b02c92bc67abcefef478fd06d12e6d2eecf"
+    },
+    {
+      "bytes": 29575,
+      "git_blob": "cba18cc70699ecf75bb484ae9085855b6e664256",
+      "path": "scripts/studio/verification/0.9.1/production-quit-05/production-quit-report.json",
+      "sha256": "a686c88ca02f35477223756652f3be71ab6af9a3a48d581efb21789d9a99dadf"
+    },
+    {
+      "bytes": 11040,
+      "git_blob": "60c78b90489558b8e56dc3195b68ddd0196df576",
+      "path": "scripts/studio/verification/0.9.1/tools/installed-launch-01/InstalledAppControl.swift",
+      "sha256": "7c6ff3f77b350f6e5b4ee25a136235de51ee5247f9867b3de24b2b76747e1f8b"
+    },
+    {
+      "bytes": 2221,
+      "git_blob": "b376fa388b920bdaca8d9298cc359acc27f07145",
+      "path": "scripts/studio/verification/0.9.1/tools/installed-launch-01/build_installed_launch.py",
+      "sha256": "ff72c75045006aef6d2b93f596df72ab02f3031871ed3fcb5d5c2d6dce34495c"
+    },
+    {
+      "bytes": 31984,
+      "git_blob": "1269fdfe3563d0831091b901b79c13df9cfcb536",
+      "path": "scripts/studio/verification/0.9.1/tools/installed-launch-01/run_installed_launch.py",
+      "sha256": "709d06707404862a0e08757271557ffae95bbed7816df5a1afddd2566d83fb2e"
+    },
+    {
+      "bytes": 8369,
+      "git_blob": "e200c22727886ba354eeb8d27a508c7dbdacb140",
+      "path": "scripts/studio/verification/0.9.1/tools/installed-source-reconcile-01/reconcile_installed_source.py",
+      "sha256": "3c094e1af7da32b5611825836c88cfad769c372e72d8c6d17696ae42775466ed"
+    },
+    {
+      "bytes": 10175,
+      "git_blob": "cd7df884c822381e6542b0168779cb4eb76dfe4e",
+      "path": "scripts/studio/verification/0.9.1/tools/installed-source-reconcile-02/reconcile_installed_source.py",
+      "sha256": "cc83e05179b85ed57afd54e0941bd7ce381731b47c4a8c08c9f8e6523bfa534e"
+    },
+    {
+      "bytes": 16151,
+      "git_blob": "6fb4803401321056cbeb5b6d096386229ff02468",
+      "path": "scripts/studio/verification/0.9.1/tools/production-native-01/ProductionNativeAcceptance.swift",
+      "sha256": "36be165098625a19a6296eadc5ecf8925b38761c6d1aca09a67488a3b19027e9"
+    },
+    {
+      "bytes": 4076,
+      "git_blob": "39f6d524aaef7258b71f196adab5abb45bc31f5f",
+      "path": "scripts/studio/verification/0.9.1/tools/production-native-01/build.py",
+      "sha256": "cb35730549b005398d689caf271c4731cc18ecf60f8049fceb25113afd349836"
+    },
+    {
+      "bytes": 11095,
+      "git_blob": "b4769c416ddc2b69432940114571b840ebef3474",
+      "path": "scripts/studio/verification/0.9.1/tools/production-native-01/run_download.py",
+      "sha256": "3b273046a1fea46b6e411048505c34d27a1d72f43643332e16f151d6f7acfc62"
+    },
+    {
+      "bytes": 22445,
+      "git_blob": "bf68eba2a0e5c3d092ba24db661d06e0eb7957c8",
+      "path": "scripts/studio/verification/0.9.1/tools/production-native-02/ProductionNativeAcceptance.swift",
+      "sha256": "5ab7992bd328215b4331e5fa281770e43aea47c1409caec1ee89f05e68a20dc9"
+    },
+    {
+      "bytes": 4076,
+      "git_blob": "39f6d524aaef7258b71f196adab5abb45bc31f5f",
+      "path": "scripts/studio/verification/0.9.1/tools/production-native-02/build.py",
+      "sha256": "cb35730549b005398d689caf271c4731cc18ecf60f8049fceb25113afd349836"
+    },
+    {
+      "bytes": 12560,
+      "git_blob": "e7d87ff321d8d9ca9929e1e44551e3a4ba261476",
+      "path": "scripts/studio/verification/0.9.1/tools/production-native-02/run_download.py",
+      "sha256": "1eada74943a43c9878ea48d7f84f8cd0ea0d0ed755abdc9f1c52e6c8a3a0ffdf"
+    },
+    {
+      "bytes": 30714,
+      "git_blob": "8864b52bfa2a196a8cab477d6bd3488ad923617a",
+      "path": "scripts/studio/verification/0.9.1/tools/production-native-03/ProductionNativeAcceptance.swift",
+      "sha256": "e9432d6f863049d451b42cebce75be5de4b27b9cf5644d9ddbee75462a67c9f9"
+    },
+    {
+      "bytes": 4076,
+      "git_blob": "39f6d524aaef7258b71f196adab5abb45bc31f5f",
+      "path": "scripts/studio/verification/0.9.1/tools/production-native-03/build.py",
+      "sha256": "cb35730549b005398d689caf271c4731cc18ecf60f8049fceb25113afd349836"
+    },
+    {
+      "bytes": 15272,
+      "git_blob": "b76b3cc5354d22c8175be7a39fe0710333799256",
+      "path": "scripts/studio/verification/0.9.1/tools/production-native-03/run_download.py",
+      "sha256": "8c3c34d507c423e4b513b4252690afff9e349022d3dab613d0bc2041ffefdd20"
+    },
+    {
+      "bytes": 31447,
+      "git_blob": "c989d2ece6fcbb70ae80ed37ca5c66154ad64358",
+      "path": "scripts/studio/verification/0.9.1/tools/production-native-04/ProductionNativeAcceptance.swift",
+      "sha256": "44ab3c17cb6c2d9237804e9e295251ade0cd3fe51c627674ebf05984640dfcb7"
+    },
+    {
+      "bytes": 4076,
+      "git_blob": "39f6d524aaef7258b71f196adab5abb45bc31f5f",
+      "path": "scripts/studio/verification/0.9.1/tools/production-native-04/build.py",
+      "sha256": "cb35730549b005398d689caf271c4731cc18ecf60f8049fceb25113afd349836"
+    },
+    {
+      "bytes": 16261,
+      "git_blob": "d792470f976e0e86fbb916d0080c3028e4ab6310",
+      "path": "scripts/studio/verification/0.9.1/tools/production-native-04/run_download.py",
+      "sha256": "90dc8daa73442fb7aa5069b38e3222a1e013690053b099173661338b69a14e0b"
+    },
+    {
+      "bytes": 20387,
+      "git_blob": "1c0242478aa90a33c22091257f69f4402aa074ee",
+      "path": "scripts/studio/verification/0.9.1/tools/production-quit-01/ProductionQuitAcceptance.swift",
+      "sha256": "921a7cfaf45f074d7478d35f243c28c094f78f3577e705b9afa0a0cf101633b0"
+    },
+    {
+      "bytes": 1535,
+      "git_blob": "850fbab022a52a3b8953a673dbd53cff606a03eb",
+      "path": "scripts/studio/verification/0.9.1/tools/production-quit-01/QuitRestart.js",
+      "sha256": "45496dad6a27835083f4d5973e93c4de7a292c57fa79f2837aeb08d4e237a802"
+    },
+    {
+      "bytes": 2267,
+      "git_blob": "2acb77c6e5a5a96657c7c54702d6003a5876c551",
+      "path": "scripts/studio/verification/0.9.1/tools/production-quit-01/QuitWorkflow.js",
+      "sha256": "d1604138407113f69afb41c0e326ac2c693ccf51f2274ed7aef6846f4c73504b"
+    },
+    {
+      "bytes": 3139,
+      "git_blob": "5c3aaecf9e5d6d3d818446d6691a5c8d12a2e38c",
+      "path": "scripts/studio/verification/0.9.1/tools/production-quit-01/build_quit.py",
+      "sha256": "175ed9c90f3e3a75f7b7424e3b1821260a96da6e28dc7a9f18917c1119b783b0"
+    },
+    {
+      "bytes": 18053,
+      "git_blob": "398ba3bacd6eb3c4105c50cf264e37fdebde7a91",
+      "path": "scripts/studio/verification/0.9.1/tools/production-quit-01/run_quit.py",
+      "sha256": "25cec7cac6fb5bd7cfdf8c5bd6fce8668acdccc3d4759d050708e09a3abaec5e"
+    },
+    {
+      "bytes": 20387,
+      "git_blob": "1c0242478aa90a33c22091257f69f4402aa074ee",
+      "path": "scripts/studio/verification/0.9.1/tools/production-quit-03/ProductionQuitAcceptance.swift",
+      "sha256": "921a7cfaf45f074d7478d35f243c28c094f78f3577e705b9afa0a0cf101633b0"
+    },
+    {
+      "bytes": 1535,
+      "git_blob": "850fbab022a52a3b8953a673dbd53cff606a03eb",
+      "path": "scripts/studio/verification/0.9.1/tools/production-quit-03/QuitRestart.js",
+      "sha256": "45496dad6a27835083f4d5973e93c4de7a292c57fa79f2837aeb08d4e237a802"
+    },
+    {
+      "bytes": 2267,
+      "git_blob": "2acb77c6e5a5a96657c7c54702d6003a5876c551",
+      "path": "scripts/studio/verification/0.9.1/tools/production-quit-03/QuitWorkflow.js",
+      "sha256": "d1604138407113f69afb41c0e326ac2c693ccf51f2274ed7aef6846f4c73504b"
+    },
+    {
+      "bytes": 3139,
+      "git_blob": "5c3aaecf9e5d6d3d818446d6691a5c8d12a2e38c",
+      "path": "scripts/studio/verification/0.9.1/tools/production-quit-03/build_quit.py",
+      "sha256": "175ed9c90f3e3a75f7b7424e3b1821260a96da6e28dc7a9f18917c1119b783b0"
+    },
+    {
+      "bytes": 18273,
+      "git_blob": "3a64592f88af508e30a55010b2ca1bc777f807d8",
+      "path": "scripts/studio/verification/0.9.1/tools/production-quit-03/run_quit.py",
+      "sha256": "69d85f9cb19e9c08b0a6dd4bd09ad25eedf7d4bf9f37281c35569d098b9a96de"
+    },
+    {
+      "bytes": 20387,
+      "git_blob": "1c0242478aa90a33c22091257f69f4402aa074ee",
+      "path": "scripts/studio/verification/0.9.1/tools/production-quit-04/ProductionQuitAcceptance.swift",
+      "sha256": "921a7cfaf45f074d7478d35f243c28c094f78f3577e705b9afa0a0cf101633b0"
+    },
+    {
+      "bytes": 1535,
+      "git_blob": "850fbab022a52a3b8953a673dbd53cff606a03eb",
+      "path": "scripts/studio/verification/0.9.1/tools/production-quit-04/QuitRestart.js",
+      "sha256": "45496dad6a27835083f4d5973e93c4de7a292c57fa79f2837aeb08d4e237a802"
+    },
+    {
+      "bytes": 2267,
+      "git_blob": "2acb77c6e5a5a96657c7c54702d6003a5876c551",
+      "path": "scripts/studio/verification/0.9.1/tools/production-quit-04/QuitWorkflow.js",
+      "sha256": "d1604138407113f69afb41c0e326ac2c693ccf51f2274ed7aef6846f4c73504b"
+    },
+    {
+      "bytes": 3139,
+      "git_blob": "5c3aaecf9e5d6d3d818446d6691a5c8d12a2e38c",
+      "path": "scripts/studio/verification/0.9.1/tools/production-quit-04/build_quit.py",
+      "sha256": "175ed9c90f3e3a75f7b7424e3b1821260a96da6e28dc7a9f18917c1119b783b0"
+    },
+    {
+      "bytes": 18599,
+      "git_blob": "bae7b7e4f921b81b48ac19bc4335d812c0bd2ad1",
+      "path": "scripts/studio/verification/0.9.1/tools/production-quit-04/run_quit.py",
+      "sha256": "7c4b64995c45c63d479cd45f1740d1e5450f1692d387c38d42dde0db802e04f9"
+    },
+    {
+      "bytes": 20387,
+      "git_blob": "1c0242478aa90a33c22091257f69f4402aa074ee",
+      "path": "scripts/studio/verification/0.9.1/tools/production-quit-05/ProductionQuitAcceptance.swift",
+      "sha256": "921a7cfaf45f074d7478d35f243c28c094f78f3577e705b9afa0a0cf101633b0"
+    },
+    {
+      "bytes": 1535,
+      "git_blob": "850fbab022a52a3b8953a673dbd53cff606a03eb",
+      "path": "scripts/studio/verification/0.9.1/tools/production-quit-05/QuitRestart.js",
+      "sha256": "45496dad6a27835083f4d5973e93c4de7a292c57fa79f2837aeb08d4e237a802"
+    },
+    {
+      "bytes": 2267,
+      "git_blob": "2acb77c6e5a5a96657c7c54702d6003a5876c551",
+      "path": "scripts/studio/verification/0.9.1/tools/production-quit-05/QuitWorkflow.js",
+      "sha256": "d1604138407113f69afb41c0e326ac2c693ccf51f2274ed7aef6846f4c73504b"
+    },
+    {
+      "bytes": 3139,
+      "git_blob": "5c3aaecf9e5d6d3d818446d6691a5c8d12a2e38c",
+      "path": "scripts/studio/verification/0.9.1/tools/production-quit-05/build_quit.py",
+      "sha256": "175ed9c90f3e3a75f7b7424e3b1821260a96da6e28dc7a9f18917c1119b783b0"
+    },
+    {
+      "bytes": 20249,
+      "git_blob": "59f31df635418211e678f72b8d9d1f3f3e496566",
+      "path": "scripts/studio/verification/0.9.1/tools/production-quit-05/run_quit.py",
+      "sha256": "055c0065f1e759d59474e96634aa2dc91f566dc28448908a08a0872c46999176"
+    },
+    {
+      "bytes": 22924,
+      "git_blob": "b4d9874e7f0a7a9a31c246825b2f1e85ae0dd3b5",
+      "path": "scripts/studio/verification/0.9.1/tools/tool-identities-before-native-04.json",
+      "sha256": "fdc23c4ac38d0918dad201317e54ab8556d3145461139ab46be9224e150884b6"
+    },
+    {
+      "bytes": 1738,
+      "git_blob": "334f855e56b4666b2155cab50370b614dd28ce12",
+      "path": "scripts/studio/verification/0.9.1/tools/tool-identities-before-versioning.json",
+      "sha256": "fe76af62d012c1752d8c0629b9d72dd7af63010c7b2108ba76d7e1ea6f8fb495"
+    },
+    {
+      "bytes": 28996,
+      "git_blob": "ee03586233bf7b55ef1ccca11696163ae47912d5",
+      "path": "scripts/studio/verification/0.9.1/tools/tool-identities.json",
+      "sha256": "6aac19ff53c55cb77275f2a4f5c8564f30ba2226f1e92527bc48453fa6b59cd8"
+    },
+    {
+      "bytes": 26790,
+      "git_blob": "02e4f426f3584ac4639ecd1a6835c4c7ae696e80",
+      "path": "scripts/studio/verification/0.9.1/tools/verify_installation.py",
+      "sha256": "47de0993575e0646d7c507ebf387ea85db766b41d6c56fe597a7cb0b9047121e"
+    },
+    {
+      "bytes": 1116,
+      "git_blob": "b4ff086f54ed44e1eb0124b4a7b47a44e0c7138d",
+      "path": "scripts/studio/verification/0.9.1/worker-bytecode-fix/after-focused.json",
+      "sha256": "9c97ad5cfc16e372bf0ced8b4adb470b86cefc7303fb21d32f87038b1027cdca"
+    },
+    {
+      "bytes": 1604,
+      "git_blob": "a9997fa0cff2967fecea96085b4e7a824ba63194",
+      "path": "scripts/studio/verification/0.9.1/worker-bytecode-fix/after-focused.stderr",
+      "sha256": "5eedddb2e50786180ba1f56e8dccfe97c67832e1ff36afbc83f2b9375fa86981"
+    },
+    {
+      "bytes": 318,
+      "git_blob": "e72d5a876ecae75aaf2da99b530889ab2b6c814e",
+      "path": "scripts/studio/verification/0.9.1/worker-bytecode-fix/before-regression.json",
+      "sha256": "fd53787ee2b3d9db7018afc8d80a557bdfa78ff1a8679cf05d2aa3ff95fa00f0"
+    },
+    {
+      "bytes": 1550,
+      "git_blob": "ab24b246f1a95d4980585843b31a881f4935461e",
+      "path": "scripts/studio/verification/0.9.1/worker-bytecode-fix/before-regression.stderr",
+      "sha256": "556ee0c45620f752f12214af7c5303236f67e7aea0bce62a06cbc3ff6afa732c"
+    },
+    {
+      "bytes": 2749,
+      "git_blob": "e7d0135bb1bfafc550ed10746062ab09b36ba4a8",
+      "path": "scripts/studio/verification/0.9.1/worker-bytecode-fix/manifest.json",
+      "sha256": "387e85f1fdd1dc1a238e6af5f8f144158e31b9fbd719f6825690cfab7cb9097d"
+    },
+    {
+      "bytes": 3269,
+      "git_blob": "e2186fb528c47f877791aa6ddf64c62839d4baef",
+      "path": "scripts/studio/verification/0.9.1/worker-bytecode-fix/production.patch",
+      "sha256": "5168aceb82aeca560434de89d19b31cb239918a618a6bf6a50d8f4dee5e1fd48"
+    },
+    {
+      "bytes": 7745,
+      "git_blob": "cfdd51d068c7d8ed271c7de052bcb2c3a0ab1c58",
+      "path": "scripts/studio/verify_camera_native.py",
+      "sha256": "d290eb22bc554f6d2ee85632673aa338f4839d0e71e8a57cad77654082249658"
+    },
+    {
+      "bytes": 11259,
+      "git_blob": "614af9e4bd16128ef0eee682da418710537ce858",
+      "path": "scripts/studio/waveform.py",
+      "sha256": "ca2503aa4555d2f5bb3eba47d019711e1b7cf85a2fe6c5c660e459bce0824792"
+    },
+    {
+      "bytes": 131787,
+      "git_blob": "6dc44fdd40e4108752c6f78bb5ff40bd4256e49f",
+      "path": "scripts/studio/web/app.js",
+      "sha256": "21e5d5aba22720356527566fc6badf0b75cc1b69213be468f977f57f1ae9918c"
+    },
+    {
+      "bytes": 9491,
+      "git_blob": "38d9a7b3b5a057aa0287c50b9f20a8ef92a5f935",
+      "path": "scripts/studio/web/archive-ui.js",
+      "sha256": "d928645674325e620f92720afcde875d9e0f422f45e647483cb5eaa319e011b3"
+    },
+    {
+      "bytes": 14158,
+      "git_blob": "5dfce1a6e550fbcc2942e200329fa5fec306c7aa",
+      "path": "scripts/studio/web/audio-routing.js",
+      "sha256": "3cd78859882264f78204f1bab6e5c53e8346b1956a7594101357bb7e131002c8"
+    },
+    {
+      "bytes": 15889,
+      "git_blob": "bbbdaa7e23273d8a5898d5d60a19d7def520c6b0",
+      "path": "scripts/studio/web/camera-io-ui.js",
+      "sha256": "b6eba14106224ebd3712f514bba60d4df0363267d12f1675e899feb8c85ebbec"
+    },
+    {
+      "bytes": 23132,
+      "git_blob": "ab2124e218f19f31107be5249ac0634d38e84ab3",
+      "path": "scripts/studio/web/collaboration-ui.js",
+      "sha256": "f64ec4d0781f9ce917d5d791e26ab43fc234c9ce6e85a9d34611ff599779fc28"
+    },
+    {
+      "bytes": 16434,
+      "git_blob": "c0aefb1e4d047a624f0b631f835ca346588837af",
+      "path": "scripts/studio/web/color-pipeline-ui.js",
+      "sha256": "d630d7f5ccc39107ad23d00c0ddf295ebb665aae1a8207a5cd2a802767209cba"
+    },
+    {
+      "bytes": 96163,
+      "git_blob": "b8686f2e6faa4e76fba095ae27f5df952b87cc06",
+      "path": "scripts/studio/web/compositor-ui.js",
+      "sha256": "9d030cd30a1e833fc233d39f7e14bf4d0c47c7bf245c6ed159bfb4faeb608ce8"
+    },
+    {
+      "bytes": 25642,
+      "git_blob": "33bc95da8919e3ba7e39d05e26f81b96f6c1c377",
+      "path": "scripts/studio/web/deep-compositing-ui.js",
+      "sha256": "a8dacfa6436be3491cb5fe2cd8d9ceab95d9ec7718ef65f383db8aeee65b0d9e"
+    },
+    {
+      "bytes": 10125,
+      "git_blob": "221e08ab79a6172ffdc319cec96d126f47de5794",
+      "path": "scripts/studio/web/editing.js",
+      "sha256": "fcf1a80d232128a5edc3a9f25064f87277aa05086457d9453420539590b6c5a6"
+    },
+    {
+      "bytes": 16744,
+      "git_blob": "9cff8d7228ca005e084a97234aa95b4acfaccb28",
+      "path": "scripts/studio/web/editorial-ui.js",
+      "sha256": "99e1aaacd7e7fd56ae8cf846a24c1c94eecdb299b7ed81c454f1ec5d04f6a257"
+    },
+    {
+      "bytes": 24788,
+      "git_blob": "38c27a55587bfe001c267b2c61003671612dc2e8",
+      "path": "scripts/studio/web/imaging-ui.js",
+      "sha256": "312e6f841862f452608b9d2db7abd4a2b4f94a13549ae81bdcb308190df0cbd2"
+    },
+    {
+      "bytes": 19123,
+      "git_blob": "c197a3b242eee67683f6f18be00333b941363f17",
+      "path": "scripts/studio/web/index.html",
+      "sha256": "458b227373bcb99a273c82e21052cfe1af02e78fe864b92ceb514717653d970c"
+    },
+    {
+      "bytes": 20373,
+      "git_blob": "2b3e5cd91344341e9f2e5c9dbfa42e20edeadcec",
+      "path": "scripts/studio/web/interchange-ui.js",
+      "sha256": "a61b3c6abe7d73b659dc4a153a6c868bcfaa8b4e924cad915b3518da580ac3ec"
+    },
+    {
+      "bytes": 27218,
+      "git_blob": "945f32a5fd62f5bfc936db68f3559ca82fe6f292",
+      "path": "scripts/studio/web/learned-tracking-ui.js",
+      "sha256": "f598b1dc3bf687de18c26d6e4929452fc9ba8bbc89b66b3947f1526df2530c0b"
+    },
+    {
+      "bytes": 16628,
+      "git_blob": "91ee7d022d2d08fa0fe2ecea77d5fb1cec0a3d75",
+      "path": "scripts/studio/web/managed-generation-ui.js",
+      "sha256": "30863088c3d7721657eecfb9ef5b915d4156a0c263dbc32b4bc0a21535b0e9de"
+    },
+    {
+      "bytes": 7213,
+      "git_blob": "a90af79b925222eaa2f887a8d0bbfd2d28759364",
+      "path": "scripts/studio/web/media-management-ui.js",
+      "sha256": "f15d9ad5b4ca8da5456a13bd1441d32145616cdaecb5b732cd98b0013f931e9c"
+    },
+    {
+      "bytes": 18521,
+      "git_blob": "d079b0cf72c3c9194af2a8d6f9d702f90a6911a5",
+      "path": "scripts/studio/web/multicam-sync-ui.js",
+      "sha256": "3526c902ad1d30d3fb976d655c09bf5c454122c472eb93d8e6edd7613cadba6d"
+    },
+    {
+      "bytes": 10998,
+      "git_blob": "60c475ef27c79ebc5e5333f5b77810197aee6da4",
+      "path": "scripts/studio/web/pcm-playback.js",
+      "sha256": "85aae75a9ee044e0ba048617e2963adbc189c4c1900f9a874651bcb1ac0c149d"
+    },
+    {
+      "bytes": 34389,
+      "git_blob": "6dc2653b1f5daab8d242f78c936a35030ea2abb6",
+      "path": "scripts/studio/web/physical-rendering-ui.js",
+      "sha256": "d0033a662224781f04dec42bd6f93af5d46ea3e4a1f28d11a6e0fe9164844c7e"
+    },
+    {
+      "bytes": 24964,
+      "git_blob": "58ef305c939e3aa3fa1d82f38a932e989fd4c5a7",
+      "path": "scripts/studio/web/production-ui.js",
+      "sha256": "f2a6c31942df20d76d75b918adc9374dec4e48454a45c1517e185b2a57335ba5"
+    },
+    {
+      "bytes": 33616,
+      "git_blob": "b78a71f4d5dbdf96d2634637310cdc6c3f5f0a77",
+      "path": "scripts/studio/web/ray-optics-ui.js",
+      "sha256": "0bd0a7c1f46006c99fd000d090cef64e2cdfada46a17da80ba66631366ef0062"
+    },
+    {
+      "bytes": 25144,
+      "git_blob": "ec042863c5d6070fedcd94402cf0c7f04d18628f",
+      "path": "scripts/studio/web/reconstruction-ui.js",
+      "sha256": "391d6501260b0df56a133673b9942d8b01cc752f7719940ee22943bf637daa1d"
+    },
+    {
+      "bytes": 6458,
+      "git_blob": "2a891cc5eb68142b835b85edc3be3e4e2de36694",
+      "path": "scripts/studio/web/recovery-ui.js",
+      "sha256": "e146ee9ce5f7ca16ca0c55a32b36491f9769e61fdc263d1ede4699bcbda9d0ab"
+    },
+    {
+      "bytes": 11554,
+      "git_blob": "53ebb5d8d01053cc24c1d977f5c4e4018ab5a395",
+      "path": "scripts/studio/web/runtime-management-ui.js",
+      "sha256": "ba3dfbe28b85f9f33546a856d378736a3230d20da41b2362cfbe6a170ad444b7"
+    },
+    {
+      "bytes": 17869,
+      "git_blob": "58904fdcf28d39a26eea3e2d9e89e5fd6557229a",
+      "path": "scripts/studio/web/scene-editor.css",
+      "sha256": "413f7bb52631dc1e127eb07dd816df3624d7e3c8ddb70ca512e460faad1ad61b"
+    },
+    {
+      "bytes": 112820,
+      "git_blob": "170ecd9aafa21e6ea123af5578086cc4f7e02495",
+      "path": "scripts/studio/web/scene-editor.js",
+      "sha256": "63137b8183953133d9f0aa557c493f0ece847e7b18144e18eab00930d6d51173"
+    },
+    {
+      "bytes": 43898,
+      "git_blob": "ff0c5ffc28fa8b787f70ed383017ba9ebf913082",
+      "path": "scripts/studio/web/scene-processing-ui.js",
+      "sha256": "b8c9fd2fa96a39ef7891b64b05d0e2ba8fc1a64e967115619d2d50feecce1ae3"
+    },
+    {
+      "bytes": 12147,
+      "git_blob": "82b1e17c53c87e5d98755d357f134f0863e56cab",
+      "path": "scripts/studio/web/sequence-playback.js",
+      "sha256": "4828da4ec0eba70b5f3356395b17022ee77077632d8dbdbf47cf740f6e7f4ab6"
+    },
+    {
+      "bytes": 32376,
+      "git_blob": "d00f265c671242b4cf74f0f029f7361cc652e62a",
+      "path": "scripts/studio/web/style.css",
+      "sha256": "cef4f9f0a3c1370e23c6f772f90b10343a4dab8fef301434ec3d66adc1edba68"
+    },
+    {
+      "bytes": 25701,
+      "git_blob": "8010523b0e30a78833873d632fcc005b8a21706a",
+      "path": "scripts/studio/web/tracking-ui.js",
+      "sha256": "038aec934aca1e2bce3dfb62341ac7f673cb8152a5690ee130c3970e8e100013"
+    },
+    {
+      "bytes": 5885,
+      "git_blob": "40775387be04d04038763a85d34d4332091887e8",
+      "path": "scripts/studio/web/viewer-tools.js",
+      "sha256": "72c36319b06c452c5eeadad967e207c5ebb7021aad19a64317d872ba911bad28"
+    },
+    {
+      "bytes": 6826,
+      "git_blob": "6aa2768a0805fe9fbee588b29af032a540562cde",
+      "path": "scripts/verify-case-001-director-engine.mjs",
+      "sha256": "534ee77e1bcbb3e93a6bffcc3002b000f9dd5f414e1040eb094014e5e07b9e44"
+    },
+    {
+      "bytes": 4405,
+      "git_blob": "185d4881272e634daa1321094f2c3d1ada9010b2",
+      "path": "scripts/verify-case-001-godcut.mjs",
+      "sha256": "281c1c0b3c044bd192ba7f4709b98e00278c6acbca2dc288f255eaa6a05c96b3"
+    },
+    {
+      "bytes": 4771,
+      "git_blob": "0896e3f380521ef9a6e069570dee3a31ea5f7da0",
+      "path": "scripts/verify-case-001-godstudio.mjs",
+      "sha256": "403a6831b5ab6dab473801d020fb90b803b408ca13035ba47a933b6b47c4beee"
+    },
+    {
+      "bytes": 4291,
+      "git_blob": "203c98d7906bf7a01ebeec25b3cc73345a0a3b4a",
+      "path": "scripts/verify-case-001-installable-package.mjs",
+      "sha256": "aef22e2d30bf72885b2fec809f9b4082d98eecc4082bf4b6714ccb0a43b2cd4c"
+    },
+    {
+      "bytes": 3443,
+      "git_blob": "144d222f2e6e0593b468b3da3f721c0c82b862d7",
+      "path": "scripts/verify-case-001-product-boundary.mjs",
+      "sha256": "56b5d8ec2ff3f4393f31907f797c9ced22a08762d0f864f49f3ab2aa71b2029d"
+    },
+    {
+      "bytes": 12777,
+      "git_blob": "47f338103b6f72f12d06225a33d374bd1754d07b",
+      "path": "scripts/verify-external-auditor-pack-consumption-receipt.mjs",
+      "sha256": "a77b86a635acf44f565fe7b48014a803ff9cad444ac2f7e4dbdcf39003ab70c5"
+    },
+    {
+      "bytes": 11462,
+      "git_blob": "8c1d569b6154e538655715bc0fbeb9d7d711bc01",
+      "path": "scripts/verify-external-auditor-pack.mjs",
+      "sha256": "40aca74e944b498240683b049a15fc056e8584d58635d474e080bf17f9719811"
+    },
+    {
+      "bytes": 6720,
+      "git_blob": "5682ba6c8617e24870a107c8fd5aa96e6cc6b825",
+      "path": "scripts/verify-outsider-reproducible-release.mjs",
+      "sha256": "fab7049fc1d487a8df460a99aef133c9a613de51cb072a917e40d70e7f89724d"
+    },
+    {
+      "bytes": 5370,
+      "git_blob": "fd0b64eab2edb26f18f95d83218b911f087e49c6",
+      "path": "scripts/verify-production-repository-authority-acknowledgement.mjs",
+      "sha256": "027f4533b17a835f037f189d892300431a35d3159ecdecddadc8e271a6b8ed3e"
+    },
+    {
+      "bytes": 5274,
+      "git_blob": "cdd649d9a1df04171bacf081df2715b6209a594e",
+      "path": "scripts/verify-public-auditor-runner.mjs",
+      "sha256": "58403c0c8813469145d203871a78f6a45eeaaebd8fee4963d147eb65bb33a6ac"
+    },
+    {
+      "bytes": 8068,
+      "git_blob": "5ac3241007dd661b44ad5f9b507e0218da4097a6",
+      "path": "scripts/verify-public-release-consumption-receipt.mjs",
+      "sha256": "9e8ac21743fac60e192839632cccd085ff96e92efe89c4ab232902ad2f5a0fb5"
+    },
+    {
+      "bytes": 6661,
+      "git_blob": "458d2939cb1970352848e7c5311de9947434761d",
+      "path": "scripts/verify-public-release-lineage-ledger.mjs",
+      "sha256": "da9a2bb364e82b006fbf50fed75b7ebf9f5839c687ce8d2d6c9284ac40a1b577"
+    }
+  ],
+  "tree": "308e8ce8b2d1140ec8d6f52456a77c9e4a74d215",
+  "unmaterialized_sparse_paths": [
+    "AUDIT/CINEMATICUM_EXTERNAL_AUDITOR_PACK.json",
+    "AUDIT/CINEMATICUM_PUBLIC_AUDITOR_RUNNER.mjs",
+    "AUDIT/CINEMATICUM_PUBLIC_AUDITOR_RUNNER_RECEIPT.json",
+    "AUDIT/EXTERNAL_AUDITOR_PACK_STANDARD.json",
+    "AUDIT/PUBLIC_AUDITOR_RUNNER_STANDARD.json",
+    "AUTHORITY/CINEMATICUM_PRODUCTION_REPOSITORY_AUTHORITY_ACKNOWLEDGEMENT.json",
+    "CASES/CASE_001_THE_LAST_RENDER/DIRECTION/CAMERA_LAW.json",
+    "CASES/CASE_001_THE_LAST_RENDER/DIRECTION/CUT_RHYTHM_LAW.json",
+    "CASES/CASE_001_THE_LAST_RENDER/DIRECTION/DIRECTORIAL_PRINCIPLES.json",
+    "CASES/CASE_001_THE_LAST_RENDER/DIRECTION/DIRECTOR_DECISION_GRAPH.json",
+    "CASES/CASE_001_THE_LAST_RENDER/DIRECTION/DIRECTOR_ENGINE_MANIFEST.json",
+    "CASES/CASE_001_THE_LAST_RENDER/DIRECTION/SCORE_LAW.json",
+    "CASES/CASE_001_THE_LAST_RENDER/DIRECTION/SHOT_GRAMMAR.json",
+    "CASES/CASE_001_THE_LAST_RENDER/FILM/CASE_001_THE_LAST_RENDER_GODCUT_0001.mp4",
+    "CASES/CASE_001_THE_LAST_RENDER/FILM/GODCUT_0001_MANIFEST.json",
+    "CASES/CASE_001_THE_LAST_RENDER/FILM/GODCUT_0001_TIMELINE.json",
+    "CASES/CASE_001_THE_LAST_RENDER/PROOFS/director-engine-build-result.json",
+    "CASES/CASE_001_THE_LAST_RENDER/PROOFS/godcut-compile-result.json",
+    "CASES/CASE_001_THE_LAST_RENDER/PROOFS/godcut-verification-result.json",
+    "CONSUMPTION/CASE_001_PUBLIC_RELEASE_CONSUMPTION_RECEIPT.json",
+    "CONSUMPTION/EXTERNAL_AUDITOR_PACK_CONSUMPTION_RECEIPT.json",
+    "CONSUMPTION/EXTERNAL_AUDITOR_PACK_CONSUMPTION_STANDARD.json",
+    "CONSUMPTION/PUBLIC_RELEASE_CONSUMPTION_STANDARD.json",
+    "ENGINES/DIRECTOR/DIRECTOR_ENGINE_STANDARD.json",
+    "ENGINES/GODCUT/GODCUT_ENGINE_STANDARD.json",
+    "PRODUCT/CASE_001_PRODUCT_BOUNDARY.json",
+    "PRODUCT/INSTALLABLE_PRODUCT_BOUNDARY.json",
+    "RELEASES/CINEMATICUM_PUBLIC_RELEASE_LINEAGE_LEDGER.json",
+    "REPRODUCIBILITY/OUTSIDER_REPLAY_MANIFEST.json",
+    "REPRODUCIBILITY/OUTSIDER_REPRODUCIBLE_RELEASE_STANDARD.json",
+    "REPRODUCIBILITY/RELEASE_ASSET_HASH_LEDGER.json",
+    "STUDIO/CASE_001_GODCUT/index.html",
+    "STUDIO/CASE_001_GODCUT/studio-manifest.json",
+    "bin/cinematicum",
+    "bin/cinematicum.cjs",
+    "scripts/backends/README.md",
+    "scripts/backends/cinematicum-comfyui-wan-backend.mjs",
+    "scripts/backends/cinematicum-native-comfyui-backend.mjs",
+    "scripts/backends/your-real-backend.sh",
+    "scripts/local/comfyui-api-doctor.mjs",
+    "scripts/local/convert-comfyui-ui-workflow-to-api.mjs",
+    "scripts/local/download-free-wan21-t2v-13b.py",
+    "scripts/local/find-wan-template.py",
+    "scripts/local/free-local-status.sh",
+    "scripts/local/native-workflow-status.mjs",
+    "scripts/local/save-comfyui-current-api-workflow.mjs",
+    "scripts/local/select-wan-workflow.mjs",
+    "scripts/local/start-comfyui-daemon.sh"
+  ]
+}

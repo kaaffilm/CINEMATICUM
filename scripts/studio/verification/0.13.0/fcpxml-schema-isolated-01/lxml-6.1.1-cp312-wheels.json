@@ -1,0 +1,32 @@
+{
+  "source": "https://pypi.org/pypi/lxml/6.1.1/json",
+  "metadata_sha256": "16d30a4379bc3be8c747187330c48a6e0e2900d7a2e56fe467d5dc4ee656ca13",
+  "wheels": [
+    {
+      "filename": "lxml-6.1.1-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.whl",
+      "url": "https://files.pythonhosted.org/packages/eb/99/0013e8d9b5960f4f041cf0b73e2f80c23eb5205b1f7bfb20203243651359/lxml-6.1.1-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.whl",
+      "size": 5093723,
+      "digests": {
+        "blake2b_256": "eb990013e8d9b5960f4f041cf0b73e2f80c23eb5205b1f7bfb20203243651359",
+        "md5": "19596f7d7eccb61a9a317bdfebe75ae7",
+        "sha256": "54a7f95e4de5fb94e2f9f4b9055c6ba33bf3d628fd77a1d647c5923caa2cdcdc"
+      },
+      "python_version": "cp312",
+      "requires_python": ">=3.8",
+      "yanked": false
+    },
+    {
+      "filename": "lxml-6.1.1-cp312-cp312-manylinux_2_26_x86_64.manylinux_2_28_x86_64.whl",
+      "url": "https://files.pythonhosted.org/packages/08/f6/af32e23e563971ffb0fb86be52bc5be5c2c118858ffc119bf6a9039b173d/lxml-6.1.1-cp312-cp312-manylinux_2_26_x86_64.manylinux_2_28_x86_64.whl",
+      "size": 5240367,
+      "digests": {
+        "blake2b_256": "08f6af32e23e563971ffb0fb86be52bc5be5c2c118858ffc119bf6a9039b173d",
+        "md5": "8acdc0bceae45355df1fd66de98a9c91",
+        "sha256": "ebe6af670449830d6d9b752c256a983291c766a1365ba5d5460048f9e33a7818"
+      },
+      "python_version": "cp312",
+      "requires_python": ">=3.8",
+      "yanked": false
+    }
+  ]
+}

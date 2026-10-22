@@ -1,0 +1,7 @@
+{
+  "schema": "cinematicum-owned-acceptance-context-v1",
+  "test_source_changed": false,
+  "reason": "Default sandbox denied creation of loopback sockets; six planned browser subcases raised before launching a browser. Four source-integrity checks passed. Original failure receipt is retained unchanged.",
+  "browser_subcases_executed": 0,
+  "accepted_rerun": "../download-guard/report.json"
+}

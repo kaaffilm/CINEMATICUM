@@ -1,0 +1,19 @@
+{
+  "version": 1,
+  "id": "4b50dc3e0bca4a6ba953ed53f72074da",
+  "name": "ENGINE TEST lens sentinel",
+  "fps": 12,
+  "width": 160,
+  "height": 90,
+  "assets": [],
+  "clips": [],
+  "titles": [],
+  "settings": {},
+  "revision": 1,
+  "frame_rate": {
+    "numerator": 12,
+    "denominator": 1
+  },
+  "tracks": [],
+  "updated_at": "2026-10-22T13:41:45Z"
+}

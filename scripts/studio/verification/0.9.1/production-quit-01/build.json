@@ -1,0 +1,28 @@
+{
+  "schema": "cinematicum-production-class-quit-build-v1",
+  "production_source_sha256": "5bc3028eb4921b8e1d11f1a0e3a4ab2116c6ddcadce43a3968e6b42a0e80e79b",
+  "unchanged_production_class_sha256": "36650303394fbb1169923b1d3d48e0cc4fe3443478d15f69294dbab82eec8bbb",
+  "harness_sha256": "921a7cfaf45f074d7478d35f243c28c094f78f3577e705b9afa0a0cf101633b0",
+  "generated_source_sha256": "bbb4470a7cbe0ac54eb5bd8926a9dc58f694aa3ca55892c59886c0d6faf15456",
+  "compiled": true,
+  "binary": "/Users/midiakiasat/.midia-ai/gateway-live/workspaces/auto-d5f5e80a10b691457cec8d25044150b5/.completion-evidence/production-quit-01/native-build/cinematicum-production-quit-acceptance",
+  "binary_sha256": "0a9e034186ed00cb317167ab51bacddd59b3cc196d88a40305cc546b86122cd3",
+  "command": [
+    "/usr/bin/xcrun",
+    "swiftc",
+    "-O",
+    "-swift-version",
+    "5",
+    "-framework",
+    "Cocoa",
+    "-framework",
+    "WebKit",
+    "-target",
+    "arm64-apple-macos12.0",
+    "-module-cache-path",
+    "/Users/midiakiasat/.midia-ai/gateway-live/workspaces/auto-d5f5e80a10b691457cec8d25044150b5/.completion-evidence/production-quit-01/native-build/module-cache",
+    "/Users/midiakiasat/.midia-ai/gateway-live/workspaces/auto-d5f5e80a10b691457cec8d25044150b5/.completion-evidence/production-quit-01/native-build/ProductionQuitAcceptance.swift",
+    "-o",
+    "/Users/midiakiasat/.midia-ai/gateway-live/workspaces/auto-d5f5e80a10b691457cec8d25044150b5/.completion-evidence/production-quit-01/native-build/cinematicum-production-quit-acceptance"
+  ]
+}

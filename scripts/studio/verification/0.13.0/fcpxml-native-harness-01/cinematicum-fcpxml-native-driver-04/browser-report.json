@@ -1,0 +1,37 @@
+{
+  "schema": "cinematicum-phased-fcpxml-browser-check-v1",
+  "native_certified": false,
+  "passed": false,
+  "phases": [
+    {
+      "checks": 10,
+      "elapsed_seconds": 1.494,
+      "error": null,
+      "native_certified": false,
+      "operation": "prepare",
+      "passed": true
+    },
+    {
+      "checks": 29,
+      "elapsed_seconds": 3.423,
+      "error": null,
+      "native_certified": false,
+      "operation": "author",
+      "passed": true
+    },
+    {
+      "checks": 32,
+      "elapsed_seconds": 3.875,
+      "error": null,
+      "native_certified": false,
+      "operation": "render",
+      "passed": false
+    }
+  ],
+  "native_prores_playback_certified": false,
+  "browser_sha256": "f661a8c124888f491966c29581f33c1953c86c15d77048bc91452b66743d5f3a",
+  "browser_sha256_after": "f661a8c124888f491966c29581f33c1953c86c15d77048bc91452b66743d5f3a",
+  "elapsed_ms": 10037,
+  "python_exit_code": 1,
+  "error": null
+}

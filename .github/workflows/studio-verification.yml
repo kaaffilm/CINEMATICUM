@@ -1,0 +1,230 @@
+name: Studio media verification
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - 'README.md'
+      - 'scripts/studio/**'
+      - '.github/workflows/studio-verification.yml'
+  push:
+    paths:
+      - 'README.md'
+      - 'scripts/studio/**'
+      - '.github/workflows/studio-verification.yml'
+permissions:
+  contents: read
+jobs:
+  media-and-http:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Verify the complete declared source inventory
+        run: python3 -I -B scripts/studio/source_integrity.py --check
+      - name: Install declared media, LLVM and CPU renderer build prerequisites
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y --no-install-recommends ffmpeg llvm-18 build-essential \
+            libgl1-mesa-dev libxrandr-dev libxinerama-dev libxcursor-dev libxi-dev \
+            libx11-dev zlib1g-dev libegl1 libxkbcommon0 libnss3 libatk1.0-0 \
+            libatk-bridge2.0-0 libdrm2 libxcomposite1 libxdamage1 libxfixes3 \
+            libxrandr2 libgbm1 libasound2t64
+          dpkg-query -W ffmpeg llvm-18 build-essential libgl1-mesa-dev libxrandr-dev \
+            libxinerama-dev libxcursor-dev libxi-dev libx11-dev zlib1g-dev libegl1 \
+            libxkbcommon0 > "$RUNNER_TEMP/cinematicum-host-prerequisites.txt"
+      - name: Reuse immutable runtime downloads
+        uses: actions/cache@v4
+        with:
+          path: ${{ runner.temp }}/cinematicum-runtimes/downloads
+          key: studio-engine-downloads-linux-x86_64-py312-${{ hashFiles('scripts/studio/*linux*lock.json', 'scripts/studio/learned-runtime-lock.json') }}
+      - name: Prepare hash-pinned imaging, tracking, interchange and authentic RAW
+        run: |
+          python3 -I -B scripts/studio/bootstrap_verification_linux.py \
+            --root "$RUNNER_TEMP/cinematicum-runtimes" --stage base \
+            --github-env "$GITHUB_ENV" --github-path "$GITHUB_PATH"
+      - name: Verify exact engine code, wheel and checkpoint downloads
+        run: |
+          python3 -I -B scripts/studio/bootstrap_verification_linux.py \
+            --root "$RUNNER_TEMP/cinematicum-runtimes" --stage downloads
+      - name: Install and accept actual Optiland, Mitsuba, COLMAP, SAM2 and TAPIR engines
+        run: |
+          python3 -I -B scripts/studio/bootstrap_verification_linux.py \
+            --root "$RUNNER_TEMP/cinematicum-runtimes" --stage engines
+      - name: Reuse immutable independent TAPNext downloads
+        uses: actions/cache@v4
+        with:
+          path: ~/.local/share/CINEMATICUM/TAPNext/downloads
+          key: studio-tapnext-downloads-linux-py312-${{ hashFiles('scripts/studio/tapnext-runtime-lock.json') }}
+      - name: Install and accept actual independent TAPNext inference
+        run: |
+          python3 -I -B scripts/studio/install_tapnext.py
+          echo "CINEMATICUM_TAPNEXT_TEST=1" >> "$GITHUB_ENV"
+      - name: Prepare the independent hash-pinned browser
+        run: |
+          python3 -I -B scripts/studio/bootstrap_verification_linux.py \
+            --root "$RUNNER_TEMP/cinematicum-runtimes" --stage browser
+      - name: Check editor and acceptance JavaScript
+        run: |
+          for file in scripts/studio/web/*.js scripts/studio/macos/*.js scripts/studio/*.cjs; do
+            node --check "$file"
+          done
+      - name: Verify bounded decoded-frame cache lifecycle
+        run: node scripts/studio/test_decoded_frame_cache.cjs
+      - name: Accept decoded-picture reuse in the actual pinned browser
+        run: |
+          node scripts/studio/test_decoded_frame_cache_browser.cjs --browser "$CINEMATICUM_BROWSER" --evidence "$RUNNER_TEMP/decoded-frame-cache-acceptance"
+      - name: Build exact upstream PBRT CPU renderer and submodules
+        run: |
+          python3 -I -B scripts/studio/bootstrap_verification_linux.py \
+            --root "$RUNNER_TEMP/cinematicum-runtimes" --stage pbrt
+      - name: Install and verify official pinned Cycles runtime
+        run: |
+          python3 -I -B scripts/studio/bootstrap_verification_linux.py \
+            --root "$RUNNER_TEMP/cinematicum-runtimes" --stage scene
+      - name: Verify the frozen whole build with actual engines and no skipped tests
+        run: |
+          "$RUNNER_TEMP/cinematicum-runtimes/verification/bin/python" -I -B scripts/studio/run_verification.py \
+            --report "$RUNNER_TEMP/cinematicum-verification-report.json"
+      - name: Accept actual multicamera editing, save, reopen and rendered source audio
+        run: |
+          node scripts/studio/test_multicam_sync_browser.cjs \
+            --python "$RUNNER_TEMP/cinematicum-runtimes/verification/bin/python" \
+            --browser "$CINEMATICUM_BROWSER" \
+            --evidence "$RUNNER_TEMP/multicam-browser-acceptance"
+      - name: Accept simultaneous camera monitoring and continuous locked source audio
+        run: |
+          node scripts/studio/test_multicam_monitor_browser.cjs \
+            --python "$RUNNER_TEMP/cinematicum-runtimes/verification/bin/python" \
+            --browser "$CINEMATICUM_BROWSER" \
+            --evidence "$RUNNER_TEMP/multicam-monitor-acceptance"
+      - name: Accept scene-linear Float32 editing, actual EXR master and download
+        run: |
+          node scripts/studio/test_float_movie_browser.cjs \
+            --python "$RUNNER_TEMP/cinematicum-runtimes/verification/bin/python" \
+            --browser "$CINEMATICUM_BROWSER" \
+            --evidence "$RUNNER_TEMP/float-movie-acceptance"
+      - name: Accept OTIO retiming, nested dissolves, source audio and archive restore
+        run: |
+          node scripts/studio/test_otio_compositions_browser.cjs \
+            --python "$RUNNER_TEMP/cinematicum-runtimes/verification/bin/python" \
+            --browser "$CINEMATICUM_BROWSER" \
+            --evidence "$RUNNER_TEMP/otio-compositions-acceptance"
+      - name: Accept authored speed ramps, optical-flow pictures, source audio and archive restore
+        run: |
+          node scripts/studio/test_retime_browser.cjs \
+            --python "$RUNNER_TEMP/cinematicum-runtimes/verification/bin/python" \
+            --browser "$CINEMATICUM_BROWSER" \
+            --evidence "$RUNNER_TEMP/retime-acceptance"
+      - name: Accept authenticated startup quit, saved edits and active render protection
+        run: |
+          node scripts/studio/test_startup_quit_browser.cjs \
+            --python "$RUNNER_TEMP/cinematicum-runtimes/verification/bin/python" \
+            --browser "$CINEMATICUM_BROWSER" \
+            --evidence "$RUNNER_TEMP/startup-quit-acceptance"
+      - name: Accept measured HDR photographs, panoramas, lossless delivery and archive restore
+        run: |
+          node scripts/studio/test_still_photography_browser.cjs \
+            --python "$RUNNER_TEMP/cinematicum-runtimes/verification/bin/python" \
+            --browser "$CINEMATICUM_BROWSER" \
+            --evidence "$RUNNER_TEMP/still-photography-acceptance"
+      - name: Prepare the exact upstream Lensfun test profile outside application runtimes
+        run: |
+          python3 -I -B - <<'PY'
+          import hashlib, json, os, shutil, urllib.request
+          from pathlib import Path
+          root = Path(os.environ["RUNNER_TEMP"]) / "cinematicum-test-fixtures" / "lensfun"
+          root.mkdir(parents=True, exist_ok=False)
+          url = "https://raw.githubusercontent.com/lensfun/lensfun/9e6deafe100a7c6f7ce019624bb8c4da20bf7c29/data/db/slr-olympus.xml"
+          size = 116602
+          expected = "f7693b6779edd8ed10d7dc23113669255bfa4987cea7db0e843f7f5f2bbbe615"
+          with urllib.request.urlopen(url, timeout=30) as response:
+              data = response.read(size + 1)
+          if len(data) != size or hashlib.sha256(data).hexdigest() != expected:
+              raise ValueError("Lensfun test profile differs from its pinned upstream bytes")
+          with (root / "slr-olympus.xml").open("xb") as stream:
+              stream.write(data)
+          notices = Path("scripts/studio/verification/0.13.0/lens-isolated-01/upstream-notices")
+          for name in ("COPYING.CC_BY-SA_3.0", "README.md", "source.json"):
+              shutil.copyfile(notices / name, root / name)
+          (root / "fixture-receipt.json").write_text(json.dumps({"url": url, "bytes": size,
+              "sha256": expected, "license": "CC-BY-SA-3.0", "scope": "Test-only; not an installed lens database"}, indent=2) + "\n")
+          PY
+      - name: Accept Lensfun and fisheye controls, persisted source and actual movie download
+        run: |
+          node scripts/studio/test_lens_models_native_browser.cjs \
+            --python "$RUNNER_TEMP/cinematicum-runtimes/verification/bin/python" \
+            --browser "$CINEMATICUM_BROWSER" \
+            --profile "$RUNNER_TEMP/cinematicum-test-fixtures/lensfun/slr-olympus.xml" \
+            --evidence "$RUNNER_TEMP/lens-models-acceptance"
+      - name: Prepare independent pinned Apple FCPXML schema validation
+        run: |
+          python3 -I -B scripts/studio/bootstrap_fcpxml_schema_validation.py \
+            --root "$RUNNER_TEMP/fcpxml-schema-validator"
+      - name: Accept public FCPXML review, apply, undo, reopen and exact movie audio
+        run: |
+          node scripts/studio/test_fcpxml_native_browser.cjs \
+            --python "$RUNNER_TEMP/cinematicum-runtimes/verification/bin/python" \
+            --browser "$CINEMATICUM_BROWSER" \
+            --evidence "$RUNNER_TEMP/fcpxml-acceptance"
+      - name: Validate actual hand-authored and downloaded XML with the official Apple DTD
+        run: |
+          "$RUNNER_TEMP/fcpxml-schema-validator/runtime/bin/python" -I -B scripts/studio/validate_fcpxml_schema.py \
+            --dtd "$RUNNER_TEMP/fcpxml-schema-validator/FCPXMLv1_10.dtd" \
+            --hand-fixture "$RUNNER_TEMP/fcpxml-acceptance/prepare/ENGINE_TEST_input.fcpxml" \
+            --export "$RUNNER_TEMP/fcpxml-acceptance/author/ENGINE_TEST_exported.fcpxml" \
+            --report "$RUNNER_TEMP/fcpxml-schema-report.json"
+      - name: Preserve verification receipts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: studio-verification-receipts
+          path: |
+            ${{ runner.temp }}/cinematicum-host-prerequisites.txt
+            ${{ runner.temp }}/cinematicum-verification-report.json
+            ${{ runner.temp }}/cinematicum-runtimes/*-report.json
+            ${{ runner.temp }}/cinematicum-runtimes/*-receipt.json
+            ${{ runner.temp }}/cinematicum-runtimes/*-bootstrap.json
+            ${{ runner.temp }}/cinematicum-runtimes/verification-environment.json
+            ${{ runner.temp }}/cinematicum-runtimes/verification-path.json
+            ${{ runner.temp }}/cinematicum-runtimes/*.log
+            ${{ runner.temp }}/decoded-frame-cache-acceptance/**/*.json
+            ${{ runner.temp }}/decoded-frame-cache-acceptance/**/*.png
+            ${{ runner.temp }}/multicam-browser-acceptance/**/*.json
+            ${{ runner.temp }}/multicam-browser-acceptance/**/*.png
+            ${{ runner.temp }}/multicam-monitor-acceptance/**/*.json
+            ${{ runner.temp }}/multicam-monitor-acceptance/**/*.png
+            ${{ runner.temp }}/float-movie-acceptance/**/*.json
+            ${{ runner.temp }}/float-movie-acceptance/**/*.png
+            ${{ runner.temp }}/otio-compositions-acceptance/**/*.json
+            ${{ runner.temp }}/otio-compositions-acceptance/**/*.png
+            ${{ runner.temp }}/retime-acceptance/**/*.json
+            ${{ runner.temp }}/retime-acceptance/**/*.png
+            ${{ runner.temp }}/retime-acceptance/driver.stdout
+            ${{ runner.temp }}/retime-acceptance/driver.stderr
+            ${{ runner.temp }}/startup-quit-acceptance/**/*.json
+            ${{ runner.temp }}/startup-quit-acceptance/**/*.png
+            ${{ runner.temp }}/still-photography-acceptance/**/*.json
+            ${{ runner.temp }}/still-photography-acceptance/**/*.png
+            ${{ runner.temp }}/cinematicum-test-fixtures/lensfun/fixture-receipt.json
+            ${{ runner.temp }}/lens-models-acceptance/**/*.json
+            ${{ runner.temp }}/lens-models-acceptance/**/*.png
+            ${{ runner.temp }}/lens-models-acceptance/driver.stdout
+            ${{ runner.temp }}/lens-models-acceptance/driver.stderr
+            ${{ runner.temp }}/fcpxml-schema-validator/*.json
+            ${{ runner.temp }}/fcpxml-schema-validator/*.stdout
+            ${{ runner.temp }}/fcpxml-schema-validator/*.stderr
+            ${{ runner.temp }}/fcpxml-schema-report.json
+            ${{ runner.temp }}/fcpxml-acceptance/**/*.json
+            ${{ runner.temp }}/fcpxml-acceptance/**/*.png
+            ${{ runner.temp }}/fcpxml-acceptance/**/*.fcpxml
+            ${{ runner.temp }}/fcpxml-acceptance/driver.stdout
+            ${{ runner.temp }}/fcpxml-acceptance/driver.stderr
+          if-no-files-found: warn

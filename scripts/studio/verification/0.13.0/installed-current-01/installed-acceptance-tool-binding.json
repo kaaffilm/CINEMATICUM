@@ -1,0 +1,51 @@
+{
+  "schema": "cinematicum-external-acceptance-tool-binding-v1",
+  "passed": true,
+  "source_commit": "cdd15816c228fe4133fbb3ce6d90978333d699e6",
+  "source_tree": "a62ce29a8af68b38d14820c45fc42e1266762e34",
+  "source_manifest_sha256": "21034979d805cdf680c255720f6311319f3fc22c2b405dbd43294a5485d09f8d",
+  "native_sha256": "ca2a5bf65d934b87b0dfafc55392b648bda650c1c7ce76491cc5b21e20a84b39",
+  "template_sha256": "4a9e19cd07837a5e2376aa0a407416f83dda6af16babeccf066cf0ebba20b0d7",
+  "bound_helper_sha256": "a9c6feadfe85b263dd3010f8cd1815e753450048bc12c48b6788891fd9f65391",
+  "only_four_identity_constants_changed": true,
+  "source_files_modified": false,
+  "tool_files": {
+    "BINDING_SEQUENCE.md": {
+      "bytes": 3433,
+      "sha256": "29c0e4ff43f6f1eacc9352e9c84e98b17bf3dc92d2eb076bac49ea7b9d9e6060"
+    },
+    "installed-launch-01/InstalledAppControl.swift": {
+      "bytes": 11041,
+      "sha256": "242ce3defae2a0d6f3466fb5a937776106081178cdbd40b16f55108a2fcf77e8"
+    },
+    "installed-launch-01/build_installed_launch.py": {
+      "bytes": 2220,
+      "sha256": "1e16113c3993be5cb0a7d706c95da7ae5318c1f10695c67b170b5c60285c6122"
+    },
+    "installed-launch-01/run_installed_launch.py": {
+      "bytes": 34079,
+      "sha256": "96d5bb0c904108454ae4aa38c5f2abd586abcf9355f6ee404cae06268898a757"
+    },
+    "native-helper-source-reuse.json": {
+      "bytes": 2393,
+      "sha256": "26029608b1d2dabb4c3355213664fab628908f13ca1421e082ee99575bad2c62"
+    },
+    "prepared-tool-identity.json": {
+      "bytes": 3373,
+      "sha256": "ea12ebb7d8c594814b6483a4b1641ee41759179c91d3b8d3a049443a62bfd17e"
+    },
+    "run_installed_readiness_phased.py": {
+      "bytes": 38464,
+      "sha256": "4a9e19cd07837a5e2376aa0a407416f83dda6af16babeccf066cf0ebba20b0d7"
+    },
+    "test_installed_readiness_phased_guards.py": {
+      "bytes": 7970,
+      "sha256": "5132e6e2cf7b0e0adf70105b9c88bc6687a6d65476a7ae5d3683cd91bfb907c5"
+    },
+    "verify_installation.py": {
+      "bytes": 26793,
+      "sha256": "3f26640384062533c605386a0f62c61965a7175b423f61e50b09a47ce6a26a6e"
+    }
+  },
+  "external_tools": "/Users/midiakiasat/.midia-ai/gateway-live/acceptance/cinematicum-0.13-20261022-own-e980f36e/installed-acceptance-tools"
+}

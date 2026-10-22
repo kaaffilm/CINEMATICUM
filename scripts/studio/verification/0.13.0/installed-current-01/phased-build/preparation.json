@@ -1,0 +1,14 @@
+{
+  "schema": "cinematicum-frozen-build-stage-v1",
+  "source_tree": "a62ce29a8af68b38d14820c45fc42e1266762e34",
+  "source_manifest_sha256": "21034979d805cdf680c255720f6311319f3fc22c2b405dbd43294a5485d09f8d",
+  "work": "/Users/midiakiasat/Applications/.cinematicum-build-verified-013-e980f36e",
+  "staged": "/Users/midiakiasat/Applications/.cinematicum-build-verified-013-e980f36e/CINEMATICUM Studio.app",
+  "runtime_files": 114,
+  "source_manifest_sha256_installed": "ca3a8e842a57faa7d093d4aaf63b94c72e54152014c01d3797e7fa5c528ef6cb",
+  "native_sources": {
+    "StudioApp.swift": "acf64f068cc870ed0bb4e458cb78359a830f007807a22f9bc933485aa2ae0b08",
+    "StudioIcon.swift": "9be90f8566a606a664f012926c1e85f99a44b277c616fd597d51df1760a9a49b"
+  },
+  "app_replaced": false
+}

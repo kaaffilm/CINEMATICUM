@@ -1,0 +1,281 @@
+{
+  "artifacts": {
+    "display": {
+      "filename": "display.png",
+      "sha256": "292ff5607ddcb8e2517013bd0704bee3589c5948464d0c3c0a3723f2d7375074",
+      "size": 532218
+    },
+    "linear": {
+      "filename": "linear.exr",
+      "sha256": "0781a0cf604d58e660e72d91a9a5c2919ca3455959d3d156761d62821964bc54",
+      "size": 1127895
+    }
+  },
+  "config": {
+    "cache_id": "7a622835835238d8456c47cab01b2c3b:6001c324468d497f99aa06d3014798d8",
+    "name": "studio-config-v5.0.0_aces-v2.1_ocio-v2.6",
+    "sha256": "1748717664d82dd7a53f01e23d0692d2444049ac7d7f5c08d19618cec48506bf",
+    "source": "OCIO builtin registry"
+  },
+  "created_at": 1792665260.882261,
+  "delivery_boundary": "The current movie compositor uses the SDR PNG. The EXR preserves scene-linear float data; this receipt does not certify HDR movie delivery.",
+  "display_encoding": "16-bit sRGB RGBA PNG, straight alpha, OCIO display/view rendered and clipped to [0,1]",
+  "display_processor_cache_id": "53face6a-f4b6-1c6a-b0af-5088d6ed6ab8",
+  "display_statistics_before_clipping": {
+    "above_one_channels": 0,
+    "max": 0.6565318703651428,
+    "mean": 0.4268313630537326,
+    "min": 0.0,
+    "negative_channels": 0
+  },
+  "height": 193,
+  "inputs": [
+    {
+      "asset_id": "6d29c3656dd0459eb305658427345c14",
+      "name": "ENGINE_TEST_PANORAMA_1.png",
+      "path": "media/6d29c3656dd0459eb305658427345c14.png",
+      "sha256": "42dbc527c336a8a12135bc01ef04d10571c61c410a465bb2c5c1414a7aa3f253",
+      "size": 234310
+    },
+    {
+      "asset_id": "9ef613b67cba4d42991c6b349e226adb",
+      "name": "ENGINE_TEST_PANORAMA_2.png",
+      "path": "media/9ef613b67cba4d42991c6b349e226adb.png",
+      "sha256": "6b96c5c1c20959931a738e6b3d967c4b6b85125702cf56578a6d65d49a8ed164",
+      "size": 239446
+    },
+    {
+      "asset_id": "5fb6b514b701471eb6e1bf60f8292f9c",
+      "name": "ENGINE_TEST_PANORAMA_3.png",
+      "path": "media/5fb6b514b701471eb6e1bf60f8292f9c.png",
+      "sha256": "23c4a024e6995c3ddc07388316b4cbc67ad6d0d641b54a3f2dfb6d3a127faf28",
+      "size": 261767
+    }
+  ],
+  "issuance_effect": "NONE",
+  "linear_encoding": "32-bit float RGBA EXR, premultiplied alpha, selected scene-linear space, exposure applied",
+  "linear_space": "ACEScg",
+  "linear_statistics": {
+    "above_one_channels": 0,
+    "max": 0.7749905586242676,
+    "mean": 0.34211506367321665,
+    "min": 0.0,
+    "negative_channels": 0
+  },
+  "operation": "panorama",
+  "recipe": {
+    "config": "studio-config-v5.0.0_aces-v2.1_ocio-v2.6",
+    "display": "sRGB - Display",
+    "exposure": 0.0,
+    "exposure_compensation": true,
+    "images": [
+      "6d29c3656dd0459eb305658427345c14",
+      "9ef613b67cba4d42991c6b349e226adb",
+      "5fb6b514b701471eb6e1bf60f8292f9c"
+    ],
+    "input_transfer": "linear",
+    "operation": "panorama",
+    "projection": "planar",
+    "reference_asset_id": "6d29c3656dd0459eb305658427345c14",
+    "version": 1,
+    "view": "ACES 2.0 - SDR 100 nits (Rec.709)"
+  },
+  "source_details": {
+    "assumptions": [
+      "static scene with planar overlap or camera rotation approximated by homographies",
+      "fixed focus and white balance",
+      "no spherical/cylindrical projection, lens estimation, parallax repair or moving-subject seam removal"
+    ],
+    "blend": "linear-light distance feather, capped at 64 pixels",
+    "canvas_origin_in_reference": [
+      0.0,
+      0.0
+    ],
+    "covered_pixels": 122043,
+    "exposure_compensation": true,
+    "input_transfer": "linear",
+    "measurements": [
+      {
+        "asset_id": "6d29c3656dd0459eb305658427345c14",
+        "covered_pixels": 61440,
+        "exposure_gain_rgb": [
+          1.0,
+          1.0,
+          1.0
+        ],
+        "matched_to": null,
+        "source_height": 192,
+        "source_to_canvas": [
+          [
+            1.0,
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            1.0,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            1.0
+          ]
+        ],
+        "source_to_reference": [
+          [
+            1.0,
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            1.0,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            1.0
+          ]
+        ],
+        "source_width": 320
+      },
+      {
+        "analysis_scales": [
+          1.0,
+          1.0
+        ],
+        "asset_id": "9ef613b67cba4d42991c6b349e226adb",
+        "covered_pixels": 60642,
+        "exposure_gain_rgb": [
+          1.9992021322250366,
+          1.99920654296875,
+          1.9991931915283203
+        ],
+        "feature_hull_fraction": [
+          0.3478335989036841,
+          0.3467334972562663
+        ],
+        "inlier_fraction": 0.9230769230769231,
+        "inliers": 72,
+        "matched_to": "6d29c3656dd0459eb305658427345c14",
+        "matches": 78,
+        "max_inlier_error_pixels": 2.052424592733465,
+        "median_error_pixels": 0.22032693566120584,
+        "source_height": 192,
+        "source_to_canvas": [
+          [
+            1.0013368031911936,
+            0.0024580656464747463,
+            159.88897853708713
+          ],
+          [
+            0.0005130051301301513,
+            1.0013407953323177,
+            0.013747549885269786
+          ],
+          [
+            1.5913189499039325e-06,
+            1.1710110776091953e-05,
+            1.0
+          ]
+        ],
+        "source_to_reference": [
+          [
+            1.0013368031911936,
+            0.0024580656464747463,
+            159.88897853708713
+          ],
+          [
+            0.0005130051301301513,
+            1.0013407953323177,
+            0.013747549885269786
+          ],
+          [
+            1.5913189499039325e-06,
+            1.1710110776091953e-05,
+            1.0
+          ]
+        ],
+        "source_width": 320
+      },
+      {
+        "analysis_scales": [
+          1.0,
+          1.0
+        ],
+        "asset_id": "5fb6b514b701471eb6e1bf60f8292f9c",
+        "covered_pixels": 60603,
+        "exposure_gain_rgb": [
+          0.999194324016571,
+          0.999196469783783,
+          0.9991872310638428
+        ],
+        "feature_hull_fraction": [
+          0.36736008173651913,
+          0.3659806281930589
+        ],
+        "inlier_fraction": 0.9732142857142857,
+        "inliers": 109,
+        "matched_to": "9ef613b67cba4d42991c6b349e226adb",
+        "matches": 112,
+        "max_inlier_error_pixels": 1.5231078174331054,
+        "median_error_pixels": 0.14638595996924375,
+        "source_height": 192,
+        "source_to_canvas": [
+          [
+            1.0058879701050265,
+            -0.0011907615800481998,
+            319.91374419076016
+          ],
+          [
+            0.0009328532715991043,
+            1.001212651079501,
+            0.044642942571828874
+          ],
+          [
+            1.2803051172879762e-05,
+            3.0761580757667236e-06,
+            1.0
+          ]
+        ],
+        "source_to_reference": [
+          [
+            1.0058879701050265,
+            -0.0011907615800481998,
+            319.91374419076016
+          ],
+          [
+            0.0009328532715991043,
+            1.001212651079501,
+            0.044642942571828874
+          ],
+          [
+            1.2803051172879762e-05,
+            3.0761580757667236e-06,
+            1.0
+          ]
+        ],
+        "source_width": 320
+      }
+    ],
+    "overlap_pixels": 60642,
+    "projection": "planar homographies in selected reference coordinates",
+    "reference_asset_id": "6d29c3656dd0459eb305658427345c14",
+    "runtime": {
+      "numpy": "2.3.5",
+      "opencv": "4.11.0",
+      "python": "3.12.14"
+    },
+    "uncovered_pixels": 1477
+  },
+  "version": 1,
+  "versions": {
+    "OpenEXR": "3.4.15",
+    "numpy": "2.3.5",
+    "opencolorio": "2.6.0",
+    "python": "3.12.14"
+  },
+  "width": 640
+}

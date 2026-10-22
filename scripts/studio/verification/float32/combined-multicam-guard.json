@@ -1,0 +1,31 @@
+{
+  "schema": "cinematicum-combined-float32-multicam-guard-v1",
+  "passed": true,
+  "tests": 2,
+  "failures": 0,
+  "errors": 0,
+  "skips": 0,
+  "elapsed_seconds": 2.957,
+  "engine_test_only": true,
+  "native_certified": false,
+  "issuance_effect": "NONE",
+  "source_unchanged": true,
+  "integration_source": {
+    "source": "/workspace/scratch/091f394ee5df/cinematicum-next/scripts/studio",
+    "files": {
+      "engine.py": "4db13240dc125dacf7354e40637a2f1955fb057215c8dae46ed265b0ac3cddeb",
+      "multicam.py": "31b0adfc11c9f4d479fc2205a5b8a7296940c5e97fc78c6304c3039a0fd8ad1e",
+      "float_movie.py": "2a889c728138e244996816f7a785f051e9564fa2e68e6b9a8e2788c870fdd2bd",
+      "float_movie_worker.py": "757cf805c74173b1a1bf5e6dfec3d236d9b7a53175c7259a81db129b617570b3",
+      "editorial.py": "405df55a07ec66457ab7143411c7e127dd74a568f4640dd2f77a34e38f4a3ebf",
+      "project_archive.py": "319e58348e5c969fbedd185bb45d94287ee33115355a4b5ed21128f6ebff675d"
+    },
+    "engine_test_only": true
+  },
+  "test_sha256": "6ff1c75c47d34fe13c0d13f66c57ef2208483296b7f66ce052e3ea2ff7bdea44",
+  "checks": [
+    "Actual FLOAT32 master from silent picture camera retains fixed-camera source sound, explicit [0,0] channel map, exact 48,000 stereo samples and all three locked camera identities.",
+    "Mutating the third camera, selected by neither picture nor sound, is refused by the multicamera source guard before Float32 export; prior completed master and other admitted cameras remain unchanged; no staging remains."
+  ],
+  "oracle_note": "The selected mono source is independently decoded as mono and explicitly duplicated at unity for [0,0]; no implicit mono-to-stereo attenuation is used."
+}

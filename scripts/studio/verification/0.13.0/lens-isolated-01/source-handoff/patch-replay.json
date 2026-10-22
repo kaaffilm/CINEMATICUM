@@ -1,0 +1,9 @@
+{
+  "schema": "cinematicum-lens-clean-patch-replay-v1",
+  "passed": true,
+  "baseline_tree": "941da9dbc805788a89c610ee688cc17de08fccc4",
+  "changed_paths": 55,
+  "all_final_bytes_match": true,
+  "mismatches": [],
+  "check_copy": "/workspace/scratch/091f394ee5df/cinematicum-lens-patch-check"
+}

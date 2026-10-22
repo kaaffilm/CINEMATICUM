@@ -1,0 +1,10 @@
+{
+  "actual_runtime_files": 114,
+  "build_mode": "Unchanged frozen installer functions in bounded foreground phases; fresh main/icon compiler outputs recorded",
+  "elapsed_seconds": 0.023,
+  "installed_binary_sha256": "ca2a5bf65d934b87b0dfafc55392b648bda650c1c7ce76491cc5b21e20a84b39",
+  "installer_receipt": "/Users/midiakiasat/.midia-ai/gateway-live/acceptance/cinematicum-0.13-20261022-own-e980f36e/installer.json",
+  "installer_receipt_sha256": "5edc47259f1d8576482f5865005013e070a7dbe6eb8547f4f344343d97b5fb34",
+  "passed": true,
+  "source_commit": "cdd15816c228fe4133fbb3ce6d90978333d699e6"
+}

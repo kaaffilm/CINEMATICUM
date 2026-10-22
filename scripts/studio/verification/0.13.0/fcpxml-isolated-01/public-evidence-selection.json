@@ -1,0 +1,67 @@
+{
+  "schema": "cinematicum-text-evidence-selection-v1",
+  "source": "/workspace/scratch/091f394ee5df/cinematicum-fcpxml-handoff",
+  "files": [
+    {
+      "path": "feature-manifest.json",
+      "bytes": 1975,
+      "sha256": "776f24240b45dc34c379afa3ed890f61daf934690f91603667b96678664b17a2"
+    },
+    {
+      "path": "feature-paths.txt",
+      "bytes": 216,
+      "sha256": "0713cdaa483c34731d6a4bce0b23177170c7ce28b697401218fb40a5fa92053b"
+    },
+    {
+      "path": "focused-evidence/archive-admission-06.log",
+      "bytes": 282,
+      "sha256": "0b9805b3bbd76d886df585bd5a7f65399c3b02362d0005704268991df5390984"
+    },
+    {
+      "path": "focused-evidence/floor-repeat-and-integral-grid.json",
+      "bytes": 25400,
+      "sha256": "859c5e4c31d8f6823895d2db7435b2841ccaed8094fda9e079cb3d6c6135adb5"
+    },
+    {
+      "path": "focused-evidence/focused-tests-02.log",
+      "bytes": 1445,
+      "sha256": "08820056df24de8aa0ea7438f21007eccddcdc9146638d346b24bfd32b90e194"
+    },
+    {
+      "path": "focused-evidence/focused-tests-03.log",
+      "bytes": 2754,
+      "sha256": "e69b80699dc6a9a64d2c3529720cacdeab0c518a4ddc587e2326eaf682d7951e"
+    },
+    {
+      "path": "focused-evidence/focused-tests-04.log",
+      "bytes": 2919,
+      "sha256": "61814e77253ae3804484b80601193e65ac3ec2832d94f3fe7ef6f08088ecedd2"
+    },
+    {
+      "path": "focused-evidence/focused-tests-05.log",
+      "bytes": 4393,
+      "sha256": "8b68904d0ac5b6628f15d41f2f302f79a34a2b576a2cdaf56eaf8ea70dd30f47"
+    },
+    {
+      "path": "focused-evidence/focused-tests-07.log",
+      "bytes": 3104,
+      "sha256": "33ac9c78174549c17f128150ccfe3ed97ae0c82a5abbbb4da51da3d4b9e3852d"
+    },
+    {
+      "path": "focused-evidence/positive-time-map-sampling.json",
+      "bytes": 6937,
+      "sha256": "148eaf4660eb3372a68c058f1a31cbabbf44bb3c00554672c6a942adf38d4a47"
+    },
+    {
+      "path": "focused-receipt.json",
+      "bytes": 1350,
+      "sha256": "1f266b84315578b930f0815c6571d1379b2653e0a78e18e2e34be9dff5e00e07"
+    }
+  ],
+  "raw_media_in_git": false,
+  "patch": {
+    "path": "/workspace/scratch/091f394ee5df/cinematicum-fcpxml-handoff/fcpxml-feature.patch",
+    "sha256": "7828902ad6e197197f17287e30c9772e7ae36428a2b36fcb265c44d1248e2865",
+    "bytes": 138630
+  }
+}

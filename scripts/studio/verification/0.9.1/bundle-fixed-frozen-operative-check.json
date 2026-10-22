@@ -1,0 +1,10 @@
+{
+  "passed": true,
+  "files": 189,
+  "changed": [],
+  "exit_code": 0,
+  "elapsed_seconds": 169.301,
+  "frozen_source_sha256": "30b514a409c8a0d86a047780b004942f6c65defbaf3ccb7e0da72f92085f7f3d",
+  "full_report_sha256": "50f5531cbbd015abb7dc238c91e91ecc685d0cda48014deac31f70e416264541",
+  "tests_run": 544
+}

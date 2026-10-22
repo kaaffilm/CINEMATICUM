@@ -1,0 +1,9 @@
+{
+  "passed": true,
+  "commit": "cdd15816c228fe4133fbb3ce6d90978333d699e6",
+  "tree": "a62ce29a8af68b38d14820c45fc42e1266762e34",
+  "base_commit": "dcea86196f81d6476a0f60538429b984b24c1129",
+  "files": 463,
+  "source_tracked_clean": true,
+  "all_exact_bytes": true
+}

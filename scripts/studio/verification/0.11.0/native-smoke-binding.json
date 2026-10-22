@@ -1,0 +1,15 @@
+{
+  "schema": "cinematicum-reused-native-smoke-binding-v1",
+  "passed": true,
+  "source": {
+    "bytes": 21965,
+    "sha256": "f87928a4fc07c444e603337b282bb71817b48644f297bc85c5624cc0e6e8b188"
+  },
+  "binary": {
+    "path": "/Users/midiakiasat/.midia-ai/gateway-live/workspaces/auto-8f91ac5c986eed5ac689d7f8b2ff6a29/scripts/studio/verification/0.10.0/recovered-native-01/cinematicum-native-smoke",
+    "bytes": 228360,
+    "sha256": "a994e91f1ce8a39766668925ac8756e2a587b1e92a6d0b7184c10e9e21b5bd19"
+  },
+  "previous_acceptance": "verification/0.10.0/recovered-native-01/multicam-render-01/ENGINE_TEST_multicam_native_report.json",
+  "scope": "Unchanged independent WKWebView/WKDownload transport reused; new feature phases require their own source inventories and receipts."
+}

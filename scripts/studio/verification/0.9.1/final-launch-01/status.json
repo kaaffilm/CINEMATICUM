@@ -1,0 +1,19 @@
+{
+  "state": "FAILED",
+  "elapsed_seconds": 68.145,
+  "results": [
+    {
+      "name": "quit04",
+      "exit_code": 1
+    },
+    {
+      "name": "installed-launch01",
+      "exit_code": 1
+    },
+    {
+      "name": "source-after",
+      "exit_code": 0
+    }
+  ],
+  "evidence": "/Users/midiakiasat/Library/Application Support/CINEMATICUM/Verification/0.9.1-4530-20261021-launch"
+}

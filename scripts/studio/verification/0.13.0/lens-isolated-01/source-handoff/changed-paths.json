@@ -1,0 +1,399 @@
+{
+  "schema": "cinematicum-isolated-lens-patch-files-v1",
+  "baseline": {
+    "base_commit": "530ba2400571a8b67efa2d9ab28997f65920c006",
+    "baseline_tree": "941da9dbc805788a89c610ee688cc17de08fccc4",
+    "baseline_manifest_sha256": "31125bf9cef0a920bc0a5e45b2f132fdfbf4d3a5640d55cb01af372266d736d3",
+    "candidate": "/workspace/scratch/091f394ee5df/cinematicum-lens-candidate",
+    "unrelated_promisor_blob_paths_omitted": 48
+  },
+  "source_files": 12,
+  "evidence_files": 43,
+  "files": [
+    {
+      "path": "scripts/studio/LENS_WORKFLOWS.md",
+      "category": "source",
+      "before_sha256": null,
+      "after_sha256": "053c268339ed5a91c9619c15b48b7108650997a441350af9e0f4bc3453821819",
+      "bytes": 12304
+    },
+    {
+      "path": "scripts/studio/README.md",
+      "category": "source",
+      "before_sha256": "61a9f0ed03193cfc93805b6cccce817990dbc02cb0285d919a3e01d3e3aa9b1f",
+      "after_sha256": "ac138ffb0636b6ba6080b845b5aa373fa22dd8866698bb500fa01a12a17450c9",
+      "bytes": 74526
+    },
+    {
+      "path": "scripts/studio/capabilities.json",
+      "category": "source",
+      "before_sha256": "727531a78571e1df9bd5c9ed4273237b7faf27d6fa1ea7b85898de94a7fc899d",
+      "after_sha256": "83d19312bea6ab90803b1b80b1773f3ba5cec6d7d5a32a97499277655ed0cd3e",
+      "bytes": 80593
+    },
+    {
+      "path": "scripts/studio/compositor.py",
+      "category": "source",
+      "before_sha256": "6f157671a97f45da51f93c27aa9b14ee68df200fc39e50bd44e19d535c2e2c29",
+      "after_sha256": "3ceaa0e1df26eb5d0d264f3eee0c3e5bffbdb0a3019621ba7449c1649667c963",
+      "bytes": 80297
+    },
+    {
+      "path": "scripts/studio/install_macos.py",
+      "category": "source",
+      "before_sha256": "04dc936cbc00eeb4c9d2fe71bbb63976c43e75a7d2c34455860981f358cfea11",
+      "after_sha256": "aae8a7f6f499137bc0c34530349fe5aa304c138ef5fdeded0b17b7daed1940cf",
+      "bytes": 19907
+    },
+    {
+      "path": "scripts/studio/lens_geometry.py",
+      "category": "source",
+      "before_sha256": null,
+      "after_sha256": "0b73721c600a4933a26f97e4e3351d5e941d7f635ce7495bc8402635b2761e3c",
+      "bytes": 18401
+    },
+    {
+      "path": "scripts/studio/server.py",
+      "category": "source",
+      "before_sha256": "baee0a0ab0ab697a8316fef0e59025f41de02a6274f5dbdb5b7d273315cdf9e1",
+      "after_sha256": "823b9cf270f30c065749d7686ec641dc28ac2afbbd864c2220cf333b31721dec",
+      "bytes": 106760
+    },
+    {
+      "path": "scripts/studio/test_lens_geometry.py",
+      "category": "source",
+      "before_sha256": null,
+      "after_sha256": "d36857873a10c4ac35d3b9b35dc6e295ff3220d59e769e1aeb7cb791f48ecd16",
+      "bytes": 21333
+    },
+    {
+      "path": "scripts/studio/test_lens_models_browser.cjs",
+      "category": "source",
+      "before_sha256": null,
+      "after_sha256": "c61bdf73761d8d3d8b54cbc604f1edddb1116d9b4034367963dc78982d97b55e",
+      "bytes": 8088
+    },
+    {
+      "path": "scripts/studio/test_lens_models_browser.py",
+      "category": "source",
+      "before_sha256": null,
+      "after_sha256": "04a92cec7dc8e81ff2fbdd8d9134c50b0b2a76b04187df0160bdc8bc155f8e3d",
+      "bytes": 10212
+    },
+    {
+      "path": "scripts/studio/verification/0.13.0/lens-isolated-01/browser-01/ENGINE_TEST_frame_requests.json",
+      "category": "evidence",
+      "before_sha256": null,
+      "after_sha256": "ca3d163bab055381827226140568f3bef7eaac187cebd76878e0b63e9e442356",
+      "bytes": 3
+    },
+    {
+      "path": "scripts/studio/verification/0.13.0/lens-isolated-01/browser-01/ENGINE_TEST_lens_controls.png",
+      "category": "evidence",
+      "before_sha256": null,
+      "after_sha256": "77fde360236f0d8bdabaef64e21fcac97ea2c101d04beb3458584c063119eca6",
+      "bytes": 195668
+    },
+    {
+      "path": "scripts/studio/verification/0.13.0/lens-isolated-01/browser-01/ENGINE_TEST_saved_project.json",
+      "category": "evidence",
+      "before_sha256": null,
+      "after_sha256": "f0f93162d528c541b307baea7e37f760a81d688464f2d71096d88a2f9ae7920f",
+      "bytes": 1056
+    },
+    {
+      "path": "scripts/studio/verification/0.13.0/lens-isolated-01/browser-01/browser-report.json",
+      "category": "evidence",
+      "before_sha256": null,
+      "after_sha256": "65f863a5ce283ffaedbc650acdd9ba97d4c75c6e2d1e4b5d4f37c93fff4822cc",
+      "bytes": 1358
+    },
+    {
+      "path": "scripts/studio/verification/0.13.0/lens-isolated-01/browser-01/driver.stderr",
+      "category": "evidence",
+      "before_sha256": null,
+      "after_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "scripts/studio/verification/0.13.0/lens-isolated-01/browser-01/driver.stdout",
+      "category": "evidence",
+      "before_sha256": null,
+      "after_sha256": "6fa1c6b43d623035eecd3856009827f25506ea9b3d1a034b5b3d474d5bd848c2",
+      "bytes": 660
+    },
+    {
+      "path": "scripts/studio/verification/0.13.0/lens-isolated-01/browser-01/ui-report.json",
+      "category": "evidence",
+      "before_sha256": null,
+      "after_sha256": "8d26538d4a49eb085f96ba229da076a24cd564585b6d18d2d5734ae6c551741a",
+      "bytes": 718
+    },
+    {
+      "path": "scripts/studio/verification/0.13.0/lens-isolated-01/browser-02/ENGINE_TEST_equidistant.png",
+      "category": "evidence",
+      "before_sha256": null,
+      "after_sha256": "464ac5b02c7350ed708a5e219df929b5b27e6b2652fdd9546e35150b43088c4a",
+      "bytes": 39958
+    },
+    {
+      "path": "scripts/studio/verification/0.13.0/lens-isolated-01/browser-02/ENGINE_TEST_equisolid.png",
+      "category": "evidence",
+      "before_sha256": null,
+      "after_sha256": "efcc11792c5a6500f4900ea06b40d222bfa46d2e004bff36a93693c7e66af0bd",
+      "bytes": 40038
+    },
+    {
+      "path": "scripts/studio/verification/0.13.0/lens-isolated-01/browser-02/ENGINE_TEST_frame_requests.json",
+      "category": "evidence",
+      "before_sha256": null,
+      "after_sha256": "7f158a18d9f91df531e522f4cffddb71c838fd322d1b265e8cf3adeb28bf128f",
+      "bytes": 23160
+    },
+    {
+      "path": "scripts/studio/verification/0.13.0/lens-isolated-01/browser-02/ENGINE_TEST_lens_controls.png",
+      "category": "evidence",
+      "before_sha256": null,
+      "after_sha256": "aa262f80fe6ba77b18b0d5e9a9fdb78c1f44400eb4f51bf6ec38df50f6723711",
+      "bytes": 233258
+    },
+    {
+      "path": "scripts/studio/verification/0.13.0/lens-isolated-01/browser-02/ENGINE_TEST_lensfun.png",
+      "category": "evidence",
+      "before_sha256": null,
+      "after_sha256": "0b72c6d439143107c1faaa7421f45d63ed066afff3290f9d82b673fbdfff9c36",
+      "bytes": 38425
+    },
+    {
+      "path": "scripts/studio/verification/0.13.0/lens-isolated-01/browser-02/ENGINE_TEST_orthographic.png",
+      "category": "evidence",
+      "before_sha256": null,
+      "after_sha256": "f4b2de12e2f9cc59ec4a5fab1880aa5125aee20476a7236f33667c1ee5035082",
+      "bytes": 40148
+    },
+    {
+      "path": "scripts/studio/verification/0.13.0/lens-isolated-01/browser-02/ENGINE_TEST_reopened.png",
+      "category": "evidence",
+      "before_sha256": null,
+      "after_sha256": "0b72c6d439143107c1faaa7421f45d63ed066afff3290f9d82b673fbdfff9c36",
+      "bytes": 38425
+    },
+    {
+      "path": "scripts/studio/verification/0.13.0/lens-isolated-01/browser-02/ENGINE_TEST_saved_project.json",
+      "category": "evidence",
+      "before_sha256": null,
+      "after_sha256": "69d9df57ffaf611e4ba1a686d37703f67fb21892ad24c7a7a8a1f8d36d3cf8ee",
+      "bytes": 3576
+    },
+    {
+      "path": "scripts/studio/verification/0.13.0/lens-isolated-01/browser-02/ENGINE_TEST_stereographic.png",
+      "category": "evidence",
+      "before_sha256": null,
+      "after_sha256": "dca14227d7720e54e5c8417bb7b617c81813c7f409b07e999f148ceeaa75f783",
+      "bytes": 39731
+    },
+    {
+      "path": "scripts/studio/verification/0.13.0/lens-isolated-01/browser-02/browser-report.json",
+      "category": "evidence",
+      "before_sha256": null,
+      "after_sha256": "86ed025d73b5d032e4450095803e9910592ff102167d9beada7779011270b450",
+      "bytes": 4858
+    },
+    {
+      "path": "scripts/studio/verification/0.13.0/lens-isolated-01/browser-02/driver.stderr",
+      "category": "evidence",
+      "before_sha256": null,
+      "after_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "scripts/studio/verification/0.13.0/lens-isolated-01/browser-02/driver.stdout",
+      "category": "evidence",
+      "before_sha256": null,
+      "after_sha256": "0431e87b21a8592ab68d27f117184712be2dcf7670b3bac1ae58e04bf2734b72",
+      "bytes": 2029
+    },
+    {
+      "path": "scripts/studio/verification/0.13.0/lens-isolated-01/browser-02/ui-report.json",
+      "category": "evidence",
+      "before_sha256": null,
+      "after_sha256": "f14a4996c015b9f91338dd7ced31eaf184b9dbf75ec5bf8cd4ba005210c66870",
+      "bytes": 2319
+    },
+    {
+      "path": "scripts/studio/verification/0.13.0/lens-isolated-01/browser-03/ENGINE_TEST_equidistant.png",
+      "category": "evidence",
+      "before_sha256": null,
+      "after_sha256": "464ac5b02c7350ed708a5e219df929b5b27e6b2652fdd9546e35150b43088c4a",
+      "bytes": 39958
+    },
+    {
+      "path": "scripts/studio/verification/0.13.0/lens-isolated-01/browser-03/ENGINE_TEST_equisolid.png",
+      "category": "evidence",
+      "before_sha256": null,
+      "after_sha256": "efcc11792c5a6500f4900ea06b40d222bfa46d2e004bff36a93693c7e66af0bd",
+      "bytes": 40038
+    },
+    {
+      "path": "scripts/studio/verification/0.13.0/lens-isolated-01/browser-03/ENGINE_TEST_frame_requests.json",
+      "category": "evidence",
+      "before_sha256": null,
+      "after_sha256": "96e7af95407a88852799021c8b8ee5de27f21f9fe0cda2fa521ce777ca0f71a8",
+      "bytes": 27488
+    },
+    {
+      "path": "scripts/studio/verification/0.13.0/lens-isolated-01/browser-03/ENGINE_TEST_lens_controls.png",
+      "category": "evidence",
+      "before_sha256": null,
+      "after_sha256": "3d1c13391ca1717d8ce67ae61085d2ed14447441f440e90d6fab7d2829a76345",
+      "bytes": 271627
+    },
+    {
+      "path": "scripts/studio/verification/0.13.0/lens-isolated-01/browser-03/ENGINE_TEST_lensfun.png",
+      "category": "evidence",
+      "before_sha256": null,
+      "after_sha256": "0b72c6d439143107c1faaa7421f45d63ed066afff3290f9d82b673fbdfff9c36",
+      "bytes": 38425
+    },
+    {
+      "path": "scripts/studio/verification/0.13.0/lens-isolated-01/browser-03/ENGINE_TEST_lensfun_movie.mp4",
+      "category": "evidence",
+      "before_sha256": null,
+      "after_sha256": "9fe0a8f0b2e85785363c12049429e76cbc14d4529a3dc7a5af28a4cd67eab17b",
+      "bytes": 24351
+    },
+    {
+      "path": "scripts/studio/verification/0.13.0/lens-isolated-01/browser-03/ENGINE_TEST_orthographic.png",
+      "category": "evidence",
+      "before_sha256": null,
+      "after_sha256": "f4b2de12e2f9cc59ec4a5fab1880aa5125aee20476a7236f33667c1ee5035082",
+      "bytes": 40148
+    },
+    {
+      "path": "scripts/studio/verification/0.13.0/lens-isolated-01/browser-03/ENGINE_TEST_reopened.png",
+      "category": "evidence",
+      "before_sha256": null,
+      "after_sha256": "0b72c6d439143107c1faaa7421f45d63ed066afff3290f9d82b673fbdfff9c36",
+      "bytes": 38425
+    },
+    {
+      "path": "scripts/studio/verification/0.13.0/lens-isolated-01/browser-03/ENGINE_TEST_saved_project.json",
+      "category": "evidence",
+      "before_sha256": null,
+      "after_sha256": "41b128b74b374d246422fe07d48465694c700b25b9c2c5d119fb7753e870063e",
+      "bytes": 3576
+    },
+    {
+      "path": "scripts/studio/verification/0.13.0/lens-isolated-01/browser-03/ENGINE_TEST_stereographic.png",
+      "category": "evidence",
+      "before_sha256": null,
+      "after_sha256": "dca14227d7720e54e5c8417bb7b617c81813c7f409b07e999f148ceeaa75f783",
+      "bytes": 39731
+    },
+    {
+      "path": "scripts/studio/verification/0.13.0/lens-isolated-01/browser-03/browser-report.json",
+      "category": "evidence",
+      "before_sha256": null,
+      "after_sha256": "068bb6bfe47957870e9297e43b95b242a21e727dcee99a5b634ff1854084dd62",
+      "bytes": 5746
+    },
+    {
+      "path": "scripts/studio/verification/0.13.0/lens-isolated-01/browser-03/driver.stderr",
+      "category": "evidence",
+      "before_sha256": null,
+      "after_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "scripts/studio/verification/0.13.0/lens-isolated-01/browser-03/driver.stdout",
+      "category": "evidence",
+      "before_sha256": null,
+      "after_sha256": "7c21f2a8074998ace970881d3f452fee918293dc1a20b9fe070c378e7fb324a9",
+      "bytes": 1803
+    },
+    {
+      "path": "scripts/studio/verification/0.13.0/lens-isolated-01/browser-03/ui-report.json",
+      "category": "evidence",
+      "before_sha256": null,
+      "after_sha256": "777e538f20213867647759cf97a3c75a7a688a497136d0955618e0d3e4d2eb8a",
+      "bytes": 2105
+    },
+    {
+      "path": "scripts/studio/verification/0.13.0/lens-isolated-01/fixture-failure-01.txt",
+      "category": "evidence",
+      "before_sha256": null,
+      "after_sha256": "9ec51b9637b33944e6dfa06f0dbc732799f14e810a8bf46bb1e37318e79150eb",
+      "bytes": 502
+    },
+    {
+      "path": "scripts/studio/verification/0.13.0/lens-isolated-01/focused-tests-02.log",
+      "category": "evidence",
+      "before_sha256": null,
+      "after_sha256": "87bba583a3989a0cc0b7d3f1c2ee5ea952cde76234fc00facf27dbb9d99cd73e",
+      "bytes": 8529
+    },
+    {
+      "path": "scripts/studio/verification/0.13.0/lens-isolated-01/focused-tests-03.log",
+      "category": "evidence",
+      "before_sha256": null,
+      "after_sha256": "6a9d1f9011cc99d78c42a3f81e5fd5cd84db0cb78110022051aed79e629c5939",
+      "bytes": 4214
+    },
+    {
+      "path": "scripts/studio/verification/0.13.0/lens-isolated-01/focused-tests-04.log",
+      "category": "evidence",
+      "before_sha256": null,
+      "after_sha256": "d721d85c761dcf6cf9d34e2875bba2981f211698ac286b587ffc206e052cbb3b",
+      "bytes": 4421
+    },
+    {
+      "path": "scripts/studio/verification/0.13.0/lens-isolated-01/independent-review.json",
+      "category": "evidence",
+      "before_sha256": null,
+      "after_sha256": "69dbb942dc333baf59a40b36939744a54eaf20aebf0ce45d57c5cd3481c78803",
+      "bytes": 1989
+    },
+    {
+      "path": "scripts/studio/verification/0.13.0/lens-isolated-01/upstream-notices/COPYING.CC_BY-SA_3.0",
+      "category": "evidence",
+      "before_sha256": null,
+      "after_sha256": "3f941b3b89cf7b8370ceb83cc76d2120d471b58735d8ca60238a751a48d7f72f",
+      "bytes": 22240
+    },
+    {
+      "path": "scripts/studio/verification/0.13.0/lens-isolated-01/upstream-notices/README.md",
+      "category": "evidence",
+      "before_sha256": null,
+      "after_sha256": "28cb34088a8e2b478b5e92b4ec6e48dbba05ae9ed6b96a3e309bfe507ae36430",
+      "bytes": 1564
+    },
+    {
+      "path": "scripts/studio/verification/0.13.0/lens-isolated-01/upstream-notices/source.json",
+      "category": "evidence",
+      "before_sha256": null,
+      "after_sha256": "360218a892cc1173ebc8c2cc6cef4253b45595d5cf19c9b3c2eb87c228468b41",
+      "bytes": 493
+    },
+    {
+      "path": "scripts/studio/verification/0.13.0/lens-isolated-01/upstream-profile-import.json",
+      "category": "evidence",
+      "before_sha256": null,
+      "after_sha256": "6277c2d7f80949ca3ea1b1d91c83a7a3046b683295d63ca17834e6e1405df402",
+      "bytes": 2678
+    },
+    {
+      "path": "scripts/studio/web/app.js",
+      "category": "source",
+      "before_sha256": "35c3780c4601520c2b918abdeeb101cddb3006c75aa9c08219d5b8a286141fd5",
+      "after_sha256": "04b80d6129722dd6c7c91e2ee9025f89461993b7be72d68e8a8c415cf2c6962b",
+      "bytes": 140390
+    },
+    {
+      "path": "scripts/studio/web/compositor-ui.js",
+      "category": "source",
+      "before_sha256": "9d030cd30a1e833fc233d39f7e14bf4d0c47c7bf245c6ed159bfb4faeb608ce8",
+      "after_sha256": "04e99eb7c04b702fbd05d535728d9537a7a899741848e8202f3d4dc64dd17298",
+      "bytes": 103054
+    }
+  ]
+}

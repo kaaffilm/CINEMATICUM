@@ -1,0 +1,41 @@
+{
+  "id": "dda1146061bc46d88c66991445f7b4ff",
+  "project_id": "4725b27ad74c4e6db9c4fb3fe831b8d9",
+  "kind": "render",
+  "state": "completed",
+  "progress": 1,
+  "created_at": 1792674413.215007,
+  "error": null,
+  "result": {
+    "path": "/workspace/scratch/091f394ee5df/cinematicum-fcpxml-native-driver-04/fixture/workspace/projects/4725b27ad74c4e6db9c4fb3fe831b8d9/exports/dda1146061bc46d88c66991445f7b4ff.mov",
+    "sha256": "ee63a18c22ae83ada7b7839a4ad5004cad5fe9da81a98802005438c7e6b69da1",
+    "duration": 1.3346666666666667,
+    "width": 48,
+    "height": 32,
+    "fps": 29.97002997002997,
+    "frame_rate": {
+      "numerator": 30000,
+      "denominator": 1001
+    },
+    "frames": 40,
+    "size": 272423,
+    "profile": "prores",
+    "color_space": "SDR Rec.709",
+    "image_precision": "standard8",
+    "processing_bits": 8,
+    "pixel_format": "yuv422p10le",
+    "encoding": "prores",
+    "alpha_mode": "opaque",
+    "transparent_background": false,
+    "dynamic_range": "SDR UNORM; no scene-linear HDR/ACES movie mastering",
+    "packet_verification": null,
+    "retime_reports": [],
+    "elapsed_seconds": 0.269,
+    "has_audio": true,
+    "issuance_status_changed": false,
+    "url": "/api/projects/4725b27ad74c4e6db9c4fb3fe831b8d9/exports/dda1146061bc46d88c66991445f7b4ff.mov",
+    "filename": "dda1146061bc46d88c66991445f7b4ff.mov",
+    "project_revision": 4
+  },
+  "finished_at": 1792674413.6448631
+}

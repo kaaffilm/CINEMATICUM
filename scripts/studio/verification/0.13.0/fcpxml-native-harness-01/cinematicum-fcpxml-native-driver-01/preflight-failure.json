@@ -1,0 +1,8 @@
+{
+  "passed": false,
+  "stage": "explicit-browser-path-before-preparation",
+  "error": "The previously retained /tmp/cinematicum-next-verification-20261022-01/browser-runtime/chrome-linux64/chrome path no longer exists.",
+  "native_certified": false,
+  "phases_executed": 0,
+  "resolution": "The same existing Chrome binary was located under cinematicum-runtimes/chrome-for-testing-134.0.6998.35/chrome-linux64/chrome and its SHA-256 was rechecked as f661a8c124888f491966c29581f33c1953c86c15d77048bc91452b66743d5f3a."
+}

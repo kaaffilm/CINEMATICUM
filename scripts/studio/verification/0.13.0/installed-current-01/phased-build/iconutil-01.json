@@ -1,0 +1,20 @@
+{
+  "phase": "iconutil",
+  "argv": [
+    "/usr/bin/xcrun",
+    "iconutil",
+    "-c",
+    "icns",
+    "/Users/midiakiasat/Applications/.cinematicum-build-verified-013-e980f36e/StudioIcon.iconset",
+    "-o",
+    "/Users/midiakiasat/Applications/.cinematicum-build-verified-013-e980f36e/CINEMATICUM Studio.app/Contents/Resources/StudioIcon.icns"
+  ],
+  "exit_code": 0,
+  "timed_out": false,
+  "elapsed_seconds": 0.078,
+  "stdout": "",
+  "stderr": "",
+  "output": "/Users/midiakiasat/Applications/.cinematicum-build-verified-013-e980f36e/CINEMATICUM Studio.app/Contents/Resources/StudioIcon.icns",
+  "output_sha256": "eec8f4ae832f74f8764e205f2321714be527afdbc48e03b3047462f0560a9a8f",
+  "output_bytes": 283603
+}

@@ -1,0 +1,104 @@
+{
+  "every_transferred_file_sha256_and_size_verified": true,
+  "initial_native_archive_failure_preserved": true,
+  "mac_binary_source_sha256": "f6b3ee4295bcefe003c2220a7ed42a3dc4208a95ce6842936b8a901048aef6cd",
+  "native_execution_by": "release owner on actual macOS WKWebView",
+  "passed": true,
+  "phases": [
+    {
+      "checks": 6,
+      "elapsed_seconds": 2.003,
+      "helper_identity": null,
+      "independent_movie": null,
+      "native_certified": false,
+      "operation": "prepare",
+      "passed": true
+    },
+    {
+      "checks": 14,
+      "elapsed_seconds": 6.073,
+      "helper_identity": {
+        "sha256": "c6b70d236c056a6ed3eaa08ef44aaa1672ecce904f8004095b69ac2a60f3bee7",
+        "size": 206920
+      },
+      "independent_movie": null,
+      "native_certified": true,
+      "operation": "author",
+      "passed": true
+    },
+    {
+      "checks": 19,
+      "elapsed_seconds": 12.118,
+      "helper_identity": {
+        "sha256": "c6b70d236c056a6ed3eaa08ef44aaa1672ecce904f8004095b69ac2a60f3bee7",
+        "size": 206920
+      },
+      "independent_movie": {
+        "black_lead_max": 0,
+        "frames": 15,
+        "max_pcm_lsb_error": 0.5040506312921025,
+        "per_frame_interior_mae": [
+          0.0,
+          0.0,
+          0.0,
+          2.107421875,
+          2.0769856770833335,
+          2.0540364583333335,
+          1.9666341145833333,
+          2.06787109375,
+          2.0485026041666665,
+          2.091796875,
+          2.0618489583333335,
+          2.0735677083333335,
+          1.94482421875,
+          2.05322265625,
+          2.0751953125
+        ],
+        "sample_frames": 30000,
+        "silent_lead_exact": true
+      },
+      "native_certified": true,
+      "operation": "playback",
+      "passed": true
+    },
+    {
+      "checks": 19,
+      "elapsed_seconds": 6.735,
+      "helper_identity": {
+        "sha256": "c6b70d236c056a6ed3eaa08ef44aaa1672ecce904f8004095b69ac2a60f3bee7",
+        "size": 206920
+      },
+      "independent_movie": {
+        "black_lead_max": 0,
+        "frames": 15,
+        "max_pcm_lsb_error": 0.5040506312921025,
+        "per_frame_interior_mae": [
+          0.0,
+          0.0,
+          0.0,
+          2.107421875,
+          2.0769856770833335,
+          2.0540364583333335,
+          1.9666341145833333,
+          2.06787109375,
+          2.0485026041666665,
+          2.091796875,
+          2.0618489583333335,
+          2.0735677083333335,
+          1.94482421875,
+          2.05322265625,
+          2.0751953125
+        ],
+        "sample_frames": 30000,
+        "silent_lead_exact": true
+      },
+      "native_certified": true,
+      "operation": "archive",
+      "passed": true
+    }
+  ],
+  "runtime_web_helper_inventory_matches_current_frozen_source": true,
+  "schema": "cinematicum-native-retime-transferred-evidence-review-v1",
+  "total_checks": 58,
+  "transferred_json_files": 37
+}

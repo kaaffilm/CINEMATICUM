@@ -1,0 +1,41 @@
+test_exact_quadratic_integral_endpoint_extension_and_split_identity (test_retime.RetimeClockValidationTests.test_exact_quadratic_integral_endpoint_extension_and_split_identity) ... ok
+test_piecewise_curve_uses_exact_area_and_unchanged_tail_domain (test_retime.RetimeClockValidationTests.test_piecewise_curve_uses_exact_area_and_unchanged_tail_domain) ... ok
+test_recipe_refuses_unknown_operators_nonfinite_and_unbounded_curves (test_retime.RetimeClockValidationTests.test_recipe_refuses_unknown_operators_nonfinite_and_unbounded_curves) ... ok
+test_source_precision_binding_and_real_picture_handle_limits (test_retime.RetimeClockValidationTests.test_source_precision_binding_and_real_picture_handle_limits) ... ok
+test_timewarped_ancestors_and_expanded_ramp_instance_limits_are_explicit (test_retime.RetimeClockValidationTests.test_timewarped_ancestors_and_expanded_ramp_instance_limits_are_explicit) ... ok
+test_audio_only_original_uses_same_curve_and_exact_black_picture_count (test_retime.RetimeMediaTests.test_audio_only_original_uses_same_curve_and_exact_black_picture_count) ... ok
+test_changed_source_identity_and_precancel_publish_no_derivative (test_retime.RetimeMediaTests.test_changed_source_identity_and_precancel_publish_no_derivative) ... ok
+test_fast_varispeed_antialias_filter_rejects_high_band_and_keeps_low_tone (test_retime.RetimeMediaTests.test_fast_varispeed_antialias_filter_rejects_high_band_and_keeps_low_tone) ... ok
+test_fractional_clock_every_sample_and_split_preserve_routing_and_phase (test_retime.RetimeMediaTests.test_fractional_clock_every_sample_and_split_preserve_routing_and_phase) ... FAIL
+test_mute_is_exact_silence_with_full_fractional_sample_count (test_retime.RetimeMediaTests.test_mute_is_exact_silence_with_full_fractional_sample_count) ... ok
+test_nearest_actual_pixels_follow_quadratic_clock_and_selected_pcm (test_retime.RetimeMediaTests.test_nearest_actual_pixels_follow_quadratic_clock_and_selected_pcm) ... FAIL
+test_optical_flow_reconstructs_real_midpoints_beyond_nearest_and_blend (test_retime.RetimeMediaTests.test_optical_flow_reconstructs_real_midpoints_beyond_nearest_and_blend) ... FAIL
+
+======================================================================
+FAIL: test_fractional_clock_every_sample_and_split_preserve_routing_and_phase (test_retime.RetimeMediaTests.test_fractional_clock_every_sample_and_split_preserve_routing_and_phase)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/scratch/091f394ee5df/cinematicum-retime-candidate/scripts/studio/test_retime.py", line 378, in test_fractional_clock_every_sample_and_split_preserve_routing_and_phase
+    self.assertEqual(left_receipt['output_samples'], 6406)
+AssertionError: 6407 != 6406
+
+======================================================================
+FAIL: test_nearest_actual_pixels_follow_quadratic_clock_and_selected_pcm (test_retime.RetimeMediaTests.test_nearest_actual_pixels_follow_quadratic_clock_and_selected_pcm)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/scratch/091f394ee5df/cinematicum-retime-candidate/scripts/studio/test_retime.py", line 309, in test_nearest_actual_pixels_follow_quadratic_clock_and_selected_pcm
+    self.assertTrue(np.array_equal(self.pictures(output), self.frames[expected_indices]), expected_indices)
+AssertionError: False is not true : [4, 5, 5, 6, 7, 8, 9, 10, 11, 12, 13, 15]
+
+======================================================================
+FAIL: test_optical_flow_reconstructs_real_midpoints_beyond_nearest_and_blend (test_retime.RetimeMediaTests.test_optical_flow_reconstructs_real_midpoints_beyond_nearest_and_blend)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/scratch/091f394ee5df/cinematicum-retime-candidate/scripts/studio/test_retime.py", line 333, in test_optical_flow_reconstructs_real_midpoints_beyond_nearest_and_blend
+    self.assertTrue(np.array_equal(actual[frame], expected))
+AssertionError: False is not true
+
+----------------------------------------------------------------------
+Ran 12 tests in 8.280s
+
+FAILED (failures=3)

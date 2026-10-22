@@ -1,0 +1,26 @@
+{
+  "added_derivative_count": 0,
+  "all_existing_protected_files_preserved": true,
+  "changed_count": 0,
+  "fresh_bounded_readiness_acceptance_pending": true,
+  "missing_count": 0,
+  "ordinary_quit": {
+    "controller_exit_code": 0,
+    "controller_stderr_bytes": 0,
+    "controller_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "force_termination_used": false,
+    "operation": "terminate",
+    "owned_app_terminated": true,
+    "passed": true,
+    "termination_mechanism": "NSRunningApplication.terminate",
+    "termination_requested": true
+  },
+  "original_attempt_completion": "MIDIA20s deadline after successful ordinary quit; final report was not written",
+  "runtime_readiness_certified": false,
+  "schema": "cinematicum-deadline-preservation-reconciliation-v1",
+  "source_commit": "530ba2400571a8b67efa2d9ab28997f65920c006",
+  "unexpected_added_count": 0,
+  "whole_bundle_unchanged": true,
+  "workspace_after_inventory_sha256": "f3e2a94dd77fa0c4e8299121803952b91c613d13c69f7eb4b0267fb4087b860b",
+  "workspace_before_inventory_sha256": "f3e2a94dd77fa0c4e8299121803952b91c613d13c69f7eb4b0267fb4087b860b"
+}

@@ -1,0 +1,7 @@
+{
+  "passed": true,
+  "checked_files": 189,
+  "changed": [],
+  "frozen_inventory_sha256": "5ba0151588b6dbba0b10175503c4768f57da691c1feaa8357afc1fd02f3ab1f2",
+  "regression_report_sha256": "e03bef95235724b941181a506e1883ef4aeea1ceacd0ee7feb28c0e0e8019108"
+}

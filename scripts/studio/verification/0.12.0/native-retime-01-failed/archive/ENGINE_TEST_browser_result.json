@@ -1,0 +1,28 @@
+{
+  "download_destination_policy": "explicit test evidence directory; no save panel is simulated",
+  "download_errors": [],
+  "downloads": [
+    {
+      "bytes": 789530,
+      "path": "/Users/midiakiasat/.midia-ai/gateway-live/acceptance/cinematicum-0.12-20261022-own-061702ff/retime-native-01/archive/native_downloads/ENGINE_TEST_DD0B361F-BCAD-4094-8EBB-FBE1B57FD5FD_7c911f4172f34aee9eb1dbacdd6b3a3c.cinematicum.zip",
+      "state": "completed",
+      "suggested_filename": "7c911f4172f34aee9eb1dbacdd6b3a3c.cinematicum.zip",
+      "url": "http://127.0.0.1:55926/api/projects/3ced77d5cb4e4676bf016244f6188f9d/exports/7c911f4172f34aee9eb1dbacdd6b3a3c.cinematicum.zip?download=1"
+    }
+  ],
+  "elapsed_ms": 3985,
+  "expect_download": true,
+  "metrics": {
+    "movie_href": "/api/projects/cb7354c31e214f30a6d0d1eac6c4fcc5/exports/1a9a8cc92d864a81ac7585465259cbf1.mov?download=1",
+    "restored_project_id": "cb7354c31e214f30a6d0d1eac6c4fcc5"
+  },
+  "page_errors": [],
+  "passed": true,
+  "screenshot": "/Users/midiakiasat/.midia-ai/gateway-live/acceptance/cinematicum-0.12-20261022-own-061702ff/retime-native-01/archive/ENGINE_TEST_retime.png",
+  "screenshot_bytes": 352021,
+  "steps": [
+    "actual_archive_download_and_file_upload",
+    "restored_new_identity_keeps_editable_ramps",
+    "restored_picture_audio_render_and_download"
+  ]
+}

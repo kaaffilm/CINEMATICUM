@@ -1,0 +1,41 @@
+{
+  "id": "1718cd487d7d4e799b3277a36a57dfdb",
+  "project_id": "b7c4bdc3b0544cb9a76f95ebdf61ee43",
+  "kind": "render",
+  "state": "completed",
+  "progress": 1,
+  "created_at": 1792676560.911457,
+  "error": null,
+  "result": {
+    "path": "/Users/midiakiasat/.midia-ai/gateway-live/acceptance/cinematicum-0.13-20261022-own-e980f36e/fcpxml-native-01/fixture/workspace/projects/b7c4bdc3b0544cb9a76f95ebdf61ee43/exports/1718cd487d7d4e799b3277a36a57dfdb.mov",
+    "sha256": "a3f869e806ae7d950318aa990b8b4396ef5c684ddf0213c1252732da93955fca",
+    "duration": 1.3346666666666667,
+    "width": 48,
+    "height": 32,
+    "fps": 29.97002997002997,
+    "frame_rate": {
+      "numerator": 30000,
+      "denominator": 1001
+    },
+    "frames": 40,
+    "size": 272405,
+    "profile": "prores",
+    "color_space": "SDR Rec.709",
+    "image_precision": "standard8",
+    "processing_bits": 8,
+    "pixel_format": "yuv422p10le",
+    "encoding": "prores",
+    "alpha_mode": "opaque",
+    "transparent_background": false,
+    "dynamic_range": "SDR UNORM; no scene-linear HDR/ACES movie mastering",
+    "packet_verification": null,
+    "retime_reports": [],
+    "elapsed_seconds": 0.072,
+    "has_audio": true,
+    "issuance_status_changed": false,
+    "url": "/api/projects/b7c4bdc3b0544cb9a76f95ebdf61ee43/exports/1718cd487d7d4e799b3277a36a57dfdb.mov",
+    "filename": "1718cd487d7d4e799b3277a36a57dfdb.mov",
+    "project_revision": 4
+  },
+  "finished_at": 1792676561.041476
+}

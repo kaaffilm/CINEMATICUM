@@ -1,0 +1,12 @@
+{
+  "command": [
+    "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+    "-B",
+    "-m",
+    "unittest",
+    "test_install_macos.ArchiveInstallationTests.test_packaged_isolated_capability_workers_do_not_write_into_the_bundle",
+    "-v"
+  ],
+  "returncode": 1,
+  "expected_failure": true
+}

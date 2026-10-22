@@ -1,0 +1,312 @@
+{
+  "base_materialized_files": 396,
+  "base_snapshot": {
+    "bytes": 75335,
+    "sha256": "746c5ee0dfe23888ba1e477b8dddddedac0dc1fd941455d7be942a8af0e740aa"
+  },
+  "browser_runtime_source_inventory_matches_delivery": true,
+  "candidate": "/workspace/scratch/091f394ee5df/cinematicum-retime-candidate",
+  "candidate_base_commit": "8329f33051e6339740fcd167454beafffe9febe5",
+  "changed_files": [
+    {
+      "after": {
+        "bytes": 71939,
+        "sha256": "1c84fbcc37e44ccd757b4bba995fcd15b1471b0b6a41a8260f591e703362ce61"
+      },
+      "before": {
+        "bytes": 71226,
+        "sha256": "f0b1f80a8ed88160249f904d0ca670c13dc94ae2f764bf8cec85a9aa3f1c7a56"
+      },
+      "path": "scripts/studio/README.md",
+      "status": "modified"
+    },
+    {
+      "after": {
+        "bytes": 14620,
+        "sha256": "6bc22d49e3432a2085042179e9293f36bbf0649f28df40a3492d8be062d25b77"
+      },
+      "before": null,
+      "path": "scripts/studio/RETIME.md",
+      "status": "added"
+    },
+    {
+      "after": {
+        "bytes": 75194,
+        "sha256": "29c06efea7a7da7881816387f689c181bfd43ffde3a4036b555f4508f41896e9"
+      },
+      "before": {
+        "bytes": 73137,
+        "sha256": "65fcf11c0a7f432b90feb95338e3a8bf3a4944b1b269606d0e8066309a3a5df9"
+      },
+      "path": "scripts/studio/capabilities.json",
+      "status": "modified"
+    },
+    {
+      "after": {
+        "bytes": 27152,
+        "sha256": "5c29d96d609648e2012658c9a6d51de4e593ede301a257f2a1b48f2dca4f3f27"
+      },
+      "before": {
+        "bytes": 26716,
+        "sha256": "5716eb7d82a6c033931d1a261790394cb309c68f90e01755134e59da9b2f354c"
+      },
+      "path": "scripts/studio/editorial.py",
+      "status": "modified"
+    },
+    {
+      "after": {
+        "bytes": 96103,
+        "sha256": "e52eb218c0d186328f11bcbcff3009be6481daccdfa085422df787f32e8e641e"
+      },
+      "before": {
+        "bytes": 94227,
+        "sha256": "607c9dcea0fbda2f0a5c0b64d323ecefb9043f9d9fe3ca1fd295274649db0303"
+      },
+      "path": "scripts/studio/engine.py",
+      "status": "modified"
+    },
+    {
+      "after": {
+        "bytes": 25722,
+        "sha256": "9e4a0de1faa0e39221775fbb284422179b0c85e3e1ba1cf61b63f3615e47482f"
+      },
+      "before": {
+        "bytes": 25553,
+        "sha256": "2a889c728138e244996816f7a785f051e9564fa2e68e6b9a8e2788c870fdd2bd"
+      },
+      "path": "scripts/studio/float_movie.py",
+      "status": "modified"
+    },
+    {
+      "after": {
+        "bytes": 5174,
+        "sha256": "9ac66b06ebcb905743f684b64c48538d1e6aaed5dd26637cd72f7c3e6dadee6c"
+      },
+      "before": {
+        "bytes": 5174,
+        "sha256": "4f1e3374fd4c095fc21a6656929f37eef26185f8ff486d6d6d868b467436981d"
+      },
+      "path": "scripts/studio/frame_preview.py",
+      "status": "modified"
+    },
+    {
+      "after": {
+        "bytes": 19834,
+        "sha256": "a6ea05a6b1aead3a8da6de63161d801f94410a6c2149f81137990674ede933af"
+      },
+      "before": {
+        "bytes": 19801,
+        "sha256": "e29d63d3152cd1978e14a8d41535e119678ae6a6ed596c5cfb8bdff6694d5b88"
+      },
+      "path": "scripts/studio/install_macos.py",
+      "status": "modified"
+    },
+    {
+      "after": {
+        "bytes": 35384,
+        "sha256": "f7cdc22ca0027c9b711fe1bbb31255a23368b9af39ea929c044e617b5a2038d7"
+      },
+      "before": {
+        "bytes": 35108,
+        "sha256": "4caa275c02fb4b3aef4c809d97a5fb6b349345fe6628ae816b80e0462a0b7d1d"
+      },
+      "path": "scripts/studio/interchange.py",
+      "status": "modified"
+    },
+    {
+      "after": {
+        "bytes": 11840,
+        "sha256": "1594f5000677e9a420a20622ad4283f382e421feee06e6006616d9c93e768635"
+      },
+      "before": null,
+      "path": "scripts/studio/macos/RetimeSmoke.js",
+      "status": "added"
+    },
+    {
+      "after": {
+        "bytes": 20066,
+        "sha256": "6fdc54760ea51b42e1a304725fafbd1057ed37b3dd5114c78e66bfa302a1c792"
+      },
+      "before": {
+        "bytes": 19931,
+        "sha256": "01c0163cc7acfa68eaf02d3f273c6c14c6a2cf6aaed412064441bd6688e4a4a9"
+      },
+      "path": "scripts/studio/planar_tracking.py",
+      "status": "modified"
+    },
+    {
+      "after": {
+        "bytes": 22553,
+        "sha256": "a8158c3dafcdac2d9a95f360bb3efab856a3008fa187372ee25e7daa02cb142c"
+      },
+      "before": null,
+      "path": "scripts/studio/retime.py",
+      "status": "added"
+    },
+    {
+      "after": {
+        "bytes": 9270,
+        "sha256": "a3981dc1823b5142eea04f8b42b93075c95186efc9c7a166e06cd76ece31cce6"
+      },
+      "before": null,
+      "path": "scripts/studio/retime_worker.py",
+      "status": "added"
+    },
+    {
+      "after": {
+        "bytes": 106244,
+        "sha256": "2f154443605089985b3f258d7ecab88f4b80bf4ca6cda8e58befa82bb363932c"
+      },
+      "before": {
+        "bytes": 106061,
+        "sha256": "e00ec51d12dd4402aa6be69e7e7c16bd6a52e0c73280e9ffba5fc3d3b9e5820b"
+      },
+      "path": "scripts/studio/server.py",
+      "status": "modified"
+    },
+    {
+      "after": {
+        "bytes": 29616,
+        "sha256": "152bfdcff640d111fca590576a3b68b270016dfc9f398917fdb47c421b7490e9"
+      },
+      "before": {
+        "bytes": 29444,
+        "sha256": "5b734b19d6d1fffa1296f3dc8ac8922ad86ac1bb4fb0c5493f5c95bd3cc5645e"
+      },
+      "path": "scripts/studio/test_audio_routing.py",
+      "status": "modified"
+    },
+    {
+      "after": {
+        "bytes": 41709,
+        "sha256": "53ffe4e08b725435115b75c1cf29f51999c9e2235fe2f6ce2769dd41c39c1d90"
+      },
+      "before": null,
+      "path": "scripts/studio/test_retime.py",
+      "status": "added"
+    },
+    {
+      "after": {
+        "bytes": 8026,
+        "sha256": "856a51255bdb0d9f6b80ef8a1c53b050964acf5f87399d48bb58d54a64a0c659"
+      },
+      "before": null,
+      "path": "scripts/studio/test_retime_browser.cjs",
+      "status": "added"
+    },
+    {
+      "after": {
+        "bytes": 18869,
+        "sha256": "6837235034cf6cee62061d9059e25a71b6885b571b5f07c9b4d175cec91f8cfa"
+      },
+      "before": null,
+      "path": "scripts/studio/test_retime_macos.py",
+      "status": "added"
+    },
+    {
+      "after": {
+        "bytes": 20236,
+        "sha256": "478c42f63e75ec605345f833e38d32b629bc6ceb66dfe3ec2cdb3ab4e46c8894"
+      },
+      "before": {
+        "bytes": 20058,
+        "sha256": "bdaede2e53d17abe4a519fb5e7c91131dd86dda5bebc1e3a7ae1863802e52b75"
+      },
+      "path": "scripts/studio/tracking.py",
+      "status": "modified"
+    },
+    {
+      "after": {
+        "bytes": 140286,
+        "sha256": "35c3780c4601520c2b918abdeeb101cddb3006c75aa9c08219d5b8a286141fd5"
+      },
+      "before": {
+        "bytes": 137513,
+        "sha256": "e7aa7c7f55383ffe46fd95573b9cc345c880a0cea462e23fd120cb79604550d2"
+      },
+      "path": "scripts/studio/web/app.js",
+      "status": "modified"
+    },
+    {
+      "after": {
+        "bytes": 10691,
+        "sha256": "b4a2a988b20982ada77c54d7e5340795b7fd5ed5c0b35fa53cd3fb962ab7052b"
+      },
+      "before": {
+        "bytes": 10125,
+        "sha256": "fcf1a80d232128a5edc3a9f25064f87277aa05086457d9453420539590b6c5a6"
+      },
+      "path": "scripts/studio/web/editing.js",
+      "status": "modified"
+    },
+    {
+      "after": {
+        "bytes": 19649,
+        "sha256": "feed37bda02ac6b389339d221573ab4cc08205d4fcfd464cf92261073879ec44"
+      },
+      "before": {
+        "bytes": 19558,
+        "sha256": "13125b85238885b39db925ffcb526cbd84fd87ea31a8892e6ebfd6110eca5aaa"
+      },
+      "path": "scripts/studio/web/index.html",
+      "status": "modified"
+    },
+    {
+      "after": {
+        "bytes": 8862,
+        "sha256": "05d9ff44128e4817abacd405d4ff326f750d312c0223ee82c2b4b5dc83ee8613"
+      },
+      "before": null,
+      "path": "scripts/studio/web/retime-model.js",
+      "status": "added"
+    },
+    {
+      "after": {
+        "bytes": 15207,
+        "sha256": "7472eb6021f57f9df5a937da49dd6afb6e6bc58c5d90d2b6dc344016fd64bd31"
+      },
+      "before": null,
+      "path": "scripts/studio/web/retime-ui.js",
+      "status": "added"
+    },
+    {
+      "after": {
+        "bytes": 13224,
+        "sha256": "ab01741442ca91ab37ee8c88d749977954c61c6b77621120fc6ef8e0b761d17b"
+      },
+      "before": {
+        "bytes": 13210,
+        "sha256": "e463646a8a9ddf67908e8f4a9cfdb1d03b73d6d1b52565bf35a6a1ba6d4755e7"
+      },
+      "path": "scripts/studio/web/sequence-playback.js",
+      "status": "modified"
+    },
+    {
+      "after": {
+        "bytes": 5915,
+        "sha256": "5e9d311cdb1d67a26b98ad3bb16e572b660abe7b65f714c737bac26fdb7ce244"
+      },
+      "before": {
+        "bytes": 5905,
+        "sha256": "38b2104eaf3571e338100b2f26336ec8b10ec68460e4405b8b04a5c743e12fad"
+      },
+      "path": "scripts/studio/web/viewer-tools.js",
+      "status": "modified"
+    }
+  ],
+  "integration_notes": [
+    "This is a patch against the exact integrated materialized baseline in base-snapshot.json, not the older upstream a031 Git tree alone.",
+    "Preserve the released 0.11 settings:{} fixture correction. This patch intentionally supersets it with clips/tracks/sequences arrays and evaluates the actual hasSpeedRamps helper in that extracted-VM test.",
+    "Merge only the new capability entries/timeline scope and relevant README text; retain later parent release metadata and acceptance records.",
+    "Do not claim native acceptance, whole-build regression, installation or arbitrary-footage quality from these isolated gates."
+  ],
+  "native_acceptance_performed": false,
+  "patch": {
+    "bytes": 204597,
+    "sha256": "d7c148b7c1ac54389e2ff062383a1dd8ab2f1fe70cdc546ef6a357cd22169745"
+  },
+  "patch_reconstructed_exact_after_bytes": true,
+  "schema": "cinematicum-isolated-retime-source-handoff-v1",
+  "shared_release_workspace_modified": false,
+  "upstream_head_at_snapshot": "a031a04e19007f7bac252c1f5b0f8d66db15371a"
+}

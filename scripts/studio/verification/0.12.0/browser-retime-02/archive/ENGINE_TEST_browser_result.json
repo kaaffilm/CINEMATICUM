@@ -1,0 +1,37 @@
+{
+  "browser_version": "134.0.6998.35",
+  "completed_download_count": 2,
+  "download_errors": [],
+  "downloads": [
+    {
+      "path": "/workspace/scratch/091f394ee5df/cinematicum-012-browser-02/archive/native_downloads/0e176336fbf54b748d847af746535cdd.cinematicum.zip",
+      "state": "completed",
+      "suggested_filename": "0e176336fbf54b748d847af746535cdd.cinematicum.zip",
+      "url": "http://127.0.0.1:38639/api/projects/15730b3bfe7b4d1c88447e9b38844ace/exports/0e176336fbf54b748d847af746535cdd.cinematicum.zip?download=1"
+    },
+    {
+      "path": "/workspace/scratch/091f394ee5df/cinematicum-012-browser-02/archive/native_downloads/18a92713a61d40a0bc0f9ba97fc91f6e.mov",
+      "state": "completed",
+      "suggested_filename": "18a92713a61d40a0bc0f9ba97fc91f6e.mov",
+      "url": "http://127.0.0.1:38639/api/projects/159faa8d76f64ef6b2a5dc6db43c9503/exports/18a92713a61d40a0bc0f9ba97fc91f6e.mov?download=1"
+    }
+  ],
+  "elapsed_ms": 4233,
+  "expect_download": true,
+  "expected_download_count": 2,
+  "h264_decoder": "probably",
+  "metrics": {
+    "movie_href": "/api/projects/159faa8d76f64ef6b2a5dc6db43c9503/exports/18a92713a61d40a0bc0f9ba97fc91f6e.mov?download=1",
+    "restored_project_id": "159faa8d76f64ef6b2a5dc6db43c9503"
+  },
+  "native_certified": false,
+  "page_errors": [],
+  "passed": true,
+  "screenshot": "/workspace/scratch/091f394ee5df/cinematicum-012-browser-02/archive/ENGINE_TEST_retime.png",
+  "steps": [
+    "actual_archive_download_and_file_upload",
+    "restored_new_identity_keeps_editable_ramps",
+    "restored_picture_audio_render_and_download"
+  ],
+  "transport": "Chromium"
+}

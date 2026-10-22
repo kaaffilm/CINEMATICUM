@@ -1,0 +1,13 @@
+{
+  "phase": "github_artifact_download",
+  "run_id": 39780897825,
+  "artifact_id": 12428235438,
+  "exit_code": 0,
+  "timed_out": false,
+  "elapsed_seconds": 4.128,
+  "bytes": 15113939,
+  "stderr": "",
+  "passed": true,
+  "sha256": "37b4958311da499254491efa4eb95cb50e2e96ebd75d1bf7b1c019d9677c405e",
+  "archive": "/Users/midiakiasat/.midia-ai/gateway-live/acceptance/cinematicum-0.12-20261022-own-061702ff/github-ci-39780897825/studio-verification-receipts.zip"
+}

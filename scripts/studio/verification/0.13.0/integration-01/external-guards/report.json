@@ -1,0 +1,26 @@
+{
+  "schema": "cinematicum-external-readiness-guard-v1",
+  "passed": true,
+  "exit_code": 0,
+  "tests": 6,
+  "seconds": 0.187,
+  "command": [
+    "python3",
+    "-I",
+    "-B",
+    "/workspace/scratch/091f394ee5df/cinematicum-013-integration/external-guard-01/external-tools/test_installed_readiness_phased_guards.py"
+  ],
+  "environment": {
+    "CINEMATICUM_ACCEPTED_SOURCE": "/workspace/scratch/091f394ee5df/cinematicum-013-candidate"
+  },
+  "core_commit": "9f73f4cd70fbe9dc1ab671ff912a4fa617393cf3",
+  "core_tree": "3e496cd4d9e46f29e1b1a405795d3ceb5160faeb",
+  "manifest_sha256": "21034979d805cdf680c255720f6311319f3fc22c2b405dbd43294a5485d09f8d",
+  "template_helper_sha256": "4a9e19cd07837a5e2376aa0a407416f83dda6af16babeccf066cf0ebba20b0d7",
+  "test_only_bound_helper_sha256": "3de93d1572567b8b14460953f7eca53a8fb8aa6772f37d8502e8eaf896ef9e2e",
+  "guard_test_sha256": "5132e6e2cf7b0e0adf70105b9c88bc6687a6d65476a7ae5d3683cd91bfb907c5",
+  "guard_directory_outside_source": true,
+  "native_sha_remains_unset": true,
+  "native_execution_performed": false,
+  "scope": "Pure guard tests from an actual external tool copy, binding existing Git commit/tree; no installation or readiness invocation and no synthetic native hash."
+}

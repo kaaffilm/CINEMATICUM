@@ -1,0 +1,8 @@
+{
+  "schema": "cinematicum-native-startup-quit-build-v1",
+  "compiled": false,
+  "production_source_sha256": "acf64f068cc870ed0bb4e458cb78359a830f007807a22f9bc933485aa2ae0b08",
+  "unchanged_production_class_sha256": "e611e726a29caafa0db6c7e3d7db7ac1ff47f85f874f9163de5d579951f48dcb",
+  "harness_sha256": "88e5c057e2b13e5c3bc078b867fe56c7682a38bcffbe02174cc78fd428d17c5f",
+  "generated_source_sha256": "0d169a680d53cc8300bca24aff6d4bc374aeec840627d49ca182e32c6f6d8158"
+}

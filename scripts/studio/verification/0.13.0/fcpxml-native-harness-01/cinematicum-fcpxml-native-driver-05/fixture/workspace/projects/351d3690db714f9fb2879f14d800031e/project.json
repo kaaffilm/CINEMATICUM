@@ -1,0 +1,19 @@
+{
+  "version": 1,
+  "id": "351d3690db714f9fb2879f14d800031e",
+  "name": "ENGINE TEST FCPXML sentinel",
+  "width": 48,
+  "height": 32,
+  "assets": [],
+  "clips": [],
+  "titles": [],
+  "settings": {},
+  "revision": 1,
+  "frame_rate": {
+    "numerator": 30000,
+    "denominator": 1001
+  },
+  "fps": 29.97002997002997,
+  "tracks": [],
+  "updated_at": "2026-10-22T13:07:55Z"
+}

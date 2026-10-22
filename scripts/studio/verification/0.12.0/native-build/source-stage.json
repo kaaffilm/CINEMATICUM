@@ -1,0 +1,9 @@
+{
+  "source": "/Users/midiakiasat/.midia-ai/gateway-live/workspaces/auto-6ababac56a092690eac868f940f91a11-next-012",
+  "base_commit": "530ba2400571a8b67efa2d9ab28997f65920c006",
+  "git_tree": "1ecf33541ab82e3dda47259813d5d203e70479d0",
+  "source_manifest_sha256": "74c4512a3c7d67cbbac40676999787ae9457cf303dbe174c0cacfd352daea931",
+  "patch_sha256": "3d1d4da98a01b8e438eb5188eeb5b740d0f8bcc22cfdf6b30fcc51fcb24e503b",
+  "worktree": "HEAD is now at 530ba24 Implement Studio 0.11 professional media workflows and native startup shutdown",
+  "applied": true
+}

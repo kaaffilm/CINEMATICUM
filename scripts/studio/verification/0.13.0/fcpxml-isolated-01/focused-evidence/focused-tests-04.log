@@ -1,0 +1,23 @@
+test_actual_ntsc_frames_nested_trim_forward_map_and_every_pcm_sample (test_fcpxml.FCPXMLTests.test_actual_ntsc_frames_nested_trim_forward_map_and_every_pcm_sample) ... ok
+test_actual_quantized_source_clock_is_refused_for_double_speed (test_fcpxml.FCPXMLTests.test_actual_quantized_source_clock_is_refused_for_double_speed) ... ok
+test_actual_reordered_h264_frames_use_decoded_presentation_clock (test_fcpxml.FCPXMLTests.test_actual_reordered_h264_frames_use_decoded_presentation_clock) ... ok
+test_apple_positive_rotation_is_counterclockwise_in_actual_pixels (test_fcpxml.FCPXMLTests.test_apple_positive_rotation_is_counterclockwise_in_actual_pixels) ... ok
+test_exact_time_wire_and_no_rounding (test_fcpxml.FCPXMLTests.test_exact_time_wire_and_no_rounding) ... ok
+test_export_rejects_untranslated_live_edits (test_fcpxml.FCPXMLTests.test_export_rejects_untranslated_live_edits) ... ok
+test_exported_hash_autolink_refuses_ambiguous_identical_assets (test_fcpxml.FCPXMLTests.test_exported_hash_autolink_refuses_ambiguous_identical_assets) ... ok
+test_floor_repeat_grids_have_independent_exact_frame_and_pcm_oracles (test_fcpxml.FCPXMLTests.test_floor_repeat_grids_have_independent_exact_frame_and_pcm_oracles) ... ok
+test_independent_import_timing_compound_and_source_identity (test_fcpxml.FCPXMLTests.test_independent_import_timing_compound_and_source_identity) ... ok
+test_inspection_is_opaque_and_explicit_relink_required (test_fcpxml.FCPXMLTests.test_inspection_is_opaque_and_explicit_relink_required) ... ok
+test_notes_unknown_attributes_bounds_and_compound_cycles_are_rejected (test_fcpxml.FCPXMLTests.test_notes_unknown_attributes_bounds_and_compound_cycles_are_rejected) ... ok
+test_original_sequences_and_unsaved_project_are_preserved (test_fcpxml.FCPXMLTests.test_original_sequences_and_unsaved_project_are_preserved) ... ok
+test_partial_repeat_tail_and_unproven_positive_maps_are_refused (test_fcpxml.FCPXMLTests.test_partial_repeat_tail_and_unproven_positive_maps_are_refused) ... ok
+test_public_roundtrip_exact_media_and_real_nested_structure (test_fcpxml.FCPXMLTests.test_public_roundtrip_exact_media_and_real_nested_structure) ... ok
+test_repeated_import_preserves_prior_sequence_timecode_provenance (test_fcpxml.FCPXMLTests.test_repeated_import_preserves_prior_sequence_timecode_provenance) ... ok
+test_static_apple_position_scale_opacity_and_level_are_public (test_fcpxml.FCPXMLTests.test_static_apple_position_scale_opacity_and_level_are_public) ... ok
+test_unsupported_negative_smooth_sampling_mismatch_and_effects_rejected (test_fcpxml.FCPXMLTests.test_unsupported_negative_smooth_sampling_mismatch_and_effects_rejected) ... ok
+test_xml_entities_external_dtd_processing_and_path_traversal_rejected (test_fcpxml.FCPXMLTests.test_xml_entities_external_dtd_processing_and_path_traversal_rejected) ... ok
+
+----------------------------------------------------------------------
+Ran 18 tests in 8.556s
+
+OK

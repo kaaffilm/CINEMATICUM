@@ -1,0 +1,41 @@
+{
+  "id": "f25399f2d555415f80b72cc8c0828a2d",
+  "project_id": "62d2a0bd06544062bf1ca5ede41154cd",
+  "kind": "render",
+  "state": "completed",
+  "progress": 1,
+  "created_at": 1792676532.549579,
+  "error": null,
+  "result": {
+    "path": "/Users/midiakiasat/.midia-ai/gateway-live/acceptance/cinematicum-0.13-20261022-own-e980f36e/lens-native-01/fixture/workspace/projects/62d2a0bd06544062bf1ca5ede41154cd/exports/f25399f2d555415f80b72cc8c0828a2d.mov",
+    "sha256": "11b4f638c715e00e370b294e98423282cb4004f23076fdf59c74dc6f2b49c94e",
+    "duration": 0.6666666666666666,
+    "width": 160,
+    "height": 90,
+    "fps": 12,
+    "frame_rate": {
+      "numerator": 12,
+      "denominator": 1
+    },
+    "frames": 8,
+    "size": 223540,
+    "profile": "prores",
+    "color_space": "SDR Rec.709",
+    "image_precision": "standard8",
+    "processing_bits": 8,
+    "pixel_format": "yuv422p10le",
+    "encoding": "prores",
+    "alpha_mode": "opaque",
+    "transparent_background": false,
+    "dynamic_range": "SDR UNORM; no scene-linear HDR/ACES movie mastering",
+    "packet_verification": null,
+    "retime_reports": [],
+    "elapsed_seconds": 0.304,
+    "has_audio": true,
+    "issuance_status_changed": false,
+    "url": "/api/projects/62d2a0bd06544062bf1ca5ede41154cd/exports/f25399f2d555415f80b72cc8c0828a2d.mov",
+    "filename": "f25399f2d555415f80b72cc8c0828a2d.mov",
+    "project_revision": 3
+  },
+  "finished_at": 1792676532.927905
+}

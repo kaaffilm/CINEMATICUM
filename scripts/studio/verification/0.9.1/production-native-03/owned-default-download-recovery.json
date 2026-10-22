@@ -1,0 +1,14 @@
+{
+  "schema": "cinematicum-owned-native-download-recovery-v1",
+  "scope": "Exact synthetic native attempt03 output recreated after unsuccessful synthetic Escape; original failed acceptance remains unchanged.",
+  "report_sha256": "70a860ca3662e9f20b343c7eb945dfb7cb7f97c7162e3f1438c2b38efff96675",
+  "job_id": "df90f3797c194f9e8466e0de87dca120",
+  "project_id": "abef7274167c4bc396d57f29c16d1392",
+  "source_path": "/Users/midiakiasat/Movies/df90f3797c194f9e8466e0de87dca120.mkv",
+  "retained_path": "/Users/midiakiasat/Library/Application Support/CINEMATICUM/Verification/0.9.1-bundle-fixed-20261021-native/download03/failed-cancel-default-output.mkv",
+  "bytes": 63252,
+  "sha256": "33e350dc3493366a6e8a902f68324d2626201851aac75d4d47bf9123cac19d7c",
+  "already_retained_successful_save_unchanged": true,
+  "exact_job_master_and_ui_binding": true,
+  "owned_default_file_relocated_without_overwrite": true
+}

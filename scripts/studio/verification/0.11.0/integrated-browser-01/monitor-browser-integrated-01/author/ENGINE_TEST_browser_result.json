@@ -1,0 +1,53 @@
+{
+  "browser_version": "134.0.6998.35",
+  "download_errors": [],
+  "downloads": [],
+  "elapsed_ms": 1834,
+  "h264_decoder": "probably",
+  "metrics": {
+    "paused_angles": [
+      {
+        "angle_id": "96212afb016c46008cff289629a9791a",
+        "decoded_source_frame": 36,
+        "expected_source_frame": 36,
+        "muted": true,
+        "paused": true,
+        "pixel": [
+          239,
+          12,
+          7
+        ],
+        "ready": true,
+        "src": "/api/projects/881ef080839c4b12b37ff46ee37b38a2/media/b519607e481542cb9cf071069550be80",
+        "time": 1.5001
+      },
+      {
+        "angle_id": "dd5bb52e0d4d4cb99960aaf8f8aad984",
+        "decoded_source_frame": 48,
+        "expected_source_frame": 48,
+        "muted": true,
+        "paused": true,
+        "pixel": [
+          9,
+          12,
+          239
+        ],
+        "ready": true,
+        "src": "/api/projects/881ef080839c4b12b37ff46ee37b38a2/media/0df68455c29745e59b8d59048fc95414",
+        "time": 2.0001
+      }
+    ]
+  },
+  "native_certified": false,
+  "operation": "author",
+  "page_errors": [],
+  "passed": true,
+  "screenshot": "/tmp/cinematicum-next-verification-20261022-01/monitor-browser-integrated-01/author/ENGINE_TEST_multicam_monitor.png",
+  "steps": [
+    "two_original_camera_decoders_show_exact_shared_clock_source_frames",
+    "one_undo_redo_of_fixed_camera_sound_without_silent_save",
+    "nondefault_locked_stream_swapped_channels_and_authored_gain_pan",
+    "source_mapping_saved_and_reopened"
+  ],
+  "transport": "Chromium"
+}

@@ -1,0 +1,8 @@
+{
+  "schema": "cinematicum-apple-dtd-live-source-check-v1",
+  "passed": true,
+  "url": "https://developer.apple.com/documentation/professional-video-applications/document-type-definition.md",
+  "bytes": 41495,
+  "sha256": "b4ed24c7dfbb84fb81bdb6880029f007b7784459256b9b489397d7264dc5735a",
+  "uses_exact_bootstrap_downloader": true
+}

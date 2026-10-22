@@ -1,0 +1,483 @@
+{
+  "browser_version": "134.0.6998.35",
+  "download_errors": [],
+  "downloads": [],
+  "elapsed_ms": 2478,
+  "h264_decoder": "probably",
+  "metrics": {
+    "cross_cut": {
+      "calibration": {
+        "amplitudes": {
+          "220": [
+            0.0001684781551042678,
+            0.0001684781551042678
+          ],
+          "330": [
+            0.00015343592496286883,
+            0.00015343592496286883
+          ],
+          "440": [
+            6.310100819529553e-05,
+            6.310100819529553e-05
+          ],
+          "660": [
+            0.0003279164922750621,
+            0.0003279164922750621
+          ],
+          "880": [
+            0.00016215858715388793,
+            0.00016215858715388793
+          ],
+          "990": [
+            0.00907219527923773,
+            0.00907219527923773
+          ],
+          "997": [
+            0.2500280961851251,
+            0.2500280961851251
+          ]
+        },
+        "minimum_window_rms": [
+          0.17438959571802162,
+          0.17438959571802162
+        ],
+        "rms": [
+          0.17678660546780145,
+          0.17678660546780145
+        ],
+        "samples": 32768
+      },
+      "decoder": {
+        "kind": "scheduled-source-pcm",
+        "range_requests": 4,
+        "scheduled_chunks": 4,
+        "underruns": 0
+      },
+      "mixed": {
+        "amplitudes": {
+          "220": [
+            7.656538949191056e-06,
+            0.00024108707503394904
+          ],
+          "330": [
+            0.00017549136914321229,
+            0.00041084766617902193
+          ],
+          "440": [
+            0.00034032679714502654,
+            0.14993995949486785
+          ],
+          "660": [
+            0.14993318919330234,
+            0.0003262052385889412
+          ],
+          "880": [
+            0.0002596433529279366,
+            5.081984141841226e-05
+          ],
+          "990": [
+            0.00011413643048826964,
+            0.00013353208415754083
+          ],
+          "997": [
+            0.00015870948188677917,
+            7.0084838038583e-05
+          ]
+        },
+        "minimum_window_rms": [
+          0.10406008217799545,
+          0.10492689888978392
+        ],
+        "rms": [
+          0.10600948315301298,
+          0.10603000447561077
+        ],
+        "samples": 32768
+      },
+      "raw": {
+        "amplitudes": {
+          "220": [
+            2.0417425330705153e-05,
+            0.0004821741500678981
+          ],
+          "330": [
+            0.00046797696698254443,
+            0.0008216953323580439
+          ],
+          "440": [
+            0.0009075381227344474,
+            0.2998799189897357
+          ],
+          "660": [
+            0.39982183625611833,
+            0.0006524104771778824
+          ],
+          "880": [
+            0.0006923822800951508,
+            0.00010163968283682453
+          ],
+          "990": [
+            0.0003043637979698891,
+            0.00026706416831508167
+          ],
+          "997": [
+            0.00042322527590660393,
+            0.000140169676077166
+          ]
+        },
+        "minimum_window_rms": [
+          0.2774935511859069,
+          0.20985379777956784
+        ],
+        "rms": [
+          0.2826919539486055,
+          0.21206000895122154
+        ],
+        "samples": 32768
+      },
+      "route": {
+        "binding": "decoded-source-pcm",
+        "cache_key": "dbbc68c6899926f1b3dd5b83af725ac22abef4d4da64d60602b8bb23312ac578",
+        "channel_map": [
+          1,
+          0
+        ],
+        "channels": 2,
+        "manifest": {
+          "asset_id": "0df68455c29745e59b8d59048fc95414",
+          "byte_size": 2304058,
+          "cache_key": "dbbc68c6899926f1b3dd5b83af725ac22abef4d4da64d60602b8bb23312ac578",
+          "cached": false,
+          "channels": [
+            1,
+            0
+          ],
+          "codec": "pcm_f32le",
+          "created_at": 1792663448.5503058,
+          "data_offset": 58,
+          "duration": 6,
+          "export_source": "original",
+          "frame_bytes": 8,
+          "frames": 288000,
+          "output_channels": 2,
+          "padded_frames": 0,
+          "playback_rate": 1,
+          "rate": 48000,
+          "recipe": {
+            "channels": [
+              1,
+              0
+            ],
+            "codec": "pcm_f32le",
+            "output_channels": 2,
+            "pad_frames": 288000,
+            "playback_rate": 1,
+            "rate": 48000,
+            "source_channels": 2,
+            "stream_index": 2,
+            "version": 2
+          },
+          "sha256": "f06e6ab597d33c4349b70019a259744583c7f48d8da6061b541703e03aaf9a26",
+          "source_frames": 288000,
+          "source_sha256": "31049ae13f4cb864e68bc25cb725505f8ed834da9ac0738b1c2556e473746f0a",
+          "source_time_scale": 1,
+          "state": "ready",
+          "stream_index": 2,
+          "url": "/api/projects/881ef080839c4b12b37ff46ee37b38a2/audio-source/dbbc68c6899926f1b3dd5b83af725ac22abef4d4da64d60602b8bb23312ac578",
+          "version": 2
+        },
+        "message": "",
+        "playback_rate": 1,
+        "ready": true,
+        "sha256": "f06e6ab597d33c4349b70019a259744583c7f48d8da6061b541703e03aaf9a26",
+        "source_sha256": "31049ae13f4cb864e68bc25cb725505f8ed834da9ac0738b1c2556e473746f0a",
+        "state": "ready",
+        "stream_index": 2,
+        "url": "/api/projects/881ef080839c4b12b37ff46ee37b38a2/audio-source/dbbc68c6899926f1b3dd5b83af725ac22abef4d4da64d60602b8bb23312ac578"
+      },
+      "window": {
+        "end_frame": 57216,
+        "sample_rate": 44100,
+        "start_frame": 24448
+      }
+    },
+    "cut_frame": 32,
+    "playing_angles": {
+      "after": [
+        {
+          "angle_id": "96212afb016c46008cff289629a9791a",
+          "decoded_source_frame": 40,
+          "expected_source_frame": 41.301768707483,
+          "muted": true,
+          "paused": false,
+          "pixel": [
+            239,
+            12,
+            7
+          ],
+          "ready": true,
+          "src": "/api/projects/881ef080839c4b12b37ff46ee37b38a2/media/b519607e481542cb9cf071069550be80",
+          "time": 1.705671
+        },
+        {
+          "angle_id": "dd5bb52e0d4d4cb99960aaf8f8aad984",
+          "decoded_source_frame": 52,
+          "expected_source_frame": 53.301768707483006,
+          "muted": true,
+          "paused": false,
+          "pixel": [
+            9,
+            12,
+            239
+          ],
+          "ready": true,
+          "src": "/api/projects/881ef080839c4b12b37ff46ee37b38a2/media/0df68455c29745e59b8d59048fc95414",
+          "time": 2.206022
+        }
+      ],
+      "before": [
+        {
+          "angle_id": "96212afb016c46008cff289629a9791a",
+          "decoded_source_frame": 36,
+          "expected_source_frame": 36,
+          "muted": true,
+          "paused": false,
+          "pixel": [
+            239,
+            12,
+            7
+          ],
+          "ready": true,
+          "src": "/api/projects/881ef080839c4b12b37ff46ee37b38a2/media/b519607e481542cb9cf071069550be80",
+          "time": 1.515138
+        },
+        {
+          "angle_id": "dd5bb52e0d4d4cb99960aaf8f8aad984",
+          "decoded_source_frame": 48,
+          "expected_source_frame": 48,
+          "muted": true,
+          "paused": false,
+          "pixel": [
+            9,
+            12,
+            239
+          ],
+          "ready": true,
+          "src": "/api/projects/881ef080839c4b12b37ff46ee37b38a2/media/0df68455c29745e59b8d59048fc95414",
+          "time": 2.015191
+        }
+      ]
+    },
+    "restart": {
+      "calibration": {
+        "amplitudes": {
+          "220": [
+            0.0005241723117336193,
+            0.0005241723117336193
+          ],
+          "330": [
+            0.000274059314415324,
+            0.000274059314415324
+          ],
+          "440": [
+            0.0007355355473376083,
+            0.0007355355473376083
+          ],
+          "660": [
+            0.0011347565297294233,
+            0.0011347565297294233
+          ],
+          "880": [
+            0.0026168406408011487,
+            0.0026168406408011487
+          ],
+          "990": [
+            0.04958405815191237,
+            0.04958405815191237
+          ],
+          "997": [
+            0.2501101862336178,
+            0.2501101862336178
+          ]
+        },
+        "minimum_window_rms": [
+          0.17438936513209638,
+          0.17438936513209638
+        ],
+        "rms": [
+          0.17681560473646912,
+          0.17681560473646912
+        ],
+        "samples": 8192
+      },
+      "decoder": {
+        "kind": "scheduled-source-pcm",
+        "range_requests": 5,
+        "scheduled_chunks": 8,
+        "underruns": 0
+      },
+      "mixed": {
+        "amplitudes": {
+          "220": [
+            0.0005595128001584387,
+            0.0003921228204564288
+          ],
+          "330": [
+            0.000648318388158102,
+            0.0023071389160482635
+          ],
+          "440": [
+            0.0005449487396020364,
+            0.1501304344999167
+          ],
+          "660": [
+            0.1498879360333481,
+            0.0003894183343016152
+          ],
+          "880": [
+            0.0004807183163557496,
+            0.00037613252325234374
+          ],
+          "990": [
+            0.0006244668024402206,
+            0.00035728042525678174
+          ],
+          "997": [
+            0.000715051925571932,
+            0.0004809017796122265
+          ]
+        },
+        "minimum_window_rms": [
+          0.10405962611899829,
+          0.1049295238218045
+        ],
+        "rms": [
+          0.10599346163285552,
+          0.106097264073102
+        ],
+        "samples": 8192
+      },
+      "raw": {
+        "amplitudes": {
+          "220": [
+            0.001492034153603647,
+            0.0007842456409128577
+          ],
+          "330": [
+            0.0017288490772931926,
+            0.004614277832096527
+          ],
+          "440": [
+            0.0014531966812527917,
+            0.3002608689998334
+          ],
+          "660": [
+            0.39970116117412624,
+            0.0007788366686032304
+          ],
+          "880": [
+            0.0012819155860307983,
+            0.0007522650465046875
+          ],
+          "990": [
+            0.0016652447919035486,
+            0.0007145608505135635
+          ],
+          "997": [
+            0.0019068051259672535,
+            0.000961803559224453
+          ]
+        },
+        "minimum_window_rms": [
+          0.2774923357294703,
+          0.209859047643609
+        ],
+        "rms": [
+          0.28264922990262087,
+          0.212194528146204
+        ],
+        "samples": 8192
+      },
+      "route": {
+        "binding": "decoded-source-pcm",
+        "cache_key": "dbbc68c6899926f1b3dd5b83af725ac22abef4d4da64d60602b8bb23312ac578",
+        "channel_map": [
+          1,
+          0
+        ],
+        "channels": 2,
+        "manifest": {
+          "asset_id": "0df68455c29745e59b8d59048fc95414",
+          "byte_size": 2304058,
+          "cache_key": "dbbc68c6899926f1b3dd5b83af725ac22abef4d4da64d60602b8bb23312ac578",
+          "cached": false,
+          "channels": [
+            1,
+            0
+          ],
+          "codec": "pcm_f32le",
+          "created_at": 1792663448.5503058,
+          "data_offset": 58,
+          "duration": 6,
+          "export_source": "original",
+          "frame_bytes": 8,
+          "frames": 288000,
+          "output_channels": 2,
+          "padded_frames": 0,
+          "playback_rate": 1,
+          "rate": 48000,
+          "recipe": {
+            "channels": [
+              1,
+              0
+            ],
+            "codec": "pcm_f32le",
+            "output_channels": 2,
+            "pad_frames": 288000,
+            "playback_rate": 1,
+            "rate": 48000,
+            "source_channels": 2,
+            "stream_index": 2,
+            "version": 2
+          },
+          "sha256": "f06e6ab597d33c4349b70019a259744583c7f48d8da6061b541703e03aaf9a26",
+          "source_frames": 288000,
+          "source_sha256": "31049ae13f4cb864e68bc25cb725505f8ed834da9ac0738b1c2556e473746f0a",
+          "source_time_scale": 1,
+          "state": "ready",
+          "stream_index": 2,
+          "url": "/api/projects/881ef080839c4b12b37ff46ee37b38a2/audio-source/dbbc68c6899926f1b3dd5b83af725ac22abef4d4da64d60602b8bb23312ac578",
+          "version": 2
+        },
+        "message": "",
+        "playback_rate": 1,
+        "ready": true,
+        "sha256": "f06e6ab597d33c4349b70019a259744583c7f48d8da6061b541703e03aaf9a26",
+        "source_sha256": "31049ae13f4cb864e68bc25cb725505f8ed834da9ac0738b1c2556e473746f0a",
+        "state": "ready",
+        "stream_index": 2,
+        "url": "/api/projects/881ef080839c4b12b37ff46ee37b38a2/audio-source/dbbc68c6899926f1b3dd5b83af725ac22abef4d4da64d60602b8bb23312ac578"
+      },
+      "window": {
+        "end_frame": 71552,
+        "sample_rate": 44100,
+        "start_frame": 63360
+      }
+    },
+    "source_seek_events": [],
+    "voice_count": 1
+  },
+  "native_certified": false,
+  "operation": "play",
+  "page_errors": [],
+  "passed": true,
+  "screenshot": "/tmp/cinematicum-next-verification-20261022-01/monitor-browser-integrated-01/play/ENGINE_TEST_multicam_monitor.png",
+  "steps": [
+    "two_actual_camera_pictures_advance_on_shared_live_audio_clock",
+    "one_live_picture_cut_preserves_uninterrupted_original_pcm_voice",
+    "measured_nondefault_stream_swap_gain_pan_and_zero_underruns",
+    "actual_pcm_pause_restart",
+    "one_undo_redo_save_of_camera_cut_with_audio_lock_preserved"
+  ],
+  "transport": "Chromium"
+}

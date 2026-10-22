@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE fcpxml>
+<fcpxml version="1.10">
+  <resources>
+    <format id="r1" name="CINEMATICUM 48x32 30000/1001" frameDuration="1001/30000s" width="48" height="32" fieldOrder="progressive" colorSpace="1-1-1 (Rec. 709)" />
+    <asset id="r2" name="ENGINE TEST red.mov" start="6006s" duration="2002/625s" hasVideo="1" hasAudio="1" format="r1" videoSources="1" audioSources="1" audioChannels="2" audioRate="48000">
+      <media-rep kind="original-media" src="media/1809e7aa33114bb7bddc5e6e9a69a2a2.mov" />
+      <metadata>
+        <md key="com.cinematicum.media.sha256" value="5e7b42adda12e3bed28edc6e63d974ddce76f528ade7045650ed3cb1be0b4b56" />
+      </metadata>
+    </asset>
+    <media id="r3" name="ENGINE TEST compound">
+      <sequence format="r1" duration="2002/1875s" tcStart="12012/5s" tcFormat="NDF" audioLayout="stereo" audioRate="48k">
+        <spine>
+          <gap name="Independent CINEMATICUM lanes" offset="12012/5s" start="12012/5s" duration="2002/1875s">
+            <asset-clip ref="r2" name="ENGINE TEST red.mov" lane="-1" offset="12012/5s" start="11263252/1875s" duration="2002/1875s" srcEnable="audio">
+              <conform-rate scaleEnabled="0" frameSampling="nearest-neighbor" />
+            </asset-clip>
+            <asset-clip ref="r2" name="ENGINE TEST red.mov" lane="1" offset="12012/5s" start="11263252/1875s" duration="2002/1875s" srcEnable="video">
+              <conform-rate scaleEnabled="0" frameSampling="nearest-neighbor" />
+              <adjust-conform type="fit" />
+            </asset-clip>
+            <asset-clip ref="r4" name="ENGINE TEST blue.mov" lane="2" offset="7208201/3000s" start="6007001/750s" duration="1001/3750s" srcEnable="video">
+              <conform-rate scaleEnabled="0" frameSampling="nearest-neighbor" />
+              <adjust-conform type="fit" />
+            </asset-clip>
+          </gap>
+        </spine>
+      </sequence>
+    </media>
+    <asset id="r4" name="ENGINE TEST blue.mov" start="8008s" duration="2002/625s" hasVideo="1" hasAudio="1" format="r1" videoSources="1" audioSources="1" audioChannels="2" audioRate="48000">
+      <media-rep kind="original-media" src="media/ebbb80962a9140fa993108a14b322c74.mov" />
+      <metadata>
+        <md key="com.cinematicum.media.sha256" value="4bb23e10e812ff0953313e2582ed5a34ce5d6ad8f2e2caa92bb1647e6518c152" />
+      </metadata>
+    </asset>
+  </resources>
+  <project name="ENGINE TEST rational FCPXML">
+    <sequence format="r1" duration="1001/750s" tcStart="18018/5s" tcFormat="NDF" audioLayout="stereo" audioRate="48k">
+      <spine>
+        <gap name="Independent CINEMATICUM lanes" offset="18018/5s" start="18018/5s" duration="1001/750s">
+          <asset-clip ref="r2" name="ENGINE TEST red.mov" lane="-1" offset="18018/5s" start="22523501/3750s" duration="1001/1875s" srcEnable="audio">
+            <conform-rate scaleEnabled="0" frameSampling="nearest-neighbor" />
+            <adjust-volume amount="-6.0205999132796242dB" />
+          </asset-clip>
+          <asset-clip ref="r2" name="ENGINE TEST red.mov" lane="1" offset="18018/5s" start="22523501/3750s" duration="1001/1875s" srcEnable="video">
+            <conform-rate scaleEnabled="0" frameSampling="nearest-neighbor" />
+            <adjust-conform type="fit" />
+          </asset-clip>
+          <ref-clip ref="r3" name="ENGINE TEST compound" lane="1" offset="6757751/1875s" start="18019001/7500s" duration="1001/1875s" srcEnable="all">
+            <conform-rate scaleEnabled="0" frameSampling="nearest-neighbor" />
+            <adjust-conform type="fit" />
+            <adjust-volume amount="-12.041199826559248dB" />
+          </ref-clip>
+          <asset-clip ref="r2" name="ENGINE TEST red.mov" lane="1" offset="6758752/1875s" start="22529507/3750s" duration="1001/3750s" srcEnable="video">
+            <conform-rate scaleEnabled="0" frameSampling="nearest-neighbor" />
+            <timeMap frameSampling="nearest-neighbor" preservesPitch="1">
+              <timept time="22529507/3750s" value="22529507/3750s" interp="linear" />
+              <timept time="11265254/1875s" value="7510503/1250s" interp="linear" />
+            </timeMap>
+            <adjust-conform type="fit" />
+          </asset-clip>
+          <asset-clip ref="r4" name="ENGINE TEST blue.mov" lane="2" offset="27028001/7500s" start="12013001/1500s" duration="1001/5000s" srcEnable="video">
+            <conform-rate scaleEnabled="0" frameSampling="nearest-neighbor" />
+            <adjust-conform type="fit" />
+          </asset-clip>
+        </gap>
+      </spine>
+    </sequence>
+  </project>
+</fcpxml>

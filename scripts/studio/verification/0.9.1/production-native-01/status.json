@@ -1,0 +1,16 @@
+{
+  "state": "FAILED",
+  "elapsed_seconds": 47.459,
+  "results": [
+    {
+      "name": "build",
+      "exit_code": 0
+    },
+    {
+      "name": "download",
+      "exit_code": 1
+    }
+  ],
+  "error": "Actual production download/save panel acceptance failed",
+  "traceback": "Traceback (most recent call last):\n  File \"/Users/midiakiasat/.midia-ai/gateway-live/workspaces/auto-d5f5e80a10b691457cec8d25044150b5/.completion-evidence/production-native-01/run.py\", line 11, in <module>\n    if not step('download',['/opt/homebrew/bin/python3','-I',str(e/'helpers/run_download.py'),'--source',str(r),'--binary',str(e/'native-build/cinematicum-production-native-acceptance'),'--output',str(e/'production-download-01')],70):raise RuntimeError('Actual production download/save panel acceptance failed')\n                                                                                                                                                                                                                                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nRuntimeError: Actual production download/save panel acceptance failed\n"
+}

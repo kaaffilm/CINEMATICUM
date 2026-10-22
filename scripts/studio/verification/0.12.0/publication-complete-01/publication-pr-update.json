@@ -1,0 +1,100 @@
+{
+  "passed": true,
+  "head": "dcea86196f81d6476a0f60538429b984b24c1129",
+  "title": "Studio 0.12: editable retiming, integrated production workflows and verified native release",
+  "body_sha256": "20832d83f6054982ed12bb956bdc7d63646fcacf4043d2e7e50d324cc859a78a",
+  "is_draft": true,
+  "url": "https://github.com/kaaffilm/CINEMATICUM/pull/162",
+  "runs": [
+    {
+      "conclusion": "success",
+      "databaseId": 39780897833,
+      "event": "pull_request",
+      "headSha": "dcea86196f81d6476a0f60538429b984b24c1129",
+      "status": "completed",
+      "url": "https://github.com/kaaffilm/CINEMATICUM/actions/runs/39780897833",
+      "workflowName": "godstudio-verification"
+    },
+    {
+      "conclusion": "success",
+      "databaseId": 39780897808,
+      "event": "pull_request",
+      "headSha": "dcea86196f81d6476a0f60538429b984b24c1129",
+      "status": "completed",
+      "url": "https://github.com/kaaffilm/CINEMATICUM/actions/runs/39780897808",
+      "workflowName": "godcut-verification"
+    },
+    {
+      "conclusion": "success",
+      "databaseId": 39780897813,
+      "event": "pull_request",
+      "headSha": "dcea86196f81d6476a0f60538429b984b24c1129",
+      "status": "completed",
+      "url": "https://github.com/kaaffilm/CINEMATICUM/actions/runs/39780897813",
+      "workflowName": "director-engine-verification"
+    },
+    {
+      "conclusion": "success",
+      "databaseId": 39780897732,
+      "event": "pull_request",
+      "headSha": "dcea86196f81d6476a0f60538429b984b24c1129",
+      "status": "completed",
+      "url": "https://github.com/kaaffilm/CINEMATICUM/actions/runs/39780897732",
+      "workflowName": "product-boundary-verification"
+    },
+    {
+      "conclusion": "success",
+      "databaseId": 39780897811,
+      "event": "pull_request",
+      "headSha": "dcea86196f81d6476a0f60538429b984b24c1129",
+      "status": "completed",
+      "url": "https://github.com/kaaffilm/CINEMATICUM/actions/runs/39780897811",
+      "workflowName": "no-toy-film-stack"
+    },
+    {
+      "conclusion": "",
+      "databaseId": 39780897825,
+      "event": "pull_request",
+      "headSha": "dcea86196f81d6476a0f60538429b984b24c1129",
+      "status": "in_progress",
+      "url": "https://github.com/kaaffilm/CINEMATICUM/actions/runs/39780897825",
+      "workflowName": "Studio media verification"
+    },
+    {
+      "conclusion": "",
+      "databaseId": 39780897887,
+      "event": "pull_request",
+      "headSha": "dcea86196f81d6476a0f60538429b984b24c1129",
+      "status": "in_progress",
+      "url": "https://github.com/kaaffilm/CINEMATICUM/actions/runs/39780897887",
+      "workflowName": "public-auditor-runner"
+    },
+    {
+      "conclusion": "success",
+      "databaseId": 39780897707,
+      "event": "pull_request",
+      "headSha": "dcea86196f81d6476a0f60538429b984b24c1129",
+      "status": "completed",
+      "url": "https://github.com/kaaffilm/CINEMATICUM/actions/runs/39780897707",
+      "workflowName": "public-release-consumption"
+    },
+    {
+      "conclusion": "success",
+      "databaseId": 39780897799,
+      "event": "pull_request",
+      "headSha": "dcea86196f81d6476a0f60538429b984b24c1129",
+      "status": "completed",
+      "url": "https://github.com/kaaffilm/CINEMATICUM/actions/runs/39780897799",
+      "workflowName": "outsider-reproducible-release"
+    },
+    {
+      "conclusion": "success",
+      "databaseId": 39780897627,
+      "event": "pull_request",
+      "headSha": "dcea86196f81d6476a0f60538429b984b24c1129",
+      "status": "completed",
+      "url": "https://github.com/kaaffilm/CINEMATICUM/actions/runs/39780897627",
+      "workflowName": "public-release-lineage"
+    }
+  ]
+}

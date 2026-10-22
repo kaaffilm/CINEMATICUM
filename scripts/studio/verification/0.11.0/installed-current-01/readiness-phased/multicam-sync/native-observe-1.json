@@ -1,0 +1,22 @@
+{
+  "controller_exit_code": 0,
+  "controller_stderr_bytes": 0,
+  "controller_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "operation": "observe",
+  "owned": {
+    "activation_policy_regular": true,
+    "bundle_id": "com.cinematicum.studio",
+    "bundle_path": "/Users/midiakiasat/Applications/CINEMATICUM Studio.app",
+    "executable_path": "/Users/midiakiasat/Applications/CINEMATICUM Studio.app/Contents/MacOS/CINEMATICUMStudio",
+    "finished_launching": true,
+    "hidden": false,
+    "launch_unix": 1792670706.021727,
+    "native_sha256": "8f19b8920ebdd8cfacf7c3330ed60043fe33a22c6aed494d377ee64e080427ad",
+    "normal_window_count": 1,
+    "onscreen_window_count": 1,
+    "pid": 33147,
+    "running": true,
+    "window_metadata_available": true
+  },
+  "passed": true
+}

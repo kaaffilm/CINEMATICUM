@@ -1,0 +1,76 @@
+{
+  "base_commit": "dcea86196f81d6476a0f60538429b984b24c1129",
+  "candidate": "/workspace/scratch/091f394ee5df/cinematicum-013-candidate",
+  "checks": {
+    "exact_composed_scripts/studio/install_macos.py": true,
+    "exact_composed_scripts/studio/server.py": true,
+    "exact_composed_scripts/studio/web/app.js": true,
+    "existing_interchange_mount_preserved": true,
+    "fcpxml_inspect_import_export_dispatch_preserved": true,
+    "frozen_acceptance_scripts/studio/FCPXML_NATIVE_ACCEPTANCE.md": true,
+    "frozen_acceptance_scripts/studio/macos/FcpxmlSmoke.js": true,
+    "frozen_acceptance_scripts/studio/test_fcpxml_macos.py": true,
+    "frozen_acceptance_scripts/studio/test_fcpxml_native_browser.cjs": true,
+    "frozen_fcpxml_scripts/studio/fcpxml.py": true,
+    "frozen_fcpxml_scripts/studio/test_fcpxml.py": true,
+    "frozen_fcpxml_scripts/studio/web/index.html": true,
+    "frozen_fcpxml_scripts/studio/web/interchange-ui.js": true,
+    "frozen_lens_scripts/studio/compositor.py": true,
+    "frozen_lens_scripts/studio/lens_geometry.py": true,
+    "frozen_lens_scripts/studio/web/app.js": true,
+    "frozen_lens_scripts/studio/web/compositor-ui.js": true,
+    "lens_route_and_callback_preserved": true,
+    "runtime_additions_exactly_lens_and_fcpxml": true,
+    "runtime_entries_unique": true,
+    "source_stable_during_review": true
+  },
+  "feature_patches": {
+    "fcpxml": "7828902ad6e197197f17287e30c9772e7ae36428a2b36fcb265c44d1248e2865",
+    "lens": "adb9c225c4562bd142e1f5722eb88c96918908fa64aa8807437d51253322cbb7"
+  },
+  "findings": [],
+  "integration_identity": {
+    "path": "/workspace/scratch/091f394ee5df/cinematicum-013-integration/combined-product-identity-01.json",
+    "sha256": "78c57bb7f5f03a95a1c1d9e77b97a08d156c7b79118d3323f6ce578bc5c3ffef"
+  },
+  "limits": [
+    "This is a source integration review, not a substitute for the integrated whole-suite or actual Mac phases.",
+    "Documentation/capability reconciliation and other release files were outside this review scope."
+  ],
+  "passed": true,
+  "permitted_differences": {
+    "scripts/studio/install_macos.py": "--- composed_features/scripts/studio/install_macos.py\n+++ integrated/scripts/studio/install_macos.py\n@@ -62,8 +62,8 @@\n         \"CFBundleDisplayName\": \"CINEMATICUM Studio\",\n         \"CFBundleExecutable\": EXECUTABLE_NAME,\n         \"CFBundlePackageType\": \"APPL\",\n-        \"CFBundleShortVersionString\": \"0.12.0\",\n-        \"CFBundleVersion\": \"13\",\n+        \"CFBundleShortVersionString\": \"0.13.0\",\n+        \"CFBundleVersion\": \"14\",\n         \"CFBundleIconFile\": \"StudioIcon.icns\",\n         \"LSApplicationCategoryType\": \"public.app-category.video\",\n         \"LSMinimumSystemVersion\": \"12.0\",\n",
+    "scripts/studio/server.py": "--- composed_features/scripts/studio/server.py\n+++ integrated/scripts/studio/server.py\n@@ -45,7 +45,7 @@\n import recovery\n from collaboration import CollaborationError\n \n-VERSION = \"0.12.0\"\n+VERSION = \"0.13.0\"\n MAX_UPLOAD = 8 * 1024 * 1024 * 1024\n MAX_JSON = 8 * 1024 * 1024\n IDENTIFIER = re.compile(r\"^[a-f0-9]{32}$\")\n",
+    "scripts/studio/web/app.js": ""
+  },
+  "reviewed_at": "2026-10-22T13:22:09.955947+00:00",
+  "reviewer": "lens_completion",
+  "runtime_entries_added": [
+    "lens_geometry.py",
+    "fcpxml.py"
+  ],
+  "schema": "cinematicum-independent-shared-integration-review-v1",
+  "scope": "Read-only comparison of the stable integrated shared runtime/UI paths against independently replayed frozen feature patches, with the explicitly intended 0.13.0/build14 constants. No product edits or execution tests.",
+  "source_after": {
+    "scripts/studio/compositor.py": "3ceaa0e1df26eb5d0d264f3eee0c3e5bffbdb0a3019621ba7449c1649667c963",
+    "scripts/studio/fcpxml.py": "d2eb27d14243d6d51e3d19325d09101fe9a67209231e79d92a101bfbe8b14064",
+    "scripts/studio/install_macos.py": "e5063ae4758f6ca51639fa5461eb713b308cfc5914102dd467d33963fa1369fd",
+    "scripts/studio/lens_geometry.py": "0b73721c600a4933a26f97e4e3351d5e941d7f635ce7495bc8402635b2761e3c",
+    "scripts/studio/server.py": "be99dad61d534ee91aa377a04a08ddf59f605373f06b79126b130dc51ec494ad",
+    "scripts/studio/web/app.js": "04b80d6129722dd6c7c91e2ee9025f89461993b7be72d68e8a8c415cf2c6962b",
+    "scripts/studio/web/compositor-ui.js": "04e99eb7c04b702fbd05d535728d9537a7a899741848e8202f3d4dc64dd17298",
+    "scripts/studio/web/index.html": "2707509f6e8c17250e2fea625cd23fefdac9f4be693d1e9153481d0711c2c2c0",
+    "scripts/studio/web/interchange-ui.js": "e0b74c54728de48e136e1d0c40608da63785847a1fdf5c93acbd377da2df3923"
+  },
+  "source_before": {
+    "scripts/studio/compositor.py": "3ceaa0e1df26eb5d0d264f3eee0c3e5bffbdb0a3019621ba7449c1649667c963",
+    "scripts/studio/fcpxml.py": "d2eb27d14243d6d51e3d19325d09101fe9a67209231e79d92a101bfbe8b14064",
+    "scripts/studio/install_macos.py": "e5063ae4758f6ca51639fa5461eb713b308cfc5914102dd467d33963fa1369fd",
+    "scripts/studio/lens_geometry.py": "0b73721c600a4933a26f97e4e3351d5e941d7f635ce7495bc8402635b2761e3c",
+    "scripts/studio/server.py": "be99dad61d534ee91aa377a04a08ddf59f605373f06b79126b130dc51ec494ad",
+    "scripts/studio/web/app.js": "04b80d6129722dd6c7c91e2ee9025f89461993b7be72d68e8a8c415cf2c6962b",
+    "scripts/studio/web/compositor-ui.js": "04e99eb7c04b702fbd05d535728d9537a7a899741848e8202f3d4dc64dd17298",
+    "scripts/studio/web/index.html": "2707509f6e8c17250e2fea625cd23fefdac9f4be693d1e9153481d0711c2c2c0",
+    "scripts/studio/web/interchange-ui.js": "e0b74c54728de48e136e1d0c40608da63785847a1fdf5c93acbd377da2df3923"
+  }
+}

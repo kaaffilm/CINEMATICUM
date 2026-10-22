@@ -1,0 +1,481 @@
+{
+  "schema": "cinematicum-native-011-evidence-inventory-v1",
+  "native_base": "/Users/midiakiasat/.midia-ai/gateway-live/acceptance/cinematicum-0.11-20261022-own-025436f6",
+  "files": [
+    {
+      "path": "startup-app-script-01/acceptance.json",
+      "size": 5897,
+      "sha256": "bcf79b0e17c0405b2a587342472c4b18ea3a31b28be7cec90ade4414ea10c406"
+    },
+    {
+      "path": "startup-app-script-01/fixture.json",
+      "size": 143,
+      "sha256": "48318a9982fdcea8c04c66061bb4a6b716096b19516b8ae0176c8a981155724a"
+    },
+    {
+      "path": "startup-app-script-01/initial-project.json",
+      "size": 357,
+      "sha256": "9f76ee82bca6a689bd142be398a5f466d1c25f5aa5eb4a9b7598625bcdcb4268"
+    },
+    {
+      "path": "startup-app-script-01/native-report.json",
+      "size": 1344,
+      "sha256": "8db97c3c3a987c25730dcc97f125d6fdd8932e7aac404519592cc5e183e88966"
+    },
+    {
+      "path": "startup-app-script-01/native.stderr",
+      "size": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "startup-app-script-01/owned-server.log",
+      "size": 226,
+      "sha256": "6dc80a2369a47aa16ceb8e25445699106771cd52cb7ed9e1a39056e071defe1f"
+    },
+    {
+      "path": "startup-app-script-01/transport-events.json",
+      "size": 493,
+      "sha256": "b8f87e0d7be31bfc518f1cf37d9fecd0f8fd9cd29571ae451fd025f23bdc609f"
+    },
+    {
+      "path": "startup-bootstrap-01/acceptance.json",
+      "size": 5903,
+      "sha256": "f1e7c79afef2e2c11219d892add504e52564952b1b0f33854d2c95173285f758"
+    },
+    {
+      "path": "startup-bootstrap-01/fixture.json",
+      "size": 142,
+      "sha256": "b146f4a50f62057ec66c4cd7b541939046802948e9894655f27c423aefa75d2c"
+    },
+    {
+      "path": "startup-bootstrap-01/initial-project.json",
+      "size": 357,
+      "sha256": "9f28ea4bbe32ee3cd72ccea945b695a01427182144616d06622c0af48e85a22f"
+    },
+    {
+      "path": "startup-bootstrap-01/native-report.json",
+      "size": 1358,
+      "sha256": "b2ff8c39720647b7cfb086249fc327ba9f973f5f2261a172c7a89abb4af0484f"
+    },
+    {
+      "path": "startup-bootstrap-01/native.stderr",
+      "size": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "startup-bootstrap-01/owned-server.log",
+      "size": 224,
+      "sha256": "4c52e2256529e99aecd09d15f4b07acd44fa7e2a2864db59196f6af3f45ae2de"
+    },
+    {
+      "path": "startup-bootstrap-01/transport-events.json",
+      "size": 508,
+      "sha256": "4d33ac6e37de64a3aa3d883a781d8e4d61ebd965bf7f9414a83d39fe20b7d739"
+    },
+    {
+      "path": "startup-protection-01/ENGINE_TEST_quit_source.png",
+      "size": 356,
+      "sha256": "3446fbe995d675a8c85ff31145159c75038365e2ae3ba67ea697fb58e47549e6"
+    },
+    {
+      "path": "startup-protection-01/acceptance.json",
+      "size": 11521,
+      "sha256": "f9e687606607594ce0e4165bf1aadcab6bb1b42d177dde70244462af99b87e10"
+    },
+    {
+      "path": "startup-protection-01/cancel-jobs.png",
+      "size": 47716,
+      "sha256": "8189daa995bf34b8970da9b0b0a30b006bd223339ce3401de5e40ee08d7afded"
+    },
+    {
+      "path": "startup-protection-01/fixture.json",
+      "size": 353,
+      "sha256": "32bc598f0c509ae2fb92357d9ced8972aca1ab9fb7ce2aff933e1df416f32032"
+    },
+    {
+      "path": "startup-protection-01/initial-project.json",
+      "size": 2104,
+      "sha256": "491677c3b64988ea5dc5a2636087a296d4f2f6c2e2f10281322328377ac1b2c8"
+    },
+    {
+      "path": "startup-protection-01/keep-working.png",
+      "size": 47716,
+      "sha256": "8189daa995bf34b8970da9b0b0a30b006bd223339ce3401de5e40ee08d7afded"
+    },
+    {
+      "path": "startup-protection-01/native-report.json",
+      "size": 3797,
+      "sha256": "06677650ee058706002594e612747297833208f2bbc698a741a1610aa8623c34"
+    },
+    {
+      "path": "startup-protection-01/native.stderr",
+      "size": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "startup-protection-01/owned-server.log",
+      "size": 389,
+      "sha256": "85c82c9355b2dff6215adef73bc8076556de7380407780a20859dc62ae257d9e"
+    },
+    {
+      "path": "startup-protection-01/transport-events.json",
+      "size": 1336,
+      "sha256": "82b3485611950bf1a2853133048da400c1d77efca75a4f86ebd52f2dc00faf8d"
+    },
+    {
+      "path": "multicam-monitor-native-01/author/ENGINE_TEST_browser_result.json",
+      "size": 1581,
+      "sha256": "9e40c7c9ef2ab0e6793375aad21cf234eef25dcc66ef3216a72fcef48ee00426"
+    },
+    {
+      "path": "multicam-monitor-native-01/author/ENGINE_TEST_multicam_monitor.png",
+      "size": 285977,
+      "sha256": "dd3c062b34f2e650fb4046159b33c94214f21da163a19d52fc28bf33f154dcc0"
+    },
+    {
+      "path": "multicam-monitor-native-01/author/ENGINE_TEST_multicam_monitor_report.json",
+      "size": 36993,
+      "sha256": "747b047d7972259abffefb34d4f366029a8be3be4b4b07cc2c1558455174cb04"
+    },
+    {
+      "path": "multicam-monitor-native-01/author/ENGINE_TEST_owned_jobs.json",
+      "size": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570"
+    },
+    {
+      "path": "multicam-monitor-native-01/author/ENGINE_TEST_saved_project.json",
+      "size": 5158,
+      "sha256": "101ea6e9aa00fdbbcec9cf42d133f1705ec8252e090e6215df73f6eb7870d699"
+    },
+    {
+      "path": "multicam-monitor-native-01/play/ENGINE_TEST_browser_result.json",
+      "size": 13564,
+      "sha256": "882984a3057a7d34d4bed7ad326a371f84e6693272b8dd65c11a6dc3276fa6d8"
+    },
+    {
+      "path": "multicam-monitor-native-01/play/ENGINE_TEST_multicam_monitor.png",
+      "size": 294732,
+      "sha256": "5a3446d2ec8c2ead9488f29c7d46e4128771b5dc471d3fd9c366e5d47fd4a4b7"
+    },
+    {
+      "path": "multicam-monitor-native-01/play/ENGINE_TEST_multicam_monitor_report.json",
+      "size": 50184,
+      "sha256": "0ad595a2f897135fcb0d923debcf1a37409c066ca3574c78fedabcfbd5e42708"
+    },
+    {
+      "path": "multicam-monitor-native-01/play/ENGINE_TEST_owned_jobs.json",
+      "size": 1597,
+      "sha256": "730599ec3286b484ada91b82e4090256d844c413bf57af4407033fd543ffb540"
+    },
+    {
+      "path": "multicam-monitor-native-01/play/ENGINE_TEST_saved_project.json",
+      "size": 6167,
+      "sha256": "dbb61dbf51fd36ef5b1095078be1356fea8c2519bdb4e3e3922e646d3f68c7b3"
+    },
+    {
+      "path": "multicam-monitor-native-01/prepare/ENGINE_TEST_multicam_monitor_report.json",
+      "size": 34442,
+      "sha256": "41a68a1b6f8e86845ef36748c205cec9a46fee695097f7bfdb81486fedbce242"
+    },
+    {
+      "path": "multicam-monitor-native-01/prepare/ENGINE_TEST_owned_jobs.json",
+      "size": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570"
+    },
+    {
+      "path": "multicam-monitor-native-01/prepare/ENGINE_TEST_saved_project.json",
+      "size": 4206,
+      "sha256": "1ba7b1c431e4c156830615a0a31da84b216893a833f2b7e3f7e6331b4f5903d1"
+    },
+    {
+      "path": "multicam-monitor-native-01/render/ENGINE_TEST_browser_result.json",
+      "size": 2208,
+      "sha256": "f462435313677dbd2621e7968d93cdb8e6f59975a3e7f184ce5ad843e084e8c3"
+    },
+    {
+      "path": "multicam-monitor-native-01/render/ENGINE_TEST_multicam_monitor.png",
+      "size": 342239,
+      "sha256": "6dcf21b39f9351f811576f30ba877a0b84cedd130c2628384c585d6cd127e855"
+    },
+    {
+      "path": "multicam-monitor-native-01/render/ENGINE_TEST_multicam_monitor_report.json",
+      "size": 37975,
+      "sha256": "c7018581348148c277acbc196e07bfc1217257723846ca89a1f75b33549377a5"
+    },
+    {
+      "path": "multicam-monitor-native-01/render/ENGINE_TEST_owned_jobs.json",
+      "size": 1492,
+      "sha256": "e327d6d4f42726f8e89d03d238ce10af1c0739724d927c41916d74e7b12371b6"
+    },
+    {
+      "path": "multicam-monitor-native-01/render/ENGINE_TEST_saved_project.json",
+      "size": 6168,
+      "sha256": "37529c50c1978cfc907fc7267bdee1de0d66afcef8831a790938185102a5d4b6"
+    },
+    {
+      "path": "multicam-monitor-native-01/source-inventory.json",
+      "size": 15840,
+      "sha256": "2dbc8c8d340389de51c4f86d5091e4f48b34d7dbe357934456c5bab21a565b2b"
+    },
+    {
+      "path": "float-native-01/author/ENGINE_TEST_float_ui.png",
+      "size": 314178,
+      "sha256": "f59246ab94e89aa8fada0ebf8ee8774c4b55ddc44b16d60ae678f9a7a1e8e6eb"
+    },
+    {
+      "path": "float-native-01/author/ENGINE_TEST_float_ui_report.json",
+      "size": 13586,
+      "sha256": "1bb213b77ee8cebd0ce1cc920870e3b6cf9f7446313d36e429e11442a6b63c42"
+    },
+    {
+      "path": "float-native-01/author/processed-frame.png",
+      "size": 505,
+      "sha256": "7652866336767049a2e6315ec90ce617dd7231f890b2a4d90d6f2be45064bda4"
+    },
+    {
+      "path": "float-native-01/author/saved-project.json",
+      "size": 4476,
+      "sha256": "29e28c285a5afd3ff4e3242f05255df50d6562cd2c35abb806df7af3950dc0c3"
+    },
+    {
+      "path": "float-native-01/prepare/ENGINE_TEST_float_ui_report.json",
+      "size": 12030,
+      "sha256": "8699a177ea029454671c02c529569033b14c7c1eb151c0848e73dbc04145e2db"
+    },
+    {
+      "path": "float-native-01/render/ENGINE_TEST_float_ui.png",
+      "size": 310581,
+      "sha256": "3cd75397c5c3bb2031d046f1b592c8975d01056631966c9a99a0fc6db10b924a"
+    },
+    {
+      "path": "float-native-01/render/ENGINE_TEST_float_ui_report.json",
+      "size": 17003,
+      "sha256": "0e1ba065d1a5f94f3f078de7a63f874d3753508e86ebff674b6385785da23760"
+    },
+    {
+      "path": "float-native-01/render/master-manifest.json",
+      "size": 8378,
+      "sha256": "3cd168fed678983f4cb107d779b697b83c648ebd039a21c8e3b7b7eef5103cdc"
+    },
+    {
+      "path": "float-native-01/render/saved-project.json",
+      "size": 4476,
+      "sha256": "a31164a26c803a2bd4ae90b77e23b5c4bb4624cf37087067fa7faa437751d230"
+    },
+    {
+      "path": "otio-native-01/archive/ENGINE_TEST_browser_result.json",
+      "size": 1996,
+      "sha256": "407ba31d074d4f12e7eb6922ba96d18b794760b4cfc06f12a0e3deeef25472de"
+    },
+    {
+      "path": "otio-native-01/archive/ENGINE_TEST_otio_compositions.png",
+      "size": 328947,
+      "sha256": "51de33d5c9d4e497157874a496e407944780df7bc45e72a85c2056551b198e8f"
+    },
+    {
+      "path": "otio-native-01/archive/ENGINE_TEST_otio_compositions_report.json",
+      "size": 37782,
+      "sha256": "bac031549fd72c5aaa6c67605c1622d3fe6c9ab937b15926e88a0057acbc36af"
+    },
+    {
+      "path": "otio-native-01/archive/ENGINE_TEST_owned_jobs.json",
+      "size": 6459,
+      "sha256": "3995d713463b0d1e04d3ab32ddc511100192a87daec1c22142ca05f26458eddd"
+    },
+    {
+      "path": "otio-native-01/archive/ENGINE_TEST_saved_project.json",
+      "size": 25882,
+      "sha256": "c31513ba6eec973eae77f6e4ccb754f07a6d629162e4414cad71c1a7b8f4e764"
+    },
+    {
+      "path": "otio-native-01/author/ENGINE_TEST_browser_result.json",
+      "size": 1402,
+      "sha256": "7fffbe017a0b73cf09a6247603a9cd8c63aad47c0e1034102a5a382e009c7d53"
+    },
+    {
+      "path": "otio-native-01/author/ENGINE_TEST_otio_compositions.png",
+      "size": 452793,
+      "sha256": "fe85a6c2f74fbd78ebdeed54f8d8635447e3babb91ab2b401d741ddf6dd86b6b"
+    },
+    {
+      "path": "otio-native-01/author/ENGINE_TEST_otio_compositions_report.json",
+      "size": 36487,
+      "sha256": "db2569e19c09a5d6bed5977e5c43b16f2b261bcfa2e21cebb9610daba1b96704"
+    },
+    {
+      "path": "otio-native-01/author/ENGINE_TEST_owned_jobs.json",
+      "size": 321,
+      "sha256": "a21acd4c8b0975b870b836c6a698dcad3960e417e880d93b9dd72ddb9dec170c"
+    },
+    {
+      "path": "otio-native-01/author/ENGINE_TEST_saved_project.json",
+      "size": 25882,
+      "sha256": "1df91e400159c1c1dc323ca02d4bd2f7856a4b433cd6d904f918aa745b28fc0e"
+    },
+    {
+      "path": "otio-native-01/prepare/ENGINE_TEST_otio_compositions_report.json",
+      "size": 34161,
+      "sha256": "8761d3a65a1294f12a8a9bdb1d03321005694e9b75ce74b0e15043d6145dd563"
+    },
+    {
+      "path": "otio-native-01/prepare/ENGINE_TEST_owned_jobs.json",
+      "size": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570"
+    },
+    {
+      "path": "otio-native-01/prepare/ENGINE_TEST_saved_project.json",
+      "size": 3011,
+      "sha256": "b77ebfb3a4e0fbef04b9e40d00686071560c3457977c3aeb2bd70b9a12b52bbf"
+    },
+    {
+      "path": "otio-native-01/render/ENGINE_TEST_browser_result.json",
+      "size": 1298,
+      "sha256": "998c36c8be5caa20b0c9eb9cfba299580c913f1ab8d824eb5df3e0b3e3b4f1c2"
+    },
+    {
+      "path": "otio-native-01/render/ENGINE_TEST_otio_compositions.png",
+      "size": 312187,
+      "sha256": "079266744833ea33d876c30d10071070a6d67f60ca6103ca5b3eb98d362a1518"
+    },
+    {
+      "path": "otio-native-01/render/ENGINE_TEST_otio_compositions_report.json",
+      "size": 36971,
+      "sha256": "9495fdd359974f993654926bfe479648cbaa70dd2051de286f98a01944f92c97"
+    },
+    {
+      "path": "otio-native-01/render/ENGINE_TEST_owned_jobs.json",
+      "size": 2859,
+      "sha256": "afdd617c27b285b338cf4e08bf8846b8ee0eb750c1f903d405c4c39de488634c"
+    },
+    {
+      "path": "otio-native-01/render/ENGINE_TEST_saved_project.json",
+      "size": 25882,
+      "sha256": "c31513ba6eec973eae77f6e4ccb754f07a6d629162e4414cad71c1a7b8f4e764"
+    },
+    {
+      "path": "otio-native-01/source-inventory.json",
+      "size": 15706,
+      "sha256": "046322b5a89404d93dd4704a58a66946a7b2e9a4678dfb151e0e3686ff7bffc8"
+    },
+    {
+      "path": "still-photo-native-01/deliver/ENGINE_TEST_still_photography.png",
+      "size": 563695,
+      "sha256": "5c41e29daf26743ab3269767bd700cd6313c22e42e7b52534c7734bf338fd47b"
+    },
+    {
+      "path": "still-photo-native-01/deliver/ENGINE_TEST_still_photography_report.json",
+      "size": 36769,
+      "sha256": "ef059653d95e42869fa72fc3a9c34af0173f821390025e78108a2a27fd3d7319"
+    },
+    {
+      "path": "still-photo-native-01/deliver/helper.stderr",
+      "size": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "still-photo-native-01/deliver/owned-jobs.json",
+      "size": 70825,
+      "sha256": "4e7f1dfe188ea08f14dfb5a3f1593e1b3ea7828726dfb26f1220f27c63b9a06d"
+    },
+    {
+      "path": "still-photo-native-01/hdr/ENGINE_TEST_still_photography.png",
+      "size": 963412,
+      "sha256": "34d92e9e3672b9f78989ec04ec1e05846b31e19939993fa430f3df052275353b"
+    },
+    {
+      "path": "still-photo-native-01/hdr/ENGINE_TEST_still_photography_report.json",
+      "size": 38964,
+      "sha256": "6c51072382509c1e2f52b57591ab527ab1c3233e1884306b3cf058bd0c258373"
+    },
+    {
+      "path": "still-photo-native-01/hdr/helper.stderr",
+      "size": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "still-photo-native-01/hdr/native_downloads/ENGINE_TEST_9BB9E0DB-2ED2-4E63-ADBA-F97359AC7DEF_motion.png",
+      "size": 2287,
+      "sha256": "7eb8b1be49930af91d251d5627660343299cada8c82fbab965cad35454cadd9f"
+    },
+    {
+      "path": "still-photo-native-01/hdr/native_downloads/ENGINE_TEST_C8421D5E-95CC-42C4-BEA7-6971BD2CE519_display.png",
+      "size": 365456,
+      "sha256": "9d91e68fe1b89d0ba55210fd9ab2d8ebe1cc30732a2ff6d80c0036a130564c54"
+    },
+    {
+      "path": "still-photo-native-01/hdr/native_downloads/ENGINE_TEST_F44A6156-DDDD-4EA4-91E3-16D7E2429D5B_receipt.json",
+      "size": 36000,
+      "sha256": "3297f442e78b5c97283ee62609cce42427e6a449cd785a57e749402b889429d5"
+    },
+    {
+      "path": "still-photo-native-01/hdr/owned-jobs.json",
+      "size": 52323,
+      "sha256": "569a8eee998e6a6599041de7711b9dfce15f7450daa5ae5069b30f578984d406"
+    },
+    {
+      "path": "still-photo-native-01/import/ENGINE_TEST_still_photography.png",
+      "size": 978926,
+      "sha256": "dbd7f85068a17717914bf5c613ebe78020ffea8be7f33cd5a53777d8f0647613"
+    },
+    {
+      "path": "still-photo-native-01/import/ENGINE_TEST_still_photography_report.json",
+      "size": 34518,
+      "sha256": "bc5bb4d4b4c075ab190e79e776c86841baeae8b3aa332f37a99b2e89aa4e8f7a"
+    },
+    {
+      "path": "still-photo-native-01/import/helper.stderr",
+      "size": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "still-photo-native-01/import/owned-jobs.json",
+      "size": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570"
+    },
+    {
+      "path": "still-photo-native-01/panorama/ENGINE_TEST_still_photography.png",
+      "size": 820366,
+      "sha256": "c0b62ff51bb616827358f21398ab9764f6cb4baafed3a7f2c85554111dd06c75"
+    },
+    {
+      "path": "still-photo-native-01/panorama/ENGINE_TEST_still_photography_report.json",
+      "size": 38304,
+      "sha256": "5d42b343d17cf01acc4c42a524c6b459ed446ac1ff83edd8285f08089bd30cdf"
+    },
+    {
+      "path": "still-photo-native-01/panorama/helper.stderr",
+      "size": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "still-photo-native-01/panorama/native_downloads/ENGINE_TEST_5933CB86-E4EB-4FF1-86F9-3DC480C5FBCD_receipt.json",
+      "size": 7816,
+      "sha256": "a9eb45713070579c0c53cd1e9d54f202ffdeb8011396557260ed25e2336924e8"
+    },
+    {
+      "path": "still-photo-native-01/panorama/native_downloads/ENGINE_TEST_E4873238-BF08-4F4F-B725-F336014663CC_display.png",
+      "size": 532975,
+      "sha256": "39fc49994048ed66275d935b3e7f08cc6dd2d3e130a370aad6d3690f55b8a92b"
+    },
+    {
+      "path": "still-photo-native-01/panorama/owned-jobs.json",
+      "size": 67434,
+      "sha256": "9e54cf2aadb084859edd49a6e16c753e623ae3767d994d8e661286c150b1c3d2"
+    },
+    {
+      "path": "still-photo-native-01/prepare/ENGINE_TEST_still_photography_report.json",
+      "size": 33876,
+      "sha256": "9fd6e8d3f8c57c53fb9bd2459b0942dd07641bd0fd1827ae6c652821d0ed0ef2"
+    },
+    {
+      "path": "still-photo-native-01/prepare/owned-jobs.json",
+      "size": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570"
+    },
+    {
+      "path": "still-photo-native-01/source-inventory.json",
+      "size": 15564,
+      "sha256": "5eb83faa08db566bd252e2d2e9634115791ac54c515119c33809e3709ab5122e"
+    }
+  ]
+}

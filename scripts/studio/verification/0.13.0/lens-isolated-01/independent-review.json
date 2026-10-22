@@ -1,0 +1,48 @@
+{
+  "schema": "cinematicum-lens-independent-review-v1",
+  "reviewer": "verification_runtime agent",
+  "mode": "read-only source review; no production edits by reviewer",
+  "scope": [
+    "Lensfun coordinate/crop conventions",
+    "focal-preserving coefficient normalization",
+    "unique radial inverse and fisheye front-hemisphere bounds",
+    "alpha/high16 integration",
+    "project serialization and XML/path/SSRF safety",
+    "unchanged Brown behavior"
+  ],
+  "findings": [
+    {
+      "id": "explicit-null-model",
+      "status": "corrected-and-verified",
+      "before": "Frontend treated model:null as Brown; backend rejected it.",
+      "change": "Default frontend model only when undefined; added explicit-null graph to existing shipped-JavaScript/backend parity regression.",
+      "evidence": "focused-tests-04.log"
+    }
+  ],
+  "review_outcome": "Reviewer reported no other geometric, inverse, crop-scaling, fisheye, alpha-path, XML safety, serialization or Brown-regression blocker. This is bounded review evidence, not native/full-build release certification.",
+  "final_focused_tests": {
+    "tests": 25,
+    "passed": 25,
+    "failures": 0,
+    "errors": 0,
+    "skips": 0,
+    "elapsed_seconds": 15.173,
+    "log": "focused-tests-04.log"
+  },
+  "browser": {
+    "report": "browser-03/browser-report.json",
+    "coordinator_checks": 30,
+    "ui_checks": 13,
+    "elapsed_seconds": 15.38,
+    "native_certified": false,
+    "source_note": "Actual valid-control workflow ran before the one-line explicit-null schema fix. That malformed-input correction was verified afterward by the focused parity test; the valid controls/render paths did not change."
+  },
+  "high16": [
+    "PTLens and equisolid, both directions",
+    "actual FFV1 master and 16-bit paused PNG",
+    "more than512 distinct red-channel values",
+    "every pixel compared to independent premultiplied RGBA oracle within5 UNORM16 levels",
+    "exact paused/master parity",
+    "source bytes unchanged"
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "state": "FAILED",
+  "elapsed_seconds": 88.542,
+  "results": [
+    {
+      "name": "source-before",
+      "exit_code": 0
+    },
+    {
+      "name": "download03",
+      "exit_code": 1
+    },
+    {
+      "name": "quit05",
+      "exit_code": 0
+    },
+    {
+      "name": "planar",
+      "exit_code": 0
+    },
+    {
+      "name": "source-after",
+      "exit_code": 0
+    }
+  ],
+  "evidence": "/Users/midiakiasat/Library/Application Support/CINEMATICUM/Verification/0.9.1-bundle-fixed-20261021-native"
+}

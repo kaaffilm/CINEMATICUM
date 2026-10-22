@@ -1,0 +1,27 @@
+{
+  "schema": "cinematicum-tracking-wheel-lock",
+  "version": 1,
+  "platform": "macos-arm64",
+  "python": "3.13",
+  "verified_at": "2026-10-21",
+  "packages": [
+    {
+      "name": "numpy",
+      "version": "2.3.5",
+      "filename": "numpy-2.3.5-cp313-cp313-macosx_11_0_arm64.whl",
+      "url": "https://files.pythonhosted.org/packages/79/fb/f505c95ceddd7027347b067689db71ca80bd5ecc926f913f1a23e65cf09b/numpy-2.3.5-cp313-cp313-macosx_11_0_arm64.whl",
+      "sha256": "aa5bc7c5d59d831d9773d1170acac7893ce3a5e130540605770ade83280e7188",
+      "size": 12254652,
+      "source": "https://pypi.org/pypi/numpy/2.3.5/json"
+    },
+    {
+      "name": "opencv-python-headless",
+      "version": "4.11.0.86",
+      "filename": "opencv_python_headless-4.11.0.86-cp37-abi3-macosx_13_0_arm64.whl",
+      "url": "https://files.pythonhosted.org/packages/dc/53/2c50afa0b1e05ecdb4603818e85f7d174e683d874ef63a6abe3ac92220c8/opencv_python_headless-4.11.0.86-cp37-abi3-macosx_13_0_arm64.whl",
+      "sha256": "48128188ade4a7e517237c8e1e11a9cdf5c282761473383e77beb875bb1e61ca",
+      "size": 37326460,
+      "source": "https://pypi.org/pypi/opencv-python-headless/4.11.0.86/json"
+    }
+  ]
+}

@@ -1,0 +1,150 @@
+{
+  "schema": "cinematicum-independent-ci-installed-binding-review-v1",
+  "created_at_utc": "2026-10-22T13:35:32.345512+00:00",
+  "reviewer": "verification_runtime",
+  "source_root": "/workspace/scratch/091f394ee5df/cinematicum-013-candidate",
+  "reviewed_provisional_head": "9f73f4cd70fbe9dc1ab671ff912a4fa617393cf3",
+  "scope": "Read-only review of new 0.13 Studio CI fixture/validator provisioning and external installed-readiness/launch binding; no broad audit or tests.",
+  "tests_run": false,
+  "source_edits": false,
+  "native_or_remote_calls": false,
+  "status": "one_concrete_acceptance_test_location_defect_confirmed_fix_pending",
+  "findings": [
+    {
+      "id": "external-guard-source-location",
+      "severity": "blocks_documented_external_guard_validation",
+      "path": "/workspace/scratch/091f394ee5df/cinematicum-013-candidate/scripts/studio/verification/0.13.0/tools/test_installed_readiness_phased_guards.py",
+      "original_test_sha256": "4212221fb032b3c6c964a83718e30c49ec5ad38b166de7331d0528467ada0710",
+      "original_binding_document_sha256": "86a9837fedb0f2728e1b84e2e2929ade679fdd15d4f245128abc5433d035c27b",
+      "function": "Guards.test_core_requires_exact_accepted_commit_and_actual_git_tree",
+      "statement": "phased.assert_core_tree(accepted, BASE.parents[4], phased.CORE)",
+      "defect": "The documented acceptance strategy copies tools outside the accepted source. BASE.parents[4] only locates the source when the test remains at its repository path; in the external copy it resolves a different/non-Git ancestor or raises IndexError. The documented external guard run cannot pass against the actual accepted core.",
+      "impact": "Acceptance tooling only; production/source code and the readiness coordinator source-path binding are not defective.",
+      "required_correction": "Require the actual accepted-source directory explicitly, e.g. CINEMATICUM_ACCEPTED_SOURCE, and document the external-copy invocation. Preserve actual Git core/tree validation and every existing guard.",
+      "owner_acknowledged": true,
+      "owner": "acceptance_helpers",
+      "resolution_at_this_receipt": "Owner is implementing the narrow guard test and binding-document correction; not yet reviewed here."
+    }
+  ],
+  "reviewed_without_concrete_defect": [
+    {
+      "area": "CI checkout",
+      "fact": "actions/checkout explicitly uses github.event.pull_request.head.sha || github.sha; the initial source-integrity check and the frozen-suite report operate on that head rather than the default synthetic PR merge."
+    },
+    {
+      "area": "Lensfun fixture",
+      "fact": "Exact commit 9e6deafe100a7c6f7ce019624bb8c4da20bf7c29, 116602 bytes and SHA256 f7693b6779edd8ed10d7dc23113669255bfa4987cea7db0e843f7f5f2bbbe615 agree with retained original source bytes and source/license record. A fresh test-only directory is used and malformed/changed bytes fail. The actual phased browser explicitly receives --profile."
+    },
+    {
+      "area": "Apple/lxml provisioning",
+      "fact": "Separate Linux x86_64 CPython 3.12 venv; lxml 6.1.1 wheel 5240367 bytes / ebe6af670449830d6d9b752c256a983291c766a1365ba5d5460048f9e33a7818; pip --isolated --no-index --require-hashes --no-deps --only-binary. Apple document 41495 bytes / b4ed24c7dfbb84fb81bdb6880029f007b7784459256b9b489397d7264dc5735a; extracted DTD 40206 bytes / 6044527401b6cc92a9d86383437794d8de801c1904b6d08409ce81720fd23f33. Existing acceptance receipt records actual lxml/libxml2 6.1.1/2.14.6 and unchanged runtime. No shared application/runtime mutation."
+    },
+    {
+      "area": "Explicit schema gate",
+      "fact": "CI explicitly invokes actual FCPXML browser download, then the separate validator on prepare/ENGINE_TEST_input.fcpxml and author/ENGINE_TEST_exported.fcpxml. Missing runtime, pin mismatch, malformed schema, external DTD/entity and wrong version fail; no skip route."
+    },
+    {
+      "area": "Fail-closed readiness template",
+      "fact": "CORE, CORE_TREE, CORE_MANIFEST and NATIVE_SHA are None. The commit check refuses the template before importing the launch helper or invoking native control; other unknown pins fail before launch. The fully bound copy must match its explicit helper SHA and the actual accepted core/tree/manifest/native identities."
+    },
+    {
+      "area": "Helper/controller consistency",
+      "fact": "RUNNER_SHA equals actual canonical runner SHA96d5bb0c904108454ae4aa38c5f2abd586abcf9355f6ee404cae06268898a757; controller source 242ce3defae2a0d6f3466fb5a937776106081178cdbd40b16f55108a2fcf77e8 and binary 514babe113c42ae6f666b29ab0b934d878cbc50cf7d9053086fea60a72877101 match the retained actual build receipt. All version/build guards identify 0.13.0/build14."
+    },
+    {
+      "area": "External coordinator strategy",
+      "fact": "Runtime source root is read from the hash-bound independent installation receipt, not inferred from coordinator location. The external coordinator can preserve the clean accepted core while changing only four identity assignments. Private baseline/public evidence are forbidden inside source/app/protected workspace. Every phase binds the helper/controller/core/native/installation/baseline and uses actual read-only readiness, owned LaunchServices and ordinary termination. Final whole-bundle/project preservation remains separate and mandatory."
+    }
+  ],
+  "source_identities_at_receipt": [
+    {
+      "path": "/workspace/scratch/091f394ee5df/cinematicum-013-candidate/.github/workflows/studio-verification.yml",
+      "relative": ".github/workflows/studio-verification.yml",
+      "bytes": 12154,
+      "sha256": "d23ef75db3f80bd9f1bc400ca52d03d653ed45391360147f2ec1fa64ca1279d7"
+    },
+    {
+      "path": "/workspace/scratch/091f394ee5df/cinematicum-013-candidate/scripts/studio/bootstrap_fcpxml_schema_validation.py",
+      "relative": "scripts/studio/bootstrap_fcpxml_schema_validation.py",
+      "bytes": 7380,
+      "sha256": "209f405a6d1ac7bd70fd79690e71c21c348e0aa086d6738e385c4c810b72e734"
+    },
+    {
+      "path": "/workspace/scratch/091f394ee5df/cinematicum-013-candidate/scripts/studio/validate_fcpxml_schema.py",
+      "relative": "scripts/studio/validate_fcpxml_schema.py",
+      "bytes": 9997,
+      "sha256": "a78649d8f4e18db23b20f60983bd85e988360902596b603bb872c5708a496170"
+    },
+    {
+      "path": "/workspace/scratch/091f394ee5df/cinematicum-013-candidate/scripts/studio/fcpxml-schema-validation-lock.json",
+      "relative": "scripts/studio/fcpxml-schema-validation-lock.json",
+      "bytes": 1201,
+      "sha256": "04ae4133c7e910ee217b2641e1bc187572baf9684454cf6dc9e3c2bb9b4a6ba3"
+    },
+    {
+      "path": "/workspace/scratch/091f394ee5df/cinematicum-013-candidate/scripts/studio/fcpxml-schema-validation-linux.requirements.txt",
+      "relative": "scripts/studio/fcpxml-schema-validation-linux.requirements.txt",
+      "bytes": 91,
+      "sha256": "602629d75035ee82c04948cc36e14af23778bd59bf591e2aac6c0027f01e6d86"
+    },
+    {
+      "path": "/workspace/scratch/091f394ee5df/cinematicum-013-candidate/scripts/studio/verification/0.13.0/tools/BINDING_SEQUENCE.md",
+      "relative": "scripts/studio/verification/0.13.0/tools/BINDING_SEQUENCE.md",
+      "bytes": 3433,
+      "sha256": "29c0e4ff43f6f1eacc9352e9c84e98b17bf3dc92d2eb076bac49ea7b9d9e6060"
+    },
+    {
+      "path": "/workspace/scratch/091f394ee5df/cinematicum-013-candidate/scripts/studio/verification/0.13.0/tools/run_installed_readiness_phased.py",
+      "relative": "scripts/studio/verification/0.13.0/tools/run_installed_readiness_phased.py",
+      "bytes": 38464,
+      "sha256": "4a9e19cd07837a5e2376aa0a407416f83dda6af16babeccf066cf0ebba20b0d7"
+    },
+    {
+      "path": "/workspace/scratch/091f394ee5df/cinematicum-013-candidate/scripts/studio/verification/0.13.0/tools/test_installed_readiness_phased_guards.py",
+      "relative": "scripts/studio/verification/0.13.0/tools/test_installed_readiness_phased_guards.py",
+      "bytes": 7970,
+      "sha256": "5132e6e2cf7b0e0adf70105b9c88bc6687a6d65476a7ae5d3683cd91bfb907c5"
+    },
+    {
+      "path": "/workspace/scratch/091f394ee5df/cinematicum-013-candidate/scripts/studio/verification/0.13.0/tools/installed-launch-01/run_installed_launch.py",
+      "relative": "scripts/studio/verification/0.13.0/tools/installed-launch-01/run_installed_launch.py",
+      "bytes": 34079,
+      "sha256": "96d5bb0c904108454ae4aa38c5f2abd586abcf9355f6ee404cae06268898a757"
+    },
+    {
+      "path": "/workspace/scratch/091f394ee5df/cinematicum-013-candidate/scripts/studio/verification/0.13.0/tools/installed-launch-01/InstalledAppControl.swift",
+      "relative": "scripts/studio/verification/0.13.0/tools/installed-launch-01/InstalledAppControl.swift",
+      "bytes": 11041,
+      "sha256": "242ce3defae2a0d6f3466fb5a937776106081178cdbd40b16f55108a2fcf77e8"
+    },
+    {
+      "path": "/workspace/scratch/091f394ee5df/cinematicum-013-candidate/scripts/studio/verification/0.13.0/tools/verify_installation.py",
+      "relative": "scripts/studio/verification/0.13.0/tools/verify_installation.py",
+      "bytes": 26793,
+      "sha256": "3f26640384062533c605386a0f62c61965a7175b423f61e50b09a47ce6a26a6e"
+    },
+    {
+      "path": "/workspace/scratch/091f394ee5df/cinematicum-013-candidate/scripts/studio/verification/0.13.0/native-build/controller-build-01.json",
+      "relative": "scripts/studio/verification/0.13.0/native-build/controller-build-01.json",
+      "bytes": 1388,
+      "sha256": "71a35e6351e7a930da0767efa73a9e3ddf404ebf496b12bbf514c4c740db6462"
+    },
+    {
+      "path": "/workspace/scratch/091f394ee5df/cinematicum-013-candidate/scripts/studio/verification/0.13.0/lens-isolated-01/upstream-notices/source.json",
+      "relative": "scripts/studio/verification/0.13.0/lens-isolated-01/upstream-notices/source.json",
+      "bytes": 493,
+      "sha256": "360218a892cc1173ebc8c2cc6cef4253b45595d5cf19c9b3c2eb87c228468b41"
+    },
+    {
+      "path": "/workspace/scratch/091f394ee5df/cinematicum-013-candidate/scripts/studio/verification/0.13.0/fcpxml-schema-isolated-01/schema-acceptance-02.json",
+      "relative": "scripts/studio/verification/0.13.0/fcpxml-schema-isolated-01/schema-acceptance-02.json",
+      "bytes": 2522,
+      "sha256": "38e60037b7611d76cbd6868f71b62414a26c9b53d957bddb2c59654944b25bef"
+    }
+  ],
+  "limits": [
+    "No tests or native operations were run by this reviewer.",
+    "Retained prior successful validation receipts were read; they are not relabelled as new executions.",
+    "One confirmed acceptance-test issue must be corrected and the exact diff reviewed before closing this review."
+  ]
+}

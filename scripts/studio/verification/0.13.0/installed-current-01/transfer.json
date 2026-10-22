@@ -1,0 +1,503 @@
+{
+  "files": [
+    {
+      "bytes": 3433,
+      "path": "bound-tools/BINDING_SEQUENCE.md",
+      "sha256": "29c0e4ff43f6f1eacc9352e9c84e98b17bf3dc92d2eb076bac49ea7b9d9e6060"
+    },
+    {
+      "bytes": 11041,
+      "path": "bound-tools/installed-launch-01/InstalledAppControl.swift",
+      "sha256": "242ce3defae2a0d6f3466fb5a937776106081178cdbd40b16f55108a2fcf77e8"
+    },
+    {
+      "bytes": 2220,
+      "path": "bound-tools/installed-launch-01/build_installed_launch.py",
+      "sha256": "1e16113c3993be5cb0a7d706c95da7ae5318c1f10695c67b170b5c60285c6122"
+    },
+    {
+      "bytes": 34079,
+      "path": "bound-tools/installed-launch-01/run_installed_launch.py",
+      "sha256": "96d5bb0c904108454ae4aa38c5f2abd586abcf9355f6ee404cae06268898a757"
+    },
+    {
+      "bytes": 2393,
+      "path": "bound-tools/native-helper-source-reuse.json",
+      "sha256": "26029608b1d2dabb4c3355213664fab628908f13ca1421e082ee99575bad2c62"
+    },
+    {
+      "bytes": 3373,
+      "path": "bound-tools/prepared-tool-identity.json",
+      "sha256": "ea12ebb7d8c594814b6483a4b1641ee41759179c91d3b8d3a049443a62bfd17e"
+    },
+    {
+      "bytes": 38664,
+      "path": "bound-tools/run_installed_readiness_phased.py",
+      "sha256": "a9c6feadfe85b263dd3010f8cd1815e753450048bc12c48b6788891fd9f65391"
+    },
+    {
+      "bytes": 7970,
+      "path": "bound-tools/test_installed_readiness_phased_guards.py",
+      "sha256": "5132e6e2cf7b0e0adf70105b9c88bc6687a6d65476a7ae5d3683cd91bfb907c5"
+    },
+    {
+      "bytes": 26793,
+      "path": "bound-tools/verify_installation.py",
+      "sha256": "3f26640384062533c605386a0f62c61965a7175b423f61e50b09a47ce6a26a6e"
+    },
+    {
+      "bytes": 1388,
+      "path": "controller-build/build.json",
+      "sha256": "71a35e6351e7a930da0767efa73a9e3ddf404ebf496b12bbf514c4c740db6462"
+    },
+    {
+      "bytes": 511,
+      "path": "distribution-signing-prerequisite.json",
+      "sha256": "05953ee2e94f989733ca9a98b74b2a9ccfe9f46d9f027e62bb74220cffabea80"
+    },
+    {
+      "bytes": 660,
+      "path": "frozen-full-suite/mac-source-binding.json",
+      "sha256": "f9e1290deaaf7b55083176d32c51bc46c95a1efe9469eccc400c039dbb6c150d"
+    },
+    {
+      "bytes": 24824,
+      "path": "installation-summary.json",
+      "sha256": "c096f0aa20fca94bd5e1e2c352e062b423f90c50961a87dd092c52de5873ddc5"
+    },
+    {
+      "bytes": 1950,
+      "path": "installed-acceptance-guard-01.json",
+      "sha256": "663fa2d7c2a7d93195c8e0f190b8c8c677ea533785caa722863b2e52ecf43358"
+    },
+    {
+      "bytes": 2218,
+      "path": "installed-acceptance-tool-binding.json",
+      "sha256": "a802f92ad5a9b41a03b28610551d41c1ecf313522a09801c418272d33afd0c08"
+    },
+    {
+      "bytes": 79328,
+      "path": "launch/installed-launch-report.json",
+      "sha256": "c32618ede19c254250d41e7e93a327cf03c6b03f25592c0998b6d4fb99056e14"
+    },
+    {
+      "bytes": 951,
+      "path": "launch/native-launch.json",
+      "sha256": "d88c04debddc55784c33eb13fa8cc72f3872ac9ada31daae9f0d3198c3d58da7"
+    },
+    {
+      "bytes": 815,
+      "path": "launch/native-observe-1.json",
+      "sha256": "319787d0044e1980ba81cbf191709111f49b9898f3e4e040973827d3b2aa61a8"
+    },
+    {
+      "bytes": 369,
+      "path": "launch/native-ordinary-quit.json",
+      "sha256": "a55a866fd3724a2b855bdda4f97b538e25d22335b851f8ea89a24d0f2ccf9653"
+    },
+    {
+      "bytes": 317,
+      "path": "launch/native-preflight.json",
+      "sha256": "c9b1ded2249ea5e4f0e2efae3bc47fa7fea900d2523184dbf8efd509b6c063d7"
+    },
+    {
+      "bytes": 570,
+      "path": "launch/owned-launch.json",
+      "sha256": "e5571153e98d9a0326ecf0cf67416194bd71426bf726989b7204a04f49447797"
+    },
+    {
+      "bytes": 11939,
+      "path": "launch/workspace-after-hashes.json",
+      "sha256": "1d41240db21e5987f9ab1e6248c8e66c03a61c60099d7a68c7e56c561aa52fbc"
+    },
+    {
+      "bytes": 11939,
+      "path": "launch/workspace-before-hashes.json",
+      "sha256": "1d41240db21e5987f9ab1e6248c8e66c03a61c60099d7a68c7e56c561aa52fbc"
+    },
+    {
+      "bytes": 599,
+      "path": "phased-build/finish-01.json",
+      "sha256": "27d473bfe99a3a09845461ed71e9a7d49fd070a7f7d73e4366d0949a29dbb058"
+    },
+    {
+      "bytes": 834,
+      "path": "phased-build/icon_compile-01.json",
+      "sha256": "fb848da2a1537b124920fbe7e74b58fa8186c241ea21d1bf6557e5d1f1a926ff"
+    },
+    {
+      "bytes": 1278,
+      "path": "phased-build/icon_render-01.json",
+      "sha256": "e23a64ac75f366bc7634bdfe57aa8be40c51a8aa0b84803dc7195ecbc0a5b249"
+    },
+    {
+      "bytes": 708,
+      "path": "phased-build/iconutil-01.json",
+      "sha256": "28250f302fe2451b9c747976c40d9452b4505ed92d3cd46cea6830b0b9fe643f"
+    },
+    {
+      "bytes": 846,
+      "path": "phased-build/install-commit-01.json",
+      "sha256": "d5faf7ea089091f6ed0c19efd13e3502e1bf3460233eb720f51fe85c5d585c87"
+    },
+    {
+      "bytes": 1184,
+      "path": "phased-build/main-compile-01.json",
+      "sha256": "fb3afcf4650501cd8bc06302c1b4279a52fa5358e413f8fa9e1a2d90b5ab7501"
+    },
+    {
+      "bytes": 770,
+      "path": "phased-build/preparation.json",
+      "sha256": "7b0267c5b08aa9c91a8767fbbd9d8f42d092064795754eefb14e32d61d1ac019"
+    },
+    {
+      "bytes": 24283,
+      "path": "phased-build/staged-validation-01.json",
+      "sha256": "6bf6c3589a99a4f84acb934835f6c2a1fe6864e01c4cbd6947e6ed354080d7af"
+    },
+    {
+      "bytes": 952,
+      "path": "readiness-phased/deep/native-launch.json",
+      "sha256": "304871b2733a7dcfc8e143781adaf9e8cc7f20d8506208afa0a83de2d242c1e4"
+    },
+    {
+      "bytes": 816,
+      "path": "readiness-phased/deep/native-observe-1.json",
+      "sha256": "b10ba50b8a30265b6fdd4a3d4b03bf770a806fe52aa51e6e45678f3c7ae76995"
+    },
+    {
+      "bytes": 369,
+      "path": "readiness-phased/deep/native-ordinary-quit.json",
+      "sha256": "a55a866fd3724a2b855bdda4f97b538e25d22335b851f8ea89a24d0f2ccf9653"
+    },
+    {
+      "bytes": 317,
+      "path": "readiness-phased/deep/native-preflight.json",
+      "sha256": "c9b1ded2249ea5e4f0e2efae3bc47fa7fea900d2523184dbf8efd509b6c063d7"
+    },
+    {
+      "bytes": 571,
+      "path": "readiness-phased/deep/owned-launch.json",
+      "sha256": "cd0c4abe3d684c3786f46aeece2009e53c1fc2f934481e6c1b1edfcb0a4e03f3"
+    },
+    {
+      "bytes": 1166,
+      "path": "readiness-phased/deep/phase-started.json",
+      "sha256": "d8a7379c0793eb02cc729c0a9f4ea2c94ddfed36b41cbc9f9a0f275b2f06da84"
+    },
+    {
+      "bytes": 7387,
+      "path": "readiness-phased/deep/tool-report.json",
+      "sha256": "8e1870e7aa581d0db47807c9792ecb19aed2b5a77f97e25df6b147317badd93b"
+    },
+    {
+      "bytes": 951,
+      "path": "readiness-phased/learned/native-launch.json",
+      "sha256": "dedfac8b3a7f7bb8f94ef1fa32688a552fe2d4f6f7edaa355a19eb4a2fb0c476"
+    },
+    {
+      "bytes": 815,
+      "path": "readiness-phased/learned/native-observe-1.json",
+      "sha256": "fbb0f87c64885e819b8161335b3e2ac21de88805dd90886fe1482bd42d4afa9b"
+    },
+    {
+      "bytes": 369,
+      "path": "readiness-phased/learned/native-ordinary-quit.json",
+      "sha256": "a55a866fd3724a2b855bdda4f97b538e25d22335b851f8ea89a24d0f2ccf9653"
+    },
+    {
+      "bytes": 317,
+      "path": "readiness-phased/learned/native-preflight.json",
+      "sha256": "c9b1ded2249ea5e4f0e2efae3bc47fa7fea900d2523184dbf8efd509b6c063d7"
+    },
+    {
+      "bytes": 570,
+      "path": "readiness-phased/learned/owned-launch.json",
+      "sha256": "2490968733d47b35589847491b98a5c1ec23ff3e5eaa275c35e87e5e4ea26862"
+    },
+    {
+      "bytes": 1170,
+      "path": "readiness-phased/learned/phase-started.json",
+      "sha256": "c83116250e369ce6c2590450c2738e36cffbcb0df745d4e3ef3a084c22ed746d"
+    },
+    {
+      "bytes": 7390,
+      "path": "readiness-phased/learned/tool-report.json",
+      "sha256": "fee84ea30b94c8ad152b20382b66e5bf2fe63ca0059db35a520fdcbf9efd414a"
+    },
+    {
+      "bytes": 952,
+      "path": "readiness-phased/multicam-sync/native-launch.json",
+      "sha256": "e243654e590aa64992c963aca6ba452ceec145de215037f1207313e7f5ad7056"
+    },
+    {
+      "bytes": 816,
+      "path": "readiness-phased/multicam-sync/native-observe-1.json",
+      "sha256": "4d6abf9ba602ec626d3292dd9cf40854b1d6a47d5ed3457483847f7bb8c84757"
+    },
+    {
+      "bytes": 369,
+      "path": "readiness-phased/multicam-sync/native-ordinary-quit.json",
+      "sha256": "a55a866fd3724a2b855bdda4f97b538e25d22335b851f8ea89a24d0f2ccf9653"
+    },
+    {
+      "bytes": 317,
+      "path": "readiness-phased/multicam-sync/native-preflight.json",
+      "sha256": "c9b1ded2249ea5e4f0e2efae3bc47fa7fea900d2523184dbf8efd509b6c063d7"
+    },
+    {
+      "bytes": 571,
+      "path": "readiness-phased/multicam-sync/owned-launch.json",
+      "sha256": "8e31fe94063617a2e9b0221e8c97c6e564e498956de460027370a167967f8420"
+    },
+    {
+      "bytes": 1176,
+      "path": "readiness-phased/multicam-sync/phase-started.json",
+      "sha256": "916b9801357f841318eb875cac6d10dafb00585d072bf03d967000470708b1d3"
+    },
+    {
+      "bytes": 7396,
+      "path": "readiness-phased/multicam-sync/tool-report.json",
+      "sha256": "f053f0b5d55e284a02d1fc9c07c81a21254be6578f0dcd6b15ce27296b6fc546"
+    },
+    {
+      "bytes": 317,
+      "path": "readiness-phased/native-preflight.json",
+      "sha256": "c9b1ded2249ea5e4f0e2efae3bc47fa7fea900d2523184dbf8efd509b6c063d7"
+    },
+    {
+      "bytes": 951,
+      "path": "readiness-phased/physical-rendering/native-launch.json",
+      "sha256": "53bb29401c163251f4ea21b53c3aa2abe537fb939729f9cbd9ef4228d565e10e"
+    },
+    {
+      "bytes": 815,
+      "path": "readiness-phased/physical-rendering/native-observe-1.json",
+      "sha256": "1c47b4b53a4da3dc9e6e599724856fdf62a0855a8b36898fc7dc9763b7b38019"
+    },
+    {
+      "bytes": 369,
+      "path": "readiness-phased/physical-rendering/native-ordinary-quit.json",
+      "sha256": "a55a866fd3724a2b855bdda4f97b538e25d22335b851f8ea89a24d0f2ccf9653"
+    },
+    {
+      "bytes": 317,
+      "path": "readiness-phased/physical-rendering/native-preflight.json",
+      "sha256": "c9b1ded2249ea5e4f0e2efae3bc47fa7fea900d2523184dbf8efd509b6c063d7"
+    },
+    {
+      "bytes": 570,
+      "path": "readiness-phased/physical-rendering/owned-launch.json",
+      "sha256": "963d4d3cb3104387eb46f8294d95d861875d2f4000b7a0f2ccfead808c27f213"
+    },
+    {
+      "bytes": 1180,
+      "path": "readiness-phased/physical-rendering/phase-started.json",
+      "sha256": "d362b9444a952d3fd3fecd3823f141072e548ed8a7406b67d219e4821b21b447"
+    },
+    {
+      "bytes": 7400,
+      "path": "readiness-phased/physical-rendering/tool-report.json",
+      "sha256": "c63b5995307f9db17f6560fc3b22c1b6db750f0d2ea29885bcce2e02190bd62e"
+    },
+    {
+      "bytes": 15599,
+      "path": "readiness-phased/prepare-report.json",
+      "sha256": "f436587d42197dbf38e3ea2622186b7ace058a33d7d354bd3e16364541ec9805"
+    },
+    {
+      "bytes": 952,
+      "path": "readiness-phased/ray-optics/native-launch.json",
+      "sha256": "d65f745e09f3f8218aec901f285ff1fd4d37547e8d20e6566f0979d65a9d6b43"
+    },
+    {
+      "bytes": 816,
+      "path": "readiness-phased/ray-optics/native-observe-1.json",
+      "sha256": "ba8ef2995c4874c92069a8729b4aa51a80255f4e460bab6e34fc56c1f0226653"
+    },
+    {
+      "bytes": 369,
+      "path": "readiness-phased/ray-optics/native-ordinary-quit.json",
+      "sha256": "a55a866fd3724a2b855bdda4f97b538e25d22335b851f8ea89a24d0f2ccf9653"
+    },
+    {
+      "bytes": 317,
+      "path": "readiness-phased/ray-optics/native-preflight.json",
+      "sha256": "c9b1ded2249ea5e4f0e2efae3bc47fa7fea900d2523184dbf8efd509b6c063d7"
+    },
+    {
+      "bytes": 571,
+      "path": "readiness-phased/ray-optics/owned-launch.json",
+      "sha256": "1edc987dbc846f21b46390ded2b51b1975aa04743b575e2a4ceb40e825f84a8d"
+    },
+    {
+      "bytes": 1172,
+      "path": "readiness-phased/ray-optics/phase-started.json",
+      "sha256": "b8c837ac725e67b72d392b4baff3af4ecb994f8e87d19e12b51adb91c339d509"
+    },
+    {
+      "bytes": 7395,
+      "path": "readiness-phased/ray-optics/tool-report.json",
+      "sha256": "b921a4c8ca2951f18172ea0f5044f070b7ce66008568801b1e0da246b92aac6a"
+    },
+    {
+      "bytes": 952,
+      "path": "readiness-phased/reconstruction/native-launch.json",
+      "sha256": "d3f9857c4bf3bf877dd0bb78fc5f10b84cac86a85dfdfac94fe6490ce29c67ca"
+    },
+    {
+      "bytes": 816,
+      "path": "readiness-phased/reconstruction/native-observe-1.json",
+      "sha256": "54e96ee865c22ba3f9c21815f7d88db85af3705383eff3bf38516252579b1834"
+    },
+    {
+      "bytes": 369,
+      "path": "readiness-phased/reconstruction/native-ordinary-quit.json",
+      "sha256": "a55a866fd3724a2b855bdda4f97b538e25d22335b851f8ea89a24d0f2ccf9653"
+    },
+    {
+      "bytes": 317,
+      "path": "readiness-phased/reconstruction/native-preflight.json",
+      "sha256": "c9b1ded2249ea5e4f0e2efae3bc47fa7fea900d2523184dbf8efd509b6c063d7"
+    },
+    {
+      "bytes": 571,
+      "path": "readiness-phased/reconstruction/owned-launch.json",
+      "sha256": "28ae9899945e0f4210a8cd19faba85be20f450ab01e7150fb513a5d7912252cd"
+    },
+    {
+      "bytes": 1177,
+      "path": "readiness-phased/reconstruction/phase-started.json",
+      "sha256": "0a3d4f214b6bd8b35c3fb862ad41c8449da87ad91bb9c2a8ceebd1b9cbf5e3ab"
+    },
+    {
+      "bytes": 7396,
+      "path": "readiness-phased/reconstruction/tool-report.json",
+      "sha256": "dbef1dc060cb426caaecbf701f8dcdabe7b85dc3ec9dd31ebeb65404a3eb38fb"
+    },
+    {
+      "bytes": 952,
+      "path": "readiness-phased/retime/native-launch.json",
+      "sha256": "388c20659b8a8700e87a71486c660d99a6b1bc35f40632fc7ae7eec558f88cb3"
+    },
+    {
+      "bytes": 816,
+      "path": "readiness-phased/retime/native-observe-1.json",
+      "sha256": "00bd8df63a98ca3a120c1165ef54ce17277743318d215e199c0b92c4be1d76de"
+    },
+    {
+      "bytes": 369,
+      "path": "readiness-phased/retime/native-ordinary-quit.json",
+      "sha256": "a55a866fd3724a2b855bdda4f97b538e25d22335b851f8ea89a24d0f2ccf9653"
+    },
+    {
+      "bytes": 317,
+      "path": "readiness-phased/retime/native-preflight.json",
+      "sha256": "c9b1ded2249ea5e4f0e2efae3bc47fa7fea900d2523184dbf8efd509b6c063d7"
+    },
+    {
+      "bytes": 571,
+      "path": "readiness-phased/retime/owned-launch.json",
+      "sha256": "f47a0eed4e52c4d0dd074604eabd6928ef122dfba65d086222ecdb66e9c87721"
+    },
+    {
+      "bytes": 1167,
+      "path": "readiness-phased/retime/phase-started.json",
+      "sha256": "456d8fc6b460c37ab5ae1d971a54c4549a51aa8b0a42d5a2d5f3320857ada47a"
+    },
+    {
+      "bytes": 7854,
+      "path": "readiness-phased/retime/tool-report.json",
+      "sha256": "7865965053982c8119e6ef9d50934844a38a48641a3b9920d36ac982b21848bd"
+    },
+    {
+      "bytes": 952,
+      "path": "readiness-phased/scene-processing/native-launch.json",
+      "sha256": "2122ecbe41e5855a3c99cb7bd2a2866ffa1ebdefb21fa93c89114f7850fa3c63"
+    },
+    {
+      "bytes": 816,
+      "path": "readiness-phased/scene-processing/native-observe-1.json",
+      "sha256": "bc031fbd63cd6aa497ee36b9898ebd387d7834b5b0a540abf544dc6c789c06ee"
+    },
+    {
+      "bytes": 369,
+      "path": "readiness-phased/scene-processing/native-ordinary-quit.json",
+      "sha256": "a55a866fd3724a2b855bdda4f97b538e25d22335b851f8ea89a24d0f2ccf9653"
+    },
+    {
+      "bytes": 317,
+      "path": "readiness-phased/scene-processing/native-preflight.json",
+      "sha256": "c9b1ded2249ea5e4f0e2efae3bc47fa7fea900d2523184dbf8efd509b6c063d7"
+    },
+    {
+      "bytes": 571,
+      "path": "readiness-phased/scene-processing/owned-launch.json",
+      "sha256": "da45bcb58b4f3d9af73c68de23d9492693a5ab0d628f1e666324e86ec83820ee"
+    },
+    {
+      "bytes": 1179,
+      "path": "readiness-phased/scene-processing/phase-started.json",
+      "sha256": "2aa413572397cef7fa676bf0f81f4751d58d79acd12416c495afff0da072b3cd"
+    },
+    {
+      "bytes": 7398,
+      "path": "readiness-phased/scene-processing/tool-report.json",
+      "sha256": "6ba144ab6528c62b54c1467361f6873e45f71b496465303dace03395eaca260d"
+    },
+    {
+      "bytes": 317,
+      "path": "readiness-phased/verify/native-preflight.json",
+      "sha256": "c9b1ded2249ea5e4f0e2efae3bc47fa7fea900d2523184dbf8efd509b6c063d7"
+    },
+    {
+      "bytes": 288,
+      "path": "readiness-phased/verify/ownership-deep.json",
+      "sha256": "b8919e8da2b70f297bb62b0265ff1db5604a09c6c4cb935c843742c04769445a"
+    },
+    {
+      "bytes": 288,
+      "path": "readiness-phased/verify/ownership-learned.json",
+      "sha256": "b8919e8da2b70f297bb62b0265ff1db5604a09c6c4cb935c843742c04769445a"
+    },
+    {
+      "bytes": 288,
+      "path": "readiness-phased/verify/ownership-multicam-sync.json",
+      "sha256": "b8919e8da2b70f297bb62b0265ff1db5604a09c6c4cb935c843742c04769445a"
+    },
+    {
+      "bytes": 288,
+      "path": "readiness-phased/verify/ownership-physical-rendering.json",
+      "sha256": "b8919e8da2b70f297bb62b0265ff1db5604a09c6c4cb935c843742c04769445a"
+    },
+    {
+      "bytes": 288,
+      "path": "readiness-phased/verify/ownership-ray-optics.json",
+      "sha256": "b8919e8da2b70f297bb62b0265ff1db5604a09c6c4cb935c843742c04769445a"
+    },
+    {
+      "bytes": 288,
+      "path": "readiness-phased/verify/ownership-reconstruction.json",
+      "sha256": "b8919e8da2b70f297bb62b0265ff1db5604a09c6c4cb935c843742c04769445a"
+    },
+    {
+      "bytes": 288,
+      "path": "readiness-phased/verify/ownership-retime.json",
+      "sha256": "b8919e8da2b70f297bb62b0265ff1db5604a09c6c4cb935c843742c04769445a"
+    },
+    {
+      "bytes": 288,
+      "path": "readiness-phased/verify/ownership-scene-processing.json",
+      "sha256": "b8919e8da2b70f297bb62b0265ff1db5604a09c6c4cb935c843742c04769445a"
+    },
+    {
+      "bytes": 29783,
+      "path": "readiness-phased/verify/readiness-verification-report.json",
+      "sha256": "56a15e8249f9e8b22ab04170e89671a4f576cc304570ae1c9194382b6155ccdd"
+    }
+  ],
+  "schema": "cinematicum-installed-public-evidence-transfer-v1",
+  "source_commit": "cdd15816c228fe4133fbb3ce6d90978333d699e6",
+  "source_manifest_sha256": "21034979d805cdf680c255720f6311319f3fc22c2b405dbd43294a5485d09f8d",
+  "source_tree": "a62ce29a8af68b38d14820c45fc42e1266762e34"
+}

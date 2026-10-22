@@ -1,0 +1,12 @@
+{
+  "passed": true,
+  "core_commit": "c9869e86b9421b7fdc083d249b1616114320f0d5",
+  "core_tree": "941da9dbc805788a89c610ee688cc17de08fccc4",
+  "full_report_sha256": "c039f6629882521608427279d27b71dac0db8e9e8eb2e63c326c2be50df07d40",
+  "source_sha256": "cf8691d3b1d3a646ea6a73bdafe9829830b94c5592eb771c313aa449a70725b7",
+  "source_files_compared": 344,
+  "source_manifest_sha256": "31125bf9cef0a920bc0a5e45b2f132fdfbf4d3a5640d55cb01af372266d736d3",
+  "tests": 895,
+  "source_unchanged": true,
+  "managed_runtimes_unchanged": true
+}

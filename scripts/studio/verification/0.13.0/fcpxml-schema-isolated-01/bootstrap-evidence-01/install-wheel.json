@@ -1,0 +1,24 @@
+{
+  "command": [
+    "/tmp/cinematicum-fcpxml-schema-bootstrap-20261022-01/runtime/bin/python",
+    "-I",
+    "-B",
+    "-m",
+    "pip",
+    "--isolated",
+    "install",
+    "--no-index",
+    "--find-links",
+    "/tmp/cinematicum-fcpxml-schema-bootstrap-20261022-01/downloads",
+    "--require-hashes",
+    "--no-deps",
+    "--only-binary=:all:",
+    "--no-compile",
+    "--report",
+    "/tmp/cinematicum-fcpxml-schema-bootstrap-20261022-01/pip-report.json",
+    "-r",
+    "/tmp/cinematicum-fcpxml-schema-bootstrap-20261022-01/requirements.txt"
+  ],
+  "exit_code": 0,
+  "elapsed_seconds": 1.172
+}

@@ -1,0 +1,40 @@
+{
+  "scope": "Retained synthetic native acceptance captures and actual downloads",
+  "files": [
+    {
+      "path": "archive/ENGINE_TEST_retime.png",
+      "bytes": 352021,
+      "sha256": "a16339edefd2a4db1cbfaf437f691d7533ca8f81b180ee07975de55704ddbaba"
+    },
+    {
+      "path": "archive/native_downloads/ENGINE_TEST_DD0B361F-BCAD-4094-8EBB-FBE1B57FD5FD_7c911f4172f34aee9eb1dbacdd6b3a3c.cinematicum.zip",
+      "bytes": 789530,
+      "sha256": "f5cae5834f22158f225d2844f601179e6408f4e238bf2797e8ccbb262a58a8a5"
+    },
+    {
+      "path": "author/ENGINE_TEST_retime.png",
+      "bytes": 336247,
+      "sha256": "8a916ad3c55ee26bf2a476f7e5c9a61194ef7e8085b2f236b1b1490c5bfab8fe"
+    },
+    {
+      "path": "fixture/workspace/projects/3ced77d5cb4e4676bf016244f6188f9d/previews/4099d8699fbc2f946fae83b8f9f78fdbd3d53248c077026e7825d798414bca83.png",
+      "bytes": 7560,
+      "sha256": "7fdb1262c05fb2fd22b79c6d5102a7c3ee1e2496f5d9259b8d5699c912f87190"
+    },
+    {
+      "path": "fixture/workspace/projects/cb7354c31e214f30a6d0d1eac6c4fcc5/previews/8896bca5e6c6b8b9db3e38657c421784fe65dca32d91f46891660948a0f79528.png",
+      "bytes": 228,
+      "sha256": "16fde26b60e771f3876f4de3735d36da3d1cf9c72c7e55d4c767d40459964cff"
+    },
+    {
+      "path": "playback/ENGINE_TEST_retime.png",
+      "bytes": 351671,
+      "sha256": "61247073887031e3df9dbab58120731561848c56e1708ff4142c28691f08e789"
+    },
+    {
+      "path": "playback/native_downloads/ENGINE_TEST_26A807CA-6EED-419E-B603-889ABCBEE650_f48d792377e44e4ab30aa563d7488afc.mov",
+      "bytes": 180643,
+      "sha256": "a75e34e5fd82ed9eb52b1cf61789d62dbc7fdab7850d3b7985933399548446d7"
+    }
+  ]
+}

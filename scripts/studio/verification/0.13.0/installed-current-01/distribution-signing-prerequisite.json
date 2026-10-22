@@ -1,0 +1,14 @@
+{
+  "schema": "cinematicum-distribution-signing-prerequisite-v1",
+  "read_only": true,
+  "security_exit_code": 0,
+  "valid_identity_count": 1,
+  "developer_id_application_available": false,
+  "identity_output_sha256": "2c5bdd798d8e39a1a542039bfb722ac580a3a1f82c40faad8e4bf71df981ac88",
+  "identities_or_private_keys_exported": false,
+  "notarization_account_checked": false,
+  "notarization_performed": false,
+  "signing_performed": false,
+  "elapsed_seconds": 0.028,
+  "source_or_application_changed": false
+}
