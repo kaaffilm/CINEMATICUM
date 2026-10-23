@@ -1,0 +1,75 @@
+{
+  "schema": "cinematicum.cameractrl-source-lock.v1",
+  "repository": "https://github.com/hehao13/CameraCtrl",
+  "commit": "af45a7a0dbeedb7f6ed66aac4a9e5411a279f0d2",
+  "files": {
+    "inference.py": {
+      "git_blob": "23e9faa978056e8bae5cfa7a30b5cf2735e1b968",
+      "sha256": "f597d9527ec6a2b59ba7b117387834b83c003abe8ab5ce7d8ba526a3789c9678"
+    },
+    "environment.yaml": {
+      "git_blob": "56e8a1fac731c68f02526c614f9007a91c7d823a",
+      "sha256": "acdacf3f82a92f81bb24103d6d7502e7da48cc9a594abe2f95bd97d78db66732"
+    },
+    "cameractrl/data/dataset.py": {
+      "git_blob": "e937426c54766d79b18a3260fc535bbf8bb1173e",
+      "sha256": "b149446ee3de59a9fe90452d3c3efba24e89a8cd3f9f6380179bdb4bf3af4a28"
+    },
+    "cameractrl/models/unet.py": {
+      "git_blob": "fa38ee526a4afb19f7f76dcd5880699afbb436ef",
+      "sha256": "4f6ce5d8e4f425d8a59ecc14f3cf05721515b754b441c31bc686bdf1747f51e5"
+    },
+    "cameractrl/pipelines/pipeline_animation.py": {
+      "git_blob": "465b57daeb515e2452e41d2f569747e6586b0734",
+      "sha256": "314ba0f9b0ff173d9a5d2719e1eac9d56cd9ddd2bf9b83aa24f15393fe527fc3"
+    },
+    "configs/train_cameractrl/adv3_256_384_cameractrl_relora.yaml": {
+      "git_blob": "b5ffdb04b6c40dc6a4805b36b7b158860ad09e10",
+      "sha256": "eb6791ddab5c75b78f9f692afec11d40e90fbaa1f279fee52719449a6277d147"
+    },
+    "tools/merge_lora2unet.py": {
+      "git_blob": "f436ccea4e1e9a925cce5b87053677b3463d4cd1",
+      "sha256": "64f018a155a1d11cbeadc4e24224f2202638903ae6f0e08ca1855c6c5f7bd641"
+    }
+  },
+  "checkpoints": {
+    "camera": {
+      "repository": "hehao13/CameraCtrl",
+      "revision": "ecb80f5851165e6aaf3b7b3ce5cf942bb056223c",
+      "file": "CameraCtrl.ckpt",
+      "sha256": "31ec2d70923d5e12910a857ba63a8ff2511629bbce7e2f25b85befd205ef1bbf",
+      "bytes": 2619352551
+    },
+    "motion": {
+      "repository": "guoyww/animatediff",
+      "revision": "fdfe36afa161e51b3e9c24022b0e368d59e7345e",
+      "file": "v3_sd15_mm.ckpt",
+      "sha256": "2412711886f61091846f53204aabc38aa6e09356d62a9808abe4daa802168343",
+      "bytes": 1673262583
+    },
+    "adapter": {
+      "repository": "guoyww/animatediff",
+      "revision": "fdfe36afa161e51b3e9c24022b0e368d59e7345e",
+      "file": "v3_sd15_adapter.ckpt",
+      "sha256": "fd2d8e26480f6ab013c1e6af86fdf1dedbb1ed5baf850ccd5f365f39d6c3472c",
+      "bytes": 102134097
+    }
+  },
+  "runtime": {
+    "python": "3.10",
+    "torch": "1.13.1+CUDA11.7",
+    "torchvision": "0.14.1",
+    "diffusers": "0.24.0",
+    "xformers": "0.0.16",
+    "imageio": "2.27.0",
+    "device": "cuda:0",
+    "complete_dependency_wheel_lock": false
+  },
+  "scope": {
+    "width": 384,
+    "height": 256,
+    "frames": 16,
+    "inference_executed": false,
+    "model_output_acceptance": false
+  }
+}

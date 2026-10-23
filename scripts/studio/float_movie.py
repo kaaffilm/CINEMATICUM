@@ -144,7 +144,7 @@ def _stop(process):
         pass
 
 
-def _run(command, scratch, event=None, timeout=1800, request=None, progress=None):
+def _run(command, scratch, event=None, timeout=1800, request=None, progress=None, audio_audit=None):
     _cancel(event)
     scratch = Path(scratch)
     with tempfile.TemporaryFile(dir=scratch) as stdout, tempfile.TemporaryFile(dir=scratch) as stderr:
@@ -172,6 +172,10 @@ def _run(command, scratch, event=None, timeout=1800, request=None, progress=None
                 raise RuntimeError("Float movie processing failed: " + detail[-6000:])
             if len(result) > 2 * 1024 * 1024:
                 raise RuntimeError("Float movie worker returned an oversized response.")
+            if audio_audit is not None:
+                from audio_mixer import accept_normalization_audits
+                stderr.seek(0)
+                audio_audit['receipts'] = accept_normalization_audits((line.decode('utf-8', errors='replace') for line in stderr), audio_audit['expected'])
             return result
         finally:
             _stop(process)
@@ -258,23 +262,29 @@ def _audio(project, root, scratch, event):
     audio["sequence_duration"] = _duration(project)
     audio["titles"] = []; audio["captions"] = []; audio["tracks"] = []
     assets = {a["id"]: a for a in audio["assets"]}
-    kept = []
+    kept = []; audio_tracks = {}
     for clip in audio["clips"]:
         enabled, gain = track_state(project, clip["track"])
         _, source_audio = _source_audio(project, clip, assets)
         if not enabled or not gain or not source_audio["has_audio"]:
             continue
+        audio_tracks[clip["id"]] = clip["track"]
         clip["track"] = -1; clip["volume"] *= gain
         for key in clip["keyframes"]:
             if "volume" in key: key["volume"] *= gain
         kept.append(clip)
     audio["clips"] = kept
-    inputs, graph, frames = _graph(audio, root, scratch, cancel_event=event)
+    inputs, graph, frames = _graph(audio, root, scratch, cancel_event=event, _audio_tracks=audio_tracks)
     graph += ";\n[vout]nullsink"
     script = scratch / "audio-graph.txt"; script.write_text(graph)
+    normalization_expected = set(re.findall(r"astats@([A-Za-z0-9_]+)_input=", graph))
+    audit = {'expected': normalization_expected, 'receipts': []}
     out = scratch / "mix.wav"
-    _run([shutil.which("ffmpeg"), "-v", "error", "-nostdin", "-y", "-filter_complex_threads", "1"] + inputs +
-         ["-filter_complex_script", str(script), "-map", "[aout]", "-c:a", "pcm_f32le", "-ar", "48000", "-ac", "2", str(out)], scratch, event)
+    _run([shutil.which("ffmpeg"), "-v", "info" if normalization_expected else "error", "-nostdin", "-y", "-filter_complex_threads", "1"] + inputs +
+         ["-filter_complex_script", str(script), "-map", "[aout]", "-c:a", "pcm_f32le", "-ar", "48000", "-ac", "2", str(out)], scratch, event,
+         audio_audit=audit if normalization_expected else None)
+    if normalization_expected:
+        (scratch / "audio-normalization-audit.json").write_bytes(_json_bytes(audit['receipts']))
     raw = scratch / "mix-check.f32"
     _run([shutil.which("ffmpeg"), "-v", "error", "-nostdin", "-i", str(out), "-map", "0:a:0", "-c:a", "pcm_f32le", "-f", "f32le", str(raw)], scratch, event)
     samples = project_rate(project).samples_for_frames(frames)
@@ -388,6 +398,13 @@ def render_float(project, project_dir, output_path, profile="master32", progress
                       "pixel_format": "rgba64be", "pipeline": "scene-linear-float32-ocio-display", "color": worker["color"]}
         else:
             mix, audio = _audio(p, root, scratch, cancel_event)
+            audio_meter = None
+            audio_normalization = json.loads((scratch / "audio-normalization-audit.json").read_text()) if (scratch / "audio-normalization-audit.json").exists() else []
+            from audio_mixer import measure_media, configured_mixers
+            audio_mixers = configured_mixers(p)
+            if audio_mixers:
+                if profile == "master32":
+                    audio_meter = measure_media(mix, shutil.which("ffmpeg"), cancel_event=cancel_event)
             if progress: progress(.9)
             if profile == "master32":
                 shutil.move(mix, package / "mix.wav")
@@ -399,7 +416,10 @@ def render_float(project, project_dir, output_path, profile="master32", progress
                         artifacts.append({"path": file.relative_to(package).as_posix(), "sha256": identity, "size": size})
                 if sum(a["size"] for a in artifacts) > MAX_OUTPUT_BYTES:
                     raise ValueError("Float master package exceeds the 32 GiB limit.")
+                if audio_meter is not None:
+                    audio_meter["measured_audio_sha256"] = next(item["sha256"] for item in artifacts if item["path"] == "mix.wav")
                 receipt = {**worker, "sources": sources, "audio": audio, "artifacts": artifacts,
+                           **({"audio_mixer": copy.deepcopy(p.get("audio_mixer")), "audio_mixers": audio_mixers, "audio_meter": audio_meter, "audio_normalization": audio_normalization} if audio_meter is not None else {}),
                            "project_sha256": hashlib.sha256(_json_bytes(p)).hexdigest(), "project": p,
                            "frame_rate": rate.as_dict(), "duration": duration, "issuance_effect": "NONE"}
                 (package / "manifest.json").write_bytes(_json_bytes(receipt))
@@ -427,12 +447,18 @@ def render_float(project, project_dir, output_path, profile="master32", progress
                 if Fraction(actual["fps"]) != rate.fraction or abs(actual["audio_duration"]-audio["samples"]/48000)>2/48000:
                     raise RuntimeError("Float display derivative changed its exact picture/audio clock.")
                 report = {"encoding": actual["codec"], "pixel_format": actual["pixel_format"], "alpha_mode": "opaque", "audio": audio}
+                if audio_mixers:
+                    audio_meter = measure_media(complete, shutil.which("ffmpeg"), cancel_event=cancel_event)
+            if audio_meter is not None:
+                report.update(audio_mixer=copy.deepcopy(p.get("audio_mixer")), audio_mixers=audio_mixers, audio_meter=audio_meter, audio_normalization=audio_normalization)
             report.update(width=p["width"], height=p["height"], fps=p["fps"], frame_rate=rate.as_dict(), frames=frames, duration=duration,
                           processing_bits=32, image_precision="float32", profile=profile, color=worker["color"], sources=sources,
                           project_sha256=hashlib.sha256(_json_bytes(p)).hexdigest(), dynamic_range="Scene-linear float EXR; SDR display derivatives",
                           hdr_monitoring=False, calibrated_display=False, issuance_effect="NONE")
         _verify_sources(root, sources, cancel_event)
         identity, size = _digest(complete, cancel_event, MAX_OUTPUT_BYTES)
+        if profile != "frame" and report.get("audio_meter") is not None:
+            report["audio_meter"]["measured_export_sha256"] = identity
         _cancel(cancel_event); os.replace(complete, output)
         if progress: progress(1)
         return {**report, "path": str(output), "sha256": identity, "size": size}

@@ -213,6 +213,8 @@ def _asset_identities(value):
 def export_otio(project, project_dir):
     """Return {document, warnings}; media remains in the existing project."""
     p = _validated_project(project, project_dir)
+    if any("audio_mixer" in sequence for sequence in [p]+p.get("sequences",[])):
+        raise ValueError("OTIO public audio tracks do not encode CINEMATICUM buses, sends or master loudness. Render the mix to a new source before exchanging it.")
     if any(clip.get("retime") for sequence in [p] + p.get("sequences", []) for clip in sequence.get("clips", [])):
         raise ValueError("OTIO does not preserve CINEMATICUM's variable-speed and optical-flow recipe. Render and reimport those edits before exchanging them.")
     if __package__:

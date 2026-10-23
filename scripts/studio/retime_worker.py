@@ -126,14 +126,20 @@ def audio(np,request,root):
         base=np.floor(positions).astype(np.int64);where=base[:,None]+tap
         distance=where-positions[:,None];z=distance/32
         window=np.where(np.abs(z)<1,.42+.5*np.cos(np.pi*z)+.08*np.cos(2*np.pi*z),0)
-        cutoff=.95/np.maximum(1,speed)
+        cutoff=.95/np.maximum(1,np.abs(speed))
         weights=cutoff[:,None]*np.sinc(cutoff[:,None]*distance)*window
         weights/=weights.sum(axis=1)[:,None]
         valid=(where>=0)&(where<len(source))
         values=source[np.clip(where,0,len(source)-1)].astype(np.float64)*valid[:,:,None]
-        output[start:start+len(indexes)]=np.sum(values*weights[:,:,None],axis=1)
+        # Silence authored holds rather than emitting a frozen sample as DC.
+        # An isolated zero derivative at a turn is part of a continuous source
+        # waveform; muting that one sample would introduce an audible impulse.
+        holding=np.zeros(len(indexes),dtype=bool)
+        for first,last in request.get('audio_hold_spans',[]):
+            holding|=(indexes>=first)&(indexes<last)
+        output[start:start+len(indexes)]=np.sum(values*weights[:,:,None],axis=1)*(~holding)[:,None]
     output.flush()
-    return {'mode':'varispeed','sample_frames':count,'pitch_preserved':False,'filter_taps':64,'antialias':'Blackman-windowed sinc; adaptive cutoff 0.95/max(1,speed)'}
+    return {'mode':'varispeed','sample_frames':count,'pitch_preserved':False,'filter_taps':64,'antialias':'Blackman-windowed sinc; adaptive cutoff 0.95/max(1,abs(speed))','zero_speed_audio':'authored holds are silent; isolated turns preserve waveform continuity'}
 
 
 def picture(np,cv2,request,root):
@@ -199,6 +205,13 @@ def execute(path):
         first=request.get('audio_grid_start');phase=request.get('audio_grid_phase')
         if type(first) is not int or not 0<=first<=48_000*240 or first+request['samples']>48_000*240+1 or isinstance(phase,bool) or not isinstance(phase,(int,float)) or not math.isfinite(phase) or not -.5<=phase<.5:
             raise ValueError('Pitch-preserving synthesis lattice exceeds the retained curve bounds.')
+    spans=request.get('audio_hold_spans',[]);previous=-1
+    if not isinstance(spans,list) or len(spans)>34:
+        raise ValueError('Authored audio holds exceed their explicit span bound.')
+    for span in spans:
+        if not isinstance(span,list) or len(span)!=2 or any(type(x) is not int for x in span) or not 0<=span[0]<span[1]<=request['samples'] or span[0]<previous:
+            raise ValueError('Authored audio holds require ordered half-open PCM index spans.')
+        previous=span[1]
     if request['video'] and (root/'source.rgb').stat().st_size!=request['source_count']*request['width']*request['height']*3:
         raise ValueError('The exact raw source picture inventory does not match.')
     if request['audio_count'] and (root/'source.f32').stat().st_size!=request['audio_count']*8:

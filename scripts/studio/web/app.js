@@ -14,7 +14,7 @@ let compositorEditor=null, trackingEditor=null, interchangeEditor=null, colorPip
 const editing=window.CinematicumEditing;
 const TRACK_WIDTH=128;
 let frameViewer=null, recoveryEditor=null, productionEditor=null, archiveEditor=null, mediaEditor=null, editorialEditor=null, multicamSyncEditor=null, multicamMonitor=null, generationEditor=null;
-let learnedEditor=null, collaborationEditor=null, runtimeEditor=null, floatMovieEditor=null, retimeEditor=null;
+let learnedEditor=null, collaborationEditor=null, runtimeEditor=null, floatMovieEditor=null, retimeEditor=null, audioMixerEditor=null;
 const authoringEditors=new Map();
 const waveforms=new Map(),waveformPending=new Set(),waveformQueue=[];let waveformActive=0;
 const canvas = $('#preview-canvas');
@@ -232,6 +232,7 @@ function hasSpeedRamps(project=state.project) {
   return visit(project);
 }
 function updatePreviewNote() {
+  if(!state.rendered&&window.CinematicumAudioMixer?.requiresRendered(state.project)){$('#preview-note').textContent='Audio buses & master processing · Play renders the complete mix';return;}
   $('#preview-note').textContent=state.rendered?'Rendered timeline · saved render snapshot':hasSpeedRamps()?'Speed ramp · Play renders the source-time edit · varispeed pitch follows speed':state.project?.clips.some(c=>c.reverse)?'Live reverse source audio · paused picture uses the export graph':(state.mode==='color'||state.mode==='composite')?'Current-frame rendering uses the export graph':'Interactive picture and sound · render for final effects';
 }
 function syncWorkspaces() {
@@ -354,13 +355,15 @@ async function openAuthoringTool(tool) {
     'ray-optics':{module:'CinematicumRayOptics',field:'ray_optics'},
     'physical-rendering':{module:'CinematicumPhysicalRendering',field:'physical_rendering'},
     'scene-processing':{module:'CinematicumSceneProcessing',field:'scene_processing'},
+    'lens-calibration':{module:'CinematicumLensCalibration',field:null},
+    'model-inference':{module:'CinematicumModelInference',field:null},
     'reconstruction':{module:'CinematicumReconstruction',field:'reconstruction'}
   }[tool];
   if(!spec||!window[spec.module])throw Error('The requested studio tool did not load. Reopen CINEMATICUM.');
   stop();
   // Scene jobs use the saved authored scene and reconstruction input inventory.
   // Freeze pending edits before opening those controls.
-  if(['physical-rendering','scene-processing','reconstruction'].includes(tool)&&state.dirty)await saveProject(false);
+  if(['physical-rendering','scene-processing','reconstruction','lens-calibration'].includes(tool)&&state.dirty)await saveProject(false);
   const apply=(value,context)=>applyAuthoringDocument(tool,value,context);
   if(!authoringEditors.has(tool))authoringEditors.set(tool,window[spec.module].mount(document.body,{
     request:api,getProject:()=>clone(state.project),getContext:()=>({projectId:state.project.id,revision:state.revision}),notify:toast,
@@ -382,7 +385,7 @@ async function openAuthoringTool(tool) {
     }
   }));
   $('#authoring-tools-dialog').close();
-  authoringEditors.get(tool).open();
+  authoringEditors.get(tool).open(tool==='model-inference'?{sourceId:state.selectedAsset}:undefined);
 }
 async function applyAuthoringDocument(tool,document,context,scene,options) {
   if(state.savePromise)await state.savePromise;
@@ -697,7 +700,7 @@ function rippleDelete() {
   mutate(()=>{const collection=type==='title'?'titles':'clips';state.project[collection]=state.project[collection].filter(x=>x.id!==c.id);for(const other of state.project[collection])if(!other.caption_id&&(type==='title'||other.track===track)&&other.start>=start+duration)other.start-=duration;state.selected=null;},{inspector:true});
 }
 function renderMixer() {
-  return `<div class="inspector-name">Track mixer</div><p class="note">The same gain, mute and solo states feed playback and export.</p>`+editing.tracks(state.project).map(t=>`<section class="mixer-strip"><div class="mixer-strip-title"><input aria-label="Track name" data-track-name="${t.id}" maxlength="80" value="${esc(t.name)}"><span>${t.id<0?'A'+Math.abs(t.id):'V'+(t.id+1)}</span></div><label class="range-field"><span class="control-row"><span>Track gain</span><output>${(20*Math.log10(Math.max(.0001,t.gain??1))).toFixed(1)} dB</output></span><input type="range" data-track-gain="${t.id}" min="0" max="4" step="0.01" value="${t.gain??1}"></label><div class="mixer-buttons">${[['mute','Mute'],['solo','Solo'],['locked','Lock']].map(([key,label])=>`<button data-mixer-toggle="${key}" data-track-id="${t.id}" class="${t[key]?'active':''}" aria-pressed="${Boolean(t[key])}">${label}</button>`).join('')}</div></section>`).join('');
+  return `<div class="inspector-name">Track mixer</div><button class="full" data-action="audio-mixer">Buses, sends & loudness</button><p class="note">Track gain, mute and solo feed the mix. Configured buses and inserts use rendered preview and export.</p>`+editing.tracks(state.project).map(t=>`<section class="mixer-strip"><div class="mixer-strip-title"><input aria-label="Track name" data-track-name="${t.id}" maxlength="80" value="${esc(t.name)}"><span>${t.id<0?'A'+Math.abs(t.id):'V'+(t.id+1)}</span></div><label class="range-field"><span class="control-row"><span>Track gain</span><output>${(20*Math.log10(Math.max(.0001,t.gain??1))).toFixed(1)} dB</output></span><input type="range" data-track-gain="${t.id}" min="0" max="4" step="0.01" value="${t.gain??1}"></label><div class="mixer-buttons">${[['mute','Mute'],['solo','Solo'],['locked','Lock']].map(([key,label])=>`<button data-mixer-toggle="${key}" data-track-id="${t.id}" class="${t[key]?'active':''}" aria-pressed="${Boolean(t[key])}">${label}</button>`).join('')}</div></section>`).join('');
 }
 function mediaFor(c,a) {
   const originalUrl=mediaUrl(a),requestUrl=a.kind==='audio'?originalUrl:(mediaEditor?.playbackUrl(a,originalUrl)||originalUrl);
@@ -732,6 +735,7 @@ async function play() {
   frameViewer?.hide();
   if(state.rendered){const v=$('#render-video');if(v.paused)await v.play();else v.pause();return;}
   if(state.project.settings.image_precision==='float32'){toast('Rendering the color-managed float preview for playback.');await startRender('preview');return;}
+  if(window.CinematicumAudioMixer?.requiresRendered(state.project)){toast('Rendering the complete bus, aux and master mix.');await startRender('preview');return;}
   if(hasSpeedRamps()){toast('Rendering the speed-ramp preview with its interpolated picture and varispeed sound.');await startRender('preview');return;}
   if(state.playing||playbackPreparing){stop();return;}if(!durationFrames())return;
   const request=++playbackRequest,projectId=state.project.id;playbackPreparing=true;
@@ -847,7 +851,7 @@ async function cancelOwnedJob() {
   }catch(error){if(state.job===owned)toast(error.message,true);}
   finally{if(state.job?.id===owned.id)$('#cancel-job').disabled=false;}
 }
-async function finishJob(job) {const r=job.result||{},url=r.url||r.download_url,master32=job.kind==='render'&&r.profile==='master32',master16=job.kind==='render'&&(r.profile==='master16'||/\.mkv(?:$|[?#])/i.test(url||'')),prores=job.kind==='render'&&(r.profile==='prores'||/\.mov(?:$|[?#])/i.test(url||'')),downloadMaster=master32||master16||prores;$('#job-label').textContent=job.kind==='render'?(master32?'Float EXR master complete':master16?'16-bit master complete':prores?'ProRes export complete':'Render complete'):'Media ready';$('#job-detail').textContent=downloadMaster?`Download ${master32?'EXR + audio ZIP':master16?'MKV':'MOV'} · use Render preview for playback`:r.width?`${r.width} × ${r.height} · ${Number(r.duration||r.duration_seconds||0).toFixed(2)}s`:'Finished and saved locally';$('#job-progress').value=100;$('#job-indicator').className='job-indicator';$('#cancel-job').hidden=true;$('#close-job').hidden=false;
+async function finishJob(job) {if(job.kind==='render'&&job.result?.audio_meter)audioMixerEditor?.setReport(job.projectId,job.result);const r=job.result||{},url=r.url||r.download_url,master32=job.kind==='render'&&r.profile==='master32',master16=job.kind==='render'&&(r.profile==='master16'||/\.mkv(?:$|[?#])/i.test(url||'')),prores=job.kind==='render'&&(r.profile==='prores'||/\.mov(?:$|[?#])/i.test(url||'')),downloadMaster=master32||master16||prores;$('#job-label').textContent=job.kind==='render'?(master32?'Float EXR master complete':master16?'16-bit master complete':prores?'ProRes export complete':'Render complete'):'Media ready';$('#job-detail').textContent=downloadMaster?`Download ${master32?'EXR + audio ZIP':master16?'MKV':'MOV'} · use Render preview for playback`:r.width?`${r.width} × ${r.height} · ${Number(r.duration||r.duration_seconds||0).toFixed(2)}s`:'Finished and saved locally';$('#job-progress').value=100;$('#job-indicator').className='job-indicator';$('#cancel-job').hidden=true;$('#close-job').hidden=false;
   if(job.kind==='scene-modeling'){$('#job-label').textContent='Mesh evaluated';$('#job-detail').textContent='Geometry ready for the current scene';return;}
   if(job.kind==='generation-setup'||job.kind==='generation-start'){$('#job-label').textContent=job.kind==='generation-setup'?'Local generation installed':'Local generation running';$('#job-detail').textContent=job.kind==='generation-setup'?'Open Local generation setup to start the engine.':'Ready to validate the project workflow.';return;}
   if(job.kind==='archive-export'){
@@ -963,6 +967,7 @@ $('#inspector').addEventListener('click',e=>{
   else if(action==='preview')startRender('preview');
   else if(action==='track')openTracking();
   else if(action==='retime')openRetime();
+  else if(action==='audio-mixer')openAudioMixer();
   else if(action==='clear-planar'){if(!selectedItem()||selectionLocked())return;stop();mutate(()=>{delete selectedItem().planar_motion;},{inspector:true});}
   else if(action==='color-pipeline')openColorPipeline();
   else if(action==='float-color'){syncExportProcessing();$('#export-dialog').showModal();}
@@ -1074,6 +1079,19 @@ function openManagedGeneration(){
       }finally{endProjectOperation();}
     },onError:error=>toast(error?.message||String(error),true,10000)
   });generationEditor.open();
+}
+function openAudioMixer(){
+  if(projectOperationBlocked())return;stop();
+  if(state.capabilities.audio_buses===false){toast('The installed FFmpeg lacks the required audio bus, insert or loudness filters.',true);return;}
+  audioMixerEditor??=window.CinematicumAudioMixer.mount(document.body,{
+    request:api,getProject:()=>clone(state.project),getContext:()=>({projectId:state.project.id,revision:state.revision}),notify:toast,
+    getReport:()=>state.job?.kind==='render'&&state.job.projectId===state.project.id?state.job.result:null,
+    onApply:(candidate,expected)=>{
+      if(projectOperationBlocked()||state.project.id!==expected.projectId||state.revision!==expected.revision)return false;
+      const inventory=state.project.assets,savedRevision=state.project.revision,selection=state.selected;
+      stop();clearMedia();mutate(()=>{state.project=normalizeProject(candidate);state.project.assets=inventory;state.project.revision=savedRevision;state.selected=selection;},{inspector:true,bin:true});renderAll();return true;
+    }
+  });audioMixerEditor.open();
 }
 function openRetime(){
   if(projectOperationBlocked()||selectionLocked()||state.selected?.type!=='clip')return;stop();

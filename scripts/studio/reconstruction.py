@@ -24,9 +24,10 @@ from adapters import _terminate_owned
 from camera_io import _axis, _camera
 from scene import default_scene, validate_scene
 
-ARTIFACT_NAMES = frozenset({"cameras.txt", "images.txt", "points3D.txt", "rigs.txt", "frames.txt",
+SPARSE_ARTIFACT_NAMES = frozenset({"cameras.txt", "images.txt", "points3D.txt", "rigs.txt", "frames.txt",
     "sparse.ply", "database.db", "reconstruction.json", "scene.json", "undistorted-images.zip",
     "preview.png", "provenance.json"})
+ARTIFACT_NAMES = SPARSE_ARTIFACT_NAMES | frozenset({"textured-mesh.zip", "pipeline.mg", "cameras.sfm", "alicevision.json"})
 MAX_IMAGES = 48
 MAX_IMAGE_BYTES = 64*1024*1024
 MAX_INPUT_BYTES = 512*1024*1024
@@ -88,8 +89,11 @@ def validate_settings(value):
 
 def validate_recipe(recipe,project):
     if not isinstance(recipe,dict) or set(recipe)!={"operation","settings"}:raise ValueError("Reconstruction needs operation and typed settings only.")
+    if recipe["operation"]=="meshroom_dense":
+        from alicevision import validate_recipe as validate_dense
+        return validate_dense(recipe,project)
     if recipe["operation"]!="reconstruct":
-        raise ValueError("Only actual sparse COLMAP reconstruction is supported. Dense PatchMatch requires a CUDA runtime and is unavailable in this CPU workflow.")
+        raise ValueError("Choose the sparse COLMAP or typed Meshroom dense operation; CPU COLMAP does not implement CUDA PatchMatch.")
     settings=validate_settings(recipe["settings"])
     if not 3<=len(settings["asset_ids"])<=MAX_IMAGES:raise ValueError("Select 3–48 overlapping photographs.")
     if settings["camera_params"] is None and not settings["refine_intrinsics"]:raise ValueError("Fixed intrinsics require explicit calibrated parameters.")
@@ -138,6 +142,9 @@ def capabilities(python=None):
         result.update(available=True,operations=["reconstruct"],versions=doctor["versions"],reason=None,
                       cuda_compiled=doctor["cuda_compiled"],dense_reason="The managed CPU workflow does not implement CUDA PatchMatch or dense meshing.")
     except (OSError,ValueError,RuntimeError,subprocess.TimeoutExpired) as exc:result["reason"]=str(exc)
+    from alicevision import capabilities as dense_capabilities
+    result["meshroom"]=dense_capabilities()
+    if result["meshroom"]["available"]:result["operations"].append("meshroom_dense")
     return result
 
 
@@ -236,6 +243,9 @@ def scene_proposal(project,metadata,settings,output_id):
 
 
 def run(project,project_dir,recipe,output_dir,progress=None,cancel_event=None,python=None):
+    if isinstance(recipe,dict) and recipe.get("operation")=="meshroom_dense":
+        from alicevision import run as run_dense
+        return run_dense(project,project_dir,recipe,output_dir,progress,cancel_event)
     recipe=validate_recipe(recipe,project);_cancel(cancel_event);_command(python)
     root=Path(project_dir).absolute();output=Path(output_dir).absolute()
     try:relative=output.relative_to(root)
@@ -272,7 +282,7 @@ def run(project,project_dir,recipe,output_dir,progress=None,cancel_event=None,py
             if _hash_file(path,MAX_IMAGE_BYTES)!=(digest,size):raise ValueError("A source photograph changed during reconstruction.")
         actual={p.name for p in generated.iterdir()}
         required={"cameras.txt","images.txt","points3D.txt","sparse.ply","database.db","reconstruction.json","undistorted-images.zip","preview.png"}
-        if actual-ARTIFACT_NAMES or "provenance.json" in actual or not required<=actual:raise RuntimeError("The COLMAP worker returned an invalid artifact inventory.")
+        if actual-SPARSE_ARTIFACT_NAMES or "provenance.json" in actual or not required<=actual:raise RuntimeError("The COLMAP worker returned an invalid artifact inventory.")
         artifacts=[];total=0
         for name in sorted(actual):
             digest,size=_hash_file(generated/name);total+=size;artifacts.append({"filename":name,"sha256":digest,"bytes":size,"size":size})

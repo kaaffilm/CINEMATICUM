@@ -1,0 +1,101 @@
+{
+  "schema": "cinematicum-diffusionlight-source-lock",
+  "version": 1,
+  "repository": "https://github.com/DiffusionLight/DiffusionLight",
+  "commit": "7130ec43739d6c9fe1e70cf5f0389b8f72f5ddbc",
+  "files": [
+    {
+      "path": "ball2envmap.py",
+      "git_blob_sha1": "6d54dff03d4552ec9539c7d5320b61c43293a68d",
+      "size": 5021
+    },
+    {
+      "path": "exposure2hdr.py",
+      "git_blob_sha1": "00072017ce0305e80e703a5ca7204e18db9398a0",
+      "size": 4770
+    },
+    {
+      "path": "inpaint.py",
+      "git_blob_sha1": "6b6fe9eda92ed90b790cdb8904dfa03b1eff8b74",
+      "size": 16499
+    },
+    {
+      "path": "relighting/argument.py",
+      "git_blob_sha1": "a19de6caa89ab49884447bbad95f7c18db892754",
+      "size": 1399
+    },
+    {
+      "path": "relighting/ball_processor.py",
+      "git_blob_sha1": "324a04a50dfa9791bf1851f2d9469cf51c5b3b04",
+      "size": 1875
+    },
+    {
+      "path": "relighting/dataset.py",
+      "git_blob_sha1": "ba68c934365377b931a915706bce0277131229a4",
+      "size": 14678
+    },
+    {
+      "path": "relighting/dist_utils.py",
+      "git_blob_sha1": "d2f5c64c7d502713c5a776d6abd08db31c369374",
+      "size": 3919
+    },
+    {
+      "path": "relighting/image_processor.py",
+      "git_blob_sha1": "fe0906b12cf1583ce848df701cdc51fc875c845a",
+      "size": 5039
+    },
+    {
+      "path": "relighting/inpainter.py",
+      "git_blob_sha1": "0eddd323ec8fe5afea076906837b880ce234aaf2",
+      "size": 16876
+    },
+    {
+      "path": "relighting/mask_utils.py",
+      "git_blob_sha1": "0a032e639b75962c92c99c618329678b0a61488d",
+      "size": 4231
+    },
+    {
+      "path": "relighting/pipeline.py",
+      "git_blob_sha1": "a30ef86cde1d769b07cc128651d4cc4f142abddf",
+      "size": 15632
+    },
+    {
+      "path": "relighting/pipeline_inpaintonly.py",
+      "git_blob_sha1": "641fdbd9562fdb0e61aeeb1f11a5aa36a72ed3a7",
+      "size": 27534
+    },
+    {
+      "path": "relighting/pipeline_utils.py",
+      "git_blob_sha1": "812c6a224fad9eda73da74e3a5881f1fb77c1cbb",
+      "size": 9133
+    },
+    {
+      "path": "relighting/pipeline_xl.py",
+      "git_blob_sha1": "0a50e42ca0bd415a2e9d43837f9de56e652880c3",
+      "size": 22883
+    },
+    {
+      "path": "relighting/tonemapper.py",
+      "git_blob_sha1": "b2250c6c45063a11302a6b3e3a16c4b81ec1cb04",
+      "size": 1347
+    },
+    {
+      "path": "relighting/utils.py",
+      "git_blob_sha1": "699a59e95ba0083bab7a66e8068462446481147e",
+      "size": 1714
+    }
+  ],
+  "lora": {
+    "repository": "https://github.com/DiffusionLight/DiffusionLight",
+    "path": "models/ThisIsTheFinal-lora-hdr-continuous-largeT@900/0_-5/checkpoint-2500/pytorch_lora_weights.safetensors",
+    "git_blob_sha1": "8cfb0eb5ad164a8059f570434fcf2e7e051a06fe",
+    "size": 23396024
+  },
+  "models": {
+    "sdxl": "stabilityai/stable-diffusion-xl-base-1.0",
+    "controlnet_depth": "diffusers/controlnet-depth-sdxl-1.0",
+    "vae": "madebyollin/sdxl-vae-fp16-fix",
+    "depth": "Intel/dpt-hybrid-midas"
+  },
+  "scope": "Upstream source and exposure LoRA identities are official Git blobs. Other model payloads require an explicit app-owned trusted SHA256 manifest; no payloads are included or downloaded."
+}

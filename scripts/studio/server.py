@@ -395,7 +395,7 @@ class Store:
             # Ordinary duplicate imports and unchanged title plates still reuse
             # their immutable media.
             development = isinstance(provenance, dict) and provenance.get("type") in {
-                "cinematicum-imaging", "cinematicum-deep-compositing", "cinematicum-physical-rendering", "cinematicum-learned-mask", "cinematicum-scene-processing"}
+                "cinematicum-camera-ctrl", "cinematicum-diffusionlight-display", "cinematicum-imaging", "cinematicum-deep-compositing", "cinematicum-physical-rendering", "cinematicum-learned-mask", "cinematicum-scene-processing"}
             duplicate = next((a for a in assets if a.get("sha256") == asset["sha256"]
                               and a.get("kind") == asset["kind"]
                               and (not development or a.get("provenance") == provenance)), None)
@@ -1413,12 +1413,14 @@ class Handler(BaseHTTPRequestHandler):
         parts = unquote(parsed.path).strip("/").split("/")
         if parsed.path in {"/learned-tracking-ui.js", "/collaboration-ui.js", "/runtime-management-ui.js", "/reconstruction-ui.js", "/scene-processing-ui.js", "/multicam-sync-ui.js", "/multicam-monitor.js", "/float-movie-ui.js", "/retime-model.js", "/retime-ui.js"}:
             return self.file(WEB / parsed.path[1:])
+        if parsed.path == "/model-inference-ui.js":
+            return self.file(WEB / "model-inference-ui.js")
         if parts == ["api", "runtime-management"]:
             from runtime_management import inventory
             return self.json(200, inventory())
         if parts == ["api", "scene-workers"]:
             return self.json(200, self.store.scene_workers.inventory())
-        if parsed.path in {"/", "/index.html", "/app.js", "/style.css", "/editing.js", "/viewer-tools.js", "/compositor-ui.js", "/scene-editor.js", "/scene-editor.css", "/tracking-ui.js", "/interchange-ui.js", "/camera-io-ui.js", "/color-pipeline-ui.js", "/imaging-ui.js", "/deep-compositing-ui.js", "/ray-optics-ui.js", "/physical-rendering-ui.js", "/recovery-ui.js", "/production-ui.js", "/archive-ui.js", "/media-management-ui.js", "/editorial-ui.js", "/sequence-playback.js", "/decoded-frame-cache.js", "/managed-generation-ui.js", "/audio-routing.js", "/pcm-playback.js"}:
+        if parsed.path in {"/", "/index.html", "/app.js", "/style.css", "/editing.js", "/viewer-tools.js", "/compositor-ui.js", "/scene-editor.js", "/scene-editor.css", "/tracking-ui.js", "/interchange-ui.js", "/camera-io-ui.js", "/color-pipeline-ui.js", "/imaging-ui.js", "/deep-compositing-ui.js", "/ray-optics-ui.js", "/physical-rendering-ui.js", "/recovery-ui.js", "/production-ui.js", "/archive-ui.js", "/media-management-ui.js", "/editorial-ui.js", "/sequence-playback.js", "/decoded-frame-cache.js", "/managed-generation-ui.js", "/audio-routing.js", "/pcm-playback.js", "/audio-mixer-ui.js"}:
             return self.file(WEB / ("index.html" if parsed.path == "/" else parsed.path[1:]))
         if parts == ["api", "bootstrap"]:
             projects = self.store.projects()
@@ -1433,6 +1435,11 @@ class Handler(BaseHTTPRequestHandler):
         if parts == ["api", "float-movie-capabilities"]:
             from float_movie import capabilities
             return self.json(200, capabilities())
+        if parsed.path == "/lens-calibration-ui.js":
+            return self.file(WEB / "lens-calibration-ui.js")
+        if parts == ["api", "lens-calibration-capabilities"]:
+            from studio_tools import capabilities
+            return self.json(200, capabilities("lens-calibration"))
         if parts == ["api", "retime-capabilities"]:
             from retime import capabilities
             return self.json(200, capabilities())
@@ -1455,6 +1462,9 @@ class Handler(BaseHTTPRequestHandler):
             from ray_optics import ray_optics_catalog
             query = parse_qs(parsed.query)
             return self.json(200, ray_optics_catalog(query.get("q", [""])[0], int(query.get("limit", ["100"])[0])))
+        if parts == ["api", "model-inference", "status"]:
+            from model_inference import status
+            return self.json(200, status())
         if parts == ["api", "generation-runtime"]:
             return self.json(200, self.store.generation_runtime_status())
         if parts == ["api", "projects"]:
@@ -1483,9 +1493,16 @@ class Handler(BaseHTTPRequestHandler):
             if len(parts) == 4 and parts[3] == "deep-sources":
                 from deep_compositing import list_deep_sources
                 return self.json(200, {"sources": list_deep_sources(self.store.project_dir(project_id))})
+            if len(parts) == 4 and parts[3] == "model-inference-results":
+                from model_inference import list_results
+                return self.json(200, {"results": list_results(self.store, project_id)})
             if len(parts) == 4 and parts[3] == "studio-results":
                 from studio_tools import list_results
                 return self.json(200, {"results": list_results(self.store, project_id)})
+            if len(parts) == 7 and parts[3:5] == ["lens-calibration", "outputs"]:
+                from studio_tools import artifact
+                path = artifact(self.store, project_id, "lens-calibration", parts[5], parts[6])
+                return self.file(path, download=path.suffix != ".png" or "download" in parse_qs(parsed.query))
             if len(parts) in {4, 5} and parts[3] == "scene-dispatch":
                 return self.json(200, self.store.scene_workers.status(project_id, parts[4] if len(parts) == 5 else None))
             if len(parts) == 4 and parts[3] == "collaboration":
@@ -1498,6 +1515,9 @@ class Handler(BaseHTTPRequestHandler):
                 from studio_tools import artifact
                 path = artifact(self.store, project_id, parts[3], parts[5], parts[6])
                 return self.file(path, download=path.suffix not in {".png", ".svg", ".mp4"} or "download" in parse_qs(parsed.query))
+            if len(parts) == 7 and parts[3:5] == ["model-inference", "outputs"]:
+                from model_inference import artifact
+                return self.file(artifact(self.store, project_id, parts[5], parts[6]), download=parts[6] not in {"preview.png", "output.mp4"})
             if len(parts) == 7 and parts[3:5] == ["multicam-sync", "outputs"]:
                 from multicam_sync import artifact
                 path, identity = artifact(self.store.project_dir(project_id), parts[5], parts[6])
@@ -1747,6 +1767,9 @@ class Handler(BaseHTTPRequestHandler):
                 return self.json(202, self.store.render(project_id, payload))
             if action == "generate":
                 return self.json(202, self.store.generation(project_id, payload))
+            if action in {"model-inference-doctor", "model-inference-infer"}:
+                from model_inference import submit
+                return self.json(202, submit(self.store, project_id, action.rsplit("-", 1)[1], payload))
             if action in {"generation-setup", "generation-start"}:
                 return self.json(202, self.store.generation_runtime_job(project_id, action.split("-", 1)[1], payload))
             if action == "generation-stop":
@@ -1776,6 +1799,9 @@ class Handler(BaseHTTPRequestHandler):
                 from studio_tools import run_tool
                 tool = "deep-compositing" if action == "deep-render" else action
                 return self.json(202, run_tool(self.store, project_id, tool, payload))
+            if action == "lens-calibration":
+                from studio_tools import run_tool
+                return self.json(202, run_tool(self.store, project_id, "lens-calibration", payload))
             if action == "scene-dispatch":
                 return self.json(202, self.store.scene_workers.submit(project_id, payload))
             if action == "authoring-apply":
