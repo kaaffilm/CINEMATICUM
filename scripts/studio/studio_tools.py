@@ -61,6 +61,13 @@ TOOLS = {
         "label": "Meshroom dense reconstruction", "preview": None,
         "receipt": "provenance.json", "recipe_project": True,
     },
+    "camera-control": {
+        "module": "camera_ctrl", "field": None,
+        "recipe": "validate_recipe", "capabilities": "capabilities", "run": "run",
+        "directory": "camera-control", "route": "camera-control", "admit": False,
+        "label": "CameraCtrl generation", "preview": "video.mp4",
+        "receipt": "provenance.json", "recipe_project": True,
+    },
     "learned-tracking": {
         "module": "learned_tracking", "field": None,
         "capabilities": "learned_capabilities", "directory": "learned",
