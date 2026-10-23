@@ -142,8 +142,20 @@ async function main(){
      let id=null;const timer=setTimeout(()=>{if(id!==null)video.cancelVideoFrameCallback(id);reject(Error('No matching presented frame: '+JSON.stringify(diagnostics)));},4000);
      const next=()=>{id=request.call(video,(now,metadata)=>{
       id=null;diagnostics.presentations.push({mediaTime:metadata.mediaTime,currentTime:video.currentTime,seeking:video.seeking,presentedFrames:metadata.presentedFrames});
-      if(!video.seeking&&video.readyState>=2&&(forward?metadata.mediaTime>time+1e-6:Math.abs(metadata.mediaTime-time)<1e-6&&Math.abs(video.currentTime-time)<1e-6)){
-       clearTimeout(timer);resolve({mediaTime:metadata.mediaTime,presentedFrames:metadata.presentedFrames});
+      if(video.readyState>=2&&(forward?metadata.mediaTime>time+1e-6:Math.abs(metadata.mediaTime-time)<1e-6&&Math.abs(video.currentTime-time)<1e-6)){
+       if(!video.seeking){
+        clearTimeout(timer);resolve({mediaTime:metadata.mediaTime,presentedFrames:metadata.presentedFrames});
+       }else{
+        // The precise decoded frame may arrive before seeked. Require the
+        // independent seeked event and exact timestamp before admission.
+        const onSeeked=()=>{
+         video.removeEventListener('seeked',onSeeked);
+         if(!video.seeking&&video.readyState>=2&&Math.abs(video.currentTime-metadata.mediaTime)<1e-6){
+          clearTimeout(timer);resolve({mediaTime:metadata.mediaTime,presentedFrames:metadata.presentedFrames});
+         }else next();
+        };
+        video.addEventListener('seeked',onSeeked,{once:true});
+       }
       }else next();
      });};next();
     });
