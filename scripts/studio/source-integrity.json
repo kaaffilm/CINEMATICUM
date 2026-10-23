@@ -291,6 +291,11 @@
       "sha256": "c5b196cf8b91e11cdf1c26ce2982de656f6b10f02595838d6c24e58ac86398e8"
     },
     {
+      "path": "scripts/studio/camera_ctrl.py",
+      "size": 15862,
+      "sha256": "801b74aebe27ef0384b8c5b632328accaec3e28fb4fc582829aa5c939a4bbc5a"
+    },
+    {
       "path": "scripts/studio/camera_io.py",
       "size": 23781,
       "sha256": "cf70c41b57d8e9785680cb7390a44cdf6272774cba6f767cab119b44bdde60ca"
@@ -967,8 +972,8 @@
     },
     {
       "path": "scripts/studio/server.py",
-      "size": 108683,
-      "sha256": "214d9818e4d2bc97d3bb79b846ccf6642e5bb59eaaa9b265fb8700111a84ae15"
+      "size": 108799,
+      "sha256": "f98b370c813a298b69a861906fc06b4eba6a908d1c0c44a516f43bd0530cb123"
     },
     {
       "path": "scripts/studio/source_integrity.py",
@@ -997,8 +1002,8 @@
     },
     {
       "path": "scripts/studio/studio_tools.py",
-      "size": 17768,
-      "sha256": "c7c62fc834e32126ca59adb2e1c7ce1ab4be9e245b71a4d7cd877d74a8f5f96e"
+      "size": 18140,
+      "sha256": "3aa6358e5ebe4059f93a75736aa3048a80606abc3defe02c4ff290579b9a3867"
     },
     {
       "path": "scripts/studio/tapnext-runtime-lock.json",
@@ -1049,6 +1054,11 @@
       "path": "scripts/studio/test_audio_source.py",
       "size": 13465,
       "sha256": "476370639c44c53e7ecb394c514320cd97a6959e53952700c473a27c6bde5da0"
+    },
+    {
+      "path": "scripts/studio/test_camera_ctrl.py",
+      "size": 2992,
+      "sha256": "80fdb55fd3307a0d5e1c49693fb36991ad93233d71fa0f74d7109af431b3d8a0"
     },
     {
       "path": "scripts/studio/test_camera_import_ui_macos.py",
