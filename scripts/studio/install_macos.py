@@ -50,6 +50,7 @@ RUNTIME_FILES = (
     "tapnext_runtime.py", "tapnext_worker.py", "install_tapnext.py", "tapnext-runtime-lock.json",
     "install_learned_tracking.py", "reconstruction.py", "reconstruction_worker.py",
     "install_reconstruction.py", "reconstruction-macos-arm64-py313.lock.json",
+    "meshroom_reconstruction.py", "camera_ctrl.py", "diffusionlight.py",
     "scene_processing.py", "scene_processing_worker.py", "scene_dispatch.py", "scene_dispatch_store.py",
     "runtime_management.py", "install_physical_rendering.py", "physical-rendering-macos-arm64-py313.lock.json",
     "multicam_sync.py", "multicam_sync_worker.py", "multicam.py", "float_movie.py", "float_movie_worker.py",

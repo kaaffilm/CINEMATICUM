@@ -422,8 +422,8 @@
     },
     {
       "path": "scripts/studio/install_macos.py",
-      "size": 20018,
-      "sha256": "928f8a7b28e48843d69a191ccf3a2402759af2f208a16c8a7fea41643a8284e4"
+      "size": 20091,
+      "sha256": "754e1e1a8388ccf2eec9ed9b7f0693d16c0f66eddea69d89b74d13dfc4e72ec7"
     },
     {
       "path": "scripts/studio/install_physical_rendering.py",
@@ -1267,8 +1267,8 @@
     },
     {
       "path": "scripts/studio/test_install_macos.py",
-      "size": 9468,
-      "sha256": "e2501c89db1d02d5dec5b7f4d95799f4ae1f7ef8d42c23ef95f5a45df9eaf57a"
+      "size": 9691,
+      "sha256": "334a3bac060a28447731901484275b9646eecc8e9c5cbdf9495cc3893846ff53"
     },
     {
       "path": "scripts/studio/test_install_physical_rendering.py",
