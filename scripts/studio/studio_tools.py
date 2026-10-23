@@ -68,6 +68,13 @@ TOOLS = {
         "label": "CameraCtrl generation", "preview": "video.mp4",
         "receipt": "provenance.json", "recipe_project": True,
     },
+    "diffusionlight": {
+        "module": "diffusionlight", "field": None,
+        "recipe": "validate_recipe", "capabilities": "capabilities", "run": "run",
+        "directory": "diffusionlight", "route": "diffusionlight", "admit": False,
+        "label": "DiffusionLight HDR", "preview": None,
+        "receipt": "provenance.json", "recipe_project": True,
+    },
     "learned-tracking": {
         "module": "learned_tracking", "field": None,
         "capabilities": "learned_capabilities", "directory": "learned",
