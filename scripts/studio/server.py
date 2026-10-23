@@ -1445,11 +1445,11 @@ class Handler(BaseHTTPRequestHandler):
         if parts == ["api", "multicam-sync-capabilities"]:
             from multicam_sync import sync_capabilities
             return self.json(200, sync_capabilities())
-        if len(parts) == 2 and parts[0] == "api" and parts[1] in {"deep-capabilities", "ray-optics-capabilities", "physical-rendering-capabilities", "scene-processing-capabilities", "reconstruction-capabilities", "meshroom-capabilities", "camera-control-capabilities"}:
+        if len(parts) == 2 and parts[0] == "api" and parts[1] in {"deep-capabilities", "ray-optics-capabilities", "physical-rendering-capabilities", "scene-processing-capabilities", "reconstruction-capabilities", "meshroom-capabilities", "camera-control-capabilities", "diffusionlight-capabilities"}:
             from studio_tools import capabilities
             tool = {"deep-capabilities": "deep-compositing", "ray-optics-capabilities": "ray-optics",
                     "physical-rendering-capabilities": "physical-rendering", "scene-processing-capabilities": "scene-processing",
-                    "reconstruction-capabilities": "reconstruction", "meshroom-capabilities": "meshroom", "camera-control-capabilities": "camera-control"}[parts[1]]
+                    "reconstruction-capabilities": "reconstruction", "meshroom-capabilities": "meshroom", "camera-control-capabilities": "camera-control", "diffusionlight-capabilities": "diffusionlight"}[parts[1]]
             return self.json(200, capabilities(tool))
         if parts == ["api", "ray-optics-catalog"]:
             from ray_optics import ray_optics_catalog
@@ -1494,7 +1494,7 @@ class Handler(BaseHTTPRequestHandler):
                 from collaboration import Client
                 binding = self.store.collaboration._binding(project_id)
                 return self.json(200, Client(binding["connection"]).members())
-            if len(parts) == 7 and parts[3] in {"deep", "optics", "physical", "learned", "scene-processing", "reconstruction", "meshroom", "camera-control"} and parts[4] == "outputs":
+            if len(parts) == 7 and parts[3] in {"deep", "optics", "physical", "learned", "scene-processing", "reconstruction", "meshroom", "camera-control", "diffusionlight"} and parts[4] == "outputs":
                 from studio_tools import artifact
                 path = artifact(self.store, project_id, parts[3], parts[5], parts[6])
                 return self.file(path, download=path.suffix not in {".png", ".svg", ".mp4"} or "download" in parse_qs(parsed.query))
@@ -1772,7 +1772,7 @@ class Handler(BaseHTTPRequestHandler):
                 return self.json(202, self.store.scene_render(project_id, payload))
             if action == "imaging-render":
                 return self.json(202, self.store.imaging_render(project_id, payload))
-            if action in {"deep-render", "ray-optics", "physical-rendering", "scene-processing", "reconstruction", "meshroom", "camera-control"}:
+            if action in {"deep-render", "ray-optics", "physical-rendering", "scene-processing", "reconstruction", "meshroom", "camera-control", "diffusionlight"}:
                 from studio_tools import run_tool
                 tool = "deep-compositing" if action == "deep-render" else action
                 return self.json(202, run_tool(self.store, project_id, tool, payload))
