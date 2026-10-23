@@ -336,6 +336,11 @@
       "sha256": "c69f0584c7d2ce11856c09a50db130ce2172b73da4caa92d44235bf07d0a2e1b"
     },
     {
+      "path": "scripts/studio/diffusionlight.py",
+      "size": 11126,
+      "sha256": "eb64aa600b3475cebc47f4388d72d03b0417ca15e3c46a279a98f607869ae306"
+    },
+    {
       "path": "scripts/studio/editorial.py",
       "size": 27152,
       "sha256": "5c29d96d609648e2012658c9a6d51de4e593ede301a257f2a1b48f2dca4f3f27"
@@ -972,8 +977,8 @@
     },
     {
       "path": "scripts/studio/server.py",
-      "size": 108799,
-      "sha256": "f98b370c813a298b69a861906fc06b4eba6a908d1c0c44a516f43bd0530cb123"
+      "size": 108915,
+      "sha256": "d741db07279b953a836b518f5bc3c6ff7e4a6e0b61a39e3afe80373991b2d607"
     },
     {
       "path": "scripts/studio/source_integrity.py",
@@ -1002,8 +1007,8 @@
     },
     {
       "path": "scripts/studio/studio_tools.py",
-      "size": 18140,
-      "sha256": "3aa6358e5ebe4059f93a75736aa3048a80606abc3defe02c4ff290579b9a3867"
+      "size": 18505,
+      "sha256": "3329eadd9a15f14c18fe5563b52be868615eb50b1a8c238259b1c02436fd8bdf"
     },
     {
       "path": "scripts/studio/tapnext-runtime-lock.json",
@@ -1129,6 +1134,11 @@
       "path": "scripts/studio/test_deep_compositing.py",
       "size": 25208,
       "sha256": "15ec7ae062a2f9028d97ca7144159e8a10265a3213e4d0c2d93a73edc17edda6"
+    },
+    {
+      "path": "scripts/studio/test_diffusionlight.py",
+      "size": 2344,
+      "sha256": "0f7ec3dc9a0dfd80437363a1485c14a7979b872ad691c2970aef6fc94601b8c3"
     },
     {
       "path": "scripts/studio/test_editing.py",
