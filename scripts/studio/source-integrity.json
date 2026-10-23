@@ -291,6 +291,11 @@
       "sha256": "c5b196cf8b91e11cdf1c26ce2982de656f6b10f02595838d6c24e58ac86398e8"
     },
     {
+      "path": "scripts/studio/camera_ctrl.py",
+      "size": 15862,
+      "sha256": "801b74aebe27ef0384b8c5b632328accaec3e28fb4fc582829aa5c939a4bbc5a"
+    },
+    {
       "path": "scripts/studio/camera_io.py",
       "size": 23781,
       "sha256": "cf70c41b57d8e9785680cb7390a44cdf6272774cba6f767cab119b44bdde60ca"
@@ -329,6 +334,11 @@
       "path": "scripts/studio/deep_compositing_worker.py",
       "size": 44486,
       "sha256": "c69f0584c7d2ce11856c09a50db130ce2172b73da4caa92d44235bf07d0a2e1b"
+    },
+    {
+      "path": "scripts/studio/diffusionlight.py",
+      "size": 12832,
+      "sha256": "79026ba1db2b2fa2d1a86d500a2ce0055780cc1027b8b02d52009a1af542e9d8"
     },
     {
       "path": "scripts/studio/editorial.py",
@@ -731,6 +741,11 @@
       "sha256": "f7e27ccee72830ca716fea86b365c7f3a513ad137a7c05e78c480b9520c5f27d"
     },
     {
+      "path": "scripts/studio/meshroom_reconstruction.py",
+      "size": 16279,
+      "sha256": "6e20b593ffc13d326f2b902f7bd39502a88afc4fbfb4ece67789416b8bb12d15"
+    },
+    {
       "path": "scripts/studio/modeling_blender.py",
       "size": 10783,
       "sha256": "0c22d0cc37f152eed5d1b25f49a284be7e7fa93a1a639731302f63cac8c5339f"
@@ -962,8 +977,8 @@
     },
     {
       "path": "scripts/studio/server.py",
-      "size": 108597,
-      "sha256": "c9e65e1b78f493f72cf8c59f39e3e33f6135a38d8276e8bb7dcd3ac24dc852d3"
+      "size": 108915,
+      "sha256": "d741db07279b953a836b518f5bc3c6ff7e4a6e0b61a39e3afe80373991b2d607"
     },
     {
       "path": "scripts/studio/source_integrity.py",
@@ -992,8 +1007,8 @@
     },
     {
       "path": "scripts/studio/studio_tools.py",
-      "size": 17401,
-      "sha256": "e578800750de9707b269b024dc86da7a4a54cc128bc9a71c6c5e3115af616013"
+      "size": 18505,
+      "sha256": "3329eadd9a15f14c18fe5563b52be868615eb50b1a8c238259b1c02436fd8bdf"
     },
     {
       "path": "scripts/studio/tapnext-runtime-lock.json",
@@ -1044,6 +1059,11 @@
       "path": "scripts/studio/test_audio_source.py",
       "size": 13465,
       "sha256": "476370639c44c53e7ecb394c514320cd97a6959e53952700c473a27c6bde5da0"
+    },
+    {
+      "path": "scripts/studio/test_camera_ctrl.py",
+      "size": 2992,
+      "sha256": "80fdb55fd3307a0d5e1c49693fb36991ad93233d71fa0f74d7109af431b3d8a0"
     },
     {
       "path": "scripts/studio/test_camera_import_ui_macos.py",
@@ -1107,13 +1127,18 @@
     },
     {
       "path": "scripts/studio/test_decoded_frame_cache_browser.cjs",
-      "size": 20725,
-      "sha256": "0d2a2ddb27e358f0ed4d7d1563753ee06da71727895152b168a881fcfc461aa0"
+      "size": 21305,
+      "sha256": "151421c5240cf2007b9c6f74838612438f136f40d77d9cf8006695ef4d3d1e7b"
     },
     {
       "path": "scripts/studio/test_deep_compositing.py",
       "size": 25208,
       "sha256": "15ec7ae062a2f9028d97ca7144159e8a10265a3213e4d0c2d93a73edc17edda6"
+    },
+    {
+      "path": "scripts/studio/test_diffusionlight.py",
+      "size": 3156,
+      "sha256": "cad99ab2733cfedebb744face08643df6bb3c9024d4b749292953522676e8ddf"
     },
     {
       "path": "scripts/studio/test_editing.py",
@@ -1349,6 +1374,11 @@
       "path": "scripts/studio/test_mesh_modeling_ui_macos.py",
       "size": 7840,
       "sha256": "a1cf2fc30f8f5df65d145b09059d75f3219518aea2269e28b538b551ffe5fefe"
+    },
+    {
+      "path": "scripts/studio/test_meshroom_reconstruction.py",
+      "size": 7293,
+      "sha256": "b5fe34832a3a5958ebed946dd70afd0a30959247d7d3351ae37978ca29a89616"
     },
     {
       "path": "scripts/studio/test_multi_source_compositor.py",
@@ -1827,8 +1857,8 @@
     },
     {
       "path": "scripts/studio/web/decoded-frame-cache.js",
-      "size": 4998,
-      "sha256": "b029be5f61c37c35e27c4de211435b5619fdd008dd3ba58ca36fa0ff9973ce7a"
+      "size": 5968,
+      "sha256": "83c5a4e5a86959f6b558e5d56b2f861f600e69c3d4a9080163b79a1aeea4bce7"
     },
     {
       "path": "scripts/studio/web/deep-compositing-ui.js",
