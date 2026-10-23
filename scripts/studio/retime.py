@@ -53,10 +53,12 @@ def validate_recipe(value, duration):
         frame=number(key['frame'],'Speed-key frame',0,MAX_FRAMES,True)
         if frame <= previous:
             raise ValueError('Speed-key frames must be unique and increasing.')
-        result.append({'frame':frame,'speed':number(key['speed'],'Source speed',.25,4)})
+        result.append({'frame':frame,'speed':number(key['speed'],'Source speed',-4,4)})
         previous=frame
     if result[0]['frame'] != 0 or result[-1]['frame'] < 1:
         raise ValueError('Speed keys must begin at zero and end at the curve duration.')
+    if value['audio']=='pitch_preserve' and any(key['speed']<.25 for key in result):
+        raise ValueError('Pitch-preserving sound requires positive speeds from 0.25x to 4x. Use varispeed or mute for reverse and held frames.')
     offset=number(value['offset'],'Speed-ramp trim offset',0,result[-1]['frame']-1,True)
     if duration > MAX_FRAMES or offset+duration > result[-1]['frame']:
         raise ValueError('The edit must stay inside its 240-frame speed-curve domain. Edit the ramp to extend it.')
@@ -102,6 +104,53 @@ def source_position(clip,local):
     return Fraction(int(origin['numerator']),int(origin['denominator']))+integral(recipe,Fraction(recipe['offset'])+Fraction(str(local)))
 
 
+def source_bounds(clip, start=0, end=None):
+    """Exact continuous source range, including turns between output frames."""
+    end=clip['duration'] if end is None else end
+    start,end=Fraction(str(start)),Fraction(str(end))
+    if end<start:
+        start,end=end,start
+    candidates=[start,end]
+    recipe=clip.get('retime')
+    if recipe:
+        offset=recipe['offset']
+        for left,right in zip(recipe['keys'],recipe['keys'][1:]):
+            a,b=Fraction(str(left['speed'])),Fraction(str(right['speed']))
+            for frame in (left['frame'],right['frame']):
+                local=Fraction(frame-offset)
+                if start<local<end:candidates.append(local)
+            if a*b<0:
+                turn=Fraction(left['frame']-offset)-a*(right['frame']-left['frame'])/(b-a)
+                if start<turn<end:candidates.append(turn)
+    positions=[source_position(clip,frame) for frame in candidates]
+    return min(positions),max(positions)
+
+
+def audio_hold_spans(clip,rate,samples,phase):
+    """Half-open PCM index spans for exact authored holds, without float clocks."""
+    recipe=clip['retime'];scale=Fraction(48000)/rate.fraction;offset=recipe['offset']
+    spans=[]
+    def add(first,last):
+        first,last=max(0,first),min(samples,last)
+        if first<last:spans.append([first,last])
+    for left,right in zip(recipe['keys'],recipe['keys'][1:]):
+        if left['speed']==0 and right['speed']==0:
+            first=math.ceil((left['frame']-offset)*scale-phase)
+            last=math.floor((right['frame']-offset)*scale-phase)+1
+            add(first,last)
+    # The audio sample lattice can extend a fraction of a sample beyond an
+    # endpoint. Continue zero endpoint speed only strictly outside the curve.
+    if recipe['keys'][0]['speed']==0:
+        add(0,math.ceil(-offset*scale-phase))
+    if recipe['keys'][-1]['speed']==0:
+        add(math.floor((recipe['keys'][-1]['frame']-offset)*scale-phase)+1,samples)
+    merged=[]
+    for first,last in sorted(spans):
+        if merged and first<=merged[-1][1]:merged[-1][1]=max(last,merged[-1][1])
+        else:merged.append([first,last])
+    return merged
+
+
 def local_keys(clip):
     """The dialog's IEEE-754 local-key values, for lossless no-op detection.
 
@@ -144,16 +193,19 @@ def validate_clip(project, clip, asset):
     clip['retime']=recipe
     if abs(float(source_position(clip,0))-clip['in'])>1e-8:
         raise ValueError('The clip source in no longer matches its retained speed-curve origin. Edit the ramp rather than replacing its source clock.')
-    end=source_position(clip,clip['duration'])
-    if end > Fraction(str(asset['duration']))*project_rate(project).fraction+Fraction(1,1_000_000):
+    low,high=source_bounds(clip)
+    if low<0:
+        raise ValueError('The integrated speed curve crosses before source frame zero. Move the source in or shorten the reverse interval.')
+    if high > Fraction(str(asset['duration']))*project_rate(project).fraction+Fraction(1,1_000_000):
         raise ValueError('The integrated speed curve extends beyond the original media. Shorten the output or lower its speed keys.')
     if asset['kind']=='video':
-        last=source_position(clip,clip['duration']-1)
+        pictures=[source_position(clip,frame) for frame in range(clip['duration'])]
+        last=max(pictures)
         handle=math.floor(last+Fraction(1,2)) if recipe['method']=='nearest' else math.ceil(float(last)-1e-8)
         if handle >= math.ceil(asset['duration']*project_rate(project).fps-1e-6):
             raise ValueError('This ramp needs a real final source-picture handle. Shorten the output or lower its speed keys.')
     pixels=max(1,asset['width']*asset['height'])
-    if (math.ceil(float(source_delta(clip,clip['duration'])))+3+clip['duration'])*pixels*3 > MAX_RAW_BYTES:
+    if (math.ceil(high)-math.floor(low)+3+clip['duration'])*pixels*3 > MAX_RAW_BYTES:
         raise ValueError('The retime source/output window exceeds the 512 MiB raw-picture bound. Use a shorter edit or smaller original.')
 
 
@@ -336,8 +388,7 @@ def prepare(project, clip, asset, project_dir, directory, *, audio_origin=0, can
             high=source_position(clip,last_local-recipe['offset'])
             padding=1026
         else:
-            low=source_position(clip,phase*rate.fraction/48000)
-            high=source_position(clip,(samples-1+phase)*rate.fraction/48000)
+            low,high=source_bounds(clip,phase*rate.fraction/48000,(samples-1+phase)*rate.fraction/48000)
             padding=32
         audio_first=max(0,math.floor(float(rate.seconds_for_frames(low)*48000))-padding)
         audio_end=min(round(stream['duration']*48000),math.ceil(float(rate.seconds_for_frames(high)*48000))+padding+1)
@@ -351,7 +402,8 @@ def prepare(project, clip, asset, project_dir, directory, *, audio_origin=0, can
     request={'version':1,'width':width,'height':height,'video':asset['kind']=='video','source_first':first,'source_count':last-first+1,
         'positions':positions,'nearest_frames':nearest,'recipe':recipe,'source_origin':float(Fraction(int(recipe['source_origin']['numerator']),int(recipe['source_origin']['denominator']))),'duration':clip['duration'],'fps':rate.as_dict(),
         'samples':samples,'sample_phase':float(phase),'audio_first':audio_first,'audio_count':audio_count,
-        'audio_grid_start':audio_grid_start,'audio_grid_phase':float(audio_grid_phase)}
+        'audio_grid_start':audio_grid_start,'audio_grid_phase':float(audio_grid_phase),
+        'audio_hold_spans':audio_hold_spans(clip,rate,samples,phase)}
     manifest=root/'request.json';manifest.write_text(json.dumps(request,allow_nan=False))
     _run([runtime['python'],'-I','-B',WORKER,'--request',manifest],root,'source-retime',cancel_event,deadline,root/'worker.json')
     result=json.loads((root/'worker.json').read_text())

@@ -76,8 +76,11 @@ jobs:
           for file in scripts/studio/web/*.js scripts/studio/macos/*.js scripts/studio/*.cjs; do
             node --check "$file"
           done
-      - name: Verify bounded decoded-frame cache lifecycle
-        run: node scripts/studio/test_decoded_frame_cache.cjs
+      - name: Verify authoring and decoded-frame cache lifecycles
+        run: |
+          node scripts/studio/test_decoded_frame_cache.cjs
+          node scripts/studio/test_source_frame_cache.cjs
+          node scripts/studio/test_lens_calibration_ui.cjs
       - name: Accept decoded-picture reuse in the actual pinned browser
         run: |
           node scripts/studio/test_decoded_frame_cache_browser.cjs --browser "$CINEMATICUM_BROWSER" --evidence "$RUNNER_TEMP/decoded-frame-cache-acceptance"

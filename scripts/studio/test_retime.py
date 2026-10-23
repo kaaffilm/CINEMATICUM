@@ -112,7 +112,7 @@ class RetimeClockValidationTests(unittest.TestCase):
             value_recipe = recipe()
             value_recipe['keys'] = keys
             cases.append(value_recipe)
-        for speed in (0, .249, 4.001, float('nan'), float('inf'), True):
+        for speed in (-4.001, 4.001, float('nan'), float('inf'), True):
             value_recipe = recipe()
             value_recipe['keys'][0]['speed'] = speed
             cases.append(value_recipe)
@@ -132,6 +132,69 @@ class RetimeClockValidationTests(unittest.TestCase):
             with self.subTest(case=index), self.assertRaises(ValueError):
                 retime.validate_recipe(value, 12)
         self.assertEqual(retime.validate_recipe(recipe(speed0=.25, speed1=4), 12)['keys'][-1]['speed'], 4)
+
+    def test_signed_source_extrema_reject_interior_excursions_and_hold_pitch(self):
+        project={'fps':24,'settings':{}}
+        asset={'kind':'video','duration':1,'width':WIDTH,'height':HEIGHT,'sha256':'0'*64,'pixel_format':'gbrp'}
+        for origin,first,last in ((1,-4,4),(23,4,-4)):
+            clip=ramp_clip(duration=4,**{'in':origin},retime=recipe(4,speed0=first,speed1=last))
+            # Both endpoints fit, but the midpoint leaves the actual source.
+            self.assertEqual(retime.source_position(clip,4),origin)
+            with self.subTest(origin=origin),self.assertRaisesRegex(ValueError,'source frame zero|beyond the original'):
+                retime.validate_clip(project,clip,asset)
+        turn=ramp_clip(retime=recipe(speed0=.5,speed1=-.5))
+        self.assertEqual(retime.source_bounds(turn),(Fraction(4),Fraction(11,2)))
+        reverse=ramp_clip(**{'in':16},retime=recipe(speed0=-.5,speed1=-1.5))
+        self.assertEqual(retime.source_bounds(reverse),(Fraction(4),Fraction(16)))
+        retime.validate_clip(project,reverse,asset)
+        hold=ramp_clip(retime=recipe(speed0=0,speed1=0))
+        self.assertEqual(retime.source_bounds(hold),(Fraction(4),Fraction(4)))
+        retime.validate_clip(project,hold,asset)
+        for first,last in ((0,1),(-1,-.5),(.5,-.5),(.249,1)):
+            with self.subTest(speeds=(first,last)),self.assertRaisesRegex(ValueError,'Pitch-preserving'):
+                retime.validate_recipe(recipe(audio='pitch_preserve',speed0=first,speed1=last),12)
+
+    def test_exact_authored_hold_sample_boundaries_survive_fractional_rate_splits(self):
+        from timebase import FrameRate
+        rate = FrameRate(60, 13)
+        curve = recipe(4)
+        curve['keys'] = [{'frame': 0, 'speed': 1}, {'frame': 1, 'speed': 0},
+                         {'frame': 3, 'speed': 0}, {'frame': 4, 'speed': -1}]
+        whole = ramp_clip(duration=4, retime=curve)
+        samples = rate.sample_span(0, 4)
+        self.assertEqual(samples, 41_600)
+        self.assertEqual(retime.audio_hold_spans(whole, rate, samples, Fraction(0)),
+                         [[10_400, 31_201]])
+        # At 60/13 fps, a float seconds->frames round trip can put sample
+        # 10400 immediately below key 1. Inclusive authored hold keys must
+        # remain silent in both the whole clip and either side of a cut.
+        for origin in (Fraction(0), Fraction(7, 3)):
+            count = rate.sample_span(origin, 4)
+            phase = Fraction(rate.samples_for_frames(origin))-rate.seconds_for_frames(origin)*48_000
+            def mask(clip, size, sample_phase):
+                result = bytearray(size)
+                for first, last in retime.audio_hold_spans(clip, rate, size, sample_phase):
+                    result[first:last] = b'\1'*(last-first)
+                return result
+            actual = mask(whole, count, phase)
+            # Independent exact membership oracle; it never rounds the key
+            # boundaries or calls the retimer's hold-span implementation.
+            expected = bytearray(1 <= (Fraction(index)+phase)*Fraction(60, 13)/48_000 <= 3
+                                 for index in range(count))
+            self.assertEqual(actual, expected)
+            for split in (1, 2, 3):
+                left = copy.deepcopy(whole)
+                left['duration'] = split
+                right = copy.deepcopy(whole)
+                right['retime']['offset'] = split
+                right['duration'] = 4-split
+                left_count = rate.sample_span(origin, split)
+                right_count = rate.sample_span(origin+split, 4-split)
+                right_phase = (Fraction(rate.samples_for_frames(origin+split))
+                               -rate.seconds_for_frames(origin+split)*48_000)
+                with self.subTest(origin=str(origin), split=split):
+                    self.assertEqual(mask(left, left_count, phase)
+                                     +mask(right, right_count, right_phase), expected)
 
     def test_source_precision_binding_and_real_picture_handle_limits(self):
         # Metadata-only refusal tests are separate from decoded-media cases.
@@ -398,6 +461,86 @@ class RetimeMediaTests(unittest.TestCase):
         self.assertTrue(media['has_audio'])
         self.assertEqual(json.loads((output.parent/'retime-report.json').read_text()), receipt)
         return output, receipt
+
+    def test_selected_short_audio_stream_refuses_hidden_signed_curve_extremum(self):
+        source = self.root/'media/ENGINE_TEST_short_audio_stream.mkv'
+        self.ffmpeg(['-i', str(self.source), '-map', '0:v:0', '-map', '0:1', '-map', '0:2',
+                     '-c:v', 'copy', '-c:a', 'pcm_f32le',
+                     '-filter:a:0', 'atrim=end_sample=9600,asetpts=PTS-STARTPTS', str(source)])
+        asset = {**probe_media(source), 'id': 'source', 'name': source.name,
+                 'path': 'media/'+source.name,
+                 'sha256': hashlib.sha256(source.read_bytes()).hexdigest()}
+        short = next(stream for stream in asset['audio_streams'] if stream['index'] == 1)
+        self.assertAlmostEqual(short['duration'], .2, places=6)
+        clip = ramp_clip(duration=4, **{'in': 3}, audio={'stream_index': 1},
+                         retime=recipe(4, speed0=3, speed1=-3))
+        # F(0)=F(4)=3 source frames, both inside the 0.2-second stream.
+        # The continuous interior maximum is 6 frames (0.25 seconds), so
+        # selected-stream validation must inspect the turn before inference.
+        self.assertEqual(retime.source_position(clip, 0), 3)
+        self.assertEqual(retime.source_position(clip, 4), 3)
+        self.assertEqual(retime.source_position(clip, 2), 6)
+        with self.assertRaisesRegex(ValueError, 'selected audio stream|selected source audio'):
+            self.project(clip, asset=asset)
+        clip['audio']['stream_index'] = 2
+        accepted = self.project(clip, asset=asset)
+        self.assertEqual(accepted['clips'][0]['audio']['stream_index'], 2)
+        self.assertEqual(hashlib.sha256(source.read_bytes()).hexdigest(), asset['sha256'])
+
+    def test_actual_reverse_ramp_decodes_literal_source_clock_and_stereo_pcm(self):
+        clip=ramp_clip(**{'in':16},retime=recipe(speed0=-.5,speed1=-1.5))
+        output,receipt=self.prepare(self.project(clip),'signed-reverse')
+        frames=np.arange(12,dtype=np.float64)
+        nearest=np.floor(16-frames/2-frames*frames/24+.5).astype(int)
+        np.testing.assert_array_equal(self.pictures(output),self.frames[nearest])
+        actual=self.pcm(output);samples=np.arange(24_000,dtype=np.float64)
+        expected=self.tones(32_000-samples/2-samples*samples/48_000)[:,[1,0]]
+        self.assertEqual(actual.shape,expected.shape)
+        self.assertLess(float(np.max(np.abs(actual-expected))),1e-4)
+        self.observations[self._testMethodName]={'source_nearest_frames':nearest.tolist(),'stereo_samples':len(actual),'max_literal_pcm_error':float(np.max(np.abs(actual-expected)))}
+
+    def test_actual_direction_turn_keeps_waveform_and_zero_hold_is_silent(self):
+        clip=ramp_clip(retime=recipe(speed0=.5,speed1=-.5))
+        output,_=self.prepare(self.project(clip),'signed-turn')
+        frames=np.arange(12,dtype=np.float64)
+        nearest=np.floor(4+frames/2-frames*frames/24+.5).astype(int)
+        np.testing.assert_array_equal(self.pictures(output),self.frames[nearest])
+        actual=self.pcm(output);samples=np.arange(24_000,dtype=np.float64)
+        expected=self.tones(8_000+samples/2-samples*samples/48_000)[:,[1,0]]
+        self.assertLess(float(np.max(np.abs(actual-expected))),1e-4)
+        self.assertGreater(float(np.max(np.abs(actual[12_000]))),.01,'An isolated turn must not insert a zero sample')
+        hold=ramp_clip(retime=recipe(speed0=0,speed1=0))
+        frozen,_=self.prepare(self.project(hold),'signed-hold')
+        np.testing.assert_array_equal(self.pictures(frozen),np.repeat(self.frames[4:5],12,axis=0))
+        np.testing.assert_array_equal(self.pcm(frozen),np.zeros((24_000,2),dtype=np.float32))
+
+    def test_actual_fractional_rate_hold_boundary_is_sample_identical_after_split(self):
+        rate = Fraction(60, 13)
+        clip = ramp_clip(duration=4, **{'in': 2}, retime=recipe(4))
+        clip['retime']['keys'] = [{'frame': 0, 'speed': 1}, {'frame': 1, 'speed': 0},
+                                  {'frame': 3, 'speed': 0}, {'frame': 4, 'speed': -1}]
+        whole_path, _ = self.prepare(self.project(clip, rate), 'exact-hold-whole')
+        whole = self.pcm(whole_path)
+        self.assertEqual(whole.shape, (41_600, 2))
+        np.testing.assert_array_equal(whole[10_400:31_201],
+                                      np.zeros((20_801, 2), dtype=np.float32))
+        self.assertGreater(float(np.max(np.abs(whole[10_399]))), .01)
+        self.assertGreater(float(np.max(np.abs(whole[31_201]))), .01)
+        left = copy.deepcopy(clip)
+        left['duration'] = 1
+        right = copy.deepcopy(clip)
+        right.update(id='right', start=1, duration=3, **{'in': 2.5})
+        right['retime']['offset'] = 1
+        left_path, _ = self.prepare(self.project(left, rate), 'exact-hold-left')
+        right_path, _ = self.prepare(self.project(right, rate), 'exact-hold-right')
+        joined = np.concatenate((self.pcm(left_path), self.pcm(right_path)))
+        self.assertEqual(joined.shape, whole.shape)
+        np.testing.assert_array_equal(joined[10_400:31_201], whole[10_400:31_201])
+        error = float(np.max(np.abs(joined-whole)))
+        self.assertLess(error, 1e-7, 'A cut at the authored hold must preserve its exact PCM boundary')
+        self.observations[self._testMethodName] = {'rate': '60/13',
+            'decoded_stereo_samples': 41_600, 'exact_hold_samples': [10_400, 31_201],
+            'max_split_sample_error': error}
 
     @staticmethod
     def analytic_source_samples(count, rate, origin, start, source_in, offset=0):

@@ -1,4 +1,4 @@
-/* Shared output-frame clock for bounded, positive linear speed ramps. */
+/* Shared exact output-frame clock for bounded signed linear speed ramps. */
 (() => {
   'use strict';
   const copy=value=>JSON.parse(JSON.stringify(value));
@@ -41,7 +41,8 @@
       if(!key||typeof key!=='object'||Array.isArray(key))throw Error('Invalid speed key.');
       const frame=integer(key.frame,'Key frame'),speed=finite(key.speed,'Key speed');
       if(frame<0||frame>240||frame<=previous)throw Error('Key frames must increase from 0 through at most 240 output frames.');
-      if(speed<.25||speed>4)throw Error('Speed keys must be between 0.25× and 4×.');
+      if(speed< -4||speed>4)throw Error('Speed keys must be between −4× and 4×.');
+      if(recipe.audio==='pitch_preserve'&&speed<.25)throw Error('Pitch preservation requires positive speeds from 0.25× to 4×; use varispeed or mute for reverse and held frames.');
       previous=frame;
     }
     if(recipe.keys[0].frame!==0)throw Error('The first speed key must be at output frame 0.');
@@ -91,10 +92,29 @@
   }
   function exactSource(clip,t) {
     const local=decimal(t,'Local output position');
+    return exactSourceAt(clip,local);
+  }
+  function exactSourceAt(clip,local) {
     if(!clip.retime)return add(decimal(clip.in??0,'Source in point'),multiply(local,decimal(clip.speed??1,'Source speed')));
     const r=validate(clip.retime);
     return add(origin(r),exactIntegral(r,add(rational(BigInt(r.offset)),local)));
   }
+  function exactBounds(clip,start,end) {
+    let first=decimal(start,'Source-range start'),last=decimal(end,'Source-range end');
+    if(compare(first,last)>0)[first,last]=[last,first];
+    const positions=[exactSourceAt(clip,first),exactSourceAt(clip,last)],r=clip.retime;
+    if(r){
+      validate(r);
+      const include=local=>{if(compare(local,first)>0&&compare(local,last)<0)positions.push(exactSourceAt(clip,local));};
+      for(let i=1;i<r.keys.length;i++){
+        const a=r.keys[i-1],b=r.keys[i],sa=decimal(a.speed,'Key speed'),sb=decimal(b.speed,'Key speed');
+        include(rational(BigInt(a.frame-r.offset)));include(rational(BigInt(b.frame-r.offset)));
+        if(sa.n*sb.n<0n)include(subtract(rational(BigInt(a.frame-r.offset)),multiply(multiply(sa,rational(BigInt(b.frame-a.frame))),rational(subtract(sb,sa).d,subtract(sb,sa).n))));
+      }
+    }
+    return {min:positions.reduce((a,b)=>compare(a,b)<0?a:b),max:positions.reduce((a,b)=>compare(a,b)>0?a:b)};
+  }
+  function sourceBounds(clip,start=0,end=clip.duration){const result=exactBounds(clip,start,end);return {min:approximate(result.min),max:approximate(result.max)};}
   function sourceOrigin(clip,t=0){const value=exactSource(clip,t);return {numerator:String(value.n),denominator:String(value.d)};}
   function sourceFrame(clip,t) {return approximate(exactSource(clip,t));}
   function nearestFrame(clip,t) {
@@ -111,17 +131,18 @@
     if(clip.duration<1||r.offset+clip.duration>r.keys[r.keys.length-1].frame)throw Error('The clip extends beyond its speed ramp domain.');
     if(max!==Infinity&&(!Number.isFinite(max)||max<0))throw Error('Source length is invalid.');
     const bounded=(value,low,high)=>Math.max(low,Math.min(high,value));
+    const within=(start,end)=>{const range=sourceBounds(clip,start,end);return range.min>=-1e-9&&(max===Infinity||range.max<=max+1e-9);};
     if(edge==='left'){
       let low=Math.max(-clip.start,-r.offset),high=0;
-      // Positive speed makes the source mapping monotonic; find the earliest
-      // legal whole-frame extension without changing the original curve.
-      while(low<high){const middle=Math.floor((low+high)/2);if(sourceFrame(clip,middle)>=-1e-9)high=middle;else low=middle+1;}
+      // Interval containment is monotonic even when the source clock turns.
+      // Check the whole retained interval, including subframe zero crossings.
+      while(low<high){const middle=Math.floor((low+high)/2);if(within(middle,clip.duration))high=middle;else low=middle+1;}
       const shift=bounded(Math.round(requested-clip.start),low,clip.duration-1),next=slice(clip,shift);
       return {start:clip.start+shift,duration:clip.duration-shift,...next,offset:shift};
     }
     if(edge!=='right')throw Error('Choose the left or right clip edge.');
     let low=0,high=r.keys[r.keys.length-1].frame-r.offset;
-    while(low<high){const middle=Math.ceil((low+high)/2);if(sourceFrame(clip,middle)<=max+1e-9)low=middle;else high=middle-1;}
+    while(low<high){const middle=Math.ceil((low+high)/2);if(within(0,middle))low=middle;else high=middle-1;}
     if(low<1)throw Error('No complete ramp frame remains inside this source.');
     const duration=bounded(Math.round(requested-clip.start),1,low);
     return {start:clip.start,duration,...slice(clip,0),offset:0};
@@ -131,5 +152,5 @@
     if(duration<1||r.offset+duration>r.keys[r.keys.length-1].frame)throw Error('The clip extends beyond its speed ramp domain.');
     return [{frame:0,speed:speed(clip,0)},...r.keys.filter(k=>k.frame>r.offset&&k.frame<r.offset+duration).map(k=>({frame:k.frame-r.offset,speed:k.speed})),{frame:duration,speed:speed(clip,duration)}];
   }
-  window.CinematicumRetimeModel={validate,integral,delta,speed,sourceOrigin,sourceFrame,nearestFrame,trim,slice,localKeys};
+  window.CinematicumRetimeModel={validate,integral,delta,speed,sourceOrigin,sourceFrame,nearestFrame,sourceBounds,trim,slice,localKeys};
 })();

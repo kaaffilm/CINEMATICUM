@@ -32,7 +32,7 @@ if __package__:
     from .roto_assets import prepare_roto_mask
     from .timebase import parse_rate, project_rate
     from .multicam import validate_lock, resolve_audio, verify_sources as verify_multicam_sources
-    from .retime import validate_clip as validate_ramp, validate_project_ramps, source_position as retime_source_position, prepare as prepare_ramp
+    from .retime import validate_clip as validate_ramp, validate_project_ramps, source_position as retime_source_position, source_bounds as retime_source_bounds, prepare as prepare_ramp
     from .tracking import validate_motion
     from .color_pipeline import validate_pipeline, compile_pipeline
     from .media_orientation import still_display_info
@@ -44,7 +44,7 @@ else:
     from roto_assets import prepare_roto_mask
     from timebase import parse_rate, project_rate
     from multicam import validate_lock, resolve_audio, verify_sources as verify_multicam_sources
-    from retime import validate_clip as validate_ramp, validate_project_ramps, source_position as retime_source_position, prepare as prepare_ramp
+    from retime import validate_clip as validate_ramp, validate_project_ramps, source_position as retime_source_position, source_bounds as retime_source_bounds, prepare as prepare_ramp
     from tracking import validate_motion
     from color_pipeline import validate_pipeline, compile_pipeline
     from media_orientation import still_display_info
@@ -213,6 +213,24 @@ def probe_media(path):
         frames = int(video.get("nb_frames", 0))
     except (ValueError, TypeError):
         frames = 0
+    def stream_duration(stream):
+        values = [tick_duration(stream), stream.get("duration")]
+        # Matroska stores each stream's actual end independently. Falling
+        # back directly to the picture duration would manufacture handles for
+        # a shorter selected audio stream, including signed ramp turns.
+        tag = stream.get("tags", {}).get("DURATION", "")
+        if isinstance(tag, str) and re.fullmatch(r"\d+:\d+:\d+(\.\d+)?", tag):
+            hours, minutes, seconds = tag.split(":")
+            values.append(int(hours)*3600+int(minutes)*60+float(seconds))
+        for value in values:
+            try:
+                candidate = float(value)
+                if math.isfinite(candidate) and candidate > 0:
+                    return candidate
+            except (ValueError, TypeError):
+                pass
+        return duration
+
     metadata = {
         "kind": "image" if image else "video" if videos else "audio",
         "duration": 0.0 if image else duration,
@@ -230,7 +248,7 @@ def probe_media(path):
                            "container_id": str(stream["id"])[:128] if stream.get("id") is not None else None,
                            "sample_rate": int(stream.get("sample_rate", 0) or 0),
                            "codec": stream.get("codec_name"), "language": stream.get("tags", {}).get("language", ""),
-                           "duration": tick_duration(stream) or float(stream.get("duration", 0) or 0) or duration}
+                           "duration": stream_duration(stream)}
                           for stream in audios],
         "size": path.stat().st_size,
     }
@@ -362,7 +380,7 @@ def _validate_single_project(project, project_dir, sequence_assets=None):
         if not isinstance(c["reverse"], bool):
             raise ValueError("Clip reverse must be true or false.")
         validate_ramp(p, c, a)
-        source_end = float(retime_source_position(c, c["duration"])) if c.get("retime") else c["in"] + c["duration"] * c["speed"]
+        source_end = float(retime_source_bounds(c)[1]) if c.get("retime") else c["in"] + c["duration"] * c["speed"]
         if c["start"] + c["duration"] > maximum:
             raise ValueError("Timeline exceeds the six-hour limit.")
         # Permit only half a project frame of metadata rounding, never a freeze-frame fallback.
@@ -570,6 +588,11 @@ def _validate_single_project(project, project_dir, sequence_assets=None):
         from studio_tools import validate_authoring_documents
         from float_movie import validate_float_project
         from editorial import validate_dissolve
+    if __package__:
+        from .audio_mixer import validate_project_mixer
+    else:
+        from audio_mixer import validate_project_mixer
+    validate_project_mixer(p)
     validate_dissolve(p)
     return validate_authoring_documents(validate_float_project(p), project_dir)
 
@@ -701,6 +724,7 @@ def get_capabilities():
             "keyframes": list(ANIMATED_PROPERTIES), "interpolations": sorted(INTERPOLATIONS),
             "retime": all(name in filters for name in ("reverse", "areverse", "atempo")),
             "audio_mixer": all(name in filters for name in ("aeval", "afade", "pan", "amix")),
+            "audio_buses": all(name in filters for name in ("amix", "asplit", "volume", "adelay", "aeval", "highpass", "lowpass", "acompressor", "loudnorm", "ebur128", "aresample", "astats")),
             "waveforms": all(name in filters for name in ("astats", "ametadata", "asetnsamples")),
             "filters": sorted(filters)}
 
@@ -846,7 +870,7 @@ def _dissolve_picture(filters, before, after, output, duration, high):
                    f",format={'gbrap16le' if high else 'rgba'}[{output}]")
 
 
-def _graph(project, project_dir, temp_dir, cancel_event=None, _context=None, _namespace="", _audio_origin=0):
+def _graph(project, project_dir, temp_dir, cancel_event=None, _context=None, _namespace="", _audio_origin=0, _audio_tracks=None):
     if __package__:
         from .editorial import sequence_views, sequence_project, sequence_asset
     else:
@@ -884,6 +908,7 @@ def _graph(project, project_dir, temp_dir, cancel_event=None, _context=None, _na
     audio_frames = rate.sample_span(_audio_origin, frames)
     filters += [f"anullsrc=r=48000:cl=stereo,atrim=end_sample={audio_frames}[silence]"]
     inputs, audio, canvas = [], ["[silence]"], "canvas0"
+    audio_routes = []
     prepared_lenses = {}
 
     def developed_display(asset):
@@ -1226,6 +1251,7 @@ def _graph(project, project_dir, temp_dir, cancel_event=None, _context=None, _na
             audio_stream = f"{input_index}_aout" if nested else f"{sound_input}:{sound_clip['audio'].get('stream_index', sound_asset['audio_stream_index'])}"
             filters += [f"[{audio_stream}]" + ",".join(chain) + f"[audio{index}]"]
             audio.append(f"[audio{index}]")
+            audio_routes.append((f"audio{index}", (_audio_tracks or {}).get(clip["id"], clip["track"])))
         elif nested:
             filters.append(f"[{input_index}_aout]anullsink")
         if nested and clip["track"] < 0:
@@ -1290,8 +1316,17 @@ def _graph(project, project_dir, temp_dir, cancel_event=None, _context=None, _na
     display = ",format=gbrap16le" if high else "" if _namespace else ",scale=out_color_matrix=bt709:out_range=tv"
     filters += [f"[{canvas}]trim=end_frame={frames},setpts=PTS-STARTPTS{display}[vout]"]
     limiter = "" if _namespace else "alimiter=limit=0.98:level=false:latency=true,"
-    filters += ["".join(audio) + f"amix=inputs={len(audio)}:duration=longest:normalize=0,"
-                + limiter + f"atrim=end_sample={audio_frames},asetpts=PTS-STARTPTS[aout]"]
+    if "audio_mixer" in project:
+        if __package__:
+            from .audio_mixer import compile_graph as compile_audio_mixer
+        else:
+            from audio_mixer import compile_graph as compile_audio_mixer
+        mix_filters, mix_label, _ = compile_audio_mixer(project["audio_mixer"], audio_routes, audio_frames, prefix="mix" + _namespace)
+        filters.extend(mix_filters)
+        filters.append(f"[{mix_label}]" + limiter + f"apad=whole_len={audio_frames},atrim=end_sample={audio_frames},asetpts=PTS-STARTPTS[aout]")
+    else:
+        filters += ["".join(audio) + f"amix=inputs={len(audio)}:duration=longest:normalize=0,"
+                    + limiter + f"atrim=end_sample={audio_frames},asetpts=PTS-STARTPTS[aout]"]
     graph = ";\n".join(filters)
     if _namespace:
         # Input stream selectors and already-qualified descendants remain global.
@@ -1406,6 +1441,8 @@ def render_project(project, project_dir, output_path, profile="h264", progress=N
     try:
         with tempfile.TemporaryDirectory(prefix="cinematicum-render-") as temp_dir:
             inputs, graph, frames = _graph(p, project_dir, temp_dir, cancel_event=cancel_event)
+            normalization_expected = set(re.findall(r"astats@([A-Za-z0-9_]+)_input=", graph))
+            audio_normalization = []
             if high and profile != "master16":
                 # RGB behind zero alpha must never become visible just because
                 # a delivery encoder lacks alpha. Composite against black in
@@ -1417,7 +1454,7 @@ def render_project(project, project_dir, output_path, profile="h264", progress=N
             duration = float(rate.seconds_for_frames(frames))
             graph_path = Path(temp_dir) / "filter.txt"
             graph_path.write_text(graph, encoding="utf-8")
-            command = [_executable("ffmpeg"), "-hide_banner", "-nostdin", "-loglevel", "error", "-y", "-filter_complex_threads", "1"]
+            command = [_executable("ffmpeg"), "-hide_banner", "-nostdin", "-loglevel", "info" if normalization_expected else "error", "-y", "-filter_complex_threads", "1"]
             command += inputs + ["-filter_complex_script", str(graph_path), "-map", "[vout]", "-map", "[aout]",
                                  "-r", rate.ffmpeg, "-t", rate.seconds_decimal(frames), "-threads", "2"]
             # The graph itself limits the picture count. A second -frames:v
@@ -1483,6 +1520,13 @@ def render_project(project, project_dir, output_path, profile="h264", progress=N
                     error_log.seek(max(0, size - 6000))
                     detail = error_log.read().decode("utf-8", errors="replace").strip()
                     raise RuntimeError("FFmpeg render failed: " + detail)
+                if normalization_expected:
+                    if __package__:
+                        from .audio_mixer import accept_normalization_audits
+                    else:
+                        from audio_mixer import accept_normalization_audits
+                    error_log.seek(0)
+                    audio_normalization = accept_normalization_audits((line.decode("utf-8", errors="replace") for line in error_log), normalization_expected)
             actual = probe_media(partial)
             if actual["width"] != p["width"] or actual["height"] != p["height"] or not actual["has_audio"]:
                 raise RuntimeError("Rendered media does not match the requested picture/audio format.")
@@ -1506,6 +1550,17 @@ def render_project(project, project_dir, output_path, profile="h264", progress=N
                 packet_receipt = _verify_master_packets(partial, temp_dir, frames, rate.samples_for_frames(frames), cancel_event)
             elif abs(actual["audio_duration"] - expected_audio) > 2 / 48000:
                 raise RuntimeError("Rendered audio does not preserve the exact timeline sample duration.")
+            audio_meter = None
+            if __package__:
+                from .audio_mixer import measure_media, configured_mixers
+            else:
+                from audio_mixer import measure_media, configured_mixers
+            audio_mixers = configured_mixers(p)
+            if audio_mixers:
+                try:
+                    audio_meter = measure_media(partial, _executable("ffmpeg"), cancel_event=cancel_event)
+                except InterruptedError as error:
+                    raise RenderCancelled(str(error)) from error
             digest = hashlib.sha256()
             with partial.open("rb") as stream:
                 for chunk in iter(lambda: stream.read(1024 * 1024), b""):
@@ -1527,6 +1582,9 @@ def render_project(project, project_dir, output_path, profile="h264", progress=N
                     "dynamic_range": "SDR UNORM; no scene-linear HDR/ACES movie mastering",
                     "packet_verification": packet_receipt,
                     "retime_reports": [json.loads(path.read_text()) for path in sorted(Path(temp_dir).rglob("retime-report.json"))],
+                    **({"audio_mixer": copy.deepcopy(p.get("audio_mixer")), "audio_mixers": audio_mixers,
+                        "audio_normalization": audio_normalization,
+                        "audio_meter": {**audio_meter, "measured_export_sha256": digest.hexdigest()}} if audio_meter is not None else {}),
                     "elapsed_seconds": round(time.monotonic() - started, 3), "has_audio": True,
                     "issuance_status_changed": False}
     finally:

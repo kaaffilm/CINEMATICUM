@@ -54,6 +54,13 @@ TOOLS = {
         "label": "Photo reconstruction", "preview": "preview.png",
         "receipt": "provenance.json", "recipe_project": True,
     },
+    "lens-calibration": {
+        "module": "lens_calibration", "field": None,
+        "recipe": "validate_recipe", "capabilities": "capabilities", "run": "run",
+        "directory": "lens-calibration", "route": "lens-calibration", "admit": False,
+        "label": "Measured lens calibration", "preview": "preview.png",
+        "receipt": "provenance.json", "recipe_project": True,
+    },
     "meshroom": {
         "module": "meshroom_reconstruction", "field": None,
         "recipe": "validate_recipe", "capabilities": "capabilities", "run": "run",

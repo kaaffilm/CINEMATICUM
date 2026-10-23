@@ -855,6 +855,8 @@ def _media_extent(asset):
 class Exporter:
     def __init__(self, project, project_dir):
         self.project = io._validated_project(project,project_dir)
+        if any('audio_mixer' in sequence for sequence in [self.project]+self.project.get('sequences',[])):
+            _fail('audio buses, sends and master loudness must be rendered to new sources before XML interchange.')
         self.directory = project_dir
         self.rate = project_rate(self.project)
         self.width,self.height = self.project['width'],self.project['height']

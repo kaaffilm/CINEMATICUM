@@ -18,6 +18,7 @@
       ".jsx",
       ".md",
       ".mjs",
+      ".mg",
       ".plist",
       ".py",
       ".sh",
@@ -57,13 +58,18 @@
   "files": [
     {
       "path": ".github/workflows/studio-verification.yml",
-      "size": 13145,
-      "sha256": "6aee82aad34575cd1bfdd3fbbe2520387d4af5b980603d7052bd0bd2046dbd29"
+      "size": 13281,
+      "sha256": "6e26dd370f86af2de670883fdf9b8d86b7ff6fec3e14a5c1c1132706e61bbbe9"
     },
     {
       "path": "README.md",
       "size": 19055,
       "sha256": "93df778d5160d06f217c1f21692fd030159f3ce1466a1d69cc3c81de8d2d8ab9"
+    },
+    {
+      "path": "scripts/studio/ALICEVISION_DENSE.md",
+      "size": 3773,
+      "sha256": "152aef085ab2c7e6905ba7fe722d39afadb6d319b82076f3a54a444b6ceec4b2"
     },
     {
       "path": "scripts/studio/CAPABILITY_AUDIT.md",
@@ -114,6 +120,16 @@
       "path": "scripts/studio/INCREMENTAL_ACCEPTANCE_2026_10_22.md",
       "size": 1733,
       "sha256": "641cfa7a0a5253d23f88af71756338d258d35d0a5dd8facabf0811e33a2dbd64"
+    },
+    {
+      "path": "scripts/studio/LENS_CALIBRATION.md",
+      "size": 4611,
+      "sha256": "c37bf89a7a5987dd763fc95ed92fa4433bcd7a7cc02523912dbf05ae4c489461"
+    },
+    {
+      "path": "scripts/studio/LENS_CALIBRATION_INTEGRATION.md",
+      "size": 2204,
+      "sha256": "ef8364105da75ef446c0dba917f4a2c4131cf3f44cce2de771f844c97fdeffd4"
     },
     {
       "path": "scripts/studio/LENS_NATIVE_ACCEPTANCE.md",
@@ -271,6 +287,26 @@
       "sha256": "2ec3f1de6039c78393f77d9a8da16fcffb939646ebd805350edc2ccfb027025e"
     },
     {
+      "path": "scripts/studio/alicevision-graph-LICENSE.md",
+      "size": 16725,
+      "sha256": "1f256ecad192880510e84ad60474eab7589218784b9a50bc7ceee34c2b91f1d5"
+    },
+    {
+      "path": "scripts/studio/alicevision-photogrammetry-2025.1.mg",
+      "size": 4562,
+      "sha256": "b9ca66655bb4fb6eacff1695c0502d17c71c29f00884fe4d2a522a4c9d7edde4"
+    },
+    {
+      "path": "scripts/studio/alicevision.py",
+      "size": 31183,
+      "sha256": "e2a60c68f0c5ec0b38c1ed2000262a24da6baf695cf9089f85d44a2b4127f98d"
+    },
+    {
+      "path": "scripts/studio/audio_mixer.py",
+      "size": 19988,
+      "sha256": "4af2a8082bf25f1368a4e526d3e3b5894b658f83dc24e0f6c71919e80c0dd1f6"
+    },
+    {
       "path": "scripts/studio/audio_source.py",
       "size": 16351,
       "sha256": "09a6d4bd5c7c5ccb0fc4670c0e2487b68be892f1a668a38fd9373bddc5503f51"
@@ -291,9 +327,24 @@
       "sha256": "c5b196cf8b91e11cdf1c26ce2982de656f6b10f02595838d6c24e58ac86398e8"
     },
     {
+      "path": "scripts/studio/camera_ctrl-source-lock.json",
+      "size": 2755,
+      "sha256": "8dfcdf9ce9e9477381164500fac58f5d2216015f7a94be207034ab74725727c3"
+    },
+    {
       "path": "scripts/studio/camera_ctrl.py",
       "size": 15862,
       "sha256": "801b74aebe27ef0384b8c5b632328accaec3e28fb4fc582829aa5c939a4bbc5a"
+    },
+    {
+      "path": "scripts/studio/camera_ctrl_standalone.py",
+      "size": 11515,
+      "sha256": "a332e359253709c4c45c3769f52c2ff1eb71382584b8fd6d725aa97cb8d507ac"
+    },
+    {
+      "path": "scripts/studio/camera_ctrl_worker.py",
+      "size": 19097,
+      "sha256": "bfa6e2c6cf382ba388d2d7f2381fc3a6d583960c867396f1da035e61f3ebd991"
     },
     {
       "path": "scripts/studio/camera_io.py",
@@ -336,19 +387,34 @@
       "sha256": "c69f0584c7d2ce11856c09a50db130ce2172b73da4caa92d44235bf07d0a2e1b"
     },
     {
+      "path": "scripts/studio/diffusionlight-source-lock.json",
+      "size": 3168,
+      "sha256": "22f47f70dc890bd8884791ef3924e8b7d700dd82039ce1c47e73ca3e5701d33e"
+    },
+    {
       "path": "scripts/studio/diffusionlight.py",
       "size": 12832,
       "sha256": "79026ba1db2b2fa2d1a86d500a2ce0055780cc1027b8b02d52009a1af542e9d8"
     },
     {
+      "path": "scripts/studio/diffusionlight_standalone.py",
+      "size": 12893,
+      "sha256": "d76e927ba80b60f0d945d659f187e3be1d4898e1485fd96f0c4a09622c73f328"
+    },
+    {
+      "path": "scripts/studio/diffusionlight_worker.py",
+      "size": 20356,
+      "sha256": "d67f903d61469a09b112268365bb116e0bdbcf7f73035d35a38ca3ea52085dee"
+    },
+    {
       "path": "scripts/studio/editorial.py",
-      "size": 27152,
-      "sha256": "5c29d96d609648e2012658c9a6d51de4e593ede301a257f2a1b48f2dca4f3f27"
+      "size": 27471,
+      "sha256": "3f530bdd176b6f671418e4e0786b816c94c77a79f25408af25327c64ff2aa42a"
     },
     {
       "path": "scripts/studio/engine.py",
-      "size": 96103,
-      "sha256": "e52eb218c0d186328f11bcbcff3009be6481daccdfa085422df787f32e8e641e"
+      "size": 99521,
+      "sha256": "203d9fc9d7552ca78c05c779e2c32fc78bc3bb230f8a3ca103836fae5a3bce61"
     },
     {
       "path": "scripts/studio/fcpxml-schema-validation-linux.requirements.txt",
@@ -362,8 +428,8 @@
     },
     {
       "path": "scripts/studio/fcpxml.py",
-      "size": 64549,
-      "sha256": "d2eb27d14243d6d51e3d19325d09101fe9a67209231e79d92a101bfbe8b14064"
+      "size": 64772,
+      "sha256": "4e100106704f754746fcd51a5d57f8d94fcb15cc9a3625ca94773ec8611c45f2"
     },
     {
       "path": "scripts/studio/fetch_verification_raw.py",
@@ -372,8 +438,8 @@
     },
     {
       "path": "scripts/studio/float_movie.py",
-      "size": 25722,
-      "sha256": "9e4a0de1faa0e39221775fbb284422179b0c85e3e1ba1cf61b63f3615e47482f"
+      "size": 27898,
+      "sha256": "b8fb953244eb2ac6d77e4157d504717cab6f54ddf974e57b4b9e2690057ab2ca"
     },
     {
       "path": "scripts/studio/float_movie_worker.py",
@@ -382,8 +448,8 @@
     },
     {
       "path": "scripts/studio/frame_preview.py",
-      "size": 5174,
-      "sha256": "9ac66b06ebcb905743f684b64c48538d1e6aaed5dd26637cd72f7c3e6dadee6c"
+      "size": 5303,
+      "sha256": "57df7bd78ef0e60edf1835c3092dae89b1014030806d2ad7fc8ef9c419b1cc53"
     },
     {
       "path": "scripts/studio/generation-runtime-lock.json",
@@ -422,8 +488,8 @@
     },
     {
       "path": "scripts/studio/install_macos.py",
-      "size": 20091,
-      "sha256": "754e1e1a8388ccf2eec9ed9b7f0693d16c0f66eddea69d89b74d13dfc4e72ec7"
+      "size": 20510,
+      "sha256": "dcd22d9d2323a5a32ac3c3438c79ff2fab57146562efdf5bb0988acadd21928f"
     },
     {
       "path": "scripts/studio/install_physical_rendering.py",
@@ -457,8 +523,8 @@
     },
     {
       "path": "scripts/studio/interchange.py",
-      "size": 35384,
-      "sha256": "f7cdc22ca0027c9b711fe1bbb31255a23368b9af39ea929c044e617b5a2038d7"
+      "size": 35630,
+      "sha256": "cd551b7cf27d35fb2c146fc6d2b0be481be5fe8eab19c6b1dcd64898e738f8a4"
     },
     {
       "path": "scripts/studio/learned-runtime-lock.json",
@@ -484,6 +550,16 @@
       "path": "scripts/studio/lens_assets.py",
       "size": 5364,
       "sha256": "cb9d6d706bdf40ab7af32911a1c4c8ec0ad0a66d27ac640eda6a910e9b6f585d"
+    },
+    {
+      "path": "scripts/studio/lens_calibration.py",
+      "size": 23741,
+      "sha256": "d7323f3c36977442e6d8e1e4f4ae4e6b05c603e0affafc808cc2e74dd7aa2ab4"
+    },
+    {
+      "path": "scripts/studio/lens_calibration_worker.py",
+      "size": 24298,
+      "sha256": "0fc36414691f0382c1f039a3f3467ab076953747bde34fba9fe0e9301b4f6daf"
     },
     {
       "path": "scripts/studio/lens_geometry.py",
@@ -642,8 +718,8 @@
     },
     {
       "path": "scripts/studio/macos/RetimeSmoke.js",
-      "size": 11923,
-      "sha256": "6370cd21586bce0abb08e803467a4bee36d78beca72b2b61e4206b5473bc7a61"
+      "size": 12027,
+      "sha256": "e78a73a22dec61496522c6b585bdb6cf45c44c7c7b02913ff4624fb29a89a2ce"
     },
     {
       "path": "scripts/studio/macos/RotoSmoke.js",
@@ -746,6 +822,11 @@
       "sha256": "6e20b593ffc13d326f2b902f7bd39502a88afc4fbfb4ece67789416b8bb12d15"
     },
     {
+      "path": "scripts/studio/model_inference.py",
+      "size": 29170,
+      "sha256": "e0415ef871b54dee25c738a40d15cb6ac9256af482819a37abd9167eb10c9797"
+    },
+    {
       "path": "scripts/studio/modeling_blender.py",
       "size": 10783,
       "sha256": "0c22d0cc37f152eed5d1b25f49a284be7e7fa93a1a639731302f63cac8c5339f"
@@ -807,8 +888,8 @@
     },
     {
       "path": "scripts/studio/project_archive.py",
-      "size": 49286,
-      "sha256": "66bb48e8087d36a43df8afd1d8b83f6525653713d180c30eea0f01d1b61e6808"
+      "size": 49892,
+      "sha256": "805142c8cf4515b46864b8d94131c4baa2aef73ddf3a3a83c719cb159f39a00c"
     },
     {
       "path": "scripts/studio/projective_warp.py",
@@ -847,8 +928,8 @@
     },
     {
       "path": "scripts/studio/reconstruction.py",
-      "size": 19776,
-      "sha256": "4c85c7a5702f12631bb95ac1aa0dd5cd9d27f90b1f590c34313b7f234de4891b"
+      "size": 20447,
+      "sha256": "f78d4fa69a9816eb4998eb31748f8955f4c72a2fd8b9c602f9c70c6524ad939d"
     },
     {
       "path": "scripts/studio/reconstruction_worker.py",
@@ -907,13 +988,13 @@
     },
     {
       "path": "scripts/studio/retime.py",
-      "size": 23794,
-      "sha256": "46c5da52eed2756f0fc9c2a8680a31f6baac85eb2fb1f891e16c59a75cb6133c"
+      "size": 26375,
+      "sha256": "7f765a6b6993a0e85b755da8f0c4eb99aa9833484315734ac36f822fb851e64c"
     },
     {
       "path": "scripts/studio/retime_worker.py",
-      "size": 13325,
-      "sha256": "fd58df1d052c29d196bbfb23eb05d303fbea8b7c6d125b7ed6deada37b67f1d8"
+      "size": 14346,
+      "sha256": "8677f5c50b4cda49f9808e880eeeae6aa757652e269c9b07fa26011a701ba229"
     },
     {
       "path": "scripts/studio/roto.py",
@@ -977,13 +1058,18 @@
     },
     {
       "path": "scripts/studio/server.py",
-      "size": 108915,
-      "sha256": "d741db07279b953a836b518f5bc3c6ff7e4a6e0b61a39e3afe80373991b2d607"
+      "size": 110823,
+      "sha256": "1ecc0f9d3f6d634f83fc615b0c1a7abff391a484818455046eeaeb882effb05b"
+    },
+    {
+      "path": "scripts/studio/source_frame_cache.py",
+      "size": 27754,
+      "sha256": "903a9a1588ec54442835253755a590ff447a1fea40e5133e7f209fbe6ad79dc1"
     },
     {
       "path": "scripts/studio/source_integrity.py",
-      "size": 10118,
-      "sha256": "869076e74fd39f7a69d03f42ccd449e811e37bf59246cc488f8fc9244507ac40"
+      "size": 10125,
+      "sha256": "9f5893d27d8e3b3e50bd8ab1a241c23fbfa885e7044d808a5e847c52e2c8e7b8"
     },
     {
       "path": "scripts/studio/spatial_import.py",
@@ -1007,8 +1093,8 @@
     },
     {
       "path": "scripts/studio/studio_tools.py",
-      "size": 18505,
-      "sha256": "3329eadd9a15f14c18fe5563b52be868615eb50b1a8c238259b1c02436fd8bdf"
+      "size": 18894,
+      "sha256": "e935b13938213579814f0e75b3e6d2b81140373edd21d3e951b9b6989dba4196"
     },
     {
       "path": "scripts/studio/tapnext-runtime-lock.json",
@@ -1031,6 +1117,11 @@
       "sha256": "71a72e4c7505ef728caf022bcee9f4c67a74b75838b418a1c33b39edd223a22f"
     },
     {
+      "path": "scripts/studio/test_alicevision.py",
+      "size": 11453,
+      "sha256": "4ac9102f5cf15ef0ddb592e886225960bc0dc0765e326bcecf3a659a147ccdaf"
+    },
+    {
       "path": "scripts/studio/test_alpha_mask.py",
       "size": 10994,
       "sha256": "127599e9351b94f2d6c35b9f13f06c99b3cff69585bc8559badc5039cdfb80b3"
@@ -1039,6 +1130,16 @@
       "path": "scripts/studio/test_archive_http.py",
       "size": 16822,
       "sha256": "86e2270b0f9875fc2ffe0f9cee7d208ed198642e4026b60ca3bb24a6f2c66534"
+    },
+    {
+      "path": "scripts/studio/test_audio_mixer.py",
+      "size": 9888,
+      "sha256": "11470a1e1a99e6bb49eba3924c6d05d2102482c6c2f4129a7cfc16dee709cf61"
+    },
+    {
+      "path": "scripts/studio/test_audio_mixer_integration.py",
+      "size": 11429,
+      "sha256": "435a3accd989cb1adf761c6ac7fda883a7490cfb790e6335b553329963715890"
     },
     {
       "path": "scripts/studio/test_audio_observer_identity.py",
@@ -1064,6 +1165,11 @@
       "path": "scripts/studio/test_camera_ctrl.py",
       "size": 2992,
       "sha256": "80fdb55fd3307a0d5e1c49693fb36991ad93233d71fa0f74d7109af431b3d8a0"
+    },
+    {
+      "path": "scripts/studio/test_camera_ctrl_standalone.py",
+      "size": 7677,
+      "sha256": "92a57bf974887920bef7c9b1d5d5aae914b1e6dc6267bfce2f4161ff1a5f3594"
     },
     {
       "path": "scripts/studio/test_camera_import_ui_macos.py",
@@ -1139,6 +1245,11 @@
       "path": "scripts/studio/test_diffusionlight.py",
       "size": 3156,
       "sha256": "cad99ab2733cfedebb744face08643df6bb3c9024d4b749292953522676e8ddf"
+    },
+    {
+      "path": "scripts/studio/test_diffusionlight_standalone.py",
+      "size": 16276,
+      "sha256": "1b2fd908f4e8d3614b1c71ed1f3e58559edd6610590cfa11b8a29c9a39b95e07"
     },
     {
       "path": "scripts/studio/test_editing.py",
@@ -1267,8 +1378,8 @@
     },
     {
       "path": "scripts/studio/test_install_macos.py",
-      "size": 9691,
-      "sha256": "334a3bac060a28447731901484275b9646eecc8e9c5cbdf9495cc3893846ff53"
+      "size": 9690,
+      "sha256": "ebc7b1fa36789c794f86f88159e97236565a70175423217e36057320cff24a2c"
     },
     {
       "path": "scripts/studio/test_install_physical_rendering.py",
@@ -1304,6 +1415,36 @@
       "path": "scripts/studio/test_learned_tracking.py",
       "size": 25995,
       "sha256": "6b2d1aadc4db74a198f6461d251d75ff743dada53efc82f0ad381bed62254bff"
+    },
+    {
+      "path": "scripts/studio/test_lens_calibration.py",
+      "size": 6076,
+      "sha256": "d7c0272cac982ff33c89cd2ba6fecc53d893cc1d3da5f687c2ad0dec404349ee"
+    },
+    {
+      "path": "scripts/studio/test_lens_calibration_integration.py",
+      "size": 9987,
+      "sha256": "0c5f4b62add0db9904e1ee19f4b9f2ebb2832438154a7fc6bc3898c87ee3cd00"
+    },
+    {
+      "path": "scripts/studio/test_lens_calibration_owned.py",
+      "size": 5142,
+      "sha256": "43062e5a48ba071d3ea4b5ffedf029c9ca39db630ca2ef7b25981fc372ba48d2"
+    },
+    {
+      "path": "scripts/studio/test_lens_calibration_smoke.py",
+      "size": 7479,
+      "sha256": "0bcfaf8ba1336295974397bd582d50d5f929873503f63b64c302d391fa3be775"
+    },
+    {
+      "path": "scripts/studio/test_lens_calibration_ui.cjs",
+      "size": 7261,
+      "sha256": "bb86411925e379e4a89e08ff05aacffa292bea3e4e26f07f4f379250bbfb1fc5"
+    },
+    {
+      "path": "scripts/studio/test_lens_calibration_worker.py",
+      "size": 15471,
+      "sha256": "f35efe88ea4ee7264ea65132aa95f08a213a8fe628df9319880c177a21493e82"
     },
     {
       "path": "scripts/studio/test_lens_compositor.py",
@@ -1379,6 +1520,11 @@
       "path": "scripts/studio/test_meshroom_reconstruction.py",
       "size": 7293,
       "sha256": "b5fe34832a3a5958ebed946dd70afd0a30959247d7d3351ae37978ca29a89616"
+    },
+    {
+      "path": "scripts/studio/test_model_inference.py",
+      "size": 15212,
+      "sha256": "de9cc6eb373881f4799906268c644ab3b0a2c9602fa0ace0f1e60b38061cfceb"
     },
     {
       "path": "scripts/studio/test_multi_source_compositor.py",
@@ -1517,8 +1663,8 @@
     },
     {
       "path": "scripts/studio/test_reconstruction.py",
-      "size": 27062,
-      "sha256": "fa55747da5c7c33e767e2a07606c19f53818d64cab8a7896db64c26f5a34ba38"
+      "size": 27149,
+      "sha256": "05aac43fa308faf92c14488971d2629be1802ee3123688bb9bc0ab426dfaed2e"
     },
     {
       "path": "scripts/studio/test_reconstruction_browser.cjs",
@@ -1547,8 +1693,8 @@
     },
     {
       "path": "scripts/studio/test_retime.py",
-      "size": 41709,
-      "sha256": "53ffe4e08b725435115b75c1cf29f51999c9e2235fe2f6ce2769dd41c39c1d90"
+      "size": 51093,
+      "sha256": "b56fb3830160027e22c65a4f0b04f8bdb9099784eebd868da078ec93ce8a4ddb"
     },
     {
       "path": "scripts/studio/test_retime_browser.cjs",
@@ -1664,6 +1810,16 @@
       "path": "scripts/studio/test_shutdown.py",
       "size": 7459,
       "sha256": "041a0cc7de6f1410cb98d43eb99ebd68c6d1f40346a7e2b8817a70e9371da2fd"
+    },
+    {
+      "path": "scripts/studio/test_source_frame_cache.cjs",
+      "size": 8572,
+      "sha256": "fc4134273de580480ad51cd627f5b928d4a3c41834c89ae15b76715473c03f13"
+    },
+    {
+      "path": "scripts/studio/test_source_frame_cache.py",
+      "size": 11338,
+      "sha256": "e1149bac158a5d7c7a50abbaa69953248f2dedf07889c71299fbf301cba7b233"
     },
     {
       "path": "scripts/studio/test_source_integrity.py",
@@ -1797,8 +1953,8 @@
     },
     {
       "path": "scripts/studio/verification-linux-x86_64.requirements.txt",
-      "size": 1519,
-      "sha256": "0dd328e421f6b439f1defbf3b1418826d83c41912b6b12736c3c0765fe72659f"
+      "size": 1838,
+      "sha256": "ad1032143a15a04d3dd353c9e7645fbc1ca3a41f559104854f0c9e0848ad7794"
     },
     {
       "path": "scripts/studio/verify_camera_native.py",
@@ -1822,13 +1978,18 @@
     },
     {
       "path": "scripts/studio/web/app.js",
-      "size": 141187,
-      "sha256": "f13c853f7510bf820fa8f214de1afb8df1f280a5efb5df154956ac555e8e7a86"
+      "size": 143132,
+      "sha256": "7d4760dab0abb5d73c07ef77cec156a66f4813aede22185737269f27592db0ed"
     },
     {
       "path": "scripts/studio/web/archive-ui.js",
       "size": 9491,
       "sha256": "d928645674325e620f92720afcde875d9e0f422f45e647483cb5eaa319e011b3"
+    },
+    {
+      "path": "scripts/studio/web/audio-mixer-ui.js",
+      "size": 15422,
+      "sha256": "a6c4998a3b3bb76169fdf6499274d8a9947fddaa6033679bef7cba82d5b9dc15"
     },
     {
       "path": "scripts/studio/web/audio-routing.js",
@@ -1887,8 +2048,8 @@
     },
     {
       "path": "scripts/studio/web/index.html",
-      "size": 19717,
-      "sha256": "bec711456342fabbe815da5577cb3b7e21ef11c79af93270dfddd580a2228813"
+      "size": 20344,
+      "sha256": "919fff3c474ae9e4473c39ce511acac3531874a64b5e8f463c79c99a493a8390"
     },
     {
       "path": "scripts/studio/web/interchange-ui.js",
@@ -1901,6 +2062,11 @@
       "sha256": "6b5c5f726b5ce1ef71b7047198bb7e52538916f2e9d48ee35cf05bbe390914d8"
     },
     {
+      "path": "scripts/studio/web/lens-calibration-ui.js",
+      "size": 15086,
+      "sha256": "d63e023189fc2ee565aab90a895b06ce931fc6d0bc802c8aed5d210177fa3f55"
+    },
+    {
       "path": "scripts/studio/web/managed-generation-ui.js",
       "size": 16628,
       "sha256": "30863088c3d7721657eecfb9ef5b915d4156a0c263dbc32b4bc0a21535b0e9de"
@@ -1909,6 +2075,11 @@
       "path": "scripts/studio/web/media-management-ui.js",
       "size": 7213,
       "sha256": "f15d9ad5b4ca8da5456a13bd1441d32145616cdaecb5b732cd98b0013f931e9c"
+    },
+    {
+      "path": "scripts/studio/web/model-inference-ui.js",
+      "size": 18661,
+      "sha256": "9e1f2a96a9e21e01d504d049c45ad315a20df9ea6c4c9030a70135e3538d2e94"
     },
     {
       "path": "scripts/studio/web/multicam-monitor.js",
@@ -1942,8 +2113,8 @@
     },
     {
       "path": "scripts/studio/web/reconstruction-ui.js",
-      "size": 25144,
-      "sha256": "391d6501260b0df56a133673b9942d8b01cc752f7719940ee22943bf637daa1d"
+      "size": 26951,
+      "sha256": "4a79ac8fef3c7fbe67cae080278e354ab74efaa2f2f901353230c6b001ab4e72"
     },
     {
       "path": "scripts/studio/web/recovery-ui.js",
@@ -1952,13 +2123,13 @@
     },
     {
       "path": "scripts/studio/web/retime-model.js",
-      "size": 8879,
-      "sha256": "5914cc22ca24bc5a066eab39f93a1f81c25aab63d3cb282e1e299060431aea17"
+      "size": 10421,
+      "sha256": "a841b10ba260963c5be05aa14f0ee44b443253f7a6a81fe74c3c607e5e09ff63"
     },
     {
       "path": "scripts/studio/web/retime-ui.js",
-      "size": 15472,
-      "sha256": "e776f78a9e657503d3e38df7ad02c2c6c17b900c71d8889546f9a37711262e61"
+      "size": 15862,
+      "sha256": "c4e028619d454809c9282e4e6699628473666177be75d6848a9c2721dcdec7e4"
     },
     {
       "path": "scripts/studio/web/runtime-management-ui.js",
@@ -1984,6 +2155,11 @@
       "path": "scripts/studio/web/sequence-playback.js",
       "size": 14517,
       "sha256": "1e2e1f26389229b50a34db7f775bd4c012432c034f3a2e8224acddaf7a9d71af"
+    },
+    {
+      "path": "scripts/studio/web/source-frame-cache.js",
+      "size": 21123,
+      "sha256": "cbe2af4a67b6e1d496e74396469805c43fcd4a56cfc969266eb454a27366e44f"
     },
     {
       "path": "scripts/studio/web/style.css",

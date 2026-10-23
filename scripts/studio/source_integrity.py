@@ -28,7 +28,7 @@ SCOPE = {
     "root_files": [".github/workflows/studio-verification.yml", "README.md"],
     "studio_tree": STUDIO,
     "source_suffixes": [".cjs", ".css", ".entitlements", ".html", ".js", ".json", ".jsx", ".md",
-                        ".mjs", ".plist", ".py", ".sh", ".svg", ".swift", ".ts", ".tsx",
+                        ".mjs", ".mg", ".plist", ".py", ".sh", ".svg", ".swift", ".ts", ".tsx",
                         ".txt", ".yaml", ".yml"],
     "excluded_directories": [".venv", "__pycache__", "build", "dist", "evidence", "fixtures",
                              "media", "output", "outputs", "venv", "verification"],

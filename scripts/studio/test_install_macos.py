@@ -31,7 +31,7 @@ class ArchiveInstallationTests(unittest.TestCase):
             "import runtime_management,install_physical_rendering,install_ray_optics,install_reconstruction;"
             "import scene_processing,scene_dispatch,scene_dispatch_store,reconstruction;"
             "import meshroom_reconstruction,camera_ctrl,diffusionlight;"
-            "assert not meshroom_reconstruction.capabilities()['available'] or " 
+            "assert not meshroom_reconstruction.capabilities()['available'] or "
             "meshroom_reconstruction.capabilities()['operations'];"
             "assert pathlib.Path(server.__file__).parent==pathlib.Path(sys.argv[1]);"
             "assert install_tracking.LOCK.is_file();assert install_imaging.LOCK.is_file();"

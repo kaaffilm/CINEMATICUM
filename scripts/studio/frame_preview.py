@@ -42,6 +42,9 @@ def render_frame(project, project_dir, frame, output, cancel_event=None, timeout
     # Sound has no contribution to a still. Keeping its source decoders out of
     # this graph avoids unnecessary audio work while preserving picture timing.
     picture = copy.deepcopy(p)
+    picture.pop("audio_mixer", None)
+    for sequence in picture.get("sequences", []):
+        sequence.pop("audio_mixer", None)
     for clip in picture["clips"]:
         clip["volume"] = 0
         for key in clip.get("keyframes", []):

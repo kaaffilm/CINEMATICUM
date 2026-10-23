@@ -19,6 +19,7 @@ import tempfile
 import threading
 import time
 import unittest
+from unittest.mock import patch
 import zipfile
 
 import reconstruction as reconstruction
@@ -131,7 +132,8 @@ class ReconstructionValidationTests(unittest.TestCase):
         self.assertEqual("[]",result.stdout.strip())
 
     def test_missing_engine_does_not_claim_reconstruction_or_dense_support(self):
-        caps=reconstruction.capabilities("/missing/COLMAP/python")
+        with patch.dict(os.environ,{},clear=True):
+            caps=reconstruction.capabilities("/missing/COLMAP/python")
         self.assertFalse(caps["available"]);self.assertFalse(caps["dense_available"]);self.assertEqual([],caps["operations"])
         self.assertIn("not installed",caps["reason"])
 

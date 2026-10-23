@@ -9,3 +9,6 @@ rawpy==0.27.1 --hash=sha256:80a598796529373e96102458889002b181b31ae6c76dc2731335
 OpenEXR==3.4.15 --hash=sha256:aede05497f27725abfddf337ef31a1cf6f35c24870510015dda01be7090a429e --hash=sha256:5f81c38ec733259da31e257d964de5cfb4b4ef0b9aa1e7037b71fae709abe710
 opentimelineio==0.18.1 --hash=sha256:e45fe3164c6e559e660b7e1cce6c87ef0b5d634743114823c6e1fb5f56f8601e --hash=sha256:8f0924f818b496cf771612d489082bdb83f42b6bd97ed06589dd2e2c086742c9
 opencv-python-headless==4.11.0.86 --hash=sha256:0e0a27c19dd1f40ddff94976cfe43066fbbe9dfbb2ec1907d66c19caef42a57b
+# Pillow supports the explicit DiffusionLight failure-evidence image fixtures.
+# CPython 3.11/3.12 wheel hashes verified from PyPI on 2026-10-22.
+pillow==13.0.0 --hash=sha256:a625df9a2a5597fa5e5266e01aefc82604bb85d291e3547981e863560d75da6c --hash=sha256:42d63be3af4f9b951b199b0a9d23365d37ab14687e6d77b74940432c8515c4ca

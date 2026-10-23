@@ -113,6 +113,12 @@ def _allowed(value):
         return name.suffix in {".raw", ".json"} and bool(_SHA.fullmatch(name.stem))
     if len(parts) == 4 and parts[:2] == ["imaging", "outputs"]:
         return bool(_ID.fullmatch(parts[2])) and parts[3] in {"display.png", "linear.exr", "receipt.json", "motion.png"}
+    if len(parts) == 4 and parts[:2] == ["model-inference", "outputs"]:
+        from model_inference import ARTIFACT_NAMES
+        return bool(_ID.fullmatch(parts[2])) and parts[3] in ARTIFACT_NAMES
+    if len(parts) == 4 and parts[:2] == ["lens-calibration", "outputs"]:
+        from lens_calibration import ARTIFACT_NAMES
+        return bool(re.fullmatch(r"[a-f0-9]{32}", parts[2])) and parts[3] in ARTIFACT_NAMES
     if len(parts) == 4 and parts[:2] == ["multicam-sync", "outputs"]:
         from multicam_sync import ARTIFACT_NAMES
         return bool(_ID.fullmatch(parts[2])) and parts[3] in ARTIFACT_NAMES
@@ -433,6 +439,9 @@ def _collect(project, project_dir, cancel_event=None):
         raw_sources[digest] = descriptor
 
     _collect_authoring(root, p, add)
+    from model_inference import archive_dependencies
+    for entry in archive_dependencies(p, root, cancel_event):
+        add(entry["path"], entry["role"], entry["sha256"], entry["bytes"])
 
     for asset in p["assets"]:
         provenance = asset.get("provenance", {})

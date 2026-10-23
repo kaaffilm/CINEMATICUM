@@ -19,7 +19,7 @@ else:
     from timebase import project_rate, format_timecode, parse_timecode
     from multicam import set_audio_lock, monitor_plan, group_for, verify_sources
 
-SEQUENCE_FIELDS = ('clips', 'titles', 'tracks', 'captions', 'caption_style', 'sequence_duration', 'otio_dissolve')
+SEQUENCE_FIELDS = ('clips', 'titles', 'tracks', 'captions', 'caption_style', 'sequence_duration', 'otio_dissolve', 'audio_mixer')
 MAX_SEQUENCES = 64
 MAX_DEPTH = 8
 MAX_EXPANDED_CLIPS = 1024
@@ -62,7 +62,7 @@ def sequence_duration(sequence):
 def snapshot_sequence(project):
     value = {'id': project.get('sequence_id', 'main'), 'name': project.get('sequence_name', 'Main sequence')}
     for field in SEQUENCE_FIELDS:
-        if field == 'otio_dissolve' and field not in project:
+        if field in ('otio_dissolve','audio_mixer') and field not in project:
             continue
         value[field] = copy.deepcopy(project.get(field, 0 if field == 'sequence_duration' else {} if field == 'caption_style' else []))
     return value
@@ -138,7 +138,7 @@ def sequence_project(project, sequence):
     value['sequence_id'] = sequence['id']
     value['sequence_name'] = sequence['name']
     for field in SEQUENCE_FIELDS:
-        if field == 'otio_dissolve' and field not in sequence:
+        if field in ('otio_dissolve','audio_mixer') and field not in sequence:
             value.pop(field, None)
             continue
         value[field] = copy.deepcopy(sequence.get(field, 0 if field == 'sequence_duration' else {} if field == 'caption_style' else []))
@@ -296,7 +296,7 @@ def _switch(project, ident):
         raise ValueError('Unknown sequence.')
     active = views.pop(ident)
     for field in SEQUENCE_FIELDS:
-        if field == 'otio_dissolve' and field not in active:
+        if field in ('otio_dissolve','audio_mixer') and field not in active:
             project.pop(field, None)
             continue
         project[field] = copy.deepcopy(active.get(field, 0 if field == 'sequence_duration' else {} if field == 'caption_style' else []))
@@ -345,6 +345,12 @@ def apply_action(project, action, values, project_dir):
             if not runtime['available']:
                 raise ValueError(runtime['reason'])
         apply_edit(p, values, remove=action == 'retime_remove')
+    elif action == 'audio_mixer_apply':
+        if __package__:
+            from .audio_mixer import apply_edit as apply_audio_mixer
+        else:
+            from audio_mixer import apply_edit as apply_audio_mixer
+        p = apply_audio_mixer(p, values)
     elif action == 'sequence_create':
         if len(views) >= MAX_SEQUENCES:
             raise ValueError('The project already contains 64 sequences.')

@@ -20,7 +20,7 @@ return await (async()=>{
       choose('[data-retime-duration]',12);choose('[data-retime-method]','optical_flow');choose('[data-retime-audio]','varispeed');
       const rows=all('[data-retime-key]');choose('[data-retime-key]:first-child [data-retime-speed]',.5);choose('[data-retime-key]:last-child [data-retime-speed]',1.5);
       click('[data-retime-add]');if(all('[data-retime-key]').length!==3||Number(all('[data-retime-frame]')[1].value)!==6||Number(all('[data-retime-speed]')[1].value)!==1)throw Error('Real intermediate key authoring failed');
-      click('[data-retime-key]:nth-child(2) [data-retime-delete]');if(all('[data-retime-key]').length!==2||!$('[data-retime-summary]').textContent.includes('12.000 source frames'))throw Error('Curve source-span summary is wrong');
+      click('[data-retime-key]:nth-child(2) [data-retime-delete]');const summary=$('[data-retime-summary]').textContent;if(all('[data-retime-key]').length!==2||!summary.includes('net source displacement 12.000 frames')||!summary.includes('full source range 4.000–16.000'))throw Error('Curve source-span summary is wrong: '+summary);
       steps.push('real_speed_key_controls');click('[data-retime-apply]');await until(()=>!$('.cinematicum-retime').open&&$('#save-state').textContent==='UNSAVED'&&$('[data-field="speed"]').disabled,'Real ramp apply failed',3200);
       click('#undo-button');selectClip($('.timeline-clip[data-clip="'+cfg.clip_id+'"]'));if($('[data-field="speed"]').disabled)throw Error('One undo retained the ramp');
       click('#redo-button');selectClip($('.timeline-clip[data-clip="'+cfg.clip_id+'"]'));if(!$('[data-field="speed"]').disabled)throw Error('One redo lost the ramp');steps.push('one_undo_redo_applies_recipe');
