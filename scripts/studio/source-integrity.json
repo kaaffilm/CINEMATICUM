@@ -708,8 +708,8 @@
     },
     {
       "path": "scripts/studio/macos/RetimeSmoke.js",
-      "size": 11923,
-      "sha256": "6370cd21586bce0abb08e803467a4bee36d78beca72b2b61e4206b5473bc7a61"
+      "size": 12027,
+      "sha256": "e78a73a22dec61496522c6b585bdb6cf45c44c7c7b02913ff4624fb29a89a2ce"
     },
     {
       "path": "scripts/studio/macos/RotoSmoke.js",
