@@ -54,6 +54,13 @@ TOOLS = {
         "label": "Photo reconstruction", "preview": "preview.png",
         "receipt": "provenance.json", "recipe_project": True,
     },
+    "meshroom": {
+        "module": "meshroom_reconstruction", "field": None,
+        "recipe": "validate_recipe", "capabilities": "capabilities", "run": "run",
+        "directory": "meshroom", "route": "meshroom", "admit": False,
+        "label": "Meshroom dense reconstruction", "preview": None,
+        "receipt": "provenance.json", "recipe_project": True,
+    },
     "learned-tracking": {
         "module": "learned_tracking", "field": None,
         "capabilities": "learned_capabilities", "directory": "learned",
