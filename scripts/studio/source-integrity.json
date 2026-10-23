@@ -1127,8 +1127,8 @@
     },
     {
       "path": "scripts/studio/test_decoded_frame_cache_browser.cjs",
-      "size": 20725,
-      "sha256": "0d2a2ddb27e358f0ed4d7d1563753ee06da71727895152b168a881fcfc461aa0"
+      "size": 21305,
+      "sha256": "151421c5240cf2007b9c6f74838612438f136f40d77d9cf8006695ef4d3d1e7b"
     },
     {
       "path": "scripts/studio/test_deep_compositing.py",
@@ -1857,8 +1857,8 @@
     },
     {
       "path": "scripts/studio/web/decoded-frame-cache.js",
-      "size": 4998,
-      "sha256": "b029be5f61c37c35e27c4de211435b5619fdd008dd3ba58ca36fa0ff9973ce7a"
+      "size": 5968,
+      "sha256": "83c5a4e5a86959f6b558e5d56b2f861f600e69c3d4a9080163b79a1aeea4bce7"
     },
     {
       "path": "scripts/studio/web/deep-compositing-ui.js",
