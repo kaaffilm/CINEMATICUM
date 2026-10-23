@@ -19,7 +19,7 @@ import time
 import traceback
 from types import SimpleNamespace
 
-_spec = importlib.util.spec_from_file_location("_diffusionlight_controller", Path(__file__).with_name("diffusionlight.py"))
+_spec = importlib.util.spec_from_file_location("_diffusionlight_controller", Path(__file__).with_name("diffusionlight_standalone.py"))
 controller = importlib.util.module_from_spec(_spec)
 _spec.loader.exec_module(controller)
 

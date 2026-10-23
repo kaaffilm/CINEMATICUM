@@ -17,7 +17,7 @@ import sys
 # -I intentionally removes the script directory from sys.path. Only the shipped
 # sibling controller is added; upstream code is copied from verified Git blobs.
 sys.path.insert(0,str(Path(__file__).resolve().parent))
-from camera_ctrl import (UPSTREAM_COMMIT,CAMERA_CHECKPOINT_SHA256,CAMERA_CHECKPOINT_BYTES,
+from camera_ctrl_standalone import (UPSTREAM_COMMIT,CAMERA_CHECKPOINT_SHA256,CAMERA_CHECKPOINT_BYTES,
                          WIDTH,HEIGHT,FRAMES,validate_request,conditioning,_digest)
 
 MOTION_SHA256 = "2412711886f61091846f53204aabc38aa6e09356d62a9808abe4daa802168343"

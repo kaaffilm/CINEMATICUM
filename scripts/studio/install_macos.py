@@ -34,8 +34,8 @@ STUDIO_SOURCE = Path(__file__).resolve().parent
 RUNTIME_FILES = (
     "server.py", "engine.py", "adapters.py", "compositor.py", "scene.py",
     "generation_readiness.py", "managed_generation.py", "generation-runtime-lock.json",
-    "model_inference.py", "camera_ctrl.py", "camera_ctrl_worker.py", "camera_ctrl-source-lock.json",
-    "diffusionlight.py", "diffusionlight_worker.py", "diffusionlight-source-lock.json",
+    "model_inference.py", "camera_ctrl.py", "camera_ctrl_standalone.py", "camera_ctrl_worker.py", "camera_ctrl-source-lock.json",
+    "diffusionlight.py", "diffusionlight_standalone.py", "diffusionlight_worker.py", "diffusionlight-source-lock.json",
     "frame_preview.py", "waveform.py", "audio_source.py", "audio_mixer.py", "timebase.py", "tracking.py",
     "planar_tracking.py", "planar_worker.py", "projective_warp.py", "install_tracking.py",
     "lens_calibration.py", "lens_calibration_worker.py",
@@ -54,6 +54,7 @@ RUNTIME_FILES = (
     "install_learned_tracking.py", "reconstruction.py", "reconstruction_worker.py",
     "alicevision.py", "alicevision-photogrammetry-2025.1.mg", "alicevision-graph-LICENSE.md",
     "install_reconstruction.py", "reconstruction-macos-arm64-py313.lock.json",
+    "meshroom_reconstruction.py", "camera_ctrl.py", "diffusionlight.py",
     "scene_processing.py", "scene_processing_worker.py", "scene_dispatch.py", "scene_dispatch_store.py",
     "runtime_management.py", "install_physical_rendering.py", "physical-rendering-macos-arm64-py313.lock.json",
     "multicam_sync.py", "multicam_sync_worker.py", "multicam.py", "float_movie.py", "float_movie_worker.py",

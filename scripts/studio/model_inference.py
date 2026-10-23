@@ -156,7 +156,7 @@ def status():
 
 
 def _implementation(model):
-    name = "camera_ctrl" if model=="camera_ctrl" else "diffusionlight"
+    name = "camera_ctrl_standalone" if model=="camera_ctrl" else "diffusionlight_standalone"
     return importlib.import_module(("." if __package__ else "")+name,__package__ or None)
 
 

@@ -44,17 +44,33 @@
       const previous=this.observers.get(video);
       if(previous?.identity===identity){previous.isCurrent=isCurrent;previous.onFrame=onFrame;return;}
       if(previous)this.unobserve(video);
-      const record={identity,id:null,source:video.currentSrc||video.src,isCurrent,onFrame};this.observers.set(video,record);
+      const record={identity,id:null,source:video.currentSrc||video.src,isCurrent,onFrame,pendingMediaTime:null};
+      this.observers.set(video,record);
+      const current=()=>this.observers.get(video)===record&&record.isCurrent()&&(video.currentSrc||video.src)===record.source;
+      // A presented-frame callback can arrive before Chrome clears seeking.
+      // Defer pixel capture until seeked confirms the very same media timestamp.
+      record.onSeeked=()=>{
+        if(!current()){this.unobserve(video);return;}
+        const time=record.pendingMediaTime;record.pendingMediaTime=null;
+        if(Number.isFinite(time)&&!video.seeking&&video.readyState>=2&&this.key(identity,video.currentTime)===this.key(identity,time)){
+          if(this.capture(identity,time,video))record.onFrame();
+        }
+      };
+      if(typeof video.addEventListener==='function')video.addEventListener('seeked',record.onSeeked);
       const next=()=>{
         if(this.observers.get(video)!==record)return;
         try{record.id=video.requestVideoFrameCallback((now,metadata)=>{
           if(this.observers.get(video)!==record)return;
           record.id=null;
-          if(!record.isCurrent()||(video.currentSrc||video.src)!==record.source){this.unobserve(video);return;}
-          // A queued old-frame callback can arrive after a seek has already
-          // changed currentTime. Never label that video's current pixels with
-          // an earlier presentation timestamp. Exact-time misses fail closed.
-          if(Number.isFinite(metadata.mediaTime)&&this.key(identity,video.currentTime)===this.key(identity,metadata.mediaTime))this.capture(identity,metadata.mediaTime,video);
+          if(!current()){this.unobserve(video);return;}
+          // rVFC certifies a presented time, but not stable pixel-copy timing
+          // while a seek remains in progress. Defer that copy until seeked.
+          const matching=Number.isFinite(metadata.mediaTime)&&this.key(identity,video.currentTime)===this.key(identity,metadata.mediaTime);
+          if(matching&&video.seeking)record.pendingMediaTime=metadata.mediaTime;
+          else{
+            record.pendingMediaTime=null;
+            if(matching)this.capture(identity,metadata.mediaTime,video);
+          }
           // A VFR/non-grid sample can be unsuitable for exact cache lookup but
           // still be the viewer's newly presented picture. Repaint current UI.
           if(!video.seeking&&video.readyState>=2)record.onFrame();
@@ -66,6 +82,7 @@
     unobserve(video){
       const record=this.observers.get(video);if(!record)return;
       this.observers.delete(video);
+      if(record.onSeeked&&typeof video.removeEventListener==='function')video.removeEventListener('seeked',record.onSeeked);
       if(record.id!==null&&typeof video.cancelVideoFrameCallback==='function')try{video.cancelVideoFrameCallback(record.id);}catch(error){}
     }
     retain(active){for(const video of this.observers.keys())if(!active.has(video))this.unobserve(video);}
