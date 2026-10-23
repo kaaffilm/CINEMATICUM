@@ -38,6 +38,21 @@ class DiffusionLightTests(unittest.TestCase):
                 dl.run(p,root,r,root/"diffusionlight/outputs"/("f"*32),cancel_event=e)
             self.assertEqual(["source.png"],[x.name for x in root.iterdir()])
 
+    def test_hdr_float_radiance_rejects_invalid_samples(self):
+        import struct
+        raw=struct.pack("<"+"f"*768,*([.25,.5,2.]*256))
+        result=dl._validate_radiance(raw,16,16)
+        self.assertEqual(768,result["decoded_rgb_samples"])
+        self.assertEqual(2.,result["radiance_max"])
+        with self.assertRaisesRegex(ValueError,"non-finite"):
+            dl._validate_radiance(raw[:-4]+struct.pack("<f",float("nan")),16,16)
+        with self.assertRaisesRegex(ValueError,"negative"):
+            dl._validate_radiance(raw[:-4]+struct.pack("<f",-1),16,16)
+        with self.assertRaisesRegex(ValueError,"exactly one"):
+            dl._validate_radiance(raw[:-4],16,16)
+        with self.assertRaisesRegex(ValueError,"entirely black"):
+            dl._validate_radiance(bytes(len(raw)),16,16)
+
     def test_unexpected_exr_refused(self):
         with tempfile.TemporaryDirectory() as tmp:
             f=Path(tmp)/"fake.exr";f.write_bytes(b"not-an-exr")
