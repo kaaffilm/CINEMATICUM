@@ -337,8 +337,8 @@
     },
     {
       "path": "scripts/studio/diffusionlight.py",
-      "size": 11126,
-      "sha256": "eb64aa600b3475cebc47f4388d72d03b0417ca15e3c46a279a98f607869ae306"
+      "size": 12832,
+      "sha256": "79026ba1db2b2fa2d1a86d500a2ce0055780cc1027b8b02d52009a1af542e9d8"
     },
     {
       "path": "scripts/studio/editorial.py",
@@ -1137,8 +1137,8 @@
     },
     {
       "path": "scripts/studio/test_diffusionlight.py",
-      "size": 2344,
-      "sha256": "0f7ec3dc9a0dfd80437363a1485c14a7979b872ad691c2970aef6fc94601b8c3"
+      "size": 3156,
+      "sha256": "cad99ab2733cfedebb744face08643df6bb3c9024d4b749292953522676e8ddf"
     },
     {
       "path": "scripts/studio/test_editing.py",
