@@ -111,19 +111,56 @@ def _invoke(python,root,args,scratch,event,timeout=3600):
             if process.returncode:raise RuntimeError("Actual DiffusionLight inference failed.")
         finally:_terminate_owned(process)
 
+def _validate_radiance(raw,width,height):
+    """Accept only one complete RGB32F frame with finite physical radiance."""
+    import array
+    import sys
+    if type(width) is not int or type(height) is not int or not 16<=width<=8192 or not 16<=height<=8192:
+        raise ValueError("HDR frame dimensions are unsupported.")
+    pixels=width*height
+    if pixels>16777216 or len(raw)!=pixels*3*4:
+        raise ValueError("HDR must decode to exactly one bounded RGB float frame.")
+    samples=array.array("f")
+    samples.frombytes(raw)
+    if sys.byteorder!="little":
+        samples.byteswap()
+    minimum,maximum,total=float("inf"),0.,0.
+    for sample in samples:
+        if not math.isfinite(sample) or sample < -1e-6:
+            raise ValueError("HDR contains negative or non-finite radiance samples.")
+        minimum=min(minimum,sample)
+        maximum=max(maximum,sample)
+        total+=sample
+    if not maximum>0:
+        raise ValueError("HDR is entirely black; no lighting information was recovered.")
+    return {"decoded_rgb_samples":len(samples),"radiance_min":minimum,
+            "radiance_max":maximum,"radiance_mean":total/len(samples),
+            "all_samples_finite":True,"all_samples_nonnegative":True}
+
+
 def _probe_exr(path):
     if not path.is_file() or path.is_symlink() or not 0<path.stat().st_size<=MAX_ARTIFACT_BYTES:
         raise ValueError("DiffusionLight did not produce a bounded EXR environment.")
     with path.open("rb") as src:
-        if src.read(4)!=b"\x76\x2f\x31\x01":raise ValueError("DiffusionLight HDR is not OpenEXR.")
+        if src.read(4)!=b"\x76\x2f\x31\x01":
+            raise ValueError("DiffusionLight HDR is not OpenEXR.")
     p=subprocess.run(["ffprobe","-v","error","-show_entries","stream=width,height,pix_fmt",
                       "-of","json",str(path)],capture_output=True,check=True,timeout=30)
-    if len(p.stdout)>65536:raise ValueError("EXR probe response is oversized.")
+    if len(p.stdout)>65536:
+        raise ValueError("EXR probe response is oversized.")
     streams=json.loads(p.stdout).get("streams",[])
-    if len(streams)<1 or not 16<=int(streams[0].get("width",0))<=8192 or not 16<=int(streams[0].get("height",0))<=8192:
-        raise ValueError("DiffusionLight HDR dimensions are invalid.")
-    return {"width":int(streams[0]["width"]),"height":int(streams[0]["height"]),
-            "pixel_format":streams[0].get("pix_fmt"),"format":"OpenEXR"}
+    if len(streams)!=1:
+        raise ValueError("DiffusionLight must produce exactly one EXR image stream.")
+    width,height=int(streams[0].get("width",0)),int(streams[0].get("height",0))
+    if not 16<=width<=8192 or not 16<=height<=8192 or width*height>16777216:
+        raise ValueError("DiffusionLight HDR dimensions exceed its bounded float decode.")
+    decoded=subprocess.run(
+        ["ffmpeg","-v","error","-nostdin","-i",str(path),"-map","0:v:0",
+         "-frames:v","1","-pix_fmt","gbrpf32le","-f","rawvideo","pipe:1"],
+        capture_output=True,check=True,timeout=120)
+    return {"width":width,"height":height,
+            "pixel_format":streams[0].get("pix_fmt"),"format":"OpenEXR",
+            "decoded_pixel_format":"gbrpf32le",**_validate_radiance(decoded.stdout,width,height)}
 
 def run(project,project_dir,recipe,output_dir,progress=None,cancel_event=None):
     request=validate_recipe(recipe,project);_cancel(cancel_event);runtime,locked=_runtime()
