@@ -19,7 +19,7 @@ from adapters import _terminate_owned
 from reconstruction import _cancel, _hash_file, _owned
 from imaging import _number
 
-ARTIFACT_NAMES=frozenset({"lighting.exr","input.png","provenance.json"})
+ARTIFACT_NAMES=frozenset({"lighting.exr","input.source","provenance.json"})
 MAX_ARTIFACT_BYTES=2*1024**3
 HEX=re.compile(r"[a-f0-9]{64}\Z")
 ID=re.compile(r"[a-f0-9]{32}\Z")
@@ -161,9 +161,9 @@ def run(project,project_dir,recipe,output_dir,progress=None,cancel_event=None):
         publication=scratch/"published";publication.mkdir()
         shutil.copyfile(files[0],publication/"lighting.exr")
         # Original photo remains a separate immutable provenance input, not a converted HDR claim.
-        shutil.copyfile(image,publication/"input.png")
+        shutil.copyfile(image,publication/"input.source")
         artifacts=[]
-        for file in ("lighting.exr","input.png"):
+        for file in ("lighting.exr","input.source"):
             digest,size=_hash_file(publication/file,MAX_ARTIFACT_BYTES)
             artifacts.append({"filename":file,"sha256":digest,"size":size,"bytes":size})
         receipt={"type":"cinematicum-diffusionlight","version":1,"runtime_lock_sha256":locked,
