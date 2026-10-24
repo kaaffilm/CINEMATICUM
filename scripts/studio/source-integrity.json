@@ -763,8 +763,8 @@
     },
     {
       "path": "scripts/studio/macos/StudioApp.swift",
-      "size": 28187,
-      "sha256": "acf64f068cc870ed0bb4e458cb78359a830f007807a22f9bc933485aa2ae0b08"
+      "size": 28434,
+      "sha256": "c285380ce76e54289b86574e5c7c1eb98f86b32faf4265a0d5acc5baf366f419"
     },
     {
       "path": "scripts/studio/macos/StudioIcon.swift",
@@ -1378,8 +1378,8 @@
     },
     {
       "path": "scripts/studio/test_install_macos.py",
-      "size": 9690,
-      "sha256": "ebc7b1fa36789c794f86f88159e97236565a70175423217e36057320cff24a2c"
+      "size": 10419,
+      "sha256": "bd086cef5591598010d9e220758533d555b35fc6a846cba24c04fe47eb759153"
     },
     {
       "path": "scripts/studio/test_install_physical_rendering.py",

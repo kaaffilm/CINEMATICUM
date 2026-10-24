@@ -110,6 +110,9 @@ final class StudioAppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate
         process.arguments = ["-B", "-u", script.path, "--workspace", workspace.path, "--port", "0"]
         process.currentDirectoryURL = runtime
         var environment = ProcessInfo.processInfo.environment
+        // Keep the media engine's owned runtimes alongside the native user's workspace.
+        // Isolated launchers may supply a different HOME to this process.
+        environment["HOME"] = FileManager.default.homeDirectoryForCurrentUser.path
         environment["PATH"] = "/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:"
             + (environment["PATH"] ?? "")
         environment["PYTHONUNBUFFERED"] = "1"

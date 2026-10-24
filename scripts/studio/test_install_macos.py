@@ -20,6 +20,17 @@ class ArchiveInstallationTests(unittest.TestCase):
     def tearDown(self):
         self.tmp.cleanup()
 
+    def test_native_media_engine_uses_native_owner_home_not_inherited_job_home(self):
+        launcher = (installer.STUDIO_SOURCE / "macos/StudioApp.swift").read_text(encoding="utf-8")
+        startup = launcher.split("private func launchServer()", 1)
+        self.assertEqual(2, len(startup))
+        environment = startup[1].split("process.environment = environment", 1)
+        self.assertEqual(2, len(environment))
+        assignment = 'environment["HOME"] = FileManager.default.homeDirectoryForCurrentUser.path'
+        self.assertIn(assignment, environment[0])
+        self.assertLess(environment[0].index("var environment = ProcessInfo.processInfo.environment"),
+                        environment[0].index(assignment))
+
     def test_packaged_runtime_imports_without_the_development_checkout(self):
         """A source-tree pass must not hide missing bundled transitive imports."""
         runtime = self.root / "runtime"
