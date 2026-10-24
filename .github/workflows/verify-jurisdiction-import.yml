@@ -22,4 +22,4 @@ jobs:
         with:
           node-version: '22'
       - name: Verify hash-pinned imported jurisdiction source and bounded film status
-        run: node scripts/verify-jurisdiction-import.mjs
+        run: node scripts/verify-jurisdiction-import.mjs --require-media
