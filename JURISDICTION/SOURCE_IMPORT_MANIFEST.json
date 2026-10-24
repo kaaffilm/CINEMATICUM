@@ -1,0 +1,253 @@
+{
+  "schema": "cinematicum.source-consolidation.v1",
+  "destination": "kaaffilm/CINEMATICUM",
+  "destination_base": "556976bb981a729974f6a1131ec110bd74f2f611",
+  "source": "CINEMATICUM/CINEMATICUM",
+  "source_commit": "517fd51f43ae8a17db219da352f5b83998d45fbd",
+  "source_tree": "ea72233ecb90fd1edb953e6cd560ba6e500540fc",
+  "imported_prefix": "JURISDICTION/",
+  "files": [
+    {
+      "source_path": ".gitignore",
+      "imported_path": "JURISDICTION/.gitignore",
+      "blob_sha": "62ccf04b1a39b3a1cf20194fc9463ea20bb12dfa",
+      "size": 92
+    },
+    {
+      "source_path": "ADMISSIBLE_MOTION_PICTURE_STANDARD.json",
+      "imported_path": "JURISDICTION/ADMISSIBLE_MOTION_PICTURE_STANDARD.json",
+      "blob_sha": "500b5113e92060a8413d96dd7ea143676827ed01",
+      "size": 689
+    },
+    {
+      "source_path": "AUTHORITY/CINEMATICUM_REPOSITORY_AUTHORITY_BINDING.json",
+      "imported_path": "JURISDICTION/AUTHORITY/CINEMATICUM_REPOSITORY_AUTHORITY_BINDING.json",
+      "blob_sha": "1b3c1a0da80aa4055193f13c4063eae4e3b060dc",
+      "size": 3103
+    },
+    {
+      "source_path": "CASES/CASE_001_THE_LAST_RENDER/AUDIENCE_WOUND.md",
+      "imported_path": "JURISDICTION/CASES/CASE_001_THE_LAST_RENDER/AUDIENCE_WOUND.md",
+      "blob_sha": "22b56b5643db969ab6c739b376a9cfd07060c865",
+      "size": 128
+    },
+    {
+      "source_path": "CASES/CASE_001_THE_LAST_RENDER/CASE_CHARTER.json",
+      "imported_path": "JURISDICTION/CASES/CASE_001_THE_LAST_RENDER/CASE_CHARTER.json",
+      "blob_sha": "1aaddacb3380adcab18c7b2a45cfc9f55c7623bd",
+      "size": 366
+    },
+    {
+      "source_path": "CASES/CASE_001_THE_LAST_RENDER/FILM/COMPILER_CUT_MANIFEST.json",
+      "imported_path": "JURISDICTION/CASES/CASE_001_THE_LAST_RENDER/FILM/COMPILER_CUT_MANIFEST.json",
+      "blob_sha": "f4194c2789ef9803f76dd07ca99927da5a29b2f7",
+      "size": 1204
+    },
+    {
+      "source_path": "CASES/CASE_001_THE_LAST_RENDER/FILM/COMPILER_TIMELINE.json",
+      "imported_path": "JURISDICTION/CASES/CASE_001_THE_LAST_RENDER/FILM/COMPILER_TIMELINE.json",
+      "blob_sha": "14aabdad2c384975caf8245f3874b8113fa8b047",
+      "size": 2535
+    },
+    {
+      "source_path": "CASES/CASE_001_THE_LAST_RENDER/FILM_THESIS.md",
+      "imported_path": "JURISDICTION/CASES/CASE_001_THE_LAST_RENDER/FILM_THESIS.md",
+      "blob_sha": "22fdc378d4362d5158f8eb4e1c48dd7004fe92da",
+      "size": 331
+    },
+    {
+      "source_path": "CASES/CASE_001_THE_LAST_RENDER/ISSUANCE_SPINE.json",
+      "imported_path": "JURISDICTION/CASES/CASE_001_THE_LAST_RENDER/ISSUANCE_SPINE.json",
+      "blob_sha": "ea284d6b72e40d62a6cc607a538894236c75623d",
+      "size": 1366
+    },
+    {
+      "source_path": "CASES/CASE_001_THE_LAST_RENDER/OBJECTS/DIRECTORIAL_AUTHORITY.json",
+      "imported_path": "JURISDICTION/CASES/CASE_001_THE_LAST_RENDER/OBJECTS/DIRECTORIAL_AUTHORITY.json",
+      "blob_sha": "9e8c09b04ce7c02b082c887e11632cb8e938aba8",
+      "size": 647
+    },
+    {
+      "source_path": "CASES/CASE_001_THE_LAST_RENDER/OBJECTS/FINAL_CUT_TIMELINE.json",
+      "imported_path": "JURISDICTION/CASES/CASE_001_THE_LAST_RENDER/OBJECTS/FINAL_CUT_TIMELINE.json",
+      "blob_sha": "3ef6ed6d0303f88cf87294dde2438a60c01960de",
+      "size": 544
+    },
+    {
+      "source_path": "CASES/CASE_001_THE_LAST_RENDER/OBJECTS/ISSUANCE_RECEIPT.json",
+      "imported_path": "JURISDICTION/CASES/CASE_001_THE_LAST_RENDER/OBJECTS/ISSUANCE_RECEIPT.json",
+      "blob_sha": "f306a3d229ebee65d09a99c09113013e40f75848",
+      "size": 652
+    },
+    {
+      "source_path": "CASES/CASE_001_THE_LAST_RENDER/OBJECTS/MEDIA_HASHES.json",
+      "imported_path": "JURISDICTION/CASES/CASE_001_THE_LAST_RENDER/OBJECTS/MEDIA_HASHES.json",
+      "blob_sha": "1d5f9349c4493c73c1ce5efe71acf8fd5e26f0ad",
+      "size": 557
+    },
+    {
+      "source_path": "CASES/CASE_001_THE_LAST_RENDER/OBJECTS/OUTSIDER_REPLAY_BUNDLE.json",
+      "imported_path": "JURISDICTION/CASES/CASE_001_THE_LAST_RENDER/OBJECTS/OUTSIDER_REPLAY_BUNDLE.json",
+      "blob_sha": "8e441bf3dbd9a23e83f89f7aa969fd8b784482dc",
+      "size": 519
+    },
+    {
+      "source_path": "CASES/CASE_001_THE_LAST_RENDER/OBJECTS/RELEASE_MANIFEST.json",
+      "imported_path": "JURISDICTION/CASES/CASE_001_THE_LAST_RENDER/OBJECTS/RELEASE_MANIFEST.json",
+      "blob_sha": "33b7acd3592fb863453dd9e446052cd6a9e3a807",
+      "size": 757
+    },
+    {
+      "source_path": "CASES/CASE_001_THE_LAST_RENDER/OBJECTS/SCRIPT_LOCK.json",
+      "imported_path": "JURISDICTION/CASES/CASE_001_THE_LAST_RENDER/OBJECTS/SCRIPT_LOCK.json",
+      "blob_sha": "c18df22ef040b95a0c9d5d985770582cd659a6c7",
+      "size": 633
+    },
+    {
+      "source_path": "CASES/CASE_001_THE_LAST_RENDER/OBJECTS/SELECTED_TAKE_RECORD.json",
+      "imported_path": "JURISDICTION/CASES/CASE_001_THE_LAST_RENDER/OBJECTS/SELECTED_TAKE_RECORD.json",
+      "blob_sha": "7de9a57f5bc70f1d66d913f25f3f95dc199fabb4",
+      "size": 397
+    },
+    {
+      "source_path": "CASES/CASE_001_THE_LAST_RENDER/OBJECTS/SHOT_FUNCTION_LOCK.json",
+      "imported_path": "JURISDICTION/CASES/CASE_001_THE_LAST_RENDER/OBJECTS/SHOT_FUNCTION_LOCK.json",
+      "blob_sha": "6b6f311cafc7db6145cd79c29a6b21268488ffc8",
+      "size": 986
+    },
+    {
+      "source_path": "CASES/CASE_001_THE_LAST_RENDER/OBJECTS/TERMINAL_CLOSURE.json",
+      "imported_path": "JURISDICTION/CASES/CASE_001_THE_LAST_RENDER/OBJECTS/TERMINAL_CLOSURE.json",
+      "blob_sha": "ea871d573711892dd13bf77be97987fee30a8f86",
+      "size": 338
+    },
+    {
+      "source_path": "CASES/CASE_001_THE_LAST_RENDER/PROOFS/autonomous-film-compile-result.json",
+      "imported_path": "JURISDICTION/CASES/CASE_001_THE_LAST_RENDER/PROOFS/autonomous-film-compile-result.json",
+      "blob_sha": "b46e71c2c594246fc44bc10723baf7e350818eed",
+      "size": 751
+    },
+    {
+      "source_path": "CASES/CASE_001_THE_LAST_RENDER/PROOFS/case-001-verification-result.json",
+      "imported_path": "JURISDICTION/CASES/CASE_001_THE_LAST_RENDER/PROOFS/case-001-verification-result.json",
+      "blob_sha": "7eee6470a19961560fd0c899c66d1ae6bb6d8fef",
+      "size": 5303
+    },
+    {
+      "source_path": "CASES/CASE_001_THE_LAST_RENDER/SCRIPTS/SCRIPT_LOCK_V0_2.json",
+      "imported_path": "JURISDICTION/CASES/CASE_001_THE_LAST_RENDER/SCRIPTS/SCRIPT_LOCK_V0_2.json",
+      "blob_sha": "bf83e69b307433d015aafd5f7cf9a4ed535eae45",
+      "size": 2163
+    },
+    {
+      "source_path": "CASES/CASE_001_THE_LAST_RENDER/SHOT_LAW/SHOT_FUNCTION_LAW_V0_2.json",
+      "imported_path": "JURISDICTION/CASES/CASE_001_THE_LAST_RENDER/SHOT_LAW/SHOT_FUNCTION_LAW_V0_2.json",
+      "blob_sha": "9a4b541994f883d4782f8bb687dcaf9cb56dfbdf",
+      "size": 3027
+    },
+    {
+      "source_path": "CASES/CASE_001_THE_LAST_RENDER/VISUAL_EVIDENCE/S001_DEAD_RENDER_FACILITY/CANDIDATES/CANDIDATE_0001/CANDIDATE_VISUAL_RECORD.json",
+      "imported_path": "JURISDICTION/CASES/CASE_001_THE_LAST_RENDER/VISUAL_EVIDENCE/S001_DEAD_RENDER_FACILITY/CANDIDATES/CANDIDATE_0001/CANDIDATE_VISUAL_RECORD.json",
+      "blob_sha": "0d4224815bf6b8433c7604df0e973430651e1589",
+      "size": 1050
+    },
+    {
+      "source_path": "CASES/CASE_001_THE_LAST_RENDER/VISUAL_EVIDENCE/S001_DEAD_RENDER_FACILITY/CANDIDATES/CANDIDATE_0001/PROMPT_LOCK.md",
+      "imported_path": "JURISDICTION/CASES/CASE_001_THE_LAST_RENDER/VISUAL_EVIDENCE/S001_DEAD_RENDER_FACILITY/CANDIDATES/CANDIDATE_0001/PROMPT_LOCK.md",
+      "blob_sha": "96071c7d5406667de3c9e0a7400d75b1a2650c70",
+      "size": 505
+    },
+    {
+      "source_path": "CASES/CASE_001_THE_LAST_RENDER/VISUAL_EVIDENCE/S001_DEAD_RENDER_FACILITY/VISUAL_EVIDENCE_OBJECT.json",
+      "imported_path": "JURISDICTION/CASES/CASE_001_THE_LAST_RENDER/VISUAL_EVIDENCE/S001_DEAD_RENDER_FACILITY/VISUAL_EVIDENCE_OBJECT.json",
+      "blob_sha": "ccaff96c68b1b2b7275564ef2d242f5b4baa2ba3",
+      "size": 1338
+    },
+    {
+      "source_path": "CASES/CASE_001_THE_LAST_RENDER/VISUAL_EVIDENCE/VISUAL_EVIDENCE_INDEX.json",
+      "imported_path": "JURISDICTION/CASES/CASE_001_THE_LAST_RENDER/VISUAL_EVIDENCE/VISUAL_EVIDENCE_INDEX.json",
+      "blob_sha": "9de07dfe6a9889866076ab450d904c348ea96422",
+      "size": 525
+    },
+    {
+      "source_path": "CHARTER_OF_CINEMATIC_JURISDICTION.json",
+      "imported_path": "JURISDICTION/CHARTER_OF_CINEMATIC_JURISDICTION.json",
+      "blob_sha": "5b632369fed9b10293950150d35f6f39e8969d95",
+      "size": 446
+    },
+    {
+      "source_path": "CURRENT/CURRENT_CASE.json",
+      "imported_path": "JURISDICTION/CURRENT/CURRENT_CASE.json",
+      "blob_sha": "3e1b6678b4ab53ad8273237af627bed36c4578cf",
+      "size": 265
+    },
+    {
+      "source_path": "ENGINES/FILM_COMPILER/AUTONOMOUS_FILM_COMPILER_STANDARD.json",
+      "imported_path": "JURISDICTION/ENGINES/FILM_COMPILER/AUTONOMOUS_FILM_COMPILER_STANDARD.json",
+      "blob_sha": "81017b6c2278fbd083c3c478c5b14f868271a3dc",
+      "size": 1263
+    },
+    {
+      "source_path": "README.md",
+      "imported_path": "JURISDICTION/README.md",
+      "blob_sha": "1b998d6b8893779325f260da106e1bef943515e1",
+      "size": 1898
+    },
+    {
+      "source_path": "SCHEMAS/cinematicum-object.schema.json",
+      "imported_path": "JURISDICTION/SCHEMAS/cinematicum-object.schema.json",
+      "blob_sha": "1e6d3f2cafbb20a4e06f8523c30a98a3ebbb5c45",
+      "size": 698
+    },
+    {
+      "source_path": "SCHEMAS/issuance-spine.schema.json",
+      "imported_path": "JURISDICTION/SCHEMAS/issuance-spine.schema.json",
+      "blob_sha": "1a7e1365d619d3380c26718c8474d1b8decdbebb",
+      "size": 873
+    },
+    {
+      "source_path": "STANDARDS/CANDIDATE_MEDIA_INTAKE_STANDARD.json",
+      "imported_path": "JURISDICTION/STANDARDS/CANDIDATE_MEDIA_INTAKE_STANDARD.json",
+      "blob_sha": "8059b41f2ce4656631a40775eec641497c12b981",
+      "size": 1142
+    },
+    {
+      "source_path": "STANDARDS/ISSUANCE_SPINE_STANDARD.json",
+      "imported_path": "JURISDICTION/STANDARDS/ISSUANCE_SPINE_STANDARD.json",
+      "blob_sha": "38d3f77c6b02b43bd2e597013b0b8716f72888cc",
+      "size": 942
+    },
+    {
+      "source_path": "scripts/compile-case-001-film.mjs",
+      "imported_path": "JURISDICTION/scripts/compile-case-001-film.mjs",
+      "blob_sha": "eaf8874ea9ca4744a3326ba31e6e5de5512a3d08",
+      "size": 17329
+    },
+    {
+      "source_path": "scripts/intake-candidate-media.mjs",
+      "imported_path": "JURISDICTION/scripts/intake-candidate-media.mjs",
+      "blob_sha": "c2e29f9f5fe7f44c86f0c4b6cb14fecbcf658f3a",
+      "size": 4975
+    },
+    {
+      "source_path": "scripts/verify-case-001.mjs",
+      "imported_path": "JURISDICTION/scripts/verify-case-001.mjs",
+      "blob_sha": "453808ca6fa7be02bda3a163db1e4308b42ddb90",
+      "size": 5059
+    },
+    {
+      "source_path": "scripts/verify-cross-repository-authority-binding.mjs",
+      "imported_path": "JURISDICTION/scripts/verify-cross-repository-authority-binding.mjs",
+      "blob_sha": "28ff2a08a468db42d7e43effec5af4ef67aab30f",
+      "size": 3126
+    }
+  ],
+  "media_missing": {
+    "path": "JURISDICTION/CASES/CASE_001_THE_LAST_RENDER/FILM/CASE_001_THE_LAST_RENDER_COMPILER_CUT_0001.mp4",
+    "sha1": "7a2ebae6f3252abe215186245ad6876ab521c960",
+    "sha256": "6c322d7a0753658ac4f2a0d7ff9e161f76a25fbf81b696c36d682f5ef432978f",
+    "size": 7408974
+  },
+  "issuance_state": "CASE_OPEN_NOT_ISSUED",
+  "status": "TEXT_IMPORTED_MEDIA_AND_GOVERNANCE_PENDING"
+}
