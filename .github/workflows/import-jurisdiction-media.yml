@@ -1,0 +1,48 @@
+name: import-jurisdiction-media
+on:
+  push:
+    branches:
+      - midia/unify-cinematicum-jurisdiction
+    paths:
+      - .github/workflows/import-jurisdiction-media.yml
+permissions:
+  contents: write
+jobs:
+  import-exact-pinned-compiler-cut:
+    if: github.repository == 'kaaffilm/CINEMATICUM' && github.ref == 'refs/heads/midia/unify-cinematicum-jurisdiction'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+          persist-credentials: true
+      - name: Import actual source film without substitution
+        shell: bash
+        env:
+          SOURCE_REPO: https://github.com/CINEMATICUM/CINEMATICUM.git
+          SOURCE_COMMIT: 517fd51f43ae8a17db219da352f5b83998d45fbd
+          SOURCE_BLOB: 7a2ebae6f3252abe215186245ad6876ab521c960
+          SOURCE_SHA256: 6c322d7a0753658ac4f2a0d7ff9e161f76a25fbf81b696c36d682f5ef432978f
+          DEST_PATH: JURISDICTION/CASES/CASE_001_THE_LAST_RENDER/FILM/CASE_001_THE_LAST_RENDER_COMPILER_CUT_0001.mp4
+        run: |
+          set -euo pipefail
+          test -f JURISDICTION/SOURCE_IMPORT_MANIFEST.json
+          test ! -e "$DEST_PATH"
+          workdir="$(mktemp -d)"
+          trap 'rm -rf "$workdir"' EXIT
+          git -C "$workdir" init -q
+          git -C "$workdir" remote add origin "$SOURCE_REPO"
+          git -C "$workdir" fetch --quiet --depth 1 origin "$SOURCE_COMMIT"
+          test "$(git -C "$workdir" rev-parse FETCH_HEAD)" = "$SOURCE_COMMIT"
+          mkdir -p "$(dirname "$DEST_PATH")"
+          git -C "$workdir" show "$SOURCE_COMMIT:CASES/CASE_001_THE_LAST_RENDER/FILM/CASE_001_THE_LAST_RENDER_COMPILER_CUT_0001.mp4" > "$DEST_PATH"
+          test "$(wc -c < "$DEST_PATH" | tr -d '[:space:]')" = 7408974
+          test "$(git hash-object "$DEST_PATH")" = "$SOURCE_BLOB"
+          printf '%s  %s\n' "$SOURCE_SHA256" "$DEST_PATH" | sha256sum --check --status
+          node scripts/verify-jurisdiction-import.mjs --require-media
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add -- "$DEST_PATH"
+          git commit -m 'Preserve hash-verified cinematic jurisdiction source media'
+          git push origin HEAD:refs/heads/midia/unify-cinematicum-jurisdiction
